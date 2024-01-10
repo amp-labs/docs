@@ -19,11 +19,9 @@ A read action reads data from your customer's SaaS on a scheduled basis and send
 
 # Read standard objects
 
-You can use Ampersand to read any [Salesforce standard object](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_list.htm).
+To read a standard object, you need to specify:
 
-You need to specify: 
-
-- **objectName:** to indicate which standard object you'd like to read. This should match the name of the object in the official Salesforce and Hubspot documentation.
+- **objectName:** to indicate which standard object you'd like to read. This should match the name of the object in the official documentation for the SaaS API.
 - **destination: **the name of the [destination](docs:destinations) that you've defined
 - **schedule: **how frequently the read should happen. This value must be a schedule in [cron syntax](https://docs.gitlab.com/ee/topics/cron/)
 - a list of fields
@@ -44,7 +42,7 @@ You need to specify:
 
 Fields can be either be required or optional. If a field is required, then all users who install this integration will need to give your app read access to that field. If a field is optional, then users can choose whether they'd like your app to read that field. For standard fields, you will specify:
 
-- **fieldName: ** the name of the field from the official Salesforce documentation, converted to lower case. For example, if you'd like to read the first name of a contact, write `firstname`.
+- **fieldName: ** the name of the field from the official SaaS API documentation, converted to lower case. For example, if you'd like to read the first name of a contact, write `firstname`.
 
 ```yaml
       standardObjects:
@@ -79,7 +77,7 @@ Fields can be either be required or optional. If a field is required, then all u
 
 ## Allow users to pick from all fields
 
-If you want to give your user the option to pick from any of the fields in their Object, use `optionalFieldsAuto: all`. The UI component will populate a list of all the fields pulled from their Salesforce object and allow them to pick which ones your app will be able to read.
+If you want to give your user the option to pick from any of the fields in their Object, use `optionalFieldsAuto: all`. The UI component will populate a list of all the fields pulled from their object and allow them to pick which ones your app will be able to read.
 
 ```yaml
       standardObjects:
