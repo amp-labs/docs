@@ -96,7 +96,7 @@ The parameters of the component are:
 
 ## Connect provider
 
-The ConnectProvider component allows your customer to put in their SaaS credential, but does not lead them through the installation flow. After their SaaS credential is persisted by Ampersand, you can then make an API request to the [CreateInstallation](https://docs.withampersand.com/v1.0/reference/createinstallation) endpoint.
+The ConnectProvider component allows your customer to put in their SaaS credential, but does not lead them through the installation flow. After their SaaS credential is persisted by Ampersand, you can then make an API request to the [CreateInstallation](ref:createinstallation) endpoint.
 
 The parameters of the component are:
 

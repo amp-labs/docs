@@ -24,11 +24,11 @@ The high-level keys of `amp.yaml` are the following:
 The high-level keys of an integration are:
 
 - **name: **the name of the integration, only alphanumeric characters and dashes are allowed.
-- **api: **the API that this integration connects to.
-- **actions:** each integration is composed of:
+- **provider: **the API that this integration connects to.
+- each integration can include:
   - [Read Actions](doc:read-actions)
-  - Coming soon: write actions
-  - Coming soon: subscribe actions
+  - [Write Actions](doc:write-actions)
+  - [Subscribe Actions](doc:subscribe-actions)
 
 Putting all of this together, the basic structure of an `amp.yaml` file looks like the following:
 
@@ -37,7 +37,11 @@ specVersion: 1.0.0
 
 integrations: 
 -name: readSalesforceAccounts
- api: salesforce
- actions:
+ provider: salesforce
+ read:
+   ...
+ write:
+   ...
+ subscribe:
    ...
 ```
