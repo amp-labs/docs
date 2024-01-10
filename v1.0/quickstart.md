@@ -6,8 +6,6 @@ hidden: false
 metadata: 
   image: []
   robots: "index"
-createdAt: "Tue Apr 04 2023 22:15:15 GMT+0000 (Coordinated Universal Time)"
-updatedAt: "Thu Jul 20 2023 18:24:52 GMT+0000 (Coordinated Universal Time)"
 ---
 For this Quickstart, we are going to build integrations for a cool new SaaS app called MailMonkey - an email campaign manager that integrates with Salesforce. You can see the final `amp.yaml` file on [Github](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml).
 
@@ -16,13 +14,12 @@ For this Quickstart, we are going to build integrations for a cool new SaaS app 
   "images": [
     {
       "image": [
-        "https://files.readme.io/6191436-e22b8d3-Group_4.png",
+        "https://files.readme.io/28feb09-Group_2987.png",
         null,
-        "The Ampersand platform"
+        ""
       ],
       "align": "center",
-      "sizing": "600px",
-      "caption": "The Ampersand platform"
+      "sizing": "300px"
     }
   ]
 }
@@ -37,30 +34,22 @@ To make MailMonkey interoperate seamlessly with our customers' Salesforce, we wa
 2. **Create Leads**: An integration which creates a new Lead in Salesforce whenever somebody replies to to a MailMonkey email campaign.
 3. **Subscribe to Lead Conversions**: An integration which inserts Salesforce Leads into the "customer" audience segment in MailMonkey whenever a Lead's status becomes "converted" in Salesforce.
 
-We'll use the amp CLI's init command to generate the basic file structure for our integrations:
-
-```
-amp login
-amp init
-```
-
-After answering a few questions, we'll get a new folder called `amp`, with a file inside called `amp.yaml`, this is where we will define our integrations, and it will look pretty bare bones to start with. 
+Let's create a folder called `source`, with a file inside called `amp.yaml`, this is where we will define our integrations.
 
 ## Read Contacts and Leads
 
-Our first integration will have [Read Actions](doc:read-actions). We'll read 2 standard objects from Salesforce: contacts and leads. We'll also define 2 [Destinations](doc:destinations) for these objects, which are 2 Postgres tables, one for each object. (Alternatively, we could have decided to use an Ampersand-hosted data store and make API requests to retrieve our data.)
+Our first integration will have [Read Actions](doc:read-actions). We'll read 2 standard objects from Salesforce: contacts and leads.
 
 ```yaml
 integrations:
-- name: readContactsAndLeads
+ - name: readContactsAndLeads
    displayName: Read Contacts and Leads
-   api: salesforce
-   actions:
-    - type: read
-      schedule: every 12 hours
-      standardObjects:              
+   provider: salesforce
+   read:
+    standardObjects:
       - objectName: contact
-        destination: contactTable
+        destination: contactWebhook
+        schedule: "*/30 * * * *" # every 30 minutes
         # Always read these fields
         requiredFields:
           - fieldName: firstName
@@ -70,41 +59,37 @@ integrations:
         optionalFields:
           - fieldName: salutation
       - objectName: leads
-        destination: leadsTable
+        destination: leadsWebhook
+        schedule: "*/30 * * * *" # every 30 minutes
         requiredFields:
           - fieldName: firstName
           - fieldName: lastName
           - fieldName: email
           - fieldName: isConverted
-      # ...
-destinations:
-  # Sync Contacts to a Postgres table
-  - name: contactsTable
-    type: postgres
-    tableName: SalesforceContacts
-  # Sync Leads to a Postgres table
-  - name: leadsTable
-    type: postgres
-    tableName: SalesforceLeads
+          # Allow the customer to pick a standard or optional field to map to priority score
+          - mapToName: priority
+            mapToDisplayName: Priority Score
+            prompt: Which field do you use to track the priority of a lead?
+        # All other fields in a Lead are optional, and customers can pick during set up
+        optionalFieldsAuto: all
 ```
 
 ## Create Leads
 
-Our second integration will have [Write Actions](doc:write-actions). We want to insert new leads into our customer's Salesforce. As soon as we deploy our integration using the Ampersand CLI. Ampersand will expose an API endpoint with the URL of `https://store.withampersand.com/project/<ampersand-project-id>/create-account`.  MailMonkey's application backend will make an API call to it to create the new lead whenever there's an email reply that we detect.
+Our second integration will have [Write Actions](doc:write-actions). We want to insert new leads into our customer's Salesforce.
 
 ```yaml
  - name: createLeads
    displayName: Create Leads
-   api: salesforce
+   provider: salesforce
    actions:
     - type: write
-      standardObjects:
+      objects:
         # Create a new lead in Salesforce whenever we make an API request.
         - objectName: lead
-          mode: insert
-          # Specify the how the URL that Ampersand exposes to you should be named.
-          endpoint: create-account
 ```
+
+Once a customer installs our integration, MailMonkey's application backend will make an API call to Ampersand to create the new lead whenever there's an email reply that we detect.
 
 ## Subscribe to Lead Conversions
 
@@ -113,10 +98,9 @@ Our third integration will have [Subscribe Actions](doc:subscribe-actions). We w
 ```yaml
  - name: subscribeToLeadConversions
    displayName: Subscribe to Lead Conversions
-   api: salesforce
-   actions:
-    - type: subscribe
-      standardObjects:
+   provider: salesforce
+   subscribe:
+      objects:
         - objectName: lead
           destination: leadConvertedWebhook          
           event: update
@@ -127,13 +111,7 @@ Our third integration will have [Subscribe Actions](doc:subscribe-actions). We w
           additionalFields:
             - fieldName: firstName
             - fieldName: lastName
-            - fieldName: email
-            
-destinations:
-  # Webhook that Ampersand should make requests to
-  - name: leadConvertedWebhook
-    type: webhook
-    url: webhooks.mailmonkey.com/salesforce-lead-converted
+            - fieldName: email            
 ```
 
 ## Deploy the completed config file
@@ -143,7 +121,9 @@ You can see the final `amp.yaml` file on [Github](https://github.com/amp-labs/sa
 Once we are happy with the definition of our integrations, we can deploy them with the amp CLI:
 
 ```
-amp deploy
+amp login
+# Our amp.yaml file is
+amp deploy source --project=my-project-id
 ```
 
 # Embed UI components
@@ -155,7 +135,6 @@ We decide that we want each integration to have its own page, and we are going t
 Here's a simplified version of what our frontend code would look like:
 
 ```typescript
-import { ChakraProvider } from '@chakra-ui/react';
 import { AmpersandProvider, InstallIntegration } from '@amp-labs/react';
 import { Routes, Route } from 'react-router-dom';
 
@@ -166,39 +145,43 @@ const options = {
 
 function App() {
   return (
-    // Wrap your app with AmpersandProvider.
+  // Wrap your app with AmpersandProvider.
     <AmpersandProvider options={options}>
-      // Wrap the app in ChakraProvider if you're also using it to style
-      // the rest of your app, otherwise wrap individual components.
-      <ChakraProvider>
-        <Routes>
-          <Route path = '/first-integration' element =
-            {<InstallIntegration 
-              // The name of the integration from amp.yaml
-              integration = "readContactsAndLeads"
-              // The ID that your app uses to identify this end user.
-              userId = {userId}
-              // The ID that your app uses to identify the user's company, org, or team.
-              groupId = {groupId}
-            />}
-          />
-          <Route path = '/second-integration' element =
-            {<InstallIntegration 
-              integration = "createLeads"
-              userId = {userId}
-              groupId = {groupId}
-            />}
-          />
-          <Route path = '/third-integration' element =
-            {<InstallIntegration 
-              integration = "subscribeToLeadConversions"
-              userId = {userId}
-              groupId = {groupId}
-            />}
-          />          
-        </Routes>
-        // Rest of the MailMonkey app goes here
-      </ChakraProvider>
+      <Routes>
+        <Route path = '/first-integration' element =
+          {<InstallIntegration 
+            // The name of the integration from amp.yaml
+            integration = "readContactsAndLeads"
+            // The ID that your app uses to identify this end user.
+            consumerRef = {userId}
+            // The display name that your app uses for this end user.
+            consumerName = {userName}
+            // The ID that your app uses to identify the user's company, org, or team.
+            groupRef = {groupId}
+            // The display name that your app uses for this company, org or team.
+            groupName = {groupName}
+          />}
+        />
+        <Route path = '/second-integration' element =
+          {<InstallIntegration 
+            integration = "createLeads"
+            consumerRef = {userId}
+            consumerName = {userName}
+            groupRef = {groupId}
+            groupName = {groupName}
+          />}
+        />
+        <Route path = '/third-integration' element =
+          {<InstallIntegration 
+            integration = "subscribeToLeadConversions"
+            consumerRef = {userId}
+            consumerName = {userName}
+            groupRef = {groupId}
+            groupName = {groupName}
+          />}
+        />          
+      </Routes>
+      // Rest of the MailMonkey app goes here
     </AmpersandProvider>
   )
 }

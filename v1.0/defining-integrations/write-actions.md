@@ -6,9 +6,58 @@ hidden: false
 createdAt: "Thu Nov 30 2023 19:51:19 GMT+0000 (Coordinated Universal Time)"
 updatedAt: "Fri Dec 01 2023 16:57:18 GMT+0000 (Coordinated Universal Time)"
 ---
-# Bulk Writes
+A write action writes data to your customer's SaaS whenever you make an API request to us. To define a write action, add `write` as a key in your integration defined in `amp.yaml`, and add a list of standard and custom objects you want to write to.
 
-If you are updating a large number of records, you can make bulk writes by calling our Write API endpoints, for example [Upsert records](https://docs.withampersand.com/v1.0/reference/upsertrecordsasync). These are asynchronous endpoints, once your request has been successfully received, you'll get a response which contains an Operation ID. You can then use the [GetOperation](https://docs.withampersand.com/v1.0/reference/getoperation) endpoint to poll on the status of this Operation, or view its status on the Ampersand Console.
+```yaml
+    write:
+      objects:
+        - objectName: account
+        - objectName: contact
+        - objectName: touchpoints__c # You can include custom objects
+```
+
+> 🗺️ On the roadmap
+> 
+> The ability to programmatically create custom objects when a user installs your integration.
+
+# Write a single record
+
+Once your users install an integration with a write action, your app can write data to their SaaS by making an API call to Ampersand, the URL is in the format of:
+
+`https://write.withampersand.com/v1/projects/:projectId/integrations/:integrationId/objects/:objectName`
+
+You can find your project ID and integration ID in the Ampersand Management Console (look in the address bar).
+
+`objectName` refers to the `objectName` key within the `amp.yaml` file that defines your integration. This must match the name of an object that exists within the SaaS instance.
+
+## Create a new record
+
+To create a new record, make a request to the [Create record](ref:createrecord) endpoint. For example:
+
+```
+curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
+--header 'X-Api-Key: JG4AWFAJC735QE5CINESB27KL72EHICNHARST4A' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "demo-group-id",
+    "record": {
+        "FirstName": "Harry",
+        "LastName": "Potter"
+    }
+}'
+```
+
+## Update an existing record
+
+To update an existing record, you need to know the ID of the record, which is the ID that the SaaS provider uses to uniquely identify this record. If you created the record using Ampersand, this ID is available in the API response. If you are reading the record first using Ampersand's Read Actions, make sure you add the ID as a required field in the read action.
+
+See the reference doc for [Update record](ref:updaterecord) endpoint for how to construct this request.
+
+# Bulk write
+
+If you are updating a large number of records, you can make bulk writes by calling our Write API endpoints, for example [Upsert records](ref:upsertrecordsasync). These are asynchronous endpoints, once your request has been successfully received, you'll get a response which contains an Operation ID. You can then use the [GetOperation](ref:getoperation) endpoint to poll on the status of this Operation, or view its status on the Ampersand Console.
+
+At the moment, only bulk write to Salesforce is supported.
 
 ## Primary Key
 
@@ -55,7 +104,7 @@ This is an example response you might receive from the request above:
 { "operationId": "5e4f06ca-445f-43ea-943e-78465ee1bb7a" }
 ```
 
-If you want to get the status of this Operation, you can either look for it on the Ampersand Console, or you can make a request to the [GetOperation](https://docs.withampersand.com/v1.0/reference/getoperation) endpoint. When the write has completed, the Operation will have a status of `BulkWriteCompleted`.
+If you want to get the status of this Operation, you can either look for it on the Ampersand Console, or you can make a request to the [GetOperation](ref:getoperation) endpoint. When the write has completed, the Operation will have a status of `BulkWriteCompleted`.
 
 ```
 curl --request GET \

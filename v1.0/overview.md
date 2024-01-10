@@ -12,7 +12,7 @@ updatedAt: "Mon Oct 16 2023 01:00:42 GMT+0000 (Coordinated Universal Time)"
 [Ampersand](https://www.withampersand.com/) is a config-first platform for SaaS builders who are creating user-facing integrations. We allow you to:
 
 - Read data from your customer's SaaS
-- Coming soon: write data to your customer's SaaS
+- Write data to your customer's SaaS
 - Coming soon: subscribe to events (creates, deletes, and field changes) in your customer's SaaS
 
 Here's an overview of the Ampersand platform:
@@ -22,7 +22,7 @@ Here's an overview of the Ampersand platform:
   "images": [
     {
       "image": [
-        "https://files.readme.io/dd150b9-Data_Flow.png",
+        "https://files.readme.io/6191436-e22b8d3-Group_4.png",
         null,
         "The Ampersand platform"
       ],

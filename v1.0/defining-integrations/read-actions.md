@@ -17,10 +17,6 @@ A read action reads data from your customer's SaaS on a scheduled basis and send
         ...
 ```
 
-> 🗺️ On the roadmap
-> 
-> The ability for your users to define their own sync schedules.
-
 # Read standard objects
 
 You can use Ampersand to read any [Salesforce standard object](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_list.htm).
@@ -28,7 +24,7 @@ You can use Ampersand to read any [Salesforce standard object](https://developer
 You need to specify: 
 
 - **objectName:** to indicate which standard object you'd like to read. This should match the name of the object in the official Salesforce and Hubspot documentation.
-- **destination: **the name of a destination you've defined via the Ampersand Console, such as a webhook.
+- **destination: **the name of the [destination](docs:destinations) that you've defined
 - **schedule: **how frequently the read should happen. This value must be a schedule in [cron syntax](https://docs.gitlab.com/ee/topics/cron/)
 - a list of fields
 
@@ -39,6 +35,10 @@ You need to specify:
           schedule: "0 */12 * * *" # every 12 hours
           ...
 ```
+
+> 🗺️ On the roadmap
+> 
+> The ability for your users to define their own sync schedules.
 
 ## Known fields
 
