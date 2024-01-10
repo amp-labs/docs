@@ -16,13 +16,12 @@ For this Quickstart, we are going to build integrations for a cool new SaaS app 
   "images": [
     {
       "image": [
-        "https://files.readme.io/6191436-e22b8d3-Group_4.png",
+        "https://files.readme.io/28feb09-Group_2987.png",
         null,
-        "The Ampersand platform"
+        ""
       ],
       "align": "center",
-      "sizing": "600px",
-      "caption": "The Ampersand platform"
+      "sizing": "300px"
     }
   ]
 }
