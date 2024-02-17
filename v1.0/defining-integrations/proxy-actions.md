@@ -2,7 +2,7 @@
 title: "Proxy Actions"
 slug: "proxy-actions"
 excerpt: ""
-hidden: true
+hidden: false
 metadata: 
   image: []
   robots: "index"
