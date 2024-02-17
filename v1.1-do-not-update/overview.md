@@ -42,7 +42,7 @@ The key components include:
 
 > 🗺️ On the roadmap
 > 
-> Self-hosted version of the the Ampersand Integration Service.
+> Self-hosted version of the Ampersand Integration Service.
 
 - **Embeddable UIs:** with Ampersand, you can embed set-up, configuration, and management UIs that allow your end users to customize and manage their integrations.
 
