@@ -22,7 +22,7 @@ A read action reads data from your customer's SaaS on a scheduled basis and send
 To read a standard object, you need to specify:
 
 - **objectName:** to indicate which standard object you'd like to read. This should match the name of the object in the official documentation for the SaaS API.
-- **destination: **the name of the [destination](docs:destinations) that you've defined
+- **destination: **the name of the [destination](doc:destinations) that you've defined
 - **schedule: **how frequently the read should happen. This value must be a schedule in [cron syntax](https://docs.gitlab.com/ee/topics/cron/)
 - a list of fields
 
