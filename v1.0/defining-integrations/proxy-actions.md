@@ -36,10 +36,11 @@ Here is an example API call:
 ```
 curl --location --request PUT 'https://proxy.withampersand.com/services/data/v56.0/sobjects/Account' \
 --header 'Content-Type: application/json' \ # Other content types are supported
---header 'x-amp-project-id: your-ampersand-project-id' \
+--header 'x-amp-project-id: my-ampersand-project-id' \
+--header 'x-api-key: my-api-key' \
 --header 'x-amp-proxy-version: 1' \
 --header 'x-amp-integration-name: my-salesforce-integration' \
---header 'x-amp-group-ref: company-id-from-your-app' \
+--header 'x-amp-group-ref: company-id-from-my-app' \
 --data '{
     # Same request body as if you are sending the request to Salesforce
 }'
