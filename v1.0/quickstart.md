@@ -42,7 +42,7 @@ Our first integration will have [Read Actions](doc:read-actions). We'll read 2 s
 
 ```yaml
 integrations:
- - name: readContactsAndLeads
+ - name: readContactsAndLeads # name this anything you'd like
    displayName: Read Contacts and Leads
    provider: salesforce
    read:

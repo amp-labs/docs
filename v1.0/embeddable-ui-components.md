@@ -26,14 +26,14 @@ yarn add @amp-labs/react @chakra-ui/react @emotion/react @emotion/styled framer-
 
 ## Credentials
 
-This library requires your application to be wrapped in the `<AmpersandProvider/>` context. `<AmpersandProvider />` takes these props:
+This library requires your components to be wrapped in the `<AmpersandProvider/>` context. `<AmpersandProvider />` takes these props:
 
 - `apiKey`: an API key to access Ampersand services.
 - `projectId`: your Ampersand project ID. 
 
 ## Example
 
-Here's an example project set up:
+Here's an example:
 
 ```typescript
 import { AmpersandProvider } from '@amp-labs/react';
@@ -45,9 +45,10 @@ const options = {
 
 function App() {
   return (
-    // Wrap your app with AmpersandProvider.
+    // Wrap all your components inside AmpersandProvider.
+    // You can either do this at the App level, or further down in the component tree.
     <AmpersandProvider options={options}>
-        // Rest of your app
+        // You can use any of the Ampersand components here.
         ...
     </AmpersandProvider>
   )
@@ -74,7 +75,7 @@ Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the follo
 
 ```typescript
 <InstallIntegration 
-  integration = "read-salesforce"
+  integration = {myIntegrationName}
   consumerRef = {userId}
   consumerName = {userFullName}
   groupRef = {teamId}
