@@ -64,9 +64,13 @@ The parameters of the component are:
 
 - **integration** (string): the name of an integration that you've defined in `amp.yaml`. See [Defining integrations](doc:defining-integrations).
 - **consumerRef** (string): the ID that your app uses to identify this end user.
-- **consumerName** (string): the display name for this end user.
+- **consumerName** (string, optional): the display name for this end user.
 - **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](doc:glossary#group).
-- **groupName** (string): the display name for this group.
+- **groupName** (string, optional): the display name for this group.
+- **onInstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully installs the integration.
+- **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
+
+Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`
 
 ```typescript
 <InstallIntegration 
@@ -75,6 +79,12 @@ The parameters of the component are:
   consumerName = {userFullName}
   groupRef = {teamId}
   groupName = {teamName}
+  onInstallSuccess = {(installationId, configObject) =>
+    console.log(`Successfully installed ${installationId} with configuration ${JSON.stringify(configObject, null, 2)}`)
+  }
+  onUpdateSuccess = {(installationId, configObject) =>
+    console.log(`Successfully updated ${installationId} with configuration ${JSON.stringify(configObject, null, 2)}`)
+  }
 />
 ```
 
@@ -102,9 +112,11 @@ The parameters of the component are:
 
 - **provider** (string): the name SaaS provider, such as "salesforce".
 - **consumerRef** (string): the ID that your app uses to identify this end user.
-- **consumerName** (string): the display name for this end user.
+- **consumerName** (string, optional): the display name for this end user.
 - **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](doc:glossary#group).
-- **groupName** (string): the display name for this group.
+- **groupName** (string, optional): the display name for this group.
+- **redirectUrl** (string, optional): if provided, we will redirect to this URL once a consumer successfully connects. This can either be an absolute or relative URL.
+- **onSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects, it should have the signature `(connectionID: string) => void`.
 
 ```typescript
 <ConnectProvider 
@@ -113,6 +125,8 @@ The parameters of the component are:
   consumerName = {userFullName}
   groupRef = {teamId}
   groupName = {teamName}
+  redirectUrl = "/connection-success"
+  onSuccess = {connectionId => console.log(`Successfully created connection ${connectionId}`)}
 />
 ```
 
