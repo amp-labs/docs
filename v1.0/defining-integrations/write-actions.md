@@ -3,8 +3,6 @@ title: "Write Actions"
 slug: "write-actions"
 excerpt: ""
 hidden: false
-createdAt: "Thu Nov 30 2023 19:51:19 GMT+0000 (Coordinated Universal Time)"
-updatedAt: "Fri Dec 01 2023 16:57:18 GMT+0000 (Coordinated Universal Time)"
 ---
 A write action writes data to your customer's SaaS whenever you make an API request to us. To define a write action, add `write` as a key in your integration defined in `amp.yaml`, and add a list of standard and custom objects you want to write to.
 
@@ -61,16 +59,21 @@ At the moment, only bulk write to Salesforce is supported.
 
 ## Primary Key
 
-For updates and upserts, you'll need to supply a `primaryKey`. This is the name of the field that should be used as an identifier when deciding whether to create a new record or update an existing record. For Salesforce, this must be a field which is an "External ID" field.
+For updates and upserts, you'll need to supply a `primaryKey`. This is the name of the field that should be used as an identifier when deciding whether to create a new record or update an existing record. For Salesforce, this can either be the default `id` field that exists on every object, or it can be an "External ID" field. This field must exist in the CSV, and must be specified in the API request.
 
 ## CSV Format
 
 You can provide your data in one of 2 formats:
 
-- a CSV string (max size 10 MiB)
-- a public URL where the Ampersand server can make a GET request to retrieve a CSV file (max size of file is 150 MiB)
+- A CSV string (max size 10 MiB)
+- A public URL where the Ampersand server can make a GET request to retrieve a CSV file (max size of file is 150 MiB)
 
-The headers of the CSV file must match the field names of the object in Salesforce. Please note that Salesforce requires `__c` at the end of all custom fields. Here is an example CSV file:
+A few things to note regarding the format of the file:
+
+- Column headers must match the field names of the object in Salesforce. Please note that Salesforce requires `__c` at the end of all custom fields.
+- Line endings must be `LF`, not `CRLF`. Unix-based systems and most libraries for generating CSV files would default to `LF` line endings already.
+ 
+Here is an example CSV:
 
 ```
 custom_id__c,start_date__c,objective_type__c,daily_budget_amount__c
@@ -81,7 +84,7 @@ custom_id__c,start_date__c,objective_type__c,daily_budget_amount__c
 
 ## Sample Request
 
-Here's a sample request for bulk upsert using the CSV file above, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file.
+Here's a sample request for bulk upsert using the CSV file above, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file.)
 
 ```
 curl --request PUT \
@@ -104,11 +107,18 @@ This is an example response you might receive from the request above:
 { "operationId": "5e4f06ca-445f-43ea-943e-78465ee1bb7a" }
 ```
 
-If you want to get the status of this Operation, you can either look for it on the Ampersand Console, or you can make a request to the [GetOperation](ref:getoperation) endpoint. When the write has completed, the Operation will have a status of `BulkWriteCompleted`.
+If you want to get the status of this Operation, you can either look for it on the Ampersand Console, or you can make a request to the [GetOperation](ref:getoperation) endpoint. For example:
 
 ```
 curl --request GET \
      --url https://api.withampersand.com/v1/projects/2234wf/operations/5e4f06ca-445f-43ea-943e-78465ee1bb7a \
-     --header 'X-Api-Key: YOUR_KEY' \     
-     --header 'accept: application/json'
+     --header 'X-Api-Key: YOUR_KEY'
+```
+
+If the Operation has failed, you can get more details about the failure by retrieving the logs related to this Operation using the [ListOperationLogs](ref:listoperationlogs) endpoint. For example:
+
+```
+curl --request GET \
+     --url https://api.withampersand.com/v1/projects/2234wf/operations/5e4f06ca-445f-43ea-943e-78465ee1bb7a/logs \
+     --header 'X-Api-Key: YOUR_KEY'
 ```
