@@ -72,7 +72,7 @@ A few things to note regarding the format of the file when writing to Salesforce
 
 - Column headers must match the field names of the object in Salesforce. Please note that Salesforce requires `__c` at the end of all custom fields.
 - Line endings must be `LF`, not `CRLF`. Unix-based systems and most libraries for generating CSV files would default to `LF` line endings already.
-- Dates and timestamps must follow (Salesforce's specified format)[https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_valid_date_formats.htm].
+- Dates and timestamps must follow [Salesforce's specified format](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_valid_date_formats.htm).
  
 Here is an example CSV:
 
