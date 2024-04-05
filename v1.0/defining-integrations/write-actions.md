@@ -113,7 +113,7 @@ curl --request PUT \
 
 ### Method 3: using an Ampersand upload URL
 
-Using an upload URL is a multi-step process where you upload CSV data to the Ampersand server using a temporary signed URL, and then make a subsequent request for the bulk write.
+Using an upload URL is a multi-step process where you upload CSV data to the Ampersand server using a temporary signed URL, and then make a subsequent request for the bulk write. The max file size allowed is 150 MiB.
 
 #### Step 1: generate an upload URL
 
