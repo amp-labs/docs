@@ -84,7 +84,7 @@ You can provide your data in one of 3 ways:
 
 - Method 1: a CSV string
 - Method 2: a public URL
-- Method 3: using an upload URL
+- Method 3: an Ampersand upload URL
 
 ### Method 1: CSV string
 
@@ -130,7 +130,7 @@ You'll get a response like the following:
 ```
 {
   "url": "https://storage.googleapis.com/ampersand-prod-write-data/example?foo=bar",
-  "reference":"gs://ampersand-dev-write-data/2024/04/05/096b495a-8042-4ea7-a19f-4280a6ee84d0.csv"
+  "reference":"gs://ampersand-prod-write-data/2024/04/05/096b495a-8042-4ea7-a19f-4280a6ee84d0.csv"
 }
 ```
 
@@ -144,8 +144,10 @@ Here is a command line example. Please note that it uses [jq](https://jqlang.git
 # Save the results from generateUploadURL in a file called result.json
 curl -H "X-Api-Key: YOUR_AMPERSAND_KEY" https://write.withampersand.com/v1/generate-upload-url > result.json
 
-# Use jq to extract and deserialize the upload URL, and save in a shell variable
+# Use jq to extract and deserialize the upload URL and reference,
+# and save them in shell variables
 URL=$(jq -r .url result.json)
+REFERENCE=$(jq -r .reference result.json)
 
 # Upload a local file called `data.csv`
 curl -X PUT -H "Content-Type: text/csv" --upload-file data.csv "$URL"
@@ -161,12 +163,11 @@ Here is an example request for bulk upsert, if the object to be written to is a 
 curl --request PUT \
      --url https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c:async \
      --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
-     --header 'accept: application/json' \
      --header 'content-type: application/json' \
      --data '
 {
   "groupRef": "sample-org-id",
-  "recordsURL": "gs://ampersand-dev-write-data/2024/04/05/096b495a-8042-4ea7-a19f-4280a6ee84d0.csv",
+  "recordsURL": "gs://ampersand-prod-write-data/2024/04/05/44691f9c-7934-4c47-9eb6-2af044b41388.csv",
   "primaryKey": "custom_id__c"
 }
 '
