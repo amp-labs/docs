@@ -84,7 +84,7 @@ You can provide your data in one of 3 ways:
 
 - Method 1: a CSV string
 - Method 2: a public URL
-- Method 3: a reference returned by the [GenerateUploadURL](ref:generateuploadurl-1) endpoint.
+- Method 3: using an upload URL
 
 ### Method 1: CSV string
 
@@ -136,15 +136,26 @@ You'll get a response like the following:
 
 #### Step 2: make a request to the upload URL with CSV data
 
-Next, make a PUT request to the `url` returned from the previous request, with CSV data as the content.
+Next, make a PUT request to the `url` returned from the previous request, with CSV data as the content. Please note that upload URLs are only valid for 15 minutes after they are generated.
+
+Here is a command line example. Please note that it uses [jq](https://jqlang.github.io/jq/download/) for JSON deserialization (otherwise the upload URL will have unicode escape characters, which the subsequent `curl` request will not work well with.) When you are making requests in code, you do not have to worry about this since the request library in your language of choice should handle JSON deserialization.
 
 ```
-curl -X PUT -H 'Content-Type: text/csv' -d @data.csv https://storage.googleapis.com/ampersand-prod-write-data/example?foo=bar
+# Save the results from generateUploadURL in a file called result.json
+curl -H "X-Api-Key: YOUR_AMPERSAND_KEY" https://write.withampersand.com/v1/generate-upload-url > result.json
+
+# Use jq to extract and deserialize the upload URL, and save in a shell variable
+URL=$(jq -r .url result.json)
+
+# Upload a local file called `data.csv`
+curl -X PUT -H "Content-Type: text/csv" --upload-file data.csv "$URL"
 ```
 
 #### Step 3: make a request to start a bulk write
 
-The response from the [GenerateUploadURL](ref:generateuploadurl-1) endpoint from step 1 should include a `reference` field which is a URL that starts with `gs://`, put this URL in the `recordsURL` field of a bulk write request. Here is an example request for bulk upsert, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file that was uploaded)
+The response from the [GenerateUploadURL](ref:generateuploadurl-1) endpoint from step 1 should include a `reference` field which is a URL that starts with `gs://`. Put this URL in the `recordsURL` field of a bulk write request.
+
+Here is an example request for bulk upsert, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file that was uploaded)
 
 ```
 curl --request PUT \
