@@ -57,18 +57,13 @@ If you are updating a large number of records, you can make bulk writes by calli
 
 At the moment, only bulk write to Salesforce is supported.
 
-## Primary Key
+## Primary key
 
 For updates and upserts, you'll need to supply a `primaryKey`. This is the name of the field that should be used as an identifier when deciding whether to create a new record or update an existing record. For Salesforce, this can either be the default `id` field that exists on every object, or it can be an "External ID" field. This field must exist in the CSV, and must be specified in the API request.
 
-## CSV Format
+## Format the data
 
-You can provide your data in one of 2 formats:
-
-- A CSV string (max size 10 MiB)
-- A public URL where the Ampersand server can make a GET request to retrieve a CSV file (max size of file is 150 MiB)
-
-A few things to note regarding the format of the file when writing to Salesforce:
+Salesforce bulk writes and bulk deletes expect data in CSV format. A few things to note regarding the CSV format when writing to Salesforce:
 
 - Column headers must match the field names of the object in Salesforce. Please note that Salesforce requires `__c` at the end of all custom fields.
 - Line endings must be `LF`, not `CRLF`. Unix-based systems and most libraries for generating CSV files would default to `LF` line endings already.
@@ -83,14 +78,28 @@ custom_id__c,start_date__c,objective_type__c,daily_budget_amount__c
 2,2023-11-20T11:36:22-08:00,LEAD_GENERATION,10
 ```
 
-## Sample Request
+## Send the data to Ampersand
 
-Here's a sample request for bulk upsert using the CSV file above, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file.)
+You can provide your data in one of 3 ways:
+
+- Method 1: a CSV string
+- Method 2: a public URL
+- Method 3: a reference returned by the [GenerateUploadURL](ref:generateuploadurl-1) endpoint.
+
+### Method 1: CSV string
+
+You can directly add CSV data to the `recordsCSV` field of the request body. The max limit for this 10 MiB.
+
+### Method 2: public URL
+
+In the `recordsURL` field of the request body, you can provide a public URL where the Ampersand server can make a GET request to retrieve a CSV file (max size of file is 150 MiB). The URL should start with `https://`. 
+
+Here is an example request for bulk upsert using the CSV file above, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file.)
 
 ```
 curl --request PUT \
      --url https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c:async \
-     --header 'X-Api-Key: YOUR_KEY' \
+     --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
      --header 'accept: application/json' \
      --header 'content-type: application/json' \
      --data '
@@ -102,7 +111,59 @@ curl --request PUT \
 '
 ```
 
-This is an example response you might receive from the request above:
+### Method 3: using an Ampersand upload URL
+
+Using an upload URL is a multi-step process where you upload CSV data to the Ampersand server using a temporary signed URL, and then make a subsequent request for the bulk write.
+
+#### Step 1: generate an upload URL
+
+Make a request to the [GenerateUploadURL](ref:generateuploadurl-1) endpoint:
+
+```
+curl --request GET \
+     --url https://write.withampersand.com/v1/generate-upload-url \
+     --header 'X-Api-Key: YOUR_AMPERSAND_KEY'
+```
+
+You'll get a response like the following:
+
+```
+{
+  "url": "https://storage.googleapis.com/ampersand-prod-write-data/example?foo=bar",
+  "reference":"gs://ampersand-dev-write-data/2024/04/05/096b495a-8042-4ea7-a19f-4280a6ee84d0.csv"
+}
+```
+
+#### Step 2: make a request to the upload URL with CSV data
+
+Next, make a PUT request to the `url` returned from the previous request, with CSV data as the content.
+
+```
+curl -X PUT -H 'Content-Type: text/csv' -d @data.csv https://storage.googleapis.com/ampersand-prod-write-data/example?foo=bar
+```
+
+#### Step 3: make a request to start a bulk write
+
+The response from the [GenerateUploadURL](ref:generateuploadurl-1) endpoint from step 1 should include a `reference` field which is a URL that starts with `gs://`, put this URL in the `recordsURL` field of a bulk write request. Here is an example request for bulk upsert, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file that was uploaded)
+
+```
+curl --request PUT \
+     --url https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c:async \
+     --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+     --header 'accept: application/json' \
+     --header 'content-type: application/json' \
+     --data '
+{
+  "groupRef": "sample-org-id",
+  "recordsURL": "gs://ampersand-dev-write-data/2024/04/05/096b495a-8042-4ea7-a19f-4280a6ee84d0.csv",
+  "primaryKey": "custom_id__c"
+}
+'
+```
+
+## Get the status of a bulk write operation
+
+Because bulk writes are asynchronous operations, you'll get back an Operation ID from the API, for example:
 
 ```
 { "operationId": "5e4f06ca-445f-43ea-943e-78465ee1bb7a" }
@@ -113,7 +174,7 @@ If you want to get the status of this Operation, you can either look for it on t
 ```
 curl --request GET \
      --url https://api.withampersand.com/v1/projects/2234wf/operations/5e4f06ca-445f-43ea-943e-78465ee1bb7a \
-     --header 'X-Api-Key: YOUR_KEY'
+     --header 'X-Api-Key: YOUR_AMPERSAND_KEY'
 ```
 
 If the Operation has failed, you can get more details about the failure by retrieving the logs related to this Operation using the [ListOperationLogs](ref:listoperationlogs) endpoint. For example:
@@ -121,5 +182,5 @@ If the Operation has failed, you can get more details about the failure by retri
 ```
 curl --request GET \
      --url https://api.withampersand.com/v1/projects/2234wf/operations/5e4f06ca-445f-43ea-943e-78465ee1bb7a/logs \
-     --header 'X-Api-Key: YOUR_KEY'
+     --header 'X-Api-Key: YOUR_AMPERSAND_KEY'
 ```
