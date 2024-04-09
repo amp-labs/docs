@@ -199,7 +199,7 @@ curl --request GET \
 
 ## Bulk delete
 
-To delete records in bulk, you'll make a call to the Bulk Write API endpoint, with `delete` as the type and `bulk` as the mode. You'll need to supply a CSV file or string that has a single column containing the [primary key](doc:write-actions#primary-key) values of the records you'd like to delete. You'll supply the data and query for the status of the operation in the same way as any other types of bulk write. See the sections above for more information.
+To delete records in bulk, you'll make a call to the Bulk Write API endpoint, with `delete` as the type and `bulk` as the mode. You'll need to supply a CSV file or string that has a single column containing the [primary key](doc:write-actions#primary-key) values of the records you'd like to delete. You'll still need a header in the CSV data that contains the name of the primary key. You'll supply the data and query for the status of the operation in the same way as any other types of bulk write. See the sections above for more information.
 
 Here is an example request:
 
