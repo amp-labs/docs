@@ -59,7 +59,7 @@ At the moment, only bulk write to Salesforce is supported.
 
 ## Primary key
 
-For updates and upserts, you'll need to supply a `primaryKey`. This is the name of the field that should be used as an identifier when deciding whether to create a new record or update an existing record. For Salesforce, this can either be the default `id` field that exists on every object, or it can be an "External ID" field. This field must exist in the CSV, and must be specified in the API request.
+For updates, upserts, and deletes, you'll need to supply a `primaryKey`. This is the name of the field that should be used as an identifier when deciding whether to create a new record or update an existing record. For Salesforce, this can either be the default `id` field that exists on every object, or it can be an "External ID" field. This field must exist in the CSV, and must be specified in the API request.
 
 ## Format the data
 
@@ -196,3 +196,29 @@ curl --request GET \
      --url https://api.withampersand.com/v1/projects/2234wf/operations/5e4f06ca-445f-43ea-943e-78465ee1bb7a/logs \
      --header 'X-Api-Key: YOUR_AMPERSAND_KEY'
 ```
+
+## Bulk delete
+
+To delete records in bulk, you'll make a call to the Bulk Write API endpoint, with `delete` as the type and `bulk` as the mode. You'll need to supply a CSV file or string that has a single column that contains the [primary key](doc:write-actions#primary-key) values of the records you'd like to delete. You'll supply the data and query for the status of the operation in the same way as any other bulk writes. See the sections above for more information.
+
+Here is an example request:
+
+```
+curl --request POST \
+     --url https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c \
+     --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+     --header 'content-type: application/json' \
+     --data '
+{
+  "groupRef": "sample-org-id",
+  "recordsURL": "https://public-url.com/my-data",
+  "primaryKey": "custom_id__c",
+  "type": "delete",
+  "mode": "bulk"
+}
+'
+```
+
+### Size limits for bulk delete
+
+If you are deleting using a primary key which is not the standard Salesforce "Id" field of the object, the total length of all of your primary key values combined for a single request must be less than 4000 characters. This is due to the limits that Salesforce imposes on SOQL queries. If you are using the "Id" field, then you are only subject to the total size limit on the CSV data (10 MiB for inline CSV string in `recordsCSV` field or 150 MiB for CSV file).
