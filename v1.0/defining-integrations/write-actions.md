@@ -30,7 +30,7 @@ You can find your project ID and integration ID in the Ampersand Management Cons
 
 ## Create a new record
 
-To create a new record, make a request to the [Create record](ref:createrecord) endpoint. For example:
+To create a new record, make a request to the Create record endpoint. For example:
 
 ```
 curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
@@ -49,7 +49,7 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 
 To update an existing record, you need to know the ID of the record, which is the ID that the SaaS provider uses to uniquely identify this record. If you created the record using Ampersand, this ID is available in the API response. If you are reading the record first using Ampersand's Read Actions, make sure you add the ID as a required field in the read action.
 
-See the reference doc for [Update record](ref:updaterecord) endpoint for how to construct this request.
+See the reference doc for [Write](ref:writerecords) endpoint for how to construct this request.
 
 # Bulk write
 
@@ -199,7 +199,7 @@ curl --request GET \
 
 ## Bulk delete
 
-To delete records in bulk, you'll make a call to the Bulk Write API endpoint, with `delete` as the type and `bulk` as the mode. You'll need to supply a CSV file or string that has a single column containing the [primary key](doc:write-actions#primary-key) values of the records you'd like to delete. You'll still need a header in the CSV data that contains the name of the primary key. You'll supply the data and query for the status of the operation in the same way as any other types of bulk write. See the sections above for more information.
+To delete records in bulk, you'll make a call to the [Write endpoint](ref:writerecords), with `delete` as the type and `bulk` as the mode. You'll need to supply a CSV file or string that has a single column containing the [primary key](doc:write-actions#primary-key) values of the records you'd like to delete. You'll still need a header in the CSV data that contains the name of the primary key. You'll supply the data and query for the status of the operation in the same way as any other types of bulk write. See the sections above for more information.
 
 Here is an example request:
 
