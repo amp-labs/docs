@@ -20,7 +20,7 @@ A write action writes data to your customer's SaaS whenever you make an API requ
 
 # Write a single record
 
-Once your users install an integration with a write action, your app can write data to their SaaS by making an API call to Ampersand, the URL is in the format of:
+Once your users install an integration with a write action, your app can write data to their SaaS by making a POST call to Ampersand, the URL is in the format of:
 
 `https://write.withampersand.com/v1/projects/:projectId/integrations/:integrationId/objects/:objectName`
 
@@ -30,14 +30,15 @@ You can find your project ID and integration ID in the Ampersand Management Cons
 
 ## Create a new record
 
-To create a new record, make a request to the Create record endpoint. For example:
+To create a new record, make a request to the [Write endpoint](ref:writerecords) with `type` being `create`. For example:
 
 ```
 curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
---header 'X-Api-Key: JG4AWFAJC735QE5CINESB27KL72EHICNHARST4A' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
     "groupRef": "demo-group-id",
+    "type": "create",
     "record": {
         "FirstName": "Harry",
         "LastName": "Potter"
@@ -47,13 +48,26 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 
 ## Update an existing record
 
-To update an existing record, you need to know the ID of the record, which is the ID that the SaaS provider uses to uniquely identify this record. If you created the record using Ampersand, this ID is available in the API response. If you are reading the record first using Ampersand's Read Actions, make sure you add the ID as a required field in the read action.
+To update an existing record, you need to know the ID of the record, which is the ID that the SaaS provider uses to uniquely identify this record. If you created the record using Ampersand, this ID is available in the API response. If you are reading the record first using Ampersand's Read Actions, make sure you add the ID as a required field in the read action. Here is an example request:
 
-See the reference doc for [Write](ref:writerecords) endpoint for how to construct this request.
+```
+curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "demo-group-id",
+    "type": "update",
+    "record": {
+        "Id": "20scv09wer3klj",
+        "FirstName": "Harry",
+        "LastName": "Potter"
+    }
+}'
+```
 
 # Bulk write
 
-If you are updating a large number of records, you can make bulk writes by calling our Write API endpoints, for example [Upsert records](ref:upsertrecordsasync). These are asynchronous endpoints, once your request has been successfully received, you'll get a response which contains an Operation ID. You can then use the [GetOperation](ref:getoperation) endpoint to poll on the status of this Operation, or view its status on the Ampersand Console.
+If you are updating a large number of records, you can make bulk writes by calling the [Write endpoint](ref:writerecords) with `mode` being `bulk` . Because bulk writes are asynchronous, once your request has been successfully received, you'll get a response that contains an Operation ID. You can then use the [GetOperation](ref:getoperation) endpoint to poll on the status of this Operation, or view its status on the Ampersand Console.
 
 At the moment, only bulk write to Salesforce is supported.
 
@@ -97,14 +111,14 @@ In the `recordsURL` field of the request body, you can provide a public URL wher
 Here is an example request for bulk upsert using the CSV file above, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file.)
 
 ```
-curl --request PUT \
-     --url https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c:async \
+curl --location 'https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c' \
      --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
-     --header 'accept: application/json' \
      --header 'content-type: application/json' \
      --data '
 {
   "groupRef": "sample-org-id",
+  "type": "upsert",
+  "mode": "bulk",
   "recordsURL": "https://sample.com/data.csv",
   "primaryKey": "custom_id__c"
 }
@@ -160,13 +174,14 @@ The response from the [GenerateUploadURL](ref:generateuploadurl-1) endpoint from
 Here is an example request for bulk upsert, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file that was uploaded)
 
 ```
-curl --request PUT \
-     --url https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c:async \
+curl --location 'https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c' \
      --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
      --header 'content-type: application/json' \
      --data '
 {
   "groupRef": "sample-org-id",
+  "type": "upsert",
+  "mode": "bulk",
   "recordsURL": "gs://ampersand-prod-write-data/2024/04/05/44691f9c-7934-4c47-9eb6-2af044b41388.csv",
   "primaryKey": "custom_id__c"
 }
@@ -204,17 +219,16 @@ To delete records in bulk, you'll make a call to the [Write endpoint](ref:writer
 Here is an example request:
 
 ```
-curl --request POST \
-     --url https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c \
+curl --location 'https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c' \
      --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
      --header 'content-type: application/json' \
      --data '
 {
   "groupRef": "sample-org-id",
-  "recordsURL": "https://public-url.com/my-data",
-  "primaryKey": "custom_id__c",
   "type": "delete",
-  "mode": "bulk"
+  "mode": "bulk",
+  "recordsURL": "https://public-url.com/my-data",
+  "primaryKey": "custom_id__c"
 }
 '
 ```
