@@ -16,7 +16,7 @@ A proxy action allows you to make passthrough API calls to the SaaS provider's A
 
 # Make API calls
 
-All proxy actions expose an API with the base of `https://proxy.withampersand.com`. When making a passthrough call, simply replace the base URL with the Ampersand proxy URL. For example, instead of making a request to `https://subdomain.my.salesforce.com/services/data/v56.0/sobjects/Account`, making the same request to `https://proxy.withampersand.com/services/data/v56.0/sobjects/Account`. To see a list of all the API base URLs we proxy to, see the [providers.yaml file](https://github.com/amp-labs/connectors/blob/main/providers/providers.yaml) in our connectors library.
+All proxy actions expose an API with the base of `https://proxy.withampersand.com`. When making a passthrough call, simply replace the base URL with the Ampersand proxy URL. For example, instead of making a request to `https://subdomain.my.salesforce.com/services/data/v56.0/sobjects/Account`, making the same request to `https://proxy.withampersand.com/services/data/v56.0/sobjects/Account`. To see a list of all the API base URLs we proxy to, see the [catalog file](https://github.com/amp-labs/connectors/blob/main/providers/catalog.go) in our connectors library.
 
 Keep the request body and HTTP verb the same, and add these additional headers so Ampersand knows how to deliver the API request:
 
