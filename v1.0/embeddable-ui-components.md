@@ -28,8 +28,8 @@ yarn add @amp-labs/react @chakra-ui/react @emotion/react @emotion/styled framer-
 
 This library requires your components to be wrapped in the `<AmpersandProvider/>` context. `<AmpersandProvider />` takes these props:
 
-- `apiKey`: an API key to access Ampersand services.
-- `projectId`: your Ampersand project ID. 
+- `apiKey`: an API key to access Ampersand services. If you don't have one yet, create one in the Ampersand Console.
+- `projectId`: your Ampersand project ID.
 
 ## Example
 

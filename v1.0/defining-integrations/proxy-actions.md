@@ -7,7 +7,7 @@ metadata:
   image: []
   robots: "index"
 ---
-A proxy action allows you to make passthrough API calls to the SaaS provider's API. To define a proxy action, add `proxy` as a key in your integration defined in `amp.yaml`:
+A proxy action allows you to make passthrough API calls to the SaaS provider's API. Ampersand will attach the right authentication headers and also take care of token refreshes when necessary. To define a proxy action, add `proxy` as a key in your integration defined in `amp.yaml`:
 
 ```yaml
     proxy:
@@ -22,7 +22,7 @@ Keep the request body and HTTP verb the same, and add these additional headers s
 
 - `x-amp-proxy-version`: this should always be 1
 - `x-amp-project-id`: your Ampersand project ID
-- `x-api-key`: your Ampersand API key
+- `x-api-key`: your Ampersand API key, if you don't have one yet, create one in the Ampersand Console.
 
 In order for Ampersand to know which SaaS instance to make the API call against, you'll need to provide either:
 
