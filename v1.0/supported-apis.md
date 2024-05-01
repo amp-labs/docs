@@ -15,6 +15,6 @@ We support [standard objects](https://developer.salesforce.com/docs/atlas.en-us.
 
 We support standard objects (everything listed in [this page](https://developers.hubspot.com/docs/api/crm/understanding-the-crm) under "Objects") and custom objects within Hubspot.
 
-> 🗺️ On the roadmap
-> 
-> We plan to support: Outreach, Gong, Marketo, Salesloft and other tools.
+# Other APIs
+
+We are constantly adding new connectors to APIs, please see the [catalog file](https://github.com/amp-labs/connectors/blob/main/providers/catalog.go) of our Connectors library for the latest set of APIs we support.
