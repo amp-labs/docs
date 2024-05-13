@@ -7,6 +7,24 @@ metadata:
   image: []
   robots: "index"
 ---
+
+# Prerequisites
+
+## Install the Ampersand CLI
+You will need to have Ampersand CLI in order to deploy integrations. 
+
+### Using Homebrew
+
+```
+brew tap amp-labs/cli
+brew update
+brew install amp-labs/cli/cli
+```
+
+### Other systems
+
+Visit https://github.com/amp-labs/cli/releases and download the binary for your machine’s architecture. Place the binary file somewhere on your PATH (e.g. inside `/usr/bin`).
+
 For this Quickstart, we are going to build integrations for a cool new SaaS app called MailMonkey - an email campaign manager that integrates with Salesforce. You can see the final `amp.yaml` file on [Github](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml).
 
 [block:image]
