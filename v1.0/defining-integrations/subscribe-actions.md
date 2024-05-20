@@ -47,7 +47,7 @@ If you specify `create` as the event, then Ampersand will make a POST request to
 ```yaml
    actions:
     - type: subscribe
-      standardObjects:
+      objects:
         - objectName: opportunity
           destination: opportunityCreatedWebhook
           event: create
@@ -82,7 +82,7 @@ If you specify `delete` as the event, then Ampersand will make a POST request to
 ```yaml
    actions:
     - type: subscribe
-      standardObjects:
+      objects:
         - objectName: opportunity
           destination: opportunityDeletedWebhook
           event: delete
@@ -114,7 +114,7 @@ As an example, you are building a sales enablement tool and you want to enable y
 ```yaml
    actions:
     - type: subscribe
-      standardObjects:
+      objects:
         - objectName: opportunity
           destination: opportunityUpdatedWebhook          
           event: update
@@ -201,7 +201,7 @@ integrations:
    api: salesforce
    actions:
     - type: subscribe
-      standardObjects:
+      objects:
         - objectName: opportunity
           destination: opportunityCreatedWebhook
           event: create

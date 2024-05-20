@@ -13,21 +13,21 @@ A read action reads data from your customer's SaaS on a scheduled basis and send
 
 ```yaml
   read:
-      standardObjects:
+      objects:
         ...
 ```
 
-# Read standard objects
+# Defining reads
 
-To read a standard object, you need to specify:
+To read an object, you need to specify:
 
-- **objectName:** to indicate which standard object you'd like to read. This should match the name of the object in the official documentation for the SaaS API.
+- **objectName:** to indicate which object you'd like to read. This should match the name of the object in the official documentation for the SaaS API.
 - **destination: **the name of the [destination](doc:destinations) that you've defined
 - **schedule: **how frequently the read should happen. This value must be a schedule in [cron syntax](https://docs.gitlab.com/ee/topics/cron/)
 - a list of fields
 
 ```yaml
-      standardObjects:
+      objects:
         - objectName: lineItem
           destination: lineItemWebhook
           schedule: "0 */12 * * *" # every 12 hours
@@ -45,7 +45,7 @@ Fields can be either be required or optional. If a field is required, then all u
 - **fieldName: ** the name of the field from the official SaaS API documentation, converted to lower case. For example, if you'd like to read the first name of a contact, write `firstname`.
 
 ```yaml
-      standardObjects:
+      objects:
         - objectName: contact
           destination: contactWebhook
           schedule: "0 */12 * * *" # every 12 hours
@@ -80,7 +80,7 @@ Fields can be either be required or optional. If a field is required, then all u
 If you want to give your user the option to pick from any of the fields in their Object, use `optionalFieldsAuto: all`. The UI component will populate a list of all the fields pulled from their object and allow them to pick which ones your app will be able to read.
 
 ```yaml
-      standardObjects:
+      objects:
         - objectName: contact
           destination: contactWebhook
           schedule: "0 */12 * * *" # every 12 hours
@@ -104,7 +104,7 @@ For these fields, you'll specify:
 - **prompt** (optional): additional context that you want to show your user in the set up UI Component about this field. This should be a full sentence.
 
 ```yaml
-      standardObjects:
+      objects:
         - objectName: contact
           destination: contactWebhook
           optionalFields:
@@ -142,7 +142,7 @@ integrations:
  - name: readSalesforce
    api: salesforce
    read:
-     standardObjects:
+     objects:
       
       - objectName: account
         destination: accountWebhook

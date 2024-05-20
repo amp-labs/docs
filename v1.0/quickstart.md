@@ -38,7 +38,7 @@ Let's create a folder called `source`, with a file inside called `amp.yaml`, thi
 
 ## Read Contacts and Leads
 
-Our first integration will have [Read Actions](doc:read-actions). We'll read 2 standard objects from Salesforce: contacts and leads.
+Our first integration will have [Read Actions](doc:read-actions). We'll read 2 objects from Salesforce: contacts and leads.
 
 ```yaml
 integrations:
@@ -46,7 +46,7 @@ integrations:
    displayName: Read Contacts and Leads
    provider: salesforce
    read:
-    standardObjects:
+    objects:
       - objectName: contact
         destination: contactWebhook
         schedule: "*/30 * * * *" # every 30 minutes

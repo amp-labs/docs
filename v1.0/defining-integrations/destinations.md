@@ -22,7 +22,7 @@ integrations:
     displayName: Salesforce read
     provider: salesforce
     read:
-      standardObjects:
+      objects:
         - objectName: account
           destination: accountWebhook
         - objectName: contact
