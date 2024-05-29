@@ -147,17 +147,19 @@ integrations:
       - objectName: account
         destination: accountWebhook
         schedule: "0 */12 * * *" # every 12 hours
-        requiredFields: 
-        - fieldName: name
-        - fieldName: industry
+        requiredFields:
+          - fieldName: id
+          - fieldName: name
+          - fieldName: industry
         optionalFields:
-        - fieldName: annualrevenue
-        - fieldName: website
+          - fieldName: annualrevenue
+          - fieldName: website
               
       - objectName: contact
         destination: contactWebhook
         schedule: "0 */12 * * *" # every 12 hours
         requiredFields:
+          - fieldName: id
           - fieldName: firstname
           - fieldName: lastname
           - fieldName: email
@@ -166,4 +168,59 @@ integrations:
             prompt: We will use this word when addressing this person in emails we send out.
         optionalFieldsAuto: all
       
+```
+
+# Example webhook message
+
+Ampersand will do reads at the schedule you specify in `amp.yaml`. If there are any new or updated records since our last read, we will send you webhook messages. For the sample integration above, here's what a sample webhook message might look like for the Contact object:
+
+```javascript
+{
+ "projectId": "ampersand-project-id",
+ "provider": "salesforce",
+ "workspace": "salesforce-subdomain",
+ "groupRef": "xyz-company",
+ "groupName": "XYZ Company",
+ "installationId": "installation-id",
+ "objectName": "Contact",
+ "result": [
+  {
+    "fields": {
+      "id": "001Dp00000P8QurIAF",
+      "firstname": "Sally",
+      "lastname": "Jones",
+      "email": "sally@jones.net"
+    },
+    "mappedFields": {
+      "pronoun": "she",
+    },
+    "raw": {
+      "id": "001Dp00000P8QurIAF",
+      "firstname": "Sally",
+      "lastname": "Jones",
+      "email": "sally@jones.net",
+      "pronoun_custom_field": "she",
+      // ... other fields for the record
+    }
+  },
+  {
+    "fields": {
+      "id": "001Dp00000P9BusEIS",
+      "firstname": "Taylor",
+      "lastname": "Lao",
+      "email": "taylor.lao@company.com"
+    },
+    "mappedFields": {
+      "pronoun": "they",
+    },
+    "raw": {
+      "id": "001Dp00000P9BusEIS",
+      "firstname": "Taylor",
+      "lastname": "Lao",
+      "email": "taylor.lao@company.com"
+      "pronoun_custom_field": "they",
+      // ... other fields for the record
+    }
+  }
+]}
 ```
