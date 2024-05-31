@@ -18,22 +18,22 @@ metadata:
 
 ## Before You Get Started
 
-To integrate Salesforce with Ampersand, you need to [Create a Salesforce Account ](https://docs.withampersand.com/docs/salesforce-guide#create-a-salesforce-account) and obtain the following credentials from a Salesforce Connected App:
+To integrate Salesforce with Ampersand, you need to [Create a Salesforce Account](https://docs.withampersand.com/docs/salesforce-guide#create-a-salesforce-account) and obtain the following credentials from a Salesforce Connected App:
 
 - Consumer Key
 - Consumer Secret
 
 ### Create a Salesforce Account
 
-You need a Salesforce account to connect with Ampersand. If you do not have a Salesforce account, here's how you can sign up for a Developer Account:
+You need a Salesforce account to create integrations using Ampersand. If you do not have a Salesforce account, here's how you can sign up for a free Developer Account:
 
 - Go to the [Salesforce Developer site](https://developer.salesforce.com/signup) and sign up for a free developer account.
 - Fill in the required details and click on **Sign Me Up**.
 - Verify your email and complete the registration process.
 
-## Creating a Salesforce Connected App
+## Create a Salesforce Connected App
 
-To connect Salesforce to Ampersand, you'll need to create a Connected App in Salesforce. Follow the steps below to create a new connected app in Salesforce: 
+To create Salesforce integrations with Ampersand, you'll need to first create a Connected App in Salesforce. Follow the steps below:
 
 1. Log in to your Salesforce account.
 
@@ -80,11 +80,11 @@ In the **Platform Tools >> Apps >> App Manager** section, find your newly create
 
 Copy these keys and use them in the next step to connect Salesforce to Ampersand.
 
-## Connecting  Salesforce to Ampersand
+## Provide Salesforce Connected App info to Ampersand
 
-1. Log in to your [Ampersand Console](https://ampersand.io/console).
+1. Log in to your [Ampersand Console](https://console.withampersand.com).
 
-2. Select the project where you want to connect Salesforce. 
+2. Select the project where you want to create a Salesforce integration.
 
    [block:image]{"images":[{"image":["https://files.readme.io/dd47b7a-Ampersand.png","This is some image...","Alt text"],"align":"center","border":true}]}[/block]
 
