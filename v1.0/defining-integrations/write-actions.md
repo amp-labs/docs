@@ -40,8 +40,8 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
     "groupRef": "demo-group-id",
     "type": "create",
     "record": {
-        "FirstName": "Harry",
-        "LastName": "Potter"
+        "firstName": "Harry",
+        "lastName": "Potter"
     }
 }'
 ```
@@ -58,9 +58,9 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
     "groupRef": "demo-group-id",
     "type": "update",
     "record": {
-        "Id": "20scv09wer3klj",
-        "FirstName": "Harry",
-        "LastName": "Potter"
+        "id": "20scv09wer3klj",
+        "firstName": "Harry",
+        "lastName": "Potter"
     }
 }'
 ```

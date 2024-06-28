@@ -31,7 +31,7 @@ You need a Salesforce account to create integrations using Ampersand. If you do 
 - Fill in the required details and click on **Sign Me Up**.
 - Verify your email and complete the registration process.
 
-## Create a Salesforce Connected App
+### Create a Salesforce Connected App
 
 To create Salesforce integrations with Ampersand, you'll need to first create a Connected App in Salesforce. Follow the steps below:
 
