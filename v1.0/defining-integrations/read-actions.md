@@ -22,8 +22,9 @@ A read action reads data from your customer's SaaS on a scheduled basis and send
 To read an object, you need to specify:
 
 - **objectName:** to indicate which object you'd like to read. This should match the name of the object in the official documentation for the SaaS API.
-- **destination: **the name of the [destination](doc:destinations) that you've defined
-- **schedule: **how frequently the read should happen. This value must be a schedule in [cron syntax](https://docs.gitlab.com/ee/topics/cron/)
+- **destination:** the name of the [destination](doc:destinations) that you've defined
+- **schedule:** how frequently the read should happen. This value must be a schedule in [cron syntax](https://docs.gitlab.com/ee/topics/cron/)
+- **backfill** (optional): whether Ampersand should read historical data when a customer installs an integration. If omitted, then we will only incrementally read data that has been created or updated after that point. See [Backfill behavior](doc:read-actions#backfill-behavior) for details.
 - a list of fields
 
 ```yaml
@@ -31,6 +32,9 @@ To read an object, you need to specify:
         - objectName: lineItem
           destination: lineItemWebhook
           schedule: "0 */12 * * *" # every 12 hours
+          backfill:
+            defaultPeriod:
+              days: 30
           ...
 ```
 
@@ -134,6 +138,48 @@ For these fields, you'll specify:
 }
 [/block]
 
+## Backfill behavior
+
+Backfill behavior describes whether Ampersand will do an initial read of your customer's historic data when they connect their SaaS instance, and how far back we will read. For example, if your integration reads a customer's contacts stored in their CRM, you can configure whether you want to only read new and updated contacts going forward, or if you also want to do an initial backfill of the pre-existing contacts in their CRM.
+
+### No backfill
+
+If you only want to read new and updated records moving forward and do not wish to read any pre-existing records, then you can simply omit the `backfill` key in the integration definition, or you can write 0 days as the default period.
+
+```yaml yaml
+      objects:
+        - objectName: contact
+          backfill:
+            defaultPeriod:
+              days: 0 # Omitting backfill object will also default to 0 days.
+          ...
+```
+
+### Full historical backfill
+
+If you want to do a full backfill of all the existing records when a customer connects their SaaS instance, set `fullHistory` to true. If you have customers that have large SaaS instances, please ensure that your webhook endpoint can handle a high number of messages in quick succession. You may find it helpful to use a webhook gateway solution like [Hookdeck](https://hookdeck.com/docs/receive-webhooks).
+
+```yaml yaml
+      objects:
+        - objectName: contact
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          ...
+```
+
+### Limited time backfill
+
+You can select a specific time frame for backfill, such as "the last 30 days" or "the last 90 days". Here's an example of how to do so:
+
+```yaml yaml
+      objects:
+        - objectName: contact
+          backfill:
+            defaultPeriod:
+              days: 30 # We will backfill the last 30 days of data
+          ...
+```
 
 # Example read action
 
