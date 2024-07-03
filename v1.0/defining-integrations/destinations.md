@@ -35,9 +35,9 @@ integrations:
           destination: contactWebhook
 ```
 
-# Webhook security
+<!-- # Webhook security
 
-We use Svix to deliver the webhooks, so you can use one of the [official Svix SDKs](https://docs.svix.com/receiving/verifying-payloads/how#framework-specific-examples) to verify that the webhook comes from Ampersand, or [do it manually](https://docs.svix.com/receiving/verifying-payloads/how-manual). We will provide you with your webhook secret during the onboarding process.
+We use Svix to deliver the webhooks, so you can use one of the [official Svix SDKs](https://docs.svix.com/receiving/verifying-payloads/how#framework-specific-examples) to verify that the webhook comes from Ampersand, or [do it manually](https://docs.svix.com/receiving/verifying-payloads/how-manual). We will provide you with your webhook secret during the onboarding process. -->
 
 # Other Destinations
 
