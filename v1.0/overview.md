@@ -37,8 +37,8 @@ Here's an overview of the Ampersand platform:
 
 The key components include:
 
-- **Manifest file:** an `amp.yaml` file, where you define all your integrations: API to connect to, type of data, configuration values available to your end users, and how you'd like to connect it to the rest of your stack (via direct connection to your data store, API calls, or webhooks).
-- **Ampersand integration service:** we offer a managed service that keeps tracks each of your customer’s configurations, and makes the appropriate API calls to your customer's SaaS, while optimizing for cost, handling retries and error message parsing.
+- **Manifest file:** an `amp.yaml` file, where you define all your integrations: API to connect to, objects and fields you want to read or write, and configuration options you'd like to expose to your customers.
+- **Ampersand integration service:** we offer a managed service that keeps track of each of your customer’s configurations, and makes the appropriate API calls to your customer's SaaS, while optimizing for cost, handling retries and error message parsing.
 
 > 🗺️ On the roadmap
 > 
@@ -63,7 +63,7 @@ The key components include:
 [/block]
 
 
-- **Management Console: **our dashboard allows you to monitor and troubleshoot your customers' integrations, and is a place for your customer-facing teams to set up and manage end-user configurations if you want to offer white-glove onboarding and support experiences.
+- **Management Console**: our dashboard allows you to monitor and troubleshoot your customers' integrations, and is a place for your customer-facing teams to set up and manage end-user configurations if you want to offer white-glove onboarding and support experiences.
 
 [block:image]
 {
