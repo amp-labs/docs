@@ -22,9 +22,10 @@ A write action writes data to your customer's SaaS whenever you make an API requ
 
 Once your users install an integration with a write action, your app can write data to their SaaS by making a POST call to Ampersand, the URL is in the format of:
 
-`https://write.withampersand.com/v1/projects/:projectId/integrations/:integrationId/objects/:objectName`
+`https://write.withampersand.com/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
 
-You can find your project ID and integration ID in the Ampersand Management Console (look in the address bar).
+<!-- TODO: add the URL for the integrations page in the Console. -->
+You can find your integration ID in the Ampersand Management Console (look in the address bar).
 
 `objectName` refers to the `objectName` key within the `amp.yaml` file that defines your integration. This must match the name of an object that exists within the SaaS instance.
 
@@ -33,8 +34,8 @@ You can find your project ID and integration ID in the Ampersand Management Cons
 To create a new record, make a request to the [Write endpoint](ref:writerecords) with `type` being `create`. For example:
 
 ```
-curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
---header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+curl --location 'https://write.withampersand.com/v1/projects/my-project/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
+--header 'X-Api-Key: MY_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
     "groupRef": "demo-group-id",
@@ -51,8 +52,8 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 To update an existing record, you need to know the ID of the record, which is the ID that the SaaS provider uses to uniquely identify this record. If you created the record using Ampersand, this ID is available in the API response. If you are reading the record first using Ampersand's Read Actions, make sure you add the ID as a required field in the read action. Here is an example request:
 
 ```
-curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
---header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+curl --location 'https://write.withampersand.com/v1/projects/my-project/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
+--header 'X-Api-Key: MY_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
     "groupRef": "demo-group-id",
@@ -111,7 +112,7 @@ In the `recordsURL` field of the request body, you can provide a public URL wher
 Here is an example request for bulk upsert using the CSV file above, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file.)
 
 ```
-curl --location 'https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c' \
+curl --location 'https://write.withampersand.com/v1/projects/my-project/integrations/23rsdf32/objects/tactics__c' \
      --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
      --header 'content-type: application/json' \
      --data '
@@ -174,7 +175,7 @@ The response from the [GenerateUploadURL](ref:generateuploadurl-1) endpoint from
 Here is an example request for bulk upsert, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file that was uploaded)
 
 ```
-curl --location 'https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c' \
+curl --location 'https://write.withampersand.com/v1/projects/my-project/integrations/23rsdf32/objects/tactics__c' \
      --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
      --header 'content-type: application/json' \
      --data '
@@ -200,7 +201,7 @@ If you want to get the status of this Operation, you can either look for it on t
 
 ```
 curl --request GET \
-     --url https://api.withampersand.com/v1/projects/2234wf/operations/5e4f06ca-445f-43ea-943e-78465ee1bb7a \
+     --url https://api.withampersand.com/v1/projects/my-project/operations/5e4f06ca-445f-43ea-943e-78465ee1bb7a \
      --header 'X-Api-Key: YOUR_AMPERSAND_KEY'
 ```
 
@@ -208,7 +209,7 @@ If the Operation has failed, you can get more details about the failure by retri
 
 ```
 curl --request GET \
-     --url https://api.withampersand.com/v1/projects/2234wf/operations/5e4f06ca-445f-43ea-943e-78465ee1bb7a/logs \
+     --url https://api.withampersand.com/v1/projects/my-project/operations/5e4f06ca-445f-43ea-943e-78465ee1bb7a/logs \
      --header 'X-Api-Key: YOUR_AMPERSAND_KEY'
 ```
 
@@ -219,7 +220,7 @@ To delete records in bulk, you'll make a call to the [Write endpoint](ref:writer
 Here is an example request:
 
 ```
-curl --location 'https://write.withampersand.com/v1/projects/2234wf/integrations/23rsdf32/objects/tactics__c' \
+curl --location 'https://write.withampersand.com/v1/projects/my-project/integrations/23rsdf32/objects/tactics__c' \
      --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
      --header 'content-type: application/json' \
      --data '
