@@ -140,8 +140,8 @@ Once we are happy with the definition of our integrations, we can deploy them wi
 
 ```
 amp login
-# Our amp.yaml file is
-amp deploy source --project=my-project-id
+# Our amp.yaml file is located in a folder called source.
+amp deploy source --project=my-project-id-or-name
 ```
 
 # Embed UI components
