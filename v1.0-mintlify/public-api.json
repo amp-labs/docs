@@ -1,0 +1,5599 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Ampersand public API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.withampersand.com/v1"
+    }
+  ],
+  "paths": {
+    "/oauth-connect": {
+      "post": {
+        "operationId": "oauthConnect",
+        "summary": "Get URL for OAuth flow",
+        "description": "Generate a URL for the browser to render to kick off OAuth flow.",
+        "tags": [
+          "OAuth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "projectId",
+                  "groupRef",
+                  "consumerRef",
+                  "provider"
+                ],
+                "properties": {
+                  "providerWorkspaceRef": {
+                    "type": "string",
+                    "description": "The identifier for the provider workspace",
+                    "example": "salesforce-instance-domain"
+                  },
+                  "projectId": {
+                    "type": "string",
+                    "description": "The Ampersand project ID."
+                  },
+                  "groupRef": {
+                    "type": "string",
+                    "description": "The ID that your app uses to identify the group of users for this Connection, this can be an Org ID, workspace ID, etc."
+                  },
+                  "groupName": {
+                    "type": "string",
+                    "description": "The display name for the group. Defaults to groupRef if not provided."
+                  },
+                  "consumerRef": {
+                    "type": "string",
+                    "description": "The ID that your app uses to identify the user whose SaaS credential will be used for this OAuth flow."
+                  },
+                  "consumerName": {
+                    "type": "string",
+                    "description": "The display name for the consumer. Defaults to consumerRef if not provided."
+                  },
+                  "providerAppId": {
+                    "type": "string",
+                    "description": "ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Console is assumed."
+                  },
+                  "provider": {
+                    "type": "string",
+                    "description": "The provider that this app connects to.",
+                    "example": "salesforce"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "description": "URL to render"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "connectOAuthParams"
+      },
+      "options": {
+        "summary": "Options endpoint",
+        "description": "Options endpoint for CORS preflight request",
+        "operationId": "oauthConnectCors",
+        "tags": [
+          "OAuth"
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects": {
+      "get": {
+        "summary": "List all projects that the API key or user credential has access to",
+        "operationId": "listProjects",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of projects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new project",
+        "operationId": "createProject",
+        "tags": [
+          "Project"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "appName",
+                  "name",
+                  "orgId"
+                ],
+                "type": "object",
+                "properties": {
+                  "appName": {
+                    "type": "string",
+                    "description": "The app name.",
+                    "example": "MailMonkey"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "The project name.",
+                    "example": "mailmonkey-staging"
+                  },
+                  "orgId": {
+                    "type": "string",
+                    "description": "The organization ID."
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "The newly created project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                    }
+                  ],
+                  "properties": {
+                    "issues": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "An issue detected during input validation.\n",
+                        "allOf": [
+                          {
+                            "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                          }
+                        ],
+                        "properties": {
+                          "in": {
+                            "type": "string",
+                            "description": "The location of the invalid input",
+                            "enum": [
+                              "body",
+                              "header",
+                              "path",
+                              "query"
+                            ]
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the invalid input"
+                          },
+                          "value": {
+                            "description": "The value of the erroneous input"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "type": "about:blank",
+                    "title": "Bad Request",
+                    "status": 400,
+                    "detail": "The input message is incorrect",
+                    "instance": "123456-1234-1235-4567489798",
+                    "issues": [
+                      {
+                        "type": "about:blank",
+                        "detail": "exampleNumericProperty should be numeric",
+                        "in": "path",
+                        "name": "exampleNumericProperty",
+                        "value": "abc"
+                      },
+                      {
+                        "type": "about:blank",
+                        "title": "Input isn't valid with respect to schema",
+                        "detail": "examplePropertyWithPattern a2345678901 doesn't match pattern '^\\d{11}$'",
+                        "in": "body",
+                        "name": "items[0].examplePropertyWithPattern",
+                        "value": "a2345678901"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "project"
+      }
+    },
+    "/projects/{projectId}": {
+      "get": {
+        "summary": "Get a project",
+        "operationId": "getProject",
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a project",
+        "operationId": "deleteProject",
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a project",
+        "operationId": "updateProject",
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "project",
+                  "updateMask"
+                ],
+                "type": "object",
+                "properties": {
+                  "updateMask": {
+                    "type": "array",
+                    "example": [
+                      "appName"
+                    ],
+                    "items": {
+                      "type": "string",
+                      "description": "fields to update."
+                    }
+                  },
+                  "project": {
+                    "type": "object",
+                    "properties": {
+                      "appName": {
+                        "type": "string",
+                        "description": "The app name.",
+                        "example": "MailMonkey"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The project name.",
+                        "example": "mailmonkey-staging"
+                      }
+                    },
+                    "description": "The project fields to update. (Only include the fields you'd like to update.)"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "projectUpdate"
+      }
+    },
+    "/projects/{projectId}/provider-apps": {
+      "get": {
+        "summary": "List provider apps",
+        "operationId": "listProviderApps",
+        "tags": [
+          "Provider App"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of provider apps",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProviderApp"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new provider app",
+        "operationId": "createProviderApp",
+        "tags": [
+          "Provider App"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "clientId",
+                  "clientSecret",
+                  "provider"
+                ],
+                "type": "object",
+                "properties": {
+                  "externalRef": {
+                    "type": "string",
+                    "description": "The ID used by the provider to identify the app (optional).",
+                    "example": "external-id-123"
+                  },
+                  "provider": {
+                    "type": "string",
+                    "description": "The SaaS provider that this app connects to.",
+                    "example": "salesforce"
+                  },
+                  "clientId": {
+                    "type": "string",
+                    "description": "The OAuth client ID for this app.",
+                    "example": "client-id-123"
+                  },
+                  "clientSecret": {
+                    "type": "string",
+                    "description": "The OAuth client secret for this app.",
+                    "example": "client-secret-123"
+                  },
+                  "scopes": {
+                    "type": "array",
+                    "description": "The OAuth scopes for this app.",
+                    "items": {
+                      "type": "string",
+                      "example": [
+                        "read",
+                        "write"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The newly created provider app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderApp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "providerApp"
+      }
+    },
+    "/projects/{projectId}/provider-apps/{providerAppId}": {
+      "delete": {
+        "summary": "Delete a provider app",
+        "operationId": "deleteProviderApp",
+        "tags": [
+          "Provider App"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "providerAppId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a provider app",
+        "operationId": "updateProviderApp",
+        "tags": [
+          "Provider App"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "providerAppId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "providerApp",
+                  "updateMask"
+                ],
+                "type": "object",
+                "properties": {
+                  "updateMask": {
+                    "type": "array",
+                    "example": [
+                      "externalRef",
+                      "provider",
+                      "clientId",
+                      "clientSecret"
+                    ],
+                    "items": {
+                      "type": "string",
+                      "description": "fields to update."
+                    }
+                  },
+                  "providerApp": {
+                    "type": "object",
+                    "properties": {
+                      "externalRef": {
+                        "type": "string",
+                        "description": "The ID used by the provider to identify the app (optional).",
+                        "example": "external-id-123"
+                      },
+                      "provider": {
+                        "type": "string",
+                        "description": "The SaaS provider that this app connects to.",
+                        "example": "salesforce"
+                      },
+                      "clientId": {
+                        "type": "string",
+                        "description": "The OAuth client ID for this app.",
+                        "example": "client-id-123"
+                      },
+                      "clientSecret": {
+                        "type": "string",
+                        "description": "The OAuth client secret for this app.",
+                        "example": "client-secret-123"
+                      },
+                      "scopes": {
+                        "type": "array",
+                        "description": "The OAuth scopes for this app.",
+                        "items": {
+                          "type": "string",
+                          "example": [
+                            "read",
+                            "write"
+                          ]
+                        }
+                      }
+                    },
+                    "description": "The provider app fields to update. (Only include the fields you'd like to update.)"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated provider app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderApp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "providerAppUpdate"
+      }
+    },
+    "/projects/{projectId}/integrations": {
+      "get": {
+        "summary": "List integrations",
+        "operationId": "listIntegrations",
+        "tags": [
+          "Integration"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of integrations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Integration"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new integration",
+        "operationId": "createIntegration",
+        "tags": [
+          "Integration"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "name",
+                  "provider"
+                ],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The integration name."
+                  },
+                  "provider": {
+                    "type": "string",
+                    "description": "The provider name (e.g. \"salesforce\", \"hubspot\")"
+                  },
+                  "latestRevision": {
+                    "required": [
+                      "sourceZipUrl"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "sourceZipUrl": {
+                        "type": "string",
+                        "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL)."
+                      }
+                    },
+                    "description": "If included, creating this integration will also create a new revision of the integration."
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "integration"
+      }
+    },
+    "/projects/{projectId}/integrations/{integrationId}": {
+      "delete": {
+        "summary": "Delete an integration",
+        "operationId": "deleteIntegration",
+        "tags": [
+          "Integration"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "404": {
+            "description": "Integration not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/integrations:batch": {
+      "put": {
+        "summary": "Batch upsert a group of integrations",
+        "operationId": "batchUpsertIntegrations",
+        "tags": [
+          "Integration"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "sourceZipUrl"
+                ],
+                "type": "object",
+                "properties": {
+                  "sourceZipUrl": {
+                    "type": "string",
+                    "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL)."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Upserted integrations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Integration"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/integrations/{integrationId}/revisions": {
+      "post": {
+        "summary": "Create a new revision",
+        "operationId": "createRevision",
+        "tags": [
+          "Revision"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "sourceZipUrl"
+                ],
+                "type": "object",
+                "properties": {
+                  "sourceZipUrl": {
+                    "type": "string",
+                    "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL)."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "revision"
+      }
+    },
+    "/projects/{projectId}/integrations/{integrationId}/revisions/{revisionId}:hydrate": {
+      "get": {
+        "summary": "Hydrate a revision",
+        "description": "Hydrate a revision with information from the consumer's SaaS instance.",
+        "operationId": "getHydratedRevision",
+        "tags": [
+          "Revision"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "revisionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "connectionId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hydrated revision",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HydratedRevision"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/integrations/{integrationId}/installations": {
+      "get": {
+        "summary": "List installations",
+        "operationId": "listInstallations",
+        "tags": [
+          "Installation"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "groupRef",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of installations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Installation"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new installation",
+        "operationId": "createInstallation",
+        "tags": [
+          "Installation"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "config",
+                  "groupRef"
+                ],
+                "type": "object",
+                "properties": {
+                  "groupRef": {
+                    "type": "string",
+                    "description": "The ID of the user group that has access to this installation."
+                  },
+                  "connectionId": {
+                    "type": "string",
+                    "description": "The ID of the SaaS connection tied to this installation. If omitted the default connection for this group will be used."
+                  },
+                  "config": {
+                    "required": [
+                      "content"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "revisionId": {
+                        "type": "string",
+                        "description": "The ID of the revision that this config is based on. If omitted, the latest revision is assumed."
+                      },
+                      "createdBy": {
+                        "type": "string",
+                        "description": "The person who created the config, in the format of \"consumer:{consumer-id}\" or \"builder:{builder-id}\".",
+                        "default": "api:create-installation"
+                      },
+                      "content": {
+                        "$ref": "#/components/schemas/Config/properties/content"
+                      }
+                    },
+                    "description": "The config of the installation."
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Installation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "installation"
+      }
+    },
+    "/projects/{projectId}/integrations/{integrationId}/installations:import": {
+      "post": {
+        "summary": "Import an existing installation",
+        "operationId": "importInstallation",
+        "tags": [
+          "Installation"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "provider",
+                  "config",
+                  "connection"
+                ],
+                "type": "object",
+                "properties": {
+                  "provider": {
+                    "type": "string",
+                    "description": "The SaaS provider that this installation connects to.",
+                    "example": "salesforce"
+                  },
+                  "connection": {
+                    "$ref": "#/components/schemas/ImportConnectionRequest",
+                    "description": "The OAuth credentials to use to connect to this customer's SaaS instance."
+                  },
+                  "config": {
+                    "required": [
+                      "content"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "revisionId": {
+                        "type": "string",
+                        "description": "The ID of the integration revision that this config is based on. If omitted, the latest revision is assumed."
+                      },
+                      "content": {
+                        "$ref": "#/components/schemas/Config/properties/content"
+                      }
+                    },
+                    "description": "The config of the installation."
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Installation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "installation"
+      }
+    },
+    "/projects/{projectId}/integrations/{integrationId}/installations/{installationId}": {
+      "get": {
+        "summary": "Get an installation",
+        "operationId": "getInstallation",
+        "tags": [
+          "Installation"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "installationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The installation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Installation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an installation",
+        "operationId": "deleteInstallation",
+        "tags": [
+          "Installation"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "installationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an installation",
+        "operationId": "updateInstallation",
+        "tags": [
+          "Installation"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "installationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "installation",
+                  "updateMask"
+                ],
+                "type": "object",
+                "properties": {
+                  "updateMask": {
+                    "type": "array",
+                    "example": [
+                      "connectionId",
+                      "config.content.write.objects.account"
+                    ],
+                    "items": {
+                      "type": "string",
+                      "description": "fields to update."
+                    }
+                  },
+                  "installation": {
+                    "type": "object",
+                    "properties": {
+                      "connectionId": {
+                        "type": "string",
+                        "description": "The ID of the SaaS connection tied to this installation.",
+                        "example": "connection-123"
+                      },
+                      "config": {
+                        "type": "object",
+                        "properties": {
+                          "revisionId": {
+                            "type": "string",
+                            "description": "The ID of the revision that this config is based on."
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "The person who created the config, in the format of \"consumer:{consumer-id}\" or \"builder:{builder-id}\"."
+                          },
+                          "content": {
+                            "allOf": [
+                              {
+                                "$ref": "#/components/schemas/Config/properties/content/allOf/0"
+                              }
+                            ]
+                          }
+                        },
+                        "description": "The config of the installation."
+                      }
+                    },
+                    "description": "The installation fields to update. (Only include the fields you'd like to update.)"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated installation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Installation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "installationUpdate"
+      }
+    },
+    "/projects/{projectId}/integrations/{integrationId}/installations/{installationId}/operations": {
+      "get": {
+        "summary": "List operations",
+        "operationId": "listOperations",
+        "tags": [
+          "Operation"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "installationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of operations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Operation"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/operations/{operationId}": {
+      "get": {
+        "summary": "Get an operation",
+        "operationId": "getOperation",
+        "tags": [
+          "Operation"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Operation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/operations/{operationId}/events/{eventId}": {
+      "get": {
+        "summary": "Get an operation event",
+        "operationId": "getOperationEvent",
+        "tags": [
+          "Operation Event"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OperationEvent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationEvent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/operations/{operationId}/logs": {
+      "get": {
+        "summary": "List logs for an operation",
+        "operationId": "listOperationLogs",
+        "tags": [
+          "Operation"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of logs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Log"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/integrations/{integrationId}/installations/{installationId}/operations/{operationId}/events": {
+      "get": {
+        "summary": "List events for an operation",
+        "operationId": "listOperationEvents",
+        "tags": [
+          "Operation Event"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "installationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of operation events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OperationEvent"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/operations/{operationId}/events/{eventId}/logs": {
+      "get": {
+        "summary": "List logs for an operation event",
+        "operationId": "listOperationEventLogs",
+        "tags": [
+          "Operation Event"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of logs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Log"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/providers": {
+      "get": {
+        "summary": "List providers",
+        "operationId": "listProviders",
+        "tags": [
+          "Provider"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of providers & their information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/paths/~1providers~1%7Bprovider%7D/get/responses/200/content/application~1json/schema"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/providers/{provider}": {
+      "get": {
+        "summary": "Get provider",
+        "operationId": "getProvider",
+        "tags": [
+          "Provider"
+        ],
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ProviderInfo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "baseURL",
+                    "authType",
+                    "support",
+                    "providerOpts"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "authType": {
+                      "type": "string",
+                      "enum": [
+                        "oauth2",
+                        "api_key",
+                        "basic",
+                        "none"
+                      ],
+                      "x-oapi-codegen-extra-tags": {
+                        "validate": "required"
+                      }
+                    },
+                    "baseURL": {
+                      "type": "string",
+                      "x-oapi-codegen-extra-tags": {
+                        "validate": "required"
+                      }
+                    },
+                    "oauth2Opts": {
+                      "type": "object",
+                      "required": [
+                        "grantType",
+                        "tokenURL",
+                        "explicitScopesRequired",
+                        "explicitWorkspaceRequired",
+                        "tokenMetadataFields"
+                      ],
+                      "properties": {
+                        "grantType": {
+                          "type": "string",
+                          "enum": [
+                            "authorizationCode",
+                            "clientCredentials",
+                            "PKCE"
+                          ]
+                        },
+                        "authURL": {
+                          "type": "string",
+                          "example": "https://login.salesforce.com/services/oauth2/authorize",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "tokenURL": {
+                          "type": "string",
+                          "example": "https://login.salesforce.com/services/oauth2/token",
+                          "x-oapi-codegen-extra-tags": {
+                            "validate": "required"
+                          }
+                        },
+                        "explicitScopesRequired": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "explicitWorkspaceRequired": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "audience": {
+                          "type": "string",
+                          "example": "https://api.mparticle.com",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "tokenMetadataFields": {
+                          "type": "object",
+                          "properties": {
+                            "workspaceRefField": {
+                              "type": "string",
+                              "example": "account-id",
+                              "x-go-type-skip-optional-pointer": true
+                            },
+                            "consumerRefField": {
+                              "type": "string",
+                              "example": "user-id",
+                              "x-go-type-skip-optional-pointer": true
+                            },
+                            "scopesField": {
+                              "type": "string",
+                              "example": "scopes",
+                              "x-go-type-skip-optional-pointer": true
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "apiKeyOpts": {
+                      "type": "object",
+                      "required": [
+                        "type"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "in-query",
+                            "in-header"
+                          ],
+                          "x-oapi-codegen-extra-tags": {
+                            "validate": "required"
+                          }
+                        },
+                        "queryParamName": {
+                          "type": "string",
+                          "example": "api_key",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "headerName": {
+                          "type": "string",
+                          "example": "X-Api-Key",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "valuePrefix": {
+                          "type": "string",
+                          "example": "Bearer ",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "docsURL": {
+                          "type": "string",
+                          "description": "URL with more information about how to get or use an API key.",
+                          "example": "https://docs.example.com/api-key",
+                          "x-go-type-skip-optional-pointer": true
+                        }
+                      }
+                    },
+                    "support": {
+                      "type": "object",
+                      "x-oapi-codegen-extra-tags": {
+                        "validate": "required"
+                      },
+                      "required": [
+                        "bulkWrite",
+                        "proxy",
+                        "read",
+                        "subscribe",
+                        "write"
+                      ],
+                      "properties": {
+                        "bulkWrite": {
+                          "type": "object",
+                          "x-oapi-codegen-extra-tags": {
+                            "validate": "required"
+                          },
+                          "required": [
+                            "insert",
+                            "update",
+                            "upsert",
+                            "delete"
+                          ],
+                          "properties": {
+                            "insert": {
+                              "type": "boolean"
+                            },
+                            "update": {
+                              "type": "boolean"
+                            },
+                            "upsert": {
+                              "type": "boolean"
+                            },
+                            "delete": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "proxy": {
+                          "type": "boolean"
+                        },
+                        "read": {
+                          "type": "boolean"
+                        },
+                        "subscribe": {
+                          "type": "boolean"
+                        },
+                        "write": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "providerOpts": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "displayName": {
+                      "type": "string",
+                      "example": "Zendesk Chat",
+                      "description": "The display name of the provider, if omitted, defaults to provider name.",
+                      "x-go-type-skip-optional-pointer": true
+                    },
+                    "postAuthInfoNeeded": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "If true, we require additional information after auth to start making requests.",
+                      "x-go-type-skip-optional-pointer": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/api-keys": {
+      "get": {
+        "summary": "List API keys",
+        "operationId": "listApiKeys",
+        "tags": [
+          "API Key"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "description": "Whether to include only active API keys. If false, all API keys are included.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of API keys",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiKey"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new API key",
+        "operationId": "createApiKey",
+        "tags": [
+          "API Key"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiKeyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKey"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "apiKey"
+      }
+    },
+    "/projects/{projectId}/api-keys/{apiKey}": {
+      "get": {
+        "summary": "Get an API key",
+        "operationId": "getApiKey",
+        "tags": [
+          "API Key"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKey"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "API key not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an API key",
+        "operationId": "deleteApiKey",
+        "tags": [
+          "API Key"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an API key",
+        "operationId": "updateApiKey",
+        "tags": [
+          "API Key"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchApiKeyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "API key updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKey"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/connections": {
+      "get": {
+        "summary": "List connections",
+        "operationId": "listConnections",
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "description": "The provider name (e.g. \"salesforce\", \"hubspot\")",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "groupRef",
+            "in": "query",
+            "description": "The ID of the user group that has access to this installation.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "consumerRef",
+            "in": "query",
+            "description": "The consumer reference.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of project connections.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Connection"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/connections/{connectionId}": {
+      "get": {
+        "summary": "Get a connection",
+        "operationId": "getConnection",
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "connectionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Connection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Connection"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/groups": {
+      "post": {
+        "summary": "Create a new group",
+        "operationId": "createGroup",
+        "tags": [
+          "Group"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "groupName",
+                  "groupRef"
+                ],
+                "type": "object",
+                "properties": {
+                  "groupRef": {
+                    "type": "string",
+                    "description": "The ID of the user group that has access to this installation.",
+                    "example": "group-123"
+                  },
+                  "groupName": {
+                    "type": "string",
+                    "description": "The name of the user group that has access to this installation.",
+                    "example": "Super Customers"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "group"
+      }
+    },
+    "/projects/{projectId}/consumers": {
+      "post": {
+        "summary": "Create a new consumer",
+        "operationId": "createConsumer",
+        "tags": [
+          "Consumer"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "consumerName",
+                  "consumerRef"
+                ],
+                "type": "object",
+                "properties": {
+                  "consumerRef": {
+                    "type": "string",
+                    "description": "The consumer reference.",
+                    "example": "consumer-123"
+                  },
+                  "consumerName": {
+                    "type": "string",
+                    "description": "The name of the consumer that has access to this installation.",
+                    "example": "John doe"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "consumer"
+      }
+    },
+    "/projects/{projectId}/destinations": {
+      "post": {
+        "summary": "Create a new destination",
+        "operationId": "createDestination",
+        "tags": [
+          "Destination"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "type",
+                  "metadata"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name for the new destination. Must be unique within the project and can only contain letters, numbers and dashes.",
+                    "example": "leadConvertedWebhook"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The type of the destination",
+                    "example": "webhook"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "description": "Webhook URL, must start with \"https://\".",
+                        "example": "https://webhooks.mailmonkey.com/salesforce-lead-converted"
+                      },
+                      "headers": {
+                        "$ref": "#/components/schemas/WebhookHeaders"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Destination"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "destination"
+      },
+      "get": {
+        "summary": "List destinations",
+        "operationId": "listDestinations",
+        "tags": [
+          "Destination"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of destinations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Destination"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/destinations/{destinationName}": {
+      "get": {
+        "summary": "Get a destination",
+        "operationId": "getDestination",
+        "tags": [
+          "Destination"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destinationName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Destination"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Destination not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/destinations/{destinationId}": {
+      "patch": {
+        "summary": "Update a destination",
+        "operationId": "updateDestination",
+        "tags": [
+          "Destination"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destinationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "updateMask",
+                  "destination"
+                ],
+                "properties": {
+                  "updateMask": {
+                    "type": "array",
+                    "example": [
+                      "name",
+                      "metadata.url",
+                      "metadata.headers"
+                    ],
+                    "items": {
+                      "type": "string",
+                      "description": "fields to update."
+                    }
+                  },
+                  "destination": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "User-friendly name for the destination",
+                        "example": "leadConvertedWebhook"
+                      },
+                      "metadata": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "description": "Webhook URL",
+                            "example": "https://webhooks.mailmonkey.com/salesforce-lead-converted"
+                          },
+                          "headers": {
+                            "$ref": "#/components/schemas/WebhookHeaders"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Destination"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Destination not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "destinationUpdate"
+      },
+      "delete": {
+        "summary": "Delete a destination",
+        "operationId": "deleteDestination",
+        "tags": [
+          "Destination"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destinationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generate-upload-url": {
+      "get": {
+        "summary": "Generate a signed URL to upload a zip file to.",
+        "operationId": "generateUploadUrl",
+        "tags": [
+          "Upload URL"
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedUrl"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orgs": {
+      "post": {
+        "summary": "Create a new organization",
+        "operationId": "createOrg",
+        "tags": [
+          "Org"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "label"
+                ],
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "description": "The organization label.",
+                    "example": "org-123"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "The newly created org",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Org"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "org"
+      }
+    },
+    "/orgs/{orgId}": {
+      "get": {
+        "summary": "Get an organization",
+        "operationId": "getOrg",
+        "tags": [
+          "Org"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Org"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an organization",
+        "operationId": "updateOrg",
+        "tags": [
+          "Org"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "updateMask",
+                  "org"
+                ],
+                "properties": {
+                  "updateMask": {
+                    "type": "array",
+                    "example": [
+                      "label"
+                    ],
+                    "items": {
+                      "type": "string",
+                      "description": "fields to update."
+                    }
+                  },
+                  "org": {
+                    "type": "object",
+                    "properties": {
+                      "label": {
+                        "type": "string",
+                        "description": "The organization label.",
+                        "example": "org-123"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated org",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Org"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "x-codegen-request-body-name": "orgUpdate"
+        }
+      }
+    },
+    "/orgs/{orgId}/builders": {
+      "get": {
+        "summary": "List builders for an organization",
+        "operationId": "listOrgBuilders",
+        "tags": [
+          "Org"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of builders that are a part of the org",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Builder"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/invites": {
+      "post": {
+        "summary": "Invite a user to an organization",
+        "operationId": "createOrgInvite",
+        "tags": [
+          "Org"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email"
+                ],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The email address of the user to invite.",
+                    "example": "alice@company.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The newly created invite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Invite"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "x-codegen-request-body-name": "invite"
+        }
+      },
+      "get": {
+        "summary": "List invites for an organization",
+        "operationId": "listOrgInvites",
+        "tags": [
+          "Org"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of invites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Invite"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orgs/{orgId}/invites/{inviteId}": {
+      "get": {
+        "summary": "Get an invite",
+        "operationId": "getOrgInvite",
+        "tags": [
+          "Org"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "inviteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Invite"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Revoke an invite",
+        "operationId": "deleteOrgInvite",
+        "tags": [
+          "Org"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "inviteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1projects/post/responses/422/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/my-info": {
+      "get": {
+        "summary": "Get information about the current user",
+        "operationId": "getMyInfo",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Information about the current user and their organizations and projects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuilderInfo"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/invites:accept": {
+      "post": {
+        "summary": "Accept an invite",
+        "operationId": "acceptInvite",
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "invitedEmail"
+                ],
+                "properties": {
+                  "invitedEmail": {
+                    "type": "string",
+                    "description": "The email address that the invite was sent to"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Information about the current user and their organizations and projects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuilderInfo"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/paths/~1orgs/post/responses/default/content/application~1problem%2Bjson/schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Org": {
+        "required": [
+          "id",
+          "label",
+          "createTime",
+          "defaultTeamId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The organization ID.",
+            "example": "org-123"
+          },
+          "label": {
+            "type": "string",
+            "description": "The organization label.",
+            "example": "Acme Inc"
+          },
+          "defaultTeamId": {
+            "type": "string",
+            "description": "The ID of the Everyone team for the org."
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the organization was created.",
+            "format": "date-time"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the organization was updated.",
+            "format": "date-time"
+          }
+        }
+      },
+      "Destination": {
+        "required": [
+          "id",
+          "name",
+          "type",
+          "metadata",
+          "createTime"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The destination ID."
+          },
+          "name": {
+            "type": "string",
+            "description": "User-defined name for the destination",
+            "example": "leadConvertedWebhook"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the destination",
+            "example": "webhook"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "description": "Webhook URL",
+                "example": "https://webhooks.mailmonkey.com/salesforce-lead-converted"
+              },
+              "headers": {
+                "$ref": "#/components/schemas/WebhookHeaders"
+              }
+            }
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the destination was created.",
+            "format": "date-time"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the destination was updated.",
+            "format": "date-time"
+          }
+        }
+      },
+      "Project": {
+        "required": [
+          "appName",
+          "createTime",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The project ID.",
+            "example": "project-id-123"
+          },
+          "name": {
+            "type": "string",
+            "description": "The project name.",
+            "example": "mailmonkey-staging"
+          },
+          "appName": {
+            "type": "string",
+            "description": "The name of the application, which is displayed to end users.",
+            "example": "MailMonkey"
+          },
+          "orgId": {
+            "type": "string",
+            "description": "The organization ID that this project belongs to."
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the project was created.",
+            "format": "date-time"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the project was updated.",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProviderApp": {
+        "required": [
+          "clientId",
+          "createTime",
+          "id",
+          "projectId",
+          "provider"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The provider app ID.",
+            "example": "provider-app-123"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The Ampersand project ID.",
+            "example": "project-456"
+          },
+          "externalRef": {
+            "type": "string",
+            "description": "The ID used by the provider to identify the app (optional).",
+            "example": "external-id-123"
+          },
+          "provider": {
+            "type": "string",
+            "description": "The SaaS provider that this app connects to.",
+            "example": "salesforce"
+          },
+          "clientId": {
+            "type": "string",
+            "description": "The OAuth client ID for this app.",
+            "example": "client-id-123"
+          },
+          "scopes": {
+            "type": "array",
+            "description": "The OAuth scopes for this app.",
+            "items": {
+              "type": "string",
+              "example": [
+                "oauth",
+                "offline",
+                "crm.read"
+              ]
+            }
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the provider app was created.",
+            "format": "date-time"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the provider app was updated.",
+            "format": "date-time"
+          }
+        }
+      },
+      "Integration": {
+        "required": [
+          "createTime",
+          "id",
+          "latestRevision",
+          "name",
+          "projectId",
+          "provider"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The integration ID.",
+            "example": "integration-123"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The Ampersand project ID.",
+            "example": "project-456"
+          },
+          "name": {
+            "type": "string",
+            "description": "The integration name.",
+            "example": "read-accounts"
+          },
+          "provider": {
+            "type": "string",
+            "description": "The SaaS provider that this integration connects to.",
+            "example": "salesforce"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the integration was created.",
+            "format": "date-time"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the integration was last updated.",
+            "format": "date-time"
+          },
+          "latestRevision": {
+            "$ref": "#/components/schemas/Revision"
+          }
+        }
+      },
+      "Revision": {
+        "required": [
+          "content",
+          "createTime",
+          "id",
+          "specVersion"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The revision ID.",
+            "example": "revision-id-1"
+          },
+          "specVersion": {
+            "type": "string",
+            "description": "The spec version string (e.g. \"0.1.0\").",
+            "example": "0.1.0"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the revision was created.",
+            "format": "date-time"
+          },
+          "content": {
+            "type": "object",
+            "required": [
+              "name",
+              "provider"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "read": {
+                "type": "object",
+                "properties": {
+                  "objects": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "objectName",
+                        "destination",
+                        "schedule"
+                      ],
+                      "properties": {
+                        "objectName": {
+                          "type": "string"
+                        },
+                        "destination": {
+                          "type": "string"
+                        },
+                        "schedule": {
+                          "type": "string"
+                        },
+                        "requiredFields": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "required": [
+                                  "fieldName"
+                                ],
+                                "properties": {
+                                  "fieldName": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              {
+                                "$ref": "#/components/schemas/HydratedRevision/properties/content/properties/read/properties/objects/items/properties/allFields/items/oneOf/1"
+                              }
+                            ]
+                          }
+                        },
+                        "optionalFields": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Revision/properties/content/properties/read/properties/objects/items/properties/requiredFields/items"
+                          }
+                        },
+                        "optionalFieldsAuto": {
+                          "$ref": "#/components/schemas/HydratedRevision/properties/content/properties/read/properties/objects/items/properties/optionalFieldsAuto"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "write": {
+                "type": "object",
+                "properties": {
+                  "objects": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "objectName"
+                      ],
+                      "properties": {
+                        "objectName": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "proxy": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "HydratedRevision": {
+        "required": [
+          "content",
+          "createTime",
+          "id",
+          "specVersion"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The revision ID.",
+            "example": "revision-id-1"
+          },
+          "specVersion": {
+            "type": "string",
+            "description": "The spec version string (e.g. \"0.1.0\").",
+            "example": "0.1.0"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the revision was created.",
+            "format": "date-time"
+          },
+          "content": {
+            "type": "object",
+            "required": [
+              "name",
+              "provider"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "read": {
+                "type": "object",
+                "properties": {
+                  "objects": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "objectName",
+                        "displayName",
+                        "destination",
+                        "schedule"
+                      ],
+                      "properties": {
+                        "objectName": {
+                          "type": "string"
+                        },
+                        "displayName": {
+                          "type": "string"
+                        },
+                        "destination": {
+                          "type": "string"
+                        },
+                        "schedule": {
+                          "type": "string"
+                        },
+                        "requiredFields": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/HydratedRevision/properties/content/properties/read/properties/objects/items/properties/allFields/items"
+                          }
+                        },
+                        "optionalFields": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/HydratedRevision/properties/content/properties/read/properties/objects/items/properties/allFields/items"
+                          }
+                        },
+                        "optionalFieldsAuto": {
+                          "type": "string",
+                          "enum": [
+                            "all"
+                          ]
+                        },
+                        "allFields": {
+                          "description": "This is a list of all fields on the object for a particular SaaS instance. This is used to populate the UI during configuration.",
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "required": [
+                                  "fieldName",
+                                  "displayName"
+                                ],
+                                "properties": {
+                                  "fieldName": {
+                                    "type": "string"
+                                  },
+                                  "displayName": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "mapToName"
+                                ],
+                                "properties": {
+                                  "mapToName": {
+                                    "type": "string"
+                                  },
+                                  "mapToDisplayName": {
+                                    "type": "string"
+                                  },
+                                  "default": {
+                                    "type": "string"
+                                  },
+                                  "prompt": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "write": {
+                "type": "object",
+                "properties": {
+                  "objects": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "objectName",
+                        "displayName"
+                      ],
+                      "properties": {
+                        "objectName": {
+                          "type": "string"
+                        },
+                        "displayName": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "proxy": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Installation": {
+        "required": [
+          "config",
+          "connection",
+          "createTime",
+          "createdBy",
+          "healthStatus",
+          "id",
+          "integrationId",
+          "projectId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The installation ID.",
+            "example": "installation-123"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The Ampersand project ID.",
+            "example": "project-456"
+          },
+          "integrationId": {
+            "type": "string",
+            "description": "The integration ID.",
+            "example": "integration-123"
+          },
+          "group": {
+            "$ref": "#/components/schemas/Group"
+          },
+          "healthStatus": {
+            "type": "string",
+            "description": "The health status of the installation (\"healthy\", \"unhealthy\").",
+            "example": "healthy"
+          },
+          "connection": {
+            "$ref": "#/components/schemas/Connection"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the integration was first installed.",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "The person who did the installation, in the format of \"consumer:{consumer-id}\".",
+            "example": "consumer:consumer-123"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the installation was last updated with a new config.",
+            "format": "date-time"
+          },
+          "config": {
+            "$ref": "#/components/schemas/Config"
+          }
+        }
+      },
+      "Config": {
+        "required": [
+          "content",
+          "createTime",
+          "createdBy",
+          "id",
+          "revisionId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The config ID.",
+            "example": "config-123"
+          },
+          "revisionId": {
+            "type": "string",
+            "description": "The ID of the revision that this config is based on.",
+            "example": "revision-123"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the config was created.",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "The person who created the config, in the format of \"consumer:{consumer-id}\" or \"builder:{builder-id}\".",
+            "example": "builder:builder-123"
+          },
+          "content": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "provider": {
+                    "description": "The SaaS API that we are integrating with.",
+                    "example": "salesforce",
+                    "type": "string"
+                  },
+                  "read": {
+                    "type": "object",
+                    "properties": {
+                      "objects": {
+                        "type": "object",
+                        "description": "This is a map of object names to their configuration.",
+                        "additionalProperties": {
+                          "type": "object",
+                          "properties": {
+                            "objectName": {
+                              "description": "The name of the object to read from.",
+                              "example": "account",
+                              "type": "string",
+                              "x-oapi-codegen-extra-tags": {
+                                "validate": "required"
+                              }
+                            },
+                            "schedule": {
+                              "type": "string",
+                              "description": "The schedule for reading the object, in cron syntax.",
+                              "example": "*/15 * * * *"
+                            },
+                            "destination": {
+                              "description": "The name of the destination that the result should be sent to.",
+                              "example": "accountWebhook",
+                              "type": "string"
+                            },
+                            "selectedFields": {
+                              "type": "object",
+                              "description": "This is a map of field names to booleans indicating whether they should be read.",
+                              "example": "{ phone: true, fax: true }",
+                              "additionalProperties": {
+                                "type": "boolean"
+                              }
+                            },
+                            "selectedFieldMappings": {
+                              "type": "object",
+                              "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.)",
+                              "example": "{ phoneNumber: phone, faxNumber: fax }",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            },
+                            "history": {
+                              "type": "string",
+                              "description": "The history configuration for the object.",
+                              "example": "7 days"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "write": {
+                    "type": "object",
+                    "properties": {
+                      "objects": {
+                        "type": "object",
+                        "description": "This is a map of object names to their configuration.",
+                        "additionalProperties": {
+                          "type": "object",
+                          "properties": {
+                            "objectName": {
+                              "description": "The name of the object to write to.",
+                              "example": "account",
+                              "type": "string",
+                              "x-oapi-codegen-extra-tags": {
+                                "validate": "required"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "proxy": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "provider"
+                ],
+                "properties": {
+                  "read": {
+                    "x-go-type": "ReadConfig"
+                  },
+                  "write": {
+                    "x-go-type": "WriteConfig"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "Connection": {
+        "required": [
+          "consumer",
+          "createTime",
+          "group",
+          "id",
+          "projectId",
+          "providerApp",
+          "providerWorkspaceRef"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The connection ID.",
+            "example": "connection-123"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The Ampersand project ID.",
+            "example": "project-456"
+          },
+          "providerApp": {
+            "$ref": "#/components/schemas/ProviderApp"
+          },
+          "group": {
+            "$ref": "#/components/schemas/Group"
+          },
+          "consumer": {
+            "$ref": "#/components/schemas/Consumer"
+          },
+          "providerWorkspaceRef": {
+            "type": "string",
+            "description": "The identifier for the provider workspace (e.g. \"salesforce-instance-domain\")",
+            "example": "provider-workspace-123"
+          },
+          "ProviderConsumerRef": {
+            "type": "string",
+            "description": "The ID that Salesforce/Hubspot uses to identify this user (e.g. Salesforce has IDs in the form of https://login.salesforce.com/id/00D4x0000019CQTEA2/0054x000000orJ4AA)",
+            "example": "provider-consumer-123"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the connection was created.",
+            "format": "date-time",
+            "example": "2023-07-13T21:34:44.816354Z"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the connection was last updated.",
+            "format": "date-time",
+            "example": "2023-07-13T21:34:44.816354Z"
+          }
+        }
+      },
+      "ImportConnectionRequest": {
+        "required": [
+          "groupRef",
+          "groupName",
+          "consumerRef",
+          "consumerName",
+          "providerWorkspaceRef",
+          "refreshToken"
+        ],
+        "type": "object",
+        "properties": {
+          "providerAppId": {
+            "description": "ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Console is assumed.",
+            "type": "string"
+          },
+          "groupRef": {
+            "description": "The ID of the user group that has access to this installation. This is any ID that your app uses to identify a group of users - such as an org, team, or workspace.",
+            "type": "string"
+          },
+          "groupName": {
+            "description": "The display name of the user group that has access to this installation.",
+            "type": "string"
+          },
+          "consumerRef": {
+            "description": "The ID of the user whose credential was used for this connection. This is the ID that your app uses to identify a user - such as a user ID or username.",
+            "type": "string"
+          },
+          "consumerName": {
+            "description": "The display name of the user whose credential was used for this connection.",
+            "type": "string"
+          },
+          "providerWorkspaceRef": {
+            "type": "string",
+            "description": "The identifier for the provider workspace (e.g. the Salesforce subdomain)",
+            "example": "provider-workspace-123"
+          },
+          "providerConsumerRef": {
+            "type": "string",
+            "description": "The ID that Salesforce/Hubspot uses to identify this user (e.g. Salesforce has IDs in the form of https://login.salesforce.com/id/00D4x0000019CQTEA2/0054x000000orJ4AA)",
+            "example": "provider-consumer-123"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "The refresh token."
+          },
+          "scopes": {
+            "type": "array",
+            "description": "The OAuth scopes for this token. If omitted, will default to the scopes of the Provider App.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Group": {
+        "required": [
+          "createTime",
+          "groupName",
+          "groupRef",
+          "projectId"
+        ],
+        "type": "object",
+        "properties": {
+          "groupRef": {
+            "type": "string",
+            "description": "The ID of the user group that has access to this installation.",
+            "example": "group-123"
+          },
+          "groupName": {
+            "type": "string",
+            "description": "The name of the user group that has access to this installation.",
+            "example": "Super Customer"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The Ampersand project ID.",
+            "example": "project-456"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the group was created.",
+            "format": "date-time",
+            "example": "2023-07-13T21:34:44.816354Z"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the group was last updated.",
+            "format": "date-time",
+            "example": "2023-07-13T21:34:44.816354Z"
+          }
+        }
+      },
+      "Consumer": {
+        "required": [
+          "consumerName",
+          "consumerRef",
+          "createTime",
+          "projectId"
+        ],
+        "type": "object",
+        "properties": {
+          "consumerRef": {
+            "type": "string",
+            "description": "The consumer reference.",
+            "example": "consumer-123"
+          },
+          "consumerName": {
+            "type": "string",
+            "description": "The name of the consumer.",
+            "example": "Super Customer"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The Ampersand project ID.",
+            "example": "project-456"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the consumer was created.",
+            "format": "date-time",
+            "example": "2023-07-13T21:34:44.816354Z"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the consumer was last updated.",
+            "format": "date-time",
+            "example": "2023-07-13T21:34:44.816354Z"
+          }
+        }
+      },
+      "OperationEvent": {
+        "required": [
+          "id",
+          "operationId",
+          "type",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The operation event ID.",
+            "example": "operation-event-123"
+          },
+          "operationId": {
+            "type": "string",
+            "description": "The operation ID.",
+            "example": "operation-123"
+          },
+          "type": {
+            "type": "string",
+            "description": "The operation event type.",
+            "example": "ValidateParameters"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the operation event.",
+            "example": "in_progress"
+          },
+          "result": {
+            "type": "string",
+            "description": "The result of the operation event.",
+            "example": "Validated parameters successfully"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the operation event was created.",
+            "format": "date-time"
+          }
+        }
+      },
+      "Operation": {
+        "required": [
+          "projectId",
+          "integrationId",
+          "installationId",
+          "configId",
+          "actionType",
+          "status",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Ampersand project ID.",
+            "example": "project-456"
+          },
+          "integrationId": {
+            "type": "string",
+            "description": "The integration ID.",
+            "example": "integration-123"
+          },
+          "configId": {
+            "type": "string",
+            "description": "The config ID.",
+            "example": "config-123"
+          },
+          "actionType": {
+            "type": "string",
+            "description": "The action type to perform for the given object.",
+            "example": "read"
+          },
+          "id": {
+            "type": "string",
+            "description": "The operation ID.",
+            "example": "operation-123"
+          },
+          "installationId": {
+            "type": "string",
+            "description": "The Ampersand installation ID.",
+            "example": "installation-123"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the operation.",
+            "example": "success"
+          },
+          "result": {
+            "type": "string",
+            "description": "The result of the operation.",
+            "example": "[object] No changes"
+          },
+          "latestOperationEventId": {
+            "type": "string",
+            "description": "The latest operation event ID.",
+            "example": "operation-event-123"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Metadata associated with the operation.",
+            "example": {
+
+            }
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the operation was created.",
+            "format": "date-time",
+            "example": "2023-07-13T21:34:44.816354Z"
+          }
+        }
+      },
+      "Log": {
+        "type": "object",
+        "required": [
+          "timestamp",
+          "severity",
+          "message"
+        ],
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "description": "The time the log was created.",
+            "example": "2023-07-13T21:34:44.816354Z"
+          },
+          "message": {
+            "type": "object",
+            "description": "The log message object.",
+            "required": [
+              "msg"
+            ],
+            "properties": {
+              "msg": {
+                "type": "string",
+                "description": "The use-readable message.",
+                "example": "This is a log message"
+              },
+              "operation_event_id": {
+                "type": "string",
+                "description": "The operation event ID."
+              },
+              "operation_id": {
+                "type": "string",
+                "description": "The operation ID."
+              }
+            }
+          },
+          "severity": {
+            "type": "string",
+            "description": "The severity of the log.",
+            "example": "DEBUG"
+          }
+        }
+      },
+      "SignedUrl": {
+        "type": "object",
+        "required": [
+          "url",
+          "bucket",
+          "path"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The signed URL to upload the zip file to."
+          },
+          "bucket": {
+            "type": "string",
+            "description": "The bucket (will match the bucket part of the url)."
+          },
+          "path": {
+            "type": "string",
+            "description": "The path (will match the path part of the url)."
+          }
+        }
+      },
+      "ApiKeyRequest": {
+        "type": "object",
+        "required": [
+          "label"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "A short name for the API key.",
+            "example": "MailMonkey API Key"
+          }
+        }
+      },
+      "ApiKey": {
+        "type": "object",
+        "required": [
+          "key",
+          "projectId",
+          "label"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The API key.",
+            "example": "api-key-123"
+          },
+          "label": {
+            "type": "string",
+            "description": "A short name for the API key.",
+            "example": "MailMonkey API Key"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The project ID.",
+            "example": "project-id-123"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the API key is active.",
+            "example": true
+          }
+        }
+      },
+      "PatchApiKeyRequest": {
+        "type": "object",
+        "required": [
+          "updateMask",
+          "apiKey"
+        ],
+        "properties": {
+          "updateMask": {
+            "type": "array",
+            "example": [
+              "label",
+              "active"
+            ],
+            "items": {
+              "type": "string",
+              "description": "fields to update.",
+              "example": "label"
+            }
+          },
+          "apiKey": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "A short name for the API key.",
+                "example": "MailMonkey API Key"
+              },
+              "active": {
+                "type": "boolean",
+                "description": "Whether the API key is active.",
+                "example": true
+              }
+            }
+          }
+        }
+      },
+      "WebhookHeaders": {
+        "type": "object",
+        "nullable": true,
+        "description": "Additional headers to add when Ampersand sends a webhook message",
+        "additionalProperties": {
+          "type": "string",
+          "nullable": false
+        },
+        "example": {
+          "Authorization": "Bearer 1234"
+        }
+      },
+      "Invite": {
+        "type": "object",
+        "required": [
+          "id",
+          "invitedEmail",
+          "createTime",
+          "parentId",
+          "parentType",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The invite ID."
+          },
+          "invitedEmail": {
+            "type": "string",
+            "description": "The email address of the person invited."
+          },
+          "parentType": {
+            "type": "string",
+            "enum": [
+              "org"
+            ],
+            "description": "The type of entity that the person is invited to."
+          },
+          "parentId": {
+            "type": "string",
+            "description": "The ID of the parent (e.g. org ID)."
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the invite.",
+            "enum": [
+              "pending",
+              "accepted",
+              "revoked",
+              "expired"
+            ]
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the invite was created.",
+            "format": "date-time"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the invite was updated.",
+            "format": "date-time"
+          }
+        }
+      },
+      "Builder": {
+        "type": "object",
+        "required": [
+          "id",
+          "idpProvider",
+          "idpRef",
+          "createTime"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The builder ID.",
+            "example": "builder-id-123"
+          },
+          "idpProvider": {
+            "type": "string",
+            "description": "The identity provider",
+            "example": "clerk"
+          },
+          "idpRef": {
+            "type": "string",
+            "description": "ID used by the identity provider"
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time that the builder joined Ampersand.",
+            "format": "date-time"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "primaryEmail": {
+            "type": "string"
+          }
+        }
+      },
+      "BuilderInfo": {
+        "type": "object",
+        "required": [
+          "builder",
+          "projectRoles"
+        ],
+        "properties": {
+          "builder": {
+            "$ref": "#/components/schemas/Builder"
+          },
+          "projectRoles": {
+            "type": "object",
+            "description": "A map of project IDs to project roles for the builder.",
+            "additionalProperties": {
+              "type": "object",
+              "required": [
+                "role",
+                "principalType",
+                "principalId",
+                "project"
+              ],
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "description": "The role of the builder in the project.",
+                  "example": "admin"
+                },
+                "principalType": {
+                  "type": "string",
+                  "description": "The type of the principal.",
+                  "enum": [
+                    "team",
+                    "builder"
+                  ]
+                },
+                "principalId": {
+                  "type": "string",
+                  "description": "The ID of the team or builder.",
+                  "example": "builder-id-123"
+                },
+                "project": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "orgRole": {
+            "type": "object",
+            "required": [
+              "role",
+              "principalType",
+              "principalId",
+              "org"
+            ],
+            "properties": {
+              "role": {
+                "type": "string",
+                "description": "The role of the builder in the org.",
+                "example": "admin"
+              },
+              "principalType": {
+                "type": "string",
+                "description": "The type of the principal.",
+                "enum": [
+                  "team",
+                  "builder"
+                ]
+              },
+              "principalId": {
+                "type": "string",
+                "description": "The ID of the team or builder.",
+                "example": "builder-id-123"
+              },
+              "org": {
+                "$ref": "#/components/schemas/Org"
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "name": "X-Api-Key",
+        "in": "header"
+      },
+      "APIKeyQueryParam": {
+        "type": "apiKey",
+        "name": "apiKey",
+        "in": "query"
+      },
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}
