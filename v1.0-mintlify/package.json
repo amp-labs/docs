@@ -1,0 +1,16 @@
+{
+    "name": "@amp-labs/docs",
+    "scripts": {
+        "dev": "mintlify dev",
+        "test": "mintlify broken-links",
+        "generate": "pnpm run generate:api-reference && pnpm run generate:mint",
+        "generate:api-reference": "rm -rf api-reference && mkdir -p api-reference && mintlify-scrape openapi-file -o api-reference https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/api.json | tail -n +2 > ./api-reference/index.json",
+        "generate:api-reference:local": "rm -rf api-reference && mkdir -p api-reference && mintlify-scrape openapi-file -o api-reference ./api.json | tail -n +2 > ./api-reference/index.json",
+        "generate:mint": "npx tsx generate-mint.ts mint.json"
+    },
+    "devDependencies": {
+        "@mintlify/scraping": "*",
+        "@types/node": "^20.14.10",
+        "mintlify": "4.0.185"
+    }
+}
