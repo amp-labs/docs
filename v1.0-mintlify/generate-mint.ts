@@ -1,4 +1,6 @@
-import apiPages from "./api-reference/index.json";
+import platformApiPages from "./api-reference/platform/index.json";
+import readApiPages from "./api-reference/read/index.json";
+import writeApiPages from "./api-reference/write/index.json";
 import fs from "fs";
 
 export interface MintConfig {
@@ -116,23 +118,16 @@ const mintConfig: MintConfig = {
     },
     {
       group: "AMPERSAND PUBLIC API",
-      pages: apiPages,
+      pages: platformApiPages,
     },
-    // {
-    //   group: "AMPERSAND PUBLIC WRITE API",
-    //   pages: [
-    //     {
-    //       group: "Write",
-    //       pages: ["api-reference/write/create-update-upsert-or-delete-records"],
-    //     },
-    //     {
-    //       group: "Upload URL",
-    //       pages: [
-    //         "api-reference/upload-url-1/generate-a-signed-url-to-upload-write-data-to",
-    //       ],
-    //     },
-    //   ],
-    // },
+    {
+      group: "AMPERSAND PUBLIC WRITE API",
+      pages: writeApiPages,
+    },
+    {
+      group: "AMPERSAND PUBLIC READ API",
+      pages: readApiPages,
+    },
   ],
 
   footerSocials: {
