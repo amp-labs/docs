@@ -12,3 +12,13 @@ pnpm run generate
 ```
 
 This will recreate `mint.json` that is watched by Mintlify in branch `main` to redeploy the docs when updates happen. 
+
+
+# Run docs locally 
+
+```shell 
+cd v1.0-mintlify
+pnpm run dev 
+```
+
+The local preview is available at http://localhost:3000/ 
