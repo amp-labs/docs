@@ -1,6 +1,6 @@
-import platformApiPages from "./api-reference/platform/index.json";
-import readApiPages from "./api-reference/read/index.json";
-import writeApiPages from "./api-reference/write/index.json";
+import platformApiPages from "./api-reference/platform.json";
+import readApiPages from "./api-reference/read.json";
+import writeApiPages from "./api-reference/write.json";
 import fs from "fs";
 
 export interface MintConfig {

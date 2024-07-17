@@ -3,13 +3,14 @@
     "scripts": {
         "dev": "mintlify dev",
         "test": "mintlify broken-links",
-        "generate": "run-s gen-oas:* && pnpm gen-mint",
-        "gen-oas:platform": "rm -rf api-reference/platform && mkdir -p api-reference/platform && mintlify-scrape openapi-file -o api-reference/platform https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/api.json | tail -n +2 > ./api-reference/platform/index.json",
-        "gen-oas:read": "rm -rf api-reference/read && mkdir -p api-reference/read && mintlify-scrape openapi-file -o api-reference/read https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/read.json | tail -n +2 > ./api-reference/read/index.json",
-        "gen-oas:write": "rm -rf api-reference/write && mkdir -p api-reference/write && mintlify-scrape openapi-file -o api-reference/write https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/write.json | tail -n +2 > ./api-reference/write/index.json",
-        "gen-oas:platform:local": "rm -rf api-reference/platform && mkdir -p api-reference/platform && mintlify-scrape openapi-file -o api-reference/platform ./api.json | tail -n +2 > ./api-reference/platform/index.json",
-        "gen-oas:read:local": "rm -rf api-reference/read && mkdir -p api-reference/read && mintlify-scrape openapi-file -o api-reference/read ./read.json | tail -n +2 > ./api-reference/read/index.json",
-        "gen-oas:write:local": "rm -rf api-reference/write && mkdir -p api-reference/write && mintlify-scrape openapi-file -o api-reference/write ./write.json | tail -n +2 > ./api-reference/write/index.json",
+        "generate": "run-s download-spec:* && run-s gen-api-pages:* && pnpm gen-mint",
+        "download-spec:platform": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/api.json > ./api.json",
+        "download-spec:read": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/read.json > ./read.json",
+        "download-spec:write": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/write.json > ./write.json",
+        "gen-api-pages:dir": "rm -rf api-reference && mkdir -p api-reference",
+        "gen-api-pages:platform": "mintlify-scrape openapi-file -o api-reference api.json | tail -n +2 > ./api-reference/platform.json",
+        "gen-api-pages:read": "mintlify-scrape openapi-file -o api-reference read.json | tail -n +2 > ./api-reference/read.json",
+        "gen-api-pages:write": "mintlify-scrape openapi-file -o api-reference write.json | tail -n +2 > ./api-reference/write.json",
         "gen-mint": "npx tsx generate-mint.ts mint.json"
     },
     "devDependencies": {
