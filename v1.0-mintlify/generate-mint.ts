@@ -112,21 +112,20 @@ const mintConfig: MintConfig = {
         },
         "deploy-integrations",
         "embeddable-ui-components",
-        "supported-apis",
         "glossary",
       ],
     },
     {
-      group: "AMPERSAND PUBLIC API",
-      pages: platformApiPages,
+      group: "READ API",
+      pages: readApiPages,
     },
     {
-      group: "AMPERSAND PUBLIC WRITE API",
+      group: "WRITE API",
       pages: writeApiPages,
     },
     {
-      group: "AMPERSAND PUBLIC READ API",
-      pages: readApiPages,
+      group: "PLATFORM API",
+      pages: platformApiPages,
     },
   ],
 
