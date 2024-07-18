@@ -186,7 +186,7 @@ You can select a specific time frame for backfill, such as "the last 30 days" or
 ```yaml yaml
 integrations: 
  - name: readSalesforce
-   api: salesforce
+   provider: salesforce
    read:
      objects:
       

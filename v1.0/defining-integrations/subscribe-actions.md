@@ -38,7 +38,7 @@ To subscribe to a standard object, specify the following:
 - **event**: we support listening to the following events:
   - `create`: when an item is created
   - `delete`: when an item is deleted
-  - `update`: when one of more fields that you're interested in has changed
+  - `update`: when one or more fields that you're interested in have changed
 
 ## Subscribe to creates
 
@@ -198,7 +198,7 @@ For these custom objects, you'll specify:
 integrations: 
  - name: watchSalesforceOpportunities
    displayName: Subscribe to Changes in Opportunities
-   api: salesforce
+   provider: salesforce
    actions:
     - type: subscribe
       objects:
