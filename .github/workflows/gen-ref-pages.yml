@@ -34,17 +34,16 @@ jobs:
               - 'v1.0-mintlify/**'
 
       - name: Notify if no changes have happened since last run
-        if: steps.filter.outputs.docs == 'false'
+        if: steps.filter.outputs.docs == 'false' && github.event_name == 'pull_request'
         run: echo 'No changes since last run'
         shell: bash
 
-      - name: Generate API ref pages if any docs file has changed
-        if: steps.filter.outputs.docs == 'true'
+      - name: Generate API ref pages
         run: cd v1.0-mintlify && pnpm i && pnpm run generate
         shell: bash
 
       - name: Push changes
-        if: steps.filter.outputs.docs == 'true'
+        if: steps.filter.outputs.docs == 'true' || (github.event_name == 'repository_dispatch' && github.event.action == 'update-docs-trigger')
         run: |
           git config --global user.email "devops@withampersand.com"
           git config --global user.name "Ampersand Ops"
