@@ -1,0 +1,81 @@
+---
+title: "Hubspot"
+---
+
+> ℹ️ Topics Covered in This Article
+> 
+> - [Before You Get Started](#getting-started)  
+> - [Creating a HubSpot App](#creating-a-hubspot-app) 
+> - [Add HubSpot App Details in Ampersand](#connecting-hubspot-to-ampersand)
+
+## Before You Get Started
+
+To integrate HubSpot with Ampersand, you need to [Create a HubSpot Account](#create-a-hubspot-account) and obtain the following credentials from a HubSpot App:
+
+- Client ID
+- Client Secret
+- Scopes Requested
+
+### Create a HubSpot Account
+
+You need a **HubSpot** account to connect with Ampersand. If you do not have a HubSpot account, here's how you can sign up:
+
+- Go to the [HubSpot Developer site](https://app.hubspot.com/signup-hubspot/developers) and sign up for a free developer account.
+- Sign up using your preferred account.
+- Verify your email and complete the registration process.
+
+## Creating a HubSpot App
+
+Once your HubSpot Developer account is ready, you need to create a HubSpot application. Learn more about creating a HubSpot application here.
+
+1. Log in to Your [HubSpot Developer Dashboard](https://app.hubspot.com/signup-hubspot/developers).
+2. Click **Create an app**.
+
+   ![HubSpot App Creation](/images/a8c2c6f-hubspot1.gif)
+
+3. In the **Basic Info** section:
+   1. Enter **Public app name**.
+   2. Add **Description**, **Logo**, and **Support contact** info for your app.
+
+   ![HubSpot App Details](/images/a8c2c6f-hubspot1.gif)
+
+1. Click **Save changes**.
+2. Click on the **Auth** tab to review your Auth settings. This section includes the _client ID_ and _client secret_ which you need to add to the Ampersand console while setting up HubSpot in Ampersand. You’ll need this information for initiating an OAuth connection between your app and HubSpot.
+3. In the **Redirect URLs** section, add the Ampersand Callback URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+
+   ![HubSpot Auth Settings](/images/013943e-hubspot3.gif)
+
+4. In the **Scopes** section, select the scopes you'd like to use in your application. You will need to add the same scopes in Ampersand to set up your app.
+
+   ![HubSpot Scopes Selection](/images/1b56fb4-hubspot5.gif)
+
+5. Click **Save changes**.
+
+### Obtaining Client Id, Client Secret, and Scopes section
+
+Here's how to grab the credentials you'll need:
+
+1. Go to **Manage Apps** in HubSpot and select your app.
+2. Click on the **Auth** tab.
+3. You will find your _Client ID_ and _Client Secret_ under the **App Credentials** section.
+4. The **Scopes** section lists the permissions your app has in HubSpot.
+
+## Add HubSpot App Details in Ampersand
+
+> ❕ Before adding the HubSpot App Details in Ampersand, ensure you have obtained the client ID, client secret, and scopes from HubSpot.
+> 
+> For instructions on how to obtain these details, refer to the section on [Obtaining Client ID, Client Secret, and Scopes](https://docs.withampersand.com/docs/hubspot-guide#obtaining-client-id-client-secret-and-scopes-section).
+
+1. Log in to your [Ampersand Console](https://console.withampersand.com).
+2. Select the project where you want to add the HubSpot App.
+
+   ![Ampersand Project Selection](/images/dd47b7a-Ampersand.png)
+
+3. Select **Provider apps**.
+4. Select _HubSpot_ from the **Provider** list.
+5. Enter the previously obtained _Consumer Key_ in the **Client ID** field and the _Consumer Secret_ in the **Client Secret** field.
+6. Enter the scopes set for your application in HubSpot.
+
+   ![HubSpot in Ampersand](/images/f4ada70-hubspot6.gif)
+
+7. Click **Save changes**.
