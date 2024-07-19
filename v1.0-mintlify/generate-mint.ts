@@ -65,7 +65,7 @@ const mintConfig: MintConfig = {
   theme: "quill",
 
   topbarCtaButton: {
-    name: "Start Building Now",
+    name: "Start building now",
     url: "https://console.withampersand.com/sign-up",
   },
   topbarLinks: [
