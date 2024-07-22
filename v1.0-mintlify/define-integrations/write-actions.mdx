@@ -132,7 +132,7 @@ Using an upload URL is a multi-step process where you upload CSV data to the Amp
 
 ##### Step 1: generate an upload URL
 
-Make a request to the [GenerateUploadURL](/api-reference/upload-url-1/generate-a-signed-url-to-upload-write-data-to) endpoint:
+Make a request to the [GenerateUploadURL](/api-reference/upload-url/generate-a-signed-url-to-upload-write-data-to) endpoint:
 
 ```bash
 curl --request GET \
@@ -170,7 +170,7 @@ curl -X PUT -H "Content-Type: text/csv" --upload-file data.csv "$URL"
 
 ##### Step 3: make a request to start a bulk write
 
-The response from the [GenerateUploadURL](/api-reference/upload-url-1/generate-a-signed-url-to-upload-write-data-to) endpoint from step 1 should include a `reference` field which is a URL that starts with `gs://`. Put this URL in the `recordsURL` field of a bulk write request.
+The response from the [GenerateUploadURL](/api-reference/upload-url/generate-a-signed-url-to-upload-write-data-to) endpoint from step 1 should include a `reference` field which is a URL that starts with `gs://`. Put this URL in the `recordsURL` field of a bulk write request.
 
 Here is an example request for bulk upsert, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file that was uploaded)
 

@@ -38,6 +38,10 @@ jobs:
         run: echo 'No changes since last run'
         shell: bash
 
+      - name: Test for broken links in the docs
+        run: cd v1.0-mintlify && pnpm run test:links
+        shell: bash
+
       - name: Generate API ref pages
         run: cd v1.0-mintlify && pnpm i && pnpm run generate
         shell: bash
