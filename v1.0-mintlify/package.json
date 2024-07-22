@@ -2,7 +2,7 @@
     "name": "@amp-labs/docs",
     "scripts": {
         "dev": "mintlify dev",
-        "test": "mintlify broken-links",
+        "test:links": "mintlify broken-links; exitCode=$?; exit $exitCode",
         "generate": "run-s download-spec:* && run-s gen-api-pages:* && pnpm gen-mint",
         "download-spec:platform": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/api.json > ./api.json",
         "download-spec:read": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/read.json > ./read.json",
