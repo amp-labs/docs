@@ -58,12 +58,11 @@ const mintConfig: MintConfig = {
   },
   favicon: "/logos/favicon.png",
   colors: {
-    primary: "#009ee1",
-    light: "#66c4ed",
-    dark: "#009ee1",
+    primary: "#4F1EB8",
+    light: "#A67CFF",
+    dark: "#6122E7",
   },
-  theme: "quill",
-
+  theme: "venus",
   topbarCtaButton: {
     name: "Start building now",
     url: "https://dashboard.withampersand.com/sign-up",
@@ -114,7 +113,7 @@ const mintConfig: MintConfig = {
             "provider-guides/aweber",
             "provider-guides/notion",
             "provider-guides/box",
-            "provider-guides/ outreach",
+            "provider-guides/outreach",
             "provider-guides/bynder",
             "provider-guides/pinterest",
             "provider-guides/calendly",
