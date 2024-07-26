@@ -1,6 +1,6 @@
-import platformApiPages from "./api-reference/platform.json";
-import readApiPages from "./api-reference/read.json";
-import writeApiPages from "./api-reference/write.json";
+import platformApiPages from "./reference/platform.json";
+import readApiPages from "./reference/read.json";
+import writeApiPages from "./reference/write.json";
 import fs from "fs";
 
 export interface MintConfig {
@@ -74,22 +74,10 @@ const mintConfig: MintConfig = {
       url: "https://dashboard.withampersand.com/sign-in",
     },
   ],
-  anchors: [
-    {
-      name: "About us",
-      icon: "users",
-      url: "https://www.withampersand.com/about-us",
-    },
-    {
-      name: "Blog",
-      icon: "newspaper",
-      url: "https://www.withampersand.com/blog",
-    },
-  ],
   tabs: [
     {
       name: "API Reference",
-      url: "api-reference",
+      url: "reference",
     },
   ],
 
