@@ -56,13 +56,12 @@ const mintConfig: MintConfig = {
     light: "/logos/dark.svg",
     dark: "/logos/light.svg",
   },
-  favicon: "/logos/favicon.png",
+  favicon: "/logos/favicon.svg",
   colors: {
     primary: "#4F1EB8",
     light: "#A67CFF",
     dark: "#6122E7",
   },
-  theme: "venus",
   topbarCtaButton: {
     name: "Start building now",
     url: "https://dashboard.withampersand.com/sign-up",
@@ -82,7 +81,7 @@ const mintConfig: MintConfig = {
 
   navigation: [
     {
-      group: "Documentation",
+      group: "",
       pages: [
         "overview",
         "quickstart",
