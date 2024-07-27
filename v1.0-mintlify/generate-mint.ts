@@ -1,6 +1,6 @@
-import platformApiPages from "./api-reference/platform.json";
-import readApiPages from "./api-reference/read.json";
-import writeApiPages from "./api-reference/write.json";
+import platformApiPages from "./reference/platform.json";
+import readApiPages from "./reference/read.json";
+import writeApiPages from "./reference/write.json";
 import fs from "fs";
 
 export interface MintConfig {
@@ -56,14 +56,12 @@ const mintConfig: MintConfig = {
     light: "/logos/dark.svg",
     dark: "/logos/light.svg",
   },
-  favicon: "/logos/favicon.png",
+  favicon: "/logos/favicon.svg",
   colors: {
-    primary: "#009ee1",
-    light: "#66c4ed",
-    dark: "#009ee1",
+    primary: "#4F1EB8",
+    light: "#A67CFF",
+    dark: "#6122E7",
   },
-  theme: "quill",
-
   topbarCtaButton: {
     name: "Start building now",
     url: "https://dashboard.withampersand.com/sign-up",
@@ -74,28 +72,16 @@ const mintConfig: MintConfig = {
       url: "https://dashboard.withampersand.com/sign-in",
     },
   ],
-  anchors: [
-    {
-      name: "About us",
-      icon: "users",
-      url: "https://www.withampersand.com/about-us",
-    },
-    {
-      name: "Blog",
-      icon: "newspaper",
-      url: "https://www.withampersand.com/blog",
-    },
-  ],
   tabs: [
     {
       name: "API Reference",
-      url: "api-reference",
+      url: "reference",
     },
   ],
 
   navigation: [
     {
-      group: "Documentation",
+      group: "",
       pages: [
         "overview",
         "quickstart",
@@ -126,7 +112,7 @@ const mintConfig: MintConfig = {
             "provider-guides/aweber",
             "provider-guides/notion",
             "provider-guides/box",
-            "provider-guides/ outreach",
+            "provider-guides/outreach",
             "provider-guides/bynder",
             "provider-guides/pinterest",
             "provider-guides/calendly",

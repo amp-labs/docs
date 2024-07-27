@@ -32,7 +32,7 @@ You can find your project ID and integration ID in the Ampersand Management Cons
 
 ### Create a new record
 
-To create a new record, make a request to the [Write endpoint](/api-reference/write/create-update-upsert-or-delete-records) with `type` being `create`. For example:
+To create a new record, make a request to the [Write endpoint](/reference/write/create-update-upsert-or-delete-records) with `type` being `create`. For example:
 
 ```bash
 curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
@@ -69,7 +69,7 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 
 ## Bulk write
 
-If you are updating a large number of records, you can make bulk writes by calling the [Write endpoint](/api-reference/write/create-update-upsert-or-delete-records) with `mode` being `bulk` . Because bulk writes are asynchronous, once your request has been successfully received, you'll get a response that contains an Operation ID. You can then use the [GetOperation](/api-reference/operation/get-an-operation) endpoint to poll on the status of this Operation, or view its status on the Ampersand Console.
+If you are updating a large number of records, you can make bulk writes by calling the [Write endpoint](/reference/write/create-update-upsert-or-delete-records) with `mode` being `bulk` . Because bulk writes are asynchronous, once your request has been successfully received, you'll get a response that contains an Operation ID. You can then use the [GetOperation](/reference/operation/get-an-operation) endpoint to poll on the status of this Operation, or view its status on the Ampersand Console.
 
 At the moment, only bulk write to Salesforce is supported.
 
@@ -132,7 +132,7 @@ Using an upload URL is a multi-step process where you upload CSV data to the Amp
 
 ##### Step 1: generate an upload URL
 
-Make a request to the [GenerateUploadURL](/api-reference/upload-url/generate-a-signed-url-to-upload-write-data-to) endpoint:
+Make a request to the [GenerateUploadURL](/reference/upload-url/generate-a-signed-url-to-upload-write-data-to) endpoint:
 
 ```bash
 curl --request GET \
@@ -170,7 +170,7 @@ curl -X PUT -H "Content-Type: text/csv" --upload-file data.csv "$URL"
 
 ##### Step 3: make a request to start a bulk write
 
-The response from the [GenerateUploadURL](/api-reference/upload-url/generate-a-signed-url-to-upload-write-data-to) endpoint from step 1 should include a `reference` field which is a URL that starts with `gs://`. Put this URL in the `recordsURL` field of a bulk write request.
+The response from the [GenerateUploadURL](/reference/upload-url/generate-a-signed-url-to-upload-write-data-to) endpoint from step 1 should include a `reference` field which is a URL that starts with `gs://`. Put this URL in the `recordsURL` field of a bulk write request.
 
 Here is an example request for bulk upsert, if the object to be written to is a custom object with the name `tactics__c`. (Please note that `primaryKey` must match one of the column names from the CSV file that was uploaded)
 
@@ -197,7 +197,7 @@ Because bulk writes are asynchronous operations, you'll get back an Operation ID
 { "operationId": "5e4f06ca-445f-43ea-943e-78465ee1bb7a" }
 ```
 
-If you want to get the status of this Operation, you can either look for it on the Ampersand Console, or you can make a request to the [GetOperation](/api-reference/operation/get-an-operation) endpoint. For example:
+If you want to get the status of this Operation, you can either look for it on the Ampersand Console, or you can make a request to the [GetOperation](/reference/operation/get-an-operation) endpoint. For example:
 
 ```bash
 curl --request GET \
@@ -206,7 +206,7 @@ curl --request GET \
 ```
 
 
-If the Operation has failed, you can get more details about the failure by retrieving the logs related to this Operation using the [ListOperationLogs](/api-reference/operation/list-logs-for-an-operation) endpoint. For example:
+If the Operation has failed, you can get more details about the failure by retrieving the logs related to this Operation using the [ListOperationLogs](/reference/operation/list-logs-for-an-operation) endpoint. For example:
 
 ```bash
 curl --request GET \
@@ -216,7 +216,7 @@ curl --request GET \
 
 ### Bulk delete
 
-To delete records in bulk, you'll make a call to the [Write endpoint](/api-reference/write/create-update-upsert-or-delete-records), with `delete` as the type and `bulk` as the mode. You'll need to supply a CSV file or string that has a single column containing the [primary key](/define-integrations/write-actions#primary-key) values of the records you'd like to delete. You'll still need a header in the CSV data that contains the name of the primary key. You'll supply the data and query for the status of the operation in the same way as any other types of bulk write. See the sections above for more information.
+To delete records in bulk, you'll make a call to the [Write endpoint](/reference/write/create-update-upsert-or-delete-records), with `delete` as the type and `bulk` as the mode. You'll need to supply a CSV file or string that has a single column containing the [primary key](/define-integrations/write-actions#primary-key) values of the records you'd like to delete. You'll still need a header in the CSV data that contains the name of the primary key. You'll supply the data and query for the status of the operation in the same way as any other types of bulk write. See the sections above for more information.
 
 Here is an example request:
 
