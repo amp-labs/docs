@@ -55,6 +55,7 @@ const mintConfig: MintConfig = {
   logo: {
     light: "/logos/dark.svg",
     dark: "/logos/light.svg",
+    href: "https://withampersand.com"
   },
   favicon: "/logos/favicon.svg",
   colors: {
