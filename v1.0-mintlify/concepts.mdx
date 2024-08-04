@@ -1,0 +1,25 @@
+---
+title: "Concepts"
+---
+
+## Integration
+
+An **integration** defines how your application will interact with a third party SaaS tool. You will have a single integration for all of your customers that are connecting your application with a particular SaaS product. For example, you might have an integration called `mySalesforceIntegration`. Salesforce is the **provider** that we are integrating with.
+
+You create an integration by defining it in a manifest file and then deploying it using the `amp` CLI. (See [Define Integrations](/define-integrations) and [CLI Overview](cli/overview-and-installation)).
+
+An **installation** is specific to a single customer that sets up one of your integrations to connect with their SaaS instance. For example, `mySalesforceIntegration` might have 30 installations - one for each of your customers that have connected their Salesforce instance with your application.
+
+## Installation
+
+An installation is created:
+- when a customer connects their SaaS instance in an [embeddable UI component](embeddable-ui-components)
+- or when you make an API call to the [CreateInstallation](reference/installation/create-a-new-installation) or [ImportInstallation](installation/import-an-existing-installation) endpoints.
+ 
+An installation captures the following information:
+- the credentials for connecting to the customer's SaaS instance. (Ampersand supports OAuth, Basic Auth, and API Key based authentication.) We call this the **connection**.
+- a customer's preference for which objects and fields they want your application to read or write, and fields they've mapped. We call this the **config**.
+
+---
+
+For other terminology, refer to the [Glossary](glossary).

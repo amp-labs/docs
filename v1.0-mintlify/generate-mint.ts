@@ -86,19 +86,24 @@ const mintConfig: MintConfig = {
       pages: [
         "overview",
         "quickstart",
+        "concepts",
         {
           group: "Define integrations",
           pages: [
-            "define-integrations/defining-integrations",
+            "define-integrations/overview",
             "define-integrations/read-actions",
             "define-integrations/write-actions",
             "define-integrations/proxy-actions",
-            "define-integrations/subscribe-actions",
-            "define-integrations/destinations",
           ],
         },
-        "deploy-integrations",
         "embeddable-ui-components",
+        {
+          group: "CLI",
+          pages: [
+            "cli/overview"
+          ]
+        },
+        "destinations",
         "glossary",
         {
           group: "Provider guides",

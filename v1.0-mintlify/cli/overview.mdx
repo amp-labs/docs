@@ -1,0 +1,80 @@
+---
+title: Overview and Installation
+---
+
+The `amp` Command Line Interface (CLI) allows you to deploy integrations and interact with the Ampersand platform. 
+
+## Installation
+
+### Using Homebrew
+
+```
+brew tap amp-labs/cli
+brew update
+brew install amp-labs/cli/cli
+```
+
+### Other systems
+
+Visit [https://github.com/amp-labs/cli/releases](https://github.com/amp-labs/cli/releases) and download the binary for your machine’s architecture. Place the binary file somewhere on your PATH (e.g. inside `/usr/bin`).
+
+## Using the CLI
+
+### Log into your Ampersand account
+
+Before using the CLI, you must have an Ampersand account that you've created on the [Ampersand dashboard](https://dashboard.withampersand.com/sign-up).
+
+Once your account has been created, you can log into the CLI by running:
+
+```
+amp login
+```
+
+If you wish to log out, you can run:
+
+```
+amp logout
+```
+
+### Deploy integrations
+
+After defining your integrations in `amp.yaml`, deploy your changes by running the commands below:
+
+```
+amp login
+amp deploy <folder_with_amp.yaml> --project=<id-or-name>
+```
+
+### View all commands
+
+To see a list of all available commands and global flags, run:
+
+```
+amp help
+```
+
+### Run in CI/CD
+
+If you are running the Ampersand CLI in a CI/CD system, such as Github Actions, you can:
+
+1. Generate an API key in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/api-keys/new).
+2. Use the `key` flag, for example:
+
+```
+amp list:integrations --key=<api-key> --project=<id-or-name>
+```
+
+Alternatively, you can put the API key in the AMP_API_KEY environment variable, and omit the `key` flag.
+
+```
+export AMP_API_KEY=<api-key>
+amp list:integrations --project=<id-or-name>
+```
+
+### Run in debug mode
+
+You can run any command with the `debug` flag, which will print more verbose output. For example:
+
+```
+amp login --debug
+```
