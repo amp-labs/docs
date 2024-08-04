@@ -9,7 +9,7 @@ title: "Embed UI components"
 
 In your repo, use npm to install the package:
 
-```bash
+```
 npm install @amp-labs/react
 ```
 
@@ -30,8 +30,6 @@ This library requires your components to be wrapped in the `<AmpersandProvider/>
 
 Here's an example:
 
-
-
 ```TypeScript TypeScript
 import { AmpersandProvider } from '@amp-labs/react';
 
@@ -43,7 +41,8 @@ const options = {
 function App() {
   return (
     // Wrap all your components inside AmpersandProvider.
-    // You can either do this at the App level, or further down in the component tree.
+    // You can either do this at the App level,
+    // or further down in the component tree.
     <AmpersandProvider options={options}>
         // You can use any of the Ampersand components here.
         ...
@@ -56,7 +55,9 @@ function App() {
 
 ### Install integration
 
-The InstallIntegration component asks your customer for their SaaS credentials, and then guides them through the installation flow for an integration. If they've already installed this integration, then the component will display the current configuration of the integration and allow them to update it. (Please note: each [group](/glossary#group) is able to install the integration once, so if someone else in the with the same `groupRef` has already installed the integration, then the user will not be able to install the same integration again.)
+The InstallIntegration component asks your customer for their SaaS credentials, and then guides them through the installation flow for an integration. If they've already installed this integration, then the component will display the current configuration of the integration and allow them to update it. 
+
+Please note that each [group](/glossary#group) is able to install the integration once, so if someone else in the with the same `groupRef` has already installed the integration, then the user will not be able to install the same integration again.
 
 The parameters of the component are:
 
@@ -70,9 +71,7 @@ The parameters of the component are:
 
 Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`
 
-
-
-```
+```TypeScript TypeScript
  <InstallIntegration 
   integration = {myIntegrationName}
   consumerRef = {userId}
@@ -80,10 +79,12 @@ Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the follo
   groupRef = {teamId}
   groupName = {teamName}
   onInstallSuccess = {(installationId, configObject) =>
-    console.log(`Successfully installed ${installationId} with configuration ${JSON.stringify(configObject, null, 2)}`)
+    console.log(`Successfully installed ${installationId}`
+      + `with configuration ${JSON.stringify(configObject, null, 2)}`)
   }
   onUpdateSuccess = {(installationId, configObject) =>
-    console.log(`Successfully updated ${installationId} with configuration ${JSON.stringify(configObject, null, 2)}`)
+    console.log(`Successfully updated ${installationId}`
+      + ` with configuration ${JSON.stringify(configObject, null, 2)}`)
   }
 />
  ```
@@ -104,8 +105,6 @@ The parameters of the component are:
 * **redirectUrl** (string, optional): if provided, the page will be redirected to this URL once a consumer successfully connects. This can either be an absolute or relative URL.
 * **onSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects, it should have the signature `(connectionID: string) => void`.
 
-
-
 ```TypeScript
  <ConnectProvider 
   provider = "salesforce"
@@ -114,7 +113,9 @@ The parameters of the component are:
   groupRef = {teamId}
   groupName = {teamName}
   redirectUrl = "/connection-success"
-  onSuccess = {connectionId => console.log(`Successfully created connection ${connectionId}`)}
+  onSuccess = {connectionId =>
+    console.log(`Successfully created connection ${connectionId}`)
+  }
 />
 ```
 
@@ -131,8 +132,9 @@ We provide a hook `useIsIntegrationInstalled` to check if an integration has bee
 
 It returns an object with fields `isLoaded`checking if API call is resolved and `isIntegrationInstalled` indicating whether the integration has already been installed by somebody in the group.
 
-
-
 ```TypeScript
-const { isLoaded, isIntegrationInstalled } = useIsIntegrationInstalled("read-salesforce", groupRef);
+const {
+  isLoaded,
+  isIntegrationInstalled
+} = useIsIntegrationInstalled("read-salesforce", groupRef);
 ```

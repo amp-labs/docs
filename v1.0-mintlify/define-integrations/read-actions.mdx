@@ -1,29 +1,22 @@
 ---
-title: "Read Actions"
-description: A read action reads data from your customer's SaaS on a scheduled basis and send them to Destinations that you define.
+title: "Read Actions" 
 ---
 
-
-
-
-```YAML YAML
-  read:
-      objects:
-        ...
-```
+A read action reads data from your customer's SaaS and send them to Destinations that you define.
 
 ## Defining reads
 
 To read an object, you need to specify:
 
 * **objectName:** to indicate which object you'd like to read. This should match the name of the object in the official documentation for the SaaS API.
-* **destination:** the name of the [destination](doc:destinations) that you've defined
+* **destination:** the name of the [destination](/destinations) that you've defined
 * **schedule:** how frequently the read should happen. This value must be a schedule in [cron syntax](https://docs.gitlab.com/ee/topics/cron/)
-* **backfill** (optional): whether Ampersand should read historical data when a customer installs an integration. If omitted, then Ampersand will only incrementally read data that has been created or updated after that point. See [Backfill behavior](doc:read-actions#backfill-behavior) for details.
+* **backfill** (optional): whether Ampersand should read historical data when a customer installs an integration. If omitted, then Ampersand will only incrementally read data that has been created or updated after that point. See [Backfill behavior](read-actions#backfill-behavior) for details.
 
 
 
 ```YAML YAML
+...
      objects:
         - objectName: lineItem
           destination: lineItemWebhook
@@ -40,11 +33,11 @@ To read an object, you need to specify:
  The ability for your users to define their own sync schedules.
 </Note>
 
-### Known fields
+### Required fields and optional fields
 
-Fields can be either be required or optional. If a field is required, then all users who install this integration will need to give your app read access to that field. If a field is optional, then users can choose whether they'd like your app to read that field. For standard fields, you will specify:
+Fields can be either be required or optional. If a field is required, then all users who install this integration will need to give your app read access to that field. If a field is optional, then users can choose whether they'd like your app to read that field. For these fields, you will specify:
 
-* **fieldName:**  the name of the field from the official SaaS API documentation, converted to lower case. For example, if you'd like to read the first name of a contact, write `firstname`.
+* **fieldName:**  the name of the field from the official SaaS API documentation.
 
 
 ```YAML YAML
@@ -63,11 +56,9 @@ Fields can be either be required or optional. If a field is required, then all u
 <Frame caption="Embeddable UI produced by the above config">![Embeddable UI](/images/3854c9d-image.png)</Frame>
 
 
-
 ### Allow users to pick from all fields
 
-If you want to give your user the option to pick from any of the fields in their Object, use `optionalFieldsAuto: all`. The UI component will populate a list of all the fields pulled from their object and allow them to pick which ones your app will be able to read.
-
+If you want to give your user the option to pick from any of the fields in their object, use `optionalFieldsAuto: all`. The UI component will populate a list of all the fields pulled from that object (including custom fields) and allow them to pick which ones your app will be able to read.
 
 
 ```YAML YAML
@@ -90,11 +81,9 @@ You might want to ask your users during the set up of the integration to map a f
 For these fields, you'll specify:
 
 * **mapToName:** when Ampersand delivers the data from this field to you, this is the name that will be used to identify the field.
-* **mapToDisplayName:** the phrasing to display to the user in the set up UI component when asking them to select a custom field (e.g. For the config below, the helper text will say, "Which of your custom fields map to Contact Notes?")
+* **mapToDisplayName:** the text to display to the user in the UI component when asking them to select a custom field (e.g. For the yaml example below, the text will say, "Which of your custom fields map to Contact Notes?")
 * **default** (optional): the default field, you should only use standard fields as defaults.
-* **prompt** (optional): additional context that you want to show your user in the set up UI Component about this field. This should be a full sentence.
-
-
+* **prompt** (optional): additional context that you want to show your user in the UI Component about this field. This should be a full sentence.
 
 ```YAML YAML
       objects:
@@ -155,11 +144,10 @@ You can select a specific time frame for backfill, such as "the last 30 days" or
           ...
 ```
 
-## Example read action
-
-
+## Full example
 
 ```yaml yaml
+specVersion: 1.0.0
 integrations: 
  - name: readSalesforce
    provider: salesforce

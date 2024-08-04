@@ -2,26 +2,25 @@
 title: "Overview"
 ---
 
-To start defining integrations with Ampersand, create a new directory (we recommend calling it `amp`), which will hold your `amp.yaml` file. All your integrations should be defined in the same `amp.yaml` file.
+To start defining integrations with Ampersand, create a new directory (we recommend calling it `integrations`), which will hold your `amp.yaml` file. All your integrations should be defined in the same `amp.yaml` file.
 
 ```YAML
-amp/
+integrations/
   amp.yaml
 ```
 
-The high-level keys of `amp.yaml` are the following:
+The top-level keys of `amp.yaml` are the following:
 
 * **specVersion:** the version of the amp.yaml spec used, the current version is `1.0.0`
 * **integrations:** the list of integrations that your users can install
 
-The high-level keys of an integration are:
+The top-level keys of an integration are:
 
 * **name:** the name of the integration, only alphanumeric characters and dashes are allowed.
 * **provider:** the API that this integration connects to.
-* each integration can include:  
-   * [Read Actions](/define-integrations/read-actions)  
-   * [Write Actions](/define-integrations/write-actions)  
-   * [Subscribe Actions](/define-integrations/subscribe-actions)
+* each integration can include:
+   * [Read Actions](/define-integrations/read-actions)
+   * [Write Actions](/define-integrations/write-actions)
 
 Putting all of this together, the basic structure of an `amp.yaml` file looks like the following:
 
@@ -29,12 +28,10 @@ Putting all of this together, the basic structure of an `amp.yaml` file looks li
 specVersion: 1.0.0
 
 integrations: 
--name: readSalesforceAccounts
- provider: salesforce
- read:
+- name: readSalesforceAccounts
+  provider: salesforce
+  read:
    ...
- write:
-   ...
- subscribe:
+  write:
    ...
 ```

@@ -4,22 +4,25 @@ title: "Write Actions"
 
 A write action writes data to your customer's SaaS whenever you make an API request to us. To define a write action, add `write` as a key in your integration defined in `amp.yaml`, and add a list of standard and custom objects you want to write to.
 
-
-
 ```YAML YAML
-   write:
+specVersion: 1.0.0
+integrations: 
+  - name: write-to-salesforce
+    displayName: Write to Salesforce
+    provider: salesforce
+    write:
       objects:
         - objectName: account
         - objectName: contact
         - objectName: touchpoints__c # You can include custom objects
 ```
 
-
 <Note>
 **On the roadmap**
- 
+
  The ability to programmatically create custom objects when a user installs your integration.
 </Note>
+
 ## Write a single record
 
 Once your users install an integration with a write action, your app can write data to their SaaS by making a POST call to Ampersand, the URL is in the format of:
