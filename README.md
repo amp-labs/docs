@@ -5,7 +5,7 @@ This repo contains the source files for https://docs.withampersand.com/docs. Mer
 # Generate mint.json
 
 `mint.json` is the main configuration file for the docs. Do not edit it manually, it is generated based on:
-- `generate-mint.ts`, which includes Mintlify's configuration options. See (Mintlify documentation)[https://mintlify.com/docs/settings/global].
+- `generate-mint.ts`, which includes Mintlify's configuration options. See [Mintlify documentation](https://mintlify.com/docs/settings/global).
 - files in the [amp-labs/openapi repo](https://github.com/amp-labs/openapi).
 
 To generate `mint.json` run:
