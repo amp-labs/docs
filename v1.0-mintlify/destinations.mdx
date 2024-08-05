@@ -2,13 +2,13 @@
 title: "Destinations"
 ---
 
-We currently support webhooks as destinations for read actions and subscribe actions. When we get new data, we will send a message to your webhook. See [Example webhook message](doc:read-actions#example-webhook-message) for what the payload will look like.
+Ampersand currently supports webhook destinations. When new data is read from a SaaS instance via a [Read Action](define-integrations/read-actions), a webhook message will be sent to you. See [Example webhook message](/define-integrations/read-actions#example-webhook-message) for what the payload will look like.
 
 # Add a destination to the Ampersand Dashboard
 
 Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations/new) of Ampersand Dashboard to add a new Destination. You'll need:
 * **Destination name**: this is an alias for the webhook that you can then refer to in the `amp.yaml` file.
-* **URL**: this is the URL of your webhook, it must start with `https`. If you do not have a webhook already, you can easily create a temporary one using tools like [Hookdeck Console](https://console.hookdeck.com). 
+* **URL**: this is the URL of your webhook, it must start with `https`. If you do not have a webhook already, you can easily create a temporary one using tools like [Hookdeck Console](https://console.hookdeck.com?provider=ampersand). 
 
 # Refer to the destination in your integration
 
@@ -16,6 +16,7 @@ For read and subscribe actions, you can specify destinations for each object. Yo
 
 
 ```YAML YAML
+specVersion: 1.0.0
 integrations:
   - name: readFromSalesforce
     displayName: Salesforce read
@@ -27,7 +28,6 @@ integrations:
         - objectName: contact
           destination: contactWebhook
 ```
-
 
 ## Other Destinations
 
