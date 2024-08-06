@@ -2,7 +2,7 @@
 
 This repo contains the source files for https://docs.withampersand.com. Merges to the main branch will automatically update the online docs via the Mintlify Github app.
 
-# Generate mint.json
+## Generate mint.json
 
 `src/mint.json` is the main configuration file for the docs. Do not edit it manually, it is generated based on:
 - `src/generate-mint.ts`, which includes Mintlify's configuration options. See [Mintlify documentation](https://mintlify.com/docs/settings/global).
@@ -14,7 +14,7 @@ If you make any updates to site structure (by editing `src/generate-mint.ts`), r
 pnpm run gen
 ```
 
-# Preview docs locally
+## Preview docs locally
 
 ```shell
 pnpm run dev 
