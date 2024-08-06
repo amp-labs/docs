@@ -22,37 +22,37 @@ Our integration will have a [Read Actions](/define-integrations/read-actions). W
 ```YAML YAML
 specVersion: 1.0.0
 integrations:
-- name: mailmonkey-salesforce
-  displayName: MailMonkey Salesforce Integration
-  provider: salesforce
-  read:
-    objects:
-      - objectName: contact
-        destination: contactWebhook
-        schedule: "*/30 * * * *" # every 30 minutes
-        # Always read these fields
-        requiredFields:
-          - fieldName: firstName
-          - fieldName: lastName
-          - fieldName: email
-        # Customer can decide if they want us to read these fields.
-        optionalFields:
-          - fieldName: salutation
-      - objectName: leads
-        destination: leadsWebhook
-        schedule: "*/30 * * * *" # every 30 minutes
-        requiredFields:
-          - fieldName: firstName
-          - fieldName: lastName
-          - fieldName: email
-          - fieldName: isConverted
-          # Allow the customer to pick a field to map to priority score
-          - mapToName: priority
-            mapToDisplayName: Priority Score
-            prompt: Which field do you use to track the priority of a lead?
-        # All other fields in a Lead are optional,
-        # Customers can pick from all of them.
-        optionalFieldsAuto: all
+  - name: mailmonkey-salesforce
+    displayName: MailMonkey Salesforce Integration
+    provider: salesforce
+    read:
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          schedule: "*/30 * * * *" # every 30 minutes
+          # Always read these fields
+          requiredFields:
+            - fieldName: firstName
+            - fieldName: lastName
+            - fieldName: email
+          # Customer can decide if they want us to read these fields.
+          optionalFields:
+            - fieldName: salutation
+        - objectName: leads
+          destination: leadsWebhook
+          schedule: "*/30 * * * *" # every 30 minutes
+          requiredFields:
+            - fieldName: firstName
+            - fieldName: lastName
+            - fieldName: email
+            - fieldName: isConverted
+            # Allow the customer to pick a field to map to priority score
+            - mapToName: priority
+              mapToDisplayName: Priority Score
+              prompt: Which field do you use to track the priority of a lead?
+          # All other fields in a Lead are optional,
+          # Customers can pick from all of them.
+          optionalFieldsAuto: all
 ```
 
 ### Create Leads
@@ -62,11 +62,11 @@ Next we will add a [Write Action](/define-integrations/write-actions). We want t
 
 ```YAML YAML
 ...
-  # Append to the integration definition from above.
-  write
-    objects:
-      # Create a new lead in Salesforce whenever we make an API request.
-      - objectName: lead
+    # Append to the integration definition from above.
+    write
+      objects:
+        # Create a new lead in Salesforce whenever we make an API request.
+        - objectName: lead
 ```
 
 Once a customer installs our integration, MailMonkey's application backend will make an API call to Ampersand to create the new lead whenever there's an email reply that we detect.
