@@ -144,10 +144,10 @@ const mintConfig: MintConfig = {
         },
       ],
     },
-    {
-      group: "READ API",
-      pages: readApiPages,
-    },
+    // {
+    //   group: "READ API",
+    //   pages: readApiPages,
+    // },
     {
       group: "WRITE API",
       pages: writeApiPages,
