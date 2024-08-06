@@ -8,11 +8,11 @@
         "download-spec:platform": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/api.json > src/api.json",
         "download-spec:read": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/read.json > src/read.json",
         "download-spec:write": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/write.json > src/write.json",
-        "gen-api-pages:dir": "rm -rf reference && mkdir -p reference",
-        "gen-api-pages:platform": "mintlify-scrape openapi-file -o reference src/api.json | tail -n +2 > src/reference/platform.json",
-        "gen-api-pages:read": "mintlify-scrape openapi-file -o reference src/read.json | tail -n +2 > src/reference/read.json",
-        "gen-api-pages:write": "mintlify-scrape openapi-file -o reference src/write.json | tail -n +2 > src/reference/write.json",
-        "gen-mint": "npx tsx src/generate-mint.ts mint.json"
+        "gen-api-pages:dir": "cd src && rm -rf reference && mkdir -p reference",
+        "gen-api-pages:platform": "cd src && mintlify-scrape openapi-file -o reference api.json | tail -n +2 > reference/platform.json",
+        "gen-api-pages:read": "cd src && mintlify-scrape openapi-file -o reference read.json | tail -n +2 > reference/read.json",
+        "gen-api-pages:write": "cd src && mintlify-scrape openapi-file -o reference write.json | tail -n +2 > reference/write.json",
+        "gen-mint": "cd src && npx tsx generate-mint.ts mint.json"
     },
     "devDependencies": {
         "@mintlify/scraping": "*",
