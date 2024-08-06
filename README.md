@@ -1,6 +1,6 @@
 # Ampersand docs
 
-This repo contains the source files for https://docs.withampersand.com/docs. Merges to the main branch will automatically update the online docs.
+This repo contains the source files for https://docs.withampersand.com. Merges to the main branch will automatically update the online docs.
 
 # Generate mint.json
 
@@ -11,14 +11,12 @@ This repo contains the source files for https://docs.withampersand.com/docs. Mer
 To generate `mint.json` run:
 
 ```shell 
-cd v1.0-mintlify
 pnpm run generate
 ```
 
 # Preview docs locally
 
 ```shell 
-cd v1.0-mintlify
 pnpm run dev 
 ```
 

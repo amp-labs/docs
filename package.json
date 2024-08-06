@@ -1,0 +1,23 @@
+{
+    "name": "@amp-labs/docs",
+    "scripts": {
+        "dev": "cd src && mintlify dev",
+        "test:links": "cd src && mintlify broken-links; exitCode=$?; exit $exitCode",
+        "gen": "pnpm run generate",
+        "generate": "run-s download-spec:* && run-s gen-api-pages:* && pnpm gen-mint",
+        "download-spec:platform": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/api.json > src/api.json",
+        "download-spec:read": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/read.json > src/read.json",
+        "download-spec:write": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/write.json > src/write.json",
+        "gen-api-pages:dir": "rm -rf reference && mkdir -p reference",
+        "gen-api-pages:platform": "mintlify-scrape openapi-file -o reference src/api.json | tail -n +2 > src/reference/platform.json",
+        "gen-api-pages:read": "mintlify-scrape openapi-file -o reference src/read.json | tail -n +2 > src/reference/read.json",
+        "gen-api-pages:write": "mintlify-scrape openapi-file -o reference src/write.json | tail -n +2 > src/reference/write.json",
+        "gen-mint": "npx tsx src/generate-mint.ts mint.json"
+    },
+    "devDependencies": {
+        "@mintlify/scraping": "*",
+        "@types/node": "^20.14.10",
+        "mintlify": "4.0.185",
+        "npm-run-all": "^4.1.5"
+    }
+}
