@@ -4,7 +4,19 @@ title: "Quickstart"
 
 For this Quickstart, we are going to build integrations for a cool new SaaS app called MailMonkey - an email campaign manager that integrates with Salesforce. You can see the final `amp.yaml` file on [Github](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml).
 
-![](/images/28feb09-Group_2987.png) 
+![](/images/28feb09-Group_2987.png)
+
+## Create an Ampersand org and project
+
+Sign up for an [Ampersand account](https://dashboard.withampersand.com/sign-up), and then follow the steps on the screen to create an org and then a project. Each org can have multiple projects, this is helpful for separating development and production environments.
+
+## Create a provider app
+
+We'll first set up a Salesforce Connected App and put the Client ID and Client Secret inside of Ampersand Dashboard. See the [Salesforce guide](/provider-guides/salesforce) for more information.
+
+## Create a destination
+
+Next, we create a webhook destination for Ampersand to send data that it reads from Salesforce. See [Destinations](destinations) for more details.
 
 ## Define the integrations
 
@@ -71,11 +83,11 @@ Next we will add a [Write Action](/define-integrations/write-actions). We want t
 
 Once a customer installs our integration, MailMonkey's application backend will make an API call to Ampersand to create the new lead whenever there's an email reply that we detect.
 
-### Deploy the completed config file
+### Deploy the completed manifest
 
 You can see the final `amp.yaml` file on [Github](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml). 
 
-Once we are happy with the definition of our integrations, we can deploy them with the amp CLI:
+Once we are happy with the definition of our integrations, we can deploy them with the [amp CLI](/cli/overview):
 
 ```
 amp login
@@ -95,7 +107,7 @@ import { AmpersandProvider, InstallIntegration } from '@amp-labs/react';
 
 const options = {
   projectId: 'PROJECT_ID', // Your Ampersand project ID.
-  apiKey: 'API_KEY',// Your Ampersand API key.
+  apiKey: 'API_KEY',// Your Ampersand API key, create one in the Dashboard.
 };
 
 function App() {
