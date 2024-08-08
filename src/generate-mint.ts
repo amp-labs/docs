@@ -108,6 +108,7 @@ const mintConfig: MintConfig = {
         {
           group: "Provider guides",
           pages: [
+            "provider-guides/overview",
             "provider-guides/aha",
             "provider-guides/gong",
             "provider-guides/hubspot",
@@ -142,6 +143,7 @@ const mintConfig: MintConfig = {
             "provider-guides/figma",
           ],
         },
+        "dev-and-prod-environments",
       ],
     },
     // {
