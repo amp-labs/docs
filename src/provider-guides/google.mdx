@@ -1,0 +1,291 @@
+---
+title: "Google"
+slug: "google"
+excerpt: ""
+hidden: false
+createdAt: "Fri Jul 19 2024 17:44:47 GMT+0000 (Coordinated Universal Time)"
+updatedAt: "Thu Jul 25 2024 00:20:04 GMT+0000 (Coordinated Universal Time)"
+---
+The Google connector supports Google products which have APIs with the root URL `googleapis.com`, these include:
+
+- Google Drive
+- Calendar
+
+## Before You Get Started
+
+To integrate Google with Ampersand, you will need a [Google Cloud account](https://cloud.google.com/) .
+
+Once your account is created, you'll need to create a Google app, configure the Ampersand redirect URI within the app, and obtain the following credentials from you app:
+
+- Client ID
+- Client Secret
+- Scopes
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Create a Google Cloud Account
+
+You can sign up for a [free Google Cloud account here](https://cloud.google.com/free) .
+
+### Enable the appropriate APIs
+
+Go to the [API Library page](https://console.cloud.google.com/apis/library)  of Google Cloud Console and search for the APIs your integration will need. For example if you are building a Google Drive integration, type "Google Drive", select the right API and click the "Enable" button. 
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/2a15717-Screenshot_2024-07-19_at_10.47.22_AM.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "600px"
+    }
+  ]
+}
+[/block]
+
+
+Repeat this process for all the APIs your integration will need.
+
+### Creating a Google App
+
+Follow the steps below to create a Google App
+
+1. Go to the [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent) page, pick "External" as the User Type.
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/1537ae6-Screenshot_2024-07-19_at_10.40.32_AM.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "600px"
+    }
+  ]
+}
+[/block]
+
+
+<br />
+
+2. Enter the information required on the next page, click "Save and Continue".
+
+**Important information about App Logo**: when you are creating a Google app for development purposes, do not upload a logo. Uploading a logo will trigger an app verification process. When you are ready to submit your app for review by Google, then you can come back to this page and upload a logo.
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/5600533-Screenshot_2024-07-19_at_10.56.54_AM.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "600px"
+    }
+  ]
+}
+[/block]
+
+
+3. On the Scopes page, click "Add or Remove Scopes", and then select the scopes that your integration will need. For example, if you are integrating with Google Drive, type "Google Drive" into the search box and select the scopes you will need. If the scopes you require are not popping up, ensure that you've enabled the appropriate APIs (previous step), and then refresh the page.
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/d542878-Screenshot_2024-07-19_at_1.45.02_PM.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "500px"
+    }
+  ]
+}
+[/block]
+
+
+4. On the Test Users page, click "+ Add Users" to add up to 100 email addresses, and then click "Save and Continue".
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/b3953c3-Screenshot_2024-07-19_at_1.46.54_PM.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "600px"
+    }
+  ]
+}
+[/block]
+
+
+### Creating Client ID and Client Secret
+
+1. Once your Google App has been created, go to the [Credentials page](https://console.cloud.google.com/apis/credentials)  of Google Cloud Console. Click on "Create Credentials" and then select "OAuth Client ID". 
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/2a3a0ed-Screenshot_2024-07-19_at_11.07.26_AM.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "600px"
+    }
+  ]
+}
+[/block]
+
+
+2. Click "Web Application" from the Application Type dropdown menu.
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/4071e04-Screenshot_2024-07-19_at_11.08.21_AM.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "600px"
+    }
+  ]
+}
+[/block]
+
+
+3. In the name box, write down a descriptive name like "Ampersand Integration". Under "Authorized redirect URIs, add `https://api.withampersand.com/callbacks/v1/oauth`. Click "Create".
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/897fe36-fixed.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "600px"
+    }
+  ]
+}
+[/block]
+
+
+4. There will be a popup which displays the Client ID and Client Secret, you'll need to add these to the Ampersand Dashboard in the next step. You can either copy and paste these values, or click "Download JSON".
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/d0de0fe-GoogleOAuthClient.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "300px"
+    }
+  ]
+}
+[/block]
+
+
+## Add Your Google App info to Ampersand
+
+1. Log in to your [Ampersand Console](https://console.withampersand.com).
+
+2. Select the project where you want to create a Google integration.
+
+   [block:image]{"images":[{"image":["https://files.readme.io/dd47b7a-Ampersand.png","This is some image...","Alt text"],"align":"center"}]}[/block]
+
+3. Select **Provider apps**.
+
+4. Select _Google_ from the **Provider** list.
+
+5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field. In the **Scopes** field, enter each of your scopes on a separate line, and prefix each scope with `https://www.googleapis.com/auth`
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/6b33461-Screenshot_2024-07-19_at_1.10.08_PM.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "300px"
+    }
+  ]
+}
+[/block]
+
+
+6. Click **Save changes**.
+
+## Ship your integration to production
+
+When you are ready to use your integration with external customers, you'll need to go through the Google App verification process.
+
+1. Go back to the [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent) page, click on "Edit App" to upload a logo and fill out all the form fields (such as Privacy Page, Terms of Service).
+2. After saving your changes, click on the "Publish App" button under "Publishing Status".
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/ee95f57-Screenshot_2024-07-19_at_11.42.12_AM.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "500px"
+    }
+  ]
+}
+[/block]
+
+
+3. Then click on the "Prepare for Verification" button that should now be visible, follow the instructions on the screen.
+
+[block:image]
+{
+  "images": [
+    {
+      "image": [
+        "https://files.readme.io/7fb1236-Screenshot_2024-07-19_at_11.46.20_AM.png",
+        "",
+        ""
+      ],
+      "align": "center",
+      "sizing": "500px"
+    }
+  ]
+}
+[/block]
+
+
+For more information about the Google verification process, see [Google Support docs](https://support.google.com/cloud/answer/13463073?sjid=12970809243513943038-NC)

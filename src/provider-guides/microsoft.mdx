@@ -1,0 +1,88 @@
+---
+title: "Microsoft"
+slug: "microsoft"
+excerpt: ""
+hidden: false
+createdAt: "Sun Jul 21 2024 07:33:01 GMT+0000 (Coordinated Universal Time)"
+updatedAt: "Wed Jul 31 2024 08:13:04 GMT+0000 (Coordinated Universal Time)"
+---
+The Microsoft connector supports all products which are a part of the Microsoft Graph API. These include:
+
+- OneDrive
+- SharePoint
+- Outlook
+- OneNote
+- Teams
+
+For a full list of supported products, refer to [Microsoft documentation](https://learn.microsoft.com/en-us/graph/overview-major-services) 
+
+## Before You Get Started
+
+To connect Microsoft services with Ampersand, you will need [a Microsoft Account](https://aka.ms/AppRegistrations/?referrer=https%3A%2F%2Fdev.onedrive.com).
+
+Once your account is created, you'll need to create an app in the Azure portal, configure the Ampersand redirect URI within the app, and obtain the following credentials from your app:
+
+- Client ID
+- Client Secret
+- Scopes
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Create a Microsoft Account
+
+Here's how you can sign up for a Microsoft account:
+
+- Go to the [Microsoft Sign up page](https://signup.live.com/signup?sru=https%3a%2f%2flogin.live.com%2foauth20_authorize.srf%3flc%3d1033%26client_id%3d51483342-085c-4d86-bf88-cf50c7252078%26cobrandid%3ded5d1924-9524-4e70-8f68-5ee5e35afbef%26mkt%3dEN-US%26opid%3dE962B0DAAE1D7D3B%26opidt%3d1721584016%26uaid%3d20aa40834b4b4f60a5f6d0caefa69aab%26contextid%3d8123EC532BFC171F%26opignore%3d1&mkt=EN-US&uiflavor=web&lw=1&fl=easi2&cobrandid=ed5d1924-9524-4e70-8f68-5ee5e35afbef&client_id=51483342-085c-4d86-bf88-cf50c7252078&uaid=20aa40834b4b4f60a5f6d0caefa69aab&suc=c44b4083-3bb0-49c1-b47d-974e53cbdf3c&lic=1).
+- Sign up using your preferred method and verify your email.
+
+### Creating a Microsoft App
+
+Follow the steps below to create a Microsoft app and add the Ampersand redirect URL.
+
+1. Log in to your [Azure Portal](https://portal.azure.com/).
+
+2. Navigate to **Azure Active Directory** > **App registrations**.
+
+3. Click the **New registration** button.
+
+4. In the **Register an application** window, enter the **Name** and select the **Supported account types**.
+
+5. In the **Redirect URI** section, select **Web** and enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+
+6. Click **Register**.
+
+7. In the left-hand sidebar, navigate to **Certificates & secrets**.
+
+8. Click **New client secret** and provide a description and expiration period. 
+
+9. Click Add. Note the Client Secret value. You will need it later.
+
+10. In the left-hand sidebar, navigate to **Manage >> API permissions**.
+
+11. Click **Add a permission** and choose the required scopes.
+
+12. Generate
+
+    ![Microsoft App Creation](https://files.readme.io/e0b0327-Microsoft1.gif)
+
+    You will find the **Client ID **in the **Overview** section. Note this credential, as you will need the _Client ID_ and \_Client Secret \_from the** Certificates & secrets** section to connect your app to Ampersand.
+
+## Add Your Microsoft App Info to Ampersand
+
+1. Log in to your [Ampersand Console](https://console.withampersand.com).
+
+2. Select the project where you want to create a Microsoft integration.
+
+   ![Ampersand Project Selection](https://files.readme.io/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.
+
+4. Select **Microsoft** from the **Provider** list.
+
+5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
+
+6. Enter the scopes set for your application in _Microsoft_.
+
+   [block:image]{"images":[{"image":["https://files.readme.io/9445cbb-Microsoft2.gif",null,"Ampersand Integration"],"align":"center"}]}[/block]
+
+7. Click **Save Changes**.
