@@ -99,6 +99,7 @@ function downloadImage(file) {
     }));
     
     return imageDownloadPromises.then(() => {
+
       // All the images have been downloaded, now update the content of the file with the new image paths
       return writeFile(filePath, content);
     }).then(() => console.log(`Successfully processed ${filePath}`)
