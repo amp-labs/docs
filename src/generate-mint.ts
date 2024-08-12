@@ -53,11 +53,11 @@ export interface MintConfig {
 const mintConfig: MintConfig = {
   name: "Ampersand",
   logo: {
-    light: "/logos/dark.svg",
-    dark: "/logos/light.svg",
+    light: "/images/logo/dark.png",
+    dark: "/images/logo/light.png",
     href: "https://withampersand.com"
   },
-  favicon: "/logos/favicon.svg",
+  favicon: "images/logo/favicon.svg",
   colors: {
     primary: "#4F1EB8",
     light: "#A67CFF",

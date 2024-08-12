@@ -2,21 +2,29 @@
 title: "Glossary"
 ---
 
-#### Project
+#### Connection
 
-A project contains one or more integrations and their related data. An org can have one or more projects. Each project is uniquely identified by:
-- A project name is chosen at the time of project creation, it must be globally unique and can contain numbers, letters and dashes, and is case insensitive.
-- A project ID which is assigned by Ampersand at the time of project creation.
+A connection is a SaaS credential that Ampersand stores and manages which allows an integration to read or write data to or from a SaaS instance.
 
-Different projects can be used to represent different environments, learn more in [Dev and prod environments](/dev-and-prod-environments).
+#### Consumer
+
+A consumer is an individual end user that installs an integration.
 
 #### Group
 
 A group could be a company, team, or workspace within your app. All member of the group has access to its integrations, and only one member needs to install an integration for all members of the group to access it.
 
-#### Consumer
+#### Installation
 
-A consumer is an individual end user that installs an integration.
+An installation is an instance of an integration, for a particular customer. Learn more on the [Concepts page](/concepts#installation).
+
+#### Integration
+
+An integration defines how your application will interact with a third party SaaS tool. Learn more on the [Concepts page](/concepts#integration).
+
+#### Operation
+
+An Operation happens every time there's a read, or write, or proxy API request to a third party API provider. You can view Operations in the Ampersand Dashboard, or query for them using the [operation endpoints](/reference/operation).
 
 #### Primary key
 
@@ -28,13 +36,17 @@ For Salesforce, it is the [ID field](https://developer.salesforce.com/docs/atlas
 
 For Hubspot, each object has an ID, for example [Contact](https://developers.hubspot.com/docs/api/crm/contacts) has a Contact ID.
 
+#### Project
+
+A project contains one or more integrations and their related data. An org can have one or more projects. Each project is uniquely identified by:
+- A project name is chosen at the time of project creation, it must be globally unique and can contain numbers, letters and dashes, and is case insensitive.
+- A project ID which is assigned by Ampersand at the time of project creation.
+
+Different projects can be used to represent different environments, learn more in [Dev and prod environments](/dev-and-prod-environments).
+
 #### Provider
 
 A provider is a third-party API that Ampersand integrates with.
-
-#### Connection
-
-A connection is a SaaS credential that Ampersand stores and manages which allows an integration to read or write data to or from a SaaS instance.
 
 #### Provider app
 
@@ -43,15 +55,3 @@ A provider app describes the information that Ampersand stores about an OAuth ap
 #### Revision
 
 A revision is a particular version of an integration's definition. You create a new revision every time you modify the `amp.yaml` file and deploy the change via the amp CLI.
-
-#### Operation
-
-An Operation happens every time there's a read, or write, or proxy API request to a third party API provider. You can view Operations in the Ampersand Dashboard, or query for them using the [operation endpoints](/reference/operation).
-
-#### Installation
-
-An installation is an instance of an integration, for a particular customer. Learn more on the [Concepts page](/concepts#installation).
-
-#### Integration
-
-An integration defines how your application will interact with a third party SaaS tool. Learn more on the [Concepts page](/concepts#integration).

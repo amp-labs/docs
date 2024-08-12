@@ -2,4 +2,42 @@
 title: "Dev and prod environments"
 ---
 
-TODO.
+You can create multiple projects per organization, so we recommend at least creating two projects:
+- one for your production environment.
+- one for your development environment, where you can test integrations before shipping them to customers.
+
+You can deploy the same set of integrations to all of your projects by defining a single `amp.yaml` file. Then you can use the amp CLI to deploy it to all of your projects:
+
+``` bash
+amp login
+
+# First deploy to dev
+amp deploy my-integrations-folder --project=my-dev-project
+
+# Promote to prod when you are ready
+amp deploy my-integrations-folder --project=my-prod-project
+```
+
+Please note that for each of your projects, you will need to:
+- Add Provider Apps to the Ampersand Dashboard. See [Provider Guides](/provider-guides/overview) for more details.
+- Generate API keys for embedding UI components or for making API calls.
+- Add [Destinations](/destinations) to the Ampersand Dashboard if you have any read actions.
+
+## Destination names
+
+You should use the same names for the webhook destinations in each of your projects. For example, `my-dev-project` can have a `hubspotWebhook` which has the URL `https://www.my-dev-webhook.com`, and `my-prod-project` can have a `hubspotWebhook` which has the URL `https://www.my-prod-webhook.com`. Then in my `amp.yaml` file, my integration will be defined as follows:
+
+``` yaml
+specVersion: 1.0.0
+integrations: 
+  - name: readHubspotContacts
+    provider: hubspot
+    module: crm
+    read:
+      objects:
+        - objectName: contact
+          # In dev, webhook messages will go to `https://www.my-dev-webhook.com`,
+          # In prod, they will go to `https://www.my-prod-webhook.com`.
+          destination: hubspotWebhook
+          ...
+```
