@@ -1,6 +1,7 @@
 /**
  * This is a template script file for bulk manipulation of files.
  * To run: `node scripts/script.ts` from the root directory.
+ * You can update this file with your own logic.
  */
 
 const fs = require('fs');
@@ -11,20 +12,20 @@ const providerGuidesReadmeDir = path.join(__dirname, '../provider-guides-readme'
 const providerGuidesMdxDir = path.join(__dirname, '../src/provider-guides');
 const imagesDirectory = path.join(__dirname, '../src/images/provider-guides');
 
-
-// Read all files in the directory
+// Read all files in a directory
 fs.readdir(providerGuidesMdxDir, (err, files) => {
   if (err) {
     console.error("Could not list the directory.", err);
     process.exit(1);
   }
 
-  // downloadImage(files[1]);
+  // For each file, do something.
   files.forEach(file => {
     downloadImage(file);
   });
 });
 
+// TODO: replace this function with the actual logic you want to run on each file.
 function downloadImage(file) {
   const oldLink = '[Ampersand Console](https://console.withampersand.com)';
   const newLink = '[Ampersand Dashboard](https://dashboard.withampersand.com)';
@@ -85,6 +86,7 @@ function downloadImage(file) {
   });
 }
 
+// This is an async function that writes content to a file.
 function writeFile(filePath, content) {
   return new Promise((resolve, reject) => {
     fs.writeFile(filePath, content, (err) => {
