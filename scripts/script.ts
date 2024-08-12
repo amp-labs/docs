@@ -12,30 +12,6 @@ const providerGuidesMdxDir = path.join(__dirname, '../src/provider-guides');
 const imagesDirectory = path.join(__dirname, '../src/images/provider-guides');
 
 
-// fs.readdir(providerGuidesMdxDir, (err, files) => {
-//     if (err) {
-//       console.error("Could not list the directory.", err);
-//       process.exit(1);
-//     }
-// // 
-//   let pagesList = ["provider-guides/overview"];
-
-//   files.forEach(file => {
-//     // const filePath = path.join(providerGuidesReadmeDir, file);
-//     // newFilePath removes .md extension and adds .mdx extension to filePath
-//     // const newFilePath = path.join(providerGuidesMdxDir, file.replace('.md', '.mdx'));
-//     const fileRoot = file.replace('.mdx', '');
-//     // console.log('file' + file + 'fileRoot' + fileRoot);
-
-//     // fs.renameSync(filePath, newFilePath);
-
-//     pagesList.push(`provider-guides/${fileRoot}`);
-//   });
-  
-//   console.log(pagesList);
-// });
-
-
 // Read all files in the directory
 fs.readdir(providerGuidesMdxDir, (err, files) => {
   if (err) {
@@ -43,13 +19,15 @@ fs.readdir(providerGuidesMdxDir, (err, files) => {
     process.exit(1);
   }
 
-  downloadImage(files[1]);
-  // files.forEach(file => {
-  //   downloadImage(file);
-  // });
+  // downloadImage(files[1]);
+  files.forEach(file => {
+    downloadImage(file);
+  });
 });
 
 function downloadImage(file) {
+  const oldLink = '[Ampersand Console](https://console.withampersand.com)';
+  const newLink = '[Ampersand Dashboard](https://dashboard.withampersand.com)';
   const filePath = path.join(providerGuidesMdxDir, file);
 
   // Read each file content
@@ -61,11 +39,10 @@ function downloadImage(file) {
 
     // Regular expression to find image URLs
     const regex = /https:\/\/files\.readme\.io\/[^"')]+/g;
-    const images = content.match(regex);
+    let images = content.match(regex);
 
     if (!images) {
-      console.log(`No images found in ${file}`);
-      return;
+      images = [];
     }
 
     // Download each image found
@@ -100,8 +77,9 @@ function downloadImage(file) {
     
     return imageDownloadPromises.then(() => {
 
+      const dashboardLinkUpdated =  content.replace(oldLink, newLink);
       // All the images have been downloaded, now update the content of the file with the new image paths
-      return writeFile(filePath, content);
+      return writeFile(filePath, dashboardLinkUpdated);
     }).then(() => console.log(`Successfully processed ${filePath}`)
   ).catch(error => console.error(`Error downloading images:`, error));
   });
