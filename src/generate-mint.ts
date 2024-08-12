@@ -121,7 +121,7 @@ const mintConfig: MintConfig = {
             'provider-guides/calendly',
             'provider-guides/capsule',
             'provider-guides/clickup',
-            'provider-guides/close-crm',
+            'provider-guides/close',
             'provider-guides/confluence',
             'provider-guides/constant-contact',
             'provider-guides/copper',
