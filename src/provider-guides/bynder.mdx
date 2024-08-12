@@ -1,4 +1,74 @@
 ---
 title: "Bynder"
 slug: "bynder"
+excerpt: ""
+hidden: false
+createdAt: "Thu Jul 18 2024 16:47:47 GMT+0000 (Coordinated Universal Time)"
+updatedAt: "Thu Jul 25 2024 00:00:42 GMT+0000 (Coordinated Universal Time)"
 ---
+## Before You Get Started
+
+To connect Bynder with Ampersand, you will need [a Bynder Account](https://www.bynder.com/en/).
+
+Once your account is created, you'll need to create an app in your Bynder portal, configure the app, and obtain the following credentials from your app:
+
+- Client ID
+- Client Secret
+- Scopes
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Create a Bynder Account
+
+To create an account for your organization, you need to contact the [Bynder Support](https://www.bynder.com/en/) team. An active account is required to log into your portal.
+
+### Creating a Bynder App
+
+Once your Bynder account is setup, you can follow the steps below to create a Bynder app:
+
+1. Log in to your [Bynder Portal](https://portal.bynder.com/).
+
+2. Navigate to `Settings >> Advanced Settings >> Portal Settings`.
+
+3. Go to **Oauth Apps**.
+
+4. Click the **Add new app** button.
+
+5. Enter the following details to register your **Oauth** app:
+   1. **Application Name**: The name of your app.
+   2. **Homepage URL**: The URL of your app’s homepage.
+   3. **Application Description**: A brief description of your app.
+   4. **Integration**: Type of integration (e.g., API, SDK).
+   5. **Integration Name**: Specific name for your integration.
+   6. **Grant Type**: Choose between Authorization Code or Client Credentials.
+   7. **Authorization Redirect URIs**: URL(s) for Bynder to redirect after authorization.  Enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+
+6. Select the scopes for your application. Bynder will authorize access to the selected scopes for your application.
+
+7. Click **Register Application.**
+
+![Bynder App Creation](/images/provider-guides/af13a22-bynder1.gif)
+
+You will find the **Client ID** and **Client Secret** in the app details. Note these credentials, as you will need them to connect your app to Ampersand.
+
+<br />
+
+## Add Your Bynder App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Bynder integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.
+
+4. Select **Bynder** from the **Provider** list.
+
+5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
+
+6. Enter the scopes set for your application in _Bynder_.
+
+   ![Ampersand Integration](/images/provider-guides/3a0b8e9-bynder2.gif)
+
+7. Click **Save Changes**.

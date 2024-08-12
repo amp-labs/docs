@@ -1,0 +1,100 @@
+---
+title: "Atlassian"
+slug: "atlassian"
+excerpt: ""
+hidden: false
+createdAt: "Wed Jun 26 2024 06:21:12 GMT+0000 (Coordinated Universal Time)"
+updatedAt: "Thu Jul 25 2024 00:07:18 GMT+0000 (Coordinated Universal Time)"
+---
+## Before You Get Started
+
+To integrate Atlassian (Jira or Confluence) with Ampersand, you will need [an Atlassian Account](https://id.atlassian.com/signup). 
+
+Once your account is created, you'll need to create an app in Atlassian, configure the Ampersand redirect URI within the app, and obtain the following credentials from your app:
+
+- Client ID
+- Client Secret
+- Scopes
+
+You will then use these credentials and scopes to connect your application to Ampersand.
+
+Note: This guide helps you to connect both **Jira** and **Confluence** in Ampersand. You can use this same guide for both _Jira_ and _Confluence_ and customize the scopes based on your app's specific needs.
+
+### Create an Atlassian Account
+
+Here's how you can sign up for an Atlassian account:
+
+- Go to the [Atlassian Sign Up page](https://www.atlassian.com/try/cloud/signup?bundle=jira-software&edition=free&skipBundles=true) and create an account.
+- Sign up using your preferred method.
+
+### Creating an Atlassian App
+
+Follow the steps below to create a _Atlassian_ app:
+
+1. Log in to your [Atlassian Developer Console](https://id.atlassian.com/login/select-account?continue=https%3A%2F%2Fdeveloper.atlassian.com%2F).
+2. Click the **Create** dropdown to create a new app.
+3. Select **Oauth 2.0 integration**.
+4. Enter the **App Name**.
+5. Select the  **I agree to be bound by Atlassian’s developer terms.** checkbox.
+6. Click **Create**.
+
+   <br />
+
+   ![Alt text](/images/provider-guides/491e169-Jira1.gif)
+
+### Adding Scopes in your Atlassian App
+
+You need to define the necessary permissions for your Atlassian app by selecting and adding required scopes, to allow Ampersand to access data effectively. You can limit the access to only the specific scopes needed for your application.
+
+Follow the steps below to add scopes to your Atlassian App:
+
+1. In your [Developer Console](https://developer.atlassian.com/console/myapps/13ac4e18-6cad-4c54-8e38-66697df5d1ef/settings) , select your app. 
+2. Go to **Permission**.
+3. Select the scopes for your application. Atlassian will authorize access to the selected scopes for your application.
+
+![Alt text](/images/provider-guides/5d6df49-Jira2.gif)
+
+
+For more information on the scopes, go to [Scopes](https://developer.atlassian.com/cloud/jira/platform/scopes-for-oauth-2-3LO-and-forge-apps/)  section in the Atlassian documentation.
+
+### Adding Ampersand Redirect URL in Your App
+
+Follow the steps below to add the Ampersand redirect URL in your Atlassian app:
+
+1. In your [Developer Console](https://developer.atlassian.com/console/myapps/13ac4e18-6cad-4c54-8e38-66697df5d1ef/settings) , select your app. 
+2. Go to **Authorization**.
+3. Next to **OAuth 2.0 (3LO)**, click **Add**.
+4. Enter the Ampersand **Callback URL**: `https://api.withampersand.com/callbacks/v1/oauth`.
+5. Click **Save changes**.
+
+![Alt text](/images/provider-guides/1bb01c8-Jira3.gif)
+
+
+You'll find the **Client ID** and **Client Secret** keys for your app in the **Settings** section.
+
+![Alt text](/images/provider-guides/2a2bd9f-Screenshot_2024-06-26_at_16.51.34.png)
+
+
+You'll use these credentials while connecting your app to Ampersand.
+
+## Add Your Atlassian App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Atlassian integration.
+
+   ![Alt text](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Select **Provider apps**.
+
+4. Select _Atlassian (Jira ,Confluence)_ from the **Provider** list.
+
+5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
+
+6. Enter the scopes set for your application in _Atlassian_.
+
+   <br />
+
+   ![Alt text](/images/provider-guides/53b7d93-atlassian1.gif)
+
+7. Click **Save changes**.
