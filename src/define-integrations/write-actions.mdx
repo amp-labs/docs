@@ -29,7 +29,7 @@ Once your users install an integration with a write action, your app can write d
 
 `https://write.withampersand.com/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
 
-You can find your project ID and integration ID in the Ampersand Management Console (look in the address bar).
+You can find your project ID and integration ID in the [Ampersand Dashboard](https://dashboard.withampersand.com) (look in the address bar).
 
 `objectName` refers to the `objectName` key within the `amp.yaml` file that defines your integration. This must match the name of an object that exists within the SaaS instance.
 
@@ -72,7 +72,7 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 
 ## Bulk write
 
-If you are updating a large number of records, you can make bulk writes by calling the [Write endpoint](/reference/write/create-update-upsert-or-delete-records) with `mode` being `bulk` . Because bulk writes are asynchronous, once your request has been successfully received, you'll get a response that contains an Operation ID. You can then use the [GetOperation](/reference/operation/get-an-operation) endpoint to poll on the status of this Operation, or view its status on the Ampersand Console.
+If you are updating a large number of records, you can make bulk writes by calling the [Write endpoint](/reference/write/create-update-upsert-or-delete-records) with `mode` being `bulk` . Because bulk writes are asynchronous, once your request has been successfully received, you'll get a response that contains an Operation ID. You can then use the [GetOperation](/reference/operation/get-an-operation) endpoint to poll on the status of this Operation, or view its status on the [Ampersand Dashboard](https://dashboard.withampersand.com).
 
 At the moment, only bulk write to Salesforce is supported.
 
@@ -200,7 +200,7 @@ Because bulk writes are asynchronous operations, you'll get back an Operation ID
 { "operationId": "5e4f06ca-445f-43ea-943e-78465ee1bb7a" }
 ```
 
-If you want to get the status of this Operation, you can either look for it on the Ampersand Console, or you can make a request to the [GetOperation](/reference/operation/get-an-operation) endpoint. For example:
+If you want to get the status of this Operation, you can either look for it on the [Ampersand Dashboard](https://dashboard.withampersand.com), or you can make a request to the [GetOperation](/reference/operation/get-an-operation) endpoint. For example:
 
 ```bash
 curl --request GET \
