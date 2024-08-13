@@ -100,6 +100,7 @@ const mintConfig: MintConfig = {
             "define-integrations/read-actions",
             "define-integrations/write-actions",
             "define-integrations/proxy-actions",
+            "define-integrations/subscribe-actions",
           ],
         },
         "embeddable-ui-components",
