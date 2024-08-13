@@ -60,14 +60,14 @@ function App() {
 
 The InstallIntegration component asks your customer for their SaaS credentials, and then guides them through the installation flow for an integration. If they've already installed this integration, then the component will display the current configuration of the integration and allow them to update it. 
 
-Please note that each [group](/glossary#group) is able to install the integration once, so if someone else in the with the same `groupRef` has already installed the integration, then the user will not be able to install the same integration again.
+Please note that each [group](/terminology#group) is able to install the integration once, so if someone else in the with the same `groupRef` has already installed the integration, then the user will not be able to install the same integration again.
 
 The parameters of the component are:
 
 * **integration** (string): the name of an integration that you've defined in `amp.yaml`. See [Defining integrations](/define-integrations/overview).
 * **consumerRef** (string): the ID that your app uses to identify this end user.
 * **consumerName** (string, optional): the display name for this end user.
-* **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/glossary#group).
+* **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
 * **groupName** (string, optional): the display name for this group.
 * **onInstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully installs the integration.
 * **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
@@ -103,7 +103,7 @@ The parameters of the component are:
 * **provider** (string): the name SaaS provider, such as "salesforce".
 * **consumerRef** (string): the ID that your app uses to identify this end user.
 * **consumerName** (string, optional): the display name for this end user.
-* **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/glossary#group).
+* **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
 * **groupName** (string, optional): the display name for this group.
 * **redirectUrl** (string, optional): if provided, the page will be redirected to this URL once a consumer successfully connects. This can either be an absolute or relative URL.
 * **onSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects, it should have the signature `(connectionID: string) => void`.
@@ -128,10 +128,10 @@ The parameters of the component are:
 
 ### Check if integration is installed
 
-We provide a hook `useIsIntegrationInstalled` to check if an integration has been installed yet for this [group](/glossary#group). It takes in 2 parameters:
+We provide a hook `useIsIntegrationInstalled` to check if an integration has been installed yet for this [group](/terminology#group). It takes in 2 parameters:
 
 * **integration** (string): the name of an integration that you've defined in `amp.yaml`. See [Defining integrations](/define-integrations/overview).
-* **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/glossary#group).
+* **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
 
 It returns an object with fields `isLoaded`checking if API call is resolved and `isIntegrationInstalled` indicating whether the integration has already been installed by somebody in the group.
 

@@ -111,7 +111,7 @@ const mintConfig: MintConfig = {
           ]
         },
         "destinations",
-        "glossary",
+        "terminology",
         {
           group: "Provider guides",
           pages: [
