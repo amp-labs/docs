@@ -9,6 +9,20 @@ This repo contains the source files for https://docs.withampersand.com, which in
 
 Merges to the main branch will automatically update the online docs via the Mintlify Github app.
 
+## Setup 
+
+Ensure you have pnpm installed globally 
+
+```shell 
+npm install -g pnpm
+```
+
+Install dependencies 
+
+```shell
+pnpm i
+```
+
 ## Generate mint.json
 
 `src/mint.json` is the main configuration file for the docs. Do not edit it manually.
