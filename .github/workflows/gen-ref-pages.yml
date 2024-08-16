@@ -31,7 +31,7 @@ jobs:
         with:
           filters: |
             docs:
-              - 'v1.0-mintlify/**'
+              - 'src/**'
 
       - name: Notify if no changes have happened since last run
         if: steps.filter.outputs.docs == 'false' && github.event_name == 'pull_request'
@@ -39,11 +39,11 @@ jobs:
         shell: bash
 
       - name: Test for broken links in the docs
-        run: cd v1.0-mintlify && pnpm i && pnpm run test:links
+        run: cd src && pnpm i && pnpm run test:links
         shell: bash
 
       - name: Generate API ref pages
-        run: cd v1.0-mintlify && pnpm i && pnpm run generate
+        run: cd src && pnpm i && pnpm run generate
         shell: bash
 
       - name: Push changes
@@ -51,7 +51,7 @@ jobs:
         run: |
           git config --global user.email "devops@withampersand.com"
           git config --global user.name "Ampersand Ops"
-          git add v1.0-mintlify/
+          git add src/
           git commit -m "[ampersand-ops] auto: update documentation with latest api reference"
           git remote set-url origin https://x-access-token:${{ secrets.AMPERSAND_OPS_PAT }}@github.com/${{ github.repository }}
           git push origin HEAD:main
