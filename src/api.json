@@ -21975,8 +21975,8 @@
                         }
                       },
                       "oauth2Opts": {
-                        "description": "Configuration for OAuth2.0. Must be provided if authType is oauth2.",
                         "type": "object",
+                        "description": "Configuration for OAuth2.0. Must be provided if authType is oauth2.",
                         "required": [
                           "grantType",
                           "tokenURL",
@@ -22070,8 +22070,8 @@
                         }
                       },
                       "apiKeyOpts": {
-                        "description": "Configuration for API key. Must be provided if authType is api_key.",
                         "type": "object",
+                        "description": "Configuration for API key. Must be provided if authType is apiKey.",
                         "required": [
                           "attachmentType"
                         ],
@@ -22132,9 +22132,41 @@
                         }
                       },
                       "basicOpts": {
-                        "description": "Configuration for Basic Auth. Optional.",
                         "type": "object",
+                        "description": "Configuration for Basic Auth. Optional.",
                         "properties": {
+                          "apiKeyAsBasic": {
+                            "type": "boolean",
+                            "example": true,
+                            "description": "If true, the provider uses an API key which then gets encoded as a basic auth user:pass string.",
+                            "x-go-type-skip-optional-pointer": true
+                          },
+                          "apiKeyAsBasicOpts": {
+                            "type": "object",
+                            "description": "when this object is present, it means that this provider uses Basic Auth to actually collect an API key",
+                            "properties": {
+                              "fieldUsed": {
+                                "type": "string",
+                                "enum": [
+                                  "username",
+                                  "password"
+                                ],
+                                "example": "username",
+                                "description": "whether the API key should be used as the username or password.",
+                                "x-go-type-skip-optional-pointer": true,
+                                "x-enum-varnames": [
+                                  "UsernameField",
+                                  "PasswordField"
+                                ]
+                              },
+                              "keyFormat": {
+                                "type": "string",
+                                "example": "api:%s",
+                                "description": "How to transform the API key in to a basic auth user:pass string. The %s is replaced with the API key value.",
+                                "x-go-type-skip-optional-pointer": true
+                              }
+                            }
+                          },
                           "docsURL": {
                             "type": "string",
                             "description": "URL with more information about how to get or use an API key.",
@@ -22144,8 +22176,8 @@
                         }
                       },
                       "support": {
-                        "description": "The supported features for the provider.",
                         "type": "object",
+                        "description": "The supported features for the provider.",
                         "x-oapi-codegen-extra-tags": {
                           "validate": "required"
                         },
@@ -22254,6 +22286,12 @@
                               }
                             }
                           }
+                        }
+                      },
+                      "labels": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
                         }
                       }
                     }
@@ -22454,8 +22492,8 @@
                       }
                     },
                     "oauth2Opts": {
-                      "description": "Configuration for OAuth2.0. Must be provided if authType is oauth2.",
                       "type": "object",
+                      "description": "Configuration for OAuth2.0. Must be provided if authType is oauth2.",
                       "required": [
                         "grantType",
                         "tokenURL",
@@ -22549,8 +22587,8 @@
                       }
                     },
                     "apiKeyOpts": {
-                      "description": "Configuration for API key. Must be provided if authType is api_key.",
                       "type": "object",
+                      "description": "Configuration for API key. Must be provided if authType is apiKey.",
                       "required": [
                         "attachmentType"
                       ],
@@ -22611,9 +22649,41 @@
                       }
                     },
                     "basicOpts": {
-                      "description": "Configuration for Basic Auth. Optional.",
                       "type": "object",
+                      "description": "Configuration for Basic Auth. Optional.",
                       "properties": {
+                        "apiKeyAsBasic": {
+                          "type": "boolean",
+                          "example": true,
+                          "description": "If true, the provider uses an API key which then gets encoded as a basic auth user:pass string.",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "apiKeyAsBasicOpts": {
+                          "type": "object",
+                          "description": "when this object is present, it means that this provider uses Basic Auth to actually collect an API key",
+                          "properties": {
+                            "fieldUsed": {
+                              "type": "string",
+                              "enum": [
+                                "username",
+                                "password"
+                              ],
+                              "example": "username",
+                              "description": "whether the API key should be used as the username or password.",
+                              "x-go-type-skip-optional-pointer": true,
+                              "x-enum-varnames": [
+                                "UsernameField",
+                                "PasswordField"
+                              ]
+                            },
+                            "keyFormat": {
+                              "type": "string",
+                              "example": "api:%s",
+                              "description": "How to transform the API key in to a basic auth user:pass string. The %s is replaced with the API key value.",
+                              "x-go-type-skip-optional-pointer": true
+                            }
+                          }
+                        },
                         "docsURL": {
                           "type": "string",
                           "description": "URL with more information about how to get or use an API key.",
@@ -22623,8 +22693,8 @@
                       }
                     },
                     "support": {
-                      "description": "The supported features for the provider.",
                       "type": "object",
+                      "description": "The supported features for the provider.",
                       "x-oapi-codegen-extra-tags": {
                         "validate": "required"
                       },
@@ -22733,6 +22803,12 @@
                             }
                           }
                         }
+                      }
+                    },
+                    "labels": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
                       }
                     }
                   }
@@ -26757,6 +26833,13 @@
                       "clientSecret": {
                         "type": "string",
                         "description": "The client secret to use for the connection."
+                      },
+                      "scopes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "The scopes to use for the connection (optional)."
                       }
                     }
                   },
@@ -26784,6 +26867,13 @@
                       "clientSecret": {
                         "type": "string",
                         "description": "The client secret to use for the connection."
+                      },
+                      "scopes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "The scopes to use for the connection (optional)."
                       }
                     }
                   }
