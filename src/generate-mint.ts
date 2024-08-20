@@ -154,7 +154,7 @@ const mintConfig: MintConfig = {
             'provider-guides/pinterest',
             'provider-guides/pipedrive',
             'provider-guides/podium',
-            'provider-guides/provider-guidessalesloft',
+            'provider-guides/salesloft',
             'provider-guides/salesforce',
             'provider-guides/slack',
             'provider-guides/smartsheet',
