@@ -1,0 +1,34 @@
+---
+title: Insightly
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.insightly.com`.
+
+### Example integration
+
+To define an integration for Insightly, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: insightly-integration
+    displayName: My Insightly Integration
+    provider: insightly
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Insightly:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password.
+- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://api.insightly.com`.
