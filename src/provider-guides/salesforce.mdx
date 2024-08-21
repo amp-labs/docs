@@ -6,7 +6,7 @@ title: "Salesforce"
 ### Supported Actions
 
 The Salesforce connector supports:
-- [Read Actions](/define-integrations/read-actions), including full historic backfill and incremental reads.
+- [Read Actions](/define-integrations/read-actions), including full historic backfill and incremental read.
 - [Write Actions](/define-integrations/write-actions), including Bulk Write
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://{{.workspace}}.my.salesforce.com`.
 
@@ -117,3 +117,15 @@ Copy these keys and use them in the next step to connect Salesforce to Ampersand
 <br />
 
 > ℹ️ If you lose these keys, you can regenerate them by editing the Connected App in Salesforce and selecting **Regenerate Consumer Secret**.
+
+## Using the connector
+
+To start integrating with Salesforce:
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml), see [Define Integrations](/define-integrations/overview) for more info.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.
