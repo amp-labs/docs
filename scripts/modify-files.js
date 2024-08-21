@@ -8,8 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 
-const providerGuidesMdxDir = path.join(__dirname, '../src/provider-guides');
-const imagesDirectory = path.join(__dirname, '../src/images/provider-guides');
+const providerGuidesDir = path.join(__dirname, '../src/provider-guides');
 
 // Skip these files, overview is not for a provider, Jira and Confluence just link to the Atlassian guide.
 const filesToSkip = ['overview.mdx', 'jira.mdx', 'confluence.mdx'];
@@ -27,7 +26,7 @@ function main() {
   loadCatalogJSON().then(loaded => {
     catalog = loaded["catalog"];
     // Read all files in a directory
-    fs.readdir(providerGuidesMdxDir, (err, files) => {
+    fs.readdir(providerGuidesDir, (err, files) => {
       if (err) {
         console.error("Could not list the directory.", err);
         process.exit(1);
@@ -48,7 +47,7 @@ function main() {
 function runOnEachFile(file) {
   if (filesToSkip.includes(file)) return;
 
-  const filePath = path.join(providerGuidesMdxDir, file);
+  const filePath = path.join(providerGuidesDir, file);
   let baseURL = "";
 
   try {
