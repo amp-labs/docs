@@ -1,0 +1,38 @@
+---
+title: Brevo
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.brevo.com`.
+
+### Example integration
+
+To define an integration for Brevo, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: brevo-integration
+    displayName: My Brevo Integration
+    provider: brevo
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Brevo:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.brevo.com`.
+
+## Creating an API key for Brevo
+
+[Click here](https://developers.brevo.com/docs/getting-started) for more information about generating an API key for Brevo. The UI components will display this link, so that your users can successfully create API keys.
