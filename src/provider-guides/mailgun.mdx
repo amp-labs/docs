@@ -1,0 +1,38 @@
+---
+title: Mailgun
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.mailgun.net`.
+
+### Example integration
+
+To define an integration for Mailgun, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: mailgun-integration
+    displayName: My Mailgun Integration
+    provider: mailgun
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Mailgun:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password.
+- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://api.mailgun.net`.
+
+## Credential format for Mailgun
+
+Mailgun uses a non-standard format for Basic Auth, which means that the username and password fields do not correspond to the actual username and password that a customer uses to log in. [Click here](https://documentation.mailgun.com/docs/mailgun/api-reference/authentication/) for more information about the expected credential format for Mailgun. The UI components will display this link, so that your users can successfully provide their credentials.
