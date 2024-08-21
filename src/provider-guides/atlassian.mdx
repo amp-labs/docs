@@ -1,17 +1,21 @@
 ---
 title: "Atlassian"
-slug: "atlassian"
-excerpt: ""
-hidden: false
-createdAt: "Wed Jun 26 2024 06:21:12 GMT+0000 (Coordinated Universal Time)"
-updatedAt: "Thu Jul 25 2024 00:07:18 GMT+0000 (Coordinated Universal Time)"
 ---
 ## What's Supported
 
 ### Supported Actions
 
-This connector supports:
+For Jira, the following is supported:
+- [Read Actions](/define-integrations/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.atlassian.com`.
+
+For Confluence, the following is supported:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.atlassian.com`.
+
+### Example Integration
+
+For an example manifest file of a Jira integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/jira/amp.yaml).
 
 ## Before You Get Started
 
@@ -105,3 +109,15 @@ You'll use these credentials while connecting your app to Ampersand.
    ![Alt text](/images/provider-guides/53b7d93-atlassian1.gif)
 
 7. Click **Save changes**.
+
+## Using the connector
+
+To start integrating with Atlassian:
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/jira/amp.yaml), see [Define Integrations](/define-integrations/overview) for more info.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.

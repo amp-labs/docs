@@ -5,8 +5,27 @@ title: "HubSpot"
 
 ### Supported Actions
 
-This connector supports:
+The Hubspot connector supports:
+- [Read Actions](/define-integrations/read-actions), including full historic backfill and incremental reads
+- [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.hubapi.com`.
+
+### Supported Objects
+
+The Hubspot connector support writing to and reading from the following objects:
+- [Companies](https://developers.hubspot.com/docs/api/crm/companies)
+- [Contacts](https://developers.hubspot.com/docs/api/crm/contacts)
+- [Deals](https://developers.hubspot.com/docs/api/crm/deals)
+- All other standard CRM objects
+- Custom CRM objects
+
+For each of these objects, the connector supports:
+- Standard fields
+- Custom fields 
+
+### Example Integration
+
+For an example manifest file of a Hubspot integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/hubspot/amp.yaml).
 
 ## Before You Get Started
 
@@ -78,3 +97,15 @@ Here's how to grab the credentials you'll need:
    ![Alt text](/images/provider-guides/f4ada70-hubspot6.gif)
 
 7. Click **Save changes**.
+
+## Using the connector
+
+To start integrating with Hubspot:
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/hubspot/amp.yaml), see [Define Integrations](/define-integrations/overview) for more info.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.

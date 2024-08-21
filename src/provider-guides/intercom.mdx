@@ -5,8 +5,14 @@ title: "Intercom"
 
 ### Supported Actions
 
-This connector supports:
+The Intercom connector supports:
+- [Read Actions](/define-integrations/read-actions), including full historic backfill. Please incremental read is not supported, a full read of the Intercom instance will be done for each scheduled read.
+- [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.intercom.io`.
+
+### Example Integration
+
+For an example manifest file of a Intercom integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/intercom/amp.yaml).
 
 ## Before You Get Started
 
@@ -77,3 +83,15 @@ You can now add your Intercom App Details to Ampersand.
 
    ![Alt text](/images/provider-guides/b87b1d9-intercom2.gif)
 6. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Intercom:
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/intercom/amp.yaml), see [Define Integrations](/define-integrations/overview) for more info.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.

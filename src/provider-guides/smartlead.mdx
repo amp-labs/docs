@@ -5,33 +5,27 @@ title: Smartlead AI
 
 ### Supported actions
 
-This connector supports:
+The Smartlead connector supports:
+- [Read Actions](/define-integrations/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://server.smartlead.ai/api`.
 
-### Example integration
+### Example Integration
 
-To define an integration for Smartlead AI, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: smartlead-integration
-    displayName: My Smartlead AI Integration
-    provider: smartlead
-    proxy:
-      enabled: true
-```
+For an example manifest file of a Smartlead integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/smartlead/amp.yaml).
 
 ## Using the connector
 
 This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Smartlead AI:
-- Create a manifest file like the example above.
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/smartlead/amp.yaml), see [Define Integrations](/define-integrations/overview) for more info.
 - Deploy it using the [amp CLI](/cli/overview).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
-- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://server.smartlead.ai/api`.
+- Start using the connector!
+   - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.
 
 ## Creating an API key for Smartlead AI
 
