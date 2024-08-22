@@ -55,7 +55,7 @@ const mintConfig: MintConfig = {
   logo: {
     light: "/logos/dark.png",
     dark: "/logos/light.png",
-    href: "https://withampersand.com",
+    href: "https://withampersand.com"
   },
   favicon: "logos/favicon.svg",
   colors: {
@@ -73,11 +73,11 @@ const mintConfig: MintConfig = {
       url: "https://dashboard.withampersand.com/sign-in",
     },
   ],
-  redirects: [
+  "redirects": [
     {
-      source: "/docs/:slug*",
-      destination: "/:slug*",
-    },
+      "source": "/docs/:slug*",
+      "destination": "/:slug*"
+    }
   ],
   tabs: [
     {
@@ -106,7 +106,9 @@ const mintConfig: MintConfig = {
         "embeddable-ui-components",
         {
           group: "CLI",
-          pages: ["cli/overview"],
+          pages: [
+            "cli/overview"
+          ]
         },
         "destinations",
         "terminology",
@@ -146,7 +148,9 @@ const mintConfig: MintConfig = {
             "provider-guides/docusign",
             "provider-guides/drift",
             "provider-guides/dropbox",
-            "provider-guides/facebook",
+            "provider-guides/dropboxsign",
+            "provider-guides/dynamicsbusinesscentral",
+            "provider-guides/dynamicscrm",
             "provider-guides/figma",
             "provider-guides/formstack",
             "provider-guides/front",
@@ -165,6 +169,7 @@ const mintConfig: MintConfig = {
             "provider-guides/jira",
             "provider-guides/jotform",
             "provider-guides/keap",
+            "provider-guides/linkedin",
             "provider-guides/mailgun",
             "provider-guides/marketo",
             "provider-guides/microsoft",
@@ -195,7 +200,7 @@ const mintConfig: MintConfig = {
             "provider-guides/wrike",
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
-            "provider-guides/zoom",
+            "provider-guides/zoom"
           ],
         },
         "dev-and-prod-environments",
@@ -205,12 +210,6 @@ const mintConfig: MintConfig = {
     //   group: "READ API",
     //   pages: readApiPages,
     // },
-    {
-      group: "Authentication",
-      pages: [
-        "reference/auth",
-      ],
-    },
     {
       group: "WRITE API",
       pages: writeApiPages,
