@@ -1,0 +1,67 @@
+---
+title: "Microsoft Dynamics 365 CRM"
+---
+
+## What's Supported
+
+### Supported Actions
+
+This connector supports:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.businesscentral.dynamics.com`.
+
+## Before You Get Started
+
+To connect **Microsoft Dynamics 365 CRM** with **Ampersand**, you will need an active [Microsoft Dynamics 365 CRM Account](https://dynamics.microsoft.com/en-us/crm/).
+
+Once your account is set up, you'll need to register an application in the **Microsoft Entra** developer portal. After registering your app, you will need to configure it and obtain the following credentials:
+
+- **Application (client) ID**
+- **Client Secret**
+
+You will then use these credentials to connect Dynamics 365 CRM to Ampersand.
+
+### Create a Microsoft Dynamics 365 CRM Account
+
+Here's how you can sign up for a Microsoft Dynamics 365 CRM account:
+
+- Go to the [Microsoft Dynamics 365 CRM website](https://www.microsoft.com/en-us/dynamics-365/free-trial) and sign up for a new account or start a free trial.
+- If you don't have a **Microsoft Entra** (formerly Azure Active Directory) tenant, follow the instructions in [Set up Microsoft Entra ID access for your Developer Site](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-create-new-tenant) to associate your Microsoft 365 subscription with an Azure subscription.
+
+### Register a Microsoft Dynamics 365 CRM App
+
+Follow the steps below to register a **Microsoft Dynamics 365 CRM** app:
+
+1. Go to the [Microsoft Azure portal](https://portal.azure.com/#home) and sign in with an administrator account from your Microsoft 365 subscription.
+2. On the Home page, under **Azure services**, select **Microsoft Entra ID**.
+3. In the left navigation pane, select **App registrations**.
+4. Click **+ New registration**.
+5. Enter Application Details:
+    - **Name**: Enter a meaningful name for the application.
+    - **Supported account types**: Select **Accounts in any or this organizational directory**.
+6. In the **Redirect URIs** section, enter the **Ampersand** redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+7. In the left navigation panel, select **API permissions > Add a permission**.
+8. Under the **APIs my organization uses** tab, select **Microsoft Dynamics 365 CRM**.
+9. Select the applicable permissions.
+
+![MS Dynamics App Creation](/images/provider-guides/dynamics.gif)
+
+### Obtain Client ID and Client Secret
+
+1. On the **Overview** page, you'll find the **Application (client) ID**. Copy it.
+2. In the left navigation pane, select **Certificates & secrets**.
+3. Click **+ New client secret**, provide a description and expiration period, then click **Add**. Copy the client secret value.
+
+## Add Your Dynamics 365 CRM App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+2. Select the project where you want to create a Dynamics 365 CRM integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+   
+3. Select **Provider Apps**.
+4. Select **Dynamics 365** from the **Provider** list.
+5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
+
+   ![Ampersand Project Selection](/images/provider-guides/dynamics-amp.gif)
+   
+6. Click **Save Changes**.
