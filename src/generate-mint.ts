@@ -189,6 +189,7 @@ const mintConfig: MintConfig = {
             "provider-guides/recurly",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
+            "provider-guides/seismic",
             "provider-guides/sendGrid",
             "provider-guides/slack",
             "provider-guides/smartlead",
