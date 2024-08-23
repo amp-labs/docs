@@ -1,6 +1,6 @@
 /**
  * This is a template script file for bulk manipulation of files.
- * To run: `node scripts/script.ts` from the root directory.
+ * To run: `node scripts/modify-files.js` from the root directory.
  * You can update this file with your own logic.
  */
 
