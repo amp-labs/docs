@@ -149,8 +149,7 @@ const mintConfig: MintConfig = {
             "provider-guides/drift",
             "provider-guides/dropbox",
             "provider-guides/dropboxsign",
-            "provider-guides/dynamicsbusinesscentral",
-            "provider-guides/dynamicscrm",
+            "provider-guides/facebook",
             "provider-guides/figma",
             "provider-guides/formstack",
             "provider-guides/front",
@@ -173,6 +172,8 @@ const mintConfig: MintConfig = {
             "provider-guides/mailgun",
             "provider-guides/marketo",
             "provider-guides/microsoft",
+            "provider-guides/microsoftDynamicsBusinessCentral",
+            "provider-guides/microsoftDynamicsCRM",
             "provider-guides/miro",
             "provider-guides/mixmax",
             "provider-guides/notion",
@@ -211,6 +212,12 @@ const mintConfig: MintConfig = {
     //   group: "READ API",
     //   pages: readApiPages,
     // },
+    {
+      group: "Authentication",
+      pages: [
+        "reference/auth",
+      ],
+    },
     {
       group: "WRITE API",
       pages: writeApiPages,
