@@ -6,21 +6,38 @@ title: Marketo
 ### Supported actions
 
 This connector supports:
-- [Read Actions](/define-integrations/read-actions), including full historic backfill. Please note that incremental read is only supported for Leads and Lead Changes. For other objects, a full read of the Marketo instance will be done each time.
+- [Read Actions](/define-integrations/read-actions), including full historic backfill. Please note that incremental read is only supported for Email, Programs, SmartCampaigs and SmartLists. For other objects, a full read of the Marketo instance will be done each time.
 - [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://{{.workspace}}.mktorest.com`.
+
+### Supported Modules
+The marketo connector has two modules.
+
+- Module Leads (Lead Database API)
+- Module Assets (Assets API)
+
+### Supported Objects
+By default the connector uses the leads Module.
+
+The Marketo connector support reading from the following objects:
+
+- [Campaigns](https://developer.adobe.com/marketo-apis/api/mapi/#tag/Campaigns/operation/getCampaignsUsingGET)
+- [Custom Objects](https://developer.adobe.com/marketo-apis/api/mapi/#tag/Custom-Objects/operation/listCustomObjectsUsingGET)
+- [Lists](https://developer.adobe.com/marketo-apis/api/mapi/#tag/Static-Lists/operation/getListsUsingGET)
+
+The Marketo connector support writing in the following objects:
+
+- [Companies](https://developer.adobe.com/marketo-apis/api/mapi/#tag/Campaigns/operation/getCampaignsUsingGET)
+- [Leads](https://developer.adobe.com/marketo-apis/api/mapi/#tag/Custom-Objects/operation/listCustomObjectsUsingGET)
+- [Named Account Lists](https://developer.adobe.com/marketo-apis/api/mapi/#tag/Static-Lists/operation/getListsUsingGET)
+- [NamedAccounts](https://developer.adobe.com/marketo-apis/api/mapi/#tag/Named-Account-Lists/operation/syncNamedAccountListsUsingPOST)
+- [Opportunities](https://developer.adobe.com/marketo-apis/api/mapi/#tag/Opportunities/operation/syncOpportunitiesUsingPOST)
+- [SalesPersons](https://developer.adobe.com/marketo-apis/api/mapi/#tag/Sales-Persons/operation/syncSalesPersonsUsingPOST)
 
 ## Using the connector
 
 This connector uses OAuth2 Client Credentials grant type, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
-To start integrating with Marketo:
-- Create a manifest file like the example above.
-- Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for the correct credentials.
-- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the correct tokens, and manage their refreshes. Please note that this connector's base URL is `https://{{.workspace}}.mktorest.com`.
-
-## Using the connector
 
 To start integrating with Intercom:
 - Create a manifest file, see [Define Integrations](/define-integrations/overview) for more info.
