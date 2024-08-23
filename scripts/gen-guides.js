@@ -1,7 +1,6 @@
 /**
- * This is a template script file for bulk creation of files, based on catalog info.
- * To run: `node scripts/script.ts` from the root directory.
- * You can update this file with your own logic.
+ * This script will generate provider guides, based on catalog info.
+ * To run: `node scripts/gen-guides.js` from the root directory.
  */
 
 const fs = require('fs').promises;
