@@ -10,8 +10,8 @@ const axios = require('axios');
 
 const providerGuidesDir = path.join(__dirname, '../src/provider-guides');
 
-// Skip these files, overview is not for a provider, Jira and Confluence just link to the Atlassian guide.
-const filesToSkip = ['overview.mdx', 'jira.mdx', 'confluence.mdx'];
+// Skip these files, overview is not for a provider, Jira just link to the Atlassian guide.
+const filesToSkip = ['overview.mdx', 'jira.mdx'];
 
 let catalog = {};
 

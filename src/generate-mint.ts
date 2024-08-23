@@ -135,7 +135,6 @@ const mintConfig: MintConfig = {
             "provider-guides/clari",
             "provider-guides/clickup",
             "provider-guides/close",
-            "provider-guides/confluence",
             "provider-guides/constantContact",
             "provider-guides/copper",
             "provider-guides/crunchbase",
