@@ -34,6 +34,12 @@ export interface MintConfig {
     url?: string;
   }>;
 
+  feedback?: {
+    thumbsRating?: boolean;
+    suggestEdit?: boolean;
+    raiseIssue?: boolean;
+  }
+
   navigation: NavigationGroup[];
   backgroundImage?: string;
   footerSocials?: {
@@ -231,6 +237,12 @@ const mintConfig: MintConfig = {
     linkedin: "https://www.linkedin.com/company/withampersand",
     twitter: "https://twitter.com/withampersand",
   },
+
+  feedback: {
+    thumbsRating: true,
+    suggestEdit: true,
+    raiseIssue: true,
+  }
 };
 
 interface NavigationGroup {
