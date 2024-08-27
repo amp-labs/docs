@@ -11,6 +11,23 @@ This connector supports:
 - [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://{{.workspace}}.api.crm.dynamics.com/api/data`.
 
+### Supported Objects
+
+The Microsoft's DynamicsCRM connector supports reading from and writing to all the available objects in the Microsoft Dynamics 365 Sales module, which totals to more than 1000 objects and include:
+- catalog ([read-only fields](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/catalog#read-only-columnsattributes), [write-only fields](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/catalog#writable-columnsattributes))
+- contact ([read-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/contact#read-only-columnsattributes), [writable fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/contact#writable-columnsattributes))
+- discount ([read-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/discount#read-only-columnsattributes), [writable fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/discount#writable-columnsattributes))
+- goal ([read-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/goal#read-only-columnsattributes), [writable fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/goal#writable-columnsattributes))
+- lead ([read-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/lead#read-only-columnsattributes), [writable fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/lead#writable-columnsattributes))
+- list (Marketing list [read-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/list#read-only-columnsattributes), [writable fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/list#writable-columnsattributes))
+- msdyn_aitemplate ([read-only fields](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/msdyn_aitemplate#read-only-columnsattributes), [write-only fields](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/msdyn_aitemplate#writable-columnsattributes))
+- opportunity ([read-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/opportunity#read-only-columnsattributes), [write-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/opportunity#writable-columnsattributes))
+- product ([read-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/product#read-only-columnsattributes), [write-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/product#writable-columnsattributes))
+- quote ([read-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/quote#read-only-columnsattributes), [write-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/quote#writable-columnsattributes))
+- salesorder ([read-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/salesorder#read-only-columnsattributes), [write-only fields](https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/salesorder#writable-columnsattributes))
+- All the other objects in the [Dynamics Sales tables reference](https://learn.microsoft.com/en-us/dynamics365/sales/developer/about-entity-reference)
+- As well as objects in the [Dataverse tables reference](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/about-entity-reference)
+
 ### Example Integration
 
 For an example manifest file of an Dynamics CRM integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/dynamicsCRM/%20amp.yaml).
@@ -63,13 +80,13 @@ Follow the steps below to register a **Microsoft Dynamics 365 CRM** app:
 2. Select the project where you want to create a Dynamics 365 CRM integration.
 
    ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
-   
+
 3. Select **Provider Apps**.
 4. Select **Dynamics 365** from the **Provider** list.
 5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
 
    ![Ampersand Project Selection](/images/provider-guides/dynamics-amp.gif)
-   
+
 6. Click **Save Changes**.
 
 ## Using the connector
