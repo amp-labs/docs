@@ -6448,17 +6448,18 @@
                     "description": "The provider name (e.g. \"salesforce\", \"hubspot\")"
                   },
                   "latestRevision": {
-                    "required": [
-                      "sourceZipUrl"
-                    ],
                     "type": "object",
                     "properties": {
                       "sourceZipUrl": {
                         "type": "string",
                         "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL)."
+                      },
+                      "sourceYaml": {
+                        "type": "string",
+                        "description": "A YAML string that defines the integration."
                       }
                     },
-                    "description": "If included, creating this integration will also create a new revision of the integration."
+                    "description": "If included, creating this integration will also create a new revision of the integration. For LatestRevision, one of souceZipUrl or sourceYaml is required."
                   }
                 }
               }
@@ -8066,16 +8067,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "sourceZipUrl"
-                ],
                 "type": "object",
                 "properties": {
                   "sourceZipUrl": {
                     "type": "string",
                     "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL)."
+                  },
+                  "sourceYaml": {
+                    "type": "string",
+                    "description": "A YAML string that defines the integrations."
                   }
-                }
+                },
+                "description": "The source of the integrations to upsert. One of sourceZipUrl or sourceYaml is required."
               }
             }
           }
@@ -8827,16 +8830,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "sourceZipUrl"
-                ],
                 "type": "object",
                 "properties": {
                   "sourceZipUrl": {
                     "type": "string",
                     "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL)."
+                  },
+                  "sourceYaml": {
+                    "type": "string",
+                    "description": "The source YAML file that defines the revision."
                   }
-                }
+                },
+                "description": "The source of the revision to create. One of sourceZipUrl or sourceYaml is required."
               }
             }
           }
