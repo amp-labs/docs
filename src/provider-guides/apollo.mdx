@@ -5,34 +5,50 @@ title: Apollo
 
 ### Supported actions
 
-This connector supports:
+The Apollo connector supports:
+- [Read Actions](/define-integrations/read-actions), supporting full historic backfill only.
+- [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.apollo.io`.
+
+### Supported Objects
+
+The Apollo connector supports reading from the following objects:
+- [opportunities](https://apolloio.github.io/apollo-api-docs/?shell#opportunities-api)
+- email_accounts
+- contact_stages
+- opportunity_stages
+- typed_custom_fields
+- labels
+- account_stages
+- users
+
+
+The Apollo connector supports writing to the following objects:
+- [opportunities](https://apolloio.github.io/apollo-api-docs/?shell#opportunities-api)
+- [contacts](https://apolloio.github.io/apollo-api-docs/?shell#contacts-api)
+- [accounts](https://apolloio.github.io/apollo-api-docs/?shell#accounts-api)
 
 ### Example integration
 
-To define an integration for Apollo, create a manifest file that looks like this:
+For an example manifest file of a Apollo integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/apollo/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: apollo-integration
-    displayName: My Apollo Integration
-    provider: apollo
-    proxy:
-      enabled: true
-```
+## Before You Get Started
+
+### Creating an API key for Apollo
+
+[Click here](https://apolloio.github.io/apollo-api-docs/?shell#authentication) for more information about generating an API key for Apollo. The UI components will display this link, so that your users can successfully create API keys.
 
 ## Using the connector
 
 This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Apollo:
-- Create a manifest file like the example above.
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/apollo/amp.yaml), see [Define Integrations](/define-integrations/overview) for more info.
 - Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
-- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.apollo.io`.
+- Start using the connector!
+   - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.
 
-## Creating an API key for Apollo
-
-[Click here](https://apolloio.github.io/apollo-api-docs/?shell#authentication) for more information about generating an API key for Apollo. The UI components will display this link, so that your users can successfully create API keys.
