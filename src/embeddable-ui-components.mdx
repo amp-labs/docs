@@ -26,8 +26,8 @@ yarn add @amp-labs/react @chakra-ui/react @emotion/react @emotion/styled framer-
 
 This library requires your components to be wrapped in the `<AmpersandProvider/>` context. `<AmpersandProvider />` takes these props:
 
-* `apiKey`: an API key to access Ampersand services. If you don't have one yet, create one on the [API keys page](https://dashboard.withampersand.com/projects/_/api-keys) of Ampersand Dashboard.
-* `project`: your Ampersand project name or ID. You can find it on your project's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
+- `apiKey`: an API key to access Ampersand services. If you don't have one yet, create one on the [API keys page](https://dashboard.withampersand.com/projects/_/api-keys) of Ampersand Dashboard.
+- `project`: your Ampersand project name or ID. You can find it on your project's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
 
 ### Example
 
@@ -58,24 +58,24 @@ function App() {
 
 ### Install integration
 
-The InstallIntegration component asks your customer for their SaaS credentials, and then guides them through the installation flow for an integration. If they've already installed this integration, then the component will display the current configuration of the integration and allow them to update it. 
+The InstallIntegration component asks your customer for their SaaS credentials, and then guides them through the installation flow for an integration. If they've already installed this integration, then the component will display the current configuration of the integration and allow them to update it.
 
-Please note that each [group](/terminology#group) is able to install the integration once, so if someone else in the with the same `groupRef` has already installed the integration, then the user will not be able to install the same integration again.
+Please note that each [group](/terminology#group) is able to install the integration once, so if someone else in the the same `groupRef` has already installed the integration, then the user will not be able to install the same integration again.
 
 The parameters of the component are:
 
-* **integration** (string): the name of an integration that you've defined in `amp.yaml`. See [Defining integrations](/define-integrations/overview).
-* **consumerRef** (string): the ID that your app uses to identify this end user.
-* **consumerName** (string, optional): the display name for this end user.
-* **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
-* **groupName** (string, optional): the display name for this group.
-* **onInstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully installs the integration.
-* **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
+- **integration** (string): the name of an integration that you've defined in `amp.yaml`. See [Defining integrations](/define-integrations/overview).
+- **consumerRef** (string): the ID that your app uses to identify this end user.
+- **consumerName** (string, optional): the display name for this end user.
+- **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
+- **groupName** (string, optional): the display name for this group.
+- **onInstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully installs the integration.
+- **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
 
 Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`
 
 ```TypeScript TypeScript
- <InstallIntegration 
+ <InstallIntegration
   integration = {myIntegrationName}
   consumerRef = {userId}
   consumerName = {userFullName}
@@ -90,9 +90,9 @@ Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the follo
       + ` with configuration ${JSON.stringify(configObject, null, 2)}`)
   }
 />
- ```
+```
 
-![](/images/1f151f2-Example_for_docs_1.png) 
+![](/images/1f151f2-Example_for_docs_1.png)
 
 ### Connect provider
 
@@ -100,16 +100,16 @@ The ConnectProvider component allows your customer to put in their SaaS credenti
 
 The parameters of the component are:
 
-* **provider** (string): the name SaaS provider, such as "salesforce".
-* **consumerRef** (string): the ID that your app uses to identify this end user.
-* **consumerName** (string, optional): the display name for this end user.
-* **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
-* **groupName** (string, optional): the display name for this group.
-* **redirectUrl** (string, optional): if provided, the page will be redirected to this URL once a consumer successfully connects. This can either be an absolute or relative URL.
-* **onSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects, it should have the signature `(connectionID: string) => void`.
+- **provider** (string): the name SaaS provider, such as "salesforce".
+- **consumerRef** (string): the ID that your app uses to identify this end user.
+- **consumerName** (string, optional): the display name for this end user.
+- **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
+- **groupName** (string, optional): the display name for this group.
+- **redirectUrl** (string, optional): if provided, the page will be redirected to this URL once a consumer successfully connects. This can either be an absolute or relative URL.
+- **onSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects, it should have the signature `(connectionID: string) => void`.
 
 ```TypeScript
- <ConnectProvider 
+ <ConnectProvider
   provider = "salesforce"
   consumerRef = {userId}
   consumerName = {userFullName}
@@ -122,7 +122,7 @@ The parameters of the component are:
 />
 ```
 
-![](/images/98fc359-ConnectProvider__for_docs_1.png) 
+![](/images/98fc359-ConnectProvider__for_docs_1.png)
 
 ## Hooks
 
@@ -130,8 +130,8 @@ The parameters of the component are:
 
 We provide a hook `useIsIntegrationInstalled` to check if an integration has been installed yet for this [group](/terminology#group). It takes in 2 parameters:
 
-* **integration** (string): the name of an integration that you've defined in `amp.yaml`. See [Defining integrations](/define-integrations/overview).
-* **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
+- **integration** (string): the name of an integration that you've defined in `amp.yaml`. See [Defining integrations](/define-integrations/overview).
+- **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
 
 It returns an object with fields `isLoaded`checking if API call is resolved and `isIntegrationInstalled` indicating whether the integration has already been installed by somebody in the group.
 
