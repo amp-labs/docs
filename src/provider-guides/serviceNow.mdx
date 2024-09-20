@@ -1,0 +1,57 @@
+---
+title: "ServiceNow"
+---
+
+## What's Supported
+
+### Supported Actions
+This connector supports:
+* **Proxy Actions**, using the base URL `https://{{.workspace}}.service-now.com`.
+
+## Before You Get Started
+
+To integrate ServiceNow with Ampersand, you will need [a ServiceNow Instance](https://www.servicenow.com/).
+
+Once your instance is set up, you'll need to create a ServiceNow application and obtain the following credentials:
+* Client ID
+* Client Secret
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Create a ServiceNow Instance
+
+If you don't already have a ServiceNow instance:
+* Go to the [ServiceNow Developer Portal](https://developer.servicenow.com/dev.do#!/home).
+* Sign up for a Personal Developer Instance (PDI).
+
+### Creating a ServiceNow Application
+
+Follow the steps below to create a ServiceNow application:
+1. Log in to your **ServiceNow** instance.
+2. Navigate to **System OAuth** > **Application Registry**.
+3. Click **New** to create a new application.
+4. Choose **Create an OAuth API endpoint for external clients**.
+5. Fill in the required fields:
+   - Name: Your application name
+   - Client ID: Will be auto-generated
+   - Client Secret: Will be auto-generated
+6. In the **Redirect URL** field, enter: `https://api.withampersand.com/callbacks/v1/oauth`
+7. Set the appropriate access and refresh token lifespan.
+8. Click **Submit**.
+
+![Alt text](/images/provider-guides/servicenow.gif)
+
+Note the **Client ID** and **Client Secret**, as you will need them to connect your app to Ampersand.
+
+## Add Your ServiceNow App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+2. Select the project where you want to create a *ServiceNow* integration.
+3. Select **Provider Apps**.
+4. Select *ServiceNow* from the **Provider** list.
+5. Enter the previously obtained **Client ID** in the **Client ID** field.
+6. Enter the **Client Secret** in the **Client Secret** field.
+
+![Alt text](/images/provider-guides/servicenow1.gif)
+
+7. Click **Save Changes**.
