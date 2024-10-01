@@ -71,6 +71,7 @@ The parameters of the component are:
 * **groupName** (string, optional): the display name for this group.
 * **onInstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully installs the integration.
 * **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
+* **onUninstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully uninstalls the integration.
 
 Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`
 
@@ -88,6 +89,9 @@ Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the follo
   onUpdateSuccess = {(installationId, configObject) =>
     console.log(`Successfully updated ${installationId}`
       + ` with configuration ${JSON.stringify(configObject, null, 2)}`)
+  }
+  onUninstallSuccess = {(installationId) =>
+    console.log(`Successfully uninstalled ${installationId}`)
   }
 />
  ```
