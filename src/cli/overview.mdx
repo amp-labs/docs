@@ -2,78 +2,85 @@
 title: Overview
 ---
 
-The `amp` Command Line Interface (CLI) allows you to deploy integrations and interact with the Ampersand platform. 
+The `Ampersand Command Line Interface (CLI)` enables you to deploy integrations and interact with the Ampersand platform.
 
 ## Installation
 
-### Using Homebrew
+### Using Homebrew  
+To install the CLI using Homebrew (macOS users):  
 
-```
+```bash
 brew tap amp-labs/cli
 brew update
 brew install amp-labs/cli/cli
 ```
 
-### Other systems
+### For Other Systems
 
-Visit [https://github.com/amp-labs/cli/releases](https://github.com/amp-labs/cli/releases) and download the binary for your machine’s architecture. Place the binary file somewhere on your PATH (e.g. inside `/usr/bin`).
+1. Visit [Ampersand CLI Releases](https://github.com/amp-labs/cli/releases).
+2. Download the appropriate binary for your machine’s architecture.
+3. Place the binary somewhere on your `PATH` (e.g., `/usr/bin`).
 
 ## Using the CLI
 
 ### Log into your Ampersand account
 
-Before using the CLI, you must have an Ampersand account that you've created on the [Ampersand dashboard](https://dashboard.withampersand.com/sign-up).
+Ensure you have an Ampersand account. Create one on the [Ampersand Dashboard](https://dashboard.withampersand.com/sign-up) if you don’t have it already.
 
-Once your account has been created, you can log into the CLI by running:
+To log into the CLI:
 
 ```
 amp login
 ```
 
-If you wish to log out, you can run:
+To log out:
 
 ```
 amp logout
 ```
 
-### Deploy integrations
+### Deploy Integrations
 
-After defining your integrations in `amp.yaml`, deploy your changes by running the commands below:
+Once you have defined your integrations in an `amp.yaml` file, use the following commands to deploy:
 
-```
+```bash
 amp login
 amp deploy <folder_with_amp.yaml> --project=<id-or-name>
 ```
 
-### View all commands
+### View all Commands
 
-To see a list of all available commands and global flags, run:
 
-```
+To list all available commands and global flags:
+
+```bash
 amp help
 ```
 
-### Run in CI/CD
+**Note:** For detailed explanations of each command and its options, refer to the [Command Reference](https://docs.withampersand.com/cli/command-reference) section.
 
-If you are running the Ampersand CLI in a CI/CD system, such as Github Actions, you can:
 
-1. Generate an API key in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/api-keys/new).
-2. Use the `key` flag, for example:
+### Running in CI/CD Environments
+
+If using the Ampersand CLI in a CI/CD system (e.g., GitHub Actions):
+
+1. **Generate an API key** in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/api-keys/new).
+2. Use the API key with the `key` flag.
 
 ```
 amp list:integrations --key=<api-key> --project=<id-or-name>
 ```
 
-Alternatively, you can put the API key in the AMP_API_KEY environment variable, and omit the `key` flag.
+Alternatively, you can set the API key as an environment variable:
 
 ```
 export AMP_API_KEY=<api-key>
 amp list:integrations --project=<id-or-name>
 ```
 
-### Run in debug mode
+### Debug Mode
 
-You can run any command with the `debug` flag, which will print more verbose output. For example:
+For more detailed output, run commands with the ``debug`` flag. 
 
 ```
 amp login --debug

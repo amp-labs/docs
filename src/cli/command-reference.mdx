@@ -1,0 +1,255 @@
+This section provides a detailed overview of the Ampersand CLI. It takes you through all the available commands, their usage, and options.
+
+## Usage
+
+The general syntax for using the Ampersand CLI is:
+
+```
+amp [command] [flags]
+```
+
+Where `[command]` is one of the available commands, and `[flags]` are optional parameters that modify the command's behavior.
+
+## Global Flags
+
+Global flags are options available for any Ampersand CLI command, allowing you to modify behavior or provide additional information consistently across all operations.
+
+Here are the available global flags:
+
+- `-d, --debug`: Enables debug logging mode (default: false). This flag is useful for troubleshooting as it provides more detailed output about the command's execution.
+
+- `-h, --help`: Displays help information for the command. This can be used to get more details about a specific command's usage and options.
+
+- `-k, --key string`: Specifies the Ampersand API key. This allows you to authenticate your CLI sessions using an API key instead of interactive login, which can be particularly useful in automated scripts or CI/CD pipelines.
+
+- `-p, --project string`: Specifies the Ampersand project name or ID. Many commands require a project context, and this flag allows you to set it without needing to include it in each individual command.
+
+You can use these flags by adding them after any command. For example:
+
+```
+amp list:integrations --debug --project my-project
+```
+
+This command would list integrations for the project "my-project" with debug logging enabled.
+
+## **Authentication Commands**  
+
+These commands allow you to manage your session with the Ampersand CLI. Use these to log in to your Ampersand account before the Integration Management and Resource commands, and to log out when you're done.
+
+### login 
+
+Logs into your Ampersand account via CLI. 
+
+**Syntax:**
+
+```bash
+  amp login [flag]
+```
+
+**Example:**
+
+```bash
+  amp login
+```
+
+### logout
+
+Logs out from your Ampersand account.  
+
+**Syntax:**
+
+```bash
+  amp logout [--debug]
+```
+
+## Integration Management Commands
+
+These commands are used to manage your integrations within Ampersand. They allow you to deploy changes to your integrations, delete integrations, and manage installations of integrations.
+
+### deploy
+
+Deploys changes to integrations by uploading and applying your integration configurations.
+
+**Syntax:**
+
+```bash
+amp deploy <folder_with_amp.yaml> --project=<id-or-name> [--key=<api-key>] [--debug]
+```
+
+**Notes:** 
+- Requires a folder containing an `amp.yaml` file.
+- Use this command when you've made changes to your integration and want to update it in Ampersand.
+
+**Example:**
+
+```bash
+amp deploy ./my-integration --project=my-project
+```
+
+### delete:integration
+
+Deletes a specific integration from your project.
+
+**Syntax:**
+
+```bash
+amp delete:integration <integration-id> [--project=<id-or-name>] [--key=<api-key>] [--debug]
+```
+
+**Notes:** 
+- This action is irreversible. Use with caution.
+- Removes the entire integration configuration from your project.
+
+**Example:**
+
+```bash
+amp delete:integration abc123 --project=my-project
+```
+
+### delete:installation
+
+Deletes a specific installation of an integration.
+
+**Syntax:**
+
+```bash
+amp delete:installation <installation-id> [--project=<id-or-name>] [--key=<api-key>] [--debug]
+```
+
+**Notes:** 
+- This removes a specific installation of an integration, not the integration itself.
+- Useful for managing multiple installations of the same integration.
+
+**Example:**
+
+```bash
+amp delete:installation xyz789 --project=my-project
+```
+
+## Resource Commands
+
+These commands help you view and manage various resources within your Ampersand projects. Use them to inspect available destinations, current installations, integrations, and projects associated with your account.
+
+### list:destinations
+
+Lists all available destinations for integrations in your project.
+
+**Syntax:**
+
+```bash
+amp list:destinations [--project=<id-or-name>] [--key=<api-key>] [--debug]
+```
+
+**Notes:**
+- Useful for seeing where you can deploy your integrations.
+- The output includes destination IDs and names.
+
+**Example:**
+
+```bash
+amp list:destinations --project=my-project
+```
+
+### list:installations
+
+Displays all current installations of integrations in your project.
+
+**Syntax:**
+
+```bash
+amp list:installations --project=<id-or-name> [--key=<api-key>] [--debug]
+```
+
+**Notes:**
+- Helps in managing and tracking deployed integrations.
+- Shows installation IDs, associated integration names, and their status.
+
+**Example:**
+
+```bash
+amp list:installations --project=my-project
+```
+
+### list:integrations
+
+Provides a list of all integrations in your specified project.
+
+**Syntax:**
+
+```bash
+amp list:integrations --project=<id-or-name> [--key=<api-key>] [--debug]
+```
+
+**Notes:**
+- Useful for getting an overview of available integrations.
+- Includes integration IDs, names, and current versions.
+
+**Example:**
+
+```bash
+amp list:integrations --project=my-project
+```
+
+### list:projects
+
+Displays all projects associated with your Ampersand account.
+
+**Syntax:**
+
+```bash
+amp list:projects [--key=<api-key>] [--debug]
+```
+
+**Notes:**
+- Helpful for managing multiple projects or selecting a project for other commands.
+- Shows project IDs and names.
+
+**Example:**
+
+```bash
+amp list:projects
+```
+
+## Utility Commands
+
+These commands provide general functionality to help you use and understand the Ampersand CLI.
+
+### help
+
+Displays help information about any command.
+
+**Syntax:**
+
+```bash
+amp help [command]
+```
+
+**Notes:**
+- Use `amp help` for general help and `amp help [command]` for command-specific help.
+- Provides detailed information about command usage and available options.
+
+**Example:**
+
+```bash
+amp help deploy
+```
+
+### version
+
+Displays the version of the Ampersand CLI installed on your system.
+
+**Syntax:**
+
+```bash
+amp version
+```
+
+**Notes:**
+- Useful for verifying your installation or checking if updates are available.
+- Outputs the current version number of the CLI.
+
+**Example:**
+
+```bash
+amp version
+```
