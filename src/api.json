@@ -5760,8 +5760,8 @@
                           },
                           "specVersion": {
                             "type": "string",
-                            "description": "The spec version string (e.g. \"0.1.0\").",
-                            "example": "0.1.0"
+                            "description": "The spec version string.",
+                            "example": "1.0.0"
                           },
                           "createTime": {
                             "type": "string",
@@ -5883,6 +5883,12 @@
                                           }
                                         },
                                         "optionalFieldsAuto": {
+                                          "type": "string",
+                                          "enum": [
+                                            "all"
+                                          ]
+                                        },
+                                        "selectedFieldsAuto": {
                                           "type": "string",
                                           "enum": [
                                             "all"
@@ -6455,7 +6461,8 @@
               "schema": {
                 "required": [
                   "name",
-                  "provider"
+                  "provider",
+                  "latestRevision"
                 ],
                 "type": "object",
                 "properties": {
@@ -6469,17 +6476,227 @@
                   },
                   "latestRevision": {
                     "type": "object",
+                    "required": [
+                      "content",
+                      "specVersion"
+                    ],
                     "properties": {
-                      "sourceZipUrl": {
+                      "specVersion": {
                         "type": "string",
-                        "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL)."
+                        "description": "The spec version string.",
+                        "example": "1.0.0"
                       },
-                      "sourceYaml": {
-                        "type": "string",
-                        "description": "A YAML string that defines the integration."
+                      "content": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                          "provider"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string"
+                          },
+                          "read": {
+                            "type": "object",
+                            "properties": {
+                              "objects": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "required": [
+                                    "objectName",
+                                    "destination",
+                                    "schedule"
+                                  ],
+                                  "properties": {
+                                    "objectName": {
+                                      "type": "string"
+                                    },
+                                    "destination": {
+                                      "type": "string"
+                                    },
+                                    "schedule": {
+                                      "type": "string"
+                                    },
+                                    "requiredFields": {
+                                      "type": "array",
+                                      "items": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "required": [
+                                              "fieldName"
+                                            ],
+                                            "properties": {
+                                              "fieldName": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "type": "object",
+                                            "required": [
+                                              "mapToName"
+                                            ],
+                                            "properties": {
+                                              "mapToName": {
+                                                "type": "string"
+                                              },
+                                              "mapToDisplayName": {
+                                                "type": "string"
+                                              },
+                                              "default": {
+                                                "type": "string"
+                                              },
+                                              "prompt": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "optionalFields": {
+                                      "type": "array",
+                                      "items": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "required": [
+                                              "fieldName"
+                                            ],
+                                            "properties": {
+                                              "fieldName": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "type": "object",
+                                            "required": [
+                                              "mapToName"
+                                            ],
+                                            "properties": {
+                                              "mapToName": {
+                                                "type": "string"
+                                              },
+                                              "mapToDisplayName": {
+                                                "type": "string"
+                                              },
+                                              "default": {
+                                                "type": "string"
+                                              },
+                                              "prompt": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "optionalFieldsAuto": {
+                                      "type": "string",
+                                      "enum": [
+                                        "all"
+                                      ]
+                                    },
+                                    "selectedFieldsAuto": {
+                                      "type": "string",
+                                      "enum": [
+                                        "all"
+                                      ]
+                                    },
+                                    "backfill": {
+                                      "type": "object",
+                                      "required": [
+                                        "defaultPeriod"
+                                      ],
+                                      "properties": {
+                                        "defaultPeriod": {
+                                          "type": "object",
+                                          "properties": {
+                                            "days": {
+                                              "type": "integer",
+                                              "description": "Number of days in past to backfill from. 0 is no backfill. e.g) if 10, then backfill last 10 days of data. Required if fullHistory is not set.",
+                                              "minimum": 0,
+                                              "example": 30,
+                                              "x-oapi-codegen-extra-tags": {
+                                                "validate": "required_without=FullHistory,omitempty,min=0"
+                                              }
+                                            },
+                                            "fullHistory": {
+                                              "type": "boolean",
+                                              "description": "If true, backfill all history. Required if days is not set.",
+                                              "example": false,
+                                              "x-oapi-codegen-extra-tags": {
+                                                "validate": "required_without=Days"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "delivery": {
+                                      "type": "object",
+                                      "properties": {
+                                        "mode": {
+                                          "type": "string",
+                                          "default": "auto",
+                                          "enum": [
+                                            "onRequest",
+                                            "auto"
+                                          ],
+                                          "description": "The data delivery mode for this object. If not specified, defaults to automatic."
+                                        },
+                                        "pageSize": {
+                                          "type": "integer",
+                                          "description": "The number of records to receive per data delivery.",
+                                          "minimum": 50,
+                                          "maximum": 500
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "write": {
+                            "type": "object",
+                            "properties": {
+                              "objects": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "required": [
+                                    "objectName"
+                                  ],
+                                  "properties": {
+                                    "objectName": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "proxy": {
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
                       }
-                    },
-                    "description": "If included, creating this integration will also create a new revision of the integration. For LatestRevision, one of sourceZipUrl or sourceYaml is required."
+                    }
                   }
                 }
               }
@@ -8167,8 +8384,8 @@
                           },
                           "specVersion": {
                             "type": "string",
-                            "description": "The spec version string (e.g. \"0.1.0\").",
-                            "example": "0.1.0"
+                            "description": "The spec version string.",
+                            "example": "1.0.0"
                           },
                           "createTime": {
                             "type": "string",
@@ -8290,6 +8507,12 @@
                                           }
                                         },
                                         "optionalFieldsAuto": {
+                                          "type": "string",
+                                          "enum": [
+                                            "all"
+                                          ]
+                                        },
+                                        "selectedFieldsAuto": {
                                           "type": "string",
                                           "enum": [
                                             "all"
@@ -9727,8 +9950,8 @@
                     },
                     "specVersion": {
                       "type": "string",
-                      "description": "The spec version string (e.g. \"0.1.0\").",
-                      "example": "0.1.0"
+                      "description": "The spec version string.",
+                      "example": "1.0.0"
                     },
                     "createTime": {
                       "type": "string",
@@ -34518,8 +34741,8 @@
               },
               "specVersion": {
                 "type": "string",
-                "description": "The spec version string (e.g. \"0.1.0\").",
-                "example": "0.1.0"
+                "description": "The spec version string.",
+                "example": "1.0.0"
               },
               "createTime": {
                 "type": "string",
@@ -34646,6 +34869,12 @@
                                 "all"
                               ]
                             },
+                            "selectedFieldsAuto": {
+                              "type": "string",
+                              "enum": [
+                                "all"
+                              ]
+                            },
                             "backfill": {
                               "type": "object",
                               "required": [
@@ -34750,8 +34979,8 @@
           },
           "specVersion": {
             "type": "string",
-            "description": "The spec version string (e.g. \"0.1.0\").",
-            "example": "0.1.0"
+            "description": "The spec version string.",
+            "example": "1.0.0"
           },
           "createTime": {
             "type": "string",
@@ -34878,6 +35107,12 @@
                             "all"
                           ]
                         },
+                        "selectedFieldsAuto": {
+                          "type": "string",
+                          "enum": [
+                            "all"
+                          ]
+                        },
                         "backfill": {
                           "type": "object",
                           "required": [
@@ -34980,8 +35215,8 @@
           },
           "specVersion": {
             "type": "string",
-            "description": "The spec version string (e.g. \"0.1.0\").",
-            "example": "0.1.0"
+            "description": "The spec version string.",
+            "example": "1.0.0"
           },
           "createTime": {
             "type": "string",
