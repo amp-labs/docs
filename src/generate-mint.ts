@@ -114,7 +114,7 @@ const mintConfig: MintConfig = {
           group: "CLI",
           pages: [
             "cli/overview",
-            "cli/command-reference"
+            "cli/reference"
           ]
         },
         "destinations",
