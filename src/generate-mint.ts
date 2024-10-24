@@ -122,7 +122,7 @@ const mintConfig: MintConfig = {
           group: "Provider guides",
           pages: [
             "provider-guides/overview",
-            "provider-guides/aWeber",
+            "provider-guides/aweber",
             "provider-guides/acuityScheduling",
             "provider-guides/aha",
             "provider-guides/aircall",
