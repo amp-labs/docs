@@ -179,7 +179,7 @@ const mintConfig: MintConfig = {
             "provider-guides/jira",
             "provider-guides/jotform",
             "provider-guides/keap",
-            "provider-guides/linkedIn",
+            "provider-guides/linkedin",
             "provider-guides/mailgun",
             "provider-guides/marketo",
             "provider-guides/microsoft",
