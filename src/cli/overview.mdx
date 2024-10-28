@@ -2,7 +2,7 @@
 title: Overview
 ---
 
-The `Ampersand Command Line Interface (CLI)` enables you to deploy integrations and interact with the Ampersand platform.
+The Ampersand Command Line Interface (CLI) enables you to deploy integrations and interact with the Ampersand platform.
 
 ## Installation
 
@@ -15,11 +15,11 @@ brew update
 brew install amp-labs/cli/cli
 ```
 
-### For Other Systems
+### For other systems
 
 1. Visit [Ampersand CLI Releases](https://github.com/amp-labs/cli/releases).
 2. Download the appropriate binary for your machine’s architecture.
-3. Place the binary somewhere on your `PATH` (e.g., `/usr/bin`).
+3. Place the binary somewhere on your `PATH` (e.g. `/usr/bin`).
 
 **Note:**  
 To ensure the CLI is accessible from anywhere, the binary must be placed in a directory listed in your `PATH`. You can inspect your current `PATH` using the following commands:
@@ -30,9 +30,17 @@ To ensure the CLI is accessible from anywhere, the binary must be placed in a di
 
 ## Using the CLI
 
+### Checking the version
+
+To check the version and build information of your CLI, run:
+
+```
+amp version
+```
+
 ### Log into your Ampersand account
 
-Ensure you have an Ampersand account. Create one on the [Ampersand Dashboard](https://dashboard.withampersand.com/sign-up) if you don’t have it already.
+Ensure you have an Ampersand account. Create one on the [Ampersand Dashboard](https://dashboard.withampersand.com/sign-up) if you don't already have one.
 
 To log into the CLI:
 
@@ -46,16 +54,16 @@ To log out:
 amp logout
 ```
 
-### Deploy Integrations
+### Deploy integrations
 
 Once you have defined your integrations in an `amp.yaml` file, use the following commands to deploy:
 
 ```bash
 amp login
-amp deploy <folder_with_amp.yaml> --project=<id-or-name>
+amp deploy <folder_with_amp.yaml> --project <id-or-name>
 ```
 
-### View all Commands
+### View all commands
 
 
 To list all available commands and global flags:
@@ -64,28 +72,28 @@ To list all available commands and global flags:
 amp help
 ```
 
-**Note:** For detailed explanations of each command and its options, refer to the [Command Reference](https://docs.withampersand.com/cli/command-reference) section.
+**Note:** For detailed explanations of each command and its options, refer to the [Command Reference](/cli/reference) section.
 
 
 ### Running in CI/CD Environments
 
-If using the Ampersand CLI in a CI/CD system (e.g., GitHub Actions):
+If you are using the Ampersand CLI in a CI/CD system (e.g. GitHub Actions):
 
 1. **Generate an API key** in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/api-keys).
 2. Use the API key with the `key` flag.
 
 ```
-amp list:integrations --key=<api-key> --project=<id-or-name>
+amp list:integrations --key <api-key> --project <id-or-name>
 ```
 
 Alternatively, you can set the API key as an environment variable:
 
 ```
 export AMP_API_KEY=<api-key>
-amp list:integrations --project=<id-or-name>
+amp list:integrations --project <id-or-name>
 ```
 
-### Debug Mode
+### Debug mode
 
 For more detailed output, run commands with the ``debug`` flag. 
 

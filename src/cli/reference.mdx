@@ -1,4 +1,4 @@
-This section provides a detailed overview of the Ampersand CLI. It takes you through all the available commands, their usage, and options.
+This section provides a detailed overview of the Ampersand CLI, including the available commands, their usage, and options.
 
 ## Usage
 
@@ -8,9 +8,9 @@ The general syntax for using the Ampersand CLI is:
 amp [command] [flags]
 ```
 
-Where `[command]` is one of the available commands, and `[flags]` are optional parameters that modify the command's behavior.
+Where `[command]` is one of the available commands, and `[flags]` are parameters that modify the command's behavior.
 
-## Global Flags
+## Global flags
 
 Global flags are options available for any Ampersand CLI command, allowing you to modify behavior or provide additional information consistently across all operations.
 
@@ -32,9 +32,9 @@ amp list:integrations --debug --project my-project
 
 This command would list integrations for the project "my-project" with debug logging enabled.
 
-## **Authentication Commands**  
+## Authentication commands
 
-These commands allow you to manage your session with the Ampersand CLI. Use these to log in to your Ampersand account before the Integration Management and Resource commands, and to log out when you're done.
+These commands allow you to manage your session with the Ampersand CLI. Use these to log in to your Ampersand account before running other commands. As an alternative to logging in, you can also run commands using an API key. See [Running in CI/CD environments](/cli/overview#running-in-ci-cd-environments) for details.
 
 ### login 
 
@@ -43,7 +43,7 @@ Authenticates you against the CLI via an interactive browser flow.
 **Syntax:**
 
 ```bash
-  amp login [flag]
+  amp login
 ```
 
 **Example:**
@@ -62,7 +62,7 @@ Logs out from your Ampersand account.
   amp logout
 ```
 
-## Utility Commands
+## Utility commands
 
 These commands provide general functionality to help you use and understand the Ampersand CLI.
 
@@ -105,7 +105,7 @@ amp version
 amp version
 ```
 
-## Managing Integrations
+## Managing integrations
 
 These commands are used to manage your integrations within Ampersand. They allow you to deploy changes to your integrations, delete integrations, and manage installations of integrations.
 
@@ -116,18 +116,18 @@ Deploys the integrations defined in the `amp.yaml` file to Ampersand. If an inte
 **Syntax:**
 
 ```bash
-amp deploy <folder_with_amp.yaml> --project=<id-or-name> [--key=<api-key>] [--debug]
+amp deploy <folder_with_amp.yaml> --project <id-or-name> [--key <api-key>] [--debug]
 ```
 
 **Notes:** 
 - Requires a folder containing an `amp.yaml` file.
 - Use this command to deploy new integrations or update existing ones.
-- Use this command when you've made changes to your integration and want to update it in Ampersand.
+- Use this command when you've made changes to your integration
 
 **Example:**
 
 ```bash
-amp deploy ./integrations --project=my-project
+amp deploy ./integrations --project my-project
 ```
 
 ### delete:integration
@@ -137,7 +137,7 @@ Deletes a specific integration from your project.
 **Syntax:**
 
 ```bash
-amp delete:integration <integration-id> [--project=<id-or-name>] [--key=<api-key>] [--debug]
+amp delete:integration <integration-id> --project <id-or-name> [--key <api-key>] [--debug]
 ```
 
 **Notes:** 
@@ -147,7 +147,7 @@ amp delete:integration <integration-id> [--project=<id-or-name>] [--key=<api-key
 **Example:**
 
 ```bash
-amp delete:integration f47ac10b-58cc-4372-a567-0e02b2c3d479 --project=my-project
+amp delete:integration f47ac10b-58cc-4372-a567-0e02b2c3d479 --project my-project
 ```
 
 ### delete:installation
@@ -157,23 +157,22 @@ Deletes a specific installation of an integration.
 **Syntax:**
 
 ```bash
-amp delete:installation <integration-id> <installation-id> [--project=<id-or-name>] [--key=<api-key>] [--debug]
+amp delete:installation <integration-id> <installation-id> --project <id-or-name> [--key <api-key>] [--debug]
 ```
 
 **Notes:** 
 
 - This removes a specific installation of an integration, not the integration itself.
-- Useful for managing multiple installations of the same integration.
 - Requires both the integration ID and installation ID.
 
 **Example:**
 
 ```bash
-amp delete:installation 550e8400-e29b-41d4-a716-446655440000 91c38b0b-814c-4edd-8221-7e4f70a90123 --project=my-project
+amp delete:installation 550e8400-e29b-41d4-a716-446655440000 91c38b0b-814c-4edd-8221-7e4f70a90123 --project my-project
 
 ```
 
-## Resource Commands
+## Resource commands
 
 These commands help you view and manage various resources within your Ampersand projects. Use them to inspect available destinations, current installations, integrations, and projects associated with your account.
 
@@ -184,7 +183,7 @@ Lists all available destinations in your project. For more details on Destinatio
 **Syntax:**
 
 ```bash
-amp list:destinations [--project=<id-or-name>] [--key=<api-key>] [--debug]
+amp list:destinations --project <id-or-name> [--key <api-key>] [--debug]
 ```
 
 **Notes:**
@@ -193,7 +192,7 @@ amp list:destinations [--project=<id-or-name>] [--key=<api-key>] [--debug]
 **Example:**
 
 ```bash
-amp list:destinations --project=my-project
+amp list:destinations --project my-project
 ```
 
 ### list:installations
@@ -203,13 +202,13 @@ Displays all current installations of a given integration in your project.
 **Syntax:**
 
 ```bash
-amp list:installations --project=<id-or-name> [--key=<api-key>] [--debug]
+amp list:installations <integration-id> --project <id-or-name> [--key <api-key>] [--debug]
 ```
 
 **Example:**
 
 ```bash
-amp list:installations --project=my-project 
+amp list:installations 550e8400-e29b-41d4-a716-446655440000 --project my-project 
 
 ```
 
@@ -220,14 +219,14 @@ Provides a list of all integrations in your specified project.
 **Syntax:**
 
 ```bash
-amp list:integrations --project=<id-or-name> [--key=<api-key>] [--debug]
+amp list:integrations --project <id-or-name> [--key <api-key>] [--debug]
 ```
 
 
 **Example:**
 
 ```bash
-amp list:integrations --project=my-project
+amp list:integrations --project my-project
 ```
 
 ### list:projects
@@ -237,7 +236,7 @@ Displays all projects associated with your Ampersand account.
 **Syntax:**
 
 ```bash
-amp list:projects [--key=<api-key>] [--debug]
+amp list:projects [--key <api-key>] [--debug]
 ```
 
 **Notes:**
