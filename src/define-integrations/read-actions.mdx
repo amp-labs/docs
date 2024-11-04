@@ -157,6 +157,10 @@ integrations:
         - objectName: account
           destination: accountWebhook
           schedule: "*/10 * * * *" # every 10 minutes
+          # Read all accounts when integration is installed
+          backfill:
+            defaultPeriod:
+              fullHistory: true
           requiredFields:
             - fieldName: id
             - fieldName: name
@@ -168,6 +172,10 @@ integrations:
         - objectName: contact
           destination: contactWebhook
           schedule: "*/10 * * * *" # every 10 minutes
+          # Read contacts from the last 30 days when integration is installed
+          backfill:
+            defaultPeriod:
+              days: 30
           requiredFields:
             - fieldName: id
             - fieldName: firstname
@@ -175,7 +183,8 @@ integrations:
             - fieldName: email
             - mapToName: pronoun
               mapToDisplayName: Pronoun
-              prompt: We will use this word when addressing this person in emails we send out.
+              prompt: We will use this word in emails we send out.
+          # All other field are optional
           optionalFieldsAuto: all
 ```
 
