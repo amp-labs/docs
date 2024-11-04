@@ -6,14 +6,41 @@ The Ampersand Command Line Interface (CLI) enables you to deploy integrations an
 
 ## Installation
 
-### Using Homebrew  
-To install the CLI using Homebrew (macOS users):  
+### Using Homebrew
+
+To install the CLI using Homebrew (macOS users):
 
 ```bash
 brew tap amp-labs/cli
 brew update
 brew install amp-labs/cli/cli
 ```
+
+### For Windows
+
+1. Visit [Ampersand CLI Releases](https://github.com/amp-labs/cli/releases).
+2. Download the appropriate binary for your machine’s architecture.
+3. Extract the downloaded folder containing the `exe` file.
+4. To use the CLI, open Command Prompt in the extracted folder:
+   - Navigate to the folder in File Explorer
+   - Click in the address bar
+   - Type `cmd` and press Enter
+5. Verify the installation by running:
+
+   ```cmd
+   amp
+   ```
+
+   This should display a list of commands or options available in the CLI, confirming that it is properly configured and ready for use.
+
+6. To make the CLI accessible from anywhere, add the folder to your `PATH`:
+   - Open the Start menu
+   - Search for "Environment Variables"
+   - Click "Edit the system environment variables"
+   - Click "Environment Variables"
+   - Under "System variables", select "Path" and click "Edit"
+   - Click "New" and add the path to the folder containing the `exe` file
+   - Click "OK" on all windows
 
 ### For other systems
 
@@ -25,8 +52,9 @@ brew install amp-labs/cli/cli
 To ensure the CLI is accessible from anywhere, the binary must be placed in a directory listed in your `PATH`. You can inspect your current `PATH` using the following commands:
 
 - **Linux/macOS:**
-   ```bash
-   echo $PATH
+  ```bash
+  echo $PATH
+  ```
 
 ## Using the CLI
 
@@ -65,7 +93,6 @@ amp deploy <folder_with_amp.yaml> --project <id-or-name>
 
 ### View all commands
 
-
 To list all available commands and global flags:
 
 ```bash
@@ -73,7 +100,6 @@ amp help
 ```
 
 **Note:** For detailed explanations of each command and its options, refer to the [Command Reference](/cli/reference) section.
-
 
 ### Running in CI/CD Environments
 
@@ -95,7 +121,7 @@ amp list:integrations --project <id-or-name>
 
 ### Debug mode
 
-For more detailed output, run commands with the ``debug`` flag. 
+For more detailed output, run commands with the `debug` flag.
 
 ```
 amp login --debug
