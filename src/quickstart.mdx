@@ -42,6 +42,9 @@ integrations:
         - objectName: contact
           destination: contactWebhook
           schedule: "*/30 * * * *" # every 30 minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
           # Always read these fields
           requiredFields:
             - fieldName: firstName
@@ -53,6 +56,9 @@ integrations:
         - objectName: lead
           destination: leadsWebhook
           schedule: "*/30 * * * *" # every 30 minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
           requiredFields:
             - fieldName: firstName
             - fieldName: lastName
