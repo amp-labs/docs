@@ -180,7 +180,6 @@ integrations:
             - fieldName: id
             - fieldName: firstname
             - fieldName: lastname
-            - fieldName: email
             - mapToName: pronoun
               mapToDisplayName: Pronoun
               prompt: We will use this word in emails we send out.
@@ -190,26 +189,26 @@ integrations:
 
 ## Example webhook message
 
-Ampersand will do reads at the schedule you specify in `amp.yaml`. If there are any new or updated records since our last read, Ampersand will send you webhook messages. For the sample integration above, here's what a sample webhook message might look like for the Contact object:
+Ampersand will do reads at the schedule you specify in `amp.yaml`. If there are any new or updated records since our last read, Ampersand will send you webhook messages.
 
-
+Please refer to our [OpenAPI spec](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml) for the schema of the webhook message. For the sample integration above, here's what a sample webhook message might look like for the Contact object:
 
 ```JavaScript JavaScript
 {
  "projectId": "ampersand-project-id",
  "provider": "salesforce",
- "workspace": "salesforce-subdomain",
  "groupRef": "xyz-company",
  "groupName": "XYZ Company",
  "installationId": "installation-id",
  "objectName": "Contact",
+ // Only certain providers will have workspace available.
+ "workspace": "salesforce-subdomain",
  "result": [
   {
     "fields": {
       "id": "001Dp00000P8QurIAF",
       "firstname": "Sally",
       "lastname": "Jones",
-      "email": "[[email protected]](/cdn-cgi/l/email-protection)"
     },
     "mappedFields": {
       "pronoun": "she",
@@ -218,7 +217,6 @@ Ampersand will do reads at the schedule you specify in `amp.yaml`. If there are 
       "id": "001Dp00000P8QurIAF",
       "firstname": "Sally",
       "lastname": "Jones",
-      "email": "[[email protected]](/cdn-cgi/l/email-protection)",
       "pronoun_custom_field": "she",
       // ... other fields for the record
     }
@@ -228,7 +226,6 @@ Ampersand will do reads at the schedule you specify in `amp.yaml`. If there are 
       "id": "001Dp00000P9BusEIS",
       "firstname": "Taylor",
       "lastname": "Lao",
-      "email": "[[email protected]](/cdn-cgi/l/email-protection)"
     },
     "mappedFields": {
       "pronoun": "they",
@@ -237,7 +234,6 @@ Ampersand will do reads at the schedule you specify in `amp.yaml`. If there are 
       "id": "001Dp00000P9BusEIS",
       "firstname": "Taylor",
       "lastname": "Lao",
-      "email": "[[email protected]](/cdn-cgi/l/email-protection)"
       "pronoun_custom_field": "they",
       // ... other fields for the record
     }
