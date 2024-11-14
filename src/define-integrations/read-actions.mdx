@@ -189,17 +189,14 @@ integrations:
 
 ## Webhook messages
 
-Ampersand will read data on the schedule you specify in `amp.yaml`. If there are any new or updated records since our last read, Ampersand will send you webhook messages.
+Ampersand will read data on the schedule you specify in `amp.yaml`. If there are any new or updated records since our last read, Ampersand will send you webhook messages. Each webhook message contains 1 or more records, and the maximum size of a webhook message is 300KB.
 
-### Chunking and Result Types
-#### Chunking
-If the data Ampersand has read is too large for a single webhook, it is automatically split into multiple webhook messages. You do not need to add any special logic to handle this.
+### When a record is too big
 
-#### Result Types
 Ampersand attaches results to a the webhook message in two ways:
 
 1) **Inline**: In most cases, the result is directly included in the webhook's `result` field.
-2) **URL**: If a single record is over ~300KB, it usually becomes too big to be sent over a webhook, and Ampersand is unable to split it any further. In this case, the result won't be included inline. Instead, the webhook message will contain a secure download URL in `resultInfo.downloadUrl`.
+2) **URL**: If a single record is over 300KB, it becomes too big to be sent over a webhook. In this case, the result won't be included inline. Instead, the webhook message will contain a signed download URL in `resultInfo.downloadUrl`. **The URL expires after 15 minutes.**
 
 `resultInfo.type` indicates how the result is attached to the message:
 
@@ -208,7 +205,8 @@ If type is `url`, you can fetch the full result by making a GET request to `resu
 
 In both cases, `resultInfo.numRecords` tells you how many records are available in the result.
 
-### Example Webhook Message (inline)
+### Example webhook message (inline)
+
 Here's a sample webhook message for a Salesforce Contact object:
 
 ```JavaScript JavaScript
@@ -264,7 +262,7 @@ Here's a sample webhook message for a Salesforce Contact object:
 }
 ```
 
-### Example Webhook Message (url)
+### Example webhook message (URL)
 
 ```JavaScript JavaScript
 {
@@ -274,6 +272,7 @@ Here's a sample webhook message for a Salesforce Contact object:
   "groupName": "XYZ Company",
   "installationId": "installation-id",
   "objectName": "Contact",
+  // Only certain providers will have workspace available.
   "workspace": "salesforce-subdomain",
   "resultInfo": {
     "type": "url",
@@ -284,10 +283,12 @@ Here's a sample webhook message for a Salesforce Contact object:
 ```
 
 ### OpenAPI spec
+
 Check out our [OpenAPI spec](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml) for the full webhook message schema and more details on the data structure. You can use this to generate types for your language and easily parse the webhook message.
 
-### Handling Webhook Results
-Here's some pseudo-code to illustrate how you can get the result from a webhook:
+### Handling webhook results
+
+Here's some pseudo-code to illustrate how you can get parse result from a webhook:
 
 ```go go
 // Generated from the OpenAPI spec
