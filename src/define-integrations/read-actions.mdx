@@ -187,56 +187,140 @@ integrations:
           optionalFieldsAuto: all
 ```
 
-## Example webhook message
+## Webhook messages
 
-Ampersand will do reads at the schedule you specify in `amp.yaml`. If there are any new or updated records since our last read, Ampersand will send you webhook messages.
+Ampersand will read data on the schedule you specify in `amp.yaml`. If there are any new or updated records since our last read, Ampersand will send you webhook messages.
 
-Please refer to our [OpenAPI spec](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml) for the schema of the webhook message. For the sample integration above, here's what a sample webhook message might look like for the Contact object:
+### Chunking and Result Types
+#### Chunking
+If the data Ampersand has read is too large for a single webhook, it is automatically split into multiple webhook messages. You do not need to add any special logic to handle this.
+
+#### Result Types
+Ampersand attaches results to a the webhook message in two ways:
+
+1) **Inline**: In most cases, the result is directly included in the webhook's `result` field.
+2) **URL**: If a single row of data is over ~300KB, it usually becomes too big to be sent over a webhook, and Ampersand is unable to split it any further. In this case, the result won't be included inline. Instead, the webhook message will contain a secure download URL in `resultInfo.downloadUrl`.
+
+`resultInfo.type` indicates how the result is attached to the message:
+
+If type is `inline`, the full result is in the `result` field.
+If type is `url`, you can fetch the full result by making a GET request to `resultInfo.downloadUrl`.
+
+In both cases, `resultInfo.numRecords` tells you how many records are available in the result.
+
+### Example Webhook Message (inline)
+Here's a sample webhook message for a Salesforce Contact object:
 
 ```JavaScript JavaScript
 {
- "projectId": "ampersand-project-id",
- "provider": "salesforce",
- "groupRef": "xyz-company",
- "groupName": "XYZ Company",
- "installationId": "installation-id",
- "objectName": "Contact",
- // Only certain providers will have workspace available.
- "workspace": "salesforce-subdomain",
- "result": [
-  {
-    "fields": {
-      "id": "001Dp00000P8QurIAF",
-      "firstname": "Sally",
-      "lastname": "Jones",
-    },
-    "mappedFields": {
-      "pronoun": "she",
-    },
-    "raw": {
-      "id": "001Dp00000P8QurIAF",
-      "firstname": "Sally",
-      "lastname": "Jones",
-      "pronoun_custom_field": "she",
-      // ... other fields for the record
-    }
+  "projectId": "ampersand-project-id",
+  "provider": "salesforce",
+  "groupRef": "xyz-company",
+  "groupName": "XYZ Company",
+  "installationId": "installation-id",
+  "objectName": "Contact",
+  "workspace": "salesforce-subdomain",
+  "resultInfo": {
+    "type": "inline",
+    "numRecords": 2
   },
-  {
-    "fields": {
-      "id": "001Dp00000P9BusEIS",
-      "firstname": "Taylor",
-      "lastname": "Lao",
+  "result": [
+    {
+      "fields": {
+        "id": "001Dp00000P8QurIAF",
+        "firstname": "Sally",
+        "lastname": "Jones"
+      },
+      "mappedFields": {
+        "pronoun": "she"
+      },
+      "raw": {
+        "id": "001Dp00000P8QurIAF",
+        "firstname": "Sally",
+        "lastname": "Jones",
+        "pronoun_custom_field": "she"
+        // ... other fields for this record
+      }
     },
-    "mappedFields": {
-      "pronoun": "they",
-    },
-    "raw": {
-      "id": "001Dp00000P9BusEIS",
-      "firstname": "Taylor",
-      "lastname": "Lao",
-      "pronoun_custom_field": "they",
-      // ... other fields for the record
+    {
+      "fields": {
+        "id": "001Dp00000P9BusEIS",
+        "firstname": "Taylor",
+        "lastname": "Lao"
+      },
+      "mappedFields": {
+        "pronoun": "they"
+      },
+      "raw": {
+        "id": "001Dp00000P9BusEIS",
+        "firstname": "Taylor",
+        "lastname": "Lao",
+        "pronoun_custom_field": "they"
+        // ... other fields for this record
+      }
     }
+  ]
+}
+```
+
+### Example Webhook Message (url)
+
+```JavaScript JavaScript
+{
+  "projectId": "ampersand-project-id",
+  "provider": "salesforce",
+  "groupRef": "xyz-company",
+  "groupName": "XYZ Company",
+  "installationId": "installation-id",
+  "objectName": "Contact",
+  "workspace": "salesforce-subdomain",
+  "resultInfo": {
+    "type": "url",
+    "downloadUrl": "https://storage.googleapis.com/....",
+    "numRecords": 1
+  },
+}
+```
+
+### OpenAPI spec
+Check out our [OpenAPI spec](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml) for the full webhook message schema and more details on the data structure. You can use this to generate types for your language and easily parse the webhook message.
+
+### Handling Webhook Results
+Here's some pseudo-code to illustrate how you can get the result from a webhook:
+
+```go go
+// Generated from the OpenAPI spec
+type WebhookMessage struct {
+	Action string `json:"action"`
+	GroupName string `json:"groupName"`
+	GroupRef string `json:"groupRef"`
+     ...
+}
+
+func handleWebhookEndpointMessage(message WebhookMessage) { 
+  // Assumes that you have already parsed the webhook message into the openapi.WebhookMessage type 
+
+  var results map[string]any
+
+  switch message.ResultInfo.Type {
+    case "url":
+      // If result type is "url", download the data
+      res, err := http.Get(message.ResultInfo.DownloadUrl)
+      if err != nil {
+        // handle error
+      }
+
+      results = parseBodyIntoMap(res.Body)
+    case "inline":
+      // If result type is "inline", data is directly in the message
+      results = message.Result
+
+    default:
+      // This should not happen - contact us if it does!
   }
-]}
+
+  fmt.Printf("Received %d records", message.ResultInfo.NumRecords) 
+
+  // Process results as needed
+}
 ```
