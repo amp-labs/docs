@@ -10,12 +10,25 @@ The Ampersand UI library requires React v18+.
 
 ### Install the Ampersand React library
 
-In your repo, use npm to install the package:
+In your repo, use `npm` or `yarn` to install the package:
 
 ```
 npm install @amp-labs/react
 ```
+or
+```
+yarn add @amp-labs/react
+```
 
+#### Migrating Migrating to @amp-labs/react 2.0+ from 1.x.x
+@amp-labs/react 2.0+ no longer requires chakra as a dependency. Chakra dependencies (@chakra-ui/react @emotion/react @emotion/styled framer-motion) 
+are no longer required. 
+
+@amp-labs/react now ships with its own stylesheet which also allows users to override colors, 
+fonts, and other css variables. See example below.
+
+#### legacy (version 1.x)
+Version 1.x requires chakra-ui peer dependencies.
 If you are using yarn, you'll have to explicitly install the peer dependencies.
 
 ```
@@ -30,11 +43,16 @@ This library requires your components to be wrapped in the `<AmpersandProvider/>
 * `project`: your Ampersand project name or ID. You can find it on your project's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
 
 ### Example
-
 Here's an example:
 
 ```TypeScript TypeScript
 import { AmpersandProvider } from '@amp-labs/react';
+
+// CHANGES WITH v2.x.x ///////////////////
+import '@amp-labs/react/styles'; // requird: amp-labs style sheet
+import './App.css'; // optional: your own css override 
+
+//////////////////////////////////////////
 
 const options = {
   project: 'PROJECT', // Your Ampersand project name or ID.
@@ -145,3 +163,45 @@ const {
   isIntegrationInstalled
 } = useIsIntegrationInstalled("read-salesforce", groupRef);
 ```
+
+## Customized styles (supported in 2.x)
+
+Version 2.x requires stylesheet be imported. CSS variables are named `--amp` and can be overidded with 
+your own css file imported after `@amp-labs/react/styles`. To see variables that can be overrided 
+see the [variables.css file](https://github.com/amp-labs/react/blob/main/src/styles/variables.css). 
+
+```TypeScript TypeScript
+import { AmpersandProvider } from '@amp-labs/react';
+
+// CHANGES WITH v2.x.x ///////////////////
+import '@amp-labs/react/styles'; // required amp-labs style sheet
+import './App.css'; // optional: your own css override 
+
+//////////////////////////////////////////
+
+// rest of app
+```
+
+### Example App.css
+
+```css App.css
+:root {
+    /* put custom css overrides */
+    --amp-colors-primary: #4360e0;
+    --amp-default-border-radius: 8px;
+
+    /* override with your own pallette */ 
+    --amp-colors-neutral-25: #FEFEFE;
+    --amp-colors-neutral-50: #FDFCFD;
+    --amp-colors-neutral-100: #FAFAFC;
+    --amp-colors-neutral-200: #F6F5F9;
+    --amp-colors-neutral-300: #F1EFF5;
+    --amp-colors-neutral-400: #EDEAF2;
+    --amp-colors-neutral-500: #E8E5EF;
+    --amp-colors-neutral-600: #918E95;
+    --amp-colors-neutral-700: #646266;
+    --amp-colors-neutral-800: #363638;
+    --amp-colors-neutral-900: #1D1D1D;
+}
+```
+
