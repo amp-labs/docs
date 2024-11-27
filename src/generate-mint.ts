@@ -91,6 +91,14 @@ const mintConfig: MintConfig = {
     {
       "source": "/docs/write-actions",
       "destination": "/define-integrations/write-actions"
+    },
+    {
+      "source": "/docs/proxy-actions",
+      "destination": "/define-integrations/proxy-actions"
+    },
+    {
+      "source": "/docs/subscribe-actions",
+      "destination": "/define-integrations/subscribe-actions"
     }, 
     {
       "source": "/glossary",
