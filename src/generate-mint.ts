@@ -83,7 +83,19 @@ const mintConfig: MintConfig = {
     {
       "source": "/docs/:slug*",
       "destination": "/:slug*"
-    }
+    },
+    {
+      "source": "/docs/read-actions",
+      "destination": "/define-integrations/read-actions"
+    },
+    {
+      "source": "/docs/write-actions",
+      "destination": "/define-integrations/write-actions"
+    }, 
+    {
+      "source": "/glossary",
+      "destination": "/terminology"
+    },
   ],
   tabs: [
     {
