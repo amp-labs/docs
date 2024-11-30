@@ -259,10 +259,11 @@ const mintConfig: MintConfig = {
         "dev-and-prod-environments",
       ],
     },
-    // {
-    //   group: "READ API",
-    //   pages: readApiPages,
-    // },
+    {
+      group: "READ API",
+      openapiSource: openApiRead,
+      pages: readApiPages,
+    },
     {
       group: "Authentication",
       pages: [

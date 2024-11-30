@@ -6,7 +6,7 @@
         "gen": "pnpm run generate",
         "generate": "run-s download-spec:* && run-s gen-api-pages:* && pnpm gen-mint",
         "download-spec:platform": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/api.json > src/api.json",
-        "download-spec:read": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/read.json > src/read.json",
+        "download-spec:read": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/3b60490efd302888e56e34f9dca8f73136cf000f/api/generated/read.json > src/read.json",
         "download-spec:write": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/write.json > src/write.json",
         "gen-api-pages:dir": "cd src && rm -rf reference && mkdir -p reference",
         "gen-api-pages:platform": "cd src && mintlify-scrape openapi-file -o reference api.json | tail -n +2 > reference/platform.json",
