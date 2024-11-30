@@ -148,7 +148,13 @@ const mintConfig: MintConfig = {
             "cli/reference"
           ]
         },
-        "destinations",
+        {
+          group: "Destinations",
+          pages: [
+              "destinations/overview",
+              "destinations/webhooks",
+          ]
+        },
         "terminology",
         {
           group: "Provider guides",
