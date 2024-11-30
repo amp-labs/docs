@@ -1,0 +1,161 @@
+---
+title: Webhook destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/define-integrations/read-actions), Ampersand sends a payload to your configured webhook.
+
+### OpenAPI spec
+
+Check out our [OpenAPI spec](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml) for the full webhook message schema and more details on the data structure. You can use this to generate types for your language and easily parse the webhook message.
+
+# When a record is too big
+Ampersand attaches results to a webhook message in two ways:
+
+1) **Inline**: In most cases, the result is directly included in the webhook's `result` field.
+2) **URL**: If a single record is over 300KB, it becomes too big to be sent over a webhook. In this case, the result won't be included inline. Instead, the webhook message will contain a signed download URL in `resultInfo.downloadUrl`. **The URL expires after 15 minutes.**
+
+`resultInfo.type` indicates how the result is attached to the message:
+
+If type is `inline`, the full result is in the `result` field.
+If type is `url`, you can fetch the full result by making a GET request to `resultInfo.downloadUrl`.
+
+In both cases, `resultInfo.numRecords` tells you how many records are available in the result.
+
+
+### Example webhook message (inline)
+
+Here's a sample webhook message for a Salesforce Contact object:
+
+```JavaScript JavaScript
+{
+  "projectId": "ampersand-project-id",
+  "provider": "salesforce",
+  "groupRef": "xyz-company",
+  "groupName": "XYZ Company",
+  "installationId": "installation-id",
+  "objectName": "Contact",
+  // Only certain providers will have workspace available.
+  "workspace": "salesforce-subdomain",
+  "resultInfo": {
+    "type": "inline",
+    "numRecords": 2
+  },
+  "result": [
+    {
+      "fields": {
+        "id": "001Dp00000P8QurIAF",
+        "firstname": "Sally",
+        "lastname": "Jones"
+      },
+      "mappedFields": {
+        "pronoun": "she"
+      },
+      "raw": {
+        "id": "001Dp00000P8QurIAF",
+        "firstname": "Sally",
+        "lastname": "Jones",
+        "pronoun_custom_field": "she"
+        // ... other fields for this record
+      }
+    },
+    {
+      "fields": {
+        "id": "001Dp00000P9BusEIS",
+        "firstname": "Taylor",
+        "lastname": "Lao"
+      },
+      "mappedFields": {
+        "pronoun": "they"
+      },
+      "raw": {
+        "id": "001Dp00000P9BusEIS",
+        "firstname": "Taylor",
+        "lastname": "Lao",
+        "pronoun_custom_field": "they"
+        // ... other fields for this record
+      }
+    }
+  ]
+}
+```
+
+### Example webhook message (URL)
+
+```JavaScript JavaScript
+{
+  "projectId": "ampersand-project-id",
+  "provider": "salesforce",
+  "groupRef": "xyz-company",
+  "groupName": "XYZ Company",
+  "installationId": "installation-id",
+  "objectName": "Contact",
+  // Only certain providers will have workspace available.
+  "workspace": "salesforce-subdomain",
+  "resultInfo": {
+    "type": "url",
+    "downloadUrl": "https://storage.googleapis.com/....",
+    "numRecords": 1
+  },
+}
+```
+
+
+## Handling webhook results
+
+Here's some pseudo-code to illustrate how you can get parse result from a webhook:
+
+```go go
+// Generated from the OpenAPI spec
+type WebhookMessage struct {
+	Action string `json:"action"`
+	GroupName string `json:"groupName"`
+	GroupRef string `json:"groupRef"`
+     ...
+}
+
+func handleWebhookEndpointMessage(message WebhookMessage) {
+  // Assumes that you have already parsed the webhook message into the openapi.WebhookMessage type
+
+  var results map[string]any
+
+  switch message.ResultInfo.Type {
+    case "url":
+      // If result type is "url", download the data
+      res, err := http.Get(message.ResultInfo.DownloadUrl)
+      if err != nil {
+        // handle error
+      }
+
+      results = parseBodyIntoMap(res.Body)
+    case "inline":
+      // If result type is "inline", data is directly in the message
+      results = message.Result
+
+    default:
+      // This should not happen - contact us if it does!
+  }
+
+  fmt.Printf("Received %d records", message.ResultInfo.NumRecords)
+
+  // Process results as needed
+}
+```
+
+# Ensure your destination can handle the payload size
+
+The maximum size of a webhook payload Ampersand may send to your destination is **300 KB**. Most API gateways can handle this by default. If you implement your webhook using AWS Lambda or Google Cloud Run Functions, they will also be able to handle this payload size by default.
+
+If you are using the Node.js framework [Express](https://expressjs.com) in your webhook receiver, and are using the [json middleware](https://expressjs.com/en/api.html#express.json) to parse request bodies, you will need to modify it to increase the maximum request body size.
+
+
+```js
+  const app = express();
+
+  app.use([
+    express.json({
+      limit: "350kb", // Set the max to 350 KB to allow for some buffer.
+    }),
+  ]);
+```

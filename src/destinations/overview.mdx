@@ -1,0 +1,42 @@
+---
+title: Overview
+---
+
+Ampersand currently supports webhook destinations. Destinations allow you to define where the data read from SaaS instances via a [Read Action](/define-integrations/read-actions) is routed to.
+
+# Add a destination to the Ampersand Dashboard
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations/new) in the Ampersand Dashboard to add a new Destination. You'll need to provide:
+* **Destination name**: this is an alias for the destination that you can then refer to in the `amp.yaml` file.
+* **URL**: this is the URL of your webhook destination. It must start with `https`. In the case of webhooks, you can easily create a temporary one using tools like [Hookdeck Console](https://console.hookdeck.com?provider=ampersand).
+
+# Refer to the destination in your integration
+
+For read and subscribe actions, you can specify destinations for each object. You can either have one destination for each object or route multiple objects to the same destination. Here's what your `amp.yaml` file might look like if you had created 2 destinations in the Ampersand Dashboard, one named `accountWebhook` and one named `contactWebhook`.
+
+```YAML YAML
+specVersion: 1.0.0
+integrations:
+  - name: readFromSalesforce
+    displayName: Salesforce read
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: accountWebhook
+        - objectName: contact
+          destination: contactWebhook
+```
+
+# Supported destinations
+
+* [Webhook destinations](/destinations/webhooks)
+
+# Other Destinations
+
+We have many other destination types on the roadmap, including:
+
+* Postgres
+* Ampersand-hosted Postgres
+* Amazon S3
+* Google Cloud Storage
