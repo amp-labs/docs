@@ -13,8 +13,6 @@ To read an object, you need to specify:
 * **schedule:** how frequently the read should happen. This value must be a schedule in [cron syntax](https://docs.gitlab.com/ee/topics/cron/)
 * **backfill** (optional): whether Ampersand should read historical data when a customer installs an integration. If omitted, then Ampersand will only incrementally read data that has been created or updated after that point. See [Backfill behavior](/define-integrations/read-actions#backfill-behavior) for details.
 
-
-
 ```YAML YAML
 ...
      objects:
@@ -143,6 +141,47 @@ You can select a specific time frame for backfill, such as "the last 30 days" or
               days: 30 # Backfill the last 30 days of data
           ...
 ```
+
+
+## Delivery modes
+
+### Auto
+This is the default delivery mode if you do not specify a delivery mode. When you set the delivery mode to `auto`, Ampersand will automatically send results to your destination as it reads new data from the SaaS instance.
+
+### On request
+
+When you set the delivery mode to `onRequest`, Ampersand will not send webhooks as it reads new data, but only when you request for more results. This is useful when you want to control the rate at which you receive data. For precise control over how much data you receive, you can configure the page size, which specifies the number of records to send in each webhook payload.
+
+Please note that the page size is a *maximum*, and the actual number of records in each payload may be lesser if there are fewer records available in the SaaS instance. Currently, the minimum page size is 50, and the maximum is 500. Please reach out to us if you need this to be lower or higher.
+
+Here's an example of how to configure the delivery mode to `onRequest` for a Salesforce Contact object, with a page size of 50 records per webhook message:
+
+```yaml yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforce-buffered-read
+    provider: salesforce
+    read:
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          schedule: "*/30 * * * *" # Data will be read every 30 minutes
+          delivery:
+            mode: onRequest
+            pageSize: 50
+```
+
+#### Requesting results
+
+When you are ready to receive & process webhook messages, you can call [Deliver results](/reference/read/deliver-results), which will asynchronously send the stored results to the configured destination. Each webhook message will contain the next set of records based on the page size you configured.
+
+For example, if you are ready to receive & process a maximum of 300 records with a configured `pageSize` of 50 in your `amp.yaml`, you should ask for 6 pages (300 divided by 50) of results from the above endpoint.
+
+#### What happens if you request for more pages than are available?
+
+If you request for more pages than are available, Ampersand will first send you all the available records at the time of your request. Then, as it reads new data, it will send you the new records as they become available until you have received your requested number of pages.
+
+For example, if you have a read action running every hour, and you request for 10 pages of results, but there are only 4 pages available at the time of your request, Ampersand will send you the 4 pages immediately. If Ampersand reads 20 pages of results in the next scheduled read action, Ampersand will send you 6 pages more, resulting in a total of 10 pages of results being delivered. The balance of 14 pages will again be available for delivery upon request.
 
 ## Full example
 
