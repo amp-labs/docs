@@ -10,10 +10,11 @@
     }
   ],
   "paths": {
-    "/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}": {
+    "/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}:deliverResults": {
       "post": {
-        "summary": "Read records",
-        "operationId": "readRecords",
+        "summary": "Deliver results",
+        "description": "If a read action has delivery mode to onRequest, then use this endpoint to request for more results.",
+        "operationId": "deliverResults",
         "tags": [
           "Read"
         ],
@@ -44,32 +45,24 @@
           }
         ],
         "requestBody": {
-          "description": "Read Request",
+          "description": "ResultDeliveryRequestBody",
           "content": {
             "application/json": {
               "schema": {
                 "required": [
                   "groupRef",
-                  "mode"
+                  "pages"
                 ],
                 "type": "object",
                 "properties": {
                   "groupRef": {
                     "type": "string",
-                    "description": "The ID of the user group whose SaaS instance you'd like to read data from. This is the ID that was provided during installation creation."
+                    "description": "The ID of the user group whose SaaS instance you'd like to receive results from. This is the ID that was provided during installation creation."
                   },
-                  "mode": {
-                    "type": "string",
-                    "description": "The mode of read operation. Currently only asynchronus operation is supported.",
-                    "enum": [
-                      "async"
-                    ],
-                    "example": "async"
-                  },
-                  "since": {
-                    "type": "string",
-                    "description": "The timestamp from which to read data. If omitted, we will read all data.",
-                    "example": "2024-07-01T18:22:30.323771761Z"
+                  "pages": {
+                    "type": "integer",
+                    "description": "The number of pages you are ready to receive from the group's SaaS instance.",
+                    "minimum": 0
                   }
                 }
               }
@@ -77,25 +70,8 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "The success response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "operationId"
-                  ],
-                  "properties": {
-                    "operationId": {
-                      "type": "string",
-                      "description": "The operation ID",
-                      "example": "60deaf48-3856-4a2b-bfd4-3de85125eca8"
-                    }
-                  }
-                }
-              }
-            }
+          "204": {
+            "description": "The success response"
           },
           "400": {
             "description": "The failure response for bad request.",
@@ -538,6 +514,24 @@
             "type": "string",
             "description": "The operation ID",
             "example": "60deaf48-3856-4a2b-bfd4-3de85125eca8"
+          }
+        }
+      },
+      "ResultDeliveryRequestBody": {
+        "required": [
+          "groupRef",
+          "pages"
+        ],
+        "type": "object",
+        "properties": {
+          "groupRef": {
+            "type": "string",
+            "description": "The ID of the user group whose SaaS instance you'd like to receive results from. This is the ID that was provided during installation creation."
+          },
+          "pages": {
+            "type": "integer",
+            "description": "The number of pages you are ready to receive from the group's SaaS instance.",
+            "minimum": 0
           }
         }
       }
