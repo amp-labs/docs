@@ -13,8 +13,6 @@ To read an object, you need to specify:
 * **schedule:** how frequently the read should happen. This value must be a schedule in [cron syntax](https://docs.gitlab.com/ee/topics/cron/)
 * **backfill** (optional): whether Ampersand should read historical data when a customer installs an integration. If omitted, then Ampersand will only incrementally read data that has been created or updated after that point. See [Backfill behavior](/define-integrations/read-actions#backfill-behavior) for details.
 
-
-
 ```YAML YAML
 ...
      objects:
@@ -144,6 +142,65 @@ You can select a specific time frame for backfill, such as "the last 30 days" or
           ...
 ```
 
+## Delivery modes
+
+Ampersand sends data to [destinations](/destinations/overview) that you specify in your manifest file. Please refer to [webhook destinations](/destinations/webhooks) for more information on the data schema of the webhooks.
+
+You can define the delivery mode within the manifest file.
+
+### Auto
+
+This is the default delivery mode if you do not specify one. When you set the delivery mode to `auto`, Ampersand will automatically send results to your destination as it reads new data from the SaaS instance.
+
+```yaml yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforce-buffered-read
+    provider: salesforce
+    read:
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          schedule: "*/30 * * * *" # Data will be read every 30 minutes
+          delivery:
+            mode: auto # Data is delivered as soon as it is available
+```
+
+### On request
+
+When you set the delivery mode to `onRequest`, Ampersand will not send webhooks as it reads new data, but only when you request for more results. This is useful when you want to control the rate at which you receive data. For precise control over how much data you receive each time, you can configure the page size, which specifies the number of records to send in each webhook payload.
+
+Please note that the page size is a *maximum*, and the actual number of records in each payload may be less if there are fewer records available in the SaaS instance. Currently, may configure a page size between 50 and 500. Please reach out to us if you need this to be lower or higher.
+
+Here's an example of how to configure the delivery mode to `onRequest` for a Salesforce Contact object, with a max page size of 50 records per webhook message:
+
+```yaml yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforce-buffered-read
+    provider: salesforce
+    read:
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          schedule: "*/30 * * * *" # Data will be read every 30 minutes
+          delivery:
+            mode: onRequest
+            pageSize: 50
+```
+
+#### Requesting results
+
+When you are ready to receive & process webhook messages, you can call the [deliver results endpoint](/reference/read/deliver-results), which will asynchronously send the stored results to the configured destination.
+
+For example, if you are ready to receive and process a maximum of 300 records, and you have a `pageSize` of 50 in your `amp.yaml`, you should request 6 pages (300 divided by 50).
+
+#### What happens if you request for more pages than are available?
+
+If you request for more pages than are available, Ampersand will first send you all the available records at the time of your request. Then, as it reads new data, it will send you the new records as they become available until you have received your requested number of pages.
+
+For example, if you request for 10 pages of results, but there are only 4 pages available at the time of your request, Ampersand will send you the 4 pages immediately. If Ampersand reads 20 pages of results in the next scheduled read, Ampersand will send you 6 pages more, resulting in a total of 10 pages of results being delivered. Ampersand will then hold the next 14 pages until you request for more results.
+
 ## Full example
 
 ```yaml yaml
@@ -185,144 +242,4 @@ integrations:
               prompt: We will use this word in emails we send out.
           # All other field are optional
           optionalFieldsAuto: all
-```
-
-## Webhook messages
-
-Ampersand will read data on the schedule you specify in `amp.yaml`. If there are any new or updated records since our last read, Ampersand will send you webhook messages. Each webhook message contains 1 or more records, and the maximum size of a webhook message is 300KB.
-
-### When a record is too big
-
-Ampersand attaches results to a the webhook message in two ways:
-
-1) **Inline**: In most cases, the result is directly included in the webhook's `result` field.
-2) **URL**: If a single record is over 300KB, it becomes too big to be sent over a webhook. In this case, the result won't be included inline. Instead, the webhook message will contain a signed download URL in `resultInfo.downloadUrl`. **The URL expires after 15 minutes.**
-
-`resultInfo.type` indicates how the result is attached to the message:
-
-If type is `inline`, the full result is in the `result` field.
-If type is `url`, you can fetch the full result by making a GET request to `resultInfo.downloadUrl`.
-
-In both cases, `resultInfo.numRecords` tells you how many records are available in the result.
-
-### Example webhook message (inline)
-
-Here's a sample webhook message for a Salesforce Contact object:
-
-```JavaScript JavaScript
-{
-  "projectId": "ampersand-project-id",
-  "provider": "salesforce",
-  "groupRef": "xyz-company",
-  "groupName": "XYZ Company",
-  "installationId": "installation-id",
-  "objectName": "Contact",
-  // Only certain providers will have workspace available.
-  "workspace": "salesforce-subdomain",
-  "resultInfo": {
-    "type": "inline",
-    "numRecords": 2
-  },
-  "result": [
-    {
-      "fields": {
-        "id": "001Dp00000P8QurIAF",
-        "firstname": "Sally",
-        "lastname": "Jones"
-      },
-      "mappedFields": {
-        "pronoun": "she"
-      },
-      "raw": {
-        "id": "001Dp00000P8QurIAF",
-        "firstname": "Sally",
-        "lastname": "Jones",
-        "pronoun_custom_field": "she"
-        // ... other fields for this record
-      }
-    },
-    {
-      "fields": {
-        "id": "001Dp00000P9BusEIS",
-        "firstname": "Taylor",
-        "lastname": "Lao"
-      },
-      "mappedFields": {
-        "pronoun": "they"
-      },
-      "raw": {
-        "id": "001Dp00000P9BusEIS",
-        "firstname": "Taylor",
-        "lastname": "Lao",
-        "pronoun_custom_field": "they"
-        // ... other fields for this record
-      }
-    }
-  ]
-}
-```
-
-### Example webhook message (URL)
-
-```JavaScript JavaScript
-{
-  "projectId": "ampersand-project-id",
-  "provider": "salesforce",
-  "groupRef": "xyz-company",
-  "groupName": "XYZ Company",
-  "installationId": "installation-id",
-  "objectName": "Contact",
-  // Only certain providers will have workspace available.
-  "workspace": "salesforce-subdomain",
-  "resultInfo": {
-    "type": "url",
-    "downloadUrl": "https://storage.googleapis.com/....",
-    "numRecords": 1
-  },
-}
-```
-
-### OpenAPI spec
-
-Check out our [OpenAPI spec](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml) for the full webhook message schema and more details on the data structure. You can use this to generate types for your language and easily parse the webhook message.
-
-### Handling webhook results
-
-Here's some pseudo-code to illustrate how you can get parse result from a webhook:
-
-```go go
-// Generated from the OpenAPI spec
-type WebhookMessage struct {
-	Action string `json:"action"`
-	GroupName string `json:"groupName"`
-	GroupRef string `json:"groupRef"`
-     ...
-}
-
-func handleWebhookEndpointMessage(message WebhookMessage) { 
-  // Assumes that you have already parsed the webhook message into the openapi.WebhookMessage type 
-
-  var results map[string]any
-
-  switch message.ResultInfo.Type {
-    case "url":
-      // If result type is "url", download the data
-      res, err := http.Get(message.ResultInfo.DownloadUrl)
-      if err != nil {
-        // handle error
-      }
-
-      results = parseBodyIntoMap(res.Body)
-    case "inline":
-      // If result type is "inline", data is directly in the message
-      results = message.Result
-
-    default:
-      // This should not happen - contact us if it does!
-  }
-
-  fmt.Printf("Received %d records", message.ResultInfo.NumRecords) 
-
-  // Process results as needed
-}
 ```
