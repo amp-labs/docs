@@ -259,10 +259,6 @@ const mintConfig: MintConfig = {
         "dev-and-prod-environments",
       ],
     },
-    // {
-    //   group: "READ API",
-    //   pages: readApiPages,
-    // },
     {
       group: "Authentication",
       pages: [
@@ -273,6 +269,10 @@ const mintConfig: MintConfig = {
       group: "WRITE API",
       openapiSource: openApiWrite,
       pages: writeApiPages,
+    },
+    {
+      group: "READ API",
+      pages: readApiPages,
     },
     {
       group: "PLATFORM API",
