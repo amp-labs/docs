@@ -9,7 +9,7 @@ This repo contains the source files for https://docs.withampersand.com, which in
 
 Merges to the main branch will automatically update the online docs via the Mintlify Github app.
 
-## Setup 
+## First time setup 
 
 Ensure you have pnpm installed globally 
 
@@ -22,6 +22,14 @@ Install dependencies
 ```shell
 pnpm i
 ```
+
+## Adding a new page
+
+If you need to add a new page, add it to the `mintConfig` object in `src/generate-mint.ts`, and then follow the steps below for regenerating mint.json.
+
+## Changing the URL of a page
+
+If you are changing the URL of a page, be sure to add the old URL to the `redirects` section of the `mintConfig` object in `src/generate-mint.ts`, and then follow the steps below for regenerating mint.json.
 
 ## Generate mint.json
 
