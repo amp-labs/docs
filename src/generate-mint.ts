@@ -160,7 +160,6 @@ const mintConfig: MintConfig = {
           group: "Provider guides",
           pages: [
             "provider-guides/overview",
-            "provider-guides/aweber",
             "provider-guides/acuityScheduling",
             "provider-guides/aha",
             "provider-guides/aircall",
@@ -169,6 +168,7 @@ const mintConfig: MintConfig = {
             "provider-guides/asana",
             "provider-guides/atlassian",
             "provider-guides/attio",
+            "provider-guides/aweber",
             "provider-guides/bird",
             "provider-guides/blueshift",
             "provider-guides/blueshiftEU",
@@ -217,6 +217,7 @@ const mintConfig: MintConfig = {
             "provider-guides/jira",
             "provider-guides/jotform",
             "provider-guides/keap",
+            "provider-guides/klaviyo",
             "provider-guides/linkedin",
             "provider-guides/mailgun",
             "provider-guides/marketo",
