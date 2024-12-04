@@ -1,0 +1,130 @@
+---
+title: "Klaviyo"
+---
+## What's Supported
+
+### Supported Actions
+
+This connector supports:
+- [Read Actions](/define-integrations/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/define-integrations/write-actions).
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://a.klaviyo.com`.
+
+The Klaviyo connector supports writing to and reading from the following objects:
+- [campaigns](https://developers.klaviyo.com/en/reference/get_campaigns)
+- [catalog-categories](https://developers.klaviyo.com/en/reference/get_catalog_categories)
+- [catalog-items](https://developers.klaviyo.com/en/reference/get_catalog_items)
+- [catalog-variants](https://developers.klaviyo.com/en/reference/get_catalog_variants)
+- [images](https://developers.klaviyo.com/en/reference/get_images)
+- [lists](https://developers.klaviyo.com/en/reference/get_lists)
+- [profiles](https://developers.klaviyo.com/en/reference/get_profiles)
+- [segments](https://developers.klaviyo.com/en/reference/get_segments)
+- [template-universal-content](https://developers.klaviyo.com/en/reference/get_all_universal_content)
+- [templates](https://developers.klaviyo.com/en/reference/get_templates)
+- [webhooks](https://developers.klaviyo.com/en/reference/get_webhooks)
+
+Objects with partial support are as follows:
+- accounts (read backfill only; no write)
+- back-in-stock-subscriptions (create)
+- campaign-message-assign-template (create)
+- campaign-messages (update)
+- campaign-send-jobs (write)
+- catalog-category-bulk-create-jobs (read/create)
+- catalog-category-bulk-delete-jobs (read/create)
+- catalog-category-bulk-update-jobs (read/create)
+- catalog-item-bulk-create-jobs (read/create)
+- catalog-item-bulk-delete-jobs (read/create)
+- catalog-item-bulk-update-jobs (read/create)
+- catalog-variant-bulk-create-jobs (read/create)
+- catalog-variant-bulk-delete-jobs (read/create)
+- catalog-variant-bulk-update-jobs (read/create)
+- client-back-in-stock-subscriptions (create)
+- client-event-bulk-create (create)
+- client-events (create)
+- client-profiles (create)
+- client-push-token-unregister (create)
+- client-push-tokens (create)
+- client-subscriptions (create)
+- coupon-code-bulk-create-jobs (read/create)
+- coupon-codes (read backfill only; write)
+- coupons (read backfill only, write)
+- data-privacy-deletion-jobs (create)
+- event-bulk-create-jobs (create)
+- events (read/create)
+- flows (read/update)
+- forms (read)
+- image-upload (create)
+- metric-aggregates (create)
+- metrics (read)
+- profile-bulk-import-jobs (read/create)
+- profile-subscription-bulk-create-jobs (create)
+- profile-subscription-bulk-delete-jobs (create)
+- profile-suppression-bulk-create-jobs (read/create)
+- profile-suppression-bulk-delete-jobs (read/create)
+- push-tokens (create)
+- reviews (read)
+- tag-groups (read backfill only; write)
+- tags (read backfill only; write)
+- tracking-settings (read backfill only; no write)
+- webhook-topics (read backfill only; no write)
+
+### Example Integration
+
+For an example manifest file of a Klaviyo integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/klaviyo/amp.yaml).
+
+## Before You Get Started
+
+To connect Webflow with Ampersand, you need to [Create a Webflow Account](#create-a-webflow-account) and obtain the following credentials from your Webflow App:
+
+- Client ID
+- Client Secret
+- Scopes
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Create a Klaviyo Account
+
+You need a **Klaviyo** account to connect with Ampersand. If you do not have a Klaviyo account, here's how you can sign up:
+
+- Go to the [Klaviyo site](https://www.klaviyo.com/) and sign up for a free account using your preferred method.
+
+### Creating a Klaviyo App
+
+Once your Klaviyo account is ready, you need to create a Klaviyo application. Learn more about creating a Klaviyo application [here](https://developers.klaviyo.com/en/docs/create_a_public_oauth_app).
+
+1. Log in to the [Klaviyo dashboard](https://www.klaviyo.com/login).
+
+2. Then visit [Manage Apps](https://www.klaviyo.com/manage-apps) to create a new app.
+Otherwise, this can be found by clicking on avatar, go to **Integrations**, click on **Developers** dropdown and then select **Manage apps**.
+
+3. On the Create a New App form, enter your application name. [Create App Form](/images/provider-guides/klaviyo-app-form.png)
+You can find the **Client ID** and **Client Secret** keys on the app details page. Note these keys, as they are essential for connecting your app to Ampersand.
+
+4. Click **Create**. [Application Info](/images/provider-guides/klaviyo-app-info.png)
+
+5. Enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth` in the **Redirect URI** section.
+
+6. Choose the scopes that are applicable for your application. [Available API scopes](https://developers.klaviyo.com/en/docs/authenticate_)
+
+7. Click **Review submission**. Review that all sections are completed and proceed with **Submit**.
+
+
+## Add Klaviyo App Details in Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to add the Klaviyo App.
+
+   ![Ampersand Project Selection](/images/provider-guides/eba5c80-Ampersand.png)
+
+3. Navigate to the **Provider Apps** section.
+
+4. Select **Klaviyo** from the Provider list.
+
+5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
+
+6. Enter the scopes set for your application in **Klaviyo**.
+
+   ![Ampersand Project Selection](/images/provider-guides/klaviyo-amp-project.png)
+
+7. Click **Save Changes**.
