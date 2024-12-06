@@ -121,7 +121,8 @@ The parameters of the component are:
 * **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
 * **groupName** (string, optional): the display name for this group.
 * **redirectUrl** (string, optional): if provided, the page will be redirected to this URL once a consumer successfully connects. This can either be an absolute or relative URL.
-* **onSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects, it should have the signature `(connectionID: string) => void`.
+* **onConnectSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects, it should have the signature `(connectionID: string) => void`.
+* **onDisconnectSuccess** (function, optional): a callback function that gets invoked after a consumer successfully disconnects, it should have the signature `(connectionID: string) => void`.
 
 ```TypeScript
  <ConnectProvider 
@@ -131,8 +132,11 @@ The parameters of the component are:
   groupRef = {teamId}
   groupName = {teamName}
   redirectUrl = "/connection-success"
-  onSuccess = {connectionId =>
+  onConnectSuccess = {connectionId =>
     console.log(`Successfully created connection ${connectionId}`)
+  }
+  onDisonnectSuccess = {connectionId =>
+    console.log(`Successfully deleted connection ${connectionId}`)
   }
 />
 ```
