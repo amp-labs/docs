@@ -224,6 +224,7 @@ const mintConfig: MintConfig = {
             "provider-guides/microsoft",
             "provider-guides/miro",
             "provider-guides/mixmax",
+            "provider-guides/monday",
             "provider-guides/mural",
             "provider-guides/notion",
             "provider-guides/nutshell",
