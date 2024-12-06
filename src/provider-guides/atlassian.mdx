@@ -37,7 +37,11 @@ Here's how you can sign up for an Atlassian account:
 - Go to the [Atlassian Sign Up page](https://www.atlassian.com/try/cloud/signup?bundle=jira-software&edition=free&skipBundles=true) and create an account.
 - Sign up using your preferred method.
 
-### Creating an Atlassian App
+### Using OAuth authentication
+
+OAuth is the recommended way to integrate with Atlassian using Ampersand. 
+
+#### Creating an Atlassian App
 
 Follow the steps below to create a _Atlassian_ app:
 
@@ -52,7 +56,7 @@ Follow the steps below to create a _Atlassian_ app:
 
    ![Alt text](/images/provider-guides/491e169-Jira1.gif)
 
-### Adding Scopes in your Atlassian App
+#### Adding Scopes in your Atlassian App
 
 You need to define the necessary permissions for your Atlassian app by selecting and adding required scopes, to allow Ampersand to access data effectively. You can limit the access to only the specific scopes needed for your application.
 
@@ -67,7 +71,7 @@ Follow the steps below to add scopes to your Atlassian App:
 
 For more information on the scopes, go to [Scopes](https://developer.atlassian.com/cloud/jira/platform/scopes-for-oauth-2-3LO-and-forge-apps/)  section in the Atlassian documentation.
 
-### Adding Ampersand Redirect URL in Your App
+#### Adding Ampersand Redirect URL in Your App
 
 Follow the steps below to add the Ampersand redirect URL in your Atlassian app:
 
@@ -87,7 +91,7 @@ You'll find the **Client ID** and **Client Secret** keys for your app in the **S
 
 You'll use these credentials while connecting your app to Ampersand.
 
-## Add Your Atlassian App Info to Ampersand
+### Add Your Atlassian App Info to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 
@@ -108,6 +112,40 @@ You'll use these credentials while connecting your app to Ampersand.
    ![Alt text](/images/provider-guides/53b7d93-atlassian1.gif)
 
 7. Click **Save changes**.
+
+## Using Atlassian Connect authentication
+
+If you wish to use [Atlassian Connect for authentication](https://developer.atlassian.com/cloud/jira/platform/security-for-connect-apps), you must first create an Atlassian Connect App by [following these instructions](https://developer.atlassian.com/cloud/jira/platform/getting-started-with-connect/#build-a-basic-app).
+
+### Get the shared Secret from Atlassian
+
+Your application is responsible for getting the shared secret from Atlassian for future JWT token generation:
+1. Adding `authentication:type` and `lifecycle:installed` to your Atlassian Connect app descriptor. The lifecycle webhook should be an endpoint exposed by your server. See [instructions on Atlassian's documentation](https://developer.atlassian.com/cloud/jira/platform/security-for-connect-apps/#about-the-app-descriptor).
+2.  Once a customer installs your Atlassian Connect App, your lifecycle webhook will receive a payload that [looks like this](https://developer.atlassian.com/cloud/jira/platform/connect-app-descriptor/#lifecycle-http-request-payload). There are 2 key fields from this payload that you will need to share with Ampersand: `sharedSecret` and `clientKey`.
+
+### Call Ampersand API with the shared secret
+
+Once your application receives the lifecycle webhook from Atlassian, make a call to the Generate a Connection endpoint, in the request body provide:
+- The Atlassian workspace 
+
+```
+curl --location --request POST 'api.withampersand.com/v1/projects/<projectId>/connections:generate' \
+--header 'Content-Type: application/json' \
+--header 'X-Api-Key: <api-key>' \
+--data '{
+    "provider": "atlassian",
+    "providerWorkspaceRef": "<atlassian-workspace>",
+    "groupRef": "connect-group-1",
+    "consumerRef": "connect-consumer-1",
+    "jwt": {
+        "secret": "test",
+        "payload": {
+          "iss": "com.example.myapp"
+        }
+    }
+}'
+```
+
 
 ## Using the connector
 
