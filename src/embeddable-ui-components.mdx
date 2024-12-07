@@ -84,7 +84,7 @@ The parameters of the component are:
 * **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
 * **onUninstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully uninstalls the integration.
 
-Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`
+Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`. `Config` is an exported type from `@amp-labs/react`.
 
 ```TypeScript
  <InstallIntegration 
@@ -121,8 +121,10 @@ The parameters of the component are:
 * **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
 * **groupName** (string, optional): the display name for this group.
 * **redirectUrl** (string, optional): if provided, the page will be redirected to this URL once a consumer successfully connects. This can either be an absolute or relative URL.
-* **onConnectSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects, it should have the signature `(connectionID: string) => void`.
-* **onDisconnectSuccess** (function, optional): a callback function that gets invoked after a consumer successfully disconnects, it should have the signature `(connectionID: string) => void`.
+* **onConnectSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects.
+* **onDisconnectSuccess** (function, optional): a callback function that gets invoked after a consumer successfully disconnects.
+
+Both `onConnectSuccess` and `onDisconnectSuccess` should be functions with the following signature: `(connection: Connection) => void`. `Connection` is an exported type from `@amp-labs/react`.
 
 ```TypeScript
  <ConnectProvider 
@@ -132,11 +134,11 @@ The parameters of the component are:
   groupRef = {teamId}
   groupName = {teamName}
   redirectUrl = "/connection-success"
-  onConnectSuccess = {connectionId =>
-    console.log(`Successfully created connection ${connectionId}`)
+  onConnectSuccess = {connection =>
+    console.log(`Successfully created connection ${connection.id}`)
   }
-  onDisonnectSuccess = {connectionId =>
-    console.log(`Successfully deleted connection ${connectionId}`)
+  onDisonnectSuccess = {connection =>
+    console.log(`Successfully deleted connection ${connection.id}`)
   }
 />
 ```
