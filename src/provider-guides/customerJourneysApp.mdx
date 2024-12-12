@@ -6,7 +6,31 @@ title: Customer.io Journeys App
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/define-integrations/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Customer Journeys App instance will be done for each scheduled read.
+- [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.customer.io`.
+
+The Customer Journeys App connector supports writing to and reading from the following objects:
+- [activities](https://docs.customer.io/api/app/#operation/listActivities) (read)
+- [broadcasts](https://docs.customer.io/api/app/#operation/listBroadcasts) (read)
+- [collections](https://docs.customer.io/api/app/#operation/getCollections) (read,create,update)
+- [exports](https://docs.customer.io/api/app/#operation/listExports) (read)
+- [messages](https://docs.customer.io/api/app/#operation/listMessages) (read)
+- [newsletters](https://docs.customer.io/api/app/#operation/listNewsletters) (read)
+- [object_types](https://docs.customer.io/api/app/#operation/getObjectTypes) (read)
+- [reporting_webhooks](https://docs.customer.io/api/app/#operation/listWebhooks) (read,create,update)
+- [segments](https://docs.customer.io/api/app/#operation/listSegments) (read,create)
+- [sender_identities](https://docs.customer.io/api/app/#operation/listSenders) (read)
+- [snippets](https://docs.customer.io/api/app/#operation/listSnippets) (read,create)
+- [subscription_topics](https://docs.customer.io/api/app/#operation/getTopics) (read)
+- [transactional](https://docs.customer.io/api/app/#operation/listTransactional) (read)
+- [workspaces](https://docs.customer.io/api/app/#operation/listWorkspaces) (read)
+
+Objects without read but with write only are as follows:
+- [customer_exports](https://docs.customer.io/api/app/#operation/exportPeopleData) (create)
+- [deliveries_exports](https://docs.customer.io/api/app/#operation/exportDeliveriesData) (create)
+- [imports](https://docs.customer.io/api/app/#operation/import) (create)
+
 
 ### Example integration
 
