@@ -202,6 +202,7 @@ const mintConfig: MintConfig = {
             "provider-guides/g2",
             "provider-guides/geckoboard",
             "provider-guides/getResponse",
+            "provider-guides/gitlab",
             "provider-guides/gong",
             "provider-guides/google",
             "provider-guides/gorgias",
