@@ -205,6 +205,7 @@ const mintConfig: MintConfig = {
             "provider-guides/gong",
             "provider-guides/google",
             "provider-guides/gorgias",
+            "provider-guides/goToWebinar",
             "provider-guides/guru",
             "provider-guides/helpScoutMailbox",
             "provider-guides/hive",
