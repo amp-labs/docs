@@ -163,6 +163,7 @@ const mintConfig: MintConfig = {
             "provider-guides/acuityScheduling",
             "provider-guides/aha",
             "provider-guides/aircall",
+            "provider-guides/airtable",
             "provider-guides/anthropic",
             "provider-guides/apollo",
             "provider-guides/asana",
