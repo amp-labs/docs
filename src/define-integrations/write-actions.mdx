@@ -2,9 +2,13 @@
 title: "Write Actions"
 ---
 
-A write action writes data to your customer's SaaS whenever you make an API request to us. To define a write action, add `write` as a key in your integration defined in `amp.yaml`, and add a list of standard and custom objects you want to write to.
+A write action writes data to your customer's SaaS whenever you make an API request to us.
 
-```YAML YAML
+## Defining writes
+
+To define a write action, add `write` as a key in your integration defined in `amp.yaml`, and add a list of standard and custom objects you want to write to.
+
+```YAML
 specVersion: 1.0.0
 integrations: 
   - name: write-to-salesforce
@@ -15,6 +19,22 @@ integrations:
         - objectName: account
         - objectName: contact
         - objectName: touchpoints__c # You can include custom objects
+```
+
+### Sharing mappings with read actions
+
+If you are also using Read Actions and have defined [field mappings](/define-integrations/read-actions#field-mappings). Your Write Actions can use the same mappings if you add `inheritMapping` to your manifest file. This means when you call our Write API, we will ensure that we are writing back to the appropriate field that the customer has mapped. 
+
+```YAML
+specVersion: 1.0.0
+integrations: 
+  - name: write-to-salesforce
+    displayName: Write to Salesforce
+    provider: salesforce
+    write:
+      objects:
+        - objectName: account
+          inheritMapping: true
 ```
 
 <Note>
