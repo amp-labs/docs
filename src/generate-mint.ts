@@ -251,6 +251,7 @@ const mintConfig: MintConfig = {
             "provider-guides/surveyMonkey",
             "provider-guides/teamleader",
             "provider-guides/teamwork",
+            "provider-guides/timely",
             "provider-guides/webflow",
             "provider-guides/wordpress",
             "provider-guides/wrike",
