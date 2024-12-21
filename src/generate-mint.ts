@@ -188,6 +188,7 @@ const mintConfig: MintConfig = {
             "provider-guides/crunchbase",
             "provider-guides/customerJourneysApp",
             "provider-guides/customerJourneysTrack",
+            "provider-guides/delighted",
             "provider-guides/discord",
             "provider-guides/dixa",
             "provider-guides/docusign",
