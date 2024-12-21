@@ -258,6 +258,7 @@ const mintConfig: MintConfig = {
             "provider-guides/wrike",
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
+            "provider-guides/zohoDesk",
             "provider-guides/zoom"
           ],
         },
