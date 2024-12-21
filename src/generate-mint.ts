@@ -167,6 +167,7 @@ const mintConfig: MintConfig = {
             "provider-guides/anthropic",
             "provider-guides/apollo",
             "provider-guides/asana",
+            "provider-guides/ashby",
             "provider-guides/atlassian",
             "provider-guides/attio",
             "provider-guides/aweber",
