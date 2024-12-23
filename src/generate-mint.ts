@@ -219,6 +219,7 @@ const mintConfig: MintConfig = {
             "provider-guides/jira",
             "provider-guides/jotform",
             "provider-guides/keap",
+            "provider-guides/kit",
             "provider-guides/klaviyo",
             "provider-guides/linkedin",
             "provider-guides/lemlist",
