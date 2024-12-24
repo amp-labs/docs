@@ -245,6 +245,7 @@ const mintConfig: MintConfig = {
             "provider-guides/salesforce",
             "provider-guides/salesloft",
             "provider-guides/seismic",
+            "provider-guides/sellsy",
             "provider-guides/sendGrid",
             "provider-guides/serviceNow",
             "provider-guides/slack",
