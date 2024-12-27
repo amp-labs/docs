@@ -1,0 +1,82 @@
+---
+title: "Object & field mappings"
+---
+
+Ampersand supports builder or consumer mappings for both required & optional fields, and objects. This allows you to map objects and fields from providers to labels of your choice, or allow your end users to define their own mappings.
+
+## Builder-Defined Mappings
+
+### Object mappings
+You can map an object from a provider to a label of your choice. This can help you with any naming/semantic conventions that you need, or even help you build a unified API across different providers.
+
+For example, if you map the `account` object from **Salesforce** and the `contact` object from **HubSpot** to a unified label like `company`, your read action results will be delivered under the object name of `company`. The original object name will still be available in the response's `rawObjectName` key.
+
+If you wish to write data to `company`, you can [inherit the mapping](/define-integrations/write-actions#sharing-mappings-with-read-actions) from the read action.
+
+Here's an example of a hubspot integration that maps the `contacts` object to `people`:
+```YAML
+  - name: hubspot-integration
+    displayName: Hubspot integration
+    provider: hubspot
+    read:
+      objects:
+        - objectName: contacts
+          mapToName: people
+          # Additional configuration
+```
+
+### Field mappings
+You can map individual fields to labels of your choosing. This can help you enforce naming conventions, or standardize field names across providers.
+
+For example, you could map a `firstname` field to `firstName` if you want to ensure camel casing. Read results will deliver the field under the `firstName` key, and write actions can use `firstName` to update the original `firstname` (if they inherit the mapping)
+
+```YAML
+  - name: read-write-hubspot
+    displayName: Read and write hubspot
+    provider: hubspot
+    read:
+      objects:
+        - objectName: contacts
+          requiredFields:
+            - fieldName: firstname
+              mapToName: firstName
+```
+
+## Consumer Mappings
+
+Consumer-defined mappings allow your end users (or consumers, in [Ampersand terminology](/terminology)) to define their own objects and field mappings.
+
+### Field-Level Mappings
+Your end users may have a custom field to add notes to an Account object. You can ask your consumers to define this mapping at the time of installation, and receive data across different consumers under a single unified field like `notes`.
+
+**Example**:
+- You define a `notes` field in your integration.
+- **User A** stores notes in `field_a`, while **User B** uses `field_b`.
+- The UI library will ask each user to identify which field to map, and Ampersand delivers them under `notes`, accommodating custom fields unique to each consumer.
+- You can write back to each user's specific fields by writing to the `notes` field, if you inherit the mapping.
+
+```YAML
+  - name: salesforce-integration
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          requiredFields:
+            # required fields
+          optionalFields:
+            # There is no fieldName for consumer mapped fields
+            - mapToName: notes
+              mapToDisplayName: Account notes
+              prompt: Please select the field that contains notes for this account
+          # Additional configuration
+    write:
+      objects:
+        - objectName: account
+          inheritMapping: true
+```
+
+If you wish to write to optional consumer mapped fields, Ampersand will automatically strip it from the write request if no mapping exists.
+
+
+## Full example
+To see a full example of how to define object and field mappings, check out the [full example](https://github.com/amp-labs/samples/blob/main/unifiedCRM/amp.yaml) in our samples repository.
