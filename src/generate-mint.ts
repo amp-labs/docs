@@ -241,6 +241,7 @@ const mintConfig: MintConfig = {
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
             "provider-guides/podium",
+            "provider-guides/productboard",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/salesforce",
