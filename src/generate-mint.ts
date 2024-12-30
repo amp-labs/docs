@@ -140,6 +140,7 @@ const mintConfig: MintConfig = {
             "define-integrations/subscribe-actions",
           ],
         },
+        "object-and-field-mappings",
         "embeddable-ui-components",
         {
           group: "CLI",
@@ -268,8 +269,7 @@ const mintConfig: MintConfig = {
             "provider-guides/zoom"
           ],
         },
-        "dev-and-prod-environments",
-        "object-and-field-mappings"
+        "dev-and-prod-environments"
       ],
     },
     {
