@@ -269,6 +269,7 @@ const mintConfig: MintConfig = {
           ],
         },
         "dev-and-prod-environments",
+        "object-and-field-mappings"
       ],
     },
     {
