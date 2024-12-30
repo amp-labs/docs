@@ -284,6 +284,7 @@ const mintConfig: MintConfig = {
     },
     {
       group: "READ API",
+      openapiSource: openApiRead,
       pages: readApiPages,
     },
     {

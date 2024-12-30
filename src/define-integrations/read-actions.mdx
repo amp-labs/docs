@@ -243,3 +243,33 @@ integrations:
           # All other field are optional
           optionalFieldsAuto: all
 ```
+
+## Triggered reads
+
+Ampersand reads are scheduled & run on a cadence specified by you.
+
+If you'd like the flexibility of starting the read at a specific point in time (alongside the scheduled job) you can do that with the [trigger read api](/reference/read/trigger-read).
+
+There are 2 types of reads that can be triggered:
+- Full historic read
+
+```json
+
+  {
+    groupRef: "xye23r3df",
+    mode: "async"
+  }
+
+```
+
+- Read all records from a specific timestamp to now
+
+```json
+
+  {
+    groupRef: "xye23r3df",
+    mode: "async",
+    sinceTimestamp: "2012-04-23T18:25:43.511Z"
+  }
+
+```
