@@ -1,12 +1,12 @@
 ---
-title: "Object and field mappings"
+title: "Object and field mapping"
 ---
 
-Ampersand supports object and field mappings. This allows you to either pre-define a set of mappings, or prompt your users to define their own mappings via Ampersand's UI components.
+Ampersand supports object mapping and field mapping. This allows you to either pre-define a set of mappings, or prompt your users to define their own mappings via Ampersand's UI components.
 
-## Predefined mappings
+## Predefined mapping
 
-### Object mappings
+### Object mapping
 
 You can map an object from a provider API to a label of your choice. This can help you with any naming/semantic conventions that you need, or even help you build a unified API across different API providers.
 
@@ -31,7 +31,7 @@ Here's an example of a Salesforce integration that maps the `account` object to 
           inheritMapping: true
 ```
 
-### Field mappings
+### Field mapping
 
 You can map individual fields to labels of your choosing. This can help you enforce naming conventions, or standardize field names across API providers.
 
@@ -54,11 +54,11 @@ For example, you could map a `mobilephone` field to `phone`. Read results will d
           inheritMapping: true
 ```
 
-## User-defined mappings
+## User-defined mapping
 
 User-defined mappings allow your end users (or consumers, in [Ampersand terminology](/terminology)) to define mappings. Currently, only user-defined field mappings are supported, not object mappings yet.
 
-### Field mappings
+### Field mapping
 
 Your end users may have a custom field to add notes to an Account object. You can ask your consumers to define this mapping at the time of installation, and receive data across different consumers under a single unified field like `notes`.
 
@@ -67,6 +67,13 @@ Your end users may have a custom field to add notes to an Account object. You ca
 - **User A** stores notes in `field_a`, while **User B** uses `field_b`.
 - The UI library will ask each user to identify which field to map, and Ampersand delivers them under `notes`, accommodating custom fields unique to each consumer.
 - You can write back to each user's specific fields by writing to the `notes` field, if you inherit the mapping.
+
+Field mappings can either be inside `requiredFields` or `optionalFields`, you'll specify:
+
+* **mapToName:** when Ampersand delivers the data from this field to you, this is the name that will be used to identify the field.
+* **mapToDisplayName:** the text to display to the user in the UI component when asking them to select a field.
+* **default** (optional): the default field, you should only use standard fields as defaults.
+* **prompt** (optional): additional context that you want to show your user in the UI Component about this field, in a tooltip.
 
 ```YAML
   - name: salesforce-integration

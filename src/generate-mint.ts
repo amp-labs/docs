@@ -140,7 +140,7 @@ const mintConfig: MintConfig = {
             "define-integrations/subscribe-actions",
           ],
         },
-        "object-and-field-mappings",
+        "object-and-field-mapping",
         "embeddable-ui-components",
         {
           group: "CLI",
@@ -285,6 +285,7 @@ const mintConfig: MintConfig = {
     },
     {
       group: "READ API",
+      openapiSource: openApiRead,
       pages: readApiPages,
     },
     {
