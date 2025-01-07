@@ -6,7 +6,30 @@ title: Iterable
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/define-integrations/read-actions), including full historic backfill, while incremental read is supported only by templates object.
+- [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.iterable.com`.
+
+The Iterable connector supports writing to and reading from the following objects:
+- [campaigns](https://api.iterable.com/api/docs#campaigns_campaigns)
+- [catalogs](https://api.iterable.com/api/docs#catalogs_listCatalogs)
+- [channels](https://api.iterable.com/api/docs#channels_channels) (read only)
+- [jobs](https://api.iterable.com/api/docs#export_getExportJobs) (read only)
+- [journeys](https://api.iterable.com/api/docs#workflows_getJourneys) (read only)
+- [lists](https://api.iterable.com/api/docs#lists_getLists)
+- [messageTypes](https://api.iterable.com/api/docs#messageTypes_messageTypes) (read only)
+- [messages](https://api.iterable.com/api/docs#Embedded_Messaging_messages) (read only)
+- [metadata](https://api.iterable.com/api/docs#metadata_list_tables) (read only)
+- [users](https://api.iterable.com/api/docs#users_updateUser) (write only)
+- [webhooks](https://api.iterable.com/api/docs#webhooks_getWebhooks)
+
+The templates object can be read using:
+- [templates](https://api.iterable.com/api/docs#templates_getTemplates) (incremental read)
+while creating templates is done using dedicated objects based on its type:
+- [templatesEmail](https://api.iterable.com/api/docs#templates_upsertEmailTemplate) (write only)
+- [templatesInApp](https://api.iterable.com/api/docs#templates_upsertInAppTemplate) (write only)
+- [templatesPush](https://api.iterable.com/api/docs#templates_upsertPushTemplate) (write only)
+- [templatesSMS](https://api.iterable.com/api/docs#templates_upsertSMSTemplate) (write only)
 
 ### Example integration
 
