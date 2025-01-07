@@ -6,11 +6,11 @@ For more information on destinations, see the [Destinations](/destinations) page
 
 When new data is read from a SaaS instance via a [Read Action](/define-integrations/read-actions), Ampersand sends a payload to your configured webhook.
 
-# OpenAPI spec
+## OpenAPI spec
 
 Check out our [OpenAPI spec](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml) for the full webhook message schema and more details on the data structure. You can use this to generate types for your language and easily parse the webhook message.
 
-# Result types
+## Result types
 
 Ampersand attaches results to a webhook message in two ways:
 
@@ -145,9 +145,9 @@ func handleWebhookEndpointMessage(message WebhookMessage) {
 }
 ```
 
-# Ensure your destination can handle the payload size
+### Handling the payload size
 
-The maximum size of a webhook payload Ampersand may send to your destination is **300 KB**. Most API gateways can handle this by default. If you implement your webhook using AWS Lambda or Google Cloud Run Functions, they will also be able to handle this payload size by default.
+The maximum size of a webhook payload Ampersand may send to your destination is **300 KB**. Most API gateways can handle this by default. If you implement your webhook using AWS Lambda or Google Cloud Run Functions, they will also be able to handle this payload size without any additional configuration.
 
 If you are using the Node.js framework [Express](https://expressjs.com) in your webhook receiver, and are using the [json middleware](https://expressjs.com/en/api.html#express.json) to parse request bodies, you will need to modify it to increase the maximum request body size.
 
@@ -161,3 +161,7 @@ If you are using the Node.js framework [Express](https://expressjs.com) in your 
     }),
   ]);
 ```
+
+### Handling the message frequency
+
+By default, Ampersand will send you at most 1000 webhook messages per second across all your destinations. If you wish the change this limit, please contact `support@withampersand.com`. Alternatively, you can set the delivery mode to [on request](/define-integrations/read-actions#on-request) to only get webhook messages when you request for them via an API call. 
