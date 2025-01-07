@@ -10,7 +10,8 @@ When new data is read from a SaaS instance via a [Read Action](/define-integrati
 
 Check out our [OpenAPI spec](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml) for the full webhook message schema and more details on the data structure. You can use this to generate types for your language and easily parse the webhook message.
 
-# When a record is too big
+# Result types
+
 Ampersand attaches results to a webhook message in two ways:
 
 1) **Inline**: In most cases, the result is directly included in the webhook's `result` field.
@@ -22,7 +23,6 @@ If type is `inline`, the full result is in the `result` field.
 If type is `url`, you can fetch the full result by making a GET request to `resultInfo.downloadUrl`.
 
 In both cases, `resultInfo.numRecords` tells you how many records are available in the result.
-
 
 ### Example webhook message (inline)
 
