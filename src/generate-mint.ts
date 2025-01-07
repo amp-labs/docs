@@ -212,6 +212,7 @@ const mintConfig: MintConfig = {
             "provider-guides/gorgias",
             "provider-guides/guru",
             "provider-guides/helpScoutMailbox",
+            "provider-guides/heyreach",
             "provider-guides/hive",
             "provider-guides/hubspot",
             "provider-guides/insightly",
