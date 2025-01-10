@@ -140,6 +140,7 @@ const mintConfig: MintConfig = {
             "define-integrations/subscribe-actions",
           ],
         },
+        "object-and-field-mapping",
         "embeddable-ui-components",
         {
           group: "CLI",
@@ -167,6 +168,7 @@ const mintConfig: MintConfig = {
             "provider-guides/anthropic",
             "provider-guides/apollo",
             "provider-guides/asana",
+            "provider-guides/ashby",
             "provider-guides/atlassian",
             "provider-guides/attio",
             "provider-guides/aweber",
@@ -204,11 +206,13 @@ const mintConfig: MintConfig = {
             "provider-guides/g2",
             "provider-guides/geckoboard",
             "provider-guides/getResponse",
+            "provider-guides/gitlab",
             "provider-guides/gong",
             "provider-guides/google",
             "provider-guides/gorgias",
             "provider-guides/guru",
             "provider-guides/helpScoutMailbox",
+            "provider-guides/heyreach",
             "provider-guides/hive",
             "provider-guides/hubspot",
             "provider-guides/insightly",
@@ -221,6 +225,7 @@ const mintConfig: MintConfig = {
             "provider-guides/keap",
             "provider-guides/kit",
             "provider-guides/klaviyo",
+            "provider-guides/lever",
             "provider-guides/linkedin",
             "provider-guides/lemlist",
             "provider-guides/mailgun",
@@ -240,11 +245,13 @@ const mintConfig: MintConfig = {
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
             "provider-guides/podium",
+            "provider-guides/productboard",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
             "provider-guides/seismic",
+            "provider-guides/sellsy",
             "provider-guides/sendGrid",
             "provider-guides/serviceNow",
             "provider-guides/slack",
@@ -264,7 +271,7 @@ const mintConfig: MintConfig = {
             "provider-guides/zoom"
           ],
         },
-        "dev-and-prod-environments",
+        "dev-and-prod-environments"
       ],
     },
     {
@@ -280,6 +287,7 @@ const mintConfig: MintConfig = {
     },
     {
       group: "READ API",
+      openapiSource: openApiRead,
       pages: readApiPages,
     },
     {

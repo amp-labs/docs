@@ -1,0 +1,49 @@
+---
+title: HeyReach
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.heyreach.io/api`.
+
+### Example integration
+
+To define an integration for HeyReach, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: heyreach-integration
+    displayName: My HeyReach Integration
+    provider: heyreach
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with HeyReach:
+
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.heyreach.io/api`.
+
+## Creating an API key for HeyReach
+
+1. Log in to your [HeyReach Dashboard](https://app.heyreach.io/app/dashboard).
+
+2. Navigate to **Integrations**.
+
+3. Select **Get API Key**.
+
+4. Click **New API Key**.
+
+![Alt text](/images/provider-guides/heyreach-api-key.gif)
