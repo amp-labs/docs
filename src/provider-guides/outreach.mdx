@@ -12,11 +12,11 @@ The Outreach connector supports:
 
 ### Example Integration
 
-For an example manifest file of a Outreach integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/outreach/amp.yaml).
+For an example manifest file of an Outreach integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/outreach/amp.yaml).
 
 ## Before You Get Started
 
-Before creating a **Outreach** app, you must complete the Outreach partnership process to obtain a sandbox instance.
+Before creating an **Outreach** app, you must complete the Outreach partnership process to obtain a sandbox instance. Please ensure that you add `https://api.withampersand.com/callbacks/v1/oauth` as a callback URL for the Outreach app.
 
 After your account is set up, you will need to acquire the following credentials from your Outreach app:
 
@@ -36,7 +36,7 @@ You will then use these credentials to connect your application to Ampersand.
 
 4. Select Outreach from the **Provider** list.
 
-5. Enter the previously obtained _Client ID_ in the **Client ID** field, the _Client Secret_ in the **Client Secret** field, and the requested scopes in the **Permissions** field.
+5. Enter the Outreach Application ID in the **Client ID** field, the Outreach Application Secret in the **Client Secret** field, and the requested scopes in the **Permissions** field.
 
 6. Enter the scopes defined for the _Outreach_ application.
 
@@ -57,3 +57,15 @@ To start integrating with Outreach:
    - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
    - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
    - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.
+
+## Publish your Outreach app
+
+When you are ready to publish your Outreach app to the Outreach Marketplace, follow the instructions on the [Outreach documentation](https://developers.outreach.io/guides/managing-apps/#publishing-apps).
+
+## Limitations of development credentials
+
+Please note that until you publish your app, there are limitations on the credentials you obtain via your Ampersand integration. While an unpublished app can be used to connect to other Outreach workspaces, such as those of your customers, Outreach will expire those credentials weekly. This means that your customers will need to re-install their integrations weekly. Refer to the [Outreach documentation](https://developers.outreach.io/api/oauth/#limitations-of-development-credentials) for more details.
+
+Even after you publish your Outreach app, be sure to select the "Production" tab and use the Application ID and Secret from that tab for your Ampersand Provider App.
+
+<img width="70%" src="/images/provider-guides/outreach-creds.png" /> 

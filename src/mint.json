@@ -1,5 +1,10 @@
 {
   "name": "Ampersand",
+  "openapi": [
+    "api",
+    "read",
+    "write"
+  ],
   "logo": {
     "light": "/logos/dark.png",
     "dark": "/logos/light.png",
@@ -25,6 +30,26 @@
     {
       "source": "/docs/:slug*",
       "destination": "/:slug*"
+    },
+    {
+      "source": "/docs/read-actions",
+      "destination": "/define-integrations/read-actions"
+    },
+    {
+      "source": "/docs/write-actions",
+      "destination": "/define-integrations/write-actions"
+    },
+    {
+      "source": "/docs/proxy-actions",
+      "destination": "/define-integrations/proxy-actions"
+    },
+    {
+      "source": "/docs/subscribe-actions",
+      "destination": "/define-integrations/subscribe-actions"
+    },
+    {
+      "source": "/glossary",
+      "destination": "/terminology"
     }
   ],
   "tabs": [
@@ -50,6 +75,7 @@
             "define-integrations/subscribe-actions"
           ]
         },
+        "object-and-field-mapping",
         "embeddable-ui-components",
         {
           "group": "CLI",
@@ -58,21 +84,29 @@
             "cli/reference"
           ]
         },
-        "destinations",
+        {
+          "group": "Destinations",
+          "pages": [
+            "destinations/overview",
+            "destinations/webhooks"
+          ]
+        },
         "terminology",
         {
           "group": "Provider guides",
           "pages": [
             "provider-guides/overview",
-            "provider-guides/aweber",
             "provider-guides/acuityScheduling",
             "provider-guides/aha",
             "provider-guides/aircall",
+            "provider-guides/airtable",
             "provider-guides/anthropic",
             "provider-guides/apollo",
             "provider-guides/asana",
+            "provider-guides/ashby",
             "provider-guides/atlassian",
             "provider-guides/attio",
+            "provider-guides/aweber",
             "provider-guides/bird",
             "provider-guides/blueshift",
             "provider-guides/blueshiftEU",
@@ -91,6 +125,7 @@
             "provider-guides/crunchbase",
             "provider-guides/customerJourneysApp",
             "provider-guides/customerJourneysTrack",
+            "provider-guides/delighted",
             "provider-guides/discord",
             "provider-guides/dixa",
             "provider-guides/docusign",
@@ -106,11 +141,13 @@
             "provider-guides/g2",
             "provider-guides/geckoboard",
             "provider-guides/getResponse",
+            "provider-guides/gitlab",
             "provider-guides/gong",
             "provider-guides/google",
             "provider-guides/gorgias",
             "provider-guides/guru",
             "provider-guides/helpScoutMailbox",
+            "provider-guides/heyreach",
             "provider-guides/hive",
             "provider-guides/hubspot",
             "provider-guides/insightly",
@@ -121,12 +158,17 @@
             "provider-guides/jira",
             "provider-guides/jotform",
             "provider-guides/keap",
+            "provider-guides/kit",
+            "provider-guides/klaviyo",
+            "provider-guides/lever",
             "provider-guides/linkedin",
+            "provider-guides/lemlist",
             "provider-guides/mailgun",
             "provider-guides/marketo",
             "provider-guides/microsoft",
             "provider-guides/miro",
             "provider-guides/mixmax",
+            "provider-guides/monday",
             "provider-guides/mural",
             "provider-guides/notion",
             "provider-guides/nutshell",
@@ -138,11 +180,13 @@
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
             "provider-guides/podium",
+            "provider-guides/productboard",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
             "provider-guides/seismic",
+            "provider-guides/sellsy",
             "provider-guides/sendGrid",
             "provider-guides/serviceNow",
             "provider-guides/slack",
@@ -152,11 +196,13 @@
             "provider-guides/surveyMonkey",
             "provider-guides/teamleader",
             "provider-guides/teamwork",
+            "provider-guides/timely",
             "provider-guides/webflow",
             "provider-guides/wordpress",
             "provider-guides/wrike",
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
+            "provider-guides/zohoDesk",
             "provider-guides/zoom"
           ]
         },
@@ -175,13 +221,19 @@
         {
           "group": "Write",
           "pages": [
-            "reference/write/create-update-upsert-or-delete-records"
+            "reference/write/write-records"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "group": "READ API",
+      "pages": [
         {
-          "group": "Upload URL",
+          "group": "Read",
           "pages": [
-            "reference/upload-url/generate-a-signed-url-to-upload-write-data-to"
+            "reference/read/trigger-a-read",
+            "reference/read/deliver-results"
           ]
         }
       ]
@@ -235,7 +287,6 @@
           "pages": [
             "reference/installation/list-installations",
             "reference/installation/create-a-new-installation",
-            "reference/installation/import-an-existing-installation",
             "reference/installation/get-an-installation",
             "reference/installation/delete-an-installation",
             "reference/installation/update-an-installation"
@@ -270,8 +321,9 @@
           "group": "Connection",
           "pages": [
             "reference/connection/list-connections",
-            "reference/connection/generate-a-new-connection-only-valid-for-providers-with-auth-types-which-are-not-oauth2-authorization-code",
-            "reference/connection/get-a-connection"
+            "reference/connection/generate-a-new-connection",
+            "reference/connection/get-a-connection",
+            "reference/connection/delete-a-connection"
           ]
         },
         {

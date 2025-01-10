@@ -1,0 +1,128 @@
+---
+title: "Klaviyo"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/define-integrations/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/define-integrations/write-actions).
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://a.klaviyo.com`.
+
+The Klaviyo connector supports writing to and reading from the following objects:
+- [catalog-categories](https://developers.klaviyo.com/en/reference/get_catalog_categories)
+- [catalog-items](https://developers.klaviyo.com/en/reference/get_catalog_items)
+- [catalog-variants](https://developers.klaviyo.com/en/reference/get_catalog_variants)
+- [images](https://developers.klaviyo.com/en/reference/get_images)
+- [lists](https://developers.klaviyo.com/en/reference/get_lists)
+- [profiles](https://developers.klaviyo.com/en/reference/get_profiles)
+- [segments](https://developers.klaviyo.com/en/reference/get_segments)
+- [template-universal-content](https://developers.klaviyo.com/en/reference/get_all_universal_content)
+- [templates](https://developers.klaviyo.com/en/reference/get_templates)
+- [webhooks](https://developers.klaviyo.com/en/reference/get_webhooks)
+
+Objects with partial support are as follows:
+- [accounts](https://developers.klaviyo.com/en/reference/get_accounts) (read backfill only; no write)
+- [catalog-category-bulk-create-jobs](https://developers.klaviyo.com/en/reference/get_create_categories_jobs) (read/create)
+- [catalog-category-bulk-delete-jobs](https://developers.klaviyo.com/en/reference/get_delete_categories_jobs) (read/create)
+- [catalog-category-bulk-update-jobs](https://developers.klaviyo.com/en/reference/get_update_categories_jobs) (read/create)
+- [catalog-item-bulk-create-jobs](https://developers.klaviyo.com/en/reference/get_bulk_create_catalog_items_jobs) (read/create)
+- [catalog-item-bulk-delete-jobs](https://developers.klaviyo.com/en/reference/get_bulk_delete_catalog_items_jobs) (read/create)
+- [catalog-item-bulk-update-jobs](https://developers.klaviyo.com/en/reference/get_bulk_update_catalog_items_jobs) (read/create)
+- [catalog-variant-bulk-create-jobs](https://developers.klaviyo.com/en/reference/get_create_variants_jobs) (read/create)
+- [catalog-variant-bulk-delete-jobs](https://developers.klaviyo.com/en/reference/get_delete_variants_jobs) (read/create)
+- [catalog-variant-bulk-update-jobs](https://developers.klaviyo.com/en/reference/get_update_variants_jobs) (read/create)
+- [coupon-code-bulk-create-jobs](https://developers.klaviyo.com/en/reference/get_bulk_create_coupon_code_jobs) (read/create)
+- [coupons](https://developers.klaviyo.com/en/reference/get_coupons) (read backfill only, write)
+- [events](https://developers.klaviyo.com/en/reference/get_events) (read/create)
+- [flows](https://developers.klaviyo.com/en/reference/get_flows) (read/update)
+- [metrics](https://developers.klaviyo.com/en/reference/get_metrics) (read)
+- [profile-bulk-import-jobs](https://developers.klaviyo.com/en/reference/get_bulk_import_profiles_jobs) (read/create)
+- [profile-suppression-bulk-create-jobs](https://developers.klaviyo.com/en/reference/get_bulk_suppress_profiles_jobs) (read/create)
+- [profile-suppression-bulk-delete-jobs](https://developers.klaviyo.com/en/reference/get_bulk_unsuppress_profiles_jobs) (read/create)
+- [tag-groups](https://developers.klaviyo.com/en/reference/get_tag_groups) (read backfill only; write)
+- [tags](https://developers.klaviyo.com/en/reference/get_tags) (read backfill only; write)
+
+Objects with write-only support are as follows:
+- [back-in-stock-subscriptions](https://developers.klaviyo.com/en/reference/create_back_in_stock_subscription) (create)
+- [campaign-message-assign-template](https://developers.klaviyo.com/en/reference/assign_template_to_campaign_message) (create)
+- [campaign-messages](https://developers.klaviyo.com/en/reference/update_campaign_message) (update)
+- [campaign-send-jobs](https://developers.klaviyo.com/en/reference/send_campaign) (write)
+- [client-back-in-stock-subscriptions](https://developers.klaviyo.com/en/reference/create_client_back_in_stock_subscription) (create)
+- [client-event-bulk-create](https://developers.klaviyo.com/en/reference/bulk_create_client_events) (create)
+- [client-events](https://developers.klaviyo.com/en/reference/bulk_create_client_events) (create)
+- [client-profiles](https://developers.klaviyo.com/en/reference/create_client_profile) (create)
+- [client-push-token-unregister](https://developers.klaviyo.com/en/reference/unregister_client_push_token) (create)
+- [client-push-tokens](https://developers.klaviyo.com/en/reference/create_client_push_token) (create)
+- [client-subscriptions](https://developers.klaviyo.com/en/reference/create_client_subscription) (create)
+- [data-privacy-deletion-jobs](https://developers.klaviyo.com/en/reference/request_profile_deletion) (create)
+- [event-bulk-create-jobs](https://developers.klaviyo.com/en/reference/bulk_create_events) (create)
+- [image-upload](https://developers.klaviyo.com/en/reference/upload_image_from_file) (create)
+- [metric-aggregates](https://developers.klaviyo.com/en/reference/query_metric_aggregates) (create)
+- [profile-subscription-bulk-create-jobs](https://developers.klaviyo.com/en/reference/bulk_subscribe_profiles) (create)
+- [profile-subscription-bulk-delete-jobs](https://developers.klaviyo.com/en/reference/bulk_unsubscribe_profiles) (create)
+- [push-tokens](https://developers.klaviyo.com/en/reference/create_push_token) (create)
+
+Please reach out to us if there are more objects that you need support for.
+
+### Example integration
+
+For an example manifest file of a Klaviyo integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/klaviyo/amp.yaml).
+
+## Before you get started
+
+To connect Klaviyo with Ampersand, you need to [Create a Klaviyo Account](#create-a-klaviyo-account) and obtain the following credentials from your Klaviyo App:
+
+- Client ID
+- Client Secret
+- Scopes
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Create a Klaviyo account
+
+You need a **Klaviyo** account to connect with Ampersand. If you do not have a Klaviyo account, here's how you can sign up:
+
+- Go to the [Klaviyo site](https://www.klaviyo.com/) and sign up for a free account using your preferred method.
+
+### Creating a Klaviyo app
+
+Once your Klaviyo account is ready, you need to create a Klaviyo application. Learn more about creating a Klaviyo application [here](https://developers.klaviyo.com/en/docs/create_a_public_oauth_app).
+
+1. Log in to the [Klaviyo dashboard](https://www.klaviyo.com/login).
+
+2. Then visit [Manage Apps](https://www.klaviyo.com/manage-apps) to create a new app.
+Alternatively, this can be found by clicking on avatar, go to **Integrations**, click on **Developers** dropdown and then select **Manage apps**.
+
+3. On the Create a New App form, enter your application name. ![Create App Form](/images/provider-guides/klaviyo-app-form.png)
+You can find the **Client ID** and **Client Secret** keys on the app details page. Note these keys, as they are essential for connecting your app to Ampersand.
+
+4. Click **Create**. ![Application Info](/images/provider-guides/klaviyo-app-info.png)
+
+5. Enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth` in the **Redirect URI** section.
+
+6. Choose the scopes that are applicable for your application. [Available API scopes](https://developers.klaviyo.com/en/docs/authenticate_)
+
+7. Click **Review submission**. Review that all sections are completed and proceed with **Submit**.
+
+
+## Add Klaviyo app details in Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to add the Klaviyo App.
+
+   ![Ampersand Project Selection](/images/provider-guides/eba5c80-Ampersand.png)
+
+3. Navigate to the **Provider Apps** section.
+
+4. Select **Klaviyo** from the Provider list.
+
+5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
+
+6. Enter the scopes set for your application in **Klaviyo**.
+
+   ![Ampersand Project Selection](/images/provider-guides/klaviyo-amp-project.png)
+
+7. Click **Save Changes**.

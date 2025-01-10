@@ -1,0 +1,100 @@
+---
+title: "Object and field mapping"
+---
+
+Ampersand supports object mapping and field mapping. This allows you to either pre-define a set of mappings, or prompt your users to define their own mappings via Ampersand's UI components.
+
+## Predefined mapping
+
+### Object mapping
+
+You can map an object from a provider API to a label of your choice. This can help you with any naming/semantic conventions that you need, or even help you build a unified API across different API providers.
+
+For example, if you map the `account` object from **Salesforce** and the `companies` object from **HubSpot** to a unified label like `company`, your read action results will be delivered under the object name of `company`. The original object name will still be available in the response's `rawObjectName` key.
+
+If you wish to write data to `company`, you can [inherit the mapping](/define-integrations/write-actions#sharing-mappings-with-read-actions) from the read action.
+
+Here's an example of a Salesforce integration that maps the `account` object to `company`:
+
+```YAML
+  - name: salesforce-integration
+    displayName: My Salesforce integration
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          mapToName: company
+          # Additional configuration
+    write:
+      objects:
+        - objectName: account
+          inheritMapping: true
+```
+
+### Field mapping
+
+You can map individual fields to labels of your choosing. This can help you enforce naming conventions, or standardize field names across API providers.
+
+For example, you could map a `mobilephone` field to `phone`. Read results will deliver the field under the `phone` key, and when you make a call to the Write API, you can use `phone` to update the original `mobilePhone` field if the write action inherits the mapping.
+
+```YAML
+  - name: hubspot-integration
+    displayName: My Hubspot integration
+    provider: hubspot
+    module: crm
+    read:
+      objects:
+        - objectName: contacts
+          requiredFields:
+            - fieldName: mobilephone
+              mapToName: phone
+    write:
+      objects:
+        - objectName: contacts
+          inheritMapping: true
+```
+
+## User-defined mapping
+
+User-defined mappings allow your end users (or consumers, in [Ampersand terminology](/terminology)) to define mappings. Currently, only user-defined field mappings are supported, not object mappings yet.
+
+### Field mapping
+
+Your end users may have a custom field to add notes to an Account object. You can ask your consumers to define this mapping at the time of installation, and receive data across different consumers under a single unified field like `notes`.
+
+**Example**:
+- You define a `notes` field in your integration.
+- **User A** stores notes in `field_a`, while **User B** uses `field_b`.
+- The UI library will ask each user to identify which field to map, and Ampersand delivers them under `notes`, accommodating custom fields unique to each consumer.
+- You can write back to each user's specific fields by writing to the `notes` field, if you inherit the mapping.
+
+Field mappings can either be inside `requiredFields` or `optionalFields`, you'll specify:
+
+* **mapToName:** when Ampersand delivers the data from this field to you, this is the name that will be used to identify the field.
+* **mapToDisplayName:** the text to display to the user in the UI component when asking them to select a field.
+* **default** (optional): the default field, you should only use standard fields as defaults.
+* **prompt** (optional): additional context that you want to show your user in the UI Component about this field, in a tooltip.
+
+```YAML
+  - name: salesforce-integration
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          optionalFields:
+            # There is no fieldName for user-mapped fields
+            - mapToName: notes
+              mapToDisplayName: Account notes
+              prompt: Please select the field that contains notes for this account
+          # Additional configuration
+    write:
+      objects:
+        - objectName: account
+          inheritMapping: true
+```
+
+If you have an optional field mapping, and the user chose not to map the field (because they do not have a field that corresponds to notes), you can still make Write API calls with `notes` populated, and Ampersand will automatically strip it from the request before writing to the provider API to prevent errors.
+
+## Full example
+
+To see a full example of how to define object and field mappings, check out the [unified CRM example](https://github.com/amp-labs/samples/blob/main/unifiedCRM/amp.yaml) in our samples repository.

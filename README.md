@@ -9,7 +9,7 @@ This repo contains the source files for https://docs.withampersand.com, which in
 
 Merges to the main branch will automatically update the online docs via the Mintlify Github app.
 
-## Setup 
+## First time setup 
 
 Ensure you have pnpm installed globally 
 
@@ -23,11 +23,21 @@ Install dependencies
 pnpm i
 ```
 
-## Generate mint.json
+## Adding a new page
 
-`src/mint.json` is the main configuration file for the docs. Do not edit it manually.
+If you need to add a new page, add it to the `mintConfig` object in `src/generate-mint.ts`, and then follow the steps below for regenerating mint.json.
 
-If you make any updates to site structure or styling (by editing `src/generate-mint.ts`), re-generate `mint.json` by running:
+## Changing the URL of a page
+
+If you are changing the URL of a page, be sure to add the old URL to the `redirects` section of the `mintConfig` object in `src/generate-mint.ts`, and then follow the steps below for regenerating mint.json.
+
+## Generate mint.json & API references
+
+`src/mint.json` is the main configuration file for the docs. Do not edit it manually, edit `src/generate-mint.ts` instead.
+
+The gen command will do 2 things:
+- re-generate `src/mint.json` based on `src/generate-mint.ts`
+- re-generate API reference docs based on [amp-labs/openapi](https://github.com/amp-labs/openapi)
 
 ```shell 
 pnpm run gen
@@ -40,3 +50,7 @@ pnpm run dev
 ```
 
 The local preview is available at http://localhost:3000, and will hot-load any changes to .mdx files.
+
+## Style guide
+
+Please see [CONTRIBUTING.md](https://github.com/amp-labs/docs/blob/main/CONTRIBUTING.md).

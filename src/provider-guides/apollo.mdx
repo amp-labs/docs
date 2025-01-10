@@ -1,11 +1,13 @@
 ---
 title: Apollo
 ---
+
 ## What's supported
 
 ### Supported actions
 
 The Apollo connector supports:
+
 - [Read Actions](/define-integrations/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Apollo instance will be done for each scheduled read.
 - [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.apollo.io`.
@@ -13,42 +15,49 @@ The Apollo connector supports:
 ### Supported Objects
 
 The Apollo connector supports reading from the following objects:
-- [opportunities](https://apolloio.github.io/apollo-api-docs/?shell#opportunities-api)
-- email_accounts
-- contact_stages
-- opportunity_stages
-- typed_custom_fields
-- labels
-- account_stages
-- users
 
+- [emailer_campaigns (sequences)](https://docs.apollo.io/reference/search-for-sequences)
+- [accounts](https://docs.apollo.io/reference/search-for-accounts)
+- [account_stages](https://docs.apollo.io/reference/list-account-stages)
+- [contacts](https://docs.apollo.io/reference/search-for-contacts)
+- [contact_stages](https://docs.apollo.io/reference/list-contact-stages)
+- [opportunities (deals)](https://docs.apollo.io/reference/list-all-deals)
+- [opportunity_stages (deal stages)](https://docs.apollo.io/reference/list-deal-stages)
+- [email_accounts](https://docs.apollo.io/reference/get-a-list-of-email-accounts)
+- [labels (lists and tags)](https://docs.apollo.io/reference/get-a-list-of-all-liststags)
+- [tasks](https://docs.apollo.io/reference/search-tasks)
+- [typed_custom_fields (custom fields)](https://docs.apollo.io/reference/get-a-list-of-all-custom-fields)
+- [users](https://docs.apollo.io/reference/get-a-list-of-users)
+
+Note: Due to limitations in the Apollo API, Ampersand can read a maximum of 50,000 records each time for **Accounts**, **Contacts**, or **Tasks**.
 
 The Apollo connector supports writing to the following objects:
-- [opportunities](https://apolloio.github.io/apollo-api-docs/?shell#opportunities-api)
-- [contacts](https://apolloio.github.io/apollo-api-docs/?shell#contacts-api)
-- [accounts](https://apolloio.github.io/apollo-api-docs/?shell#accounts-api)
+
+- [opportunities (deals)](https://docs.apollo.io/reference/list-all-deals)
+- [contacts](https://docs.apollo.io/reference/search-for-contacts)
+- [accounts](https://docs.apollo.io/reference/search-for-accounts)
 
 ### Example integration
 
-For an example manifest file of a Apollo integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/apollo/amp.yaml).
+For an example manifest file of an Apollo integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/apollo/amp.yaml).
 
 ## Before You Get Started
 
 ### Creating an API key for Apollo
 
-[Click here](https://apolloio.github.io/apollo-api-docs/?shell#authentication) for more information about generating an API key for Apollo. The UI components will display this link, so that your users can successfully create API keys.
+[Click here](https://docs.apollo.io/docs/create-api-key) for more information about generating an API key for Apollo. The UI components will display this link, so that your users can successfully create API keys.
 
 ## Using the connector
 
 This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Apollo:
+
 - Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/apollo/amp.yaml), see [Define Integrations](/define-integrations/overview) for more info.
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
 - Start using the connector!
-   - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
-   - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
-   - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.
-
+  - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.

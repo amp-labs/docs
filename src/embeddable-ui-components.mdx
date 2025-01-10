@@ -10,11 +10,19 @@ The Ampersand UI library requires React v18+.
 
 ### Install the Ampersand React library
 
-In your repo, use npm to install the package:
+In your repo, use `npm` or `yarn` to install the package:
 
 ```
 npm install @amp-labs/react
 ```
+or
+```
+yarn add @amp-labs/react
+```
+
+#### For versions 1.x.x (legacy)
+
+Version 1.x.x requires chakra-ui peer dependencies.
 
 If you are using yarn, you'll have to explicitly install the peer dependencies.
 
@@ -30,11 +38,14 @@ This library requires your components to be wrapped in the `<AmpersandProvider/>
 * `project`: your Ampersand project name or ID. You can find it on your project's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
 
 ### Example
-
 Here's an example:
 
-```TypeScript TypeScript
-import { AmpersandProvider } from '@amp-labs/react';
+```TypeScript
+import { AmpersandProvider, InstallIntegration } from '@amp-labs/react';
+
+// For v2.x.x, you must import the Ampersand style sheet once in your application.
+import '@amp-labs/react/styles';
+import './App.css'; // optional: your own CSS override.
 
 const options = {
   project: 'PROJECT', // Your Ampersand project name or ID.
@@ -48,7 +59,7 @@ function App() {
     // or further down in the component tree.
     <AmpersandProvider options={options}>
         // You can use any of the Ampersand components here.
-        ...
+        <InstallIntegration ... />
     </AmpersandProvider>
   )
 }
@@ -73,9 +84,9 @@ The parameters of the component are:
 * **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
 * **onUninstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully uninstalls the integration.
 
-Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`
+Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`. `Config` is an exported type from `@amp-labs/react`.
 
-```TypeScript TypeScript
+```TypeScript
  <InstallIntegration 
   integration = {myIntegrationName}
   consumerRef = {userId}
@@ -110,7 +121,10 @@ The parameters of the component are:
 * **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
 * **groupName** (string, optional): the display name for this group.
 * **redirectUrl** (string, optional): if provided, the page will be redirected to this URL once a consumer successfully connects. This can either be an absolute or relative URL.
-* **onSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects, it should have the signature `(connectionID: string) => void`.
+* **onConnectSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects.
+* **onDisconnectSuccess** (function, optional): a callback function that gets invoked after a consumer successfully disconnects.
+
+Both `onConnectSuccess` and `onDisconnectSuccess` should be functions with the following signature: `(connection: Connection) => void`. `Connection` is an exported type from `@amp-labs/react`.
 
 ```TypeScript
  <ConnectProvider 
@@ -120,8 +134,11 @@ The parameters of the component are:
   groupRef = {teamId}
   groupName = {teamName}
   redirectUrl = "/connection-success"
-  onSuccess = {connectionId =>
-    console.log(`Successfully created connection ${connectionId}`)
+  onConnectSuccess = {connection =>
+    console.log(`Successfully created connection ${connection.id}`)
+  }
+  onDisonnectSuccess = {connection =>
+    console.log(`Successfully deleted connection ${connection.id}`)
   }
 />
 ```
@@ -144,4 +161,79 @@ const {
   isLoaded,
   isIntegrationInstalled
 } = useIsIntegrationInstalled("read-salesforce", groupRef);
+```
+
+## Customize styles
+
+<Warning>Customized styling is only supported in v2.x.x </Warning>
+
+To customize the look and feel of Ampersand components, import your own CSS file directly after `@amp-labs/react/styles`.
+
+You can override CSS variables that are exposed in the [variables.css file](https://github.com/amp-labs/react/blob/main/src/styles/variables.css). By convention, CSS variables that are used in the Ampersand components are named with `--amp` as a prefix.
+
+```TypeScript
+import { AmpersandProvider } from '@amp-labs/react';
+// Customized style is only supported in v2.x.x
+// You only have to import the Ampersand style sheet once in your application.
+import '@amp-labs/react/styles';
+import './App.css'; // optional: your own css override 
+```
+
+### Example App.css
+
+```css App.css
+:root {
+    /* These affect the look and feel of buttons */
+    --amp-colors-primary: #4360e0;
+    --amp-default-border-radius: 8px;
+
+    /* Override with your own color pallette */ 
+    --amp-colors-neutral-25: #FEFEFE;
+    --amp-colors-neutral-50: #FDFCFD;
+    --amp-colors-neutral-100: #FAFAFC;
+    --amp-colors-neutral-200: #F6F5F9;
+    --amp-colors-neutral-300: #F1EFF5;
+    --amp-colors-neutral-400: #EDEAF2;
+    --amp-colors-neutral-500: #E8E5EF;
+    --amp-colors-neutral-600: #918E95;
+    --amp-colors-neutral-700: #646266;
+    --amp-colors-neutral-800: #363638;
+    --amp-colors-neutral-900: #1D1D1D;
+}
+```
+
+## Dark mode
+
+<Warning>Dark mode is only supported in v2.1.0+ </Warning>
+
+Ampersand's UI components support dark mode. Ensure that you have the following lines in your application's CSS:
+
+```CSS
+:root {
+  color-scheme: light dark;
+}
+```
+
+When a user sets their system settings to dark mode, then Ampersand's UI components will automatically render in dark mode. We do this by making use of the [light-dark CSS function](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark) in our default colors. You can customize the colors by adding an override CSS file. See [Customize styles](#customize-styles).
+
+## Migrating to v2
+
+`@amp-labs/react` v2.x.x no longer requires Chakra as a dependency, and also provides users with the ability to [customize styles](#customize-styles). When upgrading from v1.x.x. to v2.x.x, you must add an additional line after importing the library:
+
+```TypeScript
+import { AmpersandProvider, InstallIntegration } from '@amp-labs/react';
+
+// For v2.x.x, you must import the Ampersand style sheet once in your application.
+import '@amp-labs/react/styles';
+import './App.css'; // optional: your own CSS override 
+```
+
+## Troubleshooting 
+
+### Why does does styling look so bare?
+
+You likely forgot to import the stylesheet, please add this line once in your application.
+
+```
+import '@amp-labs/react/styles';
 ```

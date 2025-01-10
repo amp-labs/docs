@@ -23,7 +23,7 @@ Next, we create a webhook destination for Ampersand to send data that it reads f
 To make MailMonkey interoperate seamlessly with our customers' Salesforce, we will create an integration which will:
 
 1. **Read Contacts and Leads**: pull all Contacts and Leads from a customer's Salesforce into MailMonkey.
-2. **Create Leads**: create a new Lead in Salesforce whenever somebody replies to to a MailMonkey email campaign.
+2. **Create Leads**: create a new Lead in Salesforce whenever somebody replies to a MailMonkey email campaign.
 
 Let's create a folder called `source`, with a file inside called `amp.yaml`, this is where we will define our integration.
 
@@ -47,8 +47,8 @@ integrations:
               fullHistory: true
           # Always read these fields
           requiredFields:
-            - fieldName: firstName
-            - fieldName: lastName
+            - fieldName: firstname
+            - fieldName: lastname
             - fieldName: email
           # Customer can decide if they want us to read these fields.
           optionalFields:
@@ -60,10 +60,10 @@ integrations:
             defaultPeriod:
               fullHistory: true
           requiredFields:
-            - fieldName: firstName
-            - fieldName: lastName
+            - fieldName: firstname
+            - fieldName: lastname
             - fieldName: email
-            - fieldName: isConverted
+            - fieldName: isconverted
             # Allow the customer to pick a field to map to priority score
             - mapToName: priority
               mapToDisplayName: Priority Score
@@ -81,7 +81,7 @@ Next we will add a [Write Action](/define-integrations/write-actions). We want t
 ```YAML YAML
 ...
     # Append to the integration definition from above.
-    write
+    write:
       objects:
         # Create a new lead in Salesforce whenever we make an API request.
         - objectName: lead

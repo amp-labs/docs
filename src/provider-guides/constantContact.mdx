@@ -1,14 +1,28 @@
 ---
 title: "Constant Contact"
 ---
-## What's Supported
+## What's supported
 
-### Supported Actions
+### Supported actions
 
 This connector supports:
+- [Read Actions](/define-integrations/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Constant Contact instance will be done for each scheduled read.
+- [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.cc.email`.
 
-## Before You Get Started
+The Constant Contact connector supports writing to and reading from the following objects:
+- [account_emails](https://v3.developer.constantcontact.com/api_reference/index.html#!/Account_Services/retrieveEmailAddresses)
+- [activities](https://v3.developer.constantcontact.com/api_reference/index.html#!/Bulk_Activities/getActivityStatusCollection) (read only)
+- [contact_lists](https://v3.developer.constantcontact.com/api_reference/index.html#!/Contact_Lists/getLists)
+- [contact_tags](https://v3.developer.constantcontact.com/api_reference/index.html#!/Contact_Tags/getTags)
+- [contacts](https://v3.developer.constantcontact.com/api_reference/index.html#!/Contacts/getContacts)
+- [email_campaign_summaries](https://v3.developer.constantcontact.com/api_reference/index.html#!/Email_Reporting/getAllBulkEmailCampaignSummaries) (read only)
+- [email_campaign_activities](https://v3.developer.constantcontact.com/api_reference/index.html#!/Email_Campaigns/updateEmailCampaignActivityUsingPUT) (write only)
+- [email_campaigns](https://v3.developer.constantcontact.com/api_reference/index.html#!/Email_Campaigns/retrieveEmailCampaignsUsingGET)
+- [privileges](https://v3.developer.constantcontact.com/api_reference/index.html#!/Account_Services/getUserPrivileges) (read only)
+- [segments](https://v3.developer.constantcontact.com/api_reference/index.html#!/Segments/getAccountSegments)
+
+## Before you get started
 
 To integrate Constant Contact with Ampersand, you must have a Constant Contact Developer account and obtain the necessary credentials.
 
@@ -19,14 +33,14 @@ Once your account is set up, you'll need to create an app in Constant Contact to
 
 You will use these credentials to connect your application to Ampersand.
 
-### Create a Constant Contact Account
+### Create a Constant Contact account
 
 Here's how to sign up for a Constant Contact account:
 
 1. Go to the [Constant Contact Sign Up page](https://v3.developer.constantcontact.com/login/index.html?_ga=2.74994962.1095369080.1723052125-94b8f87f-e462-4b81-9771-2b211eac0567&_gac=1.89512297.1720021371.Cj0KCQjw7ZO0BhDYARIsAFttkCjWgg2zwOvaQdS8IlbZamQr4AT9C2j_7t1Xm6EFPKJSJ7W0PHnV6gQaAi1WEALw_wcB).
 2. Sign up using your preferred method and follow the instructions to create your account.
 
-### Creating a Constant Contact App
+### Creating a Constant Contact app
 
 Follow these steps to create an app in Constant Contact and add the Ampersand redirect URL:
 
@@ -46,9 +60,9 @@ Follow these steps to create an app in Constant Contact and add the Ampersand re
 
 ![Constant Contact Client ID and Secret](/images/provider-guides/690cde2-constantcontact1.gif)
 
-### Adding Ampersand Redirect URL in Your App
+### Adding Ampersand redirect URL in your app
 
-Once your app is created, you will be redirected to the **My Applications** page. Select your newly created application from the list and add the following details to your application to setup Oauth in your app. 
+Once your app is created, you will be redirected to the **My Applications** page. Select your newly created application from the list and add the following details to your application to set up OAuth in your app. 
 
 1. In the **Redirect URLs** section, click **Add another redirect URL**. 
 2. Enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
@@ -59,7 +73,7 @@ Once your app is created, you will be redirected to the **My Applications** page
 
 <br />
 
-### Add Your Constant Contact App Info to Ampersand
+### Add your Constant Contact app info to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 

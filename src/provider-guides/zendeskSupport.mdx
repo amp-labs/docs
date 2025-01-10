@@ -1,11 +1,13 @@
 ---
 title: "Zendesk Support"
 ---
+
 ## What's Supported
 
 ### Supported Actions
 
-The Intercom connector supports:
+The Zendesk Support connector supports:
+
 - [Read Actions](/define-integrations/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Zendesk Support instance will be done for each scheduled read.
 - [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://{{.workspace}}.zendesk.com`.
@@ -20,7 +22,7 @@ The Zendesk Support connector supports reading from and writing to the following
 - [Ticket Audits](https://developer.zendesk.com/api-reference/ticketing/tickets/ticket_audits/#json-format)
 - [Ticket Metrics](https://developer.zendesk.com/api-reference/ticketing/tickets/ticket_metrics/#json-format)
 - [Suspended Tickets](https://developer.zendesk.com/api-reference/ticketing/tickets/suspended_tickets/#json-format)
-All other in alphabetical order:
+  All other in alphabetical order:
 - [Activities](https://developer.zendesk.com/api-reference/ticketing/tickets/activity_stream/#json-format)
 - [Audit Logs](https://developer.zendesk.com/api-reference/ticketing/account-configuration/audit_logs/#json-format)
 - [Automations](https://developer.zendesk.com/api-reference/ticketing/business-rules/automations/#json-format)
@@ -89,6 +91,7 @@ You need a **Zendesk** account to connect with Ampersand. If you do not have a Z
 6. On the _OAuth Clients_ page, click **Add OAuth client**.
 
 7. On the _Add OAuth client_ form, enter the following details:
+
    1. **Client Name**: The name of the OAuth client.
    2. **Description**: Description for the OAuth client.
    3. **Redirect URI**: Enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`
@@ -120,11 +123,12 @@ You can find the **Unique Identifier** and **Client Secret** keys in the OAuth t
 ## Using the connector
 
 To start integrating with Zendesk Support:
+
 - Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/zendeskSupport/amp.yaml), see [Define Integrations](/define-integrations/overview) for more info.
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
 - Start using the connector!
-   - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
-   - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
-   - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.
+  - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.
