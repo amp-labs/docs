@@ -10175,8 +10175,13 @@
                                                 "values": {
                                                   "type": "array",
                                                   "description": "If the valueType is singleSelect or multiSelect, this is a list of possible values",
+                                                  "x-go-type-skip-optional-pointer": true,
                                                   "items": {
                                                     "type": "object",
+                                                    "required": [
+                                                      "value",
+                                                      "displayValue"
+                                                    ],
                                                     "description": "Represents a field value",
                                                     "properties": {
                                                       "value": {
@@ -10291,8 +10296,13 @@
                                                 "values": {
                                                   "type": "array",
                                                   "description": "If the valueType is singleSelect or multiSelect, this is a list of possible values",
+                                                  "x-go-type-skip-optional-pointer": true,
                                                   "items": {
                                                     "type": "object",
+                                                    "required": [
+                                                      "value",
+                                                      "displayValue"
+                                                    ],
                                                     "description": "Represents a field value",
                                                     "properties": {
                                                       "value": {
@@ -10414,8 +10424,13 @@
                                                 "values": {
                                                   "type": "array",
                                                   "description": "If the valueType is singleSelect or multiSelect, this is a list of possible values",
+                                                  "x-go-type-skip-optional-pointer": true,
                                                   "items": {
                                                     "type": "object",
+                                                    "required": [
+                                                      "value",
+                                                      "displayValue"
+                                                    ],
                                                     "description": "Represents a field value",
                                                     "properties": {
                                                       "value": {
@@ -36080,8 +36095,13 @@
                                       "values": {
                                         "type": "array",
                                         "description": "If the valueType is singleSelect or multiSelect, this is a list of possible values",
+                                        "x-go-type-skip-optional-pointer": true,
                                         "items": {
                                           "type": "object",
+                                          "required": [
+                                            "value",
+                                            "displayValue"
+                                          ],
                                           "description": "Represents a field value",
                                           "properties": {
                                             "value": {
@@ -36196,8 +36216,13 @@
                                       "values": {
                                         "type": "array",
                                         "description": "If the valueType is singleSelect or multiSelect, this is a list of possible values",
+                                        "x-go-type-skip-optional-pointer": true,
                                         "items": {
                                           "type": "object",
+                                          "required": [
+                                            "value",
+                                            "displayValue"
+                                          ],
                                           "description": "Represents a field value",
                                           "properties": {
                                             "value": {
@@ -36319,8 +36344,13 @@
                                       "values": {
                                         "type": "array",
                                         "description": "If the valueType is singleSelect or multiSelect, this is a list of possible values",
+                                        "x-go-type-skip-optional-pointer": true,
                                         "items": {
                                           "type": "object",
+                                          "required": [
+                                            "value",
+                                            "displayValue"
+                                          ],
                                           "description": "Represents a field value",
                                           "properties": {
                                             "value": {
@@ -38234,6 +38264,101 @@
                     "type": "string",
                     "description": "The time the organization was updated.",
                     "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ObjectMetadata": {
+        "type": "object",
+        "required": [
+          "name",
+          "fields"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the object",
+            "example": "contact"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Human-readable name of the object",
+            "example": "Contact"
+          },
+          "fields": {
+            "type": "object",
+            "description": "Map of field metadata keyed by field name",
+            "additionalProperties": {
+              "type": "object",
+              "required": [
+                "fieldName",
+                "displayName"
+              ],
+              "properties": {
+                "fieldName": {
+                  "type": "string",
+                  "description": "The name of the field from the provider API.",
+                  "example": "Account ID"
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "The display name of the field from the provider API.",
+                  "example": "Account ID"
+                },
+                "valueType": {
+                  "type": "string",
+                  "description": "A normalized field type",
+                  "enum": [
+                    "string",
+                    "boolean",
+                    "singleSelect",
+                    "multiSelect",
+                    "date",
+                    "datetime",
+                    "int",
+                    "float",
+                    "other"
+                  ],
+                  "x-go-type-skip-optional-pointer": true
+                },
+                "providerType": {
+                  "type": "string",
+                  "description": "Raw field type from the provider API.",
+                  "example": "timestamp",
+                  "x-go-type-skip-optional-pointer": true
+                },
+                "readOnly": {
+                  "type": "boolean",
+                  "description": "Whether the field is read-only.",
+                  "example": false,
+                  "x-go-type-skip-optional-pointer": true
+                },
+                "values": {
+                  "type": "array",
+                  "description": "If the valueType is singleSelect or multiSelect, this is a list of possible values",
+                  "x-go-type-skip-optional-pointer": true,
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "value",
+                      "displayValue"
+                    ],
+                    "description": "Represents a field value",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "description": "The internal value used by the system",
+                        "example": "outbound"
+                      },
+                      "displayValue": {
+                        "type": "string",
+                        "description": "The human-readable display value",
+                        "example": "Outbound Campaign"
+                      }
+                    }
                   }
                 }
               }
