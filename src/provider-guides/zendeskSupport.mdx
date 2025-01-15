@@ -71,10 +71,9 @@ You will then use these credentials to connect your application to Ampersand.
 
 ### Create a Zendesk Account
 
-You need a **Zendesk** account to connect with Ampersand. If you do not have a Zendesk account, here's how you can sign up:
-
-- Go to the [Zendesk site](https://www.zendesk.com/) and sign up for a free account.
-- Sign up using your preferred account.
+You need a **Zendesk** account to connect with Ampersand.
+- Follow instructions for [Getting a trial account or sponsored account for development](https://developer.zendesk.com/documentation/api-basics/getting-started/getting-a-trial-or-sponsored-account-for-development/)
+- Ensure that your subdomain starts with the `d3v-` prefix. This is crucial for ensuring that you can [request a global OAuth client](https://developer.zendesk.com/documentation/marketplace/building-a-marketplace-app/set-up-a-global-oauth-client/#requesting-a-global-oauth-client) later, which will allow you to connect to your customer's Zendesk instances.
 
 ### Creating a Zendesk App
 
@@ -84,23 +83,24 @@ You need a **Zendesk** account to connect with Ampersand. If you do not have a Z
 
 3. On the _Admin Center_ page, click **Apps and integrations**.
 
-4. Click the **API** tab.
+4. Under the **APIs** heading in the left navbar, click on "Zendesk API".
 
-5. Click **OAuth Clients**.
+5. Click on **OAuth Clients** tab.
 
 6. On the _OAuth Clients_ page, click **Add OAuth client**.
 
+![Zendesk Create OAuth Client](/images/provider-guides/zendeskStep1.png)
+
 7. On the _Add OAuth client_ form, enter the following details:
 
-   1. **Client Name**: The name of the OAuth client.
-   2. **Description**: Description for the OAuth client.
-   3. **Redirect URI**: Enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`
+   1. **Client name**: The name of the OAuth client that will be shown to your users in the OAuth popup.
+   2. **Unique identifier**: Ensure that you enter a name that is prefixed with `zdg-`, this allows you to [request a global OAuth client](https://developer.zendesk.com/documentation/marketplace/building-a-marketplace-app/set-up-a-global-oauth-client/#requesting-a-global-oauth-client) later. This identifier is also what you will enter in the Provider Apps tab of the Ampersand dashboard in the next step.
+   3. **Client kind**: Select "Confidential"
+   3. **Redirect URLs**: Enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`
 
 8. Click **Save**.
 
-You can find the **Unique Identifier** and **Client Secret** keys in the OAuth tab. Note these keys, as they are essential for connecting your app to Ampersand.
-
-![Zendesk App Scopes](/images/provider-guides/d13687c-zendesk11.gif)
+![Zendesk App Set Up](/images/provider-guides/zendeskStep2.png)
 
 ## Add Zendesk App Details in Ampersand
 
@@ -114,7 +114,7 @@ You can find the **Unique Identifier** and **Client Secret** keys in the OAuth t
 
 4. Select **Zendesk** from the Provider list.
 
-5. Enter the previously obtained **Client ID / Unique identifier** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
+5. Enter the previously obtained **Unique identifier** in the **Client ID** field and the **Client Secret** in the **Client Secret** field. For a list of valid scopes, refer to the [Zendesk documentation](https://developer.zendesk.com/api-reference/ticketing/oauth/oauth_tokens/#scopes). Enter each scope in a separate line.
 
    ![Ampersand Project Selection](/images/provider-guides/3859271-zendesk12.gif)
 
@@ -132,3 +132,7 @@ To start integrating with Zendesk Support:
   - If your integration has [Read Actions](/define-integrations/read-actions), you'll start getting webhook messages.
   - If your integration has [Write Actions](/define-integrations/write-actions), you can start making API calls to our Write API.
   - If your integration has [Proxy Actions](/define-integrations/proxy-actions), you can start making Proxy API calls.
+
+## Launch your Zendesk app to production
+
+In order to connect to your customer's Zendesk instances, you will need to [request a global OAuth client](https://developer.zendesk.com/documentation/marketplace/building-a-marketplace-app/set-up-a-global-oauth-client/#requesting-a-global-oauth-client). Please note that once you complete this process, you will need to reach out to the Zendesk team in order to edit your app (e.g. adding new scopes, modifying name).
