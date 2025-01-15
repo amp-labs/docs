@@ -1,0 +1,71 @@
+---
+title: "RingCentral"
+---
+
+## What's Supported
+
+### Supported Actions
+
+This connector supports:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://platform.ringcentral.com`.
+
+## Before You Get Started
+
+To connect RingCentral with Ampersand, you will need [a RingCentral Developer Account](https://developers.ringcentral.com/sign-up).
+
+Once your account is created, you'll need to create an app in RingCentral, configure the Ampersand redirect URI within the app, and obtain the following credentials from your app:
+
+- Client ID
+- Client Secret
+- Scopes
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Create a RingCentral Account
+
+Here's how you can sign up for a RingCentral account:
+
+- Go to the [RingCentral Sign Up page](https://developers.ringcentral.com/sign-up).
+- Choose your preferred environment and sign up using your preferred method and verify your email.
+
+### Creating a RingCentral App
+
+Follow the steps below to create a RingCentral app and add the Ampersand redirect URL.
+
+1. Log in to your [RingCentral Developer](https://developers.ringcentral.com/login) account.
+
+2. Click **Console** and then select **Register App** in the **Apps** section.
+
+3. Select the **App Type**: Rest API App and click **Next** Button.
+
+4. Enter the **App Name**, **App Description**.
+
+5. Choose **3-legged OAuth flow authorization code** in the Auth section.
+
+6. Enter callback URI as **https://api.withampersand.com/callbacks/v1/oauth** in the **OAuth Redirect URI** field.
+
+7. For the **Issue refresh tokens?** Select **Yes** to enable refresh token issuance or **No** to disable it, allowing users to maintain their session without re-authentication.
+
+8. For the **Application Scopes** in the **Security** section, select the required scopes.
+
+9. For the question **Who will be authorized to access your app?**, choose 'Public' to make the app accessible to all RingCentral customers or 'Private' to restrict access to the same RingCentral account.
+
+10. Click **Create**.
+
+   ![RingCentral OAuth Creation](/images/provider-guides/ringCentral_OAuth.gif)
+
+## Add Your RingCentral App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a RingCentral integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.  
+
+4. Select RingCentral from the **Provider** list.
+
+5. Enter the previously obtained Client ID in the **Client ID** field and the Client Secret in the **Client Secret** field.
+
+   ![Ampersand Integration](/images/provider-guides/ringCentral.gif)
