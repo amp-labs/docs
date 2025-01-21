@@ -262,6 +262,7 @@ const mintConfig: MintConfig = {
             "provider-guides/smartsheet",
             "provider-guides/snapchatAds",
             "provider-guides/surveyMonkey",
+            "provider-guides/talkdesk",
             "provider-guides/teamleader",
             "provider-guides/teamwork",
             "provider-guides/timely",
