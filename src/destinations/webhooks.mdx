@@ -14,8 +14,8 @@ Check out our [OpenAPI spec](https://github.com/amp-labs/openapi/blob/main/webho
 
 Ampersand attaches results to a webhook message in two ways:
 
-1) **Inline**: In most cases, the result is directly included in the webhook's `result` field.
-2) **URL**: If a single record is over 300KB, it becomes too big to be sent over a webhook. In this case, the result won't be included inline. Instead, the webhook message will contain a signed download URL in `resultInfo.downloadUrl`. **The URL expires after 15 minutes.**
+1) **Inline**: In most cases, the result is directly included in the webhook's `result` field. If a read action returns a large number of records, you might receive multiple webhooks in quick succession, each delivering a subset of the data. Read more about [message frequency](#handling-the-message-frequency) here.
+2) **URL**: If a single record in the result set is over 300KB, it becomes too big to be sent over a webhook. In this case, the result won't be included inline. Instead, the webhook message will contain a signed download URL in `resultInfo.downloadUrl`. **The URL expires after 15 minutes.**
 
 `resultInfo.type` indicates how the result is attached to the message:
 
