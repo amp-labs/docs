@@ -71,6 +71,35 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 }'
 ```
 
+#### Creating an association while writing a record
+
+If you'd like to create records that are associated with other records, you can make a similar request with the `associations` parameter. 
+
+> Note: This is currently only supported for HubSpot 
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_NAME>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: <API_KEY>' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "<GROUP_REF>",
+    "type": "create",
+    "record": {
+        "firstname": "Harry",
+        "lastname": "Potter",
+        "email": "harry@hogwarts.com",
+        "phone": "123456789"
+    },
+    "associations": [{
+        "to": {"id": "18417469280"},
+        "types": [{
+            "associationCategory": "HUBSPOT_DEFINED",
+            "associationTypeId": 279
+        }]
+    }]
+}'
+```
+
 ### Update an existing record
 
 To update an existing record, you need to know the ID of the record, which is the ID that the SaaS provider uses to uniquely identify this record. If you created the record using Ampersand, this ID is available in the API response. If you are reading the record first using Ampersand's Read Actions, make sure you add the ID as a required field in the read action. Here is an example request:
@@ -89,3 +118,4 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
     }
 }'
 ```
+
