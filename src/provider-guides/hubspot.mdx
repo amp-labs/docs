@@ -16,12 +16,15 @@ The Hubspot connector supports writing to and reading from the following objects
 - [Companies](https://developers.hubspot.com/docs/api/crm/companies)
 - [Contacts](https://developers.hubspot.com/docs/api/crm/contacts)
 - [Deals](https://developers.hubspot.com/docs/api/crm/deals)
-- All other standard CRM objects
+- All other [standard CRM objects](https://developers.hubspot.com/docs/guides/api/crm/understanding-the-crm#object-type-ids)
 - Custom CRM objects
 
 For each of these objects, the connector supports:
 - Standard fields, [here's a list of the standard fields](https://docs.google.com/spreadsheets/d/1FGc9zT_J9dyGghDxvqeioAva-5Gj7-2DQzKNMrbrPvw/view?usp=sharing) for common Hubspot objects
-- Custom fields 
+- Custom fields
+
+The Hubspot connector only supports reading from the following objects:
+- [Lists](https://developers.hubspot.com/docs/guides/api/crm/lists/overview). Please note that for Lists, incremental reads is not supported, which means that a full read of all Lists is done for each scheduled read. Incremental read is supported for other objects listed above.
 
 ### Example Integration
 
