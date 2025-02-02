@@ -191,6 +191,91 @@ When the webhook message is delivered, both statically mapped fields (in `yaml`)
  ]
 }
 ```
+### Mapping Values
+
+Ampersand platform also offers the flexibility of mapping values of fields from your app to a provider like `HubSpot`.
+
+These might be for fields that are mapped either in a user-defined fashion or have a pre-defined mapping defined.
+
+Lets take an example:
+
+- `SampleApp` is using Ampersand to integrate with their customer's Hubspot.
+
+- `SampleApp` needs to ask the customer to map their `SampleApp` fields to their Hubspot fields.
+
+- For a certain field, say `priority`,
+`SampleApp` needs to map the values  `Very High`, `High`, `Medium`, `Low` of the "app" side to
+`BUCKET_1`, `BUCKET_2`, `BUCKET_3`, `BUCKET_4` present in HubSpot for the mapped field
+
+To achieve this you can define the "app" side of the values that need to be mapped in `InstallIntegration` component like below:
+
+```TYPESCRIPT
+const mapping = {
+    deals: [
+      {
+        mapToName: 'priority',
+        mapToDisplayName: 'Priority',
+        prompt: 'Which field do you use to track the priority of a deal?',
+        // Mapping values for a field that's mapped by a user
+        mappedValues: [
+          {
+            mappedValue: 'veryhigh',
+            mappedDisplayValue: 'Very High'
+          },
+          {
+            mappedValue: 'high',
+            mappedDisplayValue: 'High'
+          },{
+            mappedValue: 'medium',
+            mappedDisplayValue: 'Medium'
+          },{
+            mappedValue: 'low',
+            mappedDisplayValue: 'Low'
+          },
+        ]
+      },
+      {
+        fieldName: 'stage',
+        /**
+        ** Here `stage` only needs the values to be mapped.
+        ** The users will not need to map the field.
+        **/
+        mappedValues: [
+          {
+            mappedValue: 'open',
+            mappedDisplayValue: 'Open'
+          },{
+            mappedValue: 'closedWon',
+            mappedDisplayValue: 'Closed Won'
+          },{
+            mappedValue: 'closedLost',
+            mappedDisplayValue: 'Closed Lost'
+          },
+        ],
+      },
+    ],
+    companies: [
+      {
+        mapToName: 'territory', // No mapping of values on this field
+        mapToDisplayName: 'Sales Territory',
+        prompt: 'Which field do you use to track the sales territory of a company?',
+      }
+    ]
+  }
+...
+return (<InstallIntegration
+   integration="myHubspotIntegration"
+   mapping={mapping}
+   groupRef={groupRef}
+   ...
+/>);
+
+```
+
+This will ensure that your users see a mapping UI where they can select the values from the HubSpot side to be mapped to the app side values defined here.
+
+> Note: We only allow one-to-one mapping of values
+
 ## Full example
 
 To see a full example of how to define object and field mappings, check out the [unified CRM example](https://github.com/amp-labs/samples/blob/main/unifiedCRM/amp.yaml) in our samples repository.
