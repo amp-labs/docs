@@ -83,10 +83,11 @@ The parameters of the component are:
 * **onInstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully installs the integration.
 * **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
 * **onUninstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully uninstalls the integration.
+* **fieldMapping** (JSON): a JSON object that specifies the dynamic mapping configuration for this installation. Learn more about dynamic mapping [here](/object-and-field-mapping#dynamic-field-mappings)
 
 Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`. `Config` is an exported type from `@amp-labs/react`.
 
-```TypeScript
+```JSX
  <InstallIntegration 
   integration = {myIntegrationName}
   consumerRef = {userId}
@@ -104,6 +105,16 @@ Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the follo
   onUninstallSuccess = {(installationId) =>
     console.log(`Successfully uninstalled ${installationId}`)
   }
+  fieldMapping={{
+    contacts: [
+      {
+        mapToName: 'priority',
+        mapToDisplayName: 'Priority',
+        prompt: 'Which field do you use to track the priority of a deal?',
+      },
+      ... // other field mapping options
+    ],
+  }}
 />
  ```
 
