@@ -1,0 +1,80 @@
+---
+title: ServiceDesk Plus
+---
+## What's Supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://sdpondemand.manageengine.com`.
+
+### Example integration
+
+To define an integration for ServiceDesk Plus, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations: 
+  - name: serviceDeskPlus-integration
+    displayName: My ServiceDesk Plus Integration
+    provider: serviceDeskPlus
+    proxy:
+      enabled: true
+```
+
+## Before You Get Started
+
+To connect ServiceDesk Plus with Ampersand, you need [a ServiceDesk Plus Account](https://sdpondemand.manageengine.com) and [Zoho API Console account](https://api-console.zoho.com).
+
+Once your account is created, you'll need to create an app in Zoho API Console and obtain the following credentials from your app:
+
+- Client ID
+- Client Secret
+- Scopes
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Create a ServiceDesk Plus & Zoho Account
+
+**ServiceDesk Plus account:**
+
+- Go to the [ServiceDesk Plus Sign Up page](https://sdpondemand.manageengine.com/Register.do).
+- Sign up using your preferred method.
+
+**Zoho account:**
+
+- Go to the [Zoho Sign Up page](https://accounts.zoho.com/register)
+- Sign up using your preferred method.
+
+### Creating an OAuth App in Zoho API Console for ServiceDesk Plus
+
+Follow the steps below to create a _ServiceDeskPlus_ app in Zoho API console and add the Ampersand redirect URL in the app:
+
+1. Log in the [Zoho API Console](https://api-console.zoho.com/) using the Zoho account.
+2. Click **Get Started** to create your first app. If you have already created an application, click **Add Client** to create a new app.
+3. Select **Server-based Applications**.
+4. Enter the following details:
+   1. **Client Name**: Name of the client app.
+   2. **Homepage URL**: The home page URL of your app.
+   3. **Authorized Redirect URIs**: The Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+5. Click **Create**.
+
+![Ampersand Integration](/images/provider-guides/zoho_OAuth.gif)
+
+## Add Your ServiceDesk Plus App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a ServiceDesk Plus integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.
+
+4. Select _ServiceDeskPlus_ from the **Provider** list.
+
+5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
+
+![Ampersand Integration](/images/provider-guides/serviceDeskPlus-ampersand.gif)
+ 
