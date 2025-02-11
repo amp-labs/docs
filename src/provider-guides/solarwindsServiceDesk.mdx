@@ -1,0 +1,48 @@
+---
+title: "SolarWinds Service Desk"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.samanage.com`.
+
+### Example integration
+
+To define an integration for SolarWinds Service Desk, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: solarWindsServiceDesk-integration
+    displayName: My SolarWinds Service Desk Integration
+    provider: solarWindsServiceDesk
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses API Key authentication, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the OAuth2 Authorization Code grant type.)
+
+To integrate with SolarWinds Service Desk:
+- Create a manifest file similar to the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for an API key.
+- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the API key provided by the customer. Please note that this connector's base URL is `https://api.samanage.com`.
+
+## Creating an API key for SolarWinds Service Desk
+
+1. Navigate to **Setup > Users & Groups > Users** and locate your **User Detail Page** (not your User Profile Card). 
+   - Alternatively, use the search bar to find your user and click on your name to view details.
+2. From the user detail page, click **Actions** and select **Generate JSON Web Token** from the dropdown menu. (SWSD administrator rights required.)
+3. Under **JSON Web Token** you can see the following options:
+   - **Copy** → Copy the token to your clipboard.
+   - **Reset** → Generates a new token, replacing the existing one.
+   - **Delete** → Removes the current token.
+   - **Hide Token** → Conceals the token, displaying a Show Token link instead.
+4. Click **Copy** to save the token for use.
+
+![Generate Toekn](/images/provider-guides/solrwindsServiceDesk.gif)
