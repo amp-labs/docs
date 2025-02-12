@@ -13,6 +13,21 @@ The Google connector supports Google products which have APIs with the root URL 
 This connector supports:
 - [Proxy Actions](/proxy-actions), using the base URL `https://www.googleapis.com`.
 
+Additionally, the Google **Calendar** module supports:
+- [Read Actions](/read-actions), including full historical backfill. Please note that incremental
+read **is only supported for the Calendar “Events” object**; otherwise, a full read of the Google instance will be performed for each scheduled run.
+- [Write Actions](/write-actions).
+
+### Supported Calendar Objects
+
+The Google connector supports reading from and writing to the following **Calendar** module objects:
+* [acl](https://developers.google.com/workspace/calendar/api/v3/reference/acl)
+* [calendarList](https://developers.google.com/calendar/api/v3/reference/calendarList#resource-representations)
+* [events](https://developers.google.com/workspace/calendar/api/v3/reference/events)
+
+The Google connector supports the following read-only objects:
+* [settings](https://developers.google.com/workspace/calendar/api/v3/reference/settings)
+
 ## Before You Get Started
 
 To integrate Google with Ampersand, you will need a [Google Cloud account](https://cloud.google.com/).
