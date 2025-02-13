@@ -39,7 +39,7 @@ For example, you could map a `mobilephone` field to `phone`. Read results will d
 
 ```YAML
   - name: hubspot-integration
-    displayName: My Hubspot integration
+    displayName: My HubSpot integration
     provider: hubspot
     module: crm
     read:
@@ -97,14 +97,12 @@ If you have an optional field mapping, and the user chose not to map the field (
 
 ### Dynamic field mappings
 
-Above, we learned how to map fields where we know which fields your users will map ahead of time. 
+With regular field mappings, you can define a set of fields that all your users need to map. Sometimes, you may want different users to map different sets of fields.
 
-There could be a case where you'd like to have different users map a unique set of fields. 
+> For example: SampleApp is using Ampersand to integrate with their customer's HubSpot. 
+> SampleApp needs to ask the customer to map their SampleApp fields to their HubSpot fields, and different customers can have different sets of fields in SampleApp.
 
-> For example: `SampleApp` is using Ampersand to integrate with their customer's Hubspot. 
-> `SampleApp` needs to ask the customer to map their `SampleApp` fields to their Hubspot fields, and different customers can have different sets of fields in `SampleApp`.
-
-To achieve this, you can pass in the mapping configuration in the `InstallIntegration` component instead of the `amp.yaml`: 
+To achieve this, you can pass in the mapping configuration in the `fieldMapping` property of the `InstallIntegration` component: 
 
 ```TYPESCRIPT
 function MyComponent() {
@@ -135,7 +133,7 @@ function MyComponent() {
     ]
   }
   return (<InstallIntegration 
-    integration = "myHubspotIntegration"
+    integration = "myHubSpotIntegration"
     consumerRef = {userId}
     consumerName = {userFullName}
     groupRef = {teamId}
@@ -153,7 +151,7 @@ Note you can also use this configuration in tandem with static field mappings (t
 ```YAML
 specVersion: 1.0.0
 integrations: 
-  - name: myHubspotIntegration
+  - name: myHubSpotIntegration
     provider: hubspot
     module: crm
     read:
@@ -169,7 +167,7 @@ integrations:
           ...
 ```
 
-When the webhook message is delivered, both statically mapped fields (in `yaml`) and dynamically mapped fields (passed as `json`) will be present in `result.mappedFields`
+When the webhook message is delivered, both statically mapped fields (defined in `amp.yaml`) and dynamically mapped fields (defined in the UI component) will be present in `result.mappedFields`
 
 ```JSON
 {
@@ -194,21 +192,19 @@ When the webhook message is delivered, both statically mapped fields (in `yaml`)
 ```
 ### Mapping values
 
-Ampersand platform also offers the flexibility of mapping values of fields from your app to a provider like `HubSpot`.
+Ampersand platform also offers the flexibility of mapping values of fields from your app to a provider like HubSpot.
 
 These might be for fields that are mapped either in a user-defined fashion or have a pre-defined mapping defined.
 
 Lets take an example:
 
-- `SampleApp` is using Ampersand to integrate with their customer's Hubspot.
+- SampleApp is using Ampersand to integrate with their customer's HubSpot.
+- SampleApp needs to ask the customer to map their SampleApp fields to their HubSpot fields.
+- For a certain field, such as `Priority`,
+SampleApp has the values  `Very High`, `High`, `Medium`, `Low` while HubSpot has the values
+`P1`, `P2`, `P3`, and `P4`. SampleApp would like the user to map the correlation between the SampleApp values and HubSpot values.
 
-- `SampleApp` needs to ask the customer to map their `SampleApp` fields to their Hubspot fields.
-
-- For a certain field, say `priority`,
-`SampleApp` needs to map the values  `Very High`, `High`, `Medium`, `Low` of the "app" side to
-`BUCKET_1`, `BUCKET_2`, `BUCKET_3`, `BUCKET_4` present in HubSpot for the mapped field
-
-To achieve this you can define the "app" side of the values that need to be mapped in `InstallIntegration` component like below:
+To achieve this you can define the SampleApp side of the values that need to be mapped in `InstallIntegration` component like below:
 
 ```TYPESCRIPT
 const mapping = {
@@ -265,8 +261,8 @@ const mapping = {
   }
 ...
 return (<InstallIntegration
-   integration="myHubspotIntegration"
-   mapping={mapping}
+   integration="myHubSpotIntegration"
+   fieldMapping={mapping}
    groupRef={groupRef}
    ...
 />);
@@ -275,7 +271,7 @@ return (<InstallIntegration
 
 This will ensure that your users see a mapping UI where they can select the values from the HubSpot side to be mapped to the app side values defined here.
 
-> Note: We only allow one-to-one mapping of values
+<Tip> We only allow one-to-one mapping of values </Tip>
 
 ## Full example
 
