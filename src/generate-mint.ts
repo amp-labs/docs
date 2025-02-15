@@ -216,6 +216,7 @@ const mintConfig: MintConfig = {
             "provider-guides/helpScoutMailbox",
             "provider-guides/heyreach",
             "provider-guides/hive",
+            "provider-guides/highlevel",
             "provider-guides/hubspot",
             "provider-guides/insightly",
             "provider-guides/instantly",
