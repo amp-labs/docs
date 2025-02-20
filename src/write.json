@@ -45,9 +45,11 @@
         ],
         "requestBody": {
           "description": "Write request",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
+                "title": "Write Request",
                 "required": [
                   "groupRef",
                   "type"
@@ -114,6 +116,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "title": "Sync Write Response Success",
                   "type": "object",
                   "required": [
                     "result"
@@ -121,6 +124,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "result": {
+                      "title": "Write Result",
                       "type": "object",
                       "required": [
                         "success"
@@ -167,6 +171,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "title": "Sync Write Response Failure",
                   "type": "object",
                   "required": [
                     "errors"
@@ -183,6 +188,7 @@
                       }
                     },
                     "result": {
+                      "title": "Write Result",
                       "type": "object",
                       "required": [
                         "success"
@@ -232,9 +238,11 @@
             "content": {
               "application/problem+json": {
                 "schema": {
+                  "title": "API Problem",
                   "type": "object",
                   "allOf": [
                     {
+                      "title": "Problem",
                       "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
                       "type": "object",
                       "properties": {
@@ -367,6 +375,7 @@
   "components": {
     "schemas": {
       "WriteRequest": {
+        "title": "Write Request",
         "required": [
           "groupRef",
           "type"
@@ -425,6 +434,7 @@
         }
       },
       "WriteResponseSingleSuccess": {
+        "title": "Sync Write Response Success",
         "type": "object",
         "required": [
           "result"
@@ -432,6 +442,7 @@
         "additionalProperties": false,
         "properties": {
           "result": {
+            "title": "Write Result",
             "type": "object",
             "required": [
               "success"
@@ -460,6 +471,7 @@
         }
       },
       "WriteResponseSingleFail": {
+        "title": "Sync Write Response Failure",
         "type": "object",
         "required": [
           "errors"
@@ -476,6 +488,7 @@
             }
           },
           "result": {
+            "title": "Write Result",
             "type": "object",
             "required": [
               "success"
@@ -518,6 +531,7 @@
         }
       },
       "WriteResult": {
+        "title": "Write Result",
         "type": "object",
         "required": [
           "success"
