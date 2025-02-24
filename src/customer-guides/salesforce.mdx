@@ -1,0 +1,72 @@
+This guide is designed to help you prepare for and successfully set up a Salesforce integration.
+
+## Checklist Before Installing a Salesforce Integration
+
+We recommend you to verify the following requirements before installing the Salesforce integration:
+
+### 1. **Verify Your Salesforce Edition Supports API Access**
+
+Salesforce editions offer different levels of API access, which can affect Salesforce integration in Ampersand.
+
+Before setting up your Salesforce integration, you must confirm whether your specific Salesforce edition includes API access. Some editions include full API access by default, while others may offer limited access or require additional purchases.
+
+To evaluate if your Salesforce edition supports the necessary API access for this integration, please refer to [Salesforce's official documentation](https://help.salesforce.com/s/articleView?language=en_US&id=000385436&type=1) on API access by edition.
+
+If your Salesforce edition does not include the required API access, contact your *Salesforce account representative*.
+
+### 2. **Configure Token Policy Settings**
+
+Salesforce access tokens expire after a certain period. To ensure your integration continues working without interruption, you need to set your refresh token policy to **Refresh token is valid until revoked**.
+
+Here's how to configure this setting in Salesforce:
+
+1. Log in to *Salesforce*.
+2. Go to **Setup**.
+3. In the *Quick Find* box, search for **Connected Apps**.
+4. Click on **Manage Connected Apps**.
+5. Find and click on the name of your connected app.
+6. Scroll down to the **OAuth Policies** section.
+7. Look for **Refresh Token Policy**.
+8. Under *IP Relaxation*, select **Relax IP restrictions**.
+9. Make sure the refresh token policy is set to **Refresh token is valid until revoked**.
+    
+  ![Refresh Token Settings](/images/customer-guides/salesforce-refresh-token.png)
+
+10.  Click **Save**.
+
+### 3. Check API Access Control Settings
+
+Salesforce allows administrators to restrict which applications can access Salesforce data through APIs. You need to ensure that API access isn't limited to only specific connected apps.
+
+To verify your API access control settings:
+
+1. Log in to *Salesforce*.
+2. Go to **Setup**.
+3. In the *Quick Find* box, search for **Connected Apps OAuth Usage**.
+4. Under the list of connected apps, find your app and check:
+   - If its status is "Blocked" - users can't access the app.
+   - If its status is "Admin approved users are pre-authorized" - only selected users can access.
+   - If its status is "Users are pre-authorized" - all users can access the app.
+
+If you need to modify these settings:
+
+1. Click on **Install** next to your connected app.
+2. In the **OAuth Usage and Policies** section, set the appropriate permissions level.
+3. Click **Save**.
+
+### 4. Ensure the Installing User Has API Access in Their Profile
+
+The user account that will be authorizing the integration must have API access enabled in their Salesforce profile.
+
+To check and enable API access for a user profile:
+
+1. Log in to *Salesforce*.
+2. Go to **Setup**.
+3. In the *Quick Find* box, type **Profiles**.
+4. Click on **Profiles**.
+5. Find and click on the profile of the user who will be installing the integration.
+6. Look for **API Enabled** permission.
+7. Make sure **API Enabled** is checked.
+8. If you need to edit the profile, click **Edit** at the top of the page.
+9. Check the **API Enabled** box.
+10. Click **Save**.

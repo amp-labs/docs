@@ -280,6 +280,13 @@ const mintConfig: MintConfig = {
             "provider-guides/zoom"
           ],
         },
+        {
+          group: "Customer Guides",
+          pages: [
+            "customer-guides/overview",
+            "customer-guides/salesforce"
+          ]
+        },
         "dev-and-prod-environments"
       ],
     },
