@@ -8,19 +8,27 @@ title: "Zendesk Support"
 
 The Zendesk Support connector supports:
 
-- [Read Actions](/define-integrations/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Zendesk Support instance will be done for each scheduled read.
+- [Read Actions](/define-integrations/read-actions), including full historic backfill and incremental reads for several objects.
 - [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://{{.workspace}}.zendesk.com`.
 
 ### Supported Objects
 
+The Zendesk Support connector supports incremental read for the following objects:
+- attribute_values - Returns a stream of changes that occurred on routing attribute values.
+- [Attributes](https://developer.zendesk.com/api-reference/ticketing/ticket-management/skill_based_routing/#list-account-attributes)
+- [Instance Values](https://developer.zendesk.com/api-reference/ticketing/ticket-management/skill_based_routing/#list-agent-attribute-values)
+- [Organizations](https://developer.zendesk.com/api-reference/ticketing/organizations/organizations/#json-format)
+- [Ticket Events](https://developer.zendesk.com/api-reference/ticketing/ticket-management/incremental_exports/#incremental-ticket-event-export)
+- [Ticket Metrics](https://developer.zendesk.com/api-reference/ticketing/tickets/ticket_metrics/#json-format)
+- [Tickets](https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/#json-format)
+- [Users](https://developer.zendesk.com/api-reference/ticketing/users/users/#json-format)
+
 The Zendesk Support connector supports reading from and writing to the following 48 objects:
 
-- [Tickets](https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/#json-format)
 - [Ticket Forms](https://developer.zendesk.com/api-reference/ticketing/tickets/ticket_forms/#json-format)
 - [Ticket Fields](https://developer.zendesk.com/api-reference/ticketing/tickets/ticket_fields/#json-format)
 - [Ticket Audits](https://developer.zendesk.com/api-reference/ticketing/tickets/ticket_audits/#json-format)
-- [Ticket Metrics](https://developer.zendesk.com/api-reference/ticketing/tickets/ticket_metrics/#json-format)
 - [Suspended Tickets](https://developer.zendesk.com/api-reference/ticketing/tickets/suspended_tickets/#json-format)
   All other in alphabetical order:
 - [Activities](https://developer.zendesk.com/api-reference/ticketing/tickets/activity_stream/#json-format)
@@ -39,7 +47,6 @@ The Zendesk Support connector supports reading from and writing to the following
 - [Organization Fields](https://developer.zendesk.com/api-reference/ticketing/organizations/organization_fields/#json-format)
 - [Organization Memberships](https://developer.zendesk.com/api-reference/ticketing/organizations/organization_memberships/#json-format)
 - [Organization Subscriptions](https://developer.zendesk.com/api-reference/ticketing/organizations/organization_subscriptions/#json-format)
-- [Organizations](https://developer.zendesk.com/api-reference/ticketing/organizations/organizations/#json-format)
 - [Recipient Addresses](https://developer.zendesk.com/api-reference/ticketing/account-configuration/support_addresses/#json-format)
 - [Requests](https://developer.zendesk.com/api-reference/ticketing/tickets/ticket-requests/#json-format)
 - [Resource Collections](https://developer.zendesk.com/api-reference/ticketing/ticket-management/resource_collections/#json-format)
@@ -52,7 +59,6 @@ The Zendesk Support connector supports reading from and writing to the following
 - [Trigger Categories](https://developer.zendesk.com/api-reference/ticketing/business-rules/trigger_categories/#json-format)
 - [Triggers](https://developer.zendesk.com/api-reference/ticketing/business-rules/triggers/#json-format)
 - [User Fields](https://developer.zendesk.com/api-reference/ticketing/users/user_fields/#json-format)
-- [Users](https://developer.zendesk.com/api-reference/ticketing/users/users/#json-format)
 - [Views](https://developer.zendesk.com/api-reference/ticketing/business-rules/views/#json-format)
 - [Workspaces](https://developer.zendesk.com/api-reference/ticketing/ticket-management/workspaces/#json-format)
 
