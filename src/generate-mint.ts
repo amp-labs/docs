@@ -225,6 +225,7 @@ const mintConfig: MintConfig = {
             "provider-guides/iterable",
             "provider-guides/jira",
             "provider-guides/jotform",
+            "provider-guides/joinMe",
             "provider-guides/keap",
             "provider-guides/kit",
             "provider-guides/klaviyo",
