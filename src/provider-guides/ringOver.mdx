@@ -1,0 +1,59 @@
+---
+title: RingOver
+---
+## What's supported
+
+### Supported actions
+
+RingOver provides two separate APIs for US and EU regions. Each region requires its own API key and has a different base URL. We provide two connectors to support this:
+
+1. RingOver US connector:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://public-api-us.ringover.com`
+
+2. RingOver EU connector:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://public-api.ringover.com`
+
+> **Important:** API keys generated for the US region will not work with the EU base URL and vice versa. Make sure to use the appropriate connector and API key for your region.
+
+### Example integrations
+
+#### For US Region:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: ringover-us-integration
+    displayName: My RingOver US Integration
+    provider: ringOverUS
+    proxy:
+      enabled: true
+```
+
+#### For EU Region:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: ringover-eu-integration
+    displayName: My RingOver EU Integration
+    provider: ringOverEU
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+Both connectors use API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with RingOver:
+- Determine which region (US or EU) your RingOver account belongs to
+- Create a manifest file using the appropriate example above
+- Deploy it using the [amp CLI](/cli/overview)
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key
+- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer
+
+## Creating an API key for RingOver
+
+[Click here](https://developer.ringover.com) for more information about generating an API key for RingOver. The UI components will display this link, so that your users can successfully create API keys.
