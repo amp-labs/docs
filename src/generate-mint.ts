@@ -173,6 +173,7 @@ const mintConfig: MintConfig = {
             "provider-guides/attio",
             "provider-guides/aweber",
             "provider-guides/bird",
+            "provider-guides/bitbucket",
             "provider-guides/blueshift",
             "provider-guides/blueshiftEU",
             "provider-guides/box",
