@@ -1,0 +1,71 @@
+---
+title: "Join.me"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL https://api.join.me.
+
+## Before You Get Started
+
+To connect Join.me with Ampersand, you need [a Join.me Account](https://developer.join.me/).
+
+Once your account is created, you'll need to create an app in Join.me and obtain the following credentials from your app:
+
+- Key(Client ID)
+- Secret(Client Secret)
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Creating a Join.me App
+
+Follow the steps below to create a Join.me app and add the Ampersand redirect URL.
+
+1. Log in to your [Join.me](https://developer.join.me/login) account.
+
+2. Once logged in, click on the **Login Credentials** link located in the upper-right corner of your Join.me account.
+
+3. Click on the **Applications -> Create a New Application**
+
+4. Enter Application Name in the **Name of the Application** section.
+
+5. Enter website url in the **Web site** section and describe what the application do in the **Description** section.
+
+6. Enter the Ampersand Callback URI: `https://api.withampersand.com/callbacks/v1/oauth` in the **Register Callback URL** section.
+
+7. Agree the terms of service and then, Click the **Register Application**.
+
+   ![Join.me OAuth Creation](/images/provider-guides/joinMe_OAuth.gif)
+
+### Example integration
+
+To define an integration for Join.me, create a manifest file that looks like this:
+
+```YAML
+#amp.yaml
+specVersion: 1.0.0
+integrations: 
+  - name: joinMeIntegration
+    displayName: Join Me
+    provider: joinMe
+    proxy:
+      enabled: true
+```
+
+## Add Your Join.me App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Join.me integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.  
+
+4. Select Join Me from the **Provider** list.
+
+5. Enter the previously obtained Client ID in the **Client ID** field, the Client Secret in the **Client Secret** field and scopes in the **Scopes** field.
+
+   ![Ampersand Integration](/images/provider-guides/joinMe.gif)

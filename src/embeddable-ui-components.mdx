@@ -20,16 +20,6 @@ or
 yarn add @amp-labs/react
 ```
 
-#### For versions 1.x.x (legacy)
-
-Version 1.x.x requires chakra-ui peer dependencies.
-
-If you are using yarn, you'll have to explicitly install the peer dependencies.
-
-```
-yarn add @amp-labs/react @chakra-ui/react @emotion/react @emotion/styled framer-motion
-```
-
 ### Credentials
 
 This library requires your components to be wrapped in the `<AmpersandProvider/>` context. `<AmpersandProvider />` takes these props:
@@ -42,10 +32,8 @@ Here's an example:
 
 ```TypeScript
 import { AmpersandProvider, InstallIntegration } from '@amp-labs/react';
-
-// For v2.x.x, you must import the Ampersand style sheet once in your application.
-import '@amp-labs/react/styles';
-import './App.css'; // optional: your own CSS override.
+import '@amp-labs/react/styles'; // Import this once in your application.
+import './App.css'; // Optional: your own CSS override.
 
 const options = {
   project: 'PROJECT', // Your Ampersand project name or ID.
@@ -83,10 +71,11 @@ The parameters of the component are:
 * **onInstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully installs the integration.
 * **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
 * **onUninstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully uninstalls the integration.
+* **fieldMapping** (JSON): a JSON object that specifies the dynamic mapping configuration for this installation. Learn more about dynamic mapping [here](/object-and-field-mapping#dynamic-field-mappings)
 
 Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`. `Config` is an exported type from `@amp-labs/react`.
 
-```TypeScript
+```JSX
  <InstallIntegration 
   integration = {myIntegrationName}
   consumerRef = {userId}
@@ -104,6 +93,16 @@ Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the follo
   onUninstallSuccess = {(installationId) =>
     console.log(`Successfully uninstalled ${installationId}`)
   }
+  fieldMapping={{
+    contacts: [
+      {
+        mapToName: 'priority',
+        mapToDisplayName: 'Priority',
+        prompt: 'Which field do you use to track the priority of a deal?',
+      },
+      ... // other field mapping options
+    ],
+  }}
 />
  ```
 
@@ -173,10 +172,8 @@ You can override CSS variables that are exposed in the [variables.css file](http
 
 ```TypeScript
 import { AmpersandProvider } from '@amp-labs/react';
-// Customized style is only supported in v2.x.x
-// You only have to import the Ampersand style sheet once in your application.
 import '@amp-labs/react/styles';
-import './App.css'; // optional: your own css override 
+import './App.css'; // Optional: your own css override
 ```
 
 ### Example App.css
@@ -222,10 +219,8 @@ When a user sets their system settings to dark mode, then Ampersand's UI compone
 
 ```TypeScript
 import { AmpersandProvider, InstallIntegration } from '@amp-labs/react';
-
-// For v2.x.x, you must import the Ampersand style sheet once in your application.
-import '@amp-labs/react/styles';
-import './App.css'; // optional: your own CSS override 
+import '@amp-labs/react/styles'; // Add this line when migrating to v2
+import './App.css'; // Optional: your own CSS override 
 ```
 
 ## Troubleshooting 

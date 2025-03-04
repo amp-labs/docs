@@ -39,7 +39,7 @@ For example, you could map a `mobilephone` field to `phone`. Read results will d
 
 ```YAML
   - name: hubspot-integration
-    displayName: My Hubspot integration
+    displayName: My HubSpot integration
     provider: hubspot
     module: crm
     read:
@@ -94,6 +94,184 @@ Field mappings can either be inside `requiredFields` or `optionalFields`, you'll
 ```
 
 If you have an optional field mapping, and the user chose not to map the field (because they do not have a field that corresponds to notes), you can still make Write API calls with `notes` populated, and Ampersand will automatically strip it from the request before writing to the provider API to prevent errors.
+
+### Dynamic field mappings
+
+With regular field mappings, you can define a set of fields that all your users need to map. Sometimes, you may want different users to map different sets of fields.
+
+> For example: SampleApp is using Ampersand to integrate with their customer's HubSpot. 
+> SampleApp needs to ask the customer to map their SampleApp fields to their HubSpot fields, and different customers can have different sets of fields in SampleApp.
+
+To achieve this, you can pass in the mapping configuration in the `fieldMapping` property of the `InstallIntegration` component: 
+
+```TYPESCRIPT
+function MyComponent() {
+  const mapping = {
+    // You'd likely construct this dynamically based on your business logic
+    // of determining which fields the user need to map.
+    // The example is static for simplicity.
+    contacts: [
+      {
+        mapToName: 'source',
+        // Both mapToDisplayName and prompt are optional.
+        mapToDisplayName: 'Source',
+        prompt: 'Which field do you use to track the source of a contact?',
+      },
+      {
+        mapToName: 'priority',
+        mapToDisplayName: 'Priority',
+        prompt: 'Which field do you use to track the priority of a contact?',        
+      }
+    ],
+    // Field mapping for the companies object
+    companies: [
+      {
+        mapToName: 'AccountID',
+        mapToDisplayName: 'Sales Territory',
+        prompt: 'Which field do you use to track the sales territory of a company?',
+      }
+    ]
+  }
+  return (<InstallIntegration 
+    integration = "myHubSpotIntegration"
+    consumerRef = {userId}
+    consumerName = {userFullName}
+    groupRef = {teamId}
+    groupName = {teamName}
+    fieldMapping = {mapping}
+  />);
+}
+
+```
+
+<Tip>Dynamic mappings are considered optional for a user to set, i.e, your users can install the integration without explicitly mapping a field. </Tip>
+
+Note you can also use this configuration in tandem with static field mappings (the ones defined in `amp.yaml`):
+
+```YAML
+specVersion: 1.0.0
+integrations: 
+  - name: myHubSpotIntegration
+    provider: hubspot
+    module: crm
+    read:
+      objects:
+        # contacts also has a static field mapping
+        - objectName: contacts
+          optionalFields:
+            - mapToName: pronoun
+              mapToDisplayName: Pronoun
+              prompt: We will use this word when addressing this person in emails we send out.
+          ...
+        - objectName: companies
+          ...
+```
+
+When the webhook message is delivered, both statically mapped fields (defined in `amp.yaml`) and dynamically mapped fields (defined in the UI component) will be present in `result.mappedFields`
+
+```JSON
+{
+ ...
+ "objectName": "Contact",
+ "result": [
+  {
+    "fields": {
+      ... // non-mapped fields
+    },
+    "mappedFields": {
+      "pronoun": "she", // statically mapping
+      "source": "LinkedIn", // dynamically mapped
+      "priority": "high", // dynamically mapped
+    },
+    "raw": {
+      ...
+    }
+  }
+ ]
+}
+```
+### Mapping values
+
+Ampersand platform also offers the flexibility of mapping values of fields from your app to a provider like HubSpot.
+
+These might be for fields that are mapped either in a user-defined fashion or have a pre-defined mapping defined.
+
+Lets take an example:
+
+- SampleApp is using Ampersand to integrate with their customer's HubSpot.
+- SampleApp needs to ask the customer to map their SampleApp fields to their HubSpot fields.
+- For a certain field, such as `Priority`,
+SampleApp has the values  `Very High`, `High`, `Medium`, `Low` while HubSpot has the values
+`P1`, `P2`, `P3`, and `P4`. SampleApp would like the user to map the correlation between the SampleApp values and HubSpot values.
+
+To achieve this you can define the SampleApp side of the values that need to be mapped in `InstallIntegration` component like below:
+
+```TYPESCRIPT
+const mapping = {
+    deals: [
+      {
+        mapToName: 'priority',
+        mapToDisplayName: 'Priority',
+        prompt: 'Which field do you use to track the priority of a deal?',
+        // Mapping values for a field that's mapped by a user
+        mappedValues: [
+          {
+            mappedValue: 'veryhigh',
+            mappedDisplayValue: 'Very High'
+          },
+          {
+            mappedValue: 'high',
+            mappedDisplayValue: 'High'
+          },{
+            mappedValue: 'medium',
+            mappedDisplayValue: 'Medium'
+          },{
+            mappedValue: 'low',
+            mappedDisplayValue: 'Low'
+          },
+        ]
+      },
+      {
+        fieldName: 'stage',
+        /**
+        ** Here `stage` only needs the values to be mapped.
+        ** The users will not need to map the field.
+        **/
+        mappedValues: [
+          {
+            mappedValue: 'open',
+            mappedDisplayValue: 'Open'
+          },{
+            mappedValue: 'closedWon',
+            mappedDisplayValue: 'Closed Won'
+          },{
+            mappedValue: 'closedLost',
+            mappedDisplayValue: 'Closed Lost'
+          },
+        ],
+      },
+    ],
+    companies: [
+      {
+        mapToName: 'territory', // No mapping of values on this field
+        mapToDisplayName: 'Sales Territory',
+        prompt: 'Which field do you use to track the sales territory of a company?',
+      }
+    ]
+  }
+...
+return (<InstallIntegration
+   integration="myHubSpotIntegration"
+   fieldMapping={mapping}
+   groupRef={groupRef}
+   ...
+/>);
+
+```
+
+This will ensure that your users see a mapping UI where they can select the values from the HubSpot side to be mapped to the app side values defined here.
+
+<Tip> We only allow one-to-one mapping of values </Tip>
 
 ## Full example
 
