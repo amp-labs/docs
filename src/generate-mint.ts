@@ -270,6 +270,7 @@ const mintConfig: MintConfig = {
             "provider-guides/teamwork",
             "provider-guides/timely",
             "provider-guides/webflow",
+            "provider-guides/whereby",
             "provider-guides/wordpress",
             "provider-guides/wrike",
             "provider-guides/zendeskSupport",
