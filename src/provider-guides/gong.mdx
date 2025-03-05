@@ -12,21 +12,19 @@ updatedAt: "Fri Jul 19 2024 21:54:48 GMT+0000 (Coordinated Universal Time)"
 
 This connector supports:
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.gong.io`.
-- [Read Actions](/define-integrations/read-actions), including a full historical backfill, while incremental reads are limited to calls only.
-- [Write Actions](/define-integrations/write-actions).
+- [Read Actions](/define-integrations/read-actions)
 
 ### Supported Objects
 
 The Gong connector supports **reading** from the following objects:
-- Calls (incremental read)
-- Users
-- Workspaces
-- Transcripts (incremental read)
+- Users (full read only)
+- Workspaces (full read only)
+- Calls and Transcripts (incremental read in private preview, contact support@withampersand.com).
 
 The Gong connector supports **writing** to the following objects:
 - Calls
 
-> **Note:** Sometimes Gong may take 24 hours or more to analyze calls. During this analysis period, `Calls` and `Transcripts` data may not be immediately available through the Read Actions.
+> **Note:** Due to Gong's processing time. `Calls` may not be available through Read Actions until up to an hour after a call ends, and `Transcripts` may not be available until up to 24 hours after a call ends.
 
 ### Example Integration
 
