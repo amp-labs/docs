@@ -29,6 +29,36 @@ For each of these objects, the connector supports:
 
 The Hubspot connector only supports reading from the following objects:
 - [Lists](https://developers.hubspot.com/docs/guides/api/crm/lists/overview). Please note that for Lists, incremental reads is not supported, which means that a full read of all Lists is done for each scheduled read. Incremental read is supported for other objects listed above.
+- Users and owners, please refer to the section below.
+
+#### Reading users and owners
+
+In Hubspot, users and owners both refer to people that are using the Hubspot workspace. Each user is assigned an owner ID, and this is the ID that is used to identify owners for Deals, Contacts, etc.
+
+If you want to know the users in your customer's Hubspot workspace, then add `users` as an object in `amp.yaml`.
+
+```YAML
+        - objectName: users
+          destination: defaultWebhook
+          schedule: "0 0 * * *" # every day
+          requiredFields:
+            - fieldName: hs_object_id
+              mapToName: userId
+            - fieldName: hubspot_owner_id
+              mapToName: ownerId
+            - fieldName: hs_email
+              mapToName: emailAddress
+            - fieldName: hs_family_name
+              mapToName: lastName
+            - fieldName: hs_given_name
+              mapToName: firstName
+            - fieldName: hs_createdate
+              mapToName: createTime
+            - fieldName: hs_lastmodifieddate
+              mapToName: updateTime
+            - fieldName: hs_deactivated
+              mapToName: isDeactivated   
+```
 
 ### Example Integration
 
