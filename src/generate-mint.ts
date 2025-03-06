@@ -281,6 +281,12 @@ const mintConfig: MintConfig = {
       ],
     },
     {
+      group: "Provider guides",
+      pages: [
+        "customer-guides/hubspot"
+      ]
+    },
+    {
       group: "Authentication",
       pages: [
         "reference/auth",
