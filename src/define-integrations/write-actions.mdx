@@ -21,7 +21,7 @@ integrations:
         - objectName: touchpoints__c # You can include custom objects
 ```
 
-### Sharing mappings with read actions
+### Share mappings with read actions
 
 If you are using Read Actions and have already defined [field mappings](/define-integrations/read-actions#field-mappings), your Write Actions can automatically use the same mappings if you add `inheritMapping` to your manifest file. When you call our Write API, we will ensure that we are writing back to the appropriate field that the customer has mapped. 
 
@@ -79,11 +79,11 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 }'
 ```
 
-#### Creating an association while writing a record
+#### Create associations when creating a record
 
 If you'd like to create records that are associated with other records, you can make a similar request with the `associations` parameter. 
 
-> Note: This is currently only supported for HubSpot 
+<Info> This is currently only supported for HubSpot. </Info>
 
 ```bash
 curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_ID_OR_NAME>/integrations/<INTEGRATION_ID>/objects/contact' \
@@ -127,3 +127,141 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 }'
 ```
 
+## Advanced use cases
+
+<Info>These advanced use cases are currently only supported when creating or updating installations via the API.</Info>
+
+### Prevent overwriting of customer data
+
+There are certain fields that you may only want to write to when you are creating a record, not when you are updating a record. This helps prevent the scenario where you may accidentally overwrite a field that the customer has manually modified in their SaaS product. You may also have a need for the opposite behavior, where you want to leave a field blank when creating records, but write to that field when updating records.
+
+You can set this behavior on a customer-by-customer basis when you make a call to the [Create Installation API](/reference/installation/create-a-new-installation). Here is a sample request body:
+
+```Javascript
+{
+  "groupRef": "customer-group-ref",
+  "connectionId": "connection-id",
+  "config": {
+    "revisionId": "revision-id",
+    "content": {
+      "provider": "hubspot",
+      "write": {
+        "objects": {
+          "lead": {
+            "objectName": "lead",
+            "selectedFieldSettings": {
+              "source": {
+                  // Do not write to source field when updating a record.
+                  "writeOnUpdate": "never",
+                  // Write to source field when creating a record,
+                  // This is the default behavior.
+                  "writeOnCreate": "always" 
+              },
+            },
+          }
+        }
+      },
+    }
+  }
+}
+```
+
+### Default values
+
+Default values are applied to a field whenever that value is missing from the write request. We current support string, boolean and number values.
+
+You can set this behavior on a customer-by-customer basis when you make a call to the [Create Installation API](/reference/installation/create-a-new-installation). Here is a sample request body:
+
+```Javascript
+{
+  "groupRef": "customer-group-ref",
+  "connectionId": "connection-id",
+  "config": {
+    "revisionId": "revision-id",
+    "content": {
+      "provider": "hubspot",
+      "write": {
+        "objects": {
+          "lead": {
+            "objectName": "lead",
+            "selectedFieldSettings": {
+              "source": {
+                "default": {
+                  "value": "myApp" // Set the source field to myApp 
+                },
+              },
+              "amount": {
+                "default": {
+                  "value": 0 // Set the amount field to 0 
+                },
+              },
+              "automated": {
+                "default": {
+                  "value": true // Set the automated field to true 
+                },
+              },
+            },
+          }
+        }
+      },
+    }
+  }
+}
+```
+
+### Remove unmapped fields
+
+If your write action is [sharing mapping with read actions](#share-mappings-with-read-actions), we can drop unmapped fields from the write request before sending the request to the provider API. Please contact support@withampersand.com if you want to use this preview feature.
+
+
+### Combine use cases
+
+Here is a full example for a request body to the [Create Installation API](/reference/installation/create-a-new-installation) that combines multiple use cases:
+- sharing mapping with read actions
+- applying default values
+- configuring when the field should be written to
+
+```Javascript
+{
+  "groupRef": "customer-group-ref",
+  "connectionId": "connection-id",
+  "config": {
+    "revisionId": "revision-id",
+    "content": {
+      "provider": "hubspot",
+      "write": {
+        "objects": {
+          "lead": {
+            "objectName": "lead",
+            "inheritMapping": true, // Inherit mapping from read actions
+            "selectedFieldSettings": {
+              "customSource": { // customSource is a mapped field
+                  "default": {
+                    "value": "myApp" // Use "mapApp" as default value
+                  },
+                  // Do not write to the field when updating a record.
+                  "writeOnUpdate": "never",
+                  // Write to the field on creating a record,
+                  // This is the default behavior.
+                  "writeOnCreate": "always" 
+              },
+            },
+          }
+        }
+      },
+      "read": {
+        "objects": {
+          "lead": {
+            "objectName": "lead",
+            "destination": "myWebhook",
+            "selectedFieldMappings": {
+              "customSource": "myCustomSource"
+            }
+          }        
+      }
+    }
+  }
+}
+```
+
+For this installation, `customSource` has been mapped to the `myCustomSource` field in this customer's Hubspot instance, the default value for this field is "myApp" and the field will only be written to when it is a create record request, and not an update request.
