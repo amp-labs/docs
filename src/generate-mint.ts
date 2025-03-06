@@ -182,6 +182,7 @@ const mintConfig: MintConfig = {
             "provider-guides/campaignMonitor",
             "provider-guides/capsule",
             "provider-guides/chartMogul",
+            "provider-guides/chilipiper",
             "provider-guides/clari",
             "provider-guides/clickup",
             "provider-guides/close",
