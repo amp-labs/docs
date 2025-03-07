@@ -49,3 +49,11 @@ curl --location --request PUT 'https://proxy.withampersand.com/services/data/v56
     # Same request body as if you are sending the request to Salesforce
 }'
 ```
+
+## Use Ampersand to manage API rate limits
+
+If you want Ampersand to help you with managing rate limits from provider APIs, set the `X-Amp-Rate-Limiter-Mode` request header to `throttle`. This means that if we receive a 429 HTTP status code from a provider, we will return information to you about when you should retry the request again. If you make another request before the suggested retry time, then we will not pass the request to the provider API. We do this because many providers penalize you for hitting too many 429 responses in a row.
+
+In the API response, if you receive a 429 status code, you will find 2 additional headers:
+- `X-Amp-Retry-After`: this includes a UTC timestamp of when Ampersand recommends you retry the request. For example: `Thu, 06 Mar 2025 22:09:49 UTC`.
+- `X-Amp-Retryable`: this is a boolean that indicates whether the request is retryable. Most 429 request are retryable, however some API providers may "lock out" a particular token after too many unsuccessful requests, so that retrying isn't possible.
