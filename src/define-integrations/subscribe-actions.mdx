@@ -2,4 +2,36 @@
 title: "Subscribe actions"
 ---
 
-<Note>Subscribe Actions are coming soon. If you would like early access, reach out to support@withampersand.com. In the meantime, you can use [Read Actions](doc:read-actions) to get webhook notifications about new data every 10 minutes.</Note>
+When you subscribe to an event through Ampersand, you receive real-time data updates as events occur in your customers' SaaS applications, unlike Read Actions that only fetch data on a scheduled basis. This lets you respond instantly to important events, making your systems faster and more efficient.
+
+## Defining a Subscribe Action in the Manifest
+
+To define a Subscribe Action, include the following fields in your manifest:
+
+```yaml
+
+subscribe:
+  objects:
+    - objectName: company 
+      destination: accountSubscribeWebhook
+      createEvent:
+         enabled: true
+      updateEvent:
+         enabled: true
+         watchFieldsAuto: all
+      deleteEvent:
+         enabled: true
+
+```
+
+### Event Types
+
+- **createEvent**: Triggers when a new record is created in the connected SaaS application. This event fires once at the moment of creation.
+
+- **updateEvent**: Triggers when any existing record is modified. The watchFieldsAuto: all setting ensures notifications for changes to any field within the company object.
+
+- **deleteEvent**: Triggers when a record is removed from the system, allowing your application to take appropriate action when data is deleted.
+
+
+<Note>: 
+    - Subscribe Actions are currently only supported for Salesforce integrations. Support for HubSpot is in private preview. If you're interested in using Subscribe Actions with HubSpot, please contact support@withampersand.com.
