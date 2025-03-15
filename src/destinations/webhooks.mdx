@@ -102,7 +102,51 @@ Here's a sample webhook message for a Salesforce Contact object:
   },
 }
 ```
+## Subscribe actions webhook results
 
+When an event occurs in a connected SaaS instance, Ampersand triggers a Subscribe Action and sends a real-time payload to your configured webhook.
+
+### Example webhook message
+
+```JavaScript JavaScript
+{
+  "action": "subscribe",
+  "projectId": "ampersand-project-id",
+  "provider": "salesforce",
+  "groupRef": "xyz-company",
+  "groupName": "XYZ Company",
+  "installationId": "installation-id",
+  "objectName": "Lead",
+  "result": [
+    {
+      "fields": {
+        "id": "00Q5g00001ABcD1EAL",
+        "firstname": "Sally",
+        "lastname": "Jones",
+        "email": "sally.jones@example.com",
+        "company": "Acme Corp",
+        "status": "New"
+      },
+      "mappedFields": { 
+        "lead_source": "Web"
+      },
+      "subscribeEventType": "create",
+      "providerEventType": "lead.created",
+      "raw": {
+        "id": "00Q5g00001ABcD1EAL",
+        "firstname": "Sally",
+        "lastname": "Jones",
+        "email": "sally.jones@example.com",
+        "company": "Acme Corp",
+        "lead_source": "Web",
+        "status": "New"
+      },
+      "rawEvent": { ... }
+    }
+  ]
+}
+
+```
 
 ## Handling webhook results
 
