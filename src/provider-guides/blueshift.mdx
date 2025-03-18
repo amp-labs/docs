@@ -6,22 +6,28 @@ title: Blueshift
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/define-integrations/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Blueshift instance will be done for each scheduled read.
+- [Write Actions](/define-integrations/write-actions).
 - [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.getblueshift.com/api`.
 
-### Example integration
 
-To define an integration for Blueshift, create a manifest file that looks like this:
+### Supported Objects
+The Blueshift connector supports writing to and reading from the following objects:
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: blueshift-integration
-    displayName: My Blueshift Integration
-    provider: blueshift
-    proxy:
-      enabled: true
-```
+- [campaigns](https://developer.blueshift.com/reference/get_api-v2-campaigns-json) (read only)
+- [catalogs](https://developer.blueshift.com/reference/get_api-v1-catalogs) (read only)
+- [customers](https://developer.blueshift.com/reference/post_api-v1-customers) (write only)
+- [custom_user_lists/create](https://developer.blueshift.com/reference/post_api-v1-custom-user-lists-create)(write only)
+- [email_templates](https://developer.blueshift.com/reference/get_api-v1-email-templates-json) (read and write)
+- [event](https://developer.blueshift.com/reference/post_api-v1-event)(write only)
+- [external_fetches](https://developer.blueshift.com/reference/get_api-v1-external-fetches-json) (read and write)
+- [onsite_slots](https://developer.blueshift.com/reference/get_api-v1-onsite-slots-json) (read only)
+- [push_templates](https://developer.blueshift.com/reference/get_api-v1-push-templates-json) (read and write)
+- [seed_lists](https://developer.blueshift.com/reference/get_api-v1-custom-user-lists-seed-lists) (read only)
+- [segments/list](https://developer.blueshift.com/reference/get_api-v1-segments-list) (read only)
+- [sms_templates](https://developer.blueshift.com/reference/get_api-v1-sms-templates-json) (read and write)
+- [tag_contexts/list](https://developer.blueshift.com/reference/get_api-v1-tag-contexts-list)(read only)
+
 
 ## Using the connector
 
