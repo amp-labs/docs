@@ -2,39 +2,82 @@
 title: "Subscribe actions"
 ---
 
-When you subscribe to an event through Ampersand, you receive real-time data updates as events occur in your customers' SaaS applications, unlike Read Actions that only fetch data on a scheduled basis. This lets you respond instantly to important events, making your systems faster and more efficient.
-
-## Defining a Subscribe Action in the Manifest
-
-To define a Subscribe Action, include the following fields in your manifest:
-
-```yaml
-
-subscribe:
-  objects:
-    - objectName: company 
-      destination: accountSubscribeWebhook
-      createEvent:
-         enabled: true
-      updateEvent:
-         enabled: true
-         watchFieldsAuto: all
-      deleteEvent:
-         enabled: true
-
-```
-
-For a full example of how to set up a webhook, see [Webhook Example](https://docs.withampersand.com/destinations/webhooks#subscribe-actions-webhook-results).
-
-
-### Event Types
-
-- **createEvent**: Triggers when a new record is created in the connected SaaS application. This event fires once at the moment of creation.
-
-- **updateEvent**: Triggers when any existing record is modified. The watchFieldsAuto: all setting ensures notifications for changes to any field within the company object.
-
-- **deleteEvent**: Triggers when a record is removed from the system, allowing your application to take appropriate action when data is deleted.
+With Subscribe Actions, you'll receive near-instant webhooks as events occur in your customers' SaaS applications. This enables your application to quickly react to events such as record creation, deletion, and field updates.
 
 <Note>
-   - Subscribe Actions are currently only supported for Salesforce integrations. Support for HubSpot is in private preview. If you're interested in using Subscribe Actions with HubSpot, please contact support@withampersand.com.
+   Subscribe Actions are currently only supported for Salesforce integrations. Support for HubSpot is in private preview. If you're interested in using Subscribe Actions with HubSpot, please contact support@withampersand.com.
 </Note>
+
+## Define a subscription
+
+To subscribe to an object, you need to specify:
+
+- **objectName:** to indicate which object you'd like to subscribe to. This should match the name of the object in the official documentation for the SaaS API.
+- **destination:** the name of the [destination](/destinations) that you've defined
+
+You then need to specify the particular events you want to subscribe to. We support the following events:
+
+- **createEvent**: triggers when a new record is created in the SaaS application.
+
+- **updateEvent**: triggers when any existing record is modified. The `watchFieldsAuto: all` setting ensures that you subscribe to all field changes. In the future, you will be able to specify particular fields to subscribe to.
+
+- **deleteEvent**: triggers when a record is removed from the system.
+
+Here is an example `amp.yaml`:
+
+```yaml
+specVersion: 1.0.0
+integrations: 
+ - name: subscribeToSalesforce
+   provider: salesforce
+   subscribe:
+      objects:
+       - objectName: account 
+         destination: myWebhook
+         createEvent:
+            enabled: always
+         updateEvent:
+            enabled: always
+            watchFieldsAuto: all
+         deleteEvent:
+            enabled: always
+```
+
+## Using subscribe actions and read actions together
+
+By combining subscribe actions with [read actions](/define-integrations/read-actions), you can get a full picture of all the data in your customer's SaaS instance by. You can:
+- Do a full backfill when the user first installs the integration to get historic data.
+- Then get real-time updates about changes in their SaaS instance.
+
+You can achieve this by defining a subscribe action and a read action for the same object, and omit the `schedule` field in the read action. Here is an example `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations: 
+ - name: readSalesforce
+   provider: salesforce
+   read:
+      objects:
+       - objectName: account 
+         destination: myWebhook
+          # Read all accounts when integration is installed.
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+   subscribe:
+      objects:
+       - objectName: account 
+         destination: myWebhook
+         # Then subscribe to create, update and delete events.
+         createEvent:
+            enabled: always
+         updateEvent:
+            enabled: always
+            watchFieldsAuto: all
+         deleteEvent:
+            enabled: always
+```
+
+## Receiving data
+
+You will receive webhook messages about events happening in your customer's SaaS instance. These webhooks look very similar to the webhooks for read actions. [See Subscribe Action Webhook Results](/destinations/webhooks#subscribe-action-webhooks) for more information.

@@ -119,7 +119,8 @@
                   "title": "Sync Write Response Success",
                   "type": "object",
                   "required": [
-                    "result"
+                    "result",
+                    "operationId"
                   ],
                   "additionalProperties": false,
                   "properties": {
@@ -149,6 +150,11 @@
                           "example": "003Dp0X#@RG7IAP"
                         }
                       }
+                    },
+                    "operationId": {
+                      "type": "string",
+                      "description": "The operation ID",
+                      "example": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4"
                     }
                   }
                 }
@@ -174,7 +180,8 @@
                   "title": "Sync Write Response Failure",
                   "type": "object",
                   "required": [
-                    "errors"
+                    "errors",
+                    "operationId"
                   ],
                   "additionalProperties": false,
                   "properties": {
@@ -182,9 +189,14 @@
                       "type": "array",
                       "description": "Error messages resulted in failures",
                       "items": {
-                        "type": "string",
-                        "description": "errors messages when some unexpected event happened, but write to provider was successful",
-                        "example": "The record with ID 003Dp0X#@RG7IAP was not found"
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "description": "errors messages when some unexpected event happened, but write to provider was successful",
+                            "example": "The record with ID 003Dp0X#@RG7IAP was not found"
+                          }
+                        }
                       }
                     },
                     "result": {
@@ -218,9 +230,14 @@
                       "type": "array",
                       "description": "Warnings messages when some unexpected event happened, but not blocking failures",
                       "items": {
-                        "type": "string",
-                        "description": "Warning messages for unexpected events",
-                        "example": "Ampersand Operation failed to be updated"
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "description": "errors messages when some unexpected event happened, but write to provider was successful",
+                            "example": "The record with ID 003Dp0X#@RG7IAP was not found"
+                          }
+                        }
                       }
                     },
                     "operationId": {
@@ -437,7 +454,8 @@
         "title": "Sync Write Response Success",
         "type": "object",
         "required": [
-          "result"
+          "result",
+          "operationId"
         ],
         "additionalProperties": false,
         "properties": {
@@ -467,6 +485,11 @@
                 "example": "003Dp0X#@RG7IAP"
               }
             }
+          },
+          "operationId": {
+            "type": "string",
+            "description": "The operation ID",
+            "example": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4"
           }
         }
       },
@@ -474,7 +497,8 @@
         "title": "Sync Write Response Failure",
         "type": "object",
         "required": [
-          "errors"
+          "errors",
+          "operationId"
         ],
         "additionalProperties": false,
         "properties": {
@@ -482,9 +506,14 @@
             "type": "array",
             "description": "Error messages resulted in failures",
             "items": {
-              "type": "string",
-              "description": "errors messages when some unexpected event happened, but write to provider was successful",
-              "example": "The record with ID 003Dp0X#@RG7IAP was not found"
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "errors messages when some unexpected event happened, but write to provider was successful",
+                  "example": "The record with ID 003Dp0X#@RG7IAP was not found"
+                }
+              }
             }
           },
           "result": {
@@ -518,9 +547,14 @@
             "type": "array",
             "description": "Warnings messages when some unexpected event happened, but not blocking failures",
             "items": {
-              "type": "string",
-              "description": "Warning messages for unexpected events",
-              "example": "Ampersand Operation failed to be updated"
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "errors messages when some unexpected event happened, but write to provider was successful",
+                  "example": "The record with ID 003Dp0X#@RG7IAP was not found"
+                }
+              }
             }
           },
           "operationId": {
