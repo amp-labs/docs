@@ -10,9 +10,9 @@ When new data is read from a SaaS instance via a [Read Action](/define-integrati
 
 Check out our [OpenAPI spec](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml) for the full webhook message schema and more details on the data structure. You can use this to generate types for your language and easily parse the webhook message.
 
-## Result types
+## Read action webhooks
 
-Ampersand attaches results to a webhook message in two ways:
+For read actions, Ampersand attaches results to a webhook message in two ways:
 
 1) **Inline**: In most cases, the result is directly included in the webhook's `result` field. If a read action returns a large number of records, you might receive multiple webhooks in quick succession, each delivering a subset of the data. Read more about [message frequency](#handling-the-message-frequency) here.
 2) **URL**: If a single record in the result set is over 300KB, it becomes too big to be sent over a webhook. In this case, the result won't be included inline. Instead, the webhook message will contain a signed download URL in `resultInfo.downloadUrl`. **The URL expires after 15 minutes.**
@@ -102,7 +102,54 @@ Here's a sample webhook message for a Salesforce Contact object:
   },
 }
 ```
+## Subscribe action webhooks
 
+Subscribe action webhooks look very similar to read action webhooks with a few additional fields in each result entry:
+- **subscribeEventType**: this is the normalized event type string, which can be: `create`, `update`, or `delete`
+- **subscribeEventType**: this the raw event type string from the API provider.
+- **rawEvent**: when available, this is the raw webhook event from the API provider.
+
+### Example webhook message
+
+```JavaScript JavaScript
+{
+  "action": "subscribe",
+  "projectId": "ampersand-project-id",
+  "provider": "salesforce",
+  "groupRef": "xyz-company",
+  "groupName": "XYZ Company",
+  "installationId": "installation-id",
+  "objectName": "Lead",
+  "result": [
+    {
+      "fields": {
+        "id": "00Q5g00001ABcD1EAL",
+        "firstname": "Sally",
+        "lastname": "Jones",
+        "email": "sally.jones@example.com",
+        "company": "Acme Corp",
+        "status": "New"
+      },
+      "mappedFields": { 
+        "lead_source": "Web"
+      },
+      "subscribeEventType": "create",
+      "providerEventType": "lead.created",
+      "raw": {
+        "id": "00Q5g00001ABcD1EAL",
+        "firstname": "Sally",
+        "lastname": "Jones",
+        "email": "sally.jones@example.com",
+        "company": "Acme Corp",
+        "lead_source": "Web",
+        "status": "New"
+      },
+      "rawEvent": { ... }
+    }
+  ]
+}
+
+```
 
 ## Handling webhook results
 

@@ -135,10 +135,10 @@ const mintConfig: MintConfig = {
           group: "Define integrations",
           pages: [
             "define-integrations/overview",
+            "define-integrations/subscribe-actions",
             "define-integrations/read-actions",
             "define-integrations/write-actions",
             "define-integrations/proxy-actions",
-            "define-integrations/subscribe-actions",
           ],
         },
         "object-and-field-mapping",

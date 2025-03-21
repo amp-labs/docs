@@ -2,4 +2,170 @@
 title: "Subscribe actions"
 ---
 
-<Note>Subscribe Actions are coming soon. If you would like early access, reach out to support@withampersand.com. In the meantime, you can use [Read Actions](doc:read-actions) to get webhook notifications about new data every 10 minutes.</Note>
+With Subscribe Actions, you'll receive near-instant webhooks as events occur in your customers' SaaS applications. This enables your application to quickly react to events such as record creation, deletion, and field updates.
+
+<Note>
+   Subscribe Actions are in beta.
+   - They are currently only supported for Salesforce, and requires a Salesforce admin to install the integration.
+   - They do not produce Operations or Logs that can be viewed in the Ampersand dashboard.
+</Note>
+
+## Define a subscription
+
+To subscribe to an object, you currently need to also have a read action specified for the object. In addition, you need to specify:
+
+- **objectName:** to indicate which object you'd like to subscribe to. This should match the name of the object in the official documentation for the SaaS API.
+- **destination:** the name of the [destination](/destinations) that you've defined
+- **inheritFieldsAndMapping:** for now, you must always set this to `true` to inherit the mapped and unmapped fields from the Read Action. Learn more in [Fields and mapping](#fields-and-mapping).
+
+You then need to specify the particular events you want to subscribe to. We support the following events:
+
+- **createEvent**: triggers when a new record is created in the SaaS application.
+
+- **updateEvent**: triggers when any existing record is modified. The `watchFieldsAuto: all` setting ensures that you subscribe to all field changes. In the future, you will be able to specify particular fields to subscribe to.
+
+- **deleteEvent**: triggers when a record is removed from the system.
+
+### Adding full backfill
+
+By combining subscribe actions with [read actions](/define-integrations/read-actions), you can get a full picture of all the data in your customer's SaaS instance. You can:
+- Do a full backfill when the user first installs the integration to get historic data.
+- Then, receive real-time updates about changes in their SaaS instance
+
+Here is an example `amp.yaml`:
+
+```yaml
+specVersion: 1.0.0
+integrations: 
+ - name: subscribeToSalesforce
+   provider: salesforce
+   subscribe:
+      objects:
+       - objectName: account 
+         destination: myWebhook
+         inheritFieldsAndMapping: true
+         createEvent:
+            enabled: always
+         updateEvent:
+            enabled: always
+            watchFieldsAuto: all
+         deleteEvent:
+            enabled: always
+   read: # Read action is required
+      objects:
+       - objectName: account 
+         destination: myWebhook
+         requiredFields:
+            - fieldName: name
+            - fieldName: billingcity
+              mapToName: city
+              mapToDisplayName: City
+            - mapToName: country
+              mapToDisplayName: Country
+              prompt: Which field is the country for the account?
+          # Optional: read all accounts when integration is installed.
+         backfill:
+            defaultPeriod:
+              fullHistory: true
+```
+
+If you do not wish to do a backfill when the integration is first installed, you can omit the backfill block in the read action definition. Because there aren't any schedules or backfills defined, the read action won't actually do anything but its fields and mappings will be used by the subscribe action.
+
+```yaml
+specVersion: 1.0.0
+integrations: 
+ - name: subscribeToSalesforce
+   provider: salesforce
+   subscribe:
+      objects:
+       - objectName: account 
+         destination: myWebhook
+         inheritFieldsAndMapping: true
+         createEvent:
+            enabled: always
+         updateEvent:
+            enabled: always
+            watchFieldsAuto: all
+         deleteEvent:
+            enabled: always
+   read: # Read action is required
+      objects:
+       - objectName: account 
+         destination: myWebhook
+         requiredFields:
+            - fieldName: name
+            - fieldName: billingcity
+              mapToName: city
+              mapToDisplayName: City
+            - mapToName: country
+              mapToDisplayName: Country
+              prompt: Which field is the country for the account?
+         # Omit schedule and backfill
+```
+
+## Fields and mapping
+
+Your read action's set of fields and field mappings will apply to the subscribe action. When we deliver you the webhook, it will contain `fields` and `mappedFields` based on the fields and mapped fields from your read action. You can learn more in [Object and field mapping](/object-and-field-mapping). For the example above, this is what your webhook might look like:
+
+```JS
+{
+  "action": "subscribe",
+  "groupName": "Demo Group",
+  "groupRef": "demo-group",
+  "installationId": "692428b5-22b6-417d-9478-0375949223c0",
+  "installationUpdateTime": "2025-03-21T04:20:16.872886Z",
+  "objectName": "account",
+  "projectId": "my-project-id",
+  "provider": "salesforce",
+  "result": [
+    {
+      "fields": { // Unmapped fields from read action
+        "name": "Account ABC"
+      },
+      "mappedFields": { // Mapped fields from read action
+        "city": "San Francisco",
+        "country": "USA"
+      },
+      "subscribeEventType": "update",
+      "providerEventType": "UPDATE",
+      "raw": {
+        "BillingCity": "San Francisco",
+        "Id": "001Pa00000W4puRIAR",
+        "Name": "Account ABC",
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v59.0/sobjects/Account/001Pa00000W4puRIAR"
+        }
+      },
+      "rawEvent": {
+        "ChangeEventHeader": {
+          "changeOrigin": "com/salesforce/api/soap/63.0;client=SfdcInternalAPI/",
+          "changeType": "UPDATE",
+          "changedFields": [
+            "Name",
+            "LastModifiedDate"
+          ],
+          "commitNumber": 1742558812455698400,
+          "commitTimestamp": 1742558812000,
+          "commitUser": "005Do000000XDimIAG",
+          "entityName": "Account",
+          "recordId": "001Pa00000W4puRIAR",
+          "sequenceNumber": 1,
+          "transactionKey": "00004b85-ba97-e14f-68ca-cfa4c60f13ff"
+        },
+        "LastModifiedDate": "2025-03-21T12:06:52.000Z",
+        "Name": "Account ABC"
+      },
+    }
+  ],
+  "resultInfo": {
+    "numRecords": 1,
+    "type": "inline"
+  },
+  "workspace": "customer-salesforce-subdomain"
+}
+```
+
+## Receiving data
+
+You will receive webhook messages about events happening in your customer's SaaS instance. These webhooks look very similar to the webhooks for read actions. [See Subscribe Action Webhook Results](/destinations/webhooks#subscribe-action-webhooks) for more information.
