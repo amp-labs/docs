@@ -282,7 +282,7 @@ const mintConfig: MintConfig = {
           ],
         },
         {
-          group: "Customer Guides",
+          group: "Customer guides",
           pages: [
             "customer-guides/overview",
             "customer-guides/salesforce",
