@@ -211,6 +211,7 @@ const mintConfig: MintConfig = {
             "provider-guides/gitlab",
             "provider-guides/gong",
             "provider-guides/google",
+            "provider-guides/googleMeet",
             "provider-guides/gorgias",
             "provider-guides/goToWebinar",
             "provider-guides/groove",
