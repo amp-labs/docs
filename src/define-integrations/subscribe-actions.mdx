@@ -5,9 +5,9 @@ title: "Subscribe actions"
 With Subscribe Actions, you'll receive near-instant webhooks as events occur in your customers' SaaS applications. This enables your application to quickly react to events such as record creation, deletion, and field updates.
 
 <Note>
-   Subscribe Actions are in beta.
-   - They are currently only supported for Salesforce, and requires a Salesforce admin to install the integration.
-   - They do not produce Operations or Logs that can be viewed in the Ampersand dashboard.
+  - Subscribe Actions are in beta.
+  - They are currently only supported for Salesforce and HubSpot. And, requires a Salesforce admin to install the integration.
+  - They do not produce Operations or Logs that can be viewed in the Ampersand dashboard.
 </Note>
 
 ## Define a subscription
@@ -169,3 +169,71 @@ Your read action's set of fields and field mappings will apply to the subscribe 
 ## Receiving data
 
 You will receive webhook messages about events happening in your customer's SaaS instance. These webhooks look very similar to the webhooks for read actions. [See Subscribe Action Webhook Results](/destinations/webhooks#subscribe-action-webhooks) for more information.
+
+## HubSpot subscribe action private preview
+
+This section describes how you can use subscribe actions to receive near-instant webhooks as events occur for HubSpot during the private preview mode.
+
+To use Subscribe Actions for HubSpot in the private preview, follow these steps:
+
+- Configure your connected app in HubSpot.
+- Update the amp.yaml configuration file.
+- Redeploy your integration.
+- Monitor and verify webhook data.
+
+### Updating your HubSpot connected app
+
+1.  Login to your hubspot account. 
+2.  Go to the **Apps** section.
+3.  Select your connected app.
+5.  Click on *Webhooks*.
+6.  Enter the Target URL:
+  ```
+    subscribe-webhook.withampersand.com/v1/projects/<<PROJECT_ID>>/integrations/<<INTEGRATION_ID>>
+  ```
+  - Replace *PROJECT_ID* with your Ampersand project ID.
+  - Replace *INTEGRATION_ID* with your integration's ID.
+
+7.  Click **Create Subscription**.
+8.  Select object types, event types, and properties.
+9.  Select the required checkboxes for all objects.
+10. Click **Activate**.
+
+![Subscribe Actions HubSpot](/images/subscribeactions-hubspot.gif)
+
+
+### Modifying your amp.yaml file
+
+During the private preview, you must define a Read Action for any event that requires a Subscribe Action and remove the schedule from the Read Action to limit it to historic backfill only.
+
+Here's how you must modify your amp.yaml file to define the subscribe action:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: readHubspotContacts
+    displayName: Read Hubspot Contacts
+    provider: hubspot
+    read:
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: name
+            - fieldName: email
+            - fieldName: phone
+          optionalFieldsAuto: all
+```
+
+### Re-deploy integration
+
+After modifying your amp.yaml file, redeploy the integration using the following command:
+
+```bash
+amp deploy <my-folder> --project <my-project>
+```
+
+To see the webhook messages about events happening in your HubSpot, go to [HubSpot webhook message](/destinations/webhooks#hubspot-webhook-message).

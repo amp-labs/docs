@@ -109,7 +109,7 @@ Subscribe action webhooks look very similar to read action webhooks with a few a
 - **subscribeEventType**: this the raw event type string from the API provider.
 - **rawEvent**: when available, this is the raw webhook event from the API provider.
 
-### Example webhook message
+### Salesforce webhook message
 
 ```JavaScript JavaScript
 {
@@ -150,6 +150,38 @@ Subscribe action webhooks look very similar to read action webhooks with a few a
 }
 
 ```
+
+
+### HubSpot webhook message
+
+```json
+{
+  "action": "subscribe",
+  "projectId": "ampersand-project-id",
+  "provider": "hubspot",
+  "groupRef": "xyz-company",
+  "groupName": "XYZ Company",
+  "installationId": "installation-id",
+  "objectName": "Contact",
+  "result": [
+    {
+      "fields": {
+        "id": "001Dp00000P8QurIAF",
+        "firstname": "Sally",
+        "lastname": "Jones"
+      },
+      "mappedFields": {
+        "pronoun": "she"
+      },
+      "subscribeEventType": "update",
+      "providerEventType": "contact.PropertyChange",
+      "raw": { ... },
+      "rawEvent": { ... }
+    }
+  ]
+}
+```
+
 
 ## Handling webhook results
 
