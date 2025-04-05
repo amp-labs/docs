@@ -2,17 +2,18 @@
 title: "Subscribe actions"
 ---
 
-With Subscribe Actions, you'll receive near-instant webhooks as events occur in your customers' SaaS applications. This enables your application to quickly react to events such as record creation, deletion, and field updates.
+With subscribe actions, you'll receive near-instant webhooks as events occur in your customers' SaaS applications. This enables your application to quickly react to events such as record creation, deletion, and field updates.
 
 <Note>
-   Subscribe Actions are in beta.
-   - They are currently only supported for Salesforce, and requires a Salesforce admin to install the integration.
-   - They do not produce Operations or Logs that can be viewed in the Ampersand dashboard.
+  Subscribe actions are in beta.
+  - They are currently only supported for Salesforce and HubSpot. 
+  - For Salesforce, an admin needs to install the integration.
+  - They do not produce Operations or Logs that can be viewed in the Ampersand dashboard.
 </Note>
 
-## Define a subscription
+## Salesforce subscribe actions
 
-To subscribe to an object, you currently need to also have a read action specified for the object. In addition, you need to specify:
+To subscribe to an object in Salesforce, you currently need to also have a read action specified for the object. In addition, you need to specify:
 
 - **objectName:** to indicate which object you'd like to subscribe to. This should match the name of the object in the official documentation for the SaaS API.
 - **destination:** the name of the [destination](/destinations) that you've defined
@@ -26,7 +27,9 @@ You then need to specify the particular events you want to subscribe to. We supp
 
 - **deleteEvent**: triggers when a record is removed from the system.
 
-### Adding full backfill
+If you do not already have a Salesforce integration, follow the instructions in the [Salesforce provider guide](/provider-guides/salesforce) to get started.
+
+### Specify backfill behavior
 
 By combining subscribe actions with [read actions](/define-integrations/read-actions), you can get a full picture of all the data in your customer's SaaS instance. You can:
 - Do a full backfill when the user first installs the integration to get historic data.
@@ -103,6 +106,36 @@ integrations:
          # Omit schedule and backfill
 ```
 
+## HubSpot Subscribe actions
+
+<Note>
+  HubSpot subscribe actions cannot notify you of changes to custom fields. There is a workaround that requires additional set up, please contact support@withampersand.com for details.
+</Note>
+
+To enable HubSpot subscribe actions, you will need to:
+- Have a Read Action defined for the object. You can [specify backfill behavior](#specify-backfill-behavior) in the Read Action, to combine backfills with subscribe actions to get a full picture of your customer's HubSpot
+- Make modifications to the HubSpot app
+
+If you do not yet have a HubSpot app, follow the instructions in the [HubSpot provider guide](/provider-guides/hubspot#creating-a-hubspot-app) to create one. Here are the steps to modify the HubSpot app to enable subscribe actions:
+
+1.  Login to your HubSpot account. 
+2.  Go to the **Apps** section.
+3.  Select your connected app.
+5.  Click on **Webhooks**.
+6.  Enter the Target URL:
+  ```
+    subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID
+  ```
+  - Replace `PROJECT_ID` with your Ampersand project ID, which can be found in the Dashboard's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
+  - Replace `INTEGRATION_ID` with your integration's ID, which can be found in the Dashboard's [Home page](https://dashboard.withampersand.com/projects/_).
+
+7.  Click **Create Subscription**.
+8.  Select object types, event types, and properties.
+9.  Select the required checkboxes for all objects.
+10. Click **Activate**.
+
+![Subscribe actions HubSpot](/images/subscribeactions-hubspot.gif)
+
 ## Fields and mapping
 
 Your read action's set of fields and field mappings will apply to the subscribe action. When we deliver you the webhook, it will contain `fields` and `mappedFields` based on the fields and mapped fields from your read action. You can learn more in [Object and field mapping](/object-and-field-mapping). For the example above, this is what your webhook might look like:
@@ -168,4 +201,4 @@ Your read action's set of fields and field mappings will apply to the subscribe 
 
 ## Receiving data
 
-You will receive webhook messages about events happening in your customer's SaaS instance. These webhooks look very similar to the webhooks for read actions. [See Subscribe Action Webhook Results](/destinations/webhooks#subscribe-action-webhooks) for more information.
+You will receive webhook messages about events happening in your customer's SaaS instance. These webhooks look very similar to the webhooks for read actions. See [Subscribe action webhooks](/destinations/webhooks#subscribe-action-webhooks) for more information.
