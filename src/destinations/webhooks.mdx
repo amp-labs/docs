@@ -105,11 +105,11 @@ Here's a sample webhook message for a Salesforce Contact object:
 ## Subscribe action webhooks
 
 Subscribe action webhooks look very similar to read action webhooks with a few additional fields in each result entry:
-- **subscribeEventType**: this is the normalized event type string, which can be: `create`, `update`, or `delete`
+- **subscribeEventType**: this is the normalized event type string, which can be: `create`, `update`, `delete`, `associationUpdate` (for HubSpot only).
 - **subscribeEventType**: this the raw event type string from the API provider.
 - **rawEvent**: when available, this is the raw webhook event from the API provider.
 
-### Salesforce webhook message
+Here is a sample message:
 
 ```JavaScript JavaScript
 {
@@ -150,38 +150,6 @@ Subscribe action webhooks look very similar to read action webhooks with a few a
 }
 
 ```
-
-
-### HubSpot webhook message
-
-```json
-{
-  "action": "subscribe",
-  "projectId": "ampersand-project-id",
-  "provider": "hubspot",
-  "groupRef": "xyz-company",
-  "groupName": "XYZ Company",
-  "installationId": "installation-id",
-  "objectName": "Contact",
-  "result": [
-    {
-      "fields": {
-        "id": "001Dp00000P8QurIAF",
-        "firstname": "Sally",
-        "lastname": "Jones"
-      },
-      "mappedFields": {
-        "pronoun": "she"
-      },
-      "subscribeEventType": "update",
-      "providerEventType": "contact.PropertyChange",
-      "raw": { ... },
-      "rawEvent": { ... }
-    }
-  ]
-}
-```
-
 
 ## Handling webhook results
 

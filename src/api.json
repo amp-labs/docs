@@ -6274,6 +6274,14 @@
                                                 "always"
                                               ]
                                             },
+                                            "watchFieldsAuto": {
+                                              "type": "string",
+                                              "description": "If all, the integration will watch all fields for updates.",
+                                              "enum": [
+                                                "all"
+                                              ],
+                                              "example": "all"
+                                            },
                                             "requiredWatchFields": {
                                               "type": "array",
                                               "items": {
@@ -7167,6 +7175,14 @@
                                           "enum": [
                                             "always"
                                           ]
+                                        },
+                                        "watchFieldsAuto": {
+                                          "type": "string",
+                                          "description": "If all, the integration will watch all fields for updates.",
+                                          "enum": [
+                                            "all"
+                                          ],
+                                          "example": "all"
                                         },
                                         "requiredWatchFields": {
                                           "type": "array",
@@ -9273,6 +9289,14 @@
                                                 "always"
                                               ]
                                             },
+                                            "watchFieldsAuto": {
+                                              "type": "string",
+                                              "description": "If all, the integration will watch all fields for updates.",
+                                              "enum": [
+                                                "all"
+                                              ],
+                                              "example": "all"
+                                            },
                                             "requiredWatchFields": {
                                               "type": "array",
                                               "items": {
@@ -10745,6 +10769,12 @@
                                   "schedule"
                                 ],
                                 "properties": {
+                                  "error": {
+                                    "type": "string",
+                                    "description": "Error message if there was an issue hydrating this object.",
+                                    "example": "Failed to fetch fields from provider",
+                                    "x-go-type-skip-optional-pointer": true
+                                  },
                                   "objectName": {
                                     "type": "string"
                                   },
@@ -16425,9 +16455,11 @@
                 "properties": {
                   "updateMask": {
                     "type": "array",
+                    "description": "Note: In case the mask is being used to update an object and the object's name contains special characters like a period, a forward slash or a colon, you must escape them using a backslash.",
                     "example": [
                       "connectionId",
-                      "config.content.write.objects.account"
+                      "config.content.write.objects.account",
+                      "config.content.write.objects.interview\\.leads"
                     ],
                     "items": {
                       "type": "string",
@@ -38727,6 +38759,14 @@
                                     "always"
                                   ]
                                 },
+                                "watchFieldsAuto": {
+                                  "type": "string",
+                                  "description": "If all, the integration will watch all fields for updates.",
+                                  "enum": [
+                                    "all"
+                                  ],
+                                  "example": "all"
+                                },
                                 "requiredWatchFields": {
                                   "type": "array",
                                   "items": {
@@ -39134,6 +39174,14 @@
                                 "always"
                               ]
                             },
+                            "watchFieldsAuto": {
+                              "type": "string",
+                              "description": "If all, the integration will watch all fields for updates.",
+                              "enum": [
+                                "all"
+                              ],
+                              "example": "all"
+                            },
                             "requiredWatchFields": {
                               "type": "array",
                               "items": {
@@ -39253,6 +39301,12 @@
                         "schedule"
                       ],
                       "properties": {
+                        "error": {
+                          "type": "string",
+                          "description": "Error message if there was an issue hydrating this object.",
+                          "example": "Failed to fetch fields from provider",
+                          "x-go-type-skip-optional-pointer": true
+                        },
                         "objectName": {
                           "type": "string"
                         },
