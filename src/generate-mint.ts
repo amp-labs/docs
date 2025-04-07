@@ -234,6 +234,7 @@ const mintConfig: MintConfig = {
             "provider-guides/klaviyo",
             "provider-guides/lever",
             "provider-guides/linkedin",
+            "provider-guides/livestorm",
             "provider-guides/lemlist",
             "provider-guides/mailgun",
             "provider-guides/marketo",
