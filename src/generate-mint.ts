@@ -256,6 +256,7 @@ const mintConfig: MintConfig = {
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
+            "provider-guides/salesflare",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
             "provider-guides/seismic",
