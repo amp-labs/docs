@@ -1,0 +1,91 @@
+---
+title: "Introducing the official Ampersand docs server "
+---
+
+
+Now you can build production grade business integrations even faster with the power of AI x Ampersand. 
+
+
+-  The offical mcp documentation server allows you as a developer to map your business context to the integration you need to build 
+with all the context of the Ampersand offering from its documentation (`read`, `write` & `subscribe`) right inside your favourite AI IDE such Cursor, Windsurf, Cline et al. 
+
+-  Just tell Cursor what your integration use-case is and the IDE will know how to build this with Ampersand's powerful platform quickly!  
+
+## How it works 
+
+Once you have added the mcp server, you can ask how-to's as well as ask your AI IDE to build an integration for you. You can be as creative and descriptive as you'd then Cursor, will do the rest. 
+
+### Prompts you can use 
+
+
+"How can I read from HubSpot every 45 minutes" 
+
+<video 
+  controls
+  width="100%"
+  src="https://res.cloudinary.com/dycvts6vp/video/upload/v1744114462/media/vxb4a78xorq1ymjhphtp.mp4"
+>
+  <p>Here is a <a href="https://res.cloudinary.com/dycvts6vp/video/upload/v1744114462/media/vxb4a78xorq1ymjhphtp.mp4">link to the video</a> instead.</p>
+</video>
+
+
+"My use case is to listen to changes on the Salesforce Contact Object . When these changes happen I would like to update a database table. 
+How can I build this with Ampersand?"
+
+<video 
+    controls
+    width="100%"
+    src="https://res.cloudinary.com/dycvts6vp/video/upload/v1744115357/media/tp4dx1ualzlrzpsl75sf.mp4"
+>
+    <p>Here is a <a href="https://res.cloudinary.com/dycvts6vp/video/upload/v1744114462/media/vxb4a78xorq1ymjhphtp.mp4">link to the video</a> instead.</p>
+</video>    
+
+## Connecting to the mcp server from an AI first IDE 
+
+-  You can use the hosted version of the mcp server at `https://mcp-docs.withampersand.com` or use the npx command to run the server locally `npx @amp-labs/mcp-docs-server@latest`(This will start the server at http://localhost:3001)
+
+-  As a next step add the following in the tool of your choice
+
+<Note>
+Note: This mcp server runs in HTTP SSE mode 
+</Note>
+
+#### When using the official hosted mcp server 
+
+```
+{
+  "mcpServers": {
+    "@amp-labs/mcp-docs-server": {
+      "url": "https://mcp-docs.withampersand.com/sse" 
+    }
+  }
+}
+````
+
+
+#### When running the docs server locally
+```
+{
+  "mcpServers": {
+    "@amp-labs/mcp-docs-server": {
+      "url": "http://localhost:3001/sse"
+    }
+  }
+}
+
+```
+
+1. In `~/cursor/mcp.json` when using cursor IDE or 
+2. In `~/.codeium/windsurf/mcp_config.json` when using windsurf 
+3. In `claude_desktop_config.json` when using Claude desktop.
+
+
+
+
+<Note>
+Our mcp documentation server is open-source at [https://github.com/amp-labs/mcp-docs-server](https://github.com/amp-labs/mcp-docs-server).
+</Note>
+
+
+
+
