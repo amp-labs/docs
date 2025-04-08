@@ -34,7 +34,7 @@ You can provide fields to watch for update events and specify them in a list.
 
 **Note**: Only one of `requiredWatchFields` or `watchFieldsAuto` should be provided.
 
-Here is an exaple `amp.yaml`
+Here is an example `amp.yaml`
 
 ```yaml
 specVersion: 1.0.0
@@ -51,9 +51,9 @@ integrations:
           updateEvent:
             enabled: always
             requiredWatchFields:
-              - name
+              - name # this will be mapped according to read action mapping
               - phone
-            # watchFieldsAuto: all
+            # watchFieldsAuto: all # alternative to `requiredWatchFields` if you wish to watch all fields
           deleteEvent:
             enabled: always
     read: # Read action is required
@@ -76,7 +76,7 @@ integrations:
       ...
 ```
 
-Here is an example of webhook message delivered according to above `amp.yaml`
+Here is an example of a webhook message delivered according to above `amp.yaml`.
 
 ```json
 {
@@ -166,10 +166,7 @@ integrations:
             enabled: always
          updateEvent:
             enabled: always
-            requiredWatchFields:
-              - name
-              - phone
-            # watchFieldsAuto: all
+            watchFieldsAuto: all
          deleteEvent:
             enabled: always
    read: # Read action is required
@@ -206,10 +203,7 @@ integrations:
             enabled: always
          updateEvent:
             enabled: always
-            requiredWatchFields:
-              - name
-              - phone
-            # watchFieldsAuto: all
+            watchFieldsAuto: all
          deleteEvent:
             enabled: always
    read: # Read action is required
