@@ -216,6 +216,7 @@ const mintConfig: MintConfig = {
             "provider-guides/goToWebinar",
             "provider-guides/groove",
             "provider-guides/guru",
+            "provider-guides/happyFoxChat",
             "provider-guides/helpScoutMailbox",
             "provider-guides/heyreach",
             "provider-guides/hive",
