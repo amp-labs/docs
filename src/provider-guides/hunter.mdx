@@ -1,0 +1,44 @@
+---
+title: "Hunter"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://api.hunter.io`.
+
+### Example integration
+
+To define an integration for Hunter, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: hunter-integration
+    displayName: My Hunter Integration
+    provider: hunter
+    proxy:
+      enabled: true
+```
+
+## Before You Get Started
+
+To use the Hunter connector, you'll need an API key from your Hunter account. Here's how to get it:
+
+1. Log in to your [Hunter account](https://hunter.io/).
+2.  Go to the [API](https://hunter.io/api-keys) section by clicking on it from the left sidebar.
+3. Generate a new API key.
+
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Hunter:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.hunter.io`.
+
+
+For detailed information about available endpoints, refer to the [Salesflare API Reference](https://hunter.io/api-documentation/v2).
