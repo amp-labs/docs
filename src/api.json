@@ -33,32 +33,38 @@
                 "properties": {
                   "providerWorkspaceRef": {
                     "type": "string",
-                    "description": "The identifier for the provider workspace",
+                    "description": "The identifier for the provider workspace (e.g. the Salesforce subdomain).",
                     "example": "salesforce-instance-domain"
                   },
                   "projectId": {
                     "type": "string",
-                    "description": "The Ampersand project ID."
+                    "description": "The Ampersand project ID.",
+                    "example": "my-project"
                   },
                   "groupRef": {
                     "type": "string",
-                    "description": "The ID that your app uses to identify the group of users for this Connection, this can be an Org ID, workspace ID, etc."
+                    "description": "The ID that your app uses to identify the group of users for this Connection, this can be an Org ID, workspace ID, etc.",
+                    "example": "group-123"
                   },
                   "groupName": {
                     "type": "string",
-                    "description": "The display name for the group. Defaults to groupRef if not provided."
+                    "description": "The display name for the group. Defaults to groupRef if not provided.",
+                    "example": "Organization Name"
                   },
                   "consumerRef": {
                     "type": "string",
-                    "description": "The ID that your app uses to identify the user whose SaaS credential will be used for this OAuth flow."
+                    "description": "The ID that your app uses to identify the user whose SaaS credential will be used for this OAuth flow.",
+                    "example": "user_123456"
                   },
                   "consumerName": {
                     "type": "string",
-                    "description": "The display name for the consumer. Defaults to consumerRef if not provided."
+                    "description": "The display name for the consumer. Defaults to consumerRef if not provided.",
+                    "example": "John Doe"
                   },
                   "providerAppId": {
                     "type": "string",
-                    "description": "ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed."
+                    "description": "ID of the provider app, returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.",
+                    "example": "32356abe-d2fd-49c7-9030-abdcbc6456d4"
                   },
                   "provider": {
                     "type": "string",
@@ -551,7 +557,7 @@
     },
     "/projects": {
       "get": {
-        "summary": "List all projects that the API key or user credential has access to",
+        "summary": "List all projects that the API key or user credential has access to.",
         "operationId": "listProjects",
         "tags": [
           "Project"
@@ -576,7 +582,7 @@
                       "id": {
                         "type": "string",
                         "description": "The project ID.",
-                        "example": "project-id-123"
+                        "example": "my-project"
                       },
                       "name": {
                         "type": "string",
@@ -590,7 +596,8 @@
                       },
                       "orgId": {
                         "type": "string",
-                        "description": "The organization ID that this project belongs to."
+                        "description": "The organization ID that this project belongs to.",
+                        "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                       },
                       "createTime": {
                         "type": "string",
@@ -794,7 +801,8 @@
                   },
                   "orgId": {
                     "type": "string",
-                    "description": "The organization ID."
+                    "description": "The organization ID.",
+                    "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                   }
                 }
               }
@@ -820,7 +828,7 @@
                     "id": {
                       "type": "string",
                       "description": "The project ID.",
-                      "example": "project-id-123"
+                      "example": "my-project"
                     },
                     "name": {
                       "type": "string",
@@ -834,7 +842,8 @@
                     },
                     "orgId": {
                       "type": "string",
-                      "description": "The organization ID that this project belongs to."
+                      "description": "The organization ID that this project belongs to.",
+                      "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "createTime": {
                       "type": "string",
@@ -1346,9 +1355,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "includeEntitlements",
@@ -1378,7 +1389,7 @@
                     "id": {
                       "type": "string",
                       "description": "The project ID.",
-                      "example": "project-id-123"
+                      "example": "my-project"
                     },
                     "name": {
                       "type": "string",
@@ -1392,7 +1403,8 @@
                     },
                     "orgId": {
                       "type": "string",
-                      "description": "The organization ID that this project belongs to."
+                      "description": "The organization ID that this project belongs to.",
+                      "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "createTime": {
                       "type": "string",
@@ -1901,9 +1913,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "responses": {
@@ -2382,9 +2396,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "requestBody": {
@@ -2404,7 +2420,7 @@
                     ],
                     "items": {
                       "type": "string",
-                      "description": "fields to update."
+                      "description": "Fields to update."
                     }
                   },
                   "project": {
@@ -2431,7 +2447,7 @@
         },
         "responses": {
           "200": {
-            "description": "The updated project",
+            "description": "The updated project.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2447,7 +2463,7 @@
                     "id": {
                       "type": "string",
                       "description": "The project ID.",
-                      "example": "project-id-123"
+                      "example": "my-project"
                     },
                     "name": {
                       "type": "string",
@@ -2461,7 +2477,8 @@
                     },
                     "orgId": {
                       "type": "string",
-                      "description": "The organization ID that this project belongs to."
+                      "description": "The organization ID that this project belongs to.",
+                      "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "createTime": {
                       "type": "string",
@@ -3297,9 +3314,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "TThe Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "responses": {
@@ -3845,9 +3864,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "requestBody": {
@@ -4755,7 +4776,7 @@
     },
     "/projects/{projectIdOrName}/provider-apps/{providerAppId}": {
       "delete": {
-        "summary": "Delete a provider app",
+        "summary": "Delete a provider app.",
         "operationId": "deleteProviderApp",
         "tags": [
           "Provider App"
@@ -4765,17 +4786,21 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "providerAppId",
             "in": "path",
             "required": true,
+            "description": "ID of the provider app, returned by the CreateProviderApp call.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "32356abe-d2fd-49c7-9030-abdcbc6456d4"
           }
         ],
         "responses": {
@@ -5254,17 +5279,21 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "providerAppId",
             "in": "path",
             "required": true,
+            "description": "ID of the provider app, returned by the CreateProviderApp call.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "32356abe-d2fd-49c7-9030-abdcbc6456d4"
           }
         ],
         "requestBody": {
@@ -5287,7 +5316,7 @@
                     ],
                     "items": {
                       "type": "string",
-                      "description": "fields to update."
+                      "description": "Fields to update."
                     }
                   },
                   "providerApp": {
@@ -5876,9 +5905,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "responses": {
@@ -5902,8 +5933,7 @@
                     "properties": {
                       "id": {
                         "type": "string",
-                        "description": "The integration ID.",
-                        "example": "integration-123"
+                        "description": "The integration ID."
                       },
                       "projectId": {
                         "type": "string",
@@ -6811,7 +6841,7 @@
         }
       },
       "post": {
-        "summary": "Create a new integration",
+        "summary": "Create a new integration.",
         "operationId": "createIntegration",
         "tags": [
           "Integration"
@@ -6821,9 +6851,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "requestBody": {
@@ -6839,7 +6871,8 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "The integration name."
+                    "description": "The integration name.",
+                    "example": "my-integration"
                   },
                   "provider": {
                     "type": "string",
@@ -8055,17 +8088,21 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "integrationId",
             "in": "path",
             "required": true,
+            "description": "The integration ID.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
           }
         ],
         "responses": {
@@ -8870,9 +8907,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "requestBody": {
@@ -8884,7 +8923,8 @@
                 "properties": {
                   "sourceZipUrl": {
                     "type": "string",
-                    "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL)."
+                    "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL).",
+                    "example": "https://storage.googleapis.com/my-bucket/source-files/integration-v1.2.3.zip"
                   },
                   "sourceYaml": {
                     "type": "string",
@@ -8917,8 +8957,7 @@
                     "properties": {
                       "id": {
                         "type": "string",
-                        "description": "The integration ID.",
-                        "example": "integration-123"
+                        "description": "The integration ID."
                       },
                       "projectId": {
                         "type": "string",
@@ -9828,7 +9867,7 @@
     },
     "/projects/{projectIdOrName}/integrations/{integrationId}/revisions": {
       "post": {
-        "summary": "Create a new revision",
+        "summary": "Create a new revision.",
         "operationId": "createRevision",
         "tags": [
           "Revision"
@@ -9838,14 +9877,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "integrationId",
             "in": "path",
             "required": true,
+            "description": "The integration ID.",
             "schema": {
               "type": "string"
             }
@@ -9859,7 +9901,8 @@
                 "properties": {
                   "sourceZipUrl": {
                     "type": "string",
-                    "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL)."
+                    "description": "URL of where a zip of the source files can be downloaded (e.g. Google Cloud Storage URL).",
+                    "example": "https://storage.googleapis.com/my-bucket/source-files/integration-v1.2.3.zip"
                   },
                   "sourceYaml": {
                     "type": "string",
@@ -10677,14 +10720,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "integrationId",
             "in": "path",
             "required": true,
+            "description": "The integration ID.",
             "schema": {
               "type": "string"
             }
@@ -10693,6 +10739,7 @@
             "name": "revisionId",
             "in": "path",
             "required": true,
+            "description": "The revision ID.",
             "schema": {
               "type": "string"
             }
@@ -10701,6 +10748,7 @@
             "name": "connectionId",
             "in": "query",
             "required": true,
+            "description": "The connection ID.",
             "schema": {
               "type": "string"
             }
@@ -11939,9 +11987,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "integrationId",
@@ -11954,6 +12004,8 @@
           {
             "name": "groupRef",
             "in": "query",
+            "description": "The ID of the user group that has access to this installation.",
+            "example": "group-123",
             "schema": {
               "type": "string"
             }
@@ -11982,8 +12034,7 @@
                     "properties": {
                       "id": {
                         "type": "string",
-                        "description": "The installation ID.",
-                        "example": "installation-123"
+                        "description": "The installation ID."
                       },
                       "projectId": {
                         "type": "string",
@@ -11992,8 +12043,7 @@
                       },
                       "integrationId": {
                         "type": "string",
-                        "description": "The integration ID.",
-                        "example": "integration-123"
+                        "description": "The integration ID."
                       },
                       "group": {
                         "title": "Group",
@@ -12208,7 +12258,7 @@
                           },
                           "providerWorkspaceRef": {
                             "type": "string",
-                            "description": "If available, the identifier for the provider workspace (e.g. \"salesforce-instance-domain\")",
+                            "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
                             "example": "provider-workspace-123"
                           },
                           "providerConsumerRef": {
@@ -13153,14 +13203,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "integrationId",
             "in": "path",
             "required": true,
+            "description": "The integration ID.",
             "schema": {
               "type": "string"
             }
@@ -13178,7 +13231,8 @@
                 "properties": {
                   "groupRef": {
                     "type": "string",
-                    "description": "The ID of the user group that has access to this installation."
+                    "description": "The ID of the user group that has access to this installation.",
+                    "example": "group-123"
                   },
                   "connectionId": {
                     "type": "string",
@@ -13540,8 +13594,7 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The installation ID.",
-                      "example": "installation-123"
+                      "description": "The installation ID."
                     },
                     "projectId": {
                       "type": "string",
@@ -13550,8 +13603,7 @@
                     },
                     "integrationId": {
                       "type": "string",
-                      "description": "The integration ID.",
-                      "example": "integration-123"
+                      "description": "The integration ID."
                     },
                     "group": {
                       "title": "Group",
@@ -13766,7 +13818,7 @@
                         },
                         "providerWorkspaceRef": {
                           "type": "string",
-                          "description": "If available, the identifier for the provider workspace (e.g. \"salesforce-instance-domain\")",
+                          "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
                           "example": "provider-workspace-123"
                         },
                         "providerConsumerRef": {
@@ -15037,14 +15089,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "integrationId",
             "in": "path",
             "required": true,
+            "description": "The integration ID.",
             "schema": {
               "type": "string"
             }
@@ -15053,6 +15108,7 @@
             "name": "installationId",
             "in": "path",
             "required": true,
+            "description": "The installation ID.",
             "schema": {
               "type": "string"
             }
@@ -15079,8 +15135,7 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The installation ID.",
-                      "example": "installation-123"
+                      "description": "The installation ID."
                     },
                     "projectId": {
                       "type": "string",
@@ -15089,8 +15144,7 @@
                     },
                     "integrationId": {
                       "type": "string",
-                      "description": "The integration ID.",
-                      "example": "integration-123"
+                      "description": "The integration ID."
                     },
                     "group": {
                       "title": "Group",
@@ -15305,7 +15359,7 @@
                         },
                         "providerWorkspaceRef": {
                           "type": "string",
-                          "description": "If available, the identifier for the provider workspace (e.g. \"salesforce-instance-domain\")",
+                          "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
                           "example": "provider-workspace-123"
                         },
                         "providerConsumerRef": {
@@ -16249,14 +16303,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "integrationId",
             "in": "path",
             "required": true,
+            "description": "The integration ID.",
             "schema": {
               "type": "string"
             }
@@ -16267,7 +16324,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "The Ampersand installation ID."
           }
         ],
         "responses": {
@@ -16422,14 +16480,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "integrationId",
             "in": "path",
             "required": true,
+            "description": "The integration ID.",
             "schema": {
               "type": "string"
             }
@@ -16438,6 +16499,7 @@
             "name": "installationId",
             "in": "path",
             "required": true,
+            "description": "The Ampersand installation ID.",
             "schema": {
               "type": "string"
             }
@@ -16455,7 +16517,6 @@
                 "properties": {
                   "updateMask": {
                     "type": "array",
-                    "description": "Note: In case the mask is being used to update an object and the object's name contains special characters like a period, a forward slash or a colon, you must escape them using a backslash.",
                     "example": [
                       "connectionId",
                       "config.content.write.objects.account",
@@ -16463,7 +16524,7 @@
                     ],
                     "items": {
                       "type": "string",
-                      "description": "fields to update."
+                      "description": "Fields to update. In case the mask is being used to update an object and the object's name contains special characters like a period, a forward slash or a colon, you must escape them using a backslash."
                     }
                   },
                   "installation": {
@@ -16816,8 +16877,7 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The installation ID.",
-                      "example": "installation-123"
+                      "description": "The installation ID."
                     },
                     "projectId": {
                       "type": "string",
@@ -16826,8 +16886,7 @@
                     },
                     "integrationId": {
                       "type": "string",
-                      "description": "The integration ID.",
-                      "example": "integration-123"
+                      "description": "The integration ID."
                     },
                     "group": {
                       "title": "Group",
@@ -17042,7 +17101,7 @@
                         },
                         "providerWorkspaceRef": {
                           "type": "string",
-                          "description": "If available, the identifier for the provider workspace (e.g. \"salesforce-instance-domain\")",
+                          "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
                           "example": "provider-workspace-123"
                         },
                         "providerConsumerRef": {
@@ -18314,16 +18373,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
-            "description": "Project ID or name",
+            "description": "The unique identifier or name of the project.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "integrationId",
             "in": "path",
             "required": true,
-            "description": "Integration ID",
+            "description": "The integration ID.",
             "schema": {
               "type": "string"
             }
@@ -18342,6 +18402,7 @@
             "in": "query",
             "required": false,
             "description": "The groupRef for the installation",
+            "example": "group-123",
             "schema": {
               "type": "string"
             }
@@ -18608,10 +18669,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
-            "description": "Project ID or name",
+            "description": "The unique identifier or name of the project.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "provider",
@@ -18635,7 +18697,8 @@
             "name": "groupRef",
             "in": "query",
             "required": false,
-            "description": "The groupRef for the connection",
+            "description": "The groupRef for the connection.",
+            "example": "group-123",
             "schema": {
               "type": "string"
             }
@@ -18901,14 +18964,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "integrationId",
             "in": "path",
             "required": true,
+            "description": "The integration ID.",
             "schema": {
               "type": "string"
             }
@@ -18917,6 +18983,7 @@
             "name": "installationId",
             "in": "path",
             "required": true,
+            "description": "The Ampersand installation ID.",
             "schema": {
               "type": "string"
             }
@@ -18975,8 +19042,7 @@
                           },
                           "integrationId": {
                             "type": "string",
-                            "description": "The integration ID.",
-                            "example": "integration-123"
+                            "description": "The integration ID."
                           },
                           "configId": {
                             "type": "string",
@@ -18990,13 +19056,11 @@
                           },
                           "id": {
                             "type": "string",
-                            "description": "The operation ID.",
-                            "example": "operation-123"
+                            "description": "The operation ID."
                           },
                           "installationId": {
                             "type": "string",
-                            "description": "The Ampersand installation ID.",
-                            "example": "installation-123"
+                            "description": "The Ampersand installation ID."
                           },
                           "status": {
                             "type": "string",
@@ -19844,14 +19908,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "operationId",
             "in": "path",
             "required": true,
+            "description": "Operation ID.",
             "schema": {
               "type": "string"
             }
@@ -19882,8 +19949,7 @@
                     },
                     "integrationId": {
                       "type": "string",
-                      "description": "The integration ID.",
-                      "example": "integration-123"
+                      "description": "The integration ID."
                     },
                     "configId": {
                       "type": "string",
@@ -19897,13 +19963,11 @@
                     },
                     "id": {
                       "type": "string",
-                      "description": "The operation ID.",
-                      "example": "operation-123"
+                      "description": "The operation ID."
                     },
                     "installationId": {
                       "type": "string",
-                      "description": "The Ampersand installation ID.",
-                      "example": "installation-123"
+                      "description": "The Ampersand installation ID."
                     },
                     "status": {
                       "type": "string",
@@ -20729,14 +20793,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "operationId",
             "in": "path",
             "required": true,
+            "description": "Operation ID.",
             "schema": {
               "type": "string"
             }
@@ -22176,6 +22243,8 @@
             "name": "provider",
             "in": "path",
             "required": true,
+            "description": "The API provider.",
+            "example": "hubspot",
             "schema": {
               "type": "string"
             }
@@ -22765,9 +22834,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "active",
@@ -22820,7 +22891,7 @@
                       "projectId": {
                         "type": "string",
                         "description": "The project ID.",
-                        "example": "project-id-123"
+                        "example": "my-project"
                       },
                       "active": {
                         "type": "boolean",
@@ -23306,9 +23377,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "requestBody": {
@@ -23384,7 +23457,7 @@
                     "projectId": {
                       "type": "string",
                       "description": "The project ID.",
-                      "example": "project-id-123"
+                      "example": "my-project"
                     },
                     "active": {
                       "type": "boolean",
@@ -23872,14 +23945,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "apiKey",
             "in": "path",
             "required": true,
+            "description": "API key to access Ampersand APIs.",
             "schema": {
               "type": "string"
             }
@@ -23925,7 +24001,7 @@
                     "projectId": {
                       "type": "string",
                       "description": "The project ID.",
-                      "example": "project-id-123"
+                      "example": "my-project"
                     },
                     "active": {
                       "type": "boolean",
@@ -24410,14 +24486,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "apiKey",
             "in": "path",
             "required": true,
+            "description": "API key to access Ampersand APIs.",
             "schema": {
               "type": "string"
             }
@@ -24765,14 +24844,17 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "apiKey",
             "in": "path",
             "required": true,
+            "description": "API key to access Ampersand APIs.",
             "schema": {
               "type": "string"
             }
@@ -24875,7 +24957,7 @@
                     "projectId": {
                       "type": "string",
                       "description": "The project ID.",
-                      "example": "project-id-123"
+                      "example": "my-project"
                     },
                     "active": {
                       "type": "boolean",
@@ -26009,9 +26091,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "provider",
@@ -26025,6 +26109,7 @@
             "name": "groupRef",
             "in": "query",
             "description": "The ID of the user group that has access to this installation.",
+            "example": "group-123",
             "schema": {
               "type": "string"
             }
@@ -26214,7 +26299,7 @@
                       },
                       "providerWorkspaceRef": {
                         "type": "string",
-                        "description": "If available, the identifier for the provider workspace (e.g. \"salesforce-instance-domain\")",
+                        "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
                         "example": "provider-workspace-123"
                       },
                       "providerConsumerRef": {
@@ -26801,13 +26886,14 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -26828,7 +26914,8 @@
                   },
                   "groupRef": {
                     "type": "string",
-                    "description": "The ID of the user group that has access to this installation."
+                    "description": "The ID of the user group that has access to this installation.",
+                    "example": "group-123"
                   },
                   "consumerName": {
                     "type": "string",
@@ -27153,7 +27240,7 @@
                     },
                     "providerWorkspaceRef": {
                       "type": "string",
-                      "description": "If available, the identifier for the provider workspace (e.g. \"salesforce-instance-domain\")",
+                      "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
                       "example": "provider-workspace-123"
                     },
                     "providerConsumerRef": {
@@ -28063,9 +28150,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "connectionId",
@@ -28278,7 +28367,7 @@
                     },
                     "providerWorkspaceRef": {
                       "type": "string",
-                      "description": "If available, the identifier for the provider workspace (e.g. \"salesforce-instance-domain\")",
+                      "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
                       "example": "provider-workspace-123"
                     },
                     "providerConsumerRef": {
@@ -28861,9 +28950,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "connectionId",
@@ -29028,9 +29119,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "requestBody": {
@@ -29539,9 +29632,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "requestBody": {
@@ -30050,9 +30145,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "requestBody": {
@@ -30970,9 +31067,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           }
         ],
         "responses": {
@@ -31196,9 +31295,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "destination",
@@ -31207,7 +31308,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "The destination name"
+            "description": "The destination name.",
+            "example": "leadConvertedWebhook"
           }
         ],
         "responses": {
@@ -31750,9 +31852,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "destination",
@@ -31761,7 +31865,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "The destination ID"
+            "description": "The destination ID."
           }
         ],
         "requestBody": {
@@ -33014,9 +33118,11 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "my-project"
           },
           {
             "name": "destination",
@@ -33704,7 +33810,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Organisation",
+                  "title": "Organization",
                   "required": [
                     "id",
                     "label",
@@ -33716,7 +33822,7 @@
                     "id": {
                       "type": "string",
                       "description": "The organization ID.",
-                      "example": "org-123"
+                      "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "label": {
                       "type": "string",
@@ -33894,9 +34000,11 @@
             "name": "orgId",
             "in": "path",
             "required": true,
+            "description": "ID of the organization.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           }
         ],
         "responses": {
@@ -33905,7 +34013,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Organisation",
+                  "title": "Organization",
                   "required": [
                     "id",
                     "label",
@@ -33917,7 +34025,7 @@
                     "id": {
                       "type": "string",
                       "description": "The organization ID.",
-                      "example": "org-123"
+                      "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "label": {
                       "type": "string",
@@ -34416,9 +34524,11 @@
             "name": "orgId",
             "in": "path",
             "required": true,
+            "description": "ID of the organization.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           }
         ],
         "requestBody": {
@@ -34463,7 +34573,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Organisation",
+                  "title": "Organization",
                   "required": [
                     "id",
                     "label",
@@ -34475,7 +34585,7 @@
                     "id": {
                       "type": "string",
                       "description": "The organization ID.",
-                      "example": "org-123"
+                      "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "label": {
                       "type": "string",
@@ -34977,9 +35087,11 @@
             "name": "orgId",
             "in": "path",
             "required": true,
+            "description": "ID of the organization.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           }
         ],
         "responses": {
@@ -35187,9 +35299,11 @@
             "name": "orgId",
             "in": "path",
             "required": true,
+            "description": "ID of the organization.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           }
         ],
         "requestBody": {
@@ -35746,9 +35860,11 @@
             "name": "orgId",
             "in": "path",
             "required": true,
+            "description": "ID of the organization.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           }
         ],
         "responses": {
@@ -35966,9 +36082,11 @@
             "name": "orgId",
             "in": "path",
             "required": true,
+            "description": "ID of the organization.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           },
           {
             "name": "inviteId",
@@ -36189,9 +36307,11 @@
             "name": "orgId",
             "in": "path",
             "required": true,
+            "description": "ID of the organization.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           },
           {
             "name": "inviteId",
@@ -36776,7 +36896,7 @@
                               "id": {
                                 "type": "string",
                                 "description": "The project ID.",
-                                "example": "project-id-123"
+                                "example": "my-project"
                               },
                               "name": {
                                 "type": "string",
@@ -36790,7 +36910,8 @@
                               },
                               "orgId": {
                                 "type": "string",
-                                "description": "The organization ID that this project belongs to."
+                                "description": "The organization ID that this project belongs to.",
+                                "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                               },
                               "createTime": {
                                 "type": "string",
@@ -36855,7 +36976,7 @@
                           "example": "builder-id-123"
                         },
                         "org": {
-                          "title": "Organisation",
+                          "title": "Organization",
                           "required": [
                             "id",
                             "label",
@@ -36867,7 +36988,7 @@
                             "id": {
                               "type": "string",
                               "description": "The organization ID.",
-                              "example": "org-123"
+                              "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                             },
                             "label": {
                               "type": "string",
@@ -37162,7 +37283,7 @@
                               "id": {
                                 "type": "string",
                                 "description": "The project ID.",
-                                "example": "project-id-123"
+                                "example": "my-project"
                               },
                               "name": {
                                 "type": "string",
@@ -37176,7 +37297,8 @@
                               },
                               "orgId": {
                                 "type": "string",
-                                "description": "The organization ID that this project belongs to."
+                                "description": "The organization ID that this project belongs to.",
+                                "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                               },
                               "createTime": {
                                 "type": "string",
@@ -37241,7 +37363,7 @@
                           "example": "builder-id-123"
                         },
                         "org": {
-                          "title": "Organisation",
+                          "title": "Organization",
                           "required": [
                             "id",
                             "label",
@@ -37253,7 +37375,7 @@
                             "id": {
                               "type": "string",
                               "description": "The organization ID.",
-                              "example": "org-123"
+                              "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                             },
                             "label": {
                               "type": "string",
@@ -37434,9 +37556,11 @@
             "name": "orgId",
             "in": "path",
             "required": true,
+            "description": "ID of the organization.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           }
         ],
         "responses": {
@@ -38157,7 +38281,7 @@
   "components": {
     "schemas": {
       "Org": {
-        "title": "Organisation",
+        "title": "Organization",
         "required": [
           "id",
           "label",
@@ -38169,7 +38293,7 @@
           "id": {
             "type": "string",
             "description": "The organization ID.",
-            "example": "org-123"
+            "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           },
           "label": {
             "type": "string",
@@ -38265,7 +38389,7 @@
           "id": {
             "type": "string",
             "description": "The project ID.",
-            "example": "project-id-123"
+            "example": "my-project"
           },
           "name": {
             "type": "string",
@@ -38279,7 +38403,8 @@
           },
           "orgId": {
             "type": "string",
-            "description": "The organization ID that this project belongs to."
+            "description": "The organization ID that this project belongs to.",
+            "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           },
           "createTime": {
             "type": "string",
@@ -38387,8 +38512,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The integration ID.",
-            "example": "integration-123"
+            "description": "The integration ID."
           },
           "projectId": {
             "type": "string",
@@ -39686,8 +39810,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The installation ID.",
-            "example": "installation-123"
+            "description": "The installation ID."
           },
           "projectId": {
             "type": "string",
@@ -39696,8 +39819,7 @@
           },
           "integrationId": {
             "type": "string",
-            "description": "The integration ID.",
-            "example": "integration-123"
+            "description": "The integration ID."
           },
           "group": {
             "title": "Group",
@@ -39912,7 +40034,7 @@
               },
               "providerWorkspaceRef": {
                 "type": "string",
-                "description": "If available, the identifier for the provider workspace (e.g. \"salesforce-instance-domain\")",
+                "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
                 "example": "provider-workspace-123"
               },
               "providerConsumerRef": {
@@ -40894,7 +41016,7 @@
           },
           "providerWorkspaceRef": {
             "type": "string",
-            "description": "If available, the identifier for the provider workspace (e.g. \"salesforce-instance-domain\")",
+            "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
             "example": "provider-workspace-123"
           },
           "providerConsumerRef": {
@@ -41125,12 +41247,14 @@
         "type": "object",
         "properties": {
           "providerAppId": {
-            "description": "ID of the provider app (e.g. Salesforce connected app), returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.",
-            "type": "string"
+            "description": "ID of the provider app, returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.",
+            "type": "string",
+            "example": "32356abe-d2fd-49c7-9030-abdcbc6456d4"
           },
           "groupRef": {
             "description": "The ID of the user group that has access to this installation. This is any ID that your app uses to identify a group of users - such as an org, team, or workspace.",
-            "type": "string"
+            "type": "string",
+            "example": "group-123"
           },
           "groupName": {
             "description": "The display name of the user group that has access to this installation.",
@@ -41265,8 +41389,7 @@
           },
           "integrationId": {
             "type": "string",
-            "description": "The integration ID.",
-            "example": "integration-123"
+            "description": "The integration ID."
           },
           "configId": {
             "type": "string",
@@ -41280,13 +41403,11 @@
           },
           "id": {
             "type": "string",
-            "description": "The operation ID.",
-            "example": "operation-123"
+            "description": "The operation ID."
           },
           "installationId": {
             "type": "string",
-            "description": "The Ampersand installation ID.",
-            "example": "installation-123"
+            "description": "The Ampersand installation ID."
           },
           "status": {
             "type": "string",
@@ -41450,7 +41571,7 @@
           "projectId": {
             "type": "string",
             "description": "The project ID.",
-            "example": "project-id-123"
+            "example": "my-project"
           },
           "active": {
             "type": "boolean",
@@ -41754,7 +41875,7 @@
                     "id": {
                       "type": "string",
                       "description": "The project ID.",
-                      "example": "project-id-123"
+                      "example": "my-project"
                     },
                     "name": {
                       "type": "string",
@@ -41768,7 +41889,8 @@
                     },
                     "orgId": {
                       "type": "string",
-                      "description": "The organization ID that this project belongs to."
+                      "description": "The organization ID that this project belongs to.",
+                      "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "createTime": {
                       "type": "string",
@@ -41833,7 +41955,7 @@
                 "example": "builder-id-123"
               },
               "org": {
-                "title": "Organisation",
+                "title": "Organization",
                 "required": [
                   "id",
                   "label",
@@ -41845,7 +41967,7 @@
                   "id": {
                     "type": "string",
                     "description": "The organization ID.",
-                    "example": "org-123"
+                    "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                   },
                   "label": {
                     "type": "string",
