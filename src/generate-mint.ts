@@ -305,6 +305,7 @@ const mintConfig: MintConfig = {
           ]
         },
         "terminology",
+        "using-with-ai-ide"
       ],
     },
     {
