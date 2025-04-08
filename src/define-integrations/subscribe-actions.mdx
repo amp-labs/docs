@@ -23,11 +23,126 @@ You then need to specify the particular events you want to subscribe to. We supp
 
 - **createEvent**: triggers when a new record is created in the SaaS application.
 
-- **updateEvent**: triggers when any existing record is modified. The `watchFieldsAuto: all` setting ensures that you subscribe to all field changes. Also, you can list specific fields to watch in `requiredWatchFields`. **Note**: Only one of `requiredWatchFields` or `watchFieldsAuto` should be provided.
+- **updateEvent**: triggers when any existing record is modified. The `watchFieldsAuto: all` setting ensures that you subscribe to all field changes. Alternatively, you can list specific fields to watch in `requiredWatchFields`. **Note**: Only one of `requiredWatchFields` or `watchFieldsAuto` should be provided.
 
 - **deleteEvent**: triggers when a record is removed from the system.
 
 If you do not already have a Salesforce integration, follow the instructions in the [Salesforce provider guide](/provider-guides/salesforce) to get started.
+
+### Specify fields to watch
+You can provide fields to watch for update events and specify them in a list.
+
+**Note**: Only one of `requiredWatchFields` or `watchFieldsAuto` should be provided.
+
+Here is an exaple `amp.yaml`
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: readWriteSalesforceWithInheritanceMapping
+    provider: salesforce
+    subscribe:
+      objects:
+        - objectName: account
+          destination: accountWebhook
+          inheritFieldsAndMapping: true # for now this must be true
+          createEvent:
+            enabled: always
+          updateEvent:
+            enabled: always
+            requiredWatchFields:
+              - name
+              - phone
+            # watchFieldsAuto: all
+          deleteEvent:
+            enabled: always
+    read: # Read action is required
+      objects:
+        - objectName: account
+          mapToName: company
+          destination: accountWebhook
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+              mapToName: accountName 
+            - mapToName: notes
+              mapToDisplayName: Notes
+              prompt: These are notes that you would like to surface in our app.
+          optionalFields:
+            - fieldName: annualrevenue
+            - fieldName: website
+        ...
+    write:
+      ...
+```
+
+Here is an example of webhook message delivered according to above `amp.yaml`
+
+```json
+{
+    "action": "subscribe",
+    "groupName": "webhook-demo-group-name",
+    "groupRef": "webhook-demo-group-id",
+    "installationId": "561b9048-a3ea-4549-8912-7793a6d61aea",
+    "installationUpdateTime": "2025-04-07T23:49:58.528889Z",
+    "objectName": "company", // mapped from `account` to `company`
+    "projectId": "9482e676-4874-43a4-beea-fa8081d13a07",
+    "provider": "salesforce",
+    "rawObjectName": "account",
+    "result": [
+        {
+            "fields": {
+                "annualrevenue": null,
+                "id": "001Dp00000ZDgmxIAD",
+                "phone": "6502191231",
+                "website": null
+            },
+            "mappedFields": {
+                "accountName": "johnAmp", // mapped from `name` to `accountName`
+                "notes": "test" // mapped from `description` to `notes` by user selection
+            },
+            "providerEventType": "UPDATE",
+            "raw": {
+                "AnnualRevenue": null,
+                "Description": "test",
+                "Id": "001Dp00000ZDgmxIAD",
+                "Name": "johnAmp",
+                "Phone": "6502191231",
+                "Website": null,
+                "attributes": {
+                    "type": "Account",
+                    "url": "/services/data/v59.0/sobjects/Account/001Dp00000ZDgmxIAD"
+                }
+            },
+            "rawEvent": {
+                "ChangeEventHeader": {
+                    "changeOrigin": "com/salesforce/api/soap/63.0;client=SfdcInternalAPI/",
+                    "changeType": "UPDATE",
+                    "changedFields": [
+                        "Phone",
+                        "LastModifiedDate"
+                    ],
+                    "commitNumber": 12039390550076,
+                    "commitTimestamp": 1744140365000,
+                    "commitUser": "005Dp000003Cd1SIAS",
+                    "entityName": "Account",
+                    "recordId": "001Dp00000ZDgmxIAD",
+                    "sequenceNumber": 1,
+                    "transactionKey": "00050801-ab6f-6ce6-c55b-6b2dc8f258e1"
+                },
+                "LastModifiedDate": "2025-04-08T19:26:05.000Z",
+                "Phone": "6502191231"
+            },
+            "subscribeEventType": "update"
+        }
+    ],
+    "resultInfo": {
+        "numRecords": 1,
+        "type": "inline"
+    },
+    "workspace": "ampersand-dev-ed.develop"
+}
+```
 
 ### Specify backfill behavior
 
@@ -51,7 +166,10 @@ integrations:
             enabled: always
          updateEvent:
             enabled: always
-            watchFieldsAuto: all
+            requiredWatchFields:
+              - name
+              - phone
+            # watchFieldsAuto: all
          deleteEvent:
             enabled: always
    read: # Read action is required
@@ -88,7 +206,10 @@ integrations:
             enabled: always
          updateEvent:
             enabled: always
-            watchFieldsAuto: all
+            requiredWatchFields:
+              - name
+              - phone
+            # watchFieldsAuto: all
          deleteEvent:
             enabled: always
    read: # Read action is required
