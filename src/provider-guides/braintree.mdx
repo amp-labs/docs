@@ -1,0 +1,43 @@
+---
+title: "Braintree"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/define-integrations/proxy-actions), using the base URL `https://payments.sandbox.braintree-api.com/graphql`.
+
+### Example integration
+
+To define an integration for Braintree, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: braintree-integration
+    displayName: My Braintree Integration
+    provider: braintree
+    proxy:
+      enabled: true
+```
+
+## Before You Get Started
+
+[Click here](https://developer.paypal.com/braintree/articles/control-panel/important-gateway-credentials#api-keys) for detailed information about finding and generating your API credentials (Public Key, Private Key, and Merchant ID) in Braintree.
+
+Note: Make sure you're using the correct environment (Sandbox or Production) credentials.
+
+## Using the connector
+
+This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Braintree:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API credentials.
+- Start making [Proxy Calls](/define-integrations/proxy-actions), and Ampersand will automatically attach the correct Basic Auth headers to your requests.
+
+For detailed information about available GraphQL queries and mutations, refer to the [Braintree API Reference](https://developer.paypal.com/braintree/graphql/).
+
