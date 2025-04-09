@@ -222,6 +222,7 @@ const mintConfig: MintConfig = {
             "provider-guides/hive",
             "provider-guides/highlevel",
             "provider-guides/hubspot",
+            "provider-guides/hunter",
             "provider-guides/insightly",
             "provider-guides/instantly",
             "provider-guides/intercom",
