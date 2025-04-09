@@ -98,19 +98,31 @@ const mintConfig: MintConfig = {
     },
     {
       "source": "/docs/read-actions",
-      "destination": "/define-integrations/read-actions"
+      "destination": "/read-actions"
     },
     {
       "source": "/docs/write-actions",
-      "destination": "/define-integrations/write-actions"
+      "destination": "/write-actions"
     },
     {
       "source": "/docs/proxy-actions",
-      "destination": "/define-integrations/proxy-actions"
+      "destination": "/proxy-actions"
     },
     {
-      "source": "/docs/subscribe-actions",
-      "destination": "/define-integrations/subscribe-actions"
+      "source": "/define-integrations/read-actions",
+      "destination": "/read-actions"
+    },
+    {
+      "source": "/define-integrations/write-actions",
+      "destination": "/write-actions"
+    },
+    {
+      "source": "/define-integrations/proxy-actions",
+      "destination": "/proxy-actions"
+    },
+    {
+      "source": "/define-integrations/subscribe-actions",
+      "destination": "/subscribe-actions"
     },
     {
       "source": "/glossary",
@@ -128,19 +140,18 @@ const mintConfig: MintConfig = {
     {
       group: "",
       pages: [
-        "overview",
-        "quickstart",
-        "concepts",
         {
-          group: "Define integrations",
+          group: "Get started",
           pages: [
-            "define-integrations/overview",
-            "define-integrations/subscribe-actions",
-            "define-integrations/read-actions",
-            "define-integrations/write-actions",
-            "define-integrations/proxy-actions",
-          ],
+            "overview",
+            "quickstart",
+            "concepts",
+          ]
         },
+        "subscribe-actions",
+        "read-actions",
+        "write-actions",
+        "proxy-actions",
         "object-and-field-mapping",
         "embeddable-ui-components",
         {
@@ -157,7 +168,6 @@ const mintConfig: MintConfig = {
               "destinations/webhooks",
           ]
         },
-        "terminology",
         {
           group: "Provider guides",
           pages: [
@@ -285,6 +295,7 @@ const mintConfig: MintConfig = {
             "provider-guides/zoom"
           ],
         },
+        "dev-and-prod-environments",
         {
           group: "Customer guides",
           pages: [
@@ -293,7 +304,7 @@ const mintConfig: MintConfig = {
             "customer-guides/hubspot"
           ]
         },
-        "dev-and-prod-environments"
+        "terminology",
       ],
     },
     {
