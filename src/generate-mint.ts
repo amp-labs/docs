@@ -145,6 +145,7 @@ const mintConfig: MintConfig = {
           pages: [
             "overview",
             "quickstart",
+            "use-with-ai-ide",
             "concepts",
           ]
         },
@@ -304,8 +305,7 @@ const mintConfig: MintConfig = {
             "customer-guides/hubspot"
           ]
         },
-        "terminology",
-        "using-with-ai-ide"
+        "terminology"
       ],
     },
     {
