@@ -1,0 +1,50 @@
+---
+title: "Livestorm"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL https://api.livestorm.co.
+
+## Before You Get Started
+
+To integrate Livestorm with Ampersand, you must register a Livestorm OAuth2 application. To do this, contact [help@livestorm.co](mailto:help@livestorm.co) and provide the following details:
+
+- **Redirect URL**: Please provide a unique HTTPS redirect URL for your app. **Note** that dynamic URLs are not supported at this time.
+- **App Logo**: Provide logo for your app. The image should be square with a maximum size of 500px x 500px.
+- **Scope**: Specify the scope required for your app to function.
+
+Once your application is registered, you will receive two credentials: **client_id** and **client_secret.** These credentials are required to connect Livestorm with Ampersand.
+
+### Example integration
+
+To define an integration for livestorm, create a manifest file that looks like this:
+
+```YAML
+#amp.yaml
+specVersion: 1.0.0
+integrations: 
+  - name: livestormIntegration
+    displayName: Livestorm
+    provider: livestorm
+    proxy:
+      enabled: true
+```
+
+## Add Your Livestorm App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Livestorm integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.  
+
+4. Select Livestorm from the **Provider** list.
+
+5. Enter the previously obtained Client ID in the **Client ID** field, the Client Secret in the **Client Secret** field and scopes in the **Scopes** field.
+
+   ![Ampersand Integration](/images/provider-guides/livestorm.gif)

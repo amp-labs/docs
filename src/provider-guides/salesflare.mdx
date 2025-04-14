@@ -1,0 +1,47 @@
+---
+title: "Salesflare"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.salesflare.com`.
+
+### Example integration
+
+To define an integration for Salesflare, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesflare-integration
+    displayName: My Salesflare Integration
+    provider: salesflare
+    proxy:
+      enabled: true
+```
+
+## Before You Get Started
+
+To use the Salesflare connector, you'll need an API key from your Salesflare account. Here's how to get it:
+
+1. Log in to your [Salesflare account](https://app.salesflare.com/).
+2. Go to Settings > API Keys.
+3. Generate a new API key.
+
+For more information about authentication, see the [Salesflare API documentation](https://api.salesflare.com/docs#section/Introduction/Authentication).
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Salesflare:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.salesflare.com`.
+
+
+For detailed information about available endpoints and request formats, refer to the [Salesflare API Reference](https://api.salesflare.com/docs).

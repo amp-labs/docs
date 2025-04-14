@@ -98,19 +98,31 @@ const mintConfig: MintConfig = {
     },
     {
       "source": "/docs/read-actions",
-      "destination": "/define-integrations/read-actions"
+      "destination": "/read-actions"
     },
     {
       "source": "/docs/write-actions",
-      "destination": "/define-integrations/write-actions"
+      "destination": "/write-actions"
     },
     {
       "source": "/docs/proxy-actions",
-      "destination": "/define-integrations/proxy-actions"
+      "destination": "/proxy-actions"
     },
     {
-      "source": "/docs/subscribe-actions",
-      "destination": "/define-integrations/subscribe-actions"
+      "source": "/define-integrations/read-actions",
+      "destination": "/read-actions"
+    },
+    {
+      "source": "/define-integrations/write-actions",
+      "destination": "/write-actions"
+    },
+    {
+      "source": "/define-integrations/proxy-actions",
+      "destination": "/proxy-actions"
+    },
+    {
+      "source": "/define-integrations/subscribe-actions",
+      "destination": "/subscribe-actions"
     },
     {
       "source": "/glossary",
@@ -128,19 +140,19 @@ const mintConfig: MintConfig = {
     {
       group: "",
       pages: [
-        "overview",
-        "quickstart",
-        "concepts",
         {
-          group: "Define integrations",
+          group: "Get started",
           pages: [
-            "define-integrations/overview",
-            "define-integrations/subscribe-actions",
-            "define-integrations/read-actions",
-            "define-integrations/write-actions",
-            "define-integrations/proxy-actions",
-          ],
+            "overview",
+            "quickstart",
+            "use-with-ai-ide",
+            "concepts",
+          ]
         },
+        "subscribe-actions",
+        "read-actions",
+        "write-actions",
+        "proxy-actions",
         "object-and-field-mapping",
         "embeddable-ui-components",
         {
@@ -157,7 +169,6 @@ const mintConfig: MintConfig = {
               "destinations/webhooks",
           ]
         },
-        "terminology",
         {
           group: "Provider guides",
           pages: [
@@ -173,6 +184,7 @@ const mintConfig: MintConfig = {
             "provider-guides/atlassian",
             "provider-guides/attio",
             "provider-guides/aweber",
+            "provider-guides/braintree",
             "provider-guides/bird",
             "provider-guides/bitbucket",
             "provider-guides/blueshift",
@@ -216,11 +228,13 @@ const mintConfig: MintConfig = {
             "provider-guides/goToWebinar",
             "provider-guides/groove",
             "provider-guides/guru",
+            "provider-guides/happyfox",
             "provider-guides/helpScoutMailbox",
             "provider-guides/heyreach",
             "provider-guides/hive",
             "provider-guides/highlevel",
             "provider-guides/hubspot",
+            "provider-guides/hunter",
             "provider-guides/insightly",
             "provider-guides/instantly",
             "provider-guides/intercom",
@@ -234,6 +248,7 @@ const mintConfig: MintConfig = {
             "provider-guides/klaviyo",
             "provider-guides/lever",
             "provider-guides/linkedin",
+            "provider-guides/livestorm",
             "provider-guides/lemlist",
             "provider-guides/mailgun",
             "provider-guides/marketo",
@@ -256,6 +271,7 @@ const mintConfig: MintConfig = {
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
+            "provider-guides/salesflare",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
             "provider-guides/seismic",
@@ -281,6 +297,7 @@ const mintConfig: MintConfig = {
             "provider-guides/zoom"
           ],
         },
+        "dev-and-prod-environments",
         {
           group: "Customer guides",
           pages: [
@@ -289,7 +306,7 @@ const mintConfig: MintConfig = {
             "customer-guides/hubspot"
           ]
         },
-        "dev-and-prod-environments"
+        "terminology"
       ],
     },
     {
