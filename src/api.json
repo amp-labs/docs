@@ -27601,180 +27601,163 @@
                 "title": "Generate Connection Request",
                 "allOf": [
                   {
-                    "title": "Update Connection Request",
+                    "title": "Connection Request Body",
                     "type": "object",
-                    "required": [
-                      "updateMask",
-                      "connection"
-                    ],
                     "properties": {
-                      "updateMask": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "description": "The fields to update."
+                      "providerWorkspaceRef": {
+                        "type": "string",
+                        "description": "The ID of the provider workspace that this connection belongs to."
                       },
-                      "connection": {
-                        "title": "Connection Request Body",
+                      "groupName": {
+                        "type": "string",
+                        "description": "The name of the user group that has access to this installation."
+                      },
+                      "groupRef": {
+                        "type": "string",
+                        "description": "The ID of the user group that has access to this installation.",
+                        "example": "group-123"
+                      },
+                      "consumerName": {
+                        "type": "string",
+                        "description": "The name of the consumer that has access to this installation."
+                      },
+                      "consumerRef": {
+                        "type": "string",
+                        "description": "The consumer reference."
+                      },
+                      "provider": {
+                        "type": "string",
+                        "description": "The provider name (e.g. \"salesforce\", \"hubspot\")"
+                      },
+                      "apiKey": {
+                        "type": "string",
+                        "description": "The API key to use for the connection."
+                      },
+                      "basicAuth": {
+                        "type": "object",
+                        "required": [
+                          "username",
+                          "password"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "string",
+                            "description": "The username to use for the connection."
+                          },
+                          "password": {
+                            "type": "string",
+                            "description": "The password to use for the connection."
+                          }
+                        }
+                      },
+                      "oauth2ClientCredentials": {
+                        "type": "object",
+                        "required": [
+                          "clientId",
+                          "clientSecret"
+                        ],
+                        "properties": {
+                          "clientId": {
+                            "type": "string",
+                            "description": "The client ID to use for the connection."
+                          },
+                          "clientSecret": {
+                            "type": "string",
+                            "description": "The client secret to use for the connection."
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "The scopes for the tokens."
+                          }
+                        }
+                      },
+                      "oauth2PasswordCredentials": {
+                        "type": "object",
+                        "required": [
+                          "username",
+                          "password",
+                          "clientId",
+                          "clientSecret"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "string",
+                            "description": "The username to use for the connection."
+                          },
+                          "password": {
+                            "type": "string",
+                            "description": "The password to use for the connection."
+                          },
+                          "clientId": {
+                            "type": "string",
+                            "description": "The client ID to use for the connection."
+                          },
+                          "clientSecret": {
+                            "type": "string",
+                            "description": "The client secret to use for the connection."
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "The scopes for the tokens."
+                          }
+                        }
+                      },
+                      "oauth2AuthorizationCode": {
+                        "title": "OAuth2 Authorization Code",
                         "type": "object",
                         "properties": {
-                          "providerWorkspaceRef": {
-                            "type": "string",
-                            "description": "The ID of the provider workspace that this connection belongs to."
-                          },
-                          "groupName": {
-                            "type": "string",
-                            "description": "The name of the user group that has access to this installation."
-                          },
-                          "groupRef": {
-                            "type": "string",
-                            "description": "The ID of the user group that has access to this installation.",
-                            "example": "group-123"
-                          },
-                          "consumerName": {
-                            "type": "string",
-                            "description": "The name of the consumer that has access to this installation."
-                          },
-                          "consumerRef": {
-                            "type": "string",
-                            "description": "The consumer reference."
-                          },
-                          "provider": {
-                            "type": "string",
-                            "description": "The provider name (e.g. \"salesforce\", \"hubspot\")"
-                          },
-                          "apiKey": {
-                            "type": "string",
-                            "description": "The API key to use for the connection."
-                          },
-                          "basicAuth": {
+                          "accessToken": {
                             "type": "object",
                             "required": [
-                              "username",
-                              "password"
+                              "token"
                             ],
+                            "description": "The access token for the connection.",
                             "properties": {
-                              "username": {
-                                "type": "string",
-                                "description": "The username to use for the connection."
+                              "token": {
+                                "type": "string"
                               },
-                              "password": {
+                              "expiresAt": {
                                 "type": "string",
-                                "description": "The password to use for the connection."
+                                "format": "date-time"
+                              },
+                              "issuedAt": {
+                                "type": "string",
+                                "format": "date-time"
                               }
                             }
                           },
-                          "oauth2ClientCredentials": {
+                          "refreshToken": {
                             "type": "object",
                             "required": [
-                              "clientId",
-                              "clientSecret"
+                              "token"
                             ],
+                            "description": "The refresh token to use for the connection.",
                             "properties": {
-                              "clientId": {
-                                "type": "string",
-                                "description": "The client ID to use for the connection."
+                              "token": {
+                                "type": "string"
                               },
-                              "clientSecret": {
+                              "expiresAt": {
                                 "type": "string",
-                                "description": "The client secret to use for the connection."
+                                "format": "date-time"
                               },
-                              "scopes": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                },
-                                "description": "The scopes for the tokens."
+                              "issuedAt": {
+                                "type": "string",
+                                "format": "date-time"
                               }
                             }
                           },
-                          "oauth2PasswordCredentials": {
-                            "type": "object",
-                            "required": [
-                              "username",
-                              "password",
-                              "clientId",
-                              "clientSecret"
-                            ],
-                            "properties": {
-                              "username": {
-                                "type": "string",
-                                "description": "The username to use for the connection."
-                              },
-                              "password": {
-                                "type": "string",
-                                "description": "The password to use for the connection."
-                              },
-                              "clientId": {
-                                "type": "string",
-                                "description": "The client ID to use for the connection."
-                              },
-                              "clientSecret": {
-                                "type": "string",
-                                "description": "The client secret to use for the connection."
-                              },
-                              "scopes": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                },
-                                "description": "The scopes for the tokens."
-                              }
-                            }
-                          },
-                          "oauth2AuthorizationCode": {
-                            "title": "OAuth2 Authorization Code",
-                            "type": "object",
-                            "properties": {
-                              "accessToken": {
-                                "type": "object",
-                                "required": [
-                                  "token"
-                                ],
-                                "description": "The access token for the connection.",
-                                "properties": {
-                                  "token": {
-                                    "type": "string"
-                                  },
-                                  "expiresAt": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                  },
-                                  "issuedAt": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                  }
-                                }
-                              },
-                              "refreshToken": {
-                                "type": "object",
-                                "required": [
-                                  "token"
-                                ],
-                                "description": "The refresh token to use for the connection.",
-                                "properties": {
-                                  "token": {
-                                    "type": "string"
-                                  },
-                                  "expiresAt": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                  },
-                                  "issuedAt": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                  }
-                                }
-                              },
-                              "scopes": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                },
-                                "description": "The scopes for the tokens."
-                              }
-                            }
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "The scopes for the tokens."
                           }
                         }
                       }
@@ -43268,180 +43251,163 @@
         "title": "Generate Connection Request",
         "allOf": [
           {
-            "title": "Update Connection Request",
+            "title": "Connection Request Body",
             "type": "object",
-            "required": [
-              "updateMask",
-              "connection"
-            ],
             "properties": {
-              "updateMask": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "The fields to update."
+              "providerWorkspaceRef": {
+                "type": "string",
+                "description": "The ID of the provider workspace that this connection belongs to."
               },
-              "connection": {
-                "title": "Connection Request Body",
+              "groupName": {
+                "type": "string",
+                "description": "The name of the user group that has access to this installation."
+              },
+              "groupRef": {
+                "type": "string",
+                "description": "The ID of the user group that has access to this installation.",
+                "example": "group-123"
+              },
+              "consumerName": {
+                "type": "string",
+                "description": "The name of the consumer that has access to this installation."
+              },
+              "consumerRef": {
+                "type": "string",
+                "description": "The consumer reference."
+              },
+              "provider": {
+                "type": "string",
+                "description": "The provider name (e.g. \"salesforce\", \"hubspot\")"
+              },
+              "apiKey": {
+                "type": "string",
+                "description": "The API key to use for the connection."
+              },
+              "basicAuth": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "password"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The username to use for the connection."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password to use for the connection."
+                  }
+                }
+              },
+              "oauth2ClientCredentials": {
+                "type": "object",
+                "required": [
+                  "clientId",
+                  "clientSecret"
+                ],
+                "properties": {
+                  "clientId": {
+                    "type": "string",
+                    "description": "The client ID to use for the connection."
+                  },
+                  "clientSecret": {
+                    "type": "string",
+                    "description": "The client secret to use for the connection."
+                  },
+                  "scopes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The scopes for the tokens."
+                  }
+                }
+              },
+              "oauth2PasswordCredentials": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "password",
+                  "clientId",
+                  "clientSecret"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The username to use for the connection."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password to use for the connection."
+                  },
+                  "clientId": {
+                    "type": "string",
+                    "description": "The client ID to use for the connection."
+                  },
+                  "clientSecret": {
+                    "type": "string",
+                    "description": "The client secret to use for the connection."
+                  },
+                  "scopes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The scopes for the tokens."
+                  }
+                }
+              },
+              "oauth2AuthorizationCode": {
+                "title": "OAuth2 Authorization Code",
                 "type": "object",
                 "properties": {
-                  "providerWorkspaceRef": {
-                    "type": "string",
-                    "description": "The ID of the provider workspace that this connection belongs to."
-                  },
-                  "groupName": {
-                    "type": "string",
-                    "description": "The name of the user group that has access to this installation."
-                  },
-                  "groupRef": {
-                    "type": "string",
-                    "description": "The ID of the user group that has access to this installation.",
-                    "example": "group-123"
-                  },
-                  "consumerName": {
-                    "type": "string",
-                    "description": "The name of the consumer that has access to this installation."
-                  },
-                  "consumerRef": {
-                    "type": "string",
-                    "description": "The consumer reference."
-                  },
-                  "provider": {
-                    "type": "string",
-                    "description": "The provider name (e.g. \"salesforce\", \"hubspot\")"
-                  },
-                  "apiKey": {
-                    "type": "string",
-                    "description": "The API key to use for the connection."
-                  },
-                  "basicAuth": {
+                  "accessToken": {
                     "type": "object",
                     "required": [
-                      "username",
-                      "password"
+                      "token"
                     ],
+                    "description": "The access token for the connection.",
                     "properties": {
-                      "username": {
-                        "type": "string",
-                        "description": "The username to use for the connection."
+                      "token": {
+                        "type": "string"
                       },
-                      "password": {
+                      "expiresAt": {
                         "type": "string",
-                        "description": "The password to use for the connection."
+                        "format": "date-time"
+                      },
+                      "issuedAt": {
+                        "type": "string",
+                        "format": "date-time"
                       }
                     }
                   },
-                  "oauth2ClientCredentials": {
+                  "refreshToken": {
                     "type": "object",
                     "required": [
-                      "clientId",
-                      "clientSecret"
+                      "token"
                     ],
+                    "description": "The refresh token to use for the connection.",
                     "properties": {
-                      "clientId": {
-                        "type": "string",
-                        "description": "The client ID to use for the connection."
+                      "token": {
+                        "type": "string"
                       },
-                      "clientSecret": {
+                      "expiresAt": {
                         "type": "string",
-                        "description": "The client secret to use for the connection."
+                        "format": "date-time"
                       },
-                      "scopes": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "description": "The scopes for the tokens."
+                      "issuedAt": {
+                        "type": "string",
+                        "format": "date-time"
                       }
                     }
                   },
-                  "oauth2PasswordCredentials": {
-                    "type": "object",
-                    "required": [
-                      "username",
-                      "password",
-                      "clientId",
-                      "clientSecret"
-                    ],
-                    "properties": {
-                      "username": {
-                        "type": "string",
-                        "description": "The username to use for the connection."
-                      },
-                      "password": {
-                        "type": "string",
-                        "description": "The password to use for the connection."
-                      },
-                      "clientId": {
-                        "type": "string",
-                        "description": "The client ID to use for the connection."
-                      },
-                      "clientSecret": {
-                        "type": "string",
-                        "description": "The client secret to use for the connection."
-                      },
-                      "scopes": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "description": "The scopes for the tokens."
-                      }
-                    }
-                  },
-                  "oauth2AuthorizationCode": {
-                    "title": "OAuth2 Authorization Code",
-                    "type": "object",
-                    "properties": {
-                      "accessToken": {
-                        "type": "object",
-                        "required": [
-                          "token"
-                        ],
-                        "description": "The access token for the connection.",
-                        "properties": {
-                          "token": {
-                            "type": "string"
-                          },
-                          "expiresAt": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "issuedAt": {
-                            "type": "string",
-                            "format": "date-time"
-                          }
-                        }
-                      },
-                      "refreshToken": {
-                        "type": "object",
-                        "required": [
-                          "token"
-                        ],
-                        "description": "The refresh token to use for the connection.",
-                        "properties": {
-                          "token": {
-                            "type": "string"
-                          },
-                          "expiresAt": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "issuedAt": {
-                            "type": "string",
-                            "format": "date-time"
-                          }
-                        }
-                      },
-                      "scopes": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "description": "The scopes for the tokens."
-                      }
-                    }
+                  "scopes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The scopes for the tokens."
                   }
                 }
               }
