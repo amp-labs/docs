@@ -113,40 +113,65 @@ Here is a sample message:
 
 ```JavaScript JavaScript
 {
-  "action": "subscribe",
-  "projectId": "ampersand-project-id",
-  "provider": "salesforce",
-  "groupRef": "xyz-company",
-  "groupName": "XYZ Company",
-  "installationId": "installation-id",
-  "objectName": "Lead",
-  "result": [
-    {
-      "fields": {
-        "id": "00Q5g00001ABcD1EAL",
-        "firstname": "Sally",
-        "lastname": "Jones",
-        "email": "sally.jones@example.com",
-        "company": "Acme Corp",
-        "status": "New"
-      },
-      "mappedFields": { 
-        "lead_source": "Web"
-      },
-      "subscribeEventType": "create",
-      "providerEventType": "lead.created",
-      "raw": {
-        "id": "00Q5g00001ABcD1EAL",
-        "firstname": "Sally",
-        "lastname": "Jones",
-        "email": "sally.jones@example.com",
-        "company": "Acme Corp",
-        "lead_source": "Web",
-        "status": "New"
-      },
-      "rawEvent": { ... }
-    }
-  ]
+    "action": "subscribe",
+    "groupName": "webhook-demo-group-name",
+    "groupRef": "webhook-demo-group-id",
+    "installationId": "0c970e1c-8fbe-4b28-bf10-2beee8fbf4ce",
+    "installationUpdateTime": "2025-04-10T23:00:52.618406Z",
+    "objectName": "company",
+    "projectId": "9482e676-4874-43a4-beea-fa8081d13a07",
+    "provider": "salesforce",
+    "rawObjectName": "account",
+    "result": [
+        {
+            "fields": {
+                "annualrevenue": null,
+                "id": "001Dp00000ZDgmxIAD",
+                "website": null
+            },
+            "mappedFields": {
+                "accountName": "johnAmp", // `name` field mapped to `accoutnName` from `amp.yaml`
+                "notes": "Account Description Mapped to Notes" // `description` field mapped to `notes` by user selection
+            },
+            "providerEventType": "UPDATE",
+            "raw": {
+                "AnnualRevenue": null,
+                "Description": "Account Description Mapped to Notes",
+                "Id": "001Dp00000ZDgmxIAD",
+                "Name": "johnAmp",
+                "Website": null,
+                "attributes": {
+                    "type": "Account",
+                    "url": "/services/data/v59.0/sobjects/Account/001Dp00000ZDgmxIAD"
+                }
+            },
+            "rawEvent": {
+                "ChangeEventHeader": {
+                    "changeOrigin": "com/salesforce/api/soap/63.0;client=SfdcInternalAPI/",
+                    "changeType": "UPDATE",
+                    "changedFields": [
+                        "Description",
+                        "LastModifiedDate"
+                    ],
+                    "commitNumber": 12041091891110,
+                    "commitTimestamp": 1744327345000,
+                    "commitUser": "005Dp000003Cd1SIAS",
+                    "entityName": "Account",
+                    "recordId": "001Dp00000ZDgmxIAD",
+                    "sequenceNumber": 1,
+                    "transactionKey": "00051705-2e99-d1e5-7e7a-48e3af682d07"
+                },
+                "Description": "Account Description Mapped to Notes",
+                "LastModifiedDate": "2025-04-10T23:22:25.000Z"
+            },
+            "subscribeEventType": "update"
+        }
+    ],
+    "resultInfo": {
+        "numRecords": 1,
+        "type": "inline"
+    },
+    "workspace": "ampersand-dev-ed.develop"
 }
 
 ```
