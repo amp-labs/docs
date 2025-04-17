@@ -7,23 +7,97 @@ title: Ashby
 ### Supported actions
 
 This connector supports:
-
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `application.list`, `applicationFeedback.list` and `interviewSchedule.list` currently. For all other objects, a full read of the Intercom instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.ashbyhq.com`.
 
-### Example integration
+### Supported Objects
 
-To define an integration for Ashby, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: Ashby-integration
-    displayName: My Ashby Integration
-    provider: ashby
-    proxy:
-      enabled: true
-```
+The Ashby connector supports writing to and reading from the following objects:
+- [application.list](https://developers.ashbyhq.com/reference/applicationlist) (read), 
+- [application.create](https://developers.ashbyhq.com/reference/applicationcreate) (write), 
+- [application.change_source](https://developers.ashbyhq.com/reference/applicationchangesource)(write), 
+- [application.change_stage](https://developers.ashbyhq.com/reference/applicationchangestage)(write), 
+- [application.transfer](https://developers.ashbyhq.com/reference/applicationtransfer)(write), 
+- [application.update](https://developers.ashbyhq.com/reference/applicationupdate)(write), 
+- [application.updateHistory](https://developers.ashbyhq.com/reference/applicationupdatehistory)(write), 
+- [application.addHiringTeamMember](https://developers.ashbyhq.com/reference/applicationaddhiringteammember)(write), 
+- [application.removeHiringTeamMember](https://developers.ashbyhq.com/reference/applicationremovehiringteammember) (write)
+- [applicationFeedback.list](https://developers.ashbyhq.com/reference/applicationfeedbacklist) (read), 
+- [applicationFeedback.submit](https://developers.ashbyhq.com/reference/applicationfeedbacksubmit) (write)
+- [applicationForm.submit](https://developers.ashbyhq.com/reference/applicationformsubmit) (write)
+- [applicationHiringTeamRole.list](https://developers.ashbyhq.com/reference/applicationhiringteamrolelist) (read)
+- [approvalDefinition.update](https://developers.ashbyhq.com/reference/approvaldefinitionupdate) (write)
+- [archiveReason.list](https://developers.ashbyhq.com/reference/archivereasonlist) (read)
+- [assessment.list](https://developers.ashbyhq.com/reference/assessmentlist) (read), 
+- [assessment.addCompletedToCandidate](https://developers.ashbyhq.com/reference/assessmentaddcompletedtocandidate) (write), 
+- [assessment.start](https://developers.ashbyhq.com/reference/assessmentstart) (write), 
+- [assessment.update](https://developers.ashbyhq.com/reference/assessmentsupdate) (write), 
+- [assessment.cancel](https://developers.ashbyhq.com/reference/assessmentcancel) (write)
+- [candidate.list](https://developers.ashbyhq.com/reference/candidatelist) (read), 
+- [candidate.create](https://developers.ashbyhq.com/reference/candidatecreate) (write), 
+- [candidate.createNote](https://developers.ashbyhq.com/reference/candidatecreatenote) (write), 
+- [candidate.addTag](https://developers.ashbyhq.com/reference/candidateaddtag) (write), 
+- [candidate.addProject](https://developers.ashbyhq.com/reference/candidateaddproject) (write), 
+- [candidate.anonymize](https://developers.ashbyhq.com/reference/candidateanonymize) (write), 
+- [candidate.update](https://developers.ashbyhq.com/reference/candidateupdate) (write)
+- [candidateTag.list](https://developers.ashbyhq.com/reference/candidatetaglist) (read), 
+- [candidateTag.create](https://developers.ashbyhq.com/reference/candidatetagcreate) (write)
+- [communicationTemplate.list](https://developers.ashbyhq.com/reference/communicationtemplatelist) (read)
+- [customField.list](https://developers.ashbyhq.com/reference/customfieldlist) (read), 
+- [customField.create](https://developers.ashbyhq.com/reference/customfieldcreate) (write), 
+- [customField.setValue](https://developers.ashbyhq.com/reference/customfieldsetvalue) (write)
+- [department.list](https://developers.ashbyhq.com/reference/departmentlist) (read), 
+- [department.create](https://developers.ashbyhq.com/reference/departmentcreate) (write)
+- [feedbackFormDefinition.list](https://developers.ashbyhq.com/reference/feedbackformdefinitionlist) (read)
+- [hiringTeam.addMember](https://developers.ashbyhq.com/reference/hiringteamaddmember) (write)
+- [interview.list](https://developers.ashbyhq.com/reference/interviewlist) (read)
+- [interviewPlan.list](https://developers.ashbyhq.com/reference/interviewplanist) (read)
+- [interviewSchedule.list](https://developers.ashbyhq.com/reference/interviewschedulelist) (read), 
+- [interviewSchedule.create](https://developers.ashbyhq.com/reference/interviewschedulecreate) (write), 
+- [interviewSchedule.cancel](https://developers.ashbyhq.com/reference/interviewschedulecancel) (write), 
+- [interviewSchedule.update](https://developers.ashbyhq.com/reference/interviewscheduleupdate) (write)
+- [interviewStageGroup.list](https://developers.ashbyhq.com/reference/interviewstagegrouplist) (read)
+- [interviewerPool.list](https://developers.ashbyhq.com/reference/interviewerpoollist) (read), 
+- [interviewerPool.create](https://developers.ashbyhq.com/reference/interviewerpoolcreate) (write), 
+- [interviewerPool.addUser](https://developers.ashbyhq.com/reference/interviewerpooladduser) (write), 
+- [interviewerPool.update](https://developers.ashbyhq.com/reference/interviewerpoolupdate) (write), 
+- [interviewerPool.archive](https://developers.ashbyhq.com/reference/interviewerpoolarchive) (write), 
+- [interviewerPool.restore](https://developers.ashbyhq.com/reference/interviewerpoolrestore) (write), 
+- [interviewerPool.removeUser](https://developers.ashbyhq.com/reference/interviewerpoolremoveuser) (write)
+- [job.list](https://developers.ashbyhq.com/reference/joblist) (read), 
+- [job.create](https://developers.ashbyhq.com/reference/jobcreate) (write), 
+- [job.setStatus](https://developers.ashbyhq.com/reference/jobsetstatus)  (write), 
+- [job.update](https://developers.ashbyhq.com/reference/jobupdate) (write)
+- [jobBoard.list](https://developers.ashbyhq.com/reference/jobboardlist) (read)
+- [jobPosting.list](https://developers.ashbyhq.com/reference/jobpostinglist) (read),
+- [jobPosting.update](https://developers.ashbyhq.com/reference/jobpostingupdate) (write)
+- [jobTemplate.list](https://developers.ashbyhq.com/reference/jobtemplatelist) (read)
+- [location.list](https://developers.ashbyhq.com/reference/locationlist) (read), 
+- [location.create](https://developers.ashbyhq.com/reference/locationcreate) (write)
+- [offer.list](https://developers.ashbyhq.com/reference/offerlist) (read), 
+- [offer.create](https://developers.ashbyhq.com/reference/offercreate)  (write), 
+- [offer.start](https://developers.ashbyhq.com/reference/offerstart) (write)
+- [offerProcess.start](https://developers.ashbyhq.com/reference/offerprocessstart) (write)
+- [opening.list](https://developers.ashbyhq.com/reference/openinglist) (read), 
+- [opening.create](https://developers.ashbyhq.com/reference/openingcreate)  (write), 
+- [opening.addJob](https://developers.ashbyhq.com/reference/openingaddjob)  (write), 
+- [opening.removeJob](https://developers.ashbyhq.com/reference/openingremovejob)  (write), 
+- [opening.addLocation](https://developers.ashbyhq.com/reference/openingaddlocation)  (write), 
+- [opening.removeLocation](https://developers.ashbyhq.com/reference/openingremovelocation)  (write), 
+- [opening.setOpeningState](https://developers.ashbyhq.com/reference/openingsetopeningstate)  (write), 
+- [opening.setArchived](https://developers.ashbyhq.com/reference/openingsetarchived) (write),
+- [opening.update](https://developers.ashbyhq.com/reference/openingupdate) (write)
+- [project.list](https://developers.ashbyhq.com/reference/projectlist) (read)
+- [referral.create](https://developers.ashbyhq.com/reference/referralcreate) (write)
+- [source.list](https://developers.ashbyhq.com/reference/sourcelist) (read)
+- [sourceTrackingLink.list](https://developers.ashbyhq.com/reference/sourcetrackinglinklist) (read)
+- [surveyFormDefinition.list](https://developers.ashbyhq.com/reference/surveyformdefinitionlist) (read)
+- [surveyRequest.create](https://developers.ashbyhq.com/reference/surveyrequestcreate) (write)
+- [surveySubmission.create](https://developers.ashbyhq.com/reference/surveysubmissioncreate) (write)
+- [user.list](https://developers.ashbyhq.com/reference/userlist) (read)
+- [webhook.create](https://developers.ashbyhq.com/reference/webhookcreate), 
+- [webhook.update](https://developers.ashbyhq.com/reference/webhookupdate) (write)
 
 ## Using the connector
 
@@ -31,7 +105,11 @@ This connector uses Basic Auth, which means that you do not need to set up a Pro
 
 To start integrating with Ashby:
 
-- Create a manifest file like the [example](#example-integration) above.
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/ashby/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://api.ashbyhq.com`.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
