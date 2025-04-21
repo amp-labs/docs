@@ -304,7 +304,7 @@ const mintConfig: MintConfig = {
             "customer-guides/overview",
             "customer-guides/salesforce",
             "customer-guides/hubspot",
-            "customer-guides/reauthenticate-connection"
+            "customer-guides/update-connection"
           ]
         },
         "terminology"
