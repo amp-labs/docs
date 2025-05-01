@@ -216,6 +216,7 @@ const mintConfig: MintConfig = {
             "provider-guides/dynamicsCRM",
             "provider-guides/facebook",
             "provider-guides/figma",
+            "provider-guides/fireflies",
             "provider-guides/formstack",
             "provider-guides/front",
             "provider-guides/g2",
