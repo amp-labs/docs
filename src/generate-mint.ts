@@ -306,6 +306,7 @@ const mintConfig: MintConfig = {
             "customer-guides/overview",
             "customer-guides/salesforce",
             "customer-guides/hubspot",
+            "customer-guides/marketo",
             "customer-guides/update-connection"
           ]
         },
