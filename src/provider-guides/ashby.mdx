@@ -7,23 +7,45 @@ title: Ashby
 ### Supported actions
 
 This connector supports:
-
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `application`, `applicationFeedback` and `interviewSchedule` currently. For all other objects, a full read of the Ashby instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.ashbyhq.com`.
 
-### Example integration
+### Supported Objects
 
-To define an integration for Ashby, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: Ashby-integration
-    displayName: My Ashby Integration
-    provider: ashby
-    proxy:
-      enabled: true
-```
+The Ashby connector supports writing to and reading from the following objects:
+- [application](https://developers.ashbyhq.com/reference/applicationlist) (read, write), 
+- [applicationFeedback](https://developers.ashbyhq.com/reference/applicationfeedbacklist) (read), 
+- [applicationHiringTeamRole](https://developers.ashbyhq.com/reference/applicationhiringteamrolelist) (read)
+- [archiveReason](https://developers.ashbyhq.com/reference/archivereasonlist) (read)
+- [assessment](https://developers.ashbyhq.com/reference/assessmentlist) (read), 
+- [candidate](https://developers.ashbyhq.com/reference/candidatelist) (read, write), 
+- [candidateTag](https://developers.ashbyhq.com/reference/candidatetaglist) (read, write), 
+- [communicationTemplate](https://developers.ashbyhq.com/reference/communicationtemplatelist) (read)
+- [customField](https://developers.ashbyhq.com/reference/customfieldlist) (read, write), 
+- [department](https://developers.ashbyhq.com/reference/departmentlist) (read, write), 
+- [feedbackFormDefinition](https://developers.ashbyhq.com/reference/feedbackformdefinitionlist) (read)
+- [interview](https://developers.ashbyhq.com/reference/interviewlist) (read)
+- [interviewPlan](https://developers.ashbyhq.com/reference/interviewplanlist) (read)
+- [interviewSchedule](https://developers.ashbyhq.com/reference/interviewschedulelist) (read, write), 
+- [interviewStageGroup](https://developers.ashbyhq.com/reference/interviewstagegrouplist) (read)
+- [interviewerPool](https://developers.ashbyhq.com/reference/interviewerpoollist) (read, write), 
+- [job](https://developers.ashbyhq.com/reference/joblist) (read, write), 
+- [jobBoard](https://developers.ashbyhq.com/reference/jobboardlist) (read)
+- [jobPosting](https://developers.ashbyhq.com/reference/jobpostinglist) (read),
+- [jobTemplate](https://developers.ashbyhq.com/reference/jobtemplatelist) (read)
+- [location](https://developers.ashbyhq.com/reference/locationlist) (read, write), 
+- [offer](https://developers.ashbyhq.com/reference/offerlist) (read, write), 
+- [opening](https://developers.ashbyhq.com/reference/openinglist) (read, write), 
+- [project](https://developers.ashbyhq.com/reference/projectlist) (read)
+- [referral](https://developers.ashbyhq.com/reference/referralcreate) (write)
+- [source](https://developers.ashbyhq.com/reference/sourcelist) (read)
+- [sourceTrackingLink](https://developers.ashbyhq.com/reference/sourcetrackinglinklist) (read)
+- [surveyFormDefinition](https://developers.ashbyhq.com/reference/surveyformdefinitionlist) (read)
+- [surveyRequest](https://developers.ashbyhq.com/reference/surveyrequestcreate) (write)
+- [surveySubmission](https://developers.ashbyhq.com/reference/surveysubmissioncreate) (write)
+- [user](https://developers.ashbyhq.com/reference/userlist) (read)
+- [webhook](https://developers.ashbyhq.com/reference/webhookcreate) [write]
 
 ## Using the connector
 
@@ -31,7 +53,11 @@ This connector uses Basic Auth, which means that you do not need to set up a Pro
 
 To start integrating with Ashby:
 
-- Create a manifest file like the [example](#example-integration) above.
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/ashby/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://api.ashbyhq.com`.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
