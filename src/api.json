@@ -25547,6 +25547,39 @@
                           "type": "string"
                         }
                       },
+                      "authHealthCheck": {
+                        "title": "Auth Health Check",
+                        "type": "object",
+                        "description": "A URL to check the health of a provider's credentials. It's used to see if the credentials are valid and if the provider is reachable.",
+                        "required": [
+                          "url"
+                        ],
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "description": "a no-op URL to check the health of the credentials. The URL MUST not mutate any state. If the provider doesn't have such an endpoint, then don't provide credentialsHealthCheck.",
+                            "example": "https://api.example.com/health-check"
+                          },
+                          "method": {
+                            "type": "string",
+                            "description": "The HTTP method to use for the health check. If not set, defaults to GET.",
+                            "example": "GET",
+                            "x-go-type-skip-optional-pointer": true
+                          },
+                          "successStatusCodes": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            },
+                            "description": "The HTTP status codes that indicate a successful health check. If not set, defaults to 200 and 204.",
+                            "example": [
+                              200,
+                              204
+                            ],
+                            "x-go-type-skip-optional-pointer": true
+                          }
+                        }
+                      },
                       "displayName": {
                         "type": "string",
                         "example": "Zendesk Chat",
@@ -26323,6 +26356,39 @@
                       "type": "object",
                       "additionalProperties": {
                         "type": "string"
+                      }
+                    },
+                    "authHealthCheck": {
+                      "title": "Auth Health Check",
+                      "type": "object",
+                      "description": "A URL to check the health of a provider's credentials. It's used to see if the credentials are valid and if the provider is reachable.",
+                      "required": [
+                        "url"
+                      ],
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "description": "a no-op URL to check the health of the credentials. The URL MUST not mutate any state. If the provider doesn't have such an endpoint, then don't provide credentialsHealthCheck.",
+                          "example": "https://api.example.com/health-check"
+                        },
+                        "method": {
+                          "type": "string",
+                          "description": "The HTTP method to use for the health check. If not set, defaults to GET.",
+                          "example": "GET",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "successStatusCodes": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer"
+                          },
+                          "description": "The HTTP status codes that indicate a successful health check. If not set, defaults to 200 and 204.",
+                          "example": [
+                            200,
+                            204
+                          ],
+                          "x-go-type-skip-optional-pointer": true
+                        }
                       }
                     },
                     "displayName": {
