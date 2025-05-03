@@ -25311,7 +25311,7 @@
                                   "required": [
                                     "name",
                                     "displayName",
-                                    "jqValueSelector"
+                                    "path"
                                   ],
                                   "properties": {
                                     "name": {
@@ -25324,10 +25324,16 @@
                                       "description": "The human-readable name of the field",
                                       "x-go-type-skip-optional-pointer": true
                                     },
-                                    "jqValueSelector": {
+                                    "path": {
                                       "type": "string",
-                                      "description": "jq expression that extracts and transforms the value from the token response",
-                                      "example": ".instance_url | capture(\"https://([^.]+)\\.docusign\\.net\") | .[0]",
+                                      "description": "The path to the field in the token response (accepts dot notation for nested fields)",
+                                      "example": "owner.siteId",
+                                      "x-go-type-skip-optional-pointer": true
+                                    },
+                                    "capture": {
+                                      "type": "string",
+                                      "description": "A regex expression to capture the value that we need from the path",
+                                      "example": "https:\\/\\/([^.]+)\\.docusign\\.net",
                                       "x-go-type-skip-optional-pointer": true
                                     }
                                   }
@@ -26122,7 +26128,7 @@
                                 "required": [
                                   "name",
                                   "displayName",
-                                  "jqValueSelector"
+                                  "path"
                                 ],
                                 "properties": {
                                   "name": {
@@ -26135,10 +26141,16 @@
                                     "description": "The human-readable name of the field",
                                     "x-go-type-skip-optional-pointer": true
                                   },
-                                  "jqValueSelector": {
+                                  "path": {
                                     "type": "string",
-                                    "description": "jq expression that extracts and transforms the value from the token response",
-                                    "example": ".instance_url | capture(\"https://([^.]+)\\.docusign\\.net\") | .[0]",
+                                    "description": "The path to the field in the token response (accepts dot notation for nested fields)",
+                                    "example": "owner.siteId",
+                                    "x-go-type-skip-optional-pointer": true
+                                  },
+                                  "capture": {
+                                    "type": "string",
+                                    "description": "A regex expression to capture the value that we need from the path",
+                                    "example": "https:\\/\\/([^.]+)\\.docusign\\.net",
                                     "x-go-type-skip-optional-pointer": true
                                   }
                                 }
