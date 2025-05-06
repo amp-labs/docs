@@ -7,7 +7,7 @@ import matter from 'gray-matter';
 // These declare the OpenAPI specs that are used to generate the API reference pages. They come in handy
 // when we have similar paths across different endpoints / specs. For example, the `read` and `write` specs have
 // the same POST path for on-demand read & write.
-const openApiPlatform = "api";
+const openApiPlatform = "platform";
 const openApiRead = "read";
 const openApiWrite = "write";
 
