@@ -7,7 +7,7 @@ import matter from 'gray-matter';
 // These declare the OpenAPI specs that are used to generate the API reference pages. They come in handy
 // when we have similar paths across different endpoints / specs. For example, the `read` and `write` specs have
 // the same POST path for on-demand read & write.
-const openApiPlatform = "api";
+const openApiPlatform = "platform";
 const openApiRead = "read";
 const openApiWrite = "write";
 
@@ -200,6 +200,7 @@ const mintConfig: MintConfig = {
             "provider-guides/clari",
             "provider-guides/clickup",
             "provider-guides/close",
+            "provider-guides/coda",
             "provider-guides/constantContact",
             "provider-guides/copper",
             "provider-guides/crunchbase",
@@ -216,11 +217,13 @@ const mintConfig: MintConfig = {
             "provider-guides/dynamicsCRM",
             "provider-guides/facebook",
             "provider-guides/figma",
+            "provider-guides/fireflies",
             "provider-guides/formstack",
             "provider-guides/front",
             "provider-guides/g2",
             "provider-guides/geckoboard",
             "provider-guides/getResponse",
+            "provider-guides/github",
             "provider-guides/gitlab",
             "provider-guides/gong",
             "provider-guides/google",
@@ -267,7 +270,7 @@ const mintConfig: MintConfig = {
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
             "provider-guides/podium",
-            "provider-guides/productboard",
+            "provider-guides/productBoard",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
@@ -303,7 +306,9 @@ const mintConfig: MintConfig = {
           pages: [
             "customer-guides/overview",
             "customer-guides/salesforce",
-            "customer-guides/hubspot"
+            "customer-guides/hubspot",
+            "customer-guides/marketo",
+            "customer-guides/update-connection"
           ]
         },
         "terminology"

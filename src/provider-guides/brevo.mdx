@@ -6,32 +6,75 @@ title: Brevo
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Brevo instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.brevo.com`.
 
-### Example integration
 
-To define an integration for Brevo, create a manifest file that looks like this:
+### Supported Objects
+The Brevo connector supports the following objects:
+- [categories](https://developers.brevo.com/reference/getcategories) (read and write)
+- [categories/batch](https://developers.brevo.com/reference/categoriesbatchpost) (write only)
+- [companies](https://developers.brevo.com/reference/get_companies) (read and write)
+- [companies/import](https://developers.brevo.com/reference/post_companies-import) (write only)
+- [companies/attributes](https://developers.brevo.com/reference/get_crm-attributes-companies) (read only)
+- [conversations/agentOnlinePing](https://developers.brevo.com/reference/post_conversations-agentonlineping) (write only)
+- [conversations/messages](https://developers.brevo.com/reference/post_conversations-messages) (write only)
+- [conversations/pushedMessages](https://developers.brevo.com/reference/post_conversations-pushedmessages) (write only)
+- [contacts](https://developers.brevo.com/reference/getcontacts-1) (read and write)
+- [contacts/doubleOptinConfirmation](https://developers.brevo.com/reference/createdoicontact) (write only)
+- [contacts/export](https://developers.brevo.com/reference/requestcontactexport-1) (write only)
+- [contacts/folders](https://developers.brevo.com/reference/getfolders-1) (read only)
+- [contacts/import](https://developers.brevo.com/reference/importcontacts-1) (write only)
+- [coupons](https://developers.brevo.com/reference/getcouponcollections) (read only)
+- [crm/deals](https://developers.brevo.com/reference/get_crm-deals) (read and write)
+- [crm/deals/import](https://developers.brevo.com/reference/post_crm-deals-import) (write only)
+- [crm/notes](https://developers.brevo.com/reference/get_crm-notes) (read and write)
+- [crm/tasks](https://developers.brevo.com/reference/get_crm-tasks) (read and write)
+- [crm/attributes](https://developers.brevo.com/reference/get_crm-attributes-companies) (read only)
+- [emailCampaigns](https://developers.brevo.com/reference/getemailcampaigns-1) (read and write)
+- [emailCampaigns/images](https://developers.brevo.com/reference/uploadimagetogallery) (write only)
+- [ecommerce/activate](https://developers.brevo.com/reference/post_ecommerce-activate) (write only)
+- [ecommerce/config/displayCurrency](https://developers.brevo.com/reference/setconfigdisplaycurrency) (write only)
+- [events](https://developers.brevo.com/reference/createevent) (write only)
+- [externalFeeds](https://developers.brevo.com/reference/getallexternalfeeds) (read only)
+- [files](https://developers.brevo.com/reference/get_crm-files) (read only)
+- [feeds](https://developers.brevo.com/reference/createexternalfeed) (write only)
+- [folders](https://developers.brevo.com/reference/getfolders-1) (read only)
+- [ips](https://developers.brevo.com/reference/getips) (read only)
+- [inbound/events](https://developers.brevo.com/reference/getinboundemailevents) (read only)
+- [loyalty/config/programs](https://developers.brevo.com/reference/createnewlp) (write only)
+- [lists](https://developers.brevo.com/reference/getlists-1) (read only)
+- [orders/status](https://developers.brevo.com/reference/createorder) (write only)
+- [orders/status/batch](https://developers.brevo.com/reference/createbatchorder) (write only)
+- [products](https://developers.brevo.com/reference/getproducts) (read and write)
+- [senders](https://developers.brevo.com/reference/getsenders-1) (read and write)
+- [senders/domains](https://developers.brevo.com/reference/createdomain) (write only)
+- [smtp/statistics/events](https://developers.brevo.com/reference/getemaileventreport-1) (read only)
+- [smtp/statistics/reports](https://developers.brevo.com/reference/getsmtpreport-1) (read only)
+- [smsCampaigns](https://developers.brevo.com/reference/getsmscampaigns-1) (read only)
+- [subAccount](https://developers.brevo.com/reference/get_corporate-subaccount) (read only)
+- [templates](https://developers.brevo.com/reference/getsmtptemplates) (read only)
+- [transactionalSMS/statistics/events](https://developers.brevo.com/reference/getsmsevents-1) (read only)
+- [transactionalSMS/statistics/reports](https://developers.brevo.com/reference/gettransacsmsreport-1) (read only)
+- [webhooks](https://developers.brevo.com/reference/getwebhooks) (read and write)
+- [webhooks/export](https://developers.brevo.com/reference/exportwebhookshistory) (write only)
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: brevo-integration
-    displayName: My Brevo Integration
-    provider: brevo
-    proxy:
-      enabled: true
-```
 
 ## Using the connector
 
 This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Brevo:
-- Create a manifest file like the example above.
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/brevo/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.brevo.com`.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
 
 ## Creating an API key for Brevo
 

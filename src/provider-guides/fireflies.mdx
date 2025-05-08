@@ -1,0 +1,42 @@
+---
+title: Fireflies
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.fireflies.ai/graphql`.
+
+### Example integration
+
+To define an integration for Fireflies, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations: 
+  - name: proxy-fireflies
+    displayName: Fireflies
+    provider: fireflies
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To integrate with Fireflies:
+- Create a manifest file similar to the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for an API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key provided by the customer. Please note that this connector's base URL is `https://api.fireflies.ai/graphql`.
+
+## Creating an API key for Fireflies
+
+1. Log in to your [Fireflies account](https://app.fireflies.ai/login). 
+2. Navigate to **Integrations** and select **Fireflies API**.
+3. click on **Get API Key**
+
+![Generate Token](/images/provider-guides/fireflies.gif)
