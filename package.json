@@ -6,7 +6,7 @@
         "test": "pnpm run test:links",
         "test:links": "cd src && mintlify broken-links; exitCode=$?; exit $exitCode",
         "gen": "pnpm run generate",
-        "generate": "run-s download-spec:* && run-s gen-api-pages:*",
+        "generate": "run-s download-spec:* && run-s gen-api-pages:* && pnpm run gen-docs",
         "download-spec:platform": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/api.json > src/platform.json",
         "download-spec:read": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/read.json > src/read.json",
         "download-spec:write": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/write.json > src/write.json",
@@ -15,7 +15,7 @@
         "gen-api-pages:read": "cd src && mintlify-scrape openapi-file -o reference read.json | tail -n +2 > reference/read.json",
         "gen-api-pages:write": "cd src && mintlify-scrape openapi-file -o reference write.json | tail -n +2 > reference/write.json",
         "gen-api-pages:copy": "cd src && cp auth.mdx reference/auth.mdx",
-        "gen-mint": "cd src && tsx generate-mint.ts mint.json"
+        "gen-docs": "cd src && tsx generate-docs.ts docs.json"
     },
     "devDependencies": {
         "@mintlify/scraping": "3.0.137",
