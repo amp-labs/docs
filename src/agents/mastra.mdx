@@ -1,12 +1,25 @@
 ---
-title: Ampersand AI SDK with Mastra
+title: Using Ampersand AI SDK with @mastra
 ---
 
-#### Using Ampersand AI SDK with Mastra
+[Mastra](https://mastra.ai) —   is a Typescript toolkit that offers agent workflows and eval tools so teams can turn prototypes into production-ready AI, fast
+
+This is a simple example of how to use the AI SDK tools by Ampersand in an agent built with @mastra.
 
 ```typescript
+import { Agent } from "@mastra/core/agent";
+import { openai } from "@ai-sdk/openai";
 import { createRecordTool, updateRecordTool } from "@amp-labs/ai/mastra";
 
-// Use in your Mastra workflow
-const tools = [createRecordTool, updateRecordTool];
+
+// Mastra Agent with Mastra tools
+export const mastraToolsAgent: Agent = new Agent({
+  name: "Mastra Tools Agent",
+  instructions: "You can use tools defined in Mastra.",
+  model: openai("gpt-4o-mini"),
+  tools: {
+    createRecordTool,
+    updateRecordTool,
+  },
+});
 ```
