@@ -1,0 +1,98 @@
+# Ampersand AI SDK
+
+This SDK enables AI agents to seamlessly perform operations on connected SaaS tools through Ampersand's platform.
+
+## Installation
+
+<pre><code className="language-bash">
+npm install @amp-labs/ai
+# or
+yarn add @amp-labs/ai
+# or
+pnpm add @amp-labs/ai
+</code></pre>
+
+## Usage
+
+The SDK provides several modules that can be used depending on your framework preference:
+
+### Using with Vercel AI SDK
+
+<pre><code className="language-typescript">
+import { createRecordTool, updateRecordTool } from "@amp-labs/ai/aisdk";
+
+// Use in your AI agent configuration
+const tools = [createRecordTool, updateRecordTool];
+</code></pre>
+
+### Using with Mastra
+
+<pre><code className="language-typescript">
+import { createRecordTool, updateRecordTool } from "@amp-labs/ai/mastra";
+
+// Use in your Mastra workflow
+const tools = [createRecordTool, updateRecordTool];
+</code></pre>
+
+## Available Tools
+
+The SDK provides the following tools for interacting with SaaS platforms:
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Description</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>createRecordTool</code></td>
+      <td>Creates a new record in the connected SaaS platform</td>
+      <td>Create new entries like contacts, deals, tickets etc.</td>
+    </tr>
+    <tr>
+      <td><code>updateRecordTool</code></td>
+      <td>Updates an existing record in the connected SaaS platform</td>
+      <td>Modify existing entries with new data</td>
+    </tr>
+    <tr>
+      <td><code>checkConnectionTool</code></td>
+      <td>Verifies if there is an active connection to the SaaS provider</td>
+      <td>Validate connection status before operations</td>
+    </tr>
+    <tr>
+      <td><code>createInstallationTool</code></td>
+      <td>Creates a new installation for a provider</td>
+      <td>Set up new tool installations</td>
+    </tr>
+    <tr>
+      <td><code>checkInstallationTool</code></td>
+      <td>Checks if there is an active installation for a provider</td>
+      <td>Verify installation status</td>
+    </tr>
+    <tr>
+      <td><code>oauthTool</code></td>
+      <td>Initiates OAuth flow for connecting to a provider</td>
+      <td>Handle authentication setup</td>
+    </tr>
+    <tr>
+      <td><code>proxyTool</code></td>
+      <td>Makes authenticated API calls to the provider through Ampersand</td>
+      <td>Execute custom API operations</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Have a tool in mind that we could add? Let us know!
+
+## Debugging & Troubleshooting
+
+If you encounter issues, ensure that:
+
+1. All required environment variables are set correctly
+2. You have an active Ampersand account with the necessary permissions & scopes
+3. The SaaS tool (say HubSpot) connection (with OAuth or apiKey) with your Agent is properly established & is still active. 
+
+For further assistance, join our <a href="https://discord.gg/BWP4BpKHvf" target="_blank" rel="noopener noreferrer">Discord community</a>. 

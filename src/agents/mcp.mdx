@@ -1,0 +1,74 @@
+# Ampersand MCP server
+
+Connect your agents to the 150+ connectors we offer at Ampersand via this multi-tenant MCP server. We expose the primitives we offer on the Ampersand platform as native tools here.
+
+## Connecting to the mcp server from an MCP Client
+
+Add the following in your `mcp.json` in cursor IDE or `claude_desktop_config.json` when using Claude desktop.
+
+#### When running the server in SSE mode
+
+```json
+{
+  "mcpServers": {
+    "@amp-labs/mcp-server": {
+      "url": "https://mcp.withampersand.com/sse?apiKey=<AMPERSAND_API_KEY>&project=<AMPERSAND_PROJECT_ID>&integrationName=<AMPERSAND_INTEGRATION_NAME>&groupRef=<AMPERSAND_GROUP_REF>"
+    }
+  }
+}
+```
+
+#### When running the server in stdio mode
+
+```json
+{
+  "mcpServers": {
+    "@amp-labs/mcp-server": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@amp-labs/mcp-server@latest",
+        "--transport",
+        "stdio",
+        "--project",
+        "<AMPERSAND_PROJECT_ID>",
+        "--integrationName",
+        "<AMPERSAND_INTEGRATION_NAME>",
+        "--groupRef",
+        "<AMPERSAND_GROUP_REF>"
+      ],
+      "env": {
+        "AMPERSAND_API_KEY": "<AMPERSAND_API_KEY>"
+      }
+    }
+  }
+}
+```
+
+# Building locally
+
+### Install dependencies
+
+```sh
+pnpm i
+```
+
+### Build the MCP SSE server
+
+```sh
+pnpm build
+```
+
+### Start the server
+
+```sh
+pnpm start
+```
+
+## Debugging & troubleshooting
+
+Use the MCP inspector tool to know more about the mcp server and debug tools, prompts, resources
+
+```sh
+pnpm inspect
+```

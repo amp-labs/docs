@@ -394,6 +394,15 @@ const baseConfig = {
             "customer-guides/update-connection"
           ]
         },
+        {
+          group: "AI Agents",
+          pages: [
+            "agents/sdk",
+            "agents/mcp",
+            "agents/mastra",
+            "agents/vercel",
+          ]
+        },
         "terminology"
       ],
     },
