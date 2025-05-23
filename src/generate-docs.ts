@@ -236,6 +236,13 @@ const baseConfig = {
         "read-actions",
         "write-actions",
         "proxy-actions",
+        {
+          group: "AI Agents",
+          pages: [
+            "agents/sdk",
+            "agents/mcp",
+          ]
+        },
         "object-and-field-mapping",
         "embeddable-ui-components",
         {
@@ -392,15 +399,6 @@ const baseConfig = {
             "customer-guides/hubspot",
             "customer-guides/marketo",
             "customer-guides/update-connection"
-          ]
-        },
-        {
-          group: "AI Agents",
-          pages: [
-            "agents/sdk",
-            "agents/mcp",
-            "agents/mastra",
-            "agents/vercel",
           ]
         },
         "terminology"

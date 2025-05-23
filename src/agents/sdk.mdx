@@ -19,6 +19,65 @@ pnpm add @amp-labs/ai
 
 The SDK provides several modules that can be used depending on your framework preference:
 
+### Use with Vercel AI SDK
+
+
+[AI SDK](https://ai-sdk.dev/) by Vercel unifies LLM access in TypeScript & makes it easy to build AI agents. 
+
+This is a simple example of how to use the AI SDK tools by Ampersand in a Vercel AI agent.
+
+```typescript
+import { openai } from '@ai-sdk/openai';
+import { generateObject, generateText } from 'ai';
+import { z } from 'zod';
+import { createRecordTool, updateRecordTool } from "@amp-labs/ai/aisdk";
+
+// Vercel Agent with AI SDK tools by Ampersand
+async function handleCustomerQuery(query: string) {
+  const model = openai('gpt-4o');
+
+  const { text: response } = await generateText({
+    model:
+      classification.complexity === 'simple'
+        ? openai('gpt-4o-mini')
+        : openai('o3-mini'),
+    system: '... your system prompt here',
+    prompt: query,
+    tools: {
+      // AI SDK tools by Ampersand being used here
+      createRecordTool,
+      updateRecordTool,
+    },
+  });
+
+  return { response };
+}
+```
+
+### Use with Mastra
+
+[Mastra](https://mastra.ai) is a Typescript toolkit that offers agent workflows and eval tools so teams can turn prototypes into production-ready AI agents.
+
+This is a simple example of how to use the AI SDK tools by Ampersand in an agent built with Mastra.
+
+```typescript
+import { Agent } from "@mastra/core/agent";
+import { openai } from "@ai-sdk/openai";
+import { createRecordTool, updateRecordTool } from "@amp-labs/ai/mastra";
+
+// Mastra Agent with Mastra tools
+export const mastraToolsAgent: Agent = new Agent({
+  name: "Mastra Tools Agent",
+  instructions: "You can use tools defined in Mastra.",
+  model: openai("gpt-4o-mini"),
+  tools: {
+    createRecordTool,
+    updateRecordTool,
+  },
+});
+```
+
+
 ## Available Tools
 
 The SDK provides the following tools for interacting with SaaS platforms:
