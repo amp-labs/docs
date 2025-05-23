@@ -236,6 +236,13 @@ const baseConfig = {
         "read-actions",
         "write-actions",
         "proxy-actions",
+        // {
+        //   group: "AI Agents",
+        //   pages: [
+        //     "agents/sdk",
+        //     "agents/mcp",
+        //   ]
+        // },
         "object-and-field-mapping",
         "embeddable-ui-components",
         {
@@ -353,7 +360,7 @@ const baseConfig = {
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
             "provider-guides/podium",
-            "provider-guides/productBoard",
+            "provider-guides/productboard",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
