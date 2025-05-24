@@ -1,0 +1,52 @@
+---
+title: "Domo"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.domo.com`.
+
+## Before you get started
+
+To connect Domo with Ampersand, you will need a [Domo account](https://www.domo.com/).
+
+### Example integration
+
+To define an integration for Domo, create a manifest file that looks like this:
+
+```YAML
+#amp.yaml
+specVersion: 1.0.0
+integrations: 
+  - name: domoIntegration
+    displayName: Domo
+    provider: domo
+    proxy:
+      enabled: true
+```
+
+## Creating a Domo client application
+
+Follow these steps to create a client application in Domo:
+
+1. Log in to your [Domo Developer Portal](https://developer.domo.com/).
+2. Navigate to **My Account**
+3. Click **New Client**.
+4. Enter a name for your application and select the appropriate scopes based on your integration needs.
+5. Click **Create**.
+
+## Using the connector
+This connector uses OAuth2 Client Credentials grant type, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Domo:
+- Create a manifest file using the [example](#example-integration) above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically handle the authentication with Domo.
+
+## API documentation
+
+For more information about the Domo API, refer to the [Domo API documentation](https://developer.domo.com/portal/8ba9aedad3679-ap-is).
