@@ -340,6 +340,7 @@ const baseConfig = {
             "provider-guides/kit",
             "provider-guides/klaviyo",
             "provider-guides/lever",
+            "provider-guides/linear",
             "provider-guides/linkedin",
             "provider-guides/livestorm",
             "provider-guides/lemlist",
