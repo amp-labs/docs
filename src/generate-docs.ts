@@ -239,8 +239,8 @@ const baseConfig = {
         // {
         //   group: "AI Agents",
         //   pages: [
-        //     "agents/sdk",
-        //     "agents/mcp",
+        //     "ai-sdk",
+        //     "mcp",
         //   ]
         // },
         "object-and-field-mapping",
