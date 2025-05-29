@@ -244,7 +244,13 @@ const baseConfig = {
         //   ]
         // },
         "object-and-field-mapping",
-        "embeddable-ui-components",
+        {
+          group: "UI",
+          pages: [
+            "ui/embeddable-ui-components",
+            "ui/headless"
+          ]
+        },
         {
           group: "CLI",
           pages: [

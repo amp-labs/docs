@@ -1,0 +1,263 @@
+---
+title: Headless React Library
+description: A flexible React library for managing connections and installations with your custom UI components
+---
+
+# Headless React Library
+
+The Headless React Library provides a powerful foundation for managing connections and installations while giving you complete control over your UI implementation. This library is designed for developers who want to build custom user interfaces while leveraging robust connection management capabilities.
+
+## Overview
+
+The Headless React Library provides a series of react hooks that manage connections, installations, 
+and other configuration data with queries and mutation hooks. The hooks may be used together 
+or independently from the @amp-labs/react embeddable UI components.
+
+The Headless React Library separates the logic of connection and installation management from the UI components, allowing you to:
+
+- Manage connections to various services and platforms
+- Handle installation processes
+- Implement custom UI components
+- Maintain full control over the user experience
+
+## Installation 
+The headless react lib is currently in the same package as our embeddable UI in @amp-labs/react. 
+
+```bash
+npm install @amp-labs/react
+# or
+yarn add @amp-labs/react-
+```
+
+## Core Features
+
+### Installation provider
+
+
+```tsx
+import {
+  AmpersandProvider,     // needed for any component/hooks in @amp-labs/react
+  InstallationProvider,  // provider needed for headless hooks
+} from "@amp-labs/react"
+
+// env variables
+const apiKey = import.meta.env.VITE_AMP_API_KEY;
+const projectId = import.meta.env.VITE_AMP_PROJECT_ID;
+
+const PARAMS = {
+  integration,
+  provider: "salesforce",
+  consumerRef: "consumer-test-1",
+  groupRef: "group-test-1",
+  integration: "my-salesforce-integration"
+};
+
+function App() {
+  return (
+    // Provider for the Ampersand SDK
+    <AmpersandProvider options={{ apiKey: apiKey, projectId: projectId }}>
+      {/* Provider for the installation specific headless library */}
+      <InstallationProvider
+        integration={PARAMS.integration}
+        consumerRef={PARAMS.consumerRef}
+        groupRef={PARAMS.groupRef}
+      >
+        {/* Builder Custom Installation Component */}
+        <MyComponent />
+      </InstallationProvider>
+    </AmpersandProvider>
+  );
+}
+```
+
+
+### Connection Management
+
+The library provides hooks and utilities for managing connections:
+
+```tsx
+import { useConnection, ConnectProvider } from '@amp-labs/react';
+
+function MyComponent() {
+  const { 
+    connection, // Connection object
+    error,
+    isPending,
+    isFetching,
+    isError,
+    isSuccess,
+  } = useConnection();
+
+  // Use these values to build your custom UI
+  return (
+    <div>
+      {connection ? (
+        // embeddable ui component
+        <ConnectProvider
+            provider={PARAMS.provider}
+            consumerRef={PARAMS.consumerRef}
+            groupRef={PARAMS.groupRef}
+            onConnectSuccess={(connection) => {
+              console.log("Connection successful:", connection);
+            }}
+            onDisconnectSuccess={(connection) => {
+              console.log("Disconnection successful:", connection);
+            }}
+          />
+        </div>
+      ) : (
+        <MyInstallIntegrationComponent/>
+      )}
+    </div>
+  );
+}
+```
+
+### Installation Management
+
+Handle installation processes with the installation hooks:
+
+```tsx
+import { useInstallation } from '@amp-labs/react';
+
+function InstallationComponent() {
+  const { installation } = useInstallation();
+
+  return (
+    <div>
+      {installation ? (
+       <div>Installation Installed</div>
+      ) : (
+        <div>Configure Installation</div>
+      )}
+    </div>
+  );
+}
+```
+
+
+## Examples
+
+### Basic App Example
+https://github.com/amp-labs/headless-basic-app
+
+#### The Demo App has the following features:
+- useConnections: manage when to show `<ConnectProvider/>`
+- useManifest	: manage objects and metadata
+
+#### Salesforce integration example
+- field mapping interface: map dynamic fields to corresponding Salesforce fields
+- connects with Salesforce through `<ConnectProvider/>`
+- field metadata from Salesforce to populate available mapping options
+
+####  Installation Management
+- Install/Update: Creates or updates the Salesforce integration
+- Reset: Syncs back to the server state
+- Delete: Removes the installation
+
+#### Installation Config Management
+- local config state is managed by the `useConfig` hook
+- provides getters and setters to manipulate the config object needed for installation mutations
+
+#### Bring your own UI
+Example using Shadcn UI components + Tailwind CSS
+
+
+### Builder defined flow (no user input needed)
+The config is able to be passed in directly if no additional config state management is needed.
+
+```tsx
+import {
+  AmpersandProvider, ConnectProvider, useConnection, useInstallation,
+} from '@amp-labs/react';
+
+import { ConfigContent, AmpersandProviderOptions, InstallationProviderOptions } from '@amp-labs/react/types';
+
+const installationOptions: InstallationProviderOptions = {
+  integration: 'my-hubspot-integration',
+  consumerRef: 'user-123',
+  consumerName: 'User 123',
+  groupRef: 'company-456',
+  groupName: 'My Organization',
+};
+
+const projectOptions: AmpersandProviderOptions ={
+  apiKey: 'my-api-key',
+  project: 'my-project',
+}
+
+export function App() {
+  // Wrap your custom component inside of AmpersandProvider and InstallationProvider
+  return (
+    <AmpersandProvider options={projectOptions}>
+      <InstallationProvider options={installationOptions}>
+        <MyIntegrationComponent />
+      </InstallationProvider>
+    </AmpersandProvider>
+  );
+}
+
+// Static content for the installation, no user input needed
+const myConfig: ConfigContent = {
+  read: {
+    objects: {
+      contacts: {
+        objectName: 'contacts',
+        // Auto-select all fields to be read,
+        // alternatively you can specify any desired fields & mappings here.
+        selectedFieldsAuto: 'all',
+      },
+    }
+};
+
+function MyIntegrationComponent() {
+  const {
+    installation,
+    isPending: isInstallationPending, // No data yet
+    isFetching: isInstallationFetching, // Data is being refreshed
+    isError: isInstallationError,
+    error: installationError,
+  } = useInstallation();
+  
+  const {
+    connection,
+    isPending: isConnectionPending, // No data yet
+    isFetching: isConnectionFetching, // Data is being refreshed
+    isError: isConnectionError,
+    error: connectionError,
+  } = useConnection(); 
+
+  // Custom connection loading, error, and installation state overrides
+  if (isConnectionPending || isInstallationPending) return <div>Loading </div>;
+  if (isConnectionError) return <div>Error loading connection: {connectionError.message}</div>;
+  if (isInstallationError) return <div>Error loading installation: {installationError.message}</div>;
+
+  // The installation already exists
+  if (!!installation) { return (<MyManageInstallationComponent />) } 
+
+  if (connection) {
+     createInstallation({ config: myConfig });
+  };
+
+  // Use Ampersand's built in UI for the Connection flow
+  // This is the same as the existing ConnectProvider component but parameters
+  // can be ommited since we are inside of InstallationProvider
+  // When the connection is successful, this component will re-render since
+  // `useConnection` will return the new connection.
+  return (
+     <ConnectProvider
+        consumerRef={installationOptions.consumerRef}
+        groupRef={installationOptions.groupRef}
+     />
+    </div>
+  );
+}
+```
+
+## Contributing
+
+We welcome contributions to the Headless React Library. Please refer to our [contributing guidelines](https://github.com/amp-labs/react/blob/main/CONTRIBUTING.md) for more information.
+
+## License
+
+This library is licensed under the MIT License. See the [LICENSE](https://github.com/amp-labs/react/blob/main/LICENSE) file for details.
