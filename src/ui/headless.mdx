@@ -347,6 +347,181 @@ Retrieves and manages manifest data from `amp.yaml` and the customer's SaaS inst
 https://github.com/amp-labs/headless-basic-app/blob/main/src/components/FieldMappingTable/FieldMappingTable.tsx
 
 
+## Config State Management 
+Managing the configuration state that needs to be passed into the Installation can be complex with deep nested objects and need to manage this state locally. 
+The useConfig hook is provided to simplify local state management of the config object by providing flexible utilities to manipulate the config directly or 
+simply through a set of setters and getters. 
+
+### useConfig
+Provides access to configuration management functionality for installations. This hook is essential for managing the configuration state of your integration, including read and write object configurations.
+
+```typescript
+{
+  draft: InstallationConfigContent;  // Current draft configuration
+  get: () => InstallationConfigContent;  // Get current configuration
+  reset: () => void;  // Reset to installation's current config
+  setDraft: (config: InstallationConfigContent) => void;  // Update draft config
+  readObject: (objectName: string) => ReadObjectHandlers;  // Manage read object config
+  writeObject: (objectName: string) => WriteObjectHandlers;  // Manage write object config
+}
+```
+
+#### ReadObjectHandlers
+```typescript
+{
+  object: BaseReadConfigObject | undefined;  // Current read object configuration
+  getSelectedField: (fieldName: string) => boolean;  // Check if field is selected
+  setSelectedField: (params: { fieldName: string; selected: boolean }) => void;  // Toggle field selection
+  getFieldMapping: (fieldName: string) => string | undefined;  // Get field mapping
+  setFieldMapping: (params: { fieldName: string; mapToName: string }) => void;  // Set field mapping
+}
+```
+
+#### WriteObjectHandlers (advanced)
+```typescript
+{
+  object: BaseWriteConfigObject | undefined;  // Current write object configuration
+  setEnableWrite: () => void;  // Enable write for object
+  setDisableWrite: () => void;  // Disable write for object
+  getWriteObject: () => BaseWriteConfigObject | undefined;  // Get write object config
+  getSelectedFieldSettings: (fieldName: string) => FieldSetting | undefined;  // Get field settings
+  setSelectedFieldSettings: (params: { fieldName: string; settings: FieldSetting }) => void;  // Update field settings
+  getDefaultValues: (fieldName: string) => FieldSettingDefault | undefined;  // Get default values
+  setDefaultValues: (params: { fieldName: string; value: FieldSettingDefault }) => void;  // Set default values
+  getWriteOnCreateSetting: (fieldName: string) => FieldSettingWriteOnCreateEnum | undefined;  // Get write on create setting
+  setWriteOnCreateSetting: (params: { fieldName: string; value: FieldSettingWriteOnCreateEnum }) => void;  // Set write on create setting
+  getWriteOnUpdateSetting: (fieldName: string) => FieldSettingWriteOnUpdateEnum | undefined;  // Get write on update setting
+  setWriteOnUpdateSetting: (params: { fieldName: string; value: FieldSettingWriteOnUpdateEnum }) => void;  // Set write on update setting
+}
+```
+
+#### Usage Examples
+
+1. Basic Configuration Management:
+```typescript
+function ConfigManager() {
+  const config = useConfig();
+  
+  // Get current configuration
+  const currentConfig = config.get();
+  
+  // Update draft configuration directly
+  config.setDraft({
+    provider: "salesforce",
+    read: {
+      objects: {
+        Contact: {
+          objectName: "Contact",
+          schedule: "0 0 * * *",
+          destination: "contacts",
+          selectedFields: {
+            "Name": true,
+            "Email": true
+          }
+        }
+      }
+    }
+  });
+  
+  // Reset to installation's current config 
+  config.reset();
+}
+```
+
+2. Managing Read Object Configuration:
+```typescript
+function ReadObjectConfig() {
+  const config = useConfig();
+  const contactConfig = config.readObject("Contact");
+  
+  // Check if field is selected
+  const isNameSelected = contactConfig.getSelectedField("Name");
+  
+  // Toggle field selection
+  contactConfig.setSelectedField({ fieldName: "Email", selected: true });
+  
+  // Set field mapping
+  contactConfig.setFieldMapping({ 
+    fieldName: "Email", 
+    mapToName: "email_address" 
+  });
+  
+  // Get field mapping
+  const mappedField = contactConfig.getFieldMapping("email_address");
+}
+```
+
+3. Managing Advanced Write Object Configuration:
+```typescript
+function WriteObjectConfig() {
+  const config = useConfig();
+  const contactWriteConfig = config.writeObject("Contact");
+  
+  // Enable write for Contact object
+  contactWriteConfig.setEnableWrite();
+  
+  // Set field settings
+  contactWriteConfig.setSelectedFieldSettings({
+    fieldName: "Email",
+    settings: {
+      writeOnCreate: "ALWAYS",
+      writeOnUpdate: "ALWAYS",
+      _default: "user@example.com"
+    }
+  });
+  
+  // Get field settings
+  const emailSettings = contactWriteConfig.getSelectedFieldSettings("Email");
+  
+  // Set default value
+  contactWriteConfig.setDefaultValues({
+    fieldName: "Email",
+    value: "default@example.com"
+  });
+  
+  // Set write on create behavior
+  contactWriteConfig.setWriteOnCreateSetting({
+    fieldName: "Email",
+    value: "ALWAYS"
+  });
+}
+```
+
+4. Complete Integration Example:
+```typescript
+function IntegrationConfig() {
+  const config = useConfig();
+  const { updateInstallation } = useUpdateInstallation();
+  
+  const handleSave = async () => {
+    try {
+      await updateInstallation({
+        config: config.get(),
+        onSuccess: () => {
+          console.log("Configuration updated successfully");
+        },
+        onError: (error) => {
+          console.error("Failed to update configuration:", error);
+        }
+      });
+    } catch (error) {
+      console.error("Error updating configuration:", error);
+    }
+  };
+  
+  return (
+    <div>
+      <ReadObjectConfig />
+      <WriteObjectConfig />
+      <button onClick={handleSave}>Save Configuration</button>
+    </div>
+  );
+}
+```
+
+The `useConfig` hook provides a powerful and flexible way to manage your integration's configuration. It maintains a draft state that you can modify before committing changes to the installation. The hook's methods allow you to manage both read and write configurations for different objects, including field selections, mappings, and write behaviors.
+
+
 ## Examples
 
 ### Basic App Example
