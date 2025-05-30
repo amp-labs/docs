@@ -85,6 +85,14 @@ function App() {
 }
 ```
 
+#### useInstallationProps
+A hook that provides access to the installation context values:
+- `integrationNameOrId`: string
+- `consumerRef`: string
+- `consumerName`: string | undefined
+- `groupRef`: string
+- `groupName`: string | undefined
+
 
 ### Connection Management
 
@@ -171,7 +179,7 @@ function InstallationComponent() {
 }
 ```
 
-#### Installation Mutation Hooks
+### Installation Mutation Hooks
 
 The following hooks provide granular control over installation operations:
 
@@ -189,13 +197,63 @@ These hooks can be used individually or together to build custom installation fl
   - `isSuccess`: Boolean indicating if creation was successful
 
 Mutation hooks follow the same convention:
+
+#### useCreateInstallation
+Creates a new installation:
+```typescript
+{
+  createInstallation: (params: {
+    config: InstallationConfigContent;
+    onSuccess?: (data: Installation) => void;
+    onError?: (error: Error) => void;
+    onSettled?: () => void;
+  }) => void;
+  isIdle: boolean;
+  isPending: boolean;
+  error: Error | null;
+  errorMsg: string | null;
+} = useCreateInstallation()
+```
+
+#### useUpdateInstallation
+Updates an existing installation:
+```typescript
+{
+  updateInstallation: (params: {
+    config: InstallationConfigContent;
+    onSuccess?: (data: Installation) => void;
+    onError?: (error: Error) => void;
+    onSettled?: () => void;
+  }) => void;
+  isIdle: boolean;
+  isPending: boolean;
+  error: Error | null;
+  errorMsg: string | null;
+} = useUpdateInstallation()
+```
+
+#### useDeleteInstallation
+Deletes an installation:
+```typescript
+{
+  deleteInstallation: (params: {
+    onSuccess?: () => void;
+    onError?: (error: Error) => void;
+    onSettled?: () => void;
+  }) => void;
+  isIdle: boolean;
+  isPending: boolean;
+  error: Error | null;
+  errorMsg: string | null;
+} = useDeleteInstallation()
+```
+
 ```tsx
 import { useCreateInstallation } from '@amp-labs/react';
 
 function InstallationForm() {
   const {
     createInstallation,
-    isIdle,
     isPending,
     error,
     errorMsg,
