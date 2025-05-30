@@ -274,26 +274,28 @@ import {
   AmpersandProvider, ConnectProvider, useConnection, useInstallation,
 } from '@amp-labs/react';
 
-import { ConfigContent, AmpersandProviderOptions, InstallationProviderOptions } from '@amp-labs/react/types';
-
-const installationOptions: InstallationProviderOptions = {
-  integration: 'my-hubspot-integration',
-  consumerRef: 'user-123',
-  consumerName: 'User 123',
-  groupRef: 'company-456',
-  groupName: 'My Organization',
-};
+import { ConfigContent, AmpersandProviderOptions } from '@amp-labs/react/types';
 
 const projectOptions: AmpersandProviderOptions ={
   apiKey: 'my-api-key',
   project: 'my-project',
 }
 
+const installationParams = {
+  integration: 'my-hubspot-integration',
+  consumerRef: 'user-123',
+  groupRef: 'company-456',
+};
+
 export function App() {
   // Wrap your custom component inside of AmpersandProvider and InstallationProvider
   return (
     <AmpersandProvider options={projectOptions}>
-      <InstallationProvider options={installationOptions}>
+      <InstallationProvider
+        integration={installationParams.integration}
+        consumerRef={installationParams.consumerRef}
+        groupRef={installationParams.groupRef}
+      >
         <MyIntegrationComponent />
       </InstallationProvider>
     </AmpersandProvider>
