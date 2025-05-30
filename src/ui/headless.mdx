@@ -171,7 +171,7 @@ function InstallationComponent() {
 }
 ```
 
-#### Installation Management Hooks
+#### Installation Mutation Hooks
 
 The following hooks provide granular control over installation operations:
 
@@ -180,6 +180,63 @@ The following hooks provide granular control over installation operations:
 - `useDeleteInstallation`: Removes an existing installation
 
 These hooks can be used individually or together to build custom installation flows:
+- `useCreateInstallation`: Creates a new installation with the provided configuration
+  - `createInstallation`: tanstack-query mutation function to create a new installation
+  - `isPending`: Boolean indicating if creation is in progress
+  - `error`: Any error that occurred during creation
+  - `errorMsg`: String message describing the error
+  - `isIdle`: Boolean indicating if no operation has been performed yet
+  - `isSuccess`: Boolean indicating if creation was successful
+
+Mutation hooks follow the same convention:
+```tsx
+import { useCreateInstallation } from '@amp-labs/react';
+
+function InstallationForm() {
+  const {
+    createInstallation,
+    isIdle,
+    isPending,
+    error,
+    errorMsg,
+  } = useCreateInstallation();
+
+  const handleSubmit = async (e) => {
+    createInstallation({
+        // Add your installation config here
+        config: {
+          read: {
+            objects: {
+              contacts: {
+                objectName: 'contacts',
+                selectedFieldsAuto: 'all',
+              },
+            }
+          };
+        }, 
+        onSuccess: (data) => {
+            console.log("Installation created", { installation: data });
+        },
+        onError: (error) => {
+            console.error("Installation creation failed", { error });
+        },
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <button 
+        type="submit"
+        disabled={isPending}
+      >
+        {isPending ? 'Creating...' : 'Create Installation'}
+      </button>
+      {error && <div className="error">{errorMsg}</div>}
+    </form>
+  );
+}
+
+```
 
 
 ## Examples
