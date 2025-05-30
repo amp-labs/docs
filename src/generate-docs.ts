@@ -247,7 +247,7 @@ const baseConfig = {
         {
           group: "UI",
           pages: [
-            "ui/embeddable-ui-components",
+            "embeddable-ui-components",
             "ui/headless"
           ]
         },
