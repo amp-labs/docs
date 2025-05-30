@@ -297,6 +297,56 @@ function InstallationForm() {
 ```
 
 
+## useManifest
+Retrieves and manages manifest data from `amp.yaml` and the customer's SaaS instance:
+- access to readObjects, required fields, optional fields
+- access to fields and metadata from providers 
+
+```typescript
+{
+  getReadObject: (objectName: string) => {
+    object: HydratedIntegrationObject | null;
+    getRequiredFields: () => HydratedIntegrationField[] | null;
+    getOptionalFields: () => HydratedIntegrationField[] | null;
+  };
+  getCustomerFieldsForObject: (objectName: string) => HydratedIntegrationField[] | null;
+  getCustomerFieldsMetadataForObject: (objectName: string) => {
+    allFieldsMetaData: { [field: string]: FieldMetadata } | null; // map all fields metadata
+    getField: (field: string) => FieldMetadata | null;
+  };
+  data: HydratedRevision | undefined;
+  isPending: boolean;
+  isFetching: boolean;
+  isError: boolean;
+  isSuccess: boolean;
+  error: Error | null;
+}
+```
+
+### destructuring objects and metadata from manifest
+
+
+```tsx
+  // ----------------------------------
+  // Manifest: Objects & Metadata
+  // ----------------------------------
+  const { getCustomerFieldsMetadataForObject, data: manifest } = useManifest();
+
+  // Selected object (Builder selected object)
+  const selectedObject = manifest?.content?.read?.objects?.[0]; // select the object you want
+
+  // Metadata
+  const metadata =
+    selectedObject &&
+    getCustomerFieldsMetadataForObject(selectedObject.objectName);
+  const allFields = metadata?.allFieldsMetaData; // provider (i.e. Saleforce) fields with metadata
+  const allFieldsArray = allFields ? Object.values(allFields) : []; // convert to array for mapping inputs
+```
+
+### See full example for passing provider fields into Select component: 
+https://github.com/amp-labs/headless-basic-app/blob/main/src/components/FieldMappingTable/FieldMappingTable.tsx
+
+
 ## Examples
 
 ### Basic App Example
