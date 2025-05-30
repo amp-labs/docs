@@ -32,7 +32,16 @@ yarn add @amp-labs/react-
 ## Core Features
 
 ### Installation provider
+The `InstallationProvider` is a React context provider that provides shared parameters. It wraps your component at the installation level and provides access to installation-related functionality through hooks.
 
+The provider requires the following props:
+- `integration`: The name of your integration
+- `consumerRef`: A unique identifier for the consumer
+- `groupRef`: A unique identifier for the group
+- `consumerName`: (Optional) A display name for the consumer
+- `groupName`: (Optional) A display name for the group
+
+This provider is essential for using any of the headless hook in your application.
 
 ```tsx
 import {
@@ -75,6 +84,17 @@ function App() {
 
 The library provides hooks and utilities for managing connections:
 
+The `useConnection` hook provides access to the current connection state and management functions. It returns an object with the following properties:
+
+- `connection`: The current Connection object, or null if not connected
+- `error`: Any error that occurred during connection operations
+- `isPending`: Boolean indicating if a connection operation is in progress
+- `isFetching`: Boolean indicating if connection data is being fetched
+- `isError`: Boolean indicating if an error occurred
+- `isSuccess`: Boolean indicating if the last operation was successful
+
+This hook is useful for building custom connection management UIs and handling connection states in your application.
+
 ```tsx
 import { useConnection, ConnectProvider } from '@amp-labs/react';
 
@@ -114,6 +134,16 @@ function MyComponent() {
 ```
 
 ### Installation Management
+The `useInstallation` hook provides access to the current installation state and management functions. It returns an object with the following properties:
+
+- `installation`: The current Installation object, or null if not installed
+- `error`: Any error that occurred during installation operations
+- `isPending`: Boolean indicating if an installation operation is in progress
+- `isFetching`: Boolean indicating if installation data is being fetched
+- `isError`: Boolean indicating if an error occurred
+- `isSuccess`: Boolean indicating if the last operation was successful
+
+This hook is useful for building custom installation management UIs and handling installation states in your application.
 
 Handle installation processes with the installation hooks:
 
@@ -134,6 +164,16 @@ function InstallationComponent() {
   );
 }
 ```
+
+#### Installation Management Hooks
+
+The following hooks provide granular control over installation operations:
+
+- `useCreateInstallation`: Creates a new installation with the provided configuration
+- `useUpdateInstallation`: Updates an existing installation with new configuration
+- `useDeleteInstallation`: Removes an existing installation
+
+These hooks can be used individually or together to build custom installation flows:
 
 
 ## Examples
