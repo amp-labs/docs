@@ -5,7 +5,7 @@ description: A flexible React library for managing connections and installations
 
 # Headless React Library
 
-The Headless React Library provides a powerful foundation for managing connections and installations while giving you complete control over your UI implementation. This library is designed for developers who want to build custom user interfaces while leveraging robust connection management capabilities.
+The Headless React Library provides a powerful foundation for managing connections and installations while giving you complete control over your UI implementation. This library is designed for developers who want to build custom user interfaces while leveraging robust connection, integration, and installation management capabilities.
 
 <Note>
 The Headless React Library is in beta. 
@@ -38,8 +38,6 @@ yarn add @amp-labs/react
 
 ### Ampersand Provider
 The Ampersand Provider is needed at the project level and is also needed for all hooks in headless lib. See [Ampersand Provider](/embeddable-ui-components#ampersand-provider) for more details.
-
-## Core Features
 
 ### Installation provider
 The `InstallationProvider` is a React context provider that provides shared parameters. It wraps your component at the installation level and provides access to installation-related functionality through hooks.
@@ -97,6 +95,7 @@ A hook that provides access to the installation context values:
 - `groupRef`: string
 - `groupName`: string | undefined
 
+## Core Features
 
 ### Connection Management
 
@@ -308,13 +307,14 @@ The `useManifest` hook provides access to the integration's [manifest](/terminol
 - Build dynamic field mapping interfaces based on available fields
 
 The manifest data comes from two sources:
-1. Your `amp.yaml` file which defines the integration's structure
+
+1. Your `amp.yaml` file which defines the [integration's structure](/quickstart#define-the-integrations)
 2. The connected provider's metadata about available fields and objects
 
 This hook is essential for building dynamic configuration interfaces that adapt to the available fields in your customer's SaaS instance.
 
 Retrieves and manages manifest data from `amp.yaml` and the customer's SaaS instance:
-- access to readObjects, required fields, optional fields
+- access to [readObject](/read-actions), required fields, optional fields
 - access to fields and metadata from providers 
 
 ```typescript
