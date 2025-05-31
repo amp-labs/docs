@@ -17,7 +17,7 @@ The Headless React Library is in beta.
 
 The Headless React Library provides a series of react hooks that manage connections, installations, 
 and other configuration data with queries and mutation hooks. The hooks may be used together 
-or independently from the @amp-labs/react embeddable UI components.
+or independently from the @amp-labs/react [embeddable UI components](/embeddable-ui-components).
 
 The Headless React Library separates the logic of connection and installation management from the UI components, allowing you to:
 
@@ -26,14 +26,18 @@ The Headless React Library separates the logic of connection and installation ma
 - Implement custom UI components
 - Maintain full control over the user experience
 
-## Installation 
-The headless react lib is currently in the same package as our embeddable UI in @amp-labs/react. 
+## Requirements and Installation 
+
+The headless react lib is currently in the same package as our [embeddable UI components](/embeddable-ui-components).
 
 ```bash
 npm install @amp-labs/react
 # or
-yarn add @amp-labs/react-
+yarn add @amp-labs/react
 ```
+
+### Ampersand Provider
+The Ampersand Provider is needed at the project level and is also needed for all hooks in headless lib. See [Ampersand Provider](/embeddable-ui-components#ampersand-provider) for more details.
 
 ## Core Features
 
@@ -77,7 +81,7 @@ function App() {
         consumerRef={PARAMS.consumerRef}
         groupRef={PARAMS.groupRef}
       >
-        {/* Builder Custom Installation Component */}
+        {/* Your Custom Installation Component */}
         <MyComponent />
       </InstallationProvider>
     </AmpersandProvider>
@@ -100,7 +104,7 @@ The library provides hooks and utilities for managing connections:
 
 The `useConnection` hook provides access to the current connection state and management functions. It returns an object with the following properties:
 
-- `connection`: The current Connection object, or null if not connected
+- `connection`: The current [Connection](/terminology#connection) object, or null if not connected
 - `error`: Any error that occurred during connection operations
 - `isPending`: Boolean indicating if a connection operation is in progress
 - `isFetching`: Boolean indicating if connection data is being fetched
@@ -150,7 +154,7 @@ function MyComponent() {
 ### Installation Management
 The `useInstallation` hook provides access to the current installation state and management functions. It returns an object with the following properties:
 
-- `installation`: The current Installation object, or null if not installed
+- `installation`: The current [Installation](/terminology#installation) object, or null if not installed
 - `error`: Any error that occurred during installation operations
 - `isPending`: Boolean indicating if an installation operation is in progress
 - `isFetching`: Boolean indicating if installation data is being fetched
@@ -170,7 +174,7 @@ function InstallationComponent() {
   return (
     <div>
       {installation ? (
-       <div>Installation Installed</div>
+        <div>Installation Installed</div>
       ) : (
         <div>Configure Installation</div>
       )}
@@ -293,11 +297,22 @@ function InstallationForm() {
     </form>
   );
 }
-
 ```
 
 
 ## useManifest
+The `useManifest` hook provides access to the integration's [manifest](/terminology#revision) data, which is defined in your `amp.yaml` file. This hook allows you to:
+
+- Access read objects and their required/optional fields as defined in your manifest
+- Retrieve field metadata from the connected provider (e.g. Salesforce, Hubspot)
+- Build dynamic field mapping interfaces based on available fields
+
+The manifest data comes from two sources:
+1. Your `amp.yaml` file which defines the integration's structure
+2. The connected provider's metadata about available fields and objects
+
+This hook is essential for building dynamic configuration interfaces that adapt to the available fields in your customer's SaaS instance.
+
 Retrieves and manages manifest data from `amp.yaml` and the customer's SaaS instance:
 - access to readObjects, required fields, optional fields
 - access to fields and metadata from providers 
@@ -332,7 +347,7 @@ Retrieves and manages manifest data from `amp.yaml` and the customer's SaaS inst
   // ----------------------------------
   const { getCustomerFieldsMetadataForObject, data: manifest } = useManifest();
 
-  // Selected object (Builder selected object)
+  // Selected object (pre-defined selected object)
   const selectedObject = manifest?.content?.read?.objects?.[0]; // select the object you want
 
   // Metadata
@@ -344,11 +359,11 @@ Retrieves and manages manifest data from `amp.yaml` and the customer's SaaS inst
 ```
 
 ### See full example for passing provider fields into Select component: 
-https://github.com/amp-labs/headless-basic-app/blob/main/src/components/FieldMappingTable/FieldMappingTable.tsx
+[View the field mapping example](https://github.com/amp-labs/headless-basic-app/blob/main/src/components/FieldMappingTable/FieldMappingTable.tsx)
 
 
 ## Config State Management 
-Managing the configuration state that needs to be passed into the Installation can be complex with deep nested objects and need to manage this state locally. 
+Managing the configuration state that needs to be passed into the [Installation](/terminology#installation) can be complex with deep nested objects and need to manage this state locally. 
 The useConfig hook is provided to simplify local state management of the config object by providing flexible utilities to manipulate the config directly or 
 simply through a set of setters and getters. 
 
@@ -525,18 +540,19 @@ The `useConfig` hook provides a powerful and flexible way to manage your integra
 ## Examples
 
 ### Basic App Example
-https://github.com/amp-labs/headless-basic-app
+[View the demo app on GitHub](https://github.com/amp-labs/headless-basic-app)
 
 #### The Demo App has the following features:
-- useConnections: manage when to show `<ConnectProvider/>`
-- useManifest	: manage objects and metadata
+- [useConnections](#connection-management): manage when to show [ConnectProvider](/embeddable-ui-components#connect-provider)
+- [useManifest](#usemanifest): manage objects and metadata
+- [useConfig](#config-state-management): manage installation configuration state
 
 #### Salesforce integration example
 - field mapping interface: map dynamic fields to corresponding Salesforce fields
-- connects with Salesforce through `<ConnectProvider/>`
+- connects with Salesforce through [ConnectProvider](/embeddable-ui-components#connect-provider)
 - field metadata from Salesforce to populate available mapping options
 
-####  Installation Management
+#### Installation Management
 - Install/Update: Creates or updates the Salesforce integration
 - Reset: Syncs back to the server state
 - Delete: Removes the installation
@@ -549,7 +565,7 @@ https://github.com/amp-labs/headless-basic-app
 Example using Shadcn UI components + Tailwind CSS
 
 
-### Builder defined flow (no user input needed)
+### Pre-defined flow (no user input needed)
 The config is able to be passed in directly if no additional config state management is needed.
 
 ```tsx
@@ -634,10 +650,9 @@ function MyIntegrationComponent() {
   // `useConnection` will return the new connection.
   return (
      <ConnectProvider
-        consumerRef={installationOptions.consumerRef}
-        groupRef={installationOptions.groupRef}
+        consumerRef={installationParams.consumerRef}
+        groupRef={installationParams.groupRef}
      />
-    </div>
   );
 }
 ```
