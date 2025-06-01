@@ -2,19 +2,17 @@
 title: Headless UI library
 ---
 
-The Headless UI library is a part of `@amp-labs/react`, and provides a powerful foundation for managing connections and installations while giving you complete control over your UI implementation. This library is designed for developers who want to build custom user interfaces while leveraging robust connection, integration, and installation management capabilities.
+The Headless UI library is part of `@amp-labs/react` and provides a powerful foundation for managing connections and installations while giving you complete control over your UI implementation. This library is designed for developers who want to build custom user interfaces while leveraging robust connection, integration, and installation management capabilities.
 
 <Note>
-The Headless UI library is in beta. It may change in non backwards-compatible ways. (Although we are very serious about semantic versioning.)
+The Headless UI library is in beta. It may change in non-backwards-compatible ways. (Although we are very serious about semantic versioning.)
 
 If you have any feedback, please file an issue [on Github](https://github.com/amp-labs/react/issues).
 </Note>
 
 ## Overview
 
-The Headless UI Library provides a series of react hooks that manage connections, installations, 
-and other configuration data with queries and mutation hooks. The hooks may be used together 
-or independently from the [prebuilt UI components](/embeddable-ui-components).
+The Headless UI Library provides a series of React hooks that manage connections, installations, and other configuration data using query and mutation hooks. The hooks may be used together or independently of the [prebuilt UI components](/embeddable-ui-components).
 
 The Headless UI Library separates the logic of connection and installation management from the UI components, allowing you to:
 
@@ -37,11 +35,11 @@ yarn add @amp-labs/react
 
 ### Context setup
 
-In order for the headless hooks and functions to have relevant context, you can only use them inside `AmpersandProvider` and `InstallationProvider`. 
+In order for the headless hooks and functions to have relevant context, you can only use them inside `AmpersandProvider` and `InstallationProvider`.
 
 The `AmpersandProvider` needs to wrap all usages of headless hooks and functions as well as prebuilt UI components. See [Ampersand Provider](/embeddable-ui-components#ampersand-provider) for more details.
 
-The `InstallationProvider` needs to wrap any code that interacts with a particular installation. This means that if your UI needs to handle multiple installations (e.g. one for Asana and one for Zendesk), then you need 2 instances of `InstallationProvider`, one that wraps the code for Asana set up, and one that wraps the code for Zendesk set up.
+The `InstallationProvider` needs to wrap any code that interacts with a particular installation. This means that if your UI needs to handle multiple installations (e.g., one for Asana and one for Zendesk), then you need two instances of `InstallationProvider`: one that wraps the code for Asana setup, and one that wraps the code for Zendesk setup.
 
 `InstallationProvider` requires the following props:
 * **integration** (string): the name of an integration that you've defined in `amp.yaml`.
@@ -74,11 +72,11 @@ function App() {
   return (
     <AmpersandProvider options={options}>
       <InstallationProvider
-        integration = {integration}
-        groupRef = {groupRef}
-        groupName = {groupName}
-        consumerRef = {consumerRef}
-        consumerName = {consumerName}
+        integration={integration}
+        groupRef={groupRef}
+        groupName={groupName}
+        consumerRef={consumerRef}
+        consumerName={consumerName}
       >
         {/* Your custom component */}
         <MyComponent />
@@ -105,7 +103,7 @@ The `useConnection` hook provides access to the current connection state and man
 import { useConnection, ConnectProvider } from '@amp-labs/react';
 
 function MyComponent() {
-  const { 
+  const {
     connection, // Connection object
     error,
     isPending,
@@ -120,17 +118,16 @@ function MyComponent() {
       {connection ? (
         {/* If there isn't a Connection, show prebuilt ConnectProvider component. */}
         <ConnectProvider
-            provider={provider}
-            consumerRef={consumerRef}
-            groupRef={groupRef}
-            onConnectSuccess={(connection) => {
-              console.log("Connection successful:", connection);
-            }}
-            onDisconnectSuccess={(connection) => {
-              console.log("Disconnection successful:", connection);
-            }}
-          />
-        </div>
+          provider={provider}
+          consumerRef={consumerRef}
+          groupRef={groupRef}
+          onConnectSuccess={(connection) => {
+            console.log("Connection successful:", connection);
+          }}
+          onDisconnectSuccess={(connection) => {
+            console.log("Disconnection successful:", connection);
+          }}
+        />
       ) : (
         {/* If user is already connected, guide them through the rest of the configuration. */}
         <MyConfigurationComponent/>
@@ -146,7 +143,7 @@ function MyComponent() {
 
 The `useInstallation` hook provides access to the current installation state and management functions. It returns an object with the following properties:
 
-- `installation`: The current [Installation](/terminology#installation) object, or null if not installed
+- `installation`: The current [Installation](/terminology#installation) object, or null if not installed.
 - `error`: Any error that occurred while fetching the Installation.
 - `isPending`: If true, there is no data yet.
 - `isFetching`: If true, the data is being fetched (including refetches).
@@ -179,8 +176,8 @@ The following hooks provide granular control over [Installation](/concepts#insta
 - `useUpdateInstallation`
 - `useDeleteInstallation`
 
-For example, the `useCreateInstallation` hook is used to creates a new Installation, it returns the following:
-  - `createInstallation`: a tanstack-query mutation function to create a new Installation. Its signature is: 
+For example, the `useCreateInstallation` hook is used to create a new Installation. It returns the following:
+  - `createInstallation`: a tanstack-query mutation function to create a new Installation. Its signature is:
   ```typescript
   (params: {
     config: InstallationConfigContent;
@@ -212,30 +209,31 @@ function InstallationForm() {
   } = useCreateInstallation();
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     createInstallation({
-        // Add your installation config here
-        config: {
-          read: {
-            objects: {
-              contacts: {
-                objectName: 'contacts',
-                selectedFieldsAuto: 'all',
-              },
-            }
-          };
-        }, 
-        onSuccess: (data) => {
-            console.log("Installation created", { installation: data });
+      // Add your installation config here
+      config: {
+        read: {
+          objects: {
+            contacts: {
+              objectName: 'contacts',
+              selectedFieldsAuto: 'all',
+            },
+          },
         },
-        onError: (error) => {
-            console.error("Installation creation failed", { error });
-        },
+      },
+      onSuccess: (data) => {
+        console.log("Installation created", { installation: data });
+      },
+      onError: (error) => {
+        console.error("Installation creation failed", { error });
+      },
     });
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <button 
+      <button
         type="submit"
         disabled={isPending}
       >
@@ -252,7 +250,7 @@ function InstallationForm() {
 The `useManifest` hook provides the data that you need to build input forms for your users to help them configure the integration. This hook allows you to:
 
 - Access integrations as defined in the [manifest](/terminology#manifest) (`amp.yaml`).
-- Retrieve object and field metadata from the connected provider (e.g. Salesforce, Hubspot). This allows your application to know about the exact objects and fields that exist in your customer's SaaS instance, including custom objects and fields. With this information, you can build dropdowns, checkboxes, etc.
+- Retrieve object and field metadata from the connected provider (e.g., Salesforce, Hubspot). This allows your application to know about the exact objects and fields that exist in your customer's SaaS instance, including custom objects and fields. With this information, you can build dropdowns, checkboxes, etc.
 
 > For now, you can only access your manifest's Read Actions. Subscribe and Write Actions are coming soon. Please note that you still create an Installation with Subscribe and Write Actions by constructing the Config yourself and using [`useCreateInstallation`](headless#creating%2C-updating%2C-and-deleting-installations).
 
@@ -264,30 +262,30 @@ const {
     object: HydratedIntegrationObject | null;
     getRequiredFields: () => HydratedIntegrationField[] | null;
     getOptionalFields: () => HydratedIntegrationField[] | null;
-  };
+  },
   getCustomerFieldsForObject: (objectName: string) => {
     // Map of field names to field metadata.
     allFields: { [field: string]: FieldMetadata } | null;
     // Get a specific field's metadata.
     getField: (field: string) => FieldMetadata | null;
-  };
-  data: HydratedRevision | undefined;
-  isPending: boolean;
-  isFetching: boolean;
-  isError: boolean;
-  isSuccess: boolean;
-  error: Error | null;
+  },
+  data: HydratedRevision | undefined,
+  isPending: boolean,
+  isFetching: boolean,
+  isError: boolean,
+  isSuccess: boolean,
+  error: Error | null,
 } = useManifest();
 ```
 
 ### Get fields from customer's SaaS
 
-The `getCustomerFieldsForObject` function returned by `useManifest` allows you to retrieve the standard and custom fields that exists in your customer's SaaS instance for a particular object.
+The `getCustomerFieldsForObject` function returned by `useManifest` allows you to retrieve the standard and custom fields that exist in your customer's SaaS instance for a particular object.
 
 ```tsx
   const { getCustomerFieldsForObject } = useManifest();
 
-  // Get all the fields that exists on the customer's Account object,
+  // Get all the fields that exist on the customer's Account object,
   // including standard and custom fields.
   const fields = getCustomerFieldsForObject("account");
 
@@ -302,9 +300,9 @@ The `getCustomerFieldsForObject` function returned by `useManifest` allows you t
 
 ## Config management
 
-Managing the [Config](/terminology#config) that keeps track of each customer's preference for how the integration behaves can be complex with deep nested objects and need to manage this state locally.
+Managing the [Config](/terminology#config) that keeps track of each customer's preference for how the integration behaves can be complex, with deeply nested objects and the need to manage this state locally.
 
-The `useConfig` hook is provided to simplify local state management of the config object by providing flexible utilities to manipulate the config through a set of setters and getters. It maintains a draft state that you can modify before committing changes to the installation.
+The `useConfig` hook simplifies local state management of the config object by providing flexible utilities to manipulate the config through a set of setters and getters. It maintains a draft state, which you can modify before committing changes to the installation.
 
 It returns these fields:
 
@@ -347,7 +345,7 @@ It returns these fields:
 
 ### Basic example
 
-This is a basic example that hard-codes a Config and does not allow users to modify it.
+This is a basic example that hard-codes a Config and does not allow the user to modify it.
 
 ```typescript
 function ConfigManager() {
@@ -490,21 +488,21 @@ function IntegrationConfig() {
 ![Dynamic Fields Table Example](/images/headless/headless-basic-app-table.png)
 
 The [headless demo app](https://github.com/amp-labs/headless-basic-app) uses a Salesforce integration, and includes:
-- ability to map fields, the dropdown is populated with standard and optional fields from the connected Salesforce instance.
-- ability to create and update an Installation with the "Install" button.
-- ability to reset Config to previous state with the "Reset" button.
-- ability to delete an Installation with the "Delete" button.
-- usage of Shadcn UI components + Tailwind CSS to demonstrate how you can bring your own design system.
+- Ability to map fields; the dropdown is populated with standard and optional fields from the connected Salesforce instance.
+- Ability to create and update an Installation with the "Install" button.
+- Ability to reset Config to previous state with the "Reset" button.
+- Ability to delete an Installation with the "Delete" button.
+- Usage of Shadcn UI components + Tailwind CSS to demonstrate how you can bring your own design system.
 
 It uses the following headless hooks:
-- [useConnections](#connection-management): manage when to show [ConnectProvider](/embeddable-ui-components#connect-provider)
-- [useManifest](#usemanifest): manage objects and metadata
-- [useConfig](#config-state-management): manage installation configuration state'
+- [useConnection](#connection-management): manage when to show [ConnectProvider](/embeddable-ui-components#connect-provider)
+- [useManifest](#get-manifest-and-field-metadata): manage objects and metadata
+- [useConfig](#config-management): manage installation configuration state
 - [useCreateInstallation, useUpdateInstallation, and useDeleteInstallation](#installation-management): manage installation lifecycle
 
 ### Pre-defined configuration flow
 
-If you do not want your users to be able to modify or configure the installation, you can build a pre-defined configuration flow using the code snippet below. This is helpful if you do not want your user to be able to modify which objects and fields your integration reads and writes, and you do need them to do any field mappings.
+If you do not want your users to be able to modify or configure the installation, you can build a pre-defined configuration flow using the code snippet below. This is helpful if you do not want your user to be able to modify which objects and fields your integration reads and writes, and you do not need them to do any field mappings.
 
 ```tsx
 import {
