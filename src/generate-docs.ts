@@ -248,7 +248,7 @@ const baseConfig = {
           group: "UI library",
           pages: [
             "embeddable-ui-components",
-            "headless"
+            // "headless"
           ]
         },
         {
