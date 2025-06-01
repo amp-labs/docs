@@ -245,10 +245,10 @@ const baseConfig = {
         // },
         "object-and-field-mapping",
         {
-          group: "UI",
+          group: "UI library",
           pages: [
             "embeddable-ui-components",
-            "ui/headless"
+            "headless"
           ]
         },
         {
