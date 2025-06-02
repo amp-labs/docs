@@ -296,7 +296,7 @@ The `getCustomerFieldsForObject` function returned by `useManifest` allows you t
   const allFieldsArray = allFields ? Object.values(allFields) : [];
 ```
 
-[The fields mapping page of the demo app](https://github.com/amp-labs/headless-basic-app/blob/main/src/components/FieldMappingTable/FieldMappingTable.tsx) provides a full example for using `useManifest` to build the UI for customers to configure the installation.
+[The fields mapping page of the demo app](https://github.com/amp-labs/demo-headless/blob/main/src/components/FieldMappingTable/FieldMappingTable.tsx) provides a full example for using `useManifest` to build the UI for customers to configure the installation.
 
 ## Config management
 
@@ -332,14 +332,6 @@ It returns these fields:
   setEnableWrite: () => void;  // Enable write for object
   setDisableWrite: () => void;  // Disable write for object
   getWriteObject: () => BaseWriteConfigObject | undefined;  // Get write object config
-  getSelectedFieldSettings: (fieldName: string) => FieldSetting | undefined;  // Get field settings
-  setSelectedFieldSettings: (params: { fieldName: string; settings: FieldSetting }) => void;  // Update field settings
-  getDefaultValues: (fieldName: string) => FieldSettingDefault | undefined;  // Get default values
-  setDefaultValues: (params: { fieldName: string; value: FieldSettingDefault }) => void;  // Set default values
-  getWriteOnCreateSetting: (fieldName: string) => FieldSettingWriteOnCreateEnum | undefined;  // Get write on create setting
-  setWriteOnCreateSetting: (params: { fieldName: string; value: FieldSettingWriteOnCreateEnum }) => void;  // Set write on create setting
-  getWriteOnUpdateSetting: (fieldName: string) => FieldSettingWriteOnUpdateEnum | undefined;  // Get write on update setting
-  setWriteOnUpdateSetting: (params: { fieldName: string; value: FieldSettingWriteOnUpdateEnum }) => void;  // Set write on update setting
 }
 ```
 
@@ -407,7 +399,7 @@ function ReadObjectConfig() {
 
 ### Managing write config
 
-This is an example for how to use helper functions to more easily construct a write config, so you do not have to create the full config object manually. See [advanced write use cases](/write-actions#advanced-use-cases) for an explanation of these features.
+This is an example for how to use helper functions to more easily construct a write config, so you do not have to create the full config object manually.
 
 ```typescript
 function WriteObjectConfig() {
@@ -416,33 +408,12 @@ function WriteObjectConfig() {
   
   // Enable write for Contact object
   contactWriteConfig.setEnableWrite();
-  
-  // Set field settings
-  contactWriteConfig.setSelectedFieldSettings({
-    fieldName: "Email",
-    settings: {
-      writeOnCreate: "ALWAYS",
-      writeOnUpdate: "ALWAYS",
-      _default: "user@example.com"
-    }
-  });
-  
-  // Get field settings
-  const emailSettings = contactWriteConfig.getSelectedFieldSettings("Email");
-  
-  // Set default value
-  contactWriteConfig.setDefaultValues({
-    fieldName: "Email",
-    value: "default@example.com"
-  });
-  
-  // Set write on create behavior
-  contactWriteConfig.setWriteOnCreateSetting({
-    fieldName: "Email",
-    value: "ALWAYS"
-  });
 }
 ```
+
+<Note>
+Support for [advanced write features](/write-actions#advanced-use-cases) coming soon.
+</Note>
 
 ### Full example
 
@@ -483,11 +454,11 @@ function IntegrationConfig() {
 
 ### Demo app
 
-[View the source code on GitHub](https://github.com/amp-labs/headless-basic-app)
+[View the source code on GitHub](https://github.com/amp-labs/demo-headless)
 
 ![Dynamic Fields Table Example](/images/headless/headless-basic-app-table.png)
 
-The [headless demo app](https://github.com/amp-labs/headless-basic-app) uses a Salesforce integration, and includes:
+The [headless demo app](https://github.com/amp-labs/demo-headless) uses a Salesforce integration, and includes:
 - Ability to map fields; the dropdown is populated with standard and optional fields from the connected Salesforce instance.
 - Ability to create and update an Installation with the "Install" button.
 - Ability to reset Config to previous state with the "Reset" button.
