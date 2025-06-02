@@ -332,14 +332,6 @@ It returns these fields:
   setEnableWrite: () => void;  // Enable write for object
   setDisableWrite: () => void;  // Disable write for object
   getWriteObject: () => BaseWriteConfigObject | undefined;  // Get write object config
-  getSelectedFieldSettings: (fieldName: string) => FieldSetting | undefined;  // Get field settings
-  setSelectedFieldSettings: (params: { fieldName: string; settings: FieldSetting }) => void;  // Update field settings
-  getDefaultValues: (fieldName: string) => FieldSettingDefault | undefined;  // Get default values
-  setDefaultValues: (params: { fieldName: string; value: FieldSettingDefault }) => void;  // Set default values
-  getWriteOnCreateSetting: (fieldName: string) => FieldSettingWriteOnCreateEnum | undefined;  // Get write on create setting
-  setWriteOnCreateSetting: (params: { fieldName: string; value: FieldSettingWriteOnCreateEnum }) => void;  // Set write on create setting
-  getWriteOnUpdateSetting: (fieldName: string) => FieldSettingWriteOnUpdateEnum | undefined;  // Get write on update setting
-  setWriteOnUpdateSetting: (params: { fieldName: string; value: FieldSettingWriteOnUpdateEnum }) => void;  // Set write on update setting
 }
 ```
 
@@ -416,33 +408,12 @@ function WriteObjectConfig() {
   
   // Enable write for Contact object
   contactWriteConfig.setEnableWrite();
-  
-  // Set field settings
-  contactWriteConfig.setSelectedFieldSettings({
-    fieldName: "Email",
-    settings: {
-      writeOnCreate: "ALWAYS",
-      writeOnUpdate: "ALWAYS",
-      _default: "user@example.com"
-    }
-  });
-  
-  // Get field settings
-  const emailSettings = contactWriteConfig.getSelectedFieldSettings("Email");
-  
-  // Set default value
-  contactWriteConfig.setDefaultValues({
-    fieldName: "Email",
-    value: "default@example.com"
-  });
-  
-  // Set write on create behavior
-  contactWriteConfig.setWriteOnCreateSetting({
-    fieldName: "Email",
-    value: "ALWAYS"
-  });
 }
 ```
+
+<Note>
+Advanced write features coming soon
+</Note>
 
 ### Full example
 
