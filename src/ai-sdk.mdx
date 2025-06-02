@@ -34,7 +34,7 @@ This is a simple example of how to use the AI SDK tools by Ampersand in a Vercel
 import { openai } from '@ai-sdk/openai';
 import { generateObject, generateText } from 'ai';
 import { z } from 'zod';
-import { createRecordTool, updateRecordTool } from "@amp-labs/ai/aisdk";
+import { createRecord, updateRecord } from "@amp-labs/ai/aisdk";
 
 // Vercel Agent with AI SDK tools by Ampersand
 async function handleCustomerQuery(query: string) {
@@ -49,8 +49,8 @@ async function handleCustomerQuery(query: string) {
     prompt: query,
     tools: {
       // AI SDK tools by Ampersand being used here
-      createRecordTool,
-      updateRecordTool,
+      createRecord,
+      updateRecord,
     },
   });
 
@@ -67,7 +67,7 @@ This is a simple example of how to use the AI SDK tools by Ampersand in an agent
 ```typescript
 import { Agent } from "@mastra/core/agent";
 import { openai } from "@ai-sdk/openai";
-import { createRecordTool, updateRecordTool } from "@amp-labs/ai/mastra";
+import { createRecord, updateRecord } from "@amp-labs/ai/mastra";
 
 // Mastra Agent with Mastra tools
 export const mastraToolsAgent: Agent = new Agent({
@@ -75,8 +75,8 @@ export const mastraToolsAgent: Agent = new Agent({
   instructions: "You can use tools defined in Mastra.",
   model: openai("gpt-4o-mini"),
   tools: {
-    createRecordTool,
-    updateRecordTool,
+    createRecord,
+    updateRecord,
   },
 });
 ```
@@ -87,13 +87,13 @@ The SDK provides the following tools for interacting with SaaS platforms:
 
 | Tool | Description | Purpose |
 |------|-------------|---------|
-| `createRecordTool` | Creates a new record in the connected SaaS platform | Create new records like contacts, deals, tickets etc. |
-| `updateRecordTool` | Updates an existing record in the connected SaaS platform | Modify existing records with new data |
-| `sendReadRequestTool` | Makes authenticated GET API calls to the provider through Ampersand | Reading and searching records |
-| `sendRequestTool` | Makes authenticated API calls to the provider through Ampersand | Do any action that is available via the API |
-| `checkConnectionTool` | Verifies if there is an active connection to the SaaS provider | Validate connection status before creating an installation |
-| `createInstallationTool` | Creates a new installation for a provider | Create an installation for an existing connection |
-| `checkInstallationTool` | Checks if there is an active installation for a provider | Verify installation status |
-| `startOAuthTool` | Returns URL for initiating OAuth flow for connecting to a provider | Authenticates a new user |
+| `createRecord` | Creates a new record in the connected SaaS platform | Create new records like contacts, deals, tickets etc. |
+| `updateRecord` | Updates an existing record in the connected SaaS platform | Modify existing records with new data |
+| `sendReadRequest` | Makes authenticated GET API calls to the provider through Ampersand | Reading and searching records |
+| `sendRequest` | Makes authenticated API calls to the provider through Ampersand | Do any action that is available via the API |
+| `checkConnection` | Verifies if there is an active connection to the SaaS provider | Validate connection status before creating an installation |
+| `createInstallation` | Creates a new installation for a provider | Create an installation for an existing connection |
+| `checkInstallation` | Checks if there is an active installation for a provider | Verify installation status |
+| `startOAuth` | Returns URL for initiating OAuth flow for connecting to a provider | Authenticates a new user |
 
 Have a tool in mind that we could add? Let us know [on Discord!](https://discord.gg/BWP4BpKHvf)
