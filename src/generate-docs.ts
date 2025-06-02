@@ -236,13 +236,13 @@ const baseConfig = {
         "read-actions",
         "write-actions",
         "proxy-actions",
-        // {
-        //   group: "AI Agents",
-        //   pages: [
-        //     "ai-sdk",
-        //     "mcp",
-        //   ]
-        // },
+        {
+          group: "AI Agents",
+          pages: [
+            "ai-sdk",
+            "mcp",
+          ]
+        },
         "object-and-field-mapping",
         {
           group: "UI library",
