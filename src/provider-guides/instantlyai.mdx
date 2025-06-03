@@ -1,0 +1,85 @@
+---
+title: Instantly V2
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.instantly.ai/api`.
+
+### Supported Objects
+The Instantly V2 connector supports reading from the following objects:
+- [accounts](https://developer.instantly.ai/api/v2/account/listaccount)
+- [campaigns](https://developer.instantly.ai/api/v2/campaign/listcampaign)
+- [emails](https://developer.instantly.ai/api/v2/email/listemail)
+- [lead-lists](https://developer.instantly.ai/api/v2/leadlist/listleadlist)
+- [inbox-placement-tests](https://developer.instantly.ai/api/v2/inboxplacementtest/listinboxplacementtest)
+- [background-jobs](https://developer.instantly.ai/api/v2/backgroundjob/listbackgroundjob)
+- [custom-tags](https://developer.instantly.ai/api/v2/customtag/listcustomtag)
+- [block-lists-entries](https://developer.instantly.ai/api/v2/blocklistentry/listblocklistentry)
+- [lead-labels](https://developer.instantly.ai/api/v2/leadlabel/listleadlabel)
+- [workspace-group-members](https://developer.instantly.ai/api/v2/workspacegroupmember/listworkspacegroupmember)
+- [workspace-members](https://developer.instantly.ai/api/v2/workspacemember/listworkspacemember)
+- [leads/list](https://developer.instantly.ai/api/v2/lead/listleads)
+- [campaigns/analytics](https://developer.instantly.ai/api/v2/analytics/getcampaignanalytics)
+- [campaigns/analytics/daily](https://developer.instantly.ai/api/v2/analytics/getdailycampaignanalytics)
+- [campaigns/analytics/steps](https://developer.instantly.ai/api/v2/analytics/getcampaignstepsanalytics)
+- [inbox-placement-tests/email-service-provider-options](https://developer.instantly.ai/api/v2/inboxplacementtest/getinboxplacementtestespoptions)
+- [audit logs](https://developer.instantly.ai/api/v2/auditlog)
+
+The Instatnlty V2 connector supports writing from the following objects:
+- [accounts](https://developer.instantly.ai/api/v2/account/createaccount)
+- [campaigns](https://developer.instantly.ai/api/v2/campaign/createcampaign)
+- [emails/reply](https://developer.instantly.ai/api/v2/email/replytoemail)
+- [lead-lists](https://developer.instantly.ai/api/v2/leadlist/createleadlist)
+- [inbox-placement-tests](https://developer.instantly.ai/api/v2/inboxplacementtest/createinboxplacementtest)
+- [custom-tags](https://developer.instantly.ai/api/v2/customtag/createcustomtag)
+- [block-lists-entries](https://developer.instantly.ai/api/v2/blocklistentry/createblocklistentry)
+- [lead-labels](https://developer.instantly.ai/api/v2/leadlabel/createleadlabel)
+- [workspace-group-members](https://developer.instantly.ai/api/v2/workspacegroupmember/createworkspacegroupmember)
+- [workspace-members](https://developer.instantly.ai/api/v2/workspacemember/createworkspacemember)
+- [email-verification](https://developer.instantly.ai/api/v2/emailverification/createemailverification)
+- [leads/merge](https://developer.instantly.ai/api/v2/lead/mergeleads)         
+- [leads/update-interest-status](https://developer.instantly.ai/api/v2/lead/updateleadintereststatus)
+- [leads/subsequence/remove](https://developer.instantly.ai/api/v2/lead/removeleadfromsubsequence)
+- [leads/move](https://developer.instantly.ai/api/v2/lead/moveleads)
+- [leads/export](https://developer.instantly.ai/api/v2/lead/exportleads)
+- [leads/subsequence/move](https://developer.instantly.ai/api/v2/lead/moveleadtosubsequence)
+- [custom-tags/toggle-resource](https://developer.instantly.ai/api/v2/customtag/toggletagresource)
+- [workspaces/current](https://developer.instantly.ai/api/v2/workspace/patchworkspace)
+
+### Example integration
+
+For an example manifest file of an Instantly V2 integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/instantlyai/amp.yaml).
+
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Instantly V2:
+
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/instantlyai/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Calls](/proxy-actions), you can start making Proxy API calls.
+
+## Creating an API key for Instantly V2:
+
+1. Log in to your [Instatntly Account](https://app.instantly.ai/auth/login).
+
+2. Navigate to **settings**.
+
+3. Click **Integraions** and navigate to **APIKeys**.
+
+4. Click **Create API Key**.
+
+![Alt text](/images/provider-guides/instantlyai-api-key.gif)
