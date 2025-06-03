@@ -1,0 +1,61 @@
+---
+title: "Jobber"
+---
+## What's Supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.getjobber.com/api/graphql`.
+
+## Before you get started
+
+To connect Jobber with Ampersand, you will need a [Jobber Account](https://www.getjobber.com/).
+
+Once your account is created, you'll need to [Create a Jobber Developer Account](https://developer.getjobber.com) and obtain the following credentials from your Jobber App:
+- Client ID
+- Client Secret
+
+You will then use these credentials to connect your application to Ampersand.
+
+<Note>
+  Jobber uses GraphQL for all API operations. When making proxy calls, you'll need to send GraphQL queries and mutations to the `/api/graphql` endpoint.
+</Note>
+
+### Create a Jobber developer account
+
+Here's how you can sign up for a Jobber account:
+
+- Go to the [Jobber Developer Center](https://developer.getjobber.com/signup/) and create a developer account.
+- Complete the registration process and verify your email.
+
+## Creating a Jobber app
+
+Once your Jobber Developer account is ready, you need to create a Jobber application:
+
+1. Log in to your [Jobber Developer Center](https://developer.getjobber.com/).
+2. Navigate to the [Apps page](https://developer.getjobber.com/apps).
+3. Click **NEW** to create your first app.
+4. Fill in the required information:
+   - **App name** (required)
+   - **Developer name** (required) 
+   - **OAuth Callback URL**: Use `https://api.withampersand.com/callbacks/v1/oauth`
+   - **App description** (required)
+   - **Scopes** (required) - Select the data access permissions your app needs
+
+5. Click **Save** to create your app.
+
+Upon creation, the app will display the necessary credentials: **Client ID** and **Client Secret.** Note these down, as you will need it to connect your app to Ampersand.
+
+
+## Add your Jobber app info to Ampersand
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+2. Select the project where you want to create a Help Scout integration.  
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+3. Select **Provider apps**.
+4. Select **Jobber** from the **Provider** list.
+5. Enter the previously obtained **Client ID** and **Client Secret**.
+6. Click **Save changes**.
+
+
+For detailed information about available queries, mutations, and the complete schema, refer to the [Jobber Developer Documentation](https://developer.getjobber.com/docs/) and use their GraphiQL tool for testing.

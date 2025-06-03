@@ -340,6 +340,7 @@ const baseConfig = {
             "provider-guides/ironclad",
             "provider-guides/iterable",
             "provider-guides/jira",
+            "provider-guides/jobber",
             "provider-guides/jotform",
             "provider-guides/joinMe",
             "provider-guides/keap",
