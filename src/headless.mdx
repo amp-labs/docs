@@ -332,6 +332,32 @@ It returns these fields:
   setEnableWrite: () => void;  // Enable write for object
   setDisableWrite: () => void;  // Disable write for object
   getWriteObject: () => BaseWriteConfigObject | undefined;  // Get write object config
+   // advanced write features
+  // https://docs.withampersand.com/write-actions#advanced-use-cases
+  getDefaultValues: (fieldName: string) => FieldSettingDefault | undefined;
+  setDefaultValues: (params: {
+    fieldName: string;
+    value: FieldSettingDefault;
+  }) => void;
+  getWriteOnCreateSetting: (
+    fieldName: string,
+  ) => FieldSettingWriteOnCreateEnum | undefined;
+  setWriteOnCreateSetting: (params: {
+    fieldName: string;
+    value: FieldSettingWriteOnCreateEnum;
+  }) => void;
+  getWriteOnUpdateSetting: (
+    fieldName: string,
+  ) => FieldSettingWriteOnUpdateEnum | undefined;
+  setWriteOnUpdateSetting: (params: {
+    fieldName: string;
+    value: FieldSettingWriteOnUpdateEnum;
+  }) => void;
+  getSelectedFieldSettings: (fieldName: string) => FieldSetting | undefined;
+  setSelectedFieldSettings: (params: {
+    fieldName: string;
+    settings: FieldSetting;
+  }) => void;
 }
 ```
 
@@ -411,9 +437,171 @@ function WriteObjectConfig() {
 }
 ```
 
-<Note>
-Support for [advanced write features](/write-actions#advanced-use-cases) coming soon.
-</Note>
+#### Setting write feature in isolation
+
+You can configure write settings for individual fields using these methods:
+
+```typescript
+function WriteObjectConfig() {
+  const config = useConfig();
+  const contactWriteConfig = config.writeObject("Contact");
+  
+  // Set default value for a field
+  contactWriteConfig.setDefaultValues({
+    fieldName: "source",
+    value: {
+      stringValue: "myApp"  // String default
+    }
+  });
+  
+  contactWriteConfig.setDefaultValues({
+    fieldName: "amount",
+    value: {
+      integerValue: 0  // Number default
+    }
+  });
+  
+  contactWriteConfig.setDefaultValues({
+    fieldName: "automated",
+    value: {
+      booleanValue: true  // Boolean default
+    }
+  });
+  
+  // Configure which fields should be written to during create operations
+  contactWriteConfig.setWriteOnCreateSetting({
+    fieldName: "source",
+    value: "always"  // Always write source field on create
+  });
+  
+  contactWriteConfig.setWriteOnCreateSetting({
+    fieldName: "notes",
+    value: "never"  // Never write notes field on create
+  });
+  
+  // Configure which fields should be written to during update operations
+  contactWriteConfig.setWriteOnUpdateSetting({
+    fieldName: "source",
+    value: "never"  // Never write source field on update
+  });
+  
+  contactWriteConfig.setWriteOnUpdateSetting({
+    fieldName: "notes",
+    value: "always"  // Always write notes field on update
+  });
+  
+  // Get current settings
+  const defaultValues = contactWriteConfig.getDefaultValues("source");
+  const writeOnCreate = contactWriteConfig.getWriteOnCreateSetting("source");
+  const writeOnUpdate = contactWriteConfig.getWriteOnUpdateSetting("source");
+}
+```
+
+#### Setting write features together
+
+The `WriteObjectHandlers` returned by `writeObject` also supports setting all field settings at once:
+
+```typescript
+// extended shape of WriteObjectHandlers (returned by `writeObject` function above).
+{
+  setFieldSettings: (params: { 
+    fieldName: string; 
+    settings: {
+      writeOnCreate?: 'always' | 'never';
+      writeOnUpdate?: 'always' | 'never';
+      default?: {
+        stringValue?: string;
+        integerValue?: number;
+        booleanValue?: boolean;
+      };
+    };
+  }) => void;  // Configure field-level write settings
+  getFieldSettings: (fieldName: string) => FieldSettings | undefined;  // Get field settings
+
+}
+```
+
+#### Prevent overwriting of customer data
+
+You can configure when a field should be written to during create and update operations. This helps prevent accidentally overwriting fields that customers have manually modified in their SaaS product.
+
+```typescript
+function WriteObjectConfig() {
+  const config = useConfig();
+  const contactWriteConfig = config.writeObject("Contact");
+  
+  // Only write to source field when creating a record, not when updating
+  contactWriteConfig.setFieldSettings({
+    fieldName: "source",
+    settings: {
+      writeOnCreate: "always",  // Write to source field when creating a record
+      writeOnUpdate: "never"    // Do not write to source field when updating a record
+    }
+  });
+}
+```
+
+#### Setting default values (alternative)
+
+You can set default values for fields that will be applied whenever that value is missing from the write request. We support string, boolean and number values.
+
+```typescript
+function WriteObjectConfig() {
+  const config = useConfig();
+  const contactWriteConfig = config.writeObject("Contact");
+  
+  // Set default values for fields
+  contactWriteConfig.setFieldSettings({
+    fieldName: "source",
+    settings: {
+      default: {
+        stringValue: "myApp"  // Set source field to "myApp" by default
+      }
+    }
+  });
+  
+  contactWriteConfig.setFieldSettings({
+    fieldName: "amount",
+    settings: {
+      default: {
+        integerValue: 0  // Set amount field to 0 by default
+      }
+    }
+  });
+  
+  contactWriteConfig.setFieldSettings({
+    fieldName: "automated",
+    settings: {
+      default: {
+        booleanValue: true  // Set automated field to true by default
+      }
+    }
+  });
+}
+```
+
+#### Combine use cases
+
+Here's an example that combines multiple write features:
+
+```typescript
+function WriteObjectConfig() {
+  const config = useConfig();
+  const contactWriteConfig = config.writeObject("Contact");
+  
+  // Configure a field with both write behavior and default value
+  contactWriteConfig.setFieldSettings({
+    fieldName: "customSource",
+    settings: {
+      writeOnCreate: "always",  // Write on create
+      writeOnUpdate: "never",   // Don't write on update
+      default: {
+        stringValue: "myApp"    // Default value
+      }
+    }
+  });
+}
+```
 
 ### Full example
 
@@ -470,6 +658,17 @@ It uses the following headless hooks:
 - [useManifest](#get-manifest-and-field-metadata): manage objects and metadata
 - [useConfig](#config-management): manage installation configuration state
 - [useCreateInstallation, useUpdateInstallation, and useDeleteInstallation](#installation-management): manage installation lifecycle
+
+### Demo app + write features
+
+[View the source code on GitHub](https://github.com/amp-labs/demo-headless-write)
+
+![Write Features Table Example](/images/headless/headless-write-app-table.png)
+
+The [headless demo write app](https://github.com/amp-labs/demo-headless-write) uses a Salesforce integration, and extends the basic demo app with:
+- Usage of write features.
+- Ability to set default values for fields.
+- Ability to prevent overwriting of customer data.
 
 ### Pre-defined configuration flow
 
