@@ -360,6 +360,7 @@ const baseConfig = {
             "provider-guides/notion",
             "provider-guides/nutshell",
             "provider-guides/openAI",
+            "provider-guides/outplay",
             "provider-guides/outreach",
             "provider-guides/paddle",
             "provider-guides/paddleSandbox",
