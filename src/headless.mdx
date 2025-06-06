@@ -252,7 +252,7 @@ The `useManifest` hook provides the data that you need to build input forms for 
 - Access integrations as defined in the [manifest](/terminology#manifest) (`amp.yaml`).
 - Retrieve object and field metadata from the connected provider (e.g., Salesforce, Hubspot). This allows your application to know about the exact objects and fields that exist in your customer's SaaS instance, including custom objects and fields. With this information, you can build dropdowns, checkboxes, etc.
 
-> For now, you can only access your manifest's Read Actions. Subscribe and Write Actions are coming soon. Please note that you still create an Installation with Subscribe and Write Actions by constructing the Config yourself and using [`useCreateInstallation`](headless#creating%2C-updating%2C-and-deleting-installations).
+> For now, you can only access your manifest's Read Actions. Please note that you still create an Installation with Subscribe and Write Actions using [`useCreateInstallation`](headless#creating%2C-updating%2C-and-deleting-installations). For write actions, you can also use `useConfig` to construct the config object, see [Manage write config](#manage-write-config).
 
 ```TypeScript
 import { useManifest } from "@amp-labs/react";
@@ -332,6 +332,32 @@ It returns these fields:
   setEnableWrite: () => void;  // Enable write for object
   setDisableWrite: () => void;  // Disable write for object
   getWriteObject: () => BaseWriteConfigObject | undefined;  // Get write object config
+   // advanced write features
+  // https://docs.withampersand.com/write-actions#advanced-use-cases
+  getDefaultValues: (fieldName: string) => FieldSettingDefault | undefined;
+  setDefaultValues: (params: {
+    fieldName: string;
+    value: FieldSettingDefault;
+  }) => void;
+  getWriteOnCreateSetting: (
+    fieldName: string,
+  ) => FieldSettingWriteOnCreateEnum | undefined;
+  setWriteOnCreateSetting: (params: {
+    fieldName: string;
+    value: FieldSettingWriteOnCreateEnum;
+  }) => void;
+  getWriteOnUpdateSetting: (
+    fieldName: string,
+  ) => FieldSettingWriteOnUpdateEnum | undefined;
+  setWriteOnUpdateSetting: (params: {
+    fieldName: string;
+    value: FieldSettingWriteOnUpdateEnum;
+  }) => void;
+  getSelectedFieldSettings: (fieldName: string) => FieldSetting | undefined;
+  setSelectedFieldSettings: (params: {
+    fieldName: string;
+    settings: FieldSetting;
+  }) => void;
 }
 ```
 
@@ -371,7 +397,7 @@ function ConfigManager() {
 }
 ```
 
-### Managing read config
+### Manage read config
 
 This is an example for how to use helper functions to more easily construct a read config, so you do not have to create the full config object manually.
 
@@ -397,9 +423,9 @@ function ReadObjectConfig() {
 }
 ```
 
-### Managing write config
+### Manage write config
 
-This is an example for how to use helper functions to more easily construct a write config, so you do not have to create the full config object manually.
+The headless UI library provides helper functions to more easily construct a write config. Here's a simple example that enables a particular object to be written to:
 
 ```typescript
 function WriteObjectConfig() {
@@ -411,9 +437,95 @@ function WriteObjectConfig() {
 }
 ```
 
-<Note>
-Support for [advanced write features](/write-actions#advanced-use-cases) coming soon.
-</Note>
+You can also configure [advanced write use cases](/write-actions#advanced-use-cases), which include the ability to:
+- Set default values for certain fields.
+- Prevent overwriting of existing customer data.
+
+#### Configure features individually
+
+You can configure write settings for individual features using these methods:
+
+```typescript
+function WriteObjectConfig() {
+  const config = useConfig();
+  const contactWriteConfig = config.writeObject("Contact");
+  
+  // Set default value for a field
+  contactWriteConfig.setDefaultValues({
+    fieldName: "source",
+    value: {
+      stringValue: "myApp"  // String default
+    }
+  });
+  
+  contactWriteConfig.setDefaultValues({
+    fieldName: "amount",
+    value: {
+      integerValue: 0  // Number default
+    }
+  });
+  
+  contactWriteConfig.setDefaultValues({
+    fieldName: "automated",
+    value: {
+      booleanValue: true  // Boolean default
+    }
+  });
+  
+  // Configure which fields should be written to during create operations
+  contactWriteConfig.setWriteOnCreateSetting({
+    fieldName: "source",
+    value: "always"  // Always write source field on create
+  });
+  
+  contactWriteConfig.setWriteOnCreateSetting({
+    fieldName: "notes",
+    value: "never"  // Never write notes field on create
+  });
+  
+  // Configure which fields should be written to during update operations
+  contactWriteConfig.setWriteOnUpdateSetting({
+    fieldName: "source",
+    value: "never"  // Never write source field on update
+  });
+  
+  contactWriteConfig.setWriteOnUpdateSetting({
+    fieldName: "notes",
+    value: "always"  // Always write notes field on update
+  });
+  
+  // Get current settings
+  const defaultValues = contactWriteConfig.getDefaultValues("source");
+  const writeOnCreate = contactWriteConfig.getWriteOnCreateSetting("source");
+  const writeOnUpdate = contactWriteConfig.getWriteOnUpdateSetting("source");
+}
+```
+
+#### Configure features together
+
+You can use `setFieldSettings` to set all advanced write features at once for a field:
+
+```typescript
+function WriteObjectConfig() {
+  const config = useConfig();
+  const contactWriteConfig = config.writeObject("Contact");
+  
+  // Configure a field with both write behavior and default value
+  contactWriteConfig.setFieldSettings({
+    fieldName: "customSource",
+    settings: {
+      writeOnCreate: "always",  // Write on create
+      writeOnUpdate: "never",   // Don't write on update
+      default: {
+        stringValue: "myApp"    // Default value
+      }
+    }
+  });
+
+  // Get current settings
+  const current = contactWriteConfig.getFieldSettings("customSource");
+}
+```
 
 ### Full example
 
@@ -470,6 +582,16 @@ It uses the following headless hooks:
 - [useManifest](#get-manifest-and-field-metadata): manage objects and metadata
 - [useConfig](#config-management): manage installation configuration state
 - [useCreateInstallation, useUpdateInstallation, and useDeleteInstallation](#installation-management): manage installation lifecycle
+
+### Demo app with write config
+
+[View the source code on GitHub](https://github.com/amp-labs/demo-headless-write)
+
+![Write Features Table Example](/images/headless/headless-write-app-table.png)
+
+The [headless write demo app](https://github.com/amp-labs/demo-headless-write) uses a Salesforce integration, and extends the [basic demo app](https://github.com/amp-labs/demo-headless) with:
+- Ability to set default values for fields when writing.
+- Ability to prevent overwriting of customer data.
 
 ### Pre-defined configuration flow
 
