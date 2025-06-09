@@ -306,6 +306,7 @@ const baseConfig = {
             "provider-guides/discord",
             "provider-guides/dixa",
             "provider-guides/docusign",
+            "provider-guides/domo",
             "provider-guides/drift",
             "provider-guides/dropbox",
             "provider-guides/dropboxsign",
