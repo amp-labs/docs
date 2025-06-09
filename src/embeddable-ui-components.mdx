@@ -57,7 +57,7 @@ function App() {
 
 ### Install integration
 
-The InstallIntegration component asks your customer for their SaaS credentials, and then guides them through the installation flow for an integration. If they've already installed this integration, then the component will display the current configuration of the integration and allow them to update it. 
+The `InstallIntegration` component asks your customer for their SaaS credentials, and then guides them through the installation flow for an integration. If they've already installed this integration, then the component will display the current configuration of the integration and allow them to update it. 
 
 Please note that each [group](/terminology#group) is able to install the integration once, so if someone else with the same `groupRef` has already installed the integration, then the user will not be able to install the same integration again.
 
@@ -160,6 +160,36 @@ const {
   isLoaded,
   isIntegrationInstalled
 } = useIsIntegrationInstalled("read-salesforce", groupRef);
+```
+
+### Check if specific objects are installed
+
+Currently, the [InstallIntegration](/embeddable-ui-components#install-integration) component will create an `Installation` as soon as the user saves a single object. This means that when
+ `useIsIntegrationInstalled` returns true for `isIntegrationInstalled`, not all objects would have been configured and saved yet. 
+ If you need to know when all objects or specific objects are installed, inspect the [Config](/reference/installation/update-an-installation#body-installation-config-content) object.
+
+
+```TypeScript
+const {
+  isLoaded,
+  isIntegrationInstalled, 
+  config,
+} = useIsIntegrationInstalled("read-salesforce", groupRef);
+
+// All 3 read objects are installed
+if (isLoaded && isIntegrationInstalled && config.read.objects.length === 3) {
+  // Do something 
+}
+
+// check if the Account object is installed
+if (isLoaded && isIntegrationInstalled && config.read.objects.filter(o => o.objectName === "Account").length === 1) {
+  // Do something 
+}
+
+// All 3 write objects are installed
+if (isLoaded && isIntegrationInstalled && config.write.objects === 3) {
+  // Do something 
+}
 ```
 
 ## Customize styles
