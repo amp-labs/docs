@@ -11,36 +11,26 @@ updatedAt: "Thu Aug 01 2024 00:50:25 GMT+0000 (Coordinated Universal Time)"
 ### Supported actions
 
 This connector supports:
-- [Read Actions](/read-actions), including full historic backfill and incremental read for some.
+- [Read Actions](/read-actions), including full historic backfill and incremental read for contacts.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.infusionsoft.com`.
 
 The Keap connector supports writing to and reading from the following objects:
-- [affiliates](https://developer.infusionsoft.com/docs/rest/#tag/Affiliate/operation/listAffiliatesUsingGET) (no update)
-- [appointments](https://developer.infusionsoft.com/docs/rest/#tag/Appointment/operation/listAppointmentsUsingGET) (incremental read)
-- [companies](https://developer.keap.com/docs/restv2/#tag/Company/operation/listCompaniesUsingGET_1)
-- [contacts](https://developer.keap.com/docs/restv2/#tag/Contact/operation/listContactsUsingGET_1) (incremental read)
-- [emails](https://developer.infusionsoft.com/docs/rest/#tag/Email/operation/listEmailsUsingGET) (no update)
-- [files](https://developer.infusionsoft.com/docs/rest/#tag/File/operation/listFilesUsingGET)
-- [hooks](https://developer.infusionsoft.com/docs/rest/#tag/REST-Hooks/operation/list_stored_hook_subscriptions)
-- [notes](https://developer.infusionsoft.com/docs/rest/#tag/Note/operation/listNotesUsingGET)
-- [opportunities](https://developer.infusionsoft.com/docs/rest/#tag/Opportunity/operation/listOpportunitiesUsingGET)
-- [orders](https://developer.infusionsoft.com/docs/rest/#tag/E-Commerce/operation/listOrdersUsingGET) (incremental read, create, no update)
-- [products](https://developer.infusionsoft.com/docs/rest/#tag/Product/operation/listProductsUsingGET)
-- [subscriptions](https://developer.infusionsoft.com/docs/rest/#tag/E-Commerce/operation/listSubscriptionsUsingGET)  (no update)
-- [tag_categories](https://developer.keap.com/docs/restv2/#tag/Tags/operation/listTagCategoriesUsingGET)
-- [tags](https://developer.keap.com/docs/restv2/#tag/Tags/operation/listTagsUsingGET_1)
-- [tasks](https://developer.infusionsoft.com/docs/rest/#tag/Task/operation/listTasksUsingGET) (incremental read)
-- [users](https://developer.infusionsoft.com/docs/rest/#tag/Users/operation/listUsersUsingGET) (no update)
-
-The Keap connector only supports reading from the following objects:
+- [automationCategory](https://developer.keap.com/docs/restv2/#tag/AutomationCategory/operation/listCategoriesUsingGET)
+- [automations](https://developer.keap.com/docs/restv2/#tag/Automation/operation/listAutomationsUsingGET)
 - [campaigns](https://developer.keap.com/docs/restv2/#tag/Campaign/operation/listCampaignsUsingGET_1)
-- [commissions](https://developer.infusionsoft.com/docs/rest/#tag/Affiliate/operation/listCommissionsUsingGET) (incremental read)
-- [merchants](https://developer.infusionsoft.com/docs/rest/#tag/Merchant/operation/getMerchantAccountsUsingGET)
-- [programs](https://developer.infusionsoft.com/docs/rest/#tag/Affiliate/operation/listProgramsUsingGET)
-- [redirectlinks](https://developer.infusionsoft.com/docs/rest/#tag/Affiliate/operation/listAffiliateRedirectLinksUsingGET)
-- [stage_pipeline](https://developer.infusionsoft.com/docs/rest/#tag/Opportunity/operation/listOpportunityStagePipelinesUsingGET)
-- [transactions](https://developer.infusionsoft.com/docs/rest/#tag/E-Commerce/operation/listTransactionsUsingGET) (incremental read)
+- [companies](https://developer.keap.com/docs/restv2/#tag/Company/operation/listCompaniesUsingGET_1)
+- [contacts/links/types](https://developer.keap.com/docs/restv2/#tag/Contact/operation/listContactLinkTypesUsingGET)
+- [contacts](https://developer.keap.com/docs/restv2/#tag/Contact/operation/listContactsUsingGET_1) (with incremental read)
+- [tags/categories](https://developer.keap.com/docs/restv2/#tag/Tags/operation/listTagCategoriesUsingGET)
+- [tags](https://developer.keap.com/docs/restv2/#tag/Tags/operation/listTagsUsingGET_1)
+- [tasks](https://developer.keap.com/docs/restv2/#tag/Task/operation/listTasksUsingGET_1)
+
+The Keap connector only supports modifying the following objects:
+- [affiliates](https://developer.keap.com/docs/restv2/#tag/Affiliate/operation/addAffiliateUsingPOST)
+- [emails](https://developer.keap.com/docs/restv2/#tag/Email/operation/createEmailUsingPOST_1)
+- [paymentMethodConfigs](https://developer.keap.com/docs/restv2/#tag/Payment-Method-Configs/operation/createPaymentMethodConfigUsingPOST)
+- [subscriptions](https://developer.keap.com/docs/restv2/#tag/Subscriptions/operation/createSubscriptionV2UsingPOST)
 
 Custom fields are returned just like any other field on objects that support them.
 
