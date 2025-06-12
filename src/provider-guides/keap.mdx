@@ -6,14 +6,35 @@ hidden: false
 createdAt: "Mon Jul 29 2024 16:13:49 GMT+0000 (Coordinated Universal Time)"
 updatedAt: "Thu Aug 01 2024 00:50:25 GMT+0000 (Coordinated Universal Time)"
 ---
-## What's Supported
+## What's supported
 
-### Supported Actions
+### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read for contacts.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.infusionsoft.com`.
 
-## Before You Get Started
+The Keap connector supports writing to and reading from the following objects:
+- [automationCategory](https://developer.keap.com/docs/restv2/#tag/AutomationCategory/operation/listCategoriesUsingGET)
+- [automations](https://developer.keap.com/docs/restv2/#tag/Automation/operation/listAutomationsUsingGET)
+- [campaigns](https://developer.keap.com/docs/restv2/#tag/Campaign/operation/listCampaignsUsingGET_1)
+- [companies](https://developer.keap.com/docs/restv2/#tag/Company/operation/listCompaniesUsingGET_1)
+- [contacts/links/types](https://developer.keap.com/docs/restv2/#tag/Contact/operation/listContactLinkTypesUsingGET)
+- [contacts](https://developer.keap.com/docs/restv2/#tag/Contact/operation/listContactsUsingGET_1) (with incremental read)
+- [tags/categories](https://developer.keap.com/docs/restv2/#tag/Tags/operation/listTagCategoriesUsingGET)
+- [tags](https://developer.keap.com/docs/restv2/#tag/Tags/operation/listTagsUsingGET_1)
+- [tasks](https://developer.keap.com/docs/restv2/#tag/Task/operation/listTasksUsingGET_1)
+
+The Keap connector only supports modifying the following objects:
+- [affiliates](https://developer.keap.com/docs/restv2/#tag/Affiliate/operation/addAffiliateUsingPOST)
+- [emails](https://developer.keap.com/docs/restv2/#tag/Email/operation/createEmailUsingPOST_1)
+- [paymentMethodConfigs](https://developer.keap.com/docs/restv2/#tag/Payment-Method-Configs/operation/createPaymentMethodConfigUsingPOST)
+- [subscriptions](https://developer.keap.com/docs/restv2/#tag/Subscriptions/operation/createSubscriptionV2UsingPOST)
+
+Custom fields are returned just like any other field on objects that support them.
+
+## Before you get started
 
 To integrate Keap with Ampersand, you will need a [Keap Developer Account](https://developer.infusionsoft.com/).
 
@@ -24,14 +45,14 @@ Once your account is created, you'll need to create an app in Keap and obtain th
 
 You will then use these credentials to connect your application to Ampersand.
 
-### Create a Keap Account
+### Create a Keap account
 
 Here's how you can sign up for a Keap account:
 
 - Go to the [Keap Developer Portal](https://developer.infusionsoft.com/).
 - Sign up using your preferred method and complete any necessary verification.
 
-### Creating a Keap App
+### Creating a Keap app
 
 Follow the steps below to create a Keap app and add the Ampersand redirect URL.
 
@@ -51,7 +72,7 @@ Follow the steps below to create a Keap app and add the Ampersand redirect URL.
 
 You will find the **App ID** and **Secret** in the app details. Note these credentials, as you will need them to connect your app to Ampersand.
 
-## Add Your Keap App Info to Ampersand
+## Add your Keap app info to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 
@@ -65,6 +86,6 @@ You will find the **App ID** and **Secret** in the app details. Note these crede
 
 5. Enter the previously obtained **App ID** in the **Client ID** field and **Secret** in the **Client Secret** field.
 
-![Ampersand Integration](/images/provider-guides/f474236-keap2.gif)
+   ![Ampersand Integration](/images/provider-guides/f474236-keap2.gif)
 
 6. Click **Save Changes**.
