@@ -313,6 +313,7 @@ const baseConfig = {
             "provider-guides/dynamicsBusinessCentral",
             "provider-guides/dynamicsCRM",
             "provider-guides/facebook",
+            "provider-guides/fathom",
             "provider-guides/figma",
             "provider-guides/fireflies",
             "provider-guides/formstack",
