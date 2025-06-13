@@ -26017,6 +26017,7 @@
                           "apiKey",
                           "basic",
                           "jwt",
+                          "custom",
                           "none"
                         ],
                         "x-oapi-codegen-extra-tags": {
@@ -26277,6 +26278,103 @@
                             "type": "string",
                             "description": "URL with more information about how to get or use an API key.",
                             "example": "https://docs.example.com/api-key",
+                            "x-go-type-skip-optional-pointer": true
+                          }
+                        }
+                      },
+                      "customOpts": {
+                        "title": "Custom Auth Options",
+                        "type": "object",
+                        "description": "Configuration for custom auth. Optional.",
+                        "properties": {
+                          "headers": {
+                            "type": "array",
+                            "items": {
+                              "title": "Custom Auth Header",
+                              "type": "object",
+                              "description": "A custom header to be used for authentication. Automatically added by the backend.",
+                              "required": [
+                                "name",
+                                "valueTemplate"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "X-Custom-Auth",
+                                  "description": "The name of the header."
+                                },
+                                "valueTemplate": {
+                                  "type": "string",
+                                  "example": "Bearer {{ .token }}",
+                                  "description": "The value of the header, represented as a Golang text/template expression. Only the backend will interpret this."
+                                }
+                              }
+                            },
+                            "description": "A list of custom headers to be used for authentication. The backend will add these headers.",
+                            "x-go-type-skip-optional-pointer": true
+                          },
+                          "queryParams": {
+                            "type": "array",
+                            "items": {
+                              "title": "Custom Auth Query Parameter",
+                              "type": "object",
+                              "description": "A custom query parameter to be used for authentication. Automatically added by the backend.",
+                              "required": [
+                                "name",
+                                "valueTemplate"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "custom_auth",
+                                  "description": "The name of the query parameter."
+                                },
+                                "valueTemplate": {
+                                  "type": "string",
+                                  "example": "{{ .token }}",
+                                  "description": "The value of the query parameter, represented as a Golang text/template expression. Only the backend will interpret this."
+                                }
+                              }
+                            },
+                            "description": "A list of custom query parameters to be used for authentication. The backend will add these query parameters.",
+                            "x-go-type-skip-optional-pointer": true
+                          },
+                          "inputs": {
+                            "type": "array",
+                            "items": {
+                              "title": "Custom Auth Input",
+                              "type": "object",
+                              "description": "A custom input field for authentication. This is used by the frontend to dynamically render input fields for custom auth. The backend will not interpret this. It will however receive the value of this field before making a request (in the connection secrets).",
+                              "required": [
+                                "name",
+                                "displayName"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "custom_auth_input",
+                                  "description": "The internal identifier for the custom auth input field."
+                                },
+                                "displayName": {
+                                  "type": "string",
+                                  "example": "Custom Auth Input",
+                                  "description": "The human-readable name for the custom auth input field."
+                                },
+                                "prompt": {
+                                  "type": "string",
+                                  "example": "See Authorization section of provider docs to obtain this value",
+                                  "description": "Some helpful text or context to be displayed to the user when asking for this input.",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "docsURL": {
+                                  "type": "string",
+                                  "example": "https://docs.example.com/custom-auth-input",
+                                  "description": "URL with details about this authentication mechanism and how to use it. Might be specific to this field, or a general URL for the provider. Optional.",
+                                  "x-go-type-skip-optional-pointer": true
+                                }
+                              }
+                            },
+                            "description": "A list of custom input fields for authentication. The frontend will render these input fields and the backend will receive the values of these fields before making a request.",
                             "x-go-type-skip-optional-pointer": true
                           }
                         }
@@ -26871,6 +26969,7 @@
                         "apiKey",
                         "basic",
                         "jwt",
+                        "custom",
                         "none"
                       ],
                       "x-oapi-codegen-extra-tags": {
@@ -27131,6 +27230,103 @@
                           "type": "string",
                           "description": "URL with more information about how to get or use an API key.",
                           "example": "https://docs.example.com/api-key",
+                          "x-go-type-skip-optional-pointer": true
+                        }
+                      }
+                    },
+                    "customOpts": {
+                      "title": "Custom Auth Options",
+                      "type": "object",
+                      "description": "Configuration for custom auth. Optional.",
+                      "properties": {
+                        "headers": {
+                          "type": "array",
+                          "items": {
+                            "title": "Custom Auth Header",
+                            "type": "object",
+                            "description": "A custom header to be used for authentication. Automatically added by the backend.",
+                            "required": [
+                              "name",
+                              "valueTemplate"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "X-Custom-Auth",
+                                "description": "The name of the header."
+                              },
+                              "valueTemplate": {
+                                "type": "string",
+                                "example": "Bearer {{ .token }}",
+                                "description": "The value of the header, represented as a Golang text/template expression. Only the backend will interpret this."
+                              }
+                            }
+                          },
+                          "description": "A list of custom headers to be used for authentication. The backend will add these headers.",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "queryParams": {
+                          "type": "array",
+                          "items": {
+                            "title": "Custom Auth Query Parameter",
+                            "type": "object",
+                            "description": "A custom query parameter to be used for authentication. Automatically added by the backend.",
+                            "required": [
+                              "name",
+                              "valueTemplate"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "custom_auth",
+                                "description": "The name of the query parameter."
+                              },
+                              "valueTemplate": {
+                                "type": "string",
+                                "example": "{{ .token }}",
+                                "description": "The value of the query parameter, represented as a Golang text/template expression. Only the backend will interpret this."
+                              }
+                            }
+                          },
+                          "description": "A list of custom query parameters to be used for authentication. The backend will add these query parameters.",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "inputs": {
+                          "type": "array",
+                          "items": {
+                            "title": "Custom Auth Input",
+                            "type": "object",
+                            "description": "A custom input field for authentication. This is used by the frontend to dynamically render input fields for custom auth. The backend will not interpret this. It will however receive the value of this field before making a request (in the connection secrets).",
+                            "required": [
+                              "name",
+                              "displayName"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "custom_auth_input",
+                                "description": "The internal identifier for the custom auth input field."
+                              },
+                              "displayName": {
+                                "type": "string",
+                                "example": "Custom Auth Input",
+                                "description": "The human-readable name for the custom auth input field."
+                              },
+                              "prompt": {
+                                "type": "string",
+                                "example": "See Authorization section of provider docs to obtain this value",
+                                "description": "Some helpful text or context to be displayed to the user when asking for this input.",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "docsURL": {
+                                "type": "string",
+                                "example": "https://docs.example.com/custom-auth-input",
+                                "description": "URL with details about this authentication mechanism and how to use it. Might be specific to this field, or a general URL for the provider. Optional.",
+                                "x-go-type-skip-optional-pointer": true
+                              }
+                            }
+                          },
+                          "description": "A list of custom input fields for authentication. The frontend will render these input fields and the backend will receive the values of these fields before making a request.",
                           "x-go-type-skip-optional-pointer": true
                         }
                       }
@@ -31855,6 +32051,18 @@
                         "type": "string",
                         "description": "The API key to use for the connection."
                       },
+                      "customAuth": {
+                        "type": "object",
+                        "description": "Values used for custom auth input variables.",
+                        "additionalProperties": {
+                          "type": "string",
+                          "nullable": false
+                        },
+                        "example": {
+                          "apiKey": "abcd1234",
+                          "password": "secret"
+                        }
+                      },
                       "basicAuth": {
                         "type": "object",
                         "required": [
@@ -34051,6 +34259,18 @@
                       "apiKey": {
                         "type": "string",
                         "description": "The API key to use for the connection."
+                      },
+                      "customAuth": {
+                        "type": "object",
+                        "description": "Values used for custom auth input variables.",
+                        "additionalProperties": {
+                          "type": "string",
+                          "nullable": false
+                        },
+                        "example": {
+                          "apiKey": "abcd1234",
+                          "password": "secret"
+                        }
                       },
                       "basicAuth": {
                         "type": "object",
@@ -49068,6 +49288,18 @@
                 "type": "string",
                 "description": "The API key to use for the connection."
               },
+              "customAuth": {
+                "type": "object",
+                "description": "Values used for custom auth input variables.",
+                "additionalProperties": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "example": {
+                  "apiKey": "abcd1234",
+                  "password": "secret"
+                }
+              },
               "basicAuth": {
                 "type": "object",
                 "required": [
@@ -49266,6 +49498,18 @@
           "apiKey": {
             "type": "string",
             "description": "The API key to use for the connection."
+          },
+          "customAuth": {
+            "type": "object",
+            "description": "Values used for custom auth input variables.",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": false
+            },
+            "example": {
+              "apiKey": "abcd1234",
+              "password": "secret"
+            }
           },
           "basicAuth": {
             "type": "object",
@@ -49466,6 +49710,18 @@
               "apiKey": {
                 "type": "string",
                 "description": "The API key to use for the connection."
+              },
+              "customAuth": {
+                "type": "object",
+                "description": "Values used for custom auth input variables.",
+                "additionalProperties": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "example": {
+                  "apiKey": "abcd1234",
+                  "password": "secret"
+                }
               },
               "basicAuth": {
                 "type": "object",
