@@ -1,0 +1,43 @@
+---
+title: EmailBison
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}/api`.
+
+### Example integration
+
+To define an integration for EmailBison, create a manifest file that looks like this:
+
+```YAML
+#amp.yaml
+specVersion: 1.0.0
+integrations: 
+  - name: emailbison-integration
+    displayName: EmailBison
+    provider: emailBison
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To integrate with EmailBison:
+- Create a manifest file similar to the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for an API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key provided by the customer. Please note that this connector's base URL is `https://{{.workspace}}/api`.
+
+## Creating an API key for EmailBison
+
+1. Log in to your EmailBison account.
+2. Click **Settings** and navigate to **Developer API**.
+3. Click **New API Token**.
+4. Enter the token name in the **Token Name** section.
+5. Select the **Token Type** then click **Generate Token**.
+![Generate Token](/images/provider-guides/emailBison.gif)
