@@ -11,7 +11,39 @@ updatedAt: "Fri Jul 19 2024 21:55:29 GMT+0000 (Coordinated Universal Time)"
 ### Supported Actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Pinterest instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.pinterest.com`.
+
+### Supported Objects
+The pinterest connector supports reading from the following objects:
+- [pins](https://developers.pinterest.com/docs/api/v5/pins-list)
+- [boards](https://developers.pinterest.com/docs/api/v5/boards-list)
+- [media](https://developers.pinterest.com/docs/api/v5/media-list)
+- [ad_accounts](https://developers.pinterest.com/docs/api/v5/ad_accounts-list)
+- [catalogs](https://developers.pinterest.com/docs/api/v5/catalogs-list)
+- [employers](https://developers.pinterest.com/docs/api/v5/get-business_employers)
+- [feeds](https://developers.pinterest.com/docs/api/v5/feeds-list)
+- [product_groups](https://developers.pinterest.com/docs/api/v5/catalogs_product_groups-list)
+- [integrations](https://developers.pinterest.com/docs/api/v5/integrations-get_list)
+- [stats](https://developers.pinterest.com/docs/api/v5/reports-stats)
+
+The pinterest connector supports writing from the following objects:
+- [pins](https://developers.pinterest.com/docs/api/v5/pins-create)
+- [boards](https://developers.pinterest.com/docs/api/v5/boards-create)
+- [media](https://developers.pinterest.com/docs/api/v5/media-create)
+- [ad_accounts](https://developers.pinterest.com/docs/api/v5/ad_accounts-create)
+- [catalogs](https://developers.pinterest.com/docs/api/v5/catalogs-create)
+- [feeds](https://developers.pinterest.com/docs/api/v5/feeds-create)
+- [product_groups](https://developers.pinterest.com/docs/api/v5/catalogs_product_groups-create)
+- [websites](https://developers.pinterest.com/docs/api/v5/verify_website-update)
+- [commerce](https://developers.pinterest.com/docs/api/v5/integrations_commerce-post)
+- [logs](https://developers.pinterest.com/docs/api/v5/integrations_logs-post)
+- [reports](https://developers.pinterest.com/docs/api/v5/reports-create)
+
+### Example integration
+
+For an example manifest file of an Pinterest integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/pinterest/amp.yaml).
 
 ## Before You Get Started
 
@@ -84,3 +116,15 @@ You'll find the **App ID**, **App Secret**, and **Scopes** keys in the **Configu
    ![Alt text](/images/provider-guides/5acff64-pinterest3.gif)
 
 7. Click **Save changes**.
+
+## Using the connector
+
+To start integrating with Pinterest:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/pinterest/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
