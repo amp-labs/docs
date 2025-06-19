@@ -1,0 +1,47 @@
+---
+title: Clari Copilot
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://rest-api.copilot.clari.com`.
+
+### Example integration
+
+To define an integration for Clari Copilot, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: clari-copilot-integration
+    displayName: My Clari Copilot Integration
+    provider: clariCopilot
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses API Key auth along with an API Secret, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Clari Copilot:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API Key and API Secret.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach both required authentication headers supplied by the customer. Please note that this connector's base URL is `https://rest-api.copilot.clari.com`.
+
+
+### Creating API credentials
+
+1. Log in to your Clari Copilot account.
+2. Navigate to **Workspace Settings** > **Integrations** > **Clari Copilot API**.
+![Clari Copilot API Settings](/images/provider-guides/clariCopilot_apikey.png)
+3. You'll find both your API Key and API Secret in this section.
+
+
+## API documentation
+
+For more detailed information about Clari Copilot API, refer to the [Clari Copilot API documentation](https://api-doc.copilot.clari.com/).

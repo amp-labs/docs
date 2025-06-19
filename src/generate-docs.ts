@@ -294,6 +294,7 @@ const baseConfig = {
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
             "provider-guides/clari",
+            "provider-guides/clariCopilot",
             "provider-guides/clickup",
             "provider-guides/close",
             "provider-guides/coda",
