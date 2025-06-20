@@ -1,8 +1,10 @@
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 import platformApiPages from "./reference/platform.json";
 import readApiPages from "./reference/read.json";
 import writeApiPages from "./reference/write.json";
-import fs from "fs";
 import matter from 'gray-matter';
+import fs from "fs";
 
 // These declare the OpenAPI specs that are used to generate the API reference pages. They come in handy
 // when we have similar paths across different endpoints / specs. For example, the `read` and `write` specs have
@@ -11,63 +13,147 @@ const openApiPlatform = "platform";
 const openApiRead = "read";
 const openApiWrite = "write";
 
-export interface MintConfig {
-  name?: string;
-  // OpenAPI specs to refer to for all pages in this group. Used by mintlify to generate the API reference pages. Needs
-  // to be here to be able to refer to them in pages.
-  openapi?: Array<string>;
-  logo?: {
-    light?: string;
-    dark?: string;
-    href?: string;
-  };
-  favicon?: string;
+export interface DocsConfig {
+  $schema: string;
+  theme: string;
+  name: string;
   colors?: {
     primary?: string;
     light?: string;
     dark?: string;
   };
-  topbarLinks?: Array<{
-    name?: string;
-    url?: string;
-  }>;
-  tabs?: Array<{
-    name?: string;
-    url?: string;
-  }>;
-  topbarCtaButton?: {
-    name?: string;
-    url?: string;
+  favicon?: string;
+  navigation: {
+    tabs: Array<{
+      tab: string;
+      groups: Array<NavigationGroup>;
+    }>;
   };
-  anchors?: Array<{
-    name?: string;
-    icon?: string;
-    url?: string;
-  }>;
-
-  feedback?: {
-    thumbsRating?: boolean;
-    suggestEdit?: boolean;
-    raiseIssue?: boolean;
-  }
-
-  navigation: NavigationGroup[];
-  backgroundImage?: string;
-  footerSocials?: {
-    github?: string;
-    discord?: string;
-    twitter?: string;
-    linkedin?: string;
+  logo?: {
+    light?: string;
+    dark?: string;
+    href?: string;
   };
-  analytics?: {
-    posthog?: {
-      apiKey?: string;
+  api?: {
+    openapi?: Array<string>;
+  };
+  navbar?: {
+    links?: Array<{
+      label: string;
+      href: string;
+    }>;
+    primary?: {
+      type: string;
+      label: string;
+      href: string;
     };
   };
-  [key: string]: unknown;
+  footer?: {
+    socials?: {
+      github?: string;
+      discord?: string;
+      twitter?: string;
+      linkedin?: string;
+    };
+  };
+  redirects?: Array<{
+    source: string;
+    destination: string;
+  }>;
 }
 
-const mintConfig: MintConfig = {
+interface NavigationGroup {
+  group: string;
+  pages: Array<string | NavigationGroup>;
+  
+  // OpenAPI spec to refer to for all methods in this group. This is helpful to avoid collisions when we have similar
+  // paths across different endpoints / specs. For example, the `read` and `write` specs have the same POST path for
+  // on-demand read & write. It is also a script property, so we omit it when the config is jsonified, because the rest
+  // of the config is what Mintlify consumes. If you decide to modify this field, you'll need to update the JSON.Stringify
+  // replacer below. Read more at https://mintlify.com/docs/api-playground/openapi/setup#manually-specify-files
+  openapiSource?: string;
+}
+
+
+// Convert navigation array to DocsConfig navigation format
+function convertNavigation(mintNavigation: Array<any>): Array<NavigationGroup> {
+  return mintNavigation.map(group => {
+    if (typeof group === 'string') {
+      return {
+        group: '',
+        pages: [group]
+      };
+    }
+    return {
+      group: group.group,
+      pages: Array.isArray(group.pages) ? group.pages.map((page: any) => {
+        if (typeof page === 'string') {
+          return page;
+        }
+        return {
+          group: page.group,
+          pages: page.pages
+        };
+      }) : []
+    };
+  });
+}
+
+// Main function to generate docs.json
+export function generateDocsConfig(mintConfig: any): DocsConfig {
+  const docsConfig: DocsConfig = {
+    $schema: 'https://mintlify.com/docs.json',
+    theme: 'mint',
+    name: mintConfig.name,
+    colors: mintConfig.colors,
+    favicon: mintConfig.favicon,
+    navigation: {
+      tabs: [
+        {
+          tab: 'Documentation',
+          groups: convertNavigation(mintConfig.navigation.filter((group: any) => 
+            !group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
+        },
+        {
+          tab: 'API Reference',
+          groups: convertNavigation(mintConfig.navigation.filter((group: any) => 
+            group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
+        }
+      ]
+    },
+    logo: mintConfig.logo,
+    api: {
+      openapi: ['./platform.json', './read.json', './write.json']
+    },
+    navbar: {
+      links: mintConfig.topbarLinks?.map((link: any) => ({
+        label: link.name,
+        href: link.url
+      })),
+      primary: mintConfig.topbarCtaButton ? {
+        type: 'button',
+        label: mintConfig.topbarCtaButton.name,
+        href: mintConfig.topbarCtaButton.url
+      } : undefined
+    },
+    footer: {
+      socials: mintConfig.footerSocials
+    },
+    redirects: mintConfig.redirects
+  };
+
+  return docsConfig;
+}
+
+// Function to write docs.json
+export function writeDocsJson(docsConfig: DocsConfig, outputPath: string = 'docs.json'): void {
+  const jsonContent = JSON.stringify(docsConfig, null, 2);
+  writeFileSync(join(__dirname, outputPath), jsonContent);
+  console.log(`Generated ${outputPath} successfully!`);
+}
+
+// Create the base configuration
+const baseConfig = {
   name: "Ampersand",
   openapi: [openApiPlatform, openApiRead, openApiWrite],
   logo: {
@@ -91,58 +177,51 @@ const mintConfig: MintConfig = {
       url: "https://dashboard.withampersand.com/sign-in",
     },
   ],
-  "redirects": [
+  redirects: [
     {
-      "source": "/docs/:slug*",
-      "destination": "/:slug*"
+      source: "/docs/:slug*",
+      destination: "/:slug*"
     },
     {
-      "source": "/docs/read-actions",
-      "destination": "/read-actions"
+      source: "/docs/read-actions",
+      destination: "/read-actions"
     },
     {
-      "source": "/docs/write-actions",
-      "destination": "/write-actions"
+      source: "/docs/write-actions",
+      destination: "/write-actions"
     },
     {
-      "source": "/docs/proxy-actions",
-      "destination": "/proxy-actions"
+      source: "/docs/proxy-actions",
+      destination: "/proxy-actions"
     },
     {
-      "source": "/define-integrations/read-actions",
-      "destination": "/read-actions"
+      source: "/define-integrations/read-actions",
+      destination: "/read-actions"
     },
     {
-      "source": "/define-integrations/write-actions",
-      "destination": "/write-actions"
+      source: "/define-integrations/write-actions",
+      destination: "/write-actions"
     },
     {
-      "source": "/define-integrations/proxy-actions",
-      "destination": "/proxy-actions"
+      source: "/define-integrations/proxy-actions",
+      destination: "/proxy-actions"
     },
     {
-      "source": "/define-integrations/subscribe-actions",
-      "destination": "/subscribe-actions"
+      source: "/define-integrations/subscribe-actions",
+      destination: "/subscribe-actions"
     },
     {
-      "source": "/manifest",
-      "destination": "/manifest-schema"
-    },
-    {
-      "source": "/glossary",
-      "destination": "/terminology"
+      source: "/glossary",
+      destination: "/terminology"
     },
   ],
-  tabs: [
-    {
-      name: "API Reference",
-      url: "reference",
-    },
-  ],
-
+  footerSocials: {
+    linkedin: "https://www.linkedin.com/company/withampersand",
+    twitter: "https://twitter.com/withampersand",
+  },
   navigation: [
     {
-      group: "",
+      group: "Getting started",
       pages: [
         {
           group: "Get started",
@@ -157,8 +236,21 @@ const mintConfig: MintConfig = {
         "read-actions",
         "write-actions",
         "proxy-actions",
+        {
+          group: "AI Agents",
+          pages: [
+            "ai-sdk",
+            "mcp",
+          ]
+        },
         "object-and-field-mapping",
-        "embeddable-ui-components",
+        {
+          group: "UI library",
+          pages: [
+            "embeddable-ui-components",
+            "headless"
+          ]
+        },
         {
           group: "CLI",
           pages: [
@@ -202,6 +294,7 @@ const mintConfig: MintConfig = {
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
             "provider-guides/clari",
+            "provider-guides/clariCopilot",
             "provider-guides/clickup",
             "provider-guides/close",
             "provider-guides/coda",
@@ -214,6 +307,7 @@ const mintConfig: MintConfig = {
             "provider-guides/discord",
             "provider-guides/dixa",
             "provider-guides/docusign",
+            "provider-guides/domo",
             "provider-guides/drift",
             "provider-guides/dropbox",
             "provider-guides/dropboxsign",
@@ -254,6 +348,7 @@ const mintConfig: MintConfig = {
             "provider-guides/kit",
             "provider-guides/klaviyo",
             "provider-guides/lever",
+            "provider-guides/linear",
             "provider-guides/linkedin",
             "provider-guides/livestorm",
             "provider-guides/lemlist",
@@ -267,6 +362,7 @@ const mintConfig: MintConfig = {
             "provider-guides/notion",
             "provider-guides/nutshell",
             "provider-guides/openAI",
+            "provider-guides/outplay",
             "provider-guides/outreach",
             "provider-guides/paddle",
             "provider-guides/paddleSandbox",
@@ -274,7 +370,7 @@ const mintConfig: MintConfig = {
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
             "provider-guides/podium",
-            "provider-guides/productBoard",
+            "provider-guides/productboard",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
@@ -302,7 +398,7 @@ const mintConfig: MintConfig = {
             "provider-guides/zoho",
             "provider-guides/zohoDesk",
             "provider-guides/zoom"
-          ],
+          ]
         },
         "dev-and-prod-environments",
         {
@@ -315,7 +411,6 @@ const mintConfig: MintConfig = {
             "customer-guides/update-connection"
           ]
         },
-        "manifest-schema",
         "terminology"
       ],
     },
@@ -327,49 +422,20 @@ const mintConfig: MintConfig = {
     },
     {
       group: "WRITE API",
-      openapiSource: openApiWrite,
       pages: writeApiPages,
+      openapiSource: openApiWrite,
     },
     {
       group: "READ API",
-      openapiSource: openApiRead,
       pages: readApiPages,
+      openapiSource: openApiRead,
     },
     {
       group: "PLATFORM API",
-      openapiSource: openApiPlatform,
       pages: platformApiPages,
+      openapiSource: openApiPlatform,
     },
-  ],
-
-  footerSocials: {
-    linkedin: "https://www.linkedin.com/company/withampersand",
-    twitter: "https://twitter.com/withampersand",
-  },
-
-  feedback: {
-    thumbsRating: true,
-    suggestEdit: true,
-    raiseIssue: true,
-  }
-};
-
-interface NavigationGroup {
-  group: string;
-  pages: Array<string | NavigationGroup>;
-
-  // OpenAPI spec to refer to for all methods in this group. This is helpful to avoid collisions when we have similar
-  // paths across different endpoints / specs. For example, the `read` and `write` specs have the same POST path for
-  // on-demand read & write. It is also a script property, so we omit it when the config is jsonified, because the rest
-  // of the config is what Mintlify consumes. If you decide to modify this field, you'll need to update the JSON.Stringify
-  // replacer below. Read more at https://mintlify.com/docs/api-playground/openapi/setup#manually-specify-files
-  openapiSource?: string;
-}
-
-const jsonStringifyReplacer = function (key: string, val: any) {
-  if (key !== 'openapiSource') {
-    return val;
-  }
+  ]
 };
 
 // This function traverses the navigation groups and runs a function on each page.
@@ -378,16 +444,17 @@ const traverseNavigationGroups = (
   processPage: (pagePath: string, groupOpenapiSource: string | undefined) => void,
   openapiSource?: string
 ) => {
-  const groupOpenapiSource = group.openapiSource || openapiSource;
+const groupOpenapiSource = group.openapiSource || openapiSource;
 
-  group.pages.forEach((page) => {
-    if (typeof page === "string") {
-      processPage(page, groupOpenapiSource);
-    } else if (typeof page === "object") {
-      traverseNavigationGroups(page, processPage, groupOpenapiSource);
-    }
-  });
+group.pages.forEach((page) => {
+  if (typeof page === "string") {
+    processPage(page, groupOpenapiSource);
+  } else if (typeof page === "object") {
+    traverseNavigationGroups(page, processPage, groupOpenapiSource);
+  }
+});
 };
+
 
 // This function reads the content of the page, and prefixes the openapi directive with the source.
 const addOpenapiSource = (pagePath: string, groupOpenapiSource: string | undefined) => {
@@ -427,21 +494,26 @@ const addOpenapiSource = (pagePath: string, groupOpenapiSource: string | undefin
 };
 
 
-// Main script
-try {
-  const outPath = process.argv[2];
-  if (outPath) {
-    console.log(`[${new Date().toISOString()}] Writing mint config to ${outPath}`);
 
-    // Traverse the navigation groups and update autogenerated pages with OpenAPI references
-    mintConfig.navigation.forEach((group) =>
-      traverseNavigationGroups(group, addOpenapiSource)
-    );
+// If running directly
+if (require.main === module) {
+  try {
+    const outPath = process.argv[2];
+    if (outPath) {
+      console.log(`[${new Date().toISOString()}] Writing docs config to ${outPath}`);
+      const docsConfig = generateDocsConfig(baseConfig);
 
-    fs.writeFileSync(outPath, JSON.stringify(mintConfig, jsonStringifyReplacer, 2));
-  } else {
-    console.log(JSON.stringify(mintConfig, jsonStringifyReplacer));
+      // Traverse the navigation groups and update autogenerated pages with OpenAPI references
+      baseConfig.navigation.forEach((group) =>
+        traverseNavigationGroups(group, addOpenapiSource)
+      );
+
+      writeDocsJson(docsConfig, outPath);
+    } else {
+      const docsConfig = generateDocsConfig(baseConfig);
+      console.log(JSON.stringify(docsConfig, null, 2));
+    }
+  } catch (error) {
+    console.log('error generating docs config', error);
   }
-} catch (error) {
-  console.log('error generating mintlify config', error);
-}
+} 

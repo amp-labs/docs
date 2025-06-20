@@ -1,0 +1,48 @@
+---
+title: MCP Server
+---
+
+Connect your agents to the 150+ connectors we offer at Ampersand via this multi-tenant MCP server. We expose the primitives we offer on the Ampersand platform as native tools here.
+
+<Note>
+  The Ampersand MCP server is in alpha. It may change in non backwards-compatible ways. (Although we are very serious about semantic versioning.)
+  
+  If you have any feedback, please file an issue [on Github](https://github.com/amp-labs/ai/issues).
+</Note>
+
+## Connect to the MCP server
+
+Here is how you can connect to the Ampersand hosted MCP server from your AI agent or from another MCP client (such as Cursor or OpenAPI Responses API). Please see [client-specific configuration](/use-with-ai-ide#client-specific-configuration) for how to configure the most popular MCP clients.
+
+If you wish to locally run the server, please see instructions in the [Github README](https://github.com/amp-labs/ai/tree/main/mcp-server#readme).
+
+If your MCP client supports headers:
+
+```JSON
+{
+  "mcpServers": {
+    "@amp-labs/mcp-server": {
+      "url": "https://mcp.withampersand.com/v1/sse?project=<AMPERSAND_PROJECT_ID>&integrationName=<AMPERSAND_INTEGRATION_NAME>&groupRef=<AMPERSAND_GROUP_REF>",
+      "headers": {
+        "x-api-key": "<AMPERSAND_API_KEY>"
+      }
+    }
+  }
+}
+```
+
+If your MCP client does not support headers, you can pass the API key in the query param:
+
+```JSON
+{
+  "mcpServers": {
+    "@amp-labs/mcp-server": {
+      "url": "https://mcp.withampersand.com/v1/sse?apiKey=<AMPERSAND_API_KEY>&project=<AMPERSAND_PROJECT_ID>&integrationName=<AMPERSAND_INTEGRATION_NAME>&groupRef=<AMPERSAND_GROUP_REF>"
+    }
+  }
+}
+```
+
+## Available tools
+
+The Ampersand MCP server exposes the same set of tools that are available in the [Ampersand AI SDK](/ai-sdk#available-tools).

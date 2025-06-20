@@ -1,0 +1,99 @@
+---
+title: Ampersand AI SDK
+---
+
+The [Ampersand AI SDK](https://www.npmjs.com/package/@amp-labs/ai) enables AI agents to seamlessly perform operations on connected SaaS tools through Ampersand's platform.
+
+<Note>
+  The Ampersand AI SDK is in alpha. It may change in non backwards-compatible ways. (Although we are very serious about semantic versioning.)
+  
+  If you have any feedback, please file an issue [on Github](https://github.com/amp-labs/ai/issues).
+</Note>
+
+## Installation
+
+```bash
+npm install @amp-labs/ai
+# or
+yarn add @amp-labs/ai
+# or
+pnpm add @amp-labs/ai
+```
+
+## Usage
+
+The SDK provides several modules that can be used depending on your framework preference:
+
+### Use with Vercel AI SDK
+
+[AI SDK](https://ai-sdk.dev/) by Vercel unifies LLM access in TypeScript & makes it easy to build AI agents. 
+
+This is a simple example of how to use the AI SDK tools by Ampersand in a Vercel AI agent.
+
+```typescript
+import { openai } from '@ai-sdk/openai';
+import { generateObject, generateText } from 'ai';
+import { z } from 'zod';
+import { createRecord, updateRecord } from "@amp-labs/ai/aisdk";
+
+// Vercel Agent with AI SDK tools by Ampersand
+async function handleCustomerQuery(query: string) {
+  const model = openai('gpt-4o');
+
+  const { text: response } = await generateText({
+    model:
+      classification.complexity === 'simple'
+        ? openai('gpt-4o-mini')
+        : openai('o3-mini'),
+    system: '... your system prompt here',
+    prompt: query,
+    tools: {
+      // AI SDK tools by Ampersand being used here
+      createRecord,
+      updateRecord,
+    },
+  });
+
+  return { response };
+}
+```
+
+### Use with Mastra
+
+[Mastra](https://mastra.ai) is a Typescript toolkit that offers agent workflows and eval tools so teams can turn prototypes into production-ready AI agents.
+
+This is a simple example of how to use the AI SDK tools by Ampersand in an agent built with Mastra.
+
+```typescript
+import { Agent } from "@mastra/core/agent";
+import { openai } from "@ai-sdk/openai";
+import { createRecord, updateRecord } from "@amp-labs/ai/mastra";
+
+// Mastra Agent with Mastra tools
+export const mastraToolsAgent: Agent = new Agent({
+  name: "Mastra Tools Agent",
+  instructions: "You can use tools defined in Mastra.",
+  model: openai("gpt-4o-mini"),
+  tools: {
+    createRecord,
+    updateRecord,
+  },
+});
+```
+
+## Available Tools
+
+The SDK provides the following tools for interacting with SaaS platforms:
+
+| Tool | Description | Purpose |
+|------|-------------|---------|
+| `createRecord` | Creates a new record in the connected SaaS platform | Create new records like contacts, deals, tickets etc. |
+| `updateRecord` | Updates an existing record in the connected SaaS platform | Modify existing records with new data |
+| `sendReadRequest` | Makes authenticated GET API calls to the provider through Ampersand | Reading and searching records |
+| `sendRequest` | Makes authenticated API calls to the provider through Ampersand | Do any action that is available via the API |
+| `checkConnection` | Verifies if there is an active connection to the SaaS provider | Validate connection status before creating an installation |
+| `createInstallation` | Creates a new installation for a provider | Create an installation for an existing connection |
+| `checkInstallation` | Checks if there is an active installation for a provider | Verify installation status |
+| `startOAuth` | Returns URL for initiating OAuth flow for connecting to a provider | Authenticates a new user |
+
+Have a tool in mind that we could add? Let us know [on Discord!](https://discord.gg/BWP4BpKHvf)
