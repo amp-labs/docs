@@ -313,6 +313,7 @@ const baseConfig = {
             "provider-guides/dropboxsign",
             "provider-guides/dynamicsBusinessCentral",
             "provider-guides/dynamicsCRM",
+            "provider-guides/emailBison",
             "provider-guides/facebook",
             "provider-guides/figma",
             "provider-guides/fireflies",
