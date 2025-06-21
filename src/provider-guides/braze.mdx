@@ -1,0 +1,43 @@
+---
+title: Braze
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://rest.{{.restInstanceId}}.braze.com`.
+
+### Example integration
+
+To define an integration for Braze, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: braze-integration
+    displayName: My Braze Integration
+    provider: braze
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Braze:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key and Rest Instance Id.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://rest.{{.restInstanceId}}.braze.com`.
+
+## Creating an API key for Braze
+
+[Click here](https://www.braze.com/docs/api/basics/#creating-rest-api-keys) for more information about generating an API key for Braze. The UI components will display this link, so that your users can successfully create API keys.
+
+The Rest Instance ID can also be found on the same page.
+
+![Braze API key](/images/provider-guides/braze-api-key.png)
+
