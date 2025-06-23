@@ -10,6 +10,8 @@ This connector supports:
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://rest-api.copilot.clari.com`.
 
+> **Important Note on Incremental Reads for Calls**: The incremental read functionality for `calls` is based on the `last_modified_time` field. However, this timestamp only updates when the call's status changes, not when other fields (like name, email, etc.) are modified. This means that incremental reads may miss updates to non-status fields that occur between scheduled reads.
+
 
 ### Supported Objects
 
