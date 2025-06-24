@@ -294,6 +294,7 @@ const baseConfig = {
             "provider-guides/campaignMonitor",
             "provider-guides/capsule",
             "provider-guides/chargebee",
+            "provider-guides/chargeover",
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
             "provider-guides/clari",
