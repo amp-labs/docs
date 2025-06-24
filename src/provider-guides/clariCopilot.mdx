@@ -6,33 +6,31 @@ title: Clari Copilot
 ### Supported actions
 
 This connector supports:
-- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Customer Clari Copilot instance will be done for each scheduled read.
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `calls`, currently. For all other objects, a full read of the Clari Copilot instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://rest-api.copilot.clari.com`.
+
+> **Important Note on Incremental Reads for Calls**: The incremental read functionality for `calls` is based on the `last_modified_time` field. However, this timestamp only updates when the call's status changes, not when other fields (like name, email, etc.) are modified. This means that incremental reads may miss updates to non-status fields that occur between scheduled reads.
 
 
 ### Supported Objects
 
 The Clari Copilot connector supports reading from the following objects:
-- [calls](https://api-doc.copilot.clari.com/#tag/call/paths/~1calls/get) (read)
+- [accounts](https://api-doc.copilot.clari.com/#tag/account/paths/~1create-account/post) (write)
+- [calls](https://api-doc.copilot.clari.com/#tag/call/paths/~1calls/get) (read, write)
+- [contacts](https://api-doc.copilot.clari.com/#tag/contact/paths/~1create-contact/post) (write)
+- [deals](https://api-doc.copilot.clari.com/#tag/deal/paths/~1create-deal/post) (write)
 - [users](https://api-doc.copilot.clari.com/#tag/user) (read)
 - [topics](https://api-doc.copilot.clari.com/#tag/topics/paths/~1v2~1topics/get) (read)
 - [scorecard](https://api-doc.copilot.clari.com/#tag/scorecard) (read)
+- [scorecard-template](https://api-doc.copilot.clari.com/#tag/scorecard) (read)
+
 
 
 ### Example integration
 
-To define an integration for Clari Copilot, create a manifest file that looks like this:
+For an example manifest file of a Clari Copilot integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/clariCopilot/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: clari-copilot-integration
-    displayName: My Clari Copilot Integration
-    provider: clariCopilot
-    proxy:
-      enabled: true
-```
 
 ## Using the connector
 
