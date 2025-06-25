@@ -335,7 +335,6 @@ const baseConfig = {
             "provider-guides/hubspot",
             "provider-guides/hunter",
             "provider-guides/insightly",
-            "provider-guides/instantlyai",
             "provider-guides/instantly",
             "provider-guides/intercom",
             "provider-guides/ironclad",
