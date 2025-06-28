@@ -6,14 +6,48 @@ title: Dixa
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Dixa instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://dev.dixa.io`.
+
+### Supported Objects
+
+The Dixa connector supports reading from the following objects:
+
+- [agents](https://docs.dixa.io/openapi/dixa-api/v1/tag/Agents/#tag/Agents/operation/getAgents)
+- [knowledge/collections](https://docs.dixa.io/openapi/dixa-api/v1/tag/Knowledge/#tag/Knowledge/operation/getKnowledgeCollections)
+- [custom-attributes](https://docs.dixa.io/openapi/dixa-api/v1/tag/Custom-Attributes/#tag/Custom-Attributes/operation/getCustom-attributes)
+- [endusers](https://docs.dixa.io/openapi/dixa-api/v1/tag/End-Users/#tag/End-Users/operation/getEndusers)
+- [conversations/flows](https://docs.dixa.io/openapi/dixa-api/v1/tag/Conversations/#tag/Conversations/operation/getConversationsFlows)
+- [agents/presence](https://docs.dixa.io/openapi/dixa-api/v1/tag/Agents/#tag/Agents/operation/getAgentsPresence)
+- [queues](https://docs.dixa.io/openapi/dixa-api/v1/tag/Queues/#tag/Queues/operation/getQueues)
+- [analytics/records](https://docs.dixa.io/openapi/dixa-api/v1/tag/Analytics/#tag/Analytics/operation/getAnalyticsRecords)
+- [tags](https://docs.dixa.io/openapi/dixa-api/v1/tag/Tags/#tag/Tags/operation/getTags)
+- [teams](https://docs.dixa.io/openapi/dixa-api/v1/tag/Teams/#tag/Teams/operation/getTeams)
+- [webhooks](https://docs.dixa.io/openapi/dixa-api/v1/tag/Webhooks/#tag/Webhooks/operation/getWebhooks)
+- [contact-endpoints](https://docs.dixa.io/openapi/dixa-api/v1/tag/Contact-Endpoints/#tag/Contact-Endpoints/operation/getContact-endpoints)
+- [business-hours/schedules](https://docs.dixa.io/openapi/dixa-api/v1/tag/Business-Hours/#tag/Business-Hours/operation/getBusiness-hoursSchedules)
+- [templates](https://docs.dixa.io/openapi/dixa-api/v1/tag/Templates/#tag/Templates/operation/getTemplates)
+
+
+The Dixa connector supports writing to the following objects:
+
+- [agents](https://docs.dixa.io/openapi/dixa-api/v1/tag/Agents/#tag/Agents/operation/postAgents)
+- [conversations](https://docs.dixa.io/openapi/dixa-api/v1/tag/Conversations/#tag/Conversations/operation/postConversations)
+- [conversations/import](https://docs.dixa.io/openapi/dixa-api/v1/tag/Conversations/#tag/Conversations/operation/postConversationsImport)
+- [queues](https://docs.dixa.io/openapi/dixa-api/v1/tag/Queues/#tag/Queues/operation/postQueues)
+- [tags](https://docs.dixa.io/openapi/dixa-api/v1/tag/Tags/#tag/Tags/operation/postTags)
+- [teams](https://docs.dixa.io/openapi/dixa-api/v1/tag/Teams/#tag/Teams/operation/postTeams)
+- [webhooks](https://docs.dixa.io/openapi/dixa-api/v1/tag/Webhooks/#tag/Webhooks/operation/postWebhooks)
+- [endusers](https://docs.dixa.io/openapi/dixa-api/v1/tag/End-Users/#tag/End-Users/operation/postEndusers)
+
 
 ### Example integration
 
 To define an integration for Dixa, create a manifest file that looks like this:
 
 ```YAML
-# amp.yaml
+# amp.yaml 
 specVersion: 1.0.0
 integrations:
   - name: dixa-integration
