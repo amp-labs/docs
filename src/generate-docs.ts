@@ -281,6 +281,7 @@ const baseConfig = {
             "provider-guides/attio",
             "provider-guides/aweber",
             "provider-guides/braintree",
+            "provider-guides/braze",
             "provider-guides/bird",
             "provider-guides/bitbucket",
             "provider-guides/blueshift",
