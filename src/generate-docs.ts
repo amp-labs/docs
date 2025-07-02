@@ -319,6 +319,7 @@ const baseConfig = {
             "provider-guides/fathom",
             "provider-guides/figma",
             "provider-guides/fireflies",
+            "provider-guides/flatfile",
             "provider-guides/freshchat",
             "provider-guides/formstack",
             "provider-guides/front",
