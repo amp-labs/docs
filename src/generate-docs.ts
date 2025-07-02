@@ -65,7 +65,7 @@ export interface DocsConfig {
 interface NavigationGroup {
   group: string;
   pages: Array<string | NavigationGroup>;
-  
+
   // OpenAPI spec to refer to for all methods in this group. This is helpful to avoid collisions when we have similar
   // paths across different endpoints / specs. For example, the `read` and `write` specs have the same POST path for
   // on-demand read & write. It is also a script property, so we omit it when the config is jsonified, because the rest
@@ -111,12 +111,12 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
       tabs: [
         {
           tab: 'Documentation',
-          groups: convertNavigation(mintConfig.navigation.filter((group: any) => 
+          groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
             !group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
         },
         {
           tab: 'API Reference',
-          groups: convertNavigation(mintConfig.navigation.filter((group: any) => 
+          groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
             group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
         }
       ]
@@ -281,6 +281,7 @@ const baseConfig = {
             "provider-guides/attio",
             "provider-guides/aweber",
             "provider-guides/braintree",
+            "provider-guides/braze",
             "provider-guides/bird",
             "provider-guides/bitbucket",
             "provider-guides/blueshift",
@@ -294,6 +295,7 @@ const baseConfig = {
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
             "provider-guides/clari",
+            "provider-guides/clariCopilot",
             "provider-guides/clickup",
             "provider-guides/close",
             "provider-guides/coda",
@@ -312,10 +314,12 @@ const baseConfig = {
             "provider-guides/dropboxsign",
             "provider-guides/dynamicsBusinessCentral",
             "provider-guides/dynamicsCRM",
+            "provider-guides/emailBison",
             "provider-guides/facebook",
             "provider-guides/fathom",
             "provider-guides/figma",
             "provider-guides/fireflies",
+            "provider-guides/freshchat",
             "provider-guides/formstack",
             "provider-guides/front",
             "provider-guides/g2",
@@ -370,7 +374,7 @@ const baseConfig = {
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
             "provider-guides/podium",
-            "provider-guides/productboard",
+            "provider-guides/productBoard",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
@@ -385,11 +389,13 @@ const baseConfig = {
             "provider-guides/smartlead",
             "provider-guides/smartsheet",
             "provider-guides/snapchatAds",
+            "provider-guides/stripe",
             "provider-guides/surveyMonkey",
             "provider-guides/talkdesk",
             "provider-guides/teamleader",
             "provider-guides/teamwork",
             "provider-guides/timely",
+            "provider-guides/vtiger",
             "provider-guides/webflow",
             "provider-guides/whereby",
             "provider-guides/wordpress",
@@ -516,4 +522,4 @@ if (require.main === module) {
   } catch (error) {
     console.log('error generating docs config', error);
   }
-} 
+}

@@ -1,0 +1,39 @@
+---
+title: "Freshchat"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.freshchat.com`.
+
+### Example integration
+
+To define an integration for Freshchat, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: freshchat-integration
+    displayName: My Freshchat Integration
+    provider: freshchat
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses API Key authentication, which means that you do not need to set up a Provider App before getting started. Provider apps are only required for providers that use OAuth2 Authorization Code grant type.
+
+To start integrating with Freshchat:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://{{.workspace}}.freshchat.com`.
+
+## Creating an API key for Freshchat
+
+[Freshchat API key documentation](https://developers.freshchat.com/api) for more information on generating API keys for Freshchat.
+

@@ -6048,11 +6048,16 @@
                               "name": {
                                 "type": "string"
                               },
-                              "displayName": {
-                                "type": "string"
-                              },
                               "provider": {
                                 "type": "string"
+                              },
+                              "displayName": {
+                                "type": "string",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "module": {
+                                "type": "string",
+                                "x-go-type-skip-optional-pointer": true
                               },
                               "read": {
                                 "title": "Read Integration",
@@ -6305,6 +6310,10 @@
                                 "properties": {
                                   "enabled": {
                                     "type": "boolean"
+                                  },
+                                  "useModule": {
+                                    "type": "boolean",
+                                    "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL."
                                   }
                                 }
                               },
@@ -6953,11 +6962,16 @@
                           "name": {
                             "type": "string"
                           },
-                          "displayName": {
-                            "type": "string"
-                          },
                           "provider": {
                             "type": "string"
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "x-go-type-skip-optional-pointer": true
+                          },
+                          "module": {
+                            "type": "string",
+                            "x-go-type-skip-optional-pointer": true
                           },
                           "read": {
                             "title": "Read Integration",
@@ -7210,6 +7224,10 @@
                             "properties": {
                               "enabled": {
                                 "type": "boolean"
+                              },
+                              "useModule": {
+                                "type": "boolean",
+                                "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL."
                               }
                             }
                           },
@@ -9072,11 +9090,16 @@
                               "name": {
                                 "type": "string"
                               },
-                              "displayName": {
-                                "type": "string"
-                              },
                               "provider": {
                                 "type": "string"
+                              },
+                              "displayName": {
+                                "type": "string",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "module": {
+                                "type": "string",
+                                "x-go-type-skip-optional-pointer": true
                               },
                               "read": {
                                 "title": "Read Integration",
@@ -9329,6 +9352,10 @@
                                 "properties": {
                                   "enabled": {
                                     "type": "boolean"
+                                  },
+                                  "useModule": {
+                                    "type": "boolean",
+                                    "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL."
                                   }
                                 }
                               },
@@ -10848,7 +10875,12 @@
                           "type": "string"
                         },
                         "displayName": {
-                          "type": "string"
+                          "type": "string",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "module": {
+                          "type": "string",
+                          "x-go-type-skip-optional-pointer": true
                         },
                         "provider": {
                           "type": "string"
@@ -11232,6 +11264,10 @@
                           "properties": {
                             "enabled": {
                               "type": "boolean"
+                            },
+                            "useModule": {
+                              "type": "boolean",
+                              "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL."
                             }
                           }
                         }
@@ -12508,8 +12544,14 @@
                                 "properties": {
                                   "provider": {
                                     "description": "The SaaS API that we are integrating with.",
-                                    "example": "salesforce",
+                                    "example": "hubspot",
                                     "type": "string"
+                                  },
+                                  "module": {
+                                    "description": "The SaaS module that we are integrating with.",
+                                    "example": "crm",
+                                    "type": "string",
+                                    "x-go-type-skip-optional-pointer": true
                                   },
                                   "read": {
                                     "title": "Base Read Config",
@@ -12788,6 +12830,10 @@
                                     "type": "object",
                                     "properties": {
                                       "enabled": {
+                                        "type": "boolean"
+                                      },
+                                      "useModule": {
+                                        "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL.",
                                         "type": "boolean"
                                       }
                                     }
@@ -14177,8 +14223,14 @@
                             "properties": {
                               "provider": {
                                 "description": "The SaaS API that we are integrating with.",
-                                "example": "salesforce",
+                                "example": "hubspot",
                                 "type": "string"
+                              },
+                              "module": {
+                                "description": "The SaaS module that we are integrating with.",
+                                "example": "crm",
+                                "type": "string",
+                                "x-go-type-skip-optional-pointer": true
                               },
                               "read": {
                                 "title": "Base Read Config",
@@ -14457,6 +14509,10 @@
                                 "type": "object",
                                 "properties": {
                                   "enabled": {
+                                    "type": "boolean"
+                                  },
+                                  "useModule": {
+                                    "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL.",
                                     "type": "boolean"
                                   }
                                 }
@@ -15758,8 +15814,14 @@
                               "properties": {
                                 "provider": {
                                   "description": "The SaaS API that we are integrating with.",
-                                  "example": "salesforce",
+                                  "example": "hubspot",
                                   "type": "string"
+                                },
+                                "module": {
+                                  "description": "The SaaS module that we are integrating with.",
+                                  "example": "crm",
+                                  "type": "string",
+                                  "x-go-type-skip-optional-pointer": true
                                 },
                                 "read": {
                                   "title": "Base Read Config",
@@ -16038,6 +16100,10 @@
                                   "type": "object",
                                   "properties": {
                                     "enabled": {
+                                      "type": "boolean"
+                                    },
+                                    "useModule": {
+                                      "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL.",
                                       "type": "boolean"
                                     }
                                   }
@@ -18161,8 +18227,14 @@
                               "properties": {
                                 "provider": {
                                   "description": "The SaaS API that we are integrating with.",
-                                  "example": "salesforce",
+                                  "example": "hubspot",
                                   "type": "string"
+                                },
+                                "module": {
+                                  "description": "The SaaS module that we are integrating with.",
+                                  "example": "crm",
+                                  "type": "string",
+                                  "x-go-type-skip-optional-pointer": true
                                 },
                                 "read": {
                                   "title": "Base Read Config",
@@ -18441,6 +18513,10 @@
                                   "type": "object",
                                   "properties": {
                                     "enabled": {
+                                      "type": "boolean"
+                                    },
+                                    "useModule": {
+                                      "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL.",
                                       "type": "boolean"
                                     }
                                   }
@@ -20023,8 +20099,14 @@
                                 "properties": {
                                   "provider": {
                                     "description": "The SaaS API that we are integrating with.",
-                                    "example": "salesforce",
+                                    "example": "hubspot",
                                     "type": "string"
+                                  },
+                                  "module": {
+                                    "description": "The SaaS module that we are integrating with.",
+                                    "example": "crm",
+                                    "type": "string",
+                                    "x-go-type-skip-optional-pointer": true
                                   },
                                   "read": {
                                     "title": "Base Read Config",
@@ -20303,6 +20385,10 @@
                                     "type": "object",
                                     "properties": {
                                       "enabled": {
+                                        "type": "boolean"
+                                      },
+                                      "useModule": {
+                                        "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL.",
                                         "type": "boolean"
                                       }
                                     }
@@ -20765,8 +20851,14 @@
                               "properties": {
                                 "provider": {
                                   "description": "The SaaS API that we are integrating with.",
-                                  "example": "salesforce",
+                                  "example": "hubspot",
                                   "type": "string"
+                                },
+                                "module": {
+                                  "description": "The SaaS module that we are integrating with.",
+                                  "example": "crm",
+                                  "type": "string",
+                                  "x-go-type-skip-optional-pointer": true
                                 },
                                 "read": {
                                   "title": "Base Read Config",
@@ -21045,6 +21137,10 @@
                                   "type": "object",
                                   "properties": {
                                     "enabled": {
+                                      "type": "boolean"
+                                    },
+                                    "useModule": {
+                                      "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL.",
                                       "type": "boolean"
                                     }
                                   }
@@ -26017,6 +26113,7 @@
                           "apiKey",
                           "basic",
                           "jwt",
+                          "custom",
                           "none"
                         ],
                         "x-oapi-codegen-extra-tags": {
@@ -26277,6 +26374,109 @@
                             "type": "string",
                             "description": "URL with more information about how to get or use an API key.",
                             "example": "https://docs.example.com/api-key",
+                            "x-go-type-skip-optional-pointer": true
+                          }
+                        }
+                      },
+                      "customOpts": {
+                        "title": "Custom Auth Options",
+                        "type": "object",
+                        "description": "Configuration for custom auth. Optional.",
+                        "properties": {
+                          "headers": {
+                            "type": "array",
+                            "items": {
+                              "title": "Custom Auth Header",
+                              "type": "object",
+                              "description": "A custom header to be used for authentication. Automatically added by the backend.",
+                              "required": [
+                                "name",
+                                "valueTemplate"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "X-Custom-Auth",
+                                  "description": "The name of the header."
+                                },
+                                "valueTemplate": {
+                                  "type": "string",
+                                  "example": "Bearer {{ .token }}",
+                                  "description": "The value of the header, represented as a Golang text/template expression. Only the backend will interpret this.",
+                                  "x-oapi-codegen-extra-tags": {
+                                    "skipSubstitutions": "true"
+                                  }
+                                }
+                              }
+                            },
+                            "description": "A list of custom headers to be used for authentication. The backend will add these headers.",
+                            "x-go-type-skip-optional-pointer": true
+                          },
+                          "queryParams": {
+                            "type": "array",
+                            "items": {
+                              "title": "Custom Auth Query Parameter",
+                              "type": "object",
+                              "description": "A custom query parameter to be used for authentication. Automatically added by the backend.",
+                              "required": [
+                                "name",
+                                "valueTemplate"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "custom_auth",
+                                  "description": "The name of the query parameter."
+                                },
+                                "valueTemplate": {
+                                  "type": "string",
+                                  "example": "{{ .token }}",
+                                  "description": "The value of the query parameter, represented as a Golang text/template expression. Only the backend will interpret this.",
+                                  "x-oapi-codegen-extra-tags": {
+                                    "skipSubstitutions": "true"
+                                  }
+                                }
+                              }
+                            },
+                            "description": "A list of custom query parameters to be used for authentication. The backend will add these query parameters.",
+                            "x-go-type-skip-optional-pointer": true
+                          },
+                          "inputs": {
+                            "type": "array",
+                            "items": {
+                              "title": "Custom Auth Input",
+                              "type": "object",
+                              "description": "A custom input field for authentication. This is used by the frontend to dynamically render input fields for custom auth. The backend will not interpret this. It will however receive the value of this field before making a request (in the connection secrets).",
+                              "required": [
+                                "name",
+                                "displayName"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "custom_auth_input",
+                                  "description": "The internal identifier for the custom auth input field."
+                                },
+                                "displayName": {
+                                  "type": "string",
+                                  "example": "Custom Auth Input",
+                                  "description": "The human-readable name for the custom auth input field."
+                                },
+                                "prompt": {
+                                  "type": "string",
+                                  "example": "See Authorization section of provider docs to obtain this value",
+                                  "description": "Some helpful text or context to be displayed to the user when asking for this input.",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "docsURL": {
+                                  "type": "string",
+                                  "example": "https://docs.example.com/custom-auth-input",
+                                  "description": "URL with details about this authentication mechanism and how to use it. Might be specific to this field, or a general URL for the provider. Optional.",
+                                  "x-go-type-skip-optional-pointer": true
+                                }
+                              }
+                            },
+                            "description": "A list of custom input fields for authentication. The frontend will render these input fields and the backend will receive the values of these fields before making a request.",
                             "x-go-type-skip-optional-pointer": true
                           }
                         }
@@ -26618,6 +26818,11 @@
                                   "description": "The human-readable name for the field",
                                   "x-go-type-skip-optional-pointer": true
                                 },
+                                "defaultValue": {
+                                  "type": "string",
+                                  "description": "Default value for this metadata item",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
                                 "docsURL": {
                                   "type": "string",
                                   "description": "URL with more information about how to locate this value",
@@ -26871,6 +27076,7 @@
                         "apiKey",
                         "basic",
                         "jwt",
+                        "custom",
                         "none"
                       ],
                       "x-oapi-codegen-extra-tags": {
@@ -27131,6 +27337,109 @@
                           "type": "string",
                           "description": "URL with more information about how to get or use an API key.",
                           "example": "https://docs.example.com/api-key",
+                          "x-go-type-skip-optional-pointer": true
+                        }
+                      }
+                    },
+                    "customOpts": {
+                      "title": "Custom Auth Options",
+                      "type": "object",
+                      "description": "Configuration for custom auth. Optional.",
+                      "properties": {
+                        "headers": {
+                          "type": "array",
+                          "items": {
+                            "title": "Custom Auth Header",
+                            "type": "object",
+                            "description": "A custom header to be used for authentication. Automatically added by the backend.",
+                            "required": [
+                              "name",
+                              "valueTemplate"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "X-Custom-Auth",
+                                "description": "The name of the header."
+                              },
+                              "valueTemplate": {
+                                "type": "string",
+                                "example": "Bearer {{ .token }}",
+                                "description": "The value of the header, represented as a Golang text/template expression. Only the backend will interpret this.",
+                                "x-oapi-codegen-extra-tags": {
+                                  "skipSubstitutions": "true"
+                                }
+                              }
+                            }
+                          },
+                          "description": "A list of custom headers to be used for authentication. The backend will add these headers.",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "queryParams": {
+                          "type": "array",
+                          "items": {
+                            "title": "Custom Auth Query Parameter",
+                            "type": "object",
+                            "description": "A custom query parameter to be used for authentication. Automatically added by the backend.",
+                            "required": [
+                              "name",
+                              "valueTemplate"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "custom_auth",
+                                "description": "The name of the query parameter."
+                              },
+                              "valueTemplate": {
+                                "type": "string",
+                                "example": "{{ .token }}",
+                                "description": "The value of the query parameter, represented as a Golang text/template expression. Only the backend will interpret this.",
+                                "x-oapi-codegen-extra-tags": {
+                                  "skipSubstitutions": "true"
+                                }
+                              }
+                            }
+                          },
+                          "description": "A list of custom query parameters to be used for authentication. The backend will add these query parameters.",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "inputs": {
+                          "type": "array",
+                          "items": {
+                            "title": "Custom Auth Input",
+                            "type": "object",
+                            "description": "A custom input field for authentication. This is used by the frontend to dynamically render input fields for custom auth. The backend will not interpret this. It will however receive the value of this field before making a request (in the connection secrets).",
+                            "required": [
+                              "name",
+                              "displayName"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "custom_auth_input",
+                                "description": "The internal identifier for the custom auth input field."
+                              },
+                              "displayName": {
+                                "type": "string",
+                                "example": "Custom Auth Input",
+                                "description": "The human-readable name for the custom auth input field."
+                              },
+                              "prompt": {
+                                "type": "string",
+                                "example": "See Authorization section of provider docs to obtain this value",
+                                "description": "Some helpful text or context to be displayed to the user when asking for this input.",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "docsURL": {
+                                "type": "string",
+                                "example": "https://docs.example.com/custom-auth-input",
+                                "description": "URL with details about this authentication mechanism and how to use it. Might be specific to this field, or a general URL for the provider. Optional.",
+                                "x-go-type-skip-optional-pointer": true
+                              }
+                            }
+                          },
+                          "description": "A list of custom input fields for authentication. The frontend will render these input fields and the backend will receive the values of these fields before making a request.",
                           "x-go-type-skip-optional-pointer": true
                         }
                       }
@@ -27470,6 +27779,11 @@
                               "displayName": {
                                 "type": "string",
                                 "description": "The human-readable name for the field",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "defaultValue": {
+                                "type": "string",
+                                "description": "Default value for this metadata item",
                                 "x-go-type-skip-optional-pointer": true
                               },
                               "docsURL": {
@@ -31855,6 +32169,18 @@
                         "type": "string",
                         "description": "The API key to use for the connection."
                       },
+                      "customAuth": {
+                        "type": "object",
+                        "description": "Values used for custom auth input variables.",
+                        "additionalProperties": {
+                          "type": "string",
+                          "nullable": false
+                        },
+                        "example": {
+                          "apiKey": "abcd1234",
+                          "password": "secret"
+                        }
+                      },
                       "basicAuth": {
                         "type": "object",
                         "required": [
@@ -34052,6 +34378,18 @@
                         "type": "string",
                         "description": "The API key to use for the connection."
                       },
+                      "customAuth": {
+                        "type": "object",
+                        "description": "Values used for custom auth input variables.",
+                        "additionalProperties": {
+                          "type": "string",
+                          "nullable": false
+                        },
+                        "example": {
+                          "apiKey": "abcd1234",
+                          "password": "secret"
+                        }
+                      },
                       "basicAuth": {
                         "type": "object",
                         "required": [
@@ -36199,8 +36537,36 @@
                   },
                   "type": {
                     "type": "string",
-                    "description": "The type of the destination",
-                    "example": "webhook"
+                    "description": "The type of the destination.",
+                    "example": "webhook",
+                    "enum": [
+                      "webhook",
+                      "kinesis"
+                    ]
+                  },
+                  "secrets": {
+                    "type": "object",
+                    "description": "Secrets for the destination.",
+                    "properties": {
+                      "awsKeyId": {
+                        "type": "string",
+                        "description": "The AWS access key ID for the Kinesis destination.",
+                        "example": "AKIAIOSFODNN7EXAMPLE",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "awsSecretKey": {
+                        "type": "string",
+                        "description": "The AWS secret access key for the Kinesis destination.",
+                        "example": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "awsSessionToken": {
+                        "type": "string",
+                        "description": "The AWS session token for the Kinesis destination.",
+                        "example": "AQoEXAMPLEH4aoAH0gNCAPy...",
+                        "x-go-type-skip-optional-pointer": true
+                      }
+                    }
                   },
                   "metadata": {
                     "type": "object",
@@ -36222,6 +36588,30 @@
                         "example": {
                           "Authorization": "Bearer 1234"
                         }
+                      },
+                      "kinesisRegion": {
+                        "type": "string",
+                        "description": "The AWS region where the kinesis destination is hosted.",
+                        "example": "us-east-1",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "kinesisStreamName": {
+                        "type": "string",
+                        "description": "The name of the Kinesis stream to send events to.",
+                        "example": "my-kinesis-stream",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "kinesisEndpointUrl": {
+                        "type": "string",
+                        "description": "The endpoint URL for the Kinesis stream.",
+                        "example": "https://kinesis.us-east-1.amazonaws.com",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "kinesisPartitionKeyTemplate": {
+                        "type": "string",
+                        "description": "The template for the partition key to use when sending events to Kinesis (a JMESPath template)",
+                        "example": "data.user_id",
+                        "x-go-type-skip-optional-pointer": true
                       }
                     }
                   }
@@ -44602,11 +44992,16 @@
                   "name": {
                     "type": "string"
                   },
-                  "displayName": {
-                    "type": "string"
-                  },
                   "provider": {
                     "type": "string"
+                  },
+                  "displayName": {
+                    "type": "string",
+                    "x-go-type-skip-optional-pointer": true
+                  },
+                  "module": {
+                    "type": "string",
+                    "x-go-type-skip-optional-pointer": true
                   },
                   "read": {
                     "title": "Read Integration",
@@ -44859,6 +45254,10 @@
                     "properties": {
                       "enabled": {
                         "type": "boolean"
+                      },
+                      "useModule": {
+                        "type": "boolean",
+                        "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL."
                       }
                     }
                   },
@@ -45017,11 +45416,16 @@
               "name": {
                 "type": "string"
               },
-              "displayName": {
-                "type": "string"
-              },
               "provider": {
                 "type": "string"
+              },
+              "displayName": {
+                "type": "string",
+                "x-go-type-skip-optional-pointer": true
+              },
+              "module": {
+                "type": "string",
+                "x-go-type-skip-optional-pointer": true
               },
               "read": {
                 "title": "Read Integration",
@@ -45274,6 +45678,10 @@
                 "properties": {
                   "enabled": {
                     "type": "boolean"
+                  },
+                  "useModule": {
+                    "type": "boolean",
+                    "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL."
                   }
                 }
               },
@@ -45431,7 +45839,12 @@
                 "type": "string"
               },
               "displayName": {
-                "type": "string"
+                "type": "string",
+                "x-go-type-skip-optional-pointer": true
+              },
+              "module": {
+                "type": "string",
+                "x-go-type-skip-optional-pointer": true
               },
               "provider": {
                 "type": "string"
@@ -45815,6 +46228,10 @@
                 "properties": {
                   "enabled": {
                     "type": "boolean"
+                  },
+                  "useModule": {
+                    "type": "boolean",
+                    "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL."
                   }
                 }
               }
@@ -46259,8 +46676,14 @@
                     "properties": {
                       "provider": {
                         "description": "The SaaS API that we are integrating with.",
-                        "example": "salesforce",
+                        "example": "hubspot",
                         "type": "string"
+                      },
+                      "module": {
+                        "description": "The SaaS module that we are integrating with.",
+                        "example": "crm",
+                        "type": "string",
+                        "x-go-type-skip-optional-pointer": true
                       },
                       "read": {
                         "title": "Base Read Config",
@@ -46539,6 +46962,10 @@
                         "type": "object",
                         "properties": {
                           "enabled": {
+                            "type": "boolean"
+                          },
+                          "useModule": {
+                            "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL.",
                             "type": "boolean"
                           }
                         }
@@ -47433,8 +47860,14 @@
                 "properties": {
                   "provider": {
                     "description": "The SaaS API that we are integrating with.",
-                    "example": "salesforce",
+                    "example": "hubspot",
                     "type": "string"
+                  },
+                  "module": {
+                    "description": "The SaaS module that we are integrating with.",
+                    "example": "crm",
+                    "type": "string",
+                    "x-go-type-skip-optional-pointer": true
                   },
                   "read": {
                     "title": "Base Read Config",
@@ -47713,6 +48146,10 @@
                     "type": "object",
                     "properties": {
                       "enabled": {
+                        "type": "boolean"
+                      },
+                      "useModule": {
+                        "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL.",
                         "type": "boolean"
                       }
                     }
@@ -49068,6 +49505,18 @@
                 "type": "string",
                 "description": "The API key to use for the connection."
               },
+              "customAuth": {
+                "type": "object",
+                "description": "Values used for custom auth input variables.",
+                "additionalProperties": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "example": {
+                  "apiKey": "abcd1234",
+                  "password": "secret"
+                }
+              },
               "basicAuth": {
                 "type": "object",
                 "required": [
@@ -49266,6 +49715,18 @@
           "apiKey": {
             "type": "string",
             "description": "The API key to use for the connection."
+          },
+          "customAuth": {
+            "type": "object",
+            "description": "Values used for custom auth input variables.",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": false
+            },
+            "example": {
+              "apiKey": "abcd1234",
+              "password": "secret"
+            }
           },
           "basicAuth": {
             "type": "object",
@@ -49466,6 +49927,18 @@
               "apiKey": {
                 "type": "string",
                 "description": "The API key to use for the connection."
+              },
+              "customAuth": {
+                "type": "object",
+                "description": "Values used for custom auth input variables.",
+                "additionalProperties": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "example": {
+                  "apiKey": "abcd1234",
+                  "password": "secret"
+                }
               },
               "basicAuth": {
                 "type": "object",
