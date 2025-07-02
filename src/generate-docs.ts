@@ -318,6 +318,7 @@ const baseConfig = {
             "provider-guides/facebook",
             "provider-guides/figma",
             "provider-guides/fireflies",
+            "provider-guides/flatfile",
             "provider-guides/freshchat",
             "provider-guides/formstack",
             "provider-guides/front",
