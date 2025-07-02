@@ -36537,8 +36537,45 @@
                   },
                   "type": {
                     "type": "string",
-                    "description": "The type of the destination",
-                    "example": "webhook"
+                    "description": "The type of the destination.",
+                    "example": "webhook",
+                    "enum": [
+                      "webhook",
+                      "kinesis"
+                    ]
+                  },
+                  "provider": {
+                    "type": "string",
+                    "description": "The provider of the destination.",
+                    "example": "svix",
+                    "enum": [
+                      "svix",
+                      "outpost"
+                    ]
+                  },
+                  "secrets": {
+                    "type": "object",
+                    "description": "Secrets for the destination. This is only used for Kinesis destinations.",
+                    "properties": {
+                      "awsKeyId": {
+                        "type": "string",
+                        "description": "The AWS access key ID for the Kinesis destination.",
+                        "example": "AKIAIOSFODNN7EXAMPLE",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "awsSecretKey": {
+                        "type": "string",
+                        "description": "The AWS secret access key for the Kinesis destination.",
+                        "example": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "awsSessionToken": {
+                        "type": "string",
+                        "description": "The AWS session token for the Kinesis destination.",
+                        "example": "AQoEXAMPLEH4aoAH0gNCAPy...",
+                        "x-go-type-skip-optional-pointer": true
+                      }
+                    }
                   },
                   "metadata": {
                     "type": "object",
@@ -36560,6 +36597,30 @@
                         "example": {
                           "Authorization": "Bearer 1234"
                         }
+                      },
+                      "kinesisRegion": {
+                        "type": "string",
+                        "description": "The AWS region where the kinesis destination is hosted.",
+                        "example": "us-east-1",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "kinesisStreamName": {
+                        "type": "string",
+                        "description": "The name of the Kinesis stream to send events to.",
+                        "example": "my-kinesis-stream",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "kinesisEndpointUrl": {
+                        "type": "string",
+                        "description": "The endpoint URL for the Kinesis stream.",
+                        "example": "https://kinesis.us-east-1.amazonaws.com",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "kinesisPartitionKeyTemplate": {
+                        "type": "string",
+                        "description": "The template for the partition key to use when sending events to Kinesis (a JMESPath template)",
+                        "example": "data.user_id",
+                        "x-go-type-skip-optional-pointer": true
                       }
                     }
                   }
