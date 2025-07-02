@@ -316,6 +316,7 @@ const baseConfig = {
             "provider-guides/dynamicsCRM",
             "provider-guides/emailBison",
             "provider-guides/facebook",
+            "provider-guides/fathom",
             "provider-guides/figma",
             "provider-guides/fireflies",
             "provider-guides/freshchat",
