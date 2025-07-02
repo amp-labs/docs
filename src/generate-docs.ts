@@ -65,7 +65,7 @@ export interface DocsConfig {
 interface NavigationGroup {
   group: string;
   pages: Array<string | NavigationGroup>;
-  
+
   // OpenAPI spec to refer to for all methods in this group. This is helpful to avoid collisions when we have similar
   // paths across different endpoints / specs. For example, the `read` and `write` specs have the same POST path for
   // on-demand read & write. It is also a script property, so we omit it when the config is jsonified, because the rest
@@ -111,12 +111,12 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
       tabs: [
         {
           tab: 'Documentation',
-          groups: convertNavigation(mintConfig.navigation.filter((group: any) => 
+          groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
             !group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
         },
         {
           tab: 'API Reference',
-          groups: convertNavigation(mintConfig.navigation.filter((group: any) => 
+          groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
             group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
         }
       ]
@@ -388,6 +388,7 @@ const baseConfig = {
             "provider-guides/smartlead",
             "provider-guides/smartsheet",
             "provider-guides/snapchatAds",
+            "provider-guides/stripe",
             "provider-guides/surveyMonkey",
             "provider-guides/talkdesk",
             "provider-guides/teamleader",
@@ -520,4 +521,4 @@ if (require.main === module) {
   } catch (error) {
     console.log('error generating docs config', error);
   }
-} 
+}
