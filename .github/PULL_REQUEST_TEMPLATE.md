@@ -2,4 +2,4 @@
 
 ## Screenshot
 
-Please include a screenshot of the documentation running locally with `pnpm dev`. 
+Please include a screenshot of the documentation running locally with `cd src && mint dev`. 
