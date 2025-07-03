@@ -323,6 +323,7 @@ const baseConfig = {
             "provider-guides/flatfile",
             "provider-guides/freshchat",
             "provider-guides/formstack",
+            "provider-guides/freshdesk",
             "provider-guides/front",
             "provider-guides/g2",
             "provider-guides/geckoboard",
