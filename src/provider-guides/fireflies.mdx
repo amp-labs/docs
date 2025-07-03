@@ -6,22 +6,27 @@ title: Fireflies
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.fireflies.ai/graphql`.
+
+### Supported Objects
+The Fireflies connector supports reading to the following objects:
+- [users](https://docs.fireflies.ai/graphql-api/query/users)
+- [transcripts](https://docs.fireflies.ai/graphql-api/query/transcripts)
+- [bites](https://docs.fireflies.ai/graphql-api/query/bites)
+
+The Fireflies connector supports writing to the following objects:
+ - [transcripts](https://docs.fireflies.ai/graphql-api/mutation/delete-transcript)
+ - [bites](https://docs.fireflies.ai/graphql-api/mutation/create-bite)
+ - [liveMeetings](https://docs.fireflies.ai/graphql-api/mutation/add-to-live)
+ - [meetingTitle](https://docs.fireflies.ai/graphql-api/mutation/update-meeting-title)
+ - [userRole](https://docs.fireflies.ai/graphql-api/mutation/set-user-role)
+ - [audio](https://docs.fireflies.ai/graphql-api/mutation/upload-audio)
 
 ### Example integration
 
-To define an integration for Fireflies, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations: 
-  - name: proxy-fireflies
-    displayName: Fireflies
-    provider: fireflies
-    proxy:
-      enabled: true
-```
+For an example manifest file of a Fireflies integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/fireflies/amp.yaml).
 
 ## Using the connector
 
@@ -31,7 +36,10 @@ To integrate with Fireflies:
 - Create a manifest file similar to the example above.
 - Deploy it using the [amp CLI](/cli/overview).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for an API key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key provided by the customer. Please note that this connector's base URL is `https://api.fireflies.ai/graphql`.
+- Start using the connector!
+- If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 
 ## Creating an API key for Fireflies
 
