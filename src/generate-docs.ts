@@ -280,6 +280,7 @@ const baseConfig = {
             "provider-guides/atlassian",
             "provider-guides/attio",
             "provider-guides/aweber",
+            "provider-guides/avoma",
             "provider-guides/braintree",
             "provider-guides/braze",
             "provider-guides/bird",
