@@ -352,6 +352,7 @@ const baseConfig = {
             "provider-guides/jobber",
             "provider-guides/jotform",
             "provider-guides/joinMe",
+            "provider-guides/kaseyaVSAX",
             "provider-guides/keap",
             "provider-guides/kit",
             "provider-guides/klaviyo",
