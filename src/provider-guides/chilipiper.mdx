@@ -6,7 +6,29 @@ title: ChiliPiper
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Chilipiper instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://fire.chilipiper.com`.
+
+### Supported Objects
+The Chilipiper connector supports reading from the following objects:
+
+- [workspace](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Read%20all%20workspaces)
+- [team](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Read%20all%20teams)
+- [distribution](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/List%20all%20distributions)
+- [workspace/users](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Read%20all%20users%20(or%20in%20a%20workspace))
+
+The Chilipiper connector supports writing to the following objects:
+
+- [distribution](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Update%20distribution%20and%20publish%20it)
+- [user/invite](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Invites%20new%20user%20to%20the%20organization)
+- [user/licenses](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Updates%20licenses%20for%20users)
+- [team/users/add](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Add%20users%20to%20a%20team)
+- [team/users/remove](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Remove%20users%20from%20a%20team)
+- [workspace/users/add](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Add%20users%20to%20a%20workspace)
+- [workspace/users/remove](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Remove%20users%20from%20a%20workspace)
+- [workspace/users/remove-from-all](https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Remove%20users%20from%20all%20workspaces)
+
 
 ### Example integration
 
