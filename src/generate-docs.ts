@@ -293,6 +293,7 @@ const baseConfig = {
             "provider-guides/calendly",
             "provider-guides/campaignMonitor",
             "provider-guides/capsule",
+            "provider-guides/chargebee",
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
             "provider-guides/clari",
