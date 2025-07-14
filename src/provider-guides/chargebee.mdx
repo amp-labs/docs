@@ -1,0 +1,40 @@
+---
+title: Chargebee
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.site}}.chargebee.com/api`.
+
+### Example integration
+
+To define an integration for Bird (MessageBird), create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: chargebee-integration
+    displayName: My Chargebee Integration
+    provider: chargebee
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses Basic auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Chargebee:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username, password and site name.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://{{.site}}.chargebee.com/api`.
+
+## Creating Basic Auth Credentials for Chargebee
+
+Chargebee uses the API Key as the username when authenticating with Basic Auth. The password field should be left blank.
+
+[Click here](https://www.chargebee.com/docs/billing/2.0/site-configuration/api_keys) for more information about generating an API key for Chargebee. The UI components will display this link, so that your users can successfully create API keys.
