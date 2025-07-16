@@ -7,7 +7,37 @@ title: "Lever"
 ### Supported Actions
 
 This connector supports:
-[Proxy Actions](/proxy-actions), using the base URL `https://api.lever.co`.
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.lever.co`.
+
+### Supported Objects
+The Lever connector supports reading to the following objects:
+- [archive_reasons](https://hire.lever.co/developer/documentation#archive-reasons)
+- [audit_events](https://hire.lever.co/developer/documentation#audit-events)
+- [sources](https://hire.lever.co/developer/documentation#sources)
+- [stages](https://hire.lever.co/developer/documentation#stages)
+- [tags](https://hire.lever.co/developer/documentation#tags)
+- [users](https://hire.lever.co/developer/documentation#users)
+- [feedback_templates](https://hire.lever.co/developer/documentation#feedback-templates)
+- [opportunities](https://hire.lever.co/developer/documentation#opportunities)
+- [postings](https://hire.lever.co/developer/documentation#postings)
+- [form_templates](https://hire.lever.co/developer/documentation#profile-form-templates)
+- [requisitions](https://hire.lever.co/developer/documentation#requisitions)
+- [requisition_fields](https://hire.lever.co/developer/documentation#requisition-fields)
+
+The Lever connector supports writing to the following objects:
+- [form_templates](https://hire.lever.co/developer/documentation#profile-form-templates)
+- [requisitions](https://hire.lever.co/developer/documentation#requisitions)
+- [requisition_fields](https://hire.lever.co/developer/documentation#requisition-fields)
+- [uploads](https://hire.lever.co/developer/documentation#uploads)
+- [users](https://hire.lever.co/developer/documentation#users)
+- [feedback_templates](https://hire.lever.co/developer/documentation#feedback-templates)
+- [contacts](https://hire.lever.co/developer/documentation#contacts)
+
+### Example integration
+
+For an example manifest file of an Lever integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/lever/amp.yaml).
 
 ## Before You Get Started
 
@@ -57,3 +87,13 @@ Follow the steps below to create a Lever app and add the Ampersand redirect URL.
 5. Enter the previously obtained Client ID in the **Client ID** field and the Client Secret in the **Client Secret** field.
 
    ![Ampersand Integration](/images/provider-guides/lever.gif)
+
+To start integrating with Lever:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/lever/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
