@@ -353,6 +353,7 @@ const baseConfig = {
             "provider-guides/jira",
             "provider-guides/jobber",
             "provider-guides/joinMe",
+            "provider-guides/kaseyaVSAX",
             "provider-guides/jotform",
             "provider-guides/keap",
             "provider-guides/kit",
@@ -456,15 +457,15 @@ const traverseNavigationGroups = (
   processPage: (pagePath: string, groupOpenapiSource: string | undefined) => void,
   openapiSource?: string
 ) => {
-const groupOpenapiSource = group.openapiSource || openapiSource;
+  const groupOpenapiSource = group.openapiSource || openapiSource;
 
-group.pages.forEach((page) => {
-  if (typeof page === "string") {
-    processPage(page, groupOpenapiSource);
-  } else if (typeof page === "object") {
-    traverseNavigationGroups(page, processPage, groupOpenapiSource);
-  }
-});
+  group.pages.forEach((page) => {
+    if (typeof page === "string") {
+      processPage(page, groupOpenapiSource);
+    } else if (typeof page === "object") {
+      traverseNavigationGroups(page, processPage, groupOpenapiSource);
+    }
+  });
 };
 
 
