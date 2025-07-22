@@ -65,7 +65,7 @@ export interface DocsConfig {
 interface NavigationGroup {
   group: string;
   pages: Array<string | NavigationGroup>;
-  
+
   // OpenAPI spec to refer to for all methods in this group. This is helpful to avoid collisions when we have similar
   // paths across different endpoints / specs. For example, the `read` and `write` specs have the same POST path for
   // on-demand read & write. It is also a script property, so we omit it when the config is jsonified, because the rest
@@ -111,12 +111,12 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
       tabs: [
         {
           tab: 'Documentation',
-          groups: convertNavigation(mintConfig.navigation.filter((group: any) => 
+          groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
             !group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
         },
         {
           tab: 'API Reference',
-          groups: convertNavigation(mintConfig.navigation.filter((group: any) => 
+          groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
             group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
         }
       ]
@@ -279,21 +279,26 @@ const baseConfig = {
             "provider-guides/ashby",
             "provider-guides/atlassian",
             "provider-guides/attio",
+            "provider-guides/avoma",
             "provider-guides/aweber",
-            "provider-guides/braintree",
             "provider-guides/bird",
             "provider-guides/bitbucket",
             "provider-guides/blueshift",
             "provider-guides/blueshiftEU",
             "provider-guides/box",
+            "provider-guides/braintree",
+            "provider-guides/braze",
             "provider-guides/brevo",
             "provider-guides/bynder",
             "provider-guides/calendly",
             "provider-guides/campaignMonitor",
             "provider-guides/capsule",
+            "provider-guides/chargeOver",
+            "provider-guides/chargebee",
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
             "provider-guides/clari",
+            "provider-guides/clariCopilot",
             "provider-guides/clickup",
             "provider-guides/close",
             "provider-guides/coda",
@@ -312,27 +317,32 @@ const baseConfig = {
             "provider-guides/dropboxsign",
             "provider-guides/dynamicsBusinessCentral",
             "provider-guides/dynamicsCRM",
+            "provider-guides/emailBison",
             "provider-guides/facebook",
+            "provider-guides/fathom",
             "provider-guides/figma",
             "provider-guides/fireflies",
+            "provider-guides/flatfile",
             "provider-guides/formstack",
+            "provider-guides/freshchat",
+            "provider-guides/freshdesk",
             "provider-guides/front",
             "provider-guides/g2",
             "provider-guides/geckoboard",
             "provider-guides/getResponse",
             "provider-guides/github",
             "provider-guides/gitlab",
+            "provider-guides/goTo",
             "provider-guides/gong",
             "provider-guides/google",
             "provider-guides/gorgias",
-            "provider-guides/goTo",
             "provider-guides/groove",
             "provider-guides/guru",
             "provider-guides/happyfox",
             "provider-guides/helpScoutMailbox",
             "provider-guides/heyreach",
-            "provider-guides/hive",
             "provider-guides/highlevel",
+            "provider-guides/hive",
             "provider-guides/hubspot",
             "provider-guides/hunter",
             "provider-guides/insightly",
@@ -341,17 +351,18 @@ const baseConfig = {
             "provider-guides/ironclad",
             "provider-guides/iterable",
             "provider-guides/jira",
-            "provider-guides/jotform",
+            "provider-guides/jobber",
             "provider-guides/joinMe",
             "provider-guides/kaseyaVSAX",
+            "provider-guides/jotform",
             "provider-guides/keap",
             "provider-guides/kit",
             "provider-guides/klaviyo",
+            "provider-guides/lemlist",
             "provider-guides/lever",
             "provider-guides/linear",
             "provider-guides/linkedin",
             "provider-guides/livestorm",
-            "provider-guides/lemlist",
             "provider-guides/mailgun",
             "provider-guides/marketo",
             "provider-guides/microsoft",
@@ -370,7 +381,7 @@ const baseConfig = {
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
             "provider-guides/podium",
-            "provider-guides/productboard",
+            "provider-guides/productBoard",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
@@ -385,11 +396,13 @@ const baseConfig = {
             "provider-guides/smartlead",
             "provider-guides/smartsheet",
             "provider-guides/snapchatAds",
+            "provider-guides/stripe",
             "provider-guides/surveyMonkey",
             "provider-guides/talkdesk",
             "provider-guides/teamleader",
             "provider-guides/teamwork",
             "provider-guides/timely",
+            "provider-guides/vtiger",
             "provider-guides/webflow",
             "provider-guides/whereby",
             "provider-guides/wordpress",
@@ -444,15 +457,15 @@ const traverseNavigationGroups = (
   processPage: (pagePath: string, groupOpenapiSource: string | undefined) => void,
   openapiSource?: string
 ) => {
-const groupOpenapiSource = group.openapiSource || openapiSource;
+  const groupOpenapiSource = group.openapiSource || openapiSource;
 
-group.pages.forEach((page) => {
-  if (typeof page === "string") {
-    processPage(page, groupOpenapiSource);
-  } else if (typeof page === "object") {
-    traverseNavigationGroups(page, processPage, groupOpenapiSource);
-  }
-});
+  group.pages.forEach((page) => {
+    if (typeof page === "string") {
+      processPage(page, groupOpenapiSource);
+    } else if (typeof page === "object") {
+      traverseNavigationGroups(page, processPage, groupOpenapiSource);
+    }
+  });
 };
 
 
@@ -516,4 +529,4 @@ if (require.main === module) {
   } catch (error) {
     console.log('error generating docs config', error);
   }
-} 
+}
