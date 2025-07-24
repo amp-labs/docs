@@ -44,29 +44,25 @@ The Dixa connector supports writing to the following objects:
 
 ### Example integration
 
-To define an integration for Dixa, create a manifest file that looks like this:
+For an example manifest file of an Dixa integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/dixa/amp.yaml).
 
-```YAML
-# amp.yaml 
-specVersion: 1.0.0
-integrations:
-  - name: dixa-integration
-    displayName: My Dixa Integration
-    provider: dixa
-    proxy:
-      enabled: true
-```
+## Before You Get Started
+
+### Creating an API key for Dixa
+
+[Click here](https://docs.dixa.io/docs/api-standards-rules/#authentication) for more information about generating an API key for Dixa. The UI components will display this link, so that your users can successfully create API keys.
+
 
 ## Using the connector
 
 This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Dixa:
-- Create a manifest file like the example above.
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/dixa/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://dev.dixa.io`.
-
-## Creating an API key for Dixa
-
-[Click here](https://docs.dixa.io/docs/api-standards-rules/#authentication) for more information about generating an API key for Dixa. The UI components will display this link, so that your users can successfully create API keys.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
