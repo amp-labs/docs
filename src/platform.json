@@ -2466,14 +2466,26 @@
                 "type": "object",
                 "properties": {
                   "updateMask": {
-                    "type": "array",
-                    "example": [
-                      "appName"
-                    ],
-                    "items": {
-                      "type": "string",
-                      "description": "Fields to update."
-                    }
+                    "allOf": [
+                      {
+                        "type": "array",
+                        "description": "Array of field paths specifying which fields to update.\nUses dot notation for nested fields (e.g., \"config.revision\", \"metadata.tags\").\n\n**Field Path Rules:**\n- Use dot notation for nested objects: `parent.child.field`\n- Escape special characters: `field\\.with\\.dots`, `field\\:with\\:colons`\n- Array elements not directly addressable\n- Only explicitly allowed fields can be updated\n",
+                        "example": [
+                          "name",
+                          "config.revision",
+                          "metadata.tags"
+                        ]
+                      },
+                      {
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "appName",
+                            "name"
+                          ]
+                        }
+                      }
+                    ]
                   },
                   "project": {
                     "type": "object",
@@ -5359,17 +5371,29 @@
                 "type": "object",
                 "properties": {
                   "updateMask": {
-                    "type": "array",
-                    "example": [
-                      "externalRef",
-                      "provider",
-                      "clientId",
-                      "clientSecret"
-                    ],
-                    "items": {
-                      "type": "string",
-                      "description": "Fields to update."
-                    }
+                    "allOf": [
+                      {
+                        "type": "array",
+                        "description": "Array of field paths specifying which fields to update.\nUses dot notation for nested fields (e.g., \"config.revision\", \"metadata.tags\").\n\n**Field Path Rules:**\n- Use dot notation for nested objects: `parent.child.field`\n- Escape special characters: `field\\.with\\.dots`, `field\\:with\\:colons`\n- Array elements not directly addressable\n- Only explicitly allowed fields can be updated\n",
+                        "example": [
+                          "name",
+                          "config.revision",
+                          "metadata.tags"
+                        ]
+                      },
+                      {
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "externalRef",
+                            "clientId",
+                            "clientSecret",
+                            "provider",
+                            "scopes"
+                          ]
+                        }
+                      }
+                    ]
                   },
                   "providerApp": {
                     "type": "object",
@@ -20059,16 +20083,32 @@
                 "type": "object",
                 "properties": {
                   "updateMask": {
-                    "type": "array",
-                    "example": [
-                      "connectionId",
-                      "config.content.write.objects.account",
-                      "config.content.write.objects.interview\\.leads"
-                    ],
-                    "items": {
-                      "type": "string",
-                      "description": "Fields to update. In case the mask is being used to update an object and the object's name contains special characters like a period, a forward slash or a colon, you must escape them using a backslash."
-                    }
+                    "allOf": [
+                      {
+                        "type": "array",
+                        "description": "Array of field paths specifying which fields to update.\nUses dot notation for nested fields (e.g., \"config.revision\", \"metadata.tags\").\n\n**Field Path Rules:**\n- Use dot notation for nested objects: `parent.child.field`\n- Escape special characters: `field\\.with\\.dots`, `field\\:with\\:colons`\n- Array elements not directly addressable\n- Only explicitly allowed fields can be updated\n",
+                        "example": [
+                          "name",
+                          "config.revision",
+                          "metadata.tags"
+                        ]
+                      },
+                      {
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "connectionId",
+                            "config.revisionId",
+                            "config.createdBy",
+                            "config.content.read.objects.*",
+                            "config.content.read.objects",
+                            "config.content.write.objects.*",
+                            "config.content.write.objects",
+                            "config.content.subscribe.objects.*"
+                          ]
+                        }
+                      }
+                    ]
                   },
                   "installation": {
                     "type": "object",
@@ -31800,17 +31840,27 @@
                 ],
                 "properties": {
                   "updateMask": {
-                    "type": "array",
-                    "example": [
-                      "label",
-                      "active",
-                      "scopes"
-                    ],
-                    "items": {
-                      "type": "string",
-                      "description": "fields to update.",
-                      "example": "label"
-                    }
+                    "allOf": [
+                      {
+                        "type": "array",
+                        "description": "Array of field paths specifying which fields to update.\nUses dot notation for nested fields (e.g., \"config.revision\", \"metadata.tags\").\n\n**Field Path Rules:**\n- Use dot notation for nested objects: `parent.child.field`\n- Escape special characters: `field\\.with\\.dots`, `field\\:with\\:colons`\n- Array elements not directly addressable\n- Only explicitly allowed fields can be updated\n",
+                        "example": [
+                          "name",
+                          "config.revision",
+                          "metadata.tags"
+                        ]
+                      },
+                      {
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "active",
+                            "label",
+                            "scopes"
+                          ]
+                        }
+                      }
+                    ]
                   },
                   "apiKey": {
                     "type": "object",
@@ -36064,11 +36114,30 @@
                 ],
                 "properties": {
                   "updateMask": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "The fields to update."
+                    "allOf": [
+                      {
+                        "type": "array",
+                        "description": "Array of field paths specifying which fields to update.\nUses dot notation for nested fields (e.g., \"config.revision\", \"metadata.tags\").\n\n**Field Path Rules:**\n- Use dot notation for nested objects: `parent.child.field`\n- Escape special characters: `field\\.with\\.dots`, `field\\:with\\:colons`\n- Array elements not directly addressable\n- Only explicitly allowed fields can be updated\n",
+                        "example": [
+                          "name",
+                          "config.revision",
+                          "metadata.tags"
+                        ]
+                      },
+                      {
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "providerWorkspaceRef",
+                            "providerMetadata",
+                            "apiKey",
+                            "basicAuth",
+                            "oauth2ClientCredentials",
+                            "oauth2PasswordCredentials"
+                          ]
+                        }
+                      }
+                    ]
                   },
                   "connection": {
                     "title": "Connection Request Body",
@@ -40057,16 +40126,27 @@
                 ],
                 "properties": {
                   "updateMask": {
-                    "type": "array",
-                    "example": [
-                      "name",
-                      "metadata.url",
-                      "metadata.headers"
-                    ],
-                    "items": {
-                      "type": "string",
-                      "description": "fields to update."
-                    }
+                    "allOf": [
+                      {
+                        "type": "array",
+                        "description": "Array of field paths specifying which fields to update.\nUses dot notation for nested fields (e.g., \"config.revision\", \"metadata.tags\").\n\n**Field Path Rules:**\n- Use dot notation for nested objects: `parent.child.field`\n- Escape special characters: `field\\.with\\.dots`, `field\\:with\\:colons`\n- Array elements not directly addressable\n- Only explicitly allowed fields can be updated\n",
+                        "example": [
+                          "name",
+                          "config.revision",
+                          "metadata.tags"
+                        ]
+                      },
+                      {
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "name",
+                            "metadata.url",
+                            "metadata.headers"
+                          ]
+                        }
+                      }
+                    ]
                   },
                   "destination": {
                     "type": "object",
@@ -42720,14 +42800,25 @@
                 ],
                 "properties": {
                   "updateMask": {
-                    "type": "array",
-                    "example": [
-                      "label"
-                    ],
-                    "items": {
-                      "type": "string",
-                      "description": "fields to update."
-                    }
+                    "allOf": [
+                      {
+                        "type": "array",
+                        "description": "Array of field paths specifying which fields to update.\nUses dot notation for nested fields (e.g., \"config.revision\", \"metadata.tags\").\n\n**Field Path Rules:**\n- Use dot notation for nested objects: `parent.child.field`\n- Escape special characters: `field\\.with\\.dots`, `field\\:with\\:colons`\n- Array elements not directly addressable\n- Only explicitly allowed fields can be updated\n",
+                        "example": [
+                          "name",
+                          "config.revision",
+                          "metadata.tags"
+                        ]
+                      },
+                      {
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "label"
+                          ]
+                        }
+                      }
+                    ]
                   },
                   "org": {
                     "type": "object",
@@ -51191,11 +51282,30 @@
         ],
         "properties": {
           "updateMask": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "The fields to update."
+            "allOf": [
+              {
+                "type": "array",
+                "description": "Array of field paths specifying which fields to update.\nUses dot notation for nested fields (e.g., \"config.revision\", \"metadata.tags\").\n\n**Field Path Rules:**\n- Use dot notation for nested objects: `parent.child.field`\n- Escape special characters: `field\\.with\\.dots`, `field\\:with\\:colons`\n- Array elements not directly addressable\n- Only explicitly allowed fields can be updated\n",
+                "example": [
+                  "name",
+                  "config.revision",
+                  "metadata.tags"
+                ]
+              },
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "providerWorkspaceRef",
+                    "providerMetadata",
+                    "apiKey",
+                    "basicAuth",
+                    "oauth2ClientCredentials",
+                    "oauth2PasswordCredentials"
+                  ]
+                }
+              }
+            ]
           },
           "connection": {
             "title": "Connection Request Body",
@@ -52137,17 +52247,27 @@
         ],
         "properties": {
           "updateMask": {
-            "type": "array",
-            "example": [
-              "label",
-              "active",
-              "scopes"
-            ],
-            "items": {
-              "type": "string",
-              "description": "fields to update.",
-              "example": "label"
-            }
+            "allOf": [
+              {
+                "type": "array",
+                "description": "Array of field paths specifying which fields to update.\nUses dot notation for nested fields (e.g., \"config.revision\", \"metadata.tags\").\n\n**Field Path Rules:**\n- Use dot notation for nested objects: `parent.child.field`\n- Escape special characters: `field\\.with\\.dots`, `field\\:with\\:colons`\n- Array elements not directly addressable\n- Only explicitly allowed fields can be updated\n",
+                "example": [
+                  "name",
+                  "config.revision",
+                  "metadata.tags"
+                ]
+              },
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "active",
+                    "label",
+                    "scopes"
+                  ]
+                }
+              }
+            ]
           },
           "apiKey": {
             "type": "object",
@@ -52726,6 +52846,15 @@
             "example": "Q9JT+2qfys28V4ODN+UayA=="
           }
         }
+      },
+      "UpdateMask": {
+        "type": "array",
+        "description": "Array of field paths specifying which fields to update.\nUses dot notation for nested fields (e.g., \"config.revision\", \"metadata.tags\").\n\n**Field Path Rules:**\n- Use dot notation for nested objects: `parent.child.field`\n- Escape special characters: `field\\.with\\.dots`, `field\\:with\\:colons`\n- Array elements not directly addressable\n- Only explicitly allowed fields can be updated\n",
+        "example": [
+          "name",
+          "config.revision",
+          "metadata.tags"
+        ]
       }
     },
     "securitySchemes": {
