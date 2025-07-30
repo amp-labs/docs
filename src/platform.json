@@ -8176,6 +8176,970 @@
         "x-codegen-request-body-name": "integration"
       }
     },
+    "/projects/{projectIdOrName}/integrations/{integrationIdOrName}": {
+      "get": {
+        "summary": "Get an integration by ID or name",
+        "operationId": "getIntegration",
+        "tags": [
+          "Integration"
+        ],
+        "parameters": [
+          {
+            "name": "integrationIdOrName",
+            "in": "path",
+            "required": true,
+            "description": "The integration ID or name.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          {
+            "name": "projectIdOrName",
+            "in": "path",
+            "required": true,
+            "description": "The Ampersand project ID or project name.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "my-project"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The integration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Integration",
+                  "required": [
+                    "createTime",
+                    "id",
+                    "latestRevision",
+                    "name",
+                    "projectId",
+                    "provider"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The integration ID."
+                    },
+                    "projectId": {
+                      "type": "string",
+                      "description": "The Ampersand project ID.",
+                      "example": "project-456"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The integration name.",
+                      "example": "read-accounts"
+                    },
+                    "provider": {
+                      "type": "string",
+                      "description": "The SaaS provider that this integration connects to.",
+                      "example": "salesforce"
+                    },
+                    "createTime": {
+                      "type": "string",
+                      "description": "The time the integration was created.",
+                      "format": "date-time"
+                    },
+                    "updateTime": {
+                      "type": "string",
+                      "description": "The time the integration was last updated.",
+                      "format": "date-time"
+                    },
+                    "latestRevision": {
+                      "title": "Revision",
+                      "required": [
+                        "content",
+                        "createTime",
+                        "id",
+                        "specVersion"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "The revision ID.",
+                          "example": "revision-id-1"
+                        },
+                        "specVersion": {
+                          "type": "string",
+                          "description": "The spec version string.",
+                          "example": "1.0.0"
+                        },
+                        "createTime": {
+                          "type": "string",
+                          "description": "The time the revision was created.",
+                          "format": "date-time"
+                        },
+                        "content": {
+                          "title": "Integration",
+                          "type": "object",
+                          "required": [
+                            "name",
+                            "provider"
+                          ],
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "provider": {
+                              "type": "string"
+                            },
+                            "displayName": {
+                              "type": "string",
+                              "x-go-type-skip-optional-pointer": true
+                            },
+                            "module": {
+                              "type": "string",
+                              "x-go-type-skip-optional-pointer": true
+                            },
+                            "read": {
+                              "title": "Read Integration",
+                              "type": "object",
+                              "properties": {
+                                "objects": {
+                                  "type": "array",
+                                  "items": {
+                                    "title": "Integration Object",
+                                    "type": "object",
+                                    "required": [
+                                      "objectName",
+                                      "destination",
+                                      "schedule"
+                                    ],
+                                    "properties": {
+                                      "objectName": {
+                                        "type": "string"
+                                      },
+                                      "destination": {
+                                        "type": "string"
+                                      },
+                                      "schedule": {
+                                        "type": "string"
+                                      },
+                                      "mapToName": {
+                                        "type": "string",
+                                        "description": "An object name to map to.",
+                                        "example": "people",
+                                        "x-go-type-skip-optional-pointer": true
+                                      },
+                                      "mapToDisplayName": {
+                                        "type": "string",
+                                        "description": "A display name to map to.",
+                                        "example": "People",
+                                        "x-go-type-skip-optional-pointer": true
+                                      },
+                                      "requiredFields": {
+                                        "type": "array",
+                                        "items": {
+                                          "title": "Integration Field",
+                                          "oneOf": [
+                                            {
+                                              "title": "Integration Field Existent",
+                                              "type": "object",
+                                              "required": [
+                                                "fieldName"
+                                              ],
+                                              "properties": {
+                                                "fieldName": {
+                                                  "type": "string"
+                                                },
+                                                "mapToName": {
+                                                  "type": "string",
+                                                  "description": "The field name to map to.",
+                                                  "example": "account_id",
+                                                  "x-go-type-skip-optional-pointer": true
+                                                },
+                                                "mapToDisplayName": {
+                                                  "type": "string",
+                                                  "description": "The display name to map to.",
+                                                  "example": "Account ID",
+                                                  "x-go-type-skip-optional-pointer": true
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "title": "Integration Field Mapping",
+                                              "type": "object",
+                                              "required": [
+                                                "mapToName"
+                                              ],
+                                              "properties": {
+                                                "mapToName": {
+                                                  "type": "string"
+                                                },
+                                                "mapToDisplayName": {
+                                                  "type": "string"
+                                                },
+                                                "default": {
+                                                  "type": "string"
+                                                },
+                                                "prompt": {
+                                                  "type": "string"
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "optionalFields": {
+                                        "type": "array",
+                                        "items": {
+                                          "title": "Integration Field",
+                                          "oneOf": [
+                                            {
+                                              "title": "Integration Field Existent",
+                                              "type": "object",
+                                              "required": [
+                                                "fieldName"
+                                              ],
+                                              "properties": {
+                                                "fieldName": {
+                                                  "type": "string"
+                                                },
+                                                "mapToName": {
+                                                  "type": "string",
+                                                  "description": "The field name to map to.",
+                                                  "example": "account_id",
+                                                  "x-go-type-skip-optional-pointer": true
+                                                },
+                                                "mapToDisplayName": {
+                                                  "type": "string",
+                                                  "description": "The display name to map to.",
+                                                  "example": "Account ID",
+                                                  "x-go-type-skip-optional-pointer": true
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "title": "Integration Field Mapping",
+                                              "type": "object",
+                                              "required": [
+                                                "mapToName"
+                                              ],
+                                              "properties": {
+                                                "mapToName": {
+                                                  "type": "string"
+                                                },
+                                                "mapToDisplayName": {
+                                                  "type": "string"
+                                                },
+                                                "default": {
+                                                  "type": "string"
+                                                },
+                                                "prompt": {
+                                                  "type": "string"
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "optionalFieldsAuto": {
+                                        "title": "Optional Fields Auto Option",
+                                        "type": "string",
+                                        "enum": [
+                                          "all"
+                                        ]
+                                      },
+                                      "backfill": {
+                                        "title": "Backfill",
+                                        "type": "object",
+                                        "required": [
+                                          "defaultPeriod"
+                                        ],
+                                        "properties": {
+                                          "defaultPeriod": {
+                                            "title": "Default Period",
+                                            "type": "object",
+                                            "properties": {
+                                              "days": {
+                                                "type": "integer",
+                                                "description": "Number of days in past to backfill from. 0 is no backfill. e.g) if 10, then backfill last 10 days of data. Required if fullHistory is not set.",
+                                                "minimum": 0,
+                                                "example": 30,
+                                                "x-oapi-codegen-extra-tags": {
+                                                  "validate": "required_without=FullHistory,omitempty,min=0"
+                                                }
+                                              },
+                                              "fullHistory": {
+                                                "type": "boolean",
+                                                "description": "If true, backfill all history. Required if days is not set.",
+                                                "example": false,
+                                                "x-oapi-codegen-extra-tags": {
+                                                  "validate": "required_without=Days"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "delivery": {
+                                        "title": "Delivery",
+                                        "type": "object",
+                                        "properties": {
+                                          "mode": {
+                                            "type": "string",
+                                            "default": "auto",
+                                            "enum": [
+                                              "onRequest",
+                                              "auto"
+                                            ],
+                                            "description": "The data delivery mode for this object. If not specified, defaults to automatic."
+                                          },
+                                          "pageSize": {
+                                            "type": "integer",
+                                            "description": "The number of records to receive per data delivery.",
+                                            "minimum": 50,
+                                            "maximum": 500
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "write": {
+                              "title": "Write Integration",
+                              "type": "object",
+                              "properties": {
+                                "objects": {
+                                  "type": "array",
+                                  "items": {
+                                    "title": "Integration Write Object",
+                                    "type": "object",
+                                    "required": [
+                                      "objectName"
+                                    ],
+                                    "properties": {
+                                      "objectName": {
+                                        "type": "string"
+                                      },
+                                      "inheritMapping": {
+                                        "type": "boolean",
+                                        "description": "If true, the write object will inherit the mapping from the read object. If false, the write object will have no mapping.",
+                                        "example": true
+                                      },
+                                      "valueDefaults": {
+                                        "title": "Value Defaults",
+                                        "type": "object",
+                                        "description": "Configuration to set default write values for object fields.",
+                                        "properties": {
+                                          "allowAnyFields": {
+                                            "type": "boolean",
+                                            "description": "If true, users can set default values for any field.",
+                                            "example": true
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "proxy": {
+                              "title": "Proxy Integration",
+                              "type": "object",
+                              "properties": {
+                                "enabled": {
+                                  "type": "boolean"
+                                },
+                                "useModule": {
+                                  "type": "boolean",
+                                  "description": "Default is false. If this is set to true, the base URL for the proxy action will be the module's base URL. Otherwise, it is assumed that the base URL is the provider's root base URL."
+                                }
+                              }
+                            },
+                            "subscribe": {
+                              "title": "Subscribe Integration",
+                              "type": "object",
+                              "properties": {
+                                "objects": {
+                                  "type": "array",
+                                  "items": {
+                                    "title": "Integration Subscribe Object",
+                                    "type": "object",
+                                    "required": [
+                                      "objectName",
+                                      "destination"
+                                    ],
+                                    "properties": {
+                                      "objectName": {
+                                        "type": "string"
+                                      },
+                                      "destination": {
+                                        "type": "string"
+                                      },
+                                      "inheritFieldsAndMapping": {
+                                        "type": "boolean",
+                                        "x-go-type-skip-optional-pointer": true,
+                                        "description": "If true, the integration will inherit the fields and mapping from the read object.",
+                                        "example": true
+                                      },
+                                      "createEvent": {
+                                        "type": "object",
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "string",
+                                            "description": "If always, the integration will subscribe to create events by default.",
+                                            "enum": [
+                                              "always"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "updateEvent": {
+                                        "type": "object",
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "string",
+                                            "description": "If always, the integration will subscribe to update events by default.",
+                                            "enum": [
+                                              "always"
+                                            ]
+                                          },
+                                          "watchFieldsAuto": {
+                                            "type": "string",
+                                            "description": "If all, the integration will watch all fields for updates.",
+                                            "enum": [
+                                              "all"
+                                            ],
+                                            "example": "all"
+                                          },
+                                          "requiredWatchFields": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string",
+                                              "description": "The fields that are required to be watched for updates.",
+                                              "example": [
+                                                "name",
+                                                "domain"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "deleteEvent": {
+                                        "type": "object",
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "string",
+                                            "description": "If always, the integration will subscribe to delete events by default.",
+                                            "enum": [
+                                              "always"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "associationChangeEvent": {
+                                        "type": "object",
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "string",
+                                            "description": "If always, the integration will subscribe to association change events.",
+                                            "enum": [
+                                              "always"
+                                            ]
+                                          },
+                                          "includeFullRecords": {
+                                            "type": "boolean",
+                                            "description": "If true, the integration will include full records in the event payload."
+                                          }
+                                        }
+                                      },
+                                      "otherEvents": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string",
+                                          "description": "Non-standard events that the integration will subscribe to.",
+                                          "example": [
+                                            "object.merged",
+                                            "object.restored"
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Integration not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "Input Validation Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "API Problem",
+                      "type": "object",
+                      "allOf": [
+                        {
+                          "title": "Problem",
+                          "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that identifies the problem type",
+                              "default": "about:blank"
+                            },
+                            "href": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                            },
+                            "title": {
+                              "type": "string",
+                              "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                              "example": "Service Unavailable"
+                            },
+                            "status": {
+                              "type": "integer",
+                              "format": "int32",
+                              "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                              "minimum": 400,
+                              "maximum": 600,
+                              "exclusiveMaximum": true,
+                              "example": 503
+                            },
+                            "detail": {
+                              "type": "string",
+                              "description": "A human-readable explanation specific to this occurrence of the problem"
+                            },
+                            "instance": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                            }
+                          },
+                          "example": {
+                            "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                            "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                            "title": "Description of the type of problem that occurred",
+                            "status": 400,
+                            "detail": "Description of specific occurrence of the problem",
+                            "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                          }
+                        }
+                      ],
+                      "properties": {
+                        "subsystem": {
+                          "type": "string",
+                          "description": "The subsystem that generated the problem",
+                          "example": "api"
+                        },
+                        "time": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "The time the problem occurred, formatted as RFC-3339",
+                          "example": "2024-04-22T18:55:28.456076Z"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "A unique identifier for the request, useful for debugging",
+                          "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                        },
+                        "causes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "description": "A brief description of something which caused the problem",
+                            "example": "database connection failed"
+                          },
+                          "example": [
+                            "database connection failed",
+                            "database query failed",
+                            "unable to fetch user"
+                          ],
+                          "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                        },
+                        "remedy": {
+                          "type": "string",
+                          "description": "A brief description of how to resolve the problem",
+                          "example": "Shorten your input to be under 100 characters"
+                        },
+                        "supportEmail": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "An email address to contact for support",
+                          "example": "support@withampersand.com"
+                        },
+                        "supportPhone": {
+                          "type": "string",
+                          "description": "A phone number to contact for support",
+                          "example": "+1-555-555-5555"
+                        },
+                        "supportUrl": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "A URL to contact for support",
+                          "example": "https://withampersand.com/support"
+                        },
+                        "retryable": {
+                          "type": "boolean",
+                          "description": "Whether the request can be retried",
+                          "example": false
+                        },
+                        "retryAfter": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                          "example": "2024-04-22T18:55:28.456076Z"
+                        },
+                        "context": {
+                          "type": "object",
+                          "description": "Additional context for the problem",
+                          "additionalProperties": true,
+                          "example": {
+                            "name": "Rick Sanchez"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "issues": {
+                      "type": "array",
+                      "items": {
+                        "title": "Input Validation Issue",
+                        "type": "object",
+                        "description": "An issue detected during input validation.\n",
+                        "allOf": [
+                          {
+                            "title": "API Problem",
+                            "type": "object",
+                            "allOf": [
+                              {
+                                "title": "Problem",
+                                "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that identifies the problem type",
+                                    "default": "about:blank"
+                                  },
+                                  "href": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                                    "example": "Service Unavailable"
+                                  },
+                                  "status": {
+                                    "type": "integer",
+                                    "format": "int32",
+                                    "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                                    "minimum": 400,
+                                    "maximum": 600,
+                                    "exclusiveMaximum": true,
+                                    "example": 503
+                                  },
+                                  "detail": {
+                                    "type": "string",
+                                    "description": "A human-readable explanation specific to this occurrence of the problem"
+                                  },
+                                  "instance": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                                  }
+                                },
+                                "example": {
+                                  "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                                  "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                                  "title": "Description of the type of problem that occurred",
+                                  "status": 400,
+                                  "detail": "Description of specific occurrence of the problem",
+                                  "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "subsystem": {
+                                "type": "string",
+                                "description": "The subsystem that generated the problem",
+                                "example": "api"
+                              },
+                              "time": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "The time the problem occurred, formatted as RFC-3339",
+                                "example": "2024-04-22T18:55:28.456076Z"
+                              },
+                              "requestId": {
+                                "type": "string",
+                                "description": "A unique identifier for the request, useful for debugging",
+                                "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                              },
+                              "causes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "description": "A brief description of something which caused the problem",
+                                  "example": "database connection failed"
+                                },
+                                "example": [
+                                  "database connection failed",
+                                  "database query failed",
+                                  "unable to fetch user"
+                                ],
+                                "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                              },
+                              "remedy": {
+                                "type": "string",
+                                "description": "A brief description of how to resolve the problem",
+                                "example": "Shorten your input to be under 100 characters"
+                              },
+                              "supportEmail": {
+                                "type": "string",
+                                "format": "email",
+                                "description": "An email address to contact for support",
+                                "example": "support@withampersand.com"
+                              },
+                              "supportPhone": {
+                                "type": "string",
+                                "description": "A phone number to contact for support",
+                                "example": "+1-555-555-5555"
+                              },
+                              "supportUrl": {
+                                "type": "string",
+                                "format": "uri",
+                                "description": "A URL to contact for support",
+                                "example": "https://withampersand.com/support"
+                              },
+                              "retryable": {
+                                "type": "boolean",
+                                "description": "Whether the request can be retried",
+                                "example": false
+                              },
+                              "retryAfter": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                                "example": "2024-04-22T18:55:28.456076Z"
+                              },
+                              "context": {
+                                "type": "object",
+                                "description": "Additional context for the problem",
+                                "additionalProperties": true,
+                                "example": {
+                                  "name": "Rick Sanchez"
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "properties": {
+                          "in": {
+                            "type": "string",
+                            "description": "The location of the invalid input",
+                            "enum": [
+                              "body",
+                              "header",
+                              "path",
+                              "query"
+                            ]
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the invalid input"
+                          },
+                          "value": {
+                            "description": "The value of the erroneous input"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "type": "about:blank",
+                    "title": "Bad Request",
+                    "status": 400,
+                    "detail": "The input message is incorrect",
+                    "instance": "123456-1234-1235-4567489798",
+                    "issues": [
+                      {
+                        "type": "about:blank",
+                        "detail": "exampleNumericProperty should be numeric",
+                        "in": "path",
+                        "name": "exampleNumericProperty",
+                        "value": "abc"
+                      },
+                      {
+                        "type": "about:blank",
+                        "title": "Input isn't valid with respect to schema",
+                        "detail": "examplePropertyWithPattern a2345678901 doesn't match pattern '^\\d{11}$'",
+                        "in": "body",
+                        "name": "items[0].examplePropertyWithPattern",
+                        "value": "a2345678901"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects/{projectIdOrName}/integrations/{integrationId}": {
       "delete": {
         "summary": "Delete an integration",
