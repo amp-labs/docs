@@ -1,0 +1,71 @@
+---
+title: "Blackbaud"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL https://api.sky.blackbaud.com.
+
+## Before You Get Started
+
+To connect Blackbaud with Ampersand, you need [a Blackbaud Account](https://developer.blackbaud.com/).
+
+Once your account is created, you'll need to create an app in Blackbaud and obtain the following credentials from your app:
+
+- Application ID(Client ID)
+- Application secret(Client Secret)
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Creating a Blackbaud App
+
+Follow the steps below to create a Blackbaud app.
+
+1. Log in to your [Blackbaud](https://developer.blackbaud.com/) account.
+
+2. After logging in, navigate to **SKY API -> My account**.
+
+3. Click **My applications -> New application**
+
+4. In the **Application name** field, enter the name of your application and provide additional details in the **Application details** section.
+
+5. In the **Application website URL** field, enter your website URL, then click **Save**.
+
+6. Under **Settings**, click **Edit redirect URIs** in the **Redirect URIs** section. Add the required redirect URIs and click **Save**.
+
+7. Under **Settings**, click **Edit scopes** in the **Scopes** section. Select the required scopes and click **Save**.
+
+   ![Blackbaud OAuth Creation](/images/provider-guides/blackbaud_oauth.gif)
+
+### Example integration
+
+To define an integration for Blackbaud, create a manifest file that looks like this:
+
+```YAML
+#amp.yaml
+specVersion: 1.0.0
+integrations: 
+  - name: blackbaud-proxy
+    displayName: Blackbaud
+    provider: blackbaud
+    proxy:
+      enabled: true
+```
+
+## Add Your Blackbaud App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Blackbaud integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.  
+
+4. Select Blackbaud from the **Provider** list.
+
+5. Enter the previously obtained Client ID in the **Client ID** field, the Client Secret in the **Client Secret** field.
+
+   ![Ampersand Integration](/images/provider-guides/blackbaud.gif)
