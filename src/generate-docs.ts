@@ -309,6 +309,7 @@ const baseConfig = {
             "provider-guides/customerJourneysTrack",
             "provider-guides/delighted",
             "provider-guides/discord",
+            "provider-guides/discourse",
             "provider-guides/dixa",
             "provider-guides/docusign",
             "provider-guides/domo",
