@@ -7,60 +7,121 @@ title: "GitLab"
 ### Supported Actions
 
 This connector supports:
-
+- [Read Actions](/read-actions), including full historic backfill and incremental read for most of the supported objects.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://gitlab.com`.
+
+### Supported Objects
+
+The Gitlab connector supports reading from the following objects:
+
+- [admin/search/migrations](https://docs.gitlab.com/api/admin/search_migrations)
+- [application/appearance](https://docs.gitlab.com/api/appearance/#get-details-on-current-application-appearance)
+- [application/plan_limits](https://docs.gitlab.com/api/plan_limits)
+- [application/settings](https://docs.gitlab.com/api/settings)
+- [applications](https://docs.gitlab.com/api/applications)
+- [audit_events](https://docs.gitlab.com/api/audit_events)
+- [broadcast_messages](https://docs.gitlab.com/api/broadcast_messages)
+- [bulk_imports](https://docs.gitlab.com/api/bulk_imports)
+- [bulk_imports/entities](https://docs.gitlab.com/api/bulk_imports/#list-group-or-project-migration-entities)
+- [deploy_keys](https://docs.gitlab.com/api/deploy_keys)
+- [deploy_tokens](https://docs.gitlab.com/api/deploy_tokens)
+- [events](https://docs.gitlab.com/api/events)
+- [experiments](https://docs.gitlab.com/api/experiments)
+- [geo_nodes/status](https://docs.gitlab.com/api/geo_nodes#status)
+- [geo_sites](https://docs.gitlab.com/api/geo_sites)
+- [geo_sites/status](https://docs.gitlab.com/api/geo_sites#status)
+- [groups](https://docs.gitlab.com/api/groups)
+- [hooks](https://docs.gitlab.com/api/system_hooks)
+- [issues](https://docs.gitlab.com/api/issues)
+- [issues_statistics](https://docs.gitlab.com/api/issues_statistics)
+- [license](https://docs.gitlab.com/api/license)
+- [licenses](https://docs.gitlab.com/api/templates/licenses)
+- [member_roles](https://docs.gitlab.com/api/member_roles)
+- [merge_requests](https://docs.gitlab.com/api/merge_requests)
+- [metadata](https://docs.gitlab.com/api/metadata)
+- [namespaces](https://docs.gitlab.com/api/namespaces)
+- [pages/domains](https://docs.gitlab.com/api/pages_domains/)
+- [personal_access_tokens](https://docs.gitlab.com/api/personal_access_tokens)
+- [personal_access_tokens/self/associations](https://docs.gitlab.com/api/personal_access_tokens/#list-all-token-associations)
+- [project_aliases](https://docs.gitlab.com/api/project_aliases)
+- [project_repository_storage_moves](https://docs.gitlab.com/api/project_repository_storage_moves)
+- [projects](https://docs.gitlab.com/api/projects)
+- [runners](https://docs.gitlab.com/api/runners)
+- [runners/all](https://docs.gitlab.com/api/runners/#list-all-runners)
+- [service_accounts](https://docs.gitlab.com/api/service_accounts)
+- [sidekiq/compound_metrics](https://docs.gitlab.com/api/sidekiq_metrics)
+- [sidekiq/job_stats](https://docs.gitlab.com/api/sidekiq_metrics/#get-the-current-job-statistics)
+- [sidekiq/process_metrics](https://docs.gitlab.com/api/sidekiq_metrics/#get-the-current-process-metrics)
+- [sidekiq/queue_metrics](https://docs.gitlab.com/api/sidekiq_metrics)
+- [snippet_repository_storage_moves](https://docs.gitlab.com/api/snippet_repository_storage_moves)
+- [snippets](https://docs.gitlab.com/api/snippets)
+- [snippets/all](https://docs.gitlab.com/api/snippets/#list-all-snippets)
+- [snippets/public](https://docs.gitlab.com/api/snippets/#list-all-public-snippets)
+- [templates/dockerfiles](https://docs.gitlab.com/api/templates/dockerfiles)
+- [templates/gitignores](https://docs.gitlab.com/api/templates/gitignores)
+- [templates/gitlab_ci_ymls](https://docs.gitlab.com/api/templates/gitlab_ci_ymls)
+- [templates/licenses](https://docs.gitlab.com/api/templates/licenses)
+- [todos](https://docs.gitlab.com/api/todos)
+- [topics](https://docs.gitlab.com/api/topics)
+- [users](https://docs.gitlab.com/api/users)
+
+The Gitlab connector supports writing to the following objects:
+
+- [applications](https://docs.gitlab.com/api/applications)
+- [broadcast_messages](https://docs.gitlab.com/api/broadcast_messages)
+- [chat/completions](https://docs.gitlab.com/api/chat)
+- [code_suggestions/completions](http://docs.gitlab.com/api/suggestions/)
+- [deploy_keys](https://docs.gitlab.com/api/deploy_keys)
+- [geo_nodes](https://docs.gitlab.com/api/geo_nodes)
+- [geo_sites](https://docs.gitlab.com/api/geo_sites)
+- [group_repository_storage_moves](https://docs.gitlab.com/api/group_repository_storage_moves)
+- [groups](https://docs.gitlab.com/api/groups)
+- [hooks](https://docs.gitlab.com/administration/system_hooks/)
+- [member_roles](https://docs.gitlab.com/api/member_roles/#create-a-instance-member-role)
+- [organizations](https://docs.gitlab.com/api/organizations)
+- [project_aliases](https://docs.gitlab.com/api/project_aliases)
+- [project_repository_storage_moves](https://docs.gitlab.com/api/project_repository_storage_moves)
+- [projects](https://docs.gitlab.com/api/projects)
+- [runners](https://docs.gitlab.com/api/runners)
+- [security/vulnerability_exports](https://docs.gitlab.com/api/vulnerability_exports/)
+- [service_accounts](https://docs.gitlab.com/api/service_accounts/)
+- [snippets](https://docs.gitlab.com/api/snippets)
+- [todos/mark_as_done](https://docs.gitlab.com/api/todos/#mark-all-to-do-items-as-done)
+- [topics](https://docs.gitlab.com/api/topics)
+- [user/emails](https://docs.gitlab.com/api/user_email_addresses/#add-an-email-address)
+- [user/gpg_keys](https://docs.gitlab.com/api/user/gpg_keys)
+- [user/keys](https://docs.gitlab.com/api/user/keys)
+- [user/runners](https://docs.gitlab.com/api/user/runners)
+- [user/support_pin](https://docs.gitlab.com/api/users/#create-a-support-pin)
+- [users](https://docs.gitlab.com/api/users)
+
+### Example integration
+
+For an example manifest file of an Gitlab integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/gitlab/amp.yaml).
 
 ## Before You Get Started
 
-To connect GitLab with Ampersand, you need to Create a [GitLab Account](#create-a-gitlab-account) and obtain the following credentials from your gitlab App:
+### Creating Access Token for Gitlab
 
-- Client ID
-- Client Secret
+[Click here](https://gitlab.com/-/user_settings/personal_access_tokens) for more information about generating an Access Token key for Gitlab. The UI components will display this link, so that your users can successfully create Access tokens.
 
-You will then use these credentials to connect your application to Ampersand.
+## Using the connector
 
-### Create a GitLab Account
+This connector uses GitLab Access Tokens for authentication, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
-You need a **GitLab** account to connect with Ampersand. If you do not have a GitLab account, here's how you can sign up:
+Your customer can pick between:
+- [Personal access tokens](https://docs.gitlab.com/user/profile/personal_access_tokens/)
+- [Project access tokens](https://docs.gitlab.com/user/project/settings/project_access_tokens/)
+- [Group access tokens](https://docs.gitlab.com/user/group/settings/group_access_tokens/)
 
-- Go to [GitLab](https://gitlab.com/) and sign up for a free account using your preferred method.
+To start integrating with Gitlab:
 
-### Creating a GitLab OAuth App
-
-Once your gitlab account is ready, you need to create a gitlab OAuth application.
-
-1. Log in to [GitLab](https://gitlab.com/users/sign_in).
-
-2. Go to the [applications page](https://gitlab.com/-/user_settings/applications)
-
-3. Click on **Add new application**.
-
-4. On the Applicationns Page, enter the following details:
-
-   1. **App Name**: The name of the app.
-   2. **Redirect URI**: Enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
-   3. Choose the scopes that are applicable for your application.
-
-5. Click on **Save Application**
-
-   ![Ampersand Project Selection](/images/provider-guides/OAuth-gitlab.gif)
-
-You can find the **Client ID** and **Client Secret** keys on the app details page. Note these keys, as they are essential for connecting your app to Ampersand.
-
-## Add GitLab App Details in Ampersand
-
-1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
-
-2. Select the project where you want to add the gitlab App.
-
-   ![Ampersand Project Selection](/images/provider-guides/eba5c80-Ampersand.png)
-
-3. Navigate to the **Provider Apps** section.
-
-4. Select **gitlab** from the Provider list.
-
-5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
-
-   ![Ampersand Project Selection](/images/provider-guides/gitlab-amp.gif)
-
-6. Click **Save Changes**.
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/gitlab/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an Access token.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
