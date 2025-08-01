@@ -371,6 +371,7 @@ const baseConfig = {
             "provider-guides/mixmax",
             "provider-guides/monday",
             "provider-guides/mural",
+            "provider-guides/netsuite",
             "provider-guides/notion",
             "provider-guides/nutshell",
             "provider-guides/openAI",
