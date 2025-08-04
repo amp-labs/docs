@@ -434,6 +434,7 @@ const baseConfig = {
       group: "Authentication",
       pages: [
         "reference/auth",
+        "jwt-authentication",
       ],
     },
     {
