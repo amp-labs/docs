@@ -1,0 +1,51 @@
+---
+title: AWS
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the AWS instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), unsupported.
+
+
+### Supported Objects
+The AWS connector supports reading and writing to and from the following objects:
+- [AccountAssignmentCreationStatus](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/list-account-assignment-creation-status.html) (read)
+- [AccountAssignmentDeletionStatus](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/list-account-assignment-deletion-status.html) (read)
+- [ApplicationProviders](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/list-application-providers.html) (read)
+- [Applications](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/list-applications.html) (read/create/update/delete)
+- [Groups](https://docs.aws.amazon.com/cli/latest/reference/identitystore/list-groups.html) (read/create/update/delete)
+- [Instances](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/list-instances.html) (read/create/update/delete)
+- [PermissionSetProvisioningStatus](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/list-permission-set-provisioning-status.html) (read)
+- [TrustedTokenIssuers](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/list-trusted-token-issuers.html) (read/create/update/delete)
+- [Users](https://docs.aws.amazon.com/cli/latest/reference/identitystore/list-users.html) (read/create/update/delete)
+
+Objects without read capability:
+- [AccountAssignments](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/create-account-assignment.html) (create)
+- [ApplicationAccessScopes](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/put-application-access-scope.html) (update)
+- [ApplicationAssignmentConfigurations](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/put-application-assignment-configuration.html) (update)
+- [ApplicationAssignments](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/create-application-assignment.html) (create)
+- [ApplicationAuthenticationMethods](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/put-application-authentication-method.html) (update)
+- [ApplicationGrants](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/put-application-grant.html) (update)
+- [GroupMemberships](https://docs.aws.amazon.com/cli/latest/reference/identitystore/create-group-membership.html) (create/delete)
+- [InstanceAccessControlAttributeConfigurations](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/create-instance-access-control-attribute-configuration.html) (create/delete)
+- [PermissionSets](https://docs.aws.amazon.com/cli/latest/reference/sso-admin/create-permission-set.html) (create/update/delete)
+
+## Using the connector
+
+This connector uses **Basic Auth**:
+- **Username** = AWS Access Key ID
+- **Password** = AWS Access Key Secret
+
+### Obtain Access Key ID and Secret
+Follow instructions to [get your AWS access keys](https://docs.aws.amazon.com/sdk-for-go/v2/developer-guide/getting-started.html#get-your-aws-access-keys).
+
+### Obtain connector metadata
+To initialize the connector, you need:
+* AWS region
+* Identity Store ID
+* Instance ARN
+To find these, open AWS dashboard, search for **IAM Identity Center** service, then open the **Settings** tab.
