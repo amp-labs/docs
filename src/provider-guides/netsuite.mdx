@@ -15,11 +15,16 @@ This connector supports:
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://{account_id}.suitetalk.api.netsuite.com`, where `{account_id}` is your NetSuite account ID.
 
-### Supported Modules
+### Supported Modules & Objects
 
 The NetSuite connector supports the following modules:
-- SuiteQL (`suiteql`) - this is a read-only module that allows you to read data from NetSuite using SuiteQL.
-- REST API (`restapi`) - this module allows you to read and write data to NetSuite using the REST API.
+1) SuiteQL (referred to as `suiteql` in `amp.yaml`)
+   - This is a read-only module that allows you to read data from NetSuite using [SuiteQL](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156257770590.html).
+   - This module supports nearly all of the records documented in the [NetSuite Record Browser](https://system.netsuite.com/help/helpcenter/en_US/srbrowser/Browser2024_2/script/record/account.html).
+
+2) REST API (referred to as `restapi` in `amp.yaml`)
+   - This module allows you to read and write data to NetSuite using the REST API.
+   - It supports all the resources documented in the [NetSuite REST API Reference](https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2024.2/index.html).
 
 By default, the connector will use the `restapi` module. To deploy the connector with the `suiteql` module, you will need to specify the `module` field in the YAML manifest file.
 
@@ -28,7 +33,7 @@ specVersion: 1.0.0
 integrations:
   - name: netsuite-suiteql-integration
     provider: netsuite
-    module: suiteql
+    module: suiteql # default is restapi
     ...
 ```
 
