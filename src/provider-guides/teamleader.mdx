@@ -11,7 +11,69 @@ updatedAt: "Thu Aug 01 2024 00:53:31 GMT+0000 (Coordinated Universal Time)"
 ### Supported Actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Pinterest instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.focus.teamleader.eu`.
+
+
+
+### Supported objects
+The teamleader connector supports reading from the following objects:
+- [activityTypes](https://developer.focus.teamleader.eu/docs/api/activity-types-list)
+- [callOutcomes](https://developer.focus.teamleader.eu/docs/api/call-outcomes-list)
+- [calls](https://developer.focus.teamleader.eu/docs/api/calls-list)
+- [closingDays](https://developer.focus.teamleader.eu/docs/api/closing-days-list)
+- [commercialDiscounts](https://developer.focus.teamleader.eu/docs/api/commercial-discounts-list)
+- [companies](https://developer.focus.teamleader.eu/docs/api/companies-list)
+- [contacts](https://developer.focus.teamleader.eu/docs/api/contacts-list)
+- [creditNotes](https://developer.focus.teamleader.eu/docs/api/credit-notes-list)
+- [customFieldDefinitions](https://developer.focus.teamleader.eu/docs/api/custom-field-definitions-list)
+- [dealPhases](https://developer.focus.teamleader.eu/docs/api/deal-phases-list)
+- [dealPipelines](https://developer.focus.teamleader.eu/docs/api/deal-pipelines-list)
+- [dealSources](https://developer.focus.teamleader.eu/docs/api/deal-sources-list)
+- [deals](https://developer.focus.teamleader.eu/docs/api/deals-list)
+- [departments](https://developer.focus.teamleader.eu/docs/api/departments-list)
+- [events](https://developer.focus.teamleader.eu/docs/api/events-list)
+- [files](https://developer.focus.teamleader.eu/docs/api/files-list)
+- [invoices](https://developer.focus.teamleader.eu/docs/api/invoices-list)
+- [mailTemplates](https://developer.focus.teamleader.eu/docs/api/mail-templates-list)
+- [meetings](https://developer.focus.teamleader.eu/docs/api/meetings-list)
+- [milestones](https://developer.focus.teamleader.eu/docs/api/milestones-list)
+- [orders](https://developer.focus.teamleader.eu/docs/api/orders-list)
+- [paymentMethods](https://developer.focus.teamleader.eu/docs/api/payment-methods-list)
+- [priceLists](https://developer.focus.teamleader.eu/docs/api/price-lists-list)
+- [productCategories](https://developer.focus.teamleader.eu/docs/api/product-categories-list)
+- [products](https://developer.focus.teamleader.eu/docs/api/products-list)
+- [projects](https://developer.focus.teamleader.eu/docs/api/projects-list)
+- [quotations](https://developer.focus.teamleader.eu/docs/api/quotations-list)
+- [subscriptions](https://developer.focus.teamleader.eu/docs/api/subscriptions-list)
+- [tags](https://developer.focus.teamleader.eu/docs/api/tags-list)
+- [tasks](https://developer.focus.teamleader.eu/docs/api/tasks-list)
+- [taxRates](https://developer.focus.teamleader.eu/docs/api/tax-rates-list)
+- [teams](https://developer.focus.teamleader.eu/docs/api/teams-list)
+- [tickets](https://developer.focus.teamleader.eu/docs/api/tickets-list)
+- [ticketStatus](https://developer.focus.teamleader.eu/docs/api/ticket-status-list)
+- [timeTracking](https://developer.focus.teamleader.eu/docs/api/time-tracking-list)
+- [unitsOfMeasure](https://developer.focus.teamleader.eu/docs/api/units-of-measure-list)
+- [users](https://developer.focus.teamleader.eu/docs/api/users-list)
+- [withholdingTaxRates](https://developer.focus.teamleader.eu/docs/api/withholding-tax-rates-list)
+- [workTypes](https://developer.focus.teamleader.eu/docs/api/work-types-list)
+
+
+The teamleader connector supports writing to the following objects:
+- [calls](https://developer.focus.teamleader.eu/docs/api/calls-add)
+- [contacts](https://developer.focus.teamleader.eu/docs/api/contacts-add)
+- [companies](https://developer.focus.teamleader.eu/docs/api/companies-add)
+- [deals](https://developer.focus.teamleader.eu/docs/api/deals-create)
+- [events](https://developer.focus.teamleader.eu/docs/api/deals-create)
+- [dealPipelines](https://developer.focus.teamleader.eu/docs/api/deal-pipelines-create)
+- [dealPhases](https://developer.focus.teamleader.eu/docs/api/deal-phases-create)
+- [quotations](https://developer.focus.teamleader.eu/docs/api/quotations-create)
+- [subscriptions](https://developer.focus.teamleader.eu/docs/api/subscriptions-create)
+- [tasks](https://developer.focus.teamleader.eu/docs/api/tasks-create)
+- [timeTracking](https://developer.focus.teamleader.eu/docs/api/time-tracking-add)
+- [tickets](https://developer.focus.teamleader.eu/docs/api/tickets-create)
+
 
 ## Before You Get Started
 
@@ -70,3 +132,13 @@ Follow the steps below to create a Teamleader app and add the Ampersand redirect
    ![Dashboard](/images/provider-guides/e8a7d90-teamleader2.gif)
 
 6. Click **Save Changes**.
+
+To start integrating with teamleader:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/teamleader/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
