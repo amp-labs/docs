@@ -1,0 +1,76 @@
+---
+title: QuickBooks
+---
+
+## What's Supported
+
+### Supported Actions
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://quickbooks.api.intuit.com`.
+
+### Example Integration
+
+```yaml
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: quickbooksIntegration
+    displayName: QuickBooks Integration
+    provider: quickbooks
+    proxy:
+      enabled: true
+```
+
+## Before You Get Started
+
+You'll need a QuickBooks account and will need to create a QuickBooks app to obtain the necessary OAuth2 credentials.
+
+### Creating a QuickBooks App
+
+1. Go to the [Intuit Developer Dashboard](https://developer.intuit.com/)
+2. Sign in with your Intuit account or create one if needed
+3. Click **Create an app**
+4. Choose **QuickBooks Online Accounting API**
+5. Provide your app details:
+   - **App name**: Choose a descriptive name for your app
+   - **Description**: Brief description of your integration
+6. Click **Create app**
+7. Once created, navigate to the **Keys & OAuth** tab
+8. Note down your:
+   - **Client ID** 
+   - **Client Secret**
+9. Under **Redirect URIs**, add: `https://api.withampersand.com/callbacks/v1/oauth`
+10. Configure the required scopes for your integration (QuickBooks requires explicit scope configuration)
+
+Common scopes include:
+- `com.intuit.quickbooks.accounting` - Full access to accounting data
+- `com.intuit.quickbooks.payment` - Access to payment data
+
+
+
+### Add QuickBooks App Details in Ampersand
+
+1. Log into your [Ampersand Dashboard](https://dashboard.withampersand.com)
+2. Select your project
+3. Navigate to **Provider apps** 
+4. Find **QuickBooks** and click **Configure**
+5. Enter your **Client ID** and **Client Secret** from the QuickBooks app
+6. Configure the required **Scopes** based on your integration needs
+7. Save your configuration
+
+<Note>
+QuickBooks API returns XML responses by default. To receive JSON responses, make sure to set the `Accept` header to `application/json` in your proxy API calls.
+</Note>
+
+
+## Using the connector
+
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) component.
+- Start making [Proxy API calls](/proxy-actions), specifying the QuickBooks endpoints you want to reach.
+
+## API documentation
+
+QuickBooks's API documentation is available at:
+- [QuickBooks API](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account#the-account-object)
