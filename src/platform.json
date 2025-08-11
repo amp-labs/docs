@@ -30,6 +30,36 @@
                   "provider"
                 ],
                 "properties": {
+                  "projectId": {
+                    "type": "string",
+                    "description": "The Ampersand project ID.",
+                    "example": "my-project"
+                  },
+                  "provider": {
+                    "type": "string",
+                    "description": "The provider that this app connects to.",
+                    "example": "salesforce"
+                  },
+                  "groupRef": {
+                    "type": "string",
+                    "description": "The ID that your app uses to identify the group of users for this Connection, this can be an Org ID, workspace ID, etc.",
+                    "example": "group-123"
+                  },
+                  "groupName": {
+                    "type": "string",
+                    "description": "The display name for the group. Defaults to groupRef if not provided.",
+                    "example": "Organization Name"
+                  },
+                  "consumerRef": {
+                    "type": "string",
+                    "description": "The ID that your app uses to identify the user whose SaaS credential will be used for this OAuth flow.",
+                    "example": "user_123456"
+                  },
+                  "consumerName": {
+                    "type": "string",
+                    "description": "The display name for the consumer. Defaults to consumerRef if not provided.",
+                    "example": "John Doe"
+                  },
                   "providerWorkspaceRef": {
                     "type": "string",
                     "description": "The identifier for the provider workspace (e.g. the Salesforce subdomain).",
@@ -69,43 +99,15 @@
                       }
                     }
                   },
-                  "projectId": {
-                    "type": "string",
-                    "description": "The Ampersand project ID.",
-                    "example": "my-project"
-                  },
-                  "groupRef": {
-                    "type": "string",
-                    "description": "The ID that your app uses to identify the group of users for this Connection, this can be an Org ID, workspace ID, etc.",
-                    "example": "group-123"
-                  },
-                  "groupName": {
-                    "type": "string",
-                    "description": "The display name for the group. Defaults to groupRef if not provided.",
-                    "example": "Organization Name"
-                  },
-                  "consumerRef": {
-                    "type": "string",
-                    "description": "The ID that your app uses to identify the user whose SaaS credential will be used for this OAuth flow.",
-                    "example": "user_123456"
-                  },
-                  "consumerName": {
-                    "type": "string",
-                    "description": "The display name for the consumer. Defaults to consumerRef if not provided.",
-                    "example": "John Doe"
-                  },
                   "providerAppId": {
                     "type": "string",
                     "description": "ID of the provider app, returned from a CreateProviderApp call. If omitted, the default provider app that was set up on the Ampersand Dashboard is assumed.",
                     "example": "32356abe-d2fd-49c7-9030-abdcbc6456d4"
                   },
-                  "provider": {
-                    "type": "string",
-                    "description": "The provider that this app connects to.",
-                    "example": "salesforce"
-                  },
                   "enableCSRFProtection": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "description": "This boolean flag is used by the UI library internally. Set it to false or omit it when manually calling this API.",
+                    "example": false
                   }
                 }
               }
