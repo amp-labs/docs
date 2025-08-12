@@ -6,7 +6,19 @@ title: "Campaign Monitor"
 
 ### Supported Actions
 This connector supports:
-* **Proxy Actions**, using the base URL `https://api.createsend.com`.
+- [Read Actions](/read-actions), including full historic backfill
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.createsend.com`.
+
+
+### Supported Objects
+The Campaign Monitor connector supports reading and writing from the following objects:
+- [clients](https://www.campaignmonitor.com/api/v3-3/account/#getting-your-clients)
+- [admins](https://www.campaignmonitor.com/api/v3-3/account/#getting-administrators)
+
+### Example integration
+
+For an example manifest file of an Campaign Monitor integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/campaignmonitor/amp.yaml).
 
 ## Before You Get Started
 
@@ -57,3 +69,15 @@ Once your OAuth app is created, you can view the **Client ID** and **Client Secr
 ![Alt text](/images/provider-guides/campaignmonitor1.gif)
 
 7. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Campaign Monitor:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/campaignmonitor/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.

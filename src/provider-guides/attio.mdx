@@ -13,27 +13,28 @@ This connector supports:
 ### Supported Objects
 The Attio connector supports reading to the following objects:
 
-- [People](https://developers.attio.com/reference/post_v2-objects-people-records-query)
-- [Companies](https://developers.attio.com/reference/post_v2-objects-companies-records-query)
-- [Users](https://developers.attio.com/reference/post_v2-objects-users-records-query)
-- [Deals](https://developers.attio.com/reference/post_v2-objects-deals-records-query)
-- [Workspaces](https://developers.attio.com/reference/post_v2-objects-workspaces-records-query)
-- [Lists](https://developers.attio.com/reference/get_v2-lists)
-- [WorkspaceMembers](https://developers.attio.com/reference/get_v2-workspace-members)
-- [Notes](https://developers.attio.com/reference/get_v2-notes)
-- [Tasks](https://developers.attio.com/reference/get_v2-tasks)
-- [Custom objects](https://developers.attio.com/reference/post_v2-objects-object-records-query)
+- [People](https://docs.attio.com/rest-api/endpoint-reference/standard-objects/people/list-person-records)
+- [Companies](https://docs.attio.com/rest-api/endpoint-reference/standard-objects/companies/list-company-records)
+- [Users](https://docs.attio.com/rest-api/endpoint-reference/standard-objects/users/list-user-records)
+- [Deals](https://docs.attio.com/rest-api/endpoint-reference/standard-objects/deals/assert-a-deal-record)
+- [Workspaces](https://docs.attio.com/rest-api/endpoint-reference/standard-objects/workspaces/assert-a-workspace-record)
+- [Lists](https://docs.attio.com/rest-api/endpoint-reference/lists/list-all-lists)
+- [WorkspaceMembers](https://docs.attio.com/rest-api/endpoint-reference/workspace-members/list-workspace-members)
+- [Notes](https://docs.attio.com/rest-api/endpoint-reference/notes/list-notes)
+- [Tasks](https://docs.attio.com/rest-api/endpoint-reference/tasks/list-tasks)
+- [Custom objects](https://docs.attio.com/rest-api/endpoint-reference/records/list-records)
 
 The Attio connector supports writing to the following objects:
-- [People](https://developers.attio.com/reference/post_v2-objects-people-records)
-- [Companies](https://developers.attio.com/reference/post_v2-objects-companies-records)
-- [Users](https://developers.attio.com/reference/post_v2-objects-users-records)
-- [Deals](https://developers.attio.com/reference/post_v2-objects-deals-records)
-- [Workspaces](https://developers.attio.com/reference/post_v2-objects-workspaces-records)
-- [Lists](https://developers.attio.com/reference/post_v2-lists)
-- [Notes](https://developers.attio.com/reference/post_v2-notes)
-- [Tasks](https://developers.attio.com/reference/post_v2-tasks)
-- [Custom objects](https://developers.attio.com/reference/post_v2-objects-object-records)
+- [People](https://docs.attio.com/rest-api/endpoint-reference/standard-objects/people/list-person-records)
+- [Companies](https://docs.attio.com/rest-api/endpoint-reference/standard-objects/companies/list-company-records)
+- [Users](https://docs.attio.com/rest-api/endpoint-reference/standard-objects/users/list-user-records)
+- [Deals](https://docs.attio.com/rest-api/endpoint-reference/standard-objects/deals/assert-a-deal-record)
+- [Workspaces](https://docs.attio.com/rest-api/endpoint-reference/standard-objects/workspaces/assert-a-workspace-record)
+- [Lists](https://docs.attio.com/rest-api/endpoint-reference/lists/list-all-lists)
+- [WorkspaceMembers](https://docs.attio.com/rest-api/endpoint-reference/workspace-members/list-workspace-members)
+- [Notes](https://docs.attio.com/rest-api/endpoint-reference/notes/list-notes)
+- [Tasks](https://docs.attio.com/rest-api/endpoint-reference/tasks/list-tasks)
+- [Custom objects](https://docs.attio.com/rest-api/endpoint-reference/records/list-records)
 
 ### Example integration
 
@@ -61,23 +62,19 @@ Here's how you can sign up for an Attio account:
 
 Follow the steps below to create an Attio app and add the Ampersand redirect URL.
 
-1. Log in to your [Attio](https://app.attio.com/auth/sign-in) account.
+1. Log in to your [Attio](https://build.attio.com/auth/login) account.
 
-2. Click **Account Settings** and go to the **Developers** tab.
+2. Click on **New app** to open the **New app** dialog.
+ 
+3. Enter a name for the application in the **name** section and click **Create app**.
 
-3. Click **Create a new integration**.
+4. Navigate to the **OAuth** section and enable **OAuth** switch to view the Client ID and Client Secret.
 
-4. In the **Create an integration** pop-up window, enter the **Integration Name**. You can also add a description and app logo.
+5. In the **Redirect URIs** section, click **New redirect URI**, add the Ampersand Redirect URI: `https://api.withampersand.com/callbacks/v1/oauth`.
 
-5. Expand the **Scopes** section and select the scopes applicable for your app.
+6. Click **Configure scopes**, enable the necessary scopes, and click Save changes.
 
-6. Expand the **OAuth** section. Here, you will find the **Client ID** and **Client Secret** keys for your app. Make a note of these credentials, as you will need them to connect your app to Ampersand.
-
-7. Enable the **OAuth Enabled** switch.
-
-8. In the **Redirect URIs**, add the Ampersand Redirect URI: `https://api.withampersand.com/callbacks/v1/oauth`.
-
-![Attio App Creation](/images/provider-guides/f8a2ac0-attio1.gif)
+![Attio App Creation](/images/provider-guides/attio_oauth.gif)
 
 ## Add Your Attio App Info to Ampersand
 
@@ -103,7 +100,7 @@ To start integrating with Attio:
 - Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/attio/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
 - Start using the connector!
    - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
    - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.

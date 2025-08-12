@@ -240,7 +240,7 @@ const baseConfig = {
           group: "AI Agents",
           pages: [
             "ai-sdk",
-            "mcp",
+            "mcp-server",
           ]
         },
         "object-and-field-mapping",
@@ -281,9 +281,11 @@ const baseConfig = {
             "provider-guides/attio",
             "provider-guides/avoma",
             "provider-guides/aweber",
-            "provider-guides/blackbaud",
+            "provider-guides/aws",
+            "provider-guides/breakcold",
             "provider-guides/bird",
             "provider-guides/bitbucket",
+            "provider-guides/blackbaud",
             "provider-guides/blueshift",
             "provider-guides/blueshiftEU",
             "provider-guides/box",
@@ -372,6 +374,7 @@ const baseConfig = {
             "provider-guides/mixmax",
             "provider-guides/monday",
             "provider-guides/mural",
+            "provider-guides/netsuite",
             "provider-guides/notion",
             "provider-guides/nutshell",
             "provider-guides/openAI",
@@ -433,6 +436,7 @@ const baseConfig = {
       group: "Authentication",
       pages: [
         "reference/auth",
+        "jwt-authentication",
       ],
     },
     {
