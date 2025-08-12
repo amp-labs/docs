@@ -1,0 +1,41 @@
+---
+title: Breakcold
+---
+## What's Supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.breakcold.com/rest`.
+
+### Example integration
+
+To define an integration for Breakcold, create a manifest file that looks like this:
+
+```YAML
+#amp.yaml
+specVersion: 1.0.0
+integrations: 
+  - name: breakcold-proxy
+    displayName: Breakcold
+    provider: breakcold
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To integrate with breakcold:
+- Create a manifest file similar to the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for an API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key provided by the customer. Please note that this connector's base URL is `https://api.breakcold.com/rest`.
+
+## Creating an API key for Breakcold
+
+1. Log in to your [Breakcold account](https://app.breakcold.com/signin). 
+2. Click settings > API Keys > Create API key.
+
+![Generate Token](/images/provider-guides/breakcold.gif)

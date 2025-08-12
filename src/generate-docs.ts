@@ -282,6 +282,7 @@ const baseConfig = {
             "provider-guides/avoma",
             "provider-guides/aweber",
             "provider-guides/aws",
+            "provider-guides/breakcold",
             "provider-guides/bird",
             "provider-guides/bitbucket",
             "provider-guides/blueshift",
