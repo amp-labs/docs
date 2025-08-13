@@ -385,7 +385,7 @@ const baseConfig = {
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
             "provider-guides/podium",
-            "provider-guides/productBoard",
+            "provider-guides/productboard",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
@@ -435,7 +435,6 @@ const baseConfig = {
       group: "Authentication",
       pages: [
         "reference/auth",
-        "jwt-authentication",
       ],
     },
     {

@@ -46,7 +46,7 @@ pnpm run gen
 ## Preview docs locally
 
 ```shell
-pnpm run dev 
+cd src && mint dev
 ```
 
 The local preview is available at http://localhost:3000, and will hot-load any changes to .mdx files.
