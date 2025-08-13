@@ -14,7 +14,7 @@
       "post": {
         "operationId": "oauthConnect",
         "summary": "Get URL for OAuth flow",
-        "description": "Generate a URL for the browser to render to kick off OAuth flow.",
+        "description": "Generate a URL for the browser to render to kick off OAuth flow. You can use this endpoint as an alternative to the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components).",
         "tags": [
           "OAuth"
         ],
@@ -55439,21 +55439,19 @@
         "name": "X-Api-Key",
         "in": "header"
       },
-      "APIKeyQueryParam": {
-        "type": "apiKey",
-        "name": "apiKey",
-        "in": "query"
-      },
       "Bearer": {
-        "type": "apiKey",
-        "name": "Authorization",
-        "in": "header"
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   },
   "security": [
     {
       "APIKeyHeader": []
+    },
+    {
+      "Bearer": []
     }
   ]
 }
