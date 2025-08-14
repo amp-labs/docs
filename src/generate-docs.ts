@@ -285,6 +285,7 @@ const baseConfig = {
             "provider-guides/breakcold",
             "provider-guides/bird",
             "provider-guides/bitbucket",
+            "provider-guides/blackbaud",
             "provider-guides/blueshift",
             "provider-guides/blueshiftEU",
             "provider-guides/box",
