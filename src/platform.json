@@ -38415,6 +38415,16 @@
                       "type": "string",
                       "description": "The time the destination was updated.",
                       "format": "date-time"
+                    },
+                    "secrets": {
+                      "type": "object",
+                      "description": "Destination secrets (only included when includeSecrets is true)",
+                      "properties": {
+                        "webhookSigningKey": {
+                          "type": "string",
+                          "description": "Webhook signing key for the destination (only included for webhook destinations)"
+                        }
+                      }
                     }
                   }
                 }
@@ -39289,6 +39299,16 @@
                         "type": "string",
                         "description": "The time the destination was updated.",
                         "format": "date-time"
+                      },
+                      "secrets": {
+                        "type": "object",
+                        "description": "Destination secrets (only included when includeSecrets is true)",
+                        "properties": {
+                          "webhookSigningKey": {
+                            "type": "string",
+                            "description": "Webhook signing key for the destination (only included for webhook destinations)"
+                          }
+                        }
                       }
                     }
                   }
@@ -39461,6 +39481,26 @@
             },
             "description": "The destination name.",
             "example": "leadConvertedWebhook"
+          },
+          {
+            "name": "includeSecrets",
+            "in": "query",
+            "required": false,
+            "description": "Include secrets in the response",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": true
+          },
+          {
+            "name": "rotate",
+            "in": "query",
+            "required": false,
+            "description": "Rotate the destination secrets",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": true
           }
         ],
         "responses": {
@@ -39525,6 +39565,16 @@
                       "type": "string",
                       "description": "The time the destination was updated.",
                       "format": "date-time"
+                    },
+                    "secrets": {
+                      "type": "object",
+                      "description": "Destination secrets (only included when includeSecrets is true)",
+                      "properties": {
+                        "webhookSigningKey": {
+                          "type": "string",
+                          "description": "Webhook signing key for the destination (only included for webhook destinations)"
+                        }
+                      }
                     }
                   }
                 }
@@ -40141,6 +40191,16 @@
                       "type": "string",
                       "description": "The time the destination was updated.",
                       "format": "date-time"
+                    },
+                    "secrets": {
+                      "type": "object",
+                      "description": "Destination secrets (only included when includeSecrets is true)",
+                      "properties": {
+                        "webhookSigningKey": {
+                          "type": "string",
+                          "description": "Webhook signing key for the destination (only included for webhook destinations)"
+                        }
+                      }
                     }
                   }
                 }
@@ -48974,6 +49034,16 @@
             "type": "string",
             "description": "The time the destination was updated.",
             "format": "date-time"
+          },
+          "secrets": {
+            "type": "object",
+            "description": "Destination secrets (only included when includeSecrets is true)",
+            "properties": {
+              "webhookSigningKey": {
+                "type": "string",
+                "description": "Webhook signing key for the destination (only included for webhook destinations)"
+              }
+            }
           }
         }
       },
