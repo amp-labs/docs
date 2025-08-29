@@ -10,7 +10,7 @@ To define a write action, add `write` as a key in your integration defined in `a
 
 ```YAML
 specVersion: 1.0.0
-integrations: 
+integrations:
   - name: write-to-salesforce
     displayName: Write to Salesforce
     provider: salesforce
@@ -23,11 +23,11 @@ integrations:
 
 ### Share mappings with read actions
 
-If you are using Read Actions and have already defined [field mappings](/read-actions#field-mappings), your Write Actions can automatically use the same mappings if you add `inheritMapping` to your manifest file. When you call our Write API, we will ensure that we are writing back to the appropriate field that the customer has mapped. 
+If you are using Read Actions and have already defined [field mappings](/read-actions#field-mappings), your Write Actions can automatically use the same mappings if you add `inheritMapping` to your manifest file. When you call our Write API, we will ensure that we are writing back to the appropriate field that the customer has mapped.
 
 ```YAML
 specVersion: 1.0.0
-integrations: 
+integrations:
   - name: write-to-salesforce
     displayName: Write to Salesforce
     provider: salesforce
@@ -49,14 +49,14 @@ Once your users install an integration with a write action, your app can write d
 
 `https://write.withampersand.com/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
 
-You can find your project ID and integration ID in the [Ampersand Dashboard](https://dashboard.withampersand.com) (look in the address bar) or you can run the following in the terminal to get `projectId` & `integrationId` : 
+You can find your project ID and integration ID in the [Ampersand Dashboard](https://dashboard.withampersand.com) (look in the address bar) or you can run the following in the terminal to get `projectId` & `integrationId` :
 
 ```bash
 # Get project ID
-amp list:projects 
+amp list:projects
 
 # List integrations for project
-amp list:integrations --project <PROJECT_ID> 
+amp list:integrations --project <PROJECT_ID>
 ```
 
 `objectName` refers to the `objectName` key within the `amp.yaml` file that defines your integration. This must match the name of an object that exists within the SaaS instance.
@@ -81,7 +81,7 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 
 #### Create associations when creating a record
 
-If you'd like to create records that are associated with other records, you can make a similar request with the `associations` parameter. 
+If you'd like to create records that are associated with other records, you can make a similar request with the `associations` parameter.
 
 <Info> This is currently only supported for HubSpot. </Info>
 
@@ -143,7 +143,7 @@ You can set overwrite behavior on a customer-by-customer basis when using the fu
 function WriteObjectConfig() {
   const config = useConfig();
   const contactWriteConfig = config.writeObject("Contact");
-  
+
   // Only write to source field when creating a record, not when updating
   contactWriteConfig.setFieldSettings({
     fieldName: "source",
@@ -177,7 +177,7 @@ As an alternative to headless UI, you can set overwrite behavior on a customer-b
                   "writeOnUpdate": "never",
                   // Write to source field when creating a record,
                   // This is the default behavior.
-                  "writeOnCreate": "always" 
+                  "writeOnCreate": "always"
               },
             },
           }
@@ -200,7 +200,7 @@ You can set default values on a customer-by-customer basis using the `setFieldSe
 function WriteObjectConfig() {
   const config = useConfig();
   const contactWriteConfig = config.writeObject("Contact");
-  
+
   // Set default values for fields
   contactWriteConfig.setFieldSettings({
     fieldName: "source",
@@ -210,7 +210,7 @@ function WriteObjectConfig() {
       }
     }
   });
-  
+
   contactWriteConfig.setFieldSettings({
     fieldName: "amount",
     settings: {
@@ -219,7 +219,7 @@ function WriteObjectConfig() {
       }
     }
   });
-  
+
   contactWriteConfig.setFieldSettings({
     fieldName: "automated",
     settings: {
@@ -276,6 +276,114 @@ As an alternative to headless UI, you can set this behavior on a customer-by-cus
 
 If your write action is [sharing mapping with read actions](#share-mappings-with-read-actions), we can drop unmapped fields from the write request before sending the request to the provider API. Please contact support@withampersand.com if you want to use this preview feature.
 
+### Write modes
+
+Write actions support two modes: `synchronous` and `asynchronous`. The mode determines how the API handles your write request and when you receive a response.
+
+#### Synchronous mode
+
+In synchronous mode, the write operation is processed immediately and the API waits for the operation to complete before returning a response.
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "create",
+    "mode": "synchronous",
+    "record": {
+        "firstname": "John",
+        "lastname": "Doe",
+        "email": "john@example.com"
+    }
+}'
+```
+
+The response includes the created/updated record immediately. If the write operation fails, the API will return the error response.
+
+#### Asynchronous mode
+
+In asynchronous mode, the API validates the request & immediately returns an operation ID. The API then processes the write in the background. If the write fails, Ampersand will automatically keep retrying the operation for up to 1 hour. This lets you avoid having to implement your own retry logic. If needed, the retry policy can be configured to retry a write for up to 48 hours.
+
+To use async mode, set `mode: "asynchronous"` in your request:
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "create",
+    "mode": "asynchronous",
+    "record": {
+        "firstname": "Jane",
+        "lastname": "Smith",
+    }
+}'
+```
+
+The response returns an operation ID immediately:
+
+```json
+{
+    "operationId": "3efc0f0f-4bb9-498f-996c-9893d98ca4b5"
+}
+```
+
+#### Checking status of an async write operation
+
+To check the status of an async write operation, use the [Get Operation endpoint](/reference/operation/get-an-operation) with the operation ID after the write request is made, ideally after the deadline has passed.
+
+```bash
+curl --location 'https://api.withampersand.com/v1/projects/<PROJECT_ID>/operations/<OPERATION_ID>' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY'
+```
+
+The response includes the operation status and result:
+
+```json
+{
+    "id": "3efc0f0f-4bb9-498f-996c-9893d98ca4b5",
+    "projectId": "<PROJECT_ID>",
+    "integrationId": "<INTEGRATION_ID>",
+    "installationId": "<INSTALLATION_ID>",
+    "configId": "<CONFIG_ID>",
+    "actionType": "write",
+    "status": "failure",
+    "result": "[contacts] Error writing to provider",
+    "createTime": "2025-08-26T23:19:27.616204Z",
+    "updateTime": "2025-08-26T23:19:28.424859Z",
+    "resource": "contacts"
+}
+```
+
+An operation can be in a `success`, `failure` or `in_progress` state.
+
+#### Retry policy for async writes
+
+Ampersand will automatically retry failed operations with exponential backoff until the default deadline of 1 hour. If this is not enough, you can specify a longer deadline of up to 48 hours.
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "create",
+    "mode": "asynchronous",
+    "retryPolicy": {
+        "deadlineHours": 24
+    },
+    "record": {
+        "firstname": "Bob",
+        "lastname": "Johnson",
+    }
+}'
+```
+
+Please note that retry policies only apply to asynchronous mode.
+
 ### Combine use cases
 
 Here is a full example for a request body to the [Create Installation API](/reference/installation/create-a-new-installation) that combines multiple use cases:
@@ -311,7 +419,7 @@ You can see an [example here of combining multiple use cases](/headless#configur
                   "writeOnUpdate": "never",
                   // Write to the field on creating a record,
                   // This is the default behavior.
-                  "writeOnCreate": "always" 
+                  "writeOnCreate": "always"
               },
             },
           }
@@ -325,7 +433,7 @@ You can see an [example here of combining multiple use cases](/headless#configur
             "selectedFieldMappings": {
               "customSource": "myCustomSource"
             }
-          }        
+          }
       }
     }
   }
