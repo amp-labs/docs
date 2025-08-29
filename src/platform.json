@@ -43280,8 +43280,7 @@
                 }
               }
             }
-          },
-          "x-codegen-request-body-name": "orgUpdate"
+          }
         }
       }
     },
@@ -44054,8 +44053,7 @@
                 }
               }
             }
-          },
-          "x-codegen-request-body-name": "invite"
+          }
         }
       },
       "get": {
@@ -55412,6 +55410,50 @@
               "active": false,
               "name": "updated-key-name"
             }
+          }
+        }
+      },
+      "orgUpdate": {
+        "title": "Organization Update Request",
+        "type": "object",
+        "required": [
+          "updateMask",
+          "org"
+        ],
+        "properties": {
+          "updateMask": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of field paths specifying which fields to update. Allowed values include:\n- label",
+            "example": [
+              "label"
+            ]
+          },
+          "org": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "The organization label.",
+                "example": "org-123"
+              }
+            }
+          }
+        }
+      },
+      "invite": {
+        "title": "Invite Request",
+        "type": "object",
+        "required": [
+          "invitedEmail"
+        ],
+        "properties": {
+          "invitedEmail": {
+            "type": "string",
+            "description": "The email address of the user to invite.",
+            "example": "user@example.com"
           }
         }
       }
