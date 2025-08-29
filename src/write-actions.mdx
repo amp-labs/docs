@@ -304,7 +304,7 @@ The response includes the created/updated record immediately. If the write opera
 
 #### Asynchronous mode
 
-In asynchronous mode, the API validates the request & immediately returns an operation ID. The API then processes the write in the background. If the write fails, Ampersand will automatically keep retrying the operation for up to 1 hour. This lets you avoid having to implement your own retry logic. If needed, the retry policy can be configured to retry a write for up to 48 hours.
+In asynchronous mode, Ampersand validates the request & immediately returns an operation ID. The write is then processed in the background. If the write fails due to API quota issues or other retryable errors, Ampersand will automatically keep retrying for up to 1 hour. If needed, the retry policy can be configured to retry for up to 48 hours.
 
 To use async mode, set `mode: "asynchronous"` in your request:
 
