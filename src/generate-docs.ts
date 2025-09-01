@@ -385,6 +385,7 @@ const baseConfig = {
             "provider-guides/pinterest",
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
+            "provider-guides/pylon",
             "provider-guides/podium",
             "provider-guides/productboard",
             "provider-guides/rebilly",
