@@ -8,70 +8,81 @@ title: "AWeber"
 This connector supports:
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.aweber.com`.
 
+### Example integration
+
+To define an integration for AWeber, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: aweber-integration
+    displayName: My AWeber Integration
+    provider: aWeber
+    proxy:
+      enabled: true
+```
+
 ## Before You Get Started
 
-To connect Webflow with Ampersand, you need to [Create a Webflow Account](#create-a-webflow-account) and obtain the following credentials from your Webflow App:
+To connect _AWeber_ with _Ampersand_, you will need [an AWeber Account](https://labs.aweber.com/).
+
+Once your account is created, you'll need to configure an app in _AWeber_ and obtain the following credentials from your app:
 
 - Client ID
 - Client Secret
 - Scopes
 
-You will then use these credentials to connect your application to Ampersand.
+You will use these credentials to connect your application to Ampersand.
 
-### Create a Webflow Account
+### Create an AWeber Account
 
-You need a **Webflow** account to connect with Ampersand. If you do not have a Webflow account, here's how you can sign up:
+Here's how you can sign up for an **AWeber Developer** account:
 
-- Go to the [Webflow site](https://webflow.com/) and sign up for a free account using your preferred method.
+- Go to the [AWeber Sign Up page](https://www.aweber.com/create-account.htm) and create an account.
 
-### Creating a Webflow App
+### Creating an AWeber App
 
-Once your Webflow account is ready, you need to create a Webflow application. Learn more about creating a Webflow application [here](https://developers.webflow.com/).
+Follow the steps below to create an _AWeber_ app and add the Ampersand redirect URL in the app:
 
-1. Log in to the [Webflow Developer Portal](https://developers.webflow.com/).
+1. Log in to your [AWeber Developer Account](https://labs.aweber.com/).
+2. Click **Create A New App**.
+3. Enter the **Application Name**, **Author** details, and **Application Website**.
+4. In the **OAuth2 Redirect URL** section, enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+5. Enter application **Description**.
 
-2. Go to **App and Integrations**.
+   ![AWeber App Creation](/images/cc4313f-Aweber1.gif)
 
-3. Click on **Create a New App**.
+6. Click **Create New App**.
 
-4. On the Create a New App form, enter the following details:
-   1. **App Name**: The name of the app.
-   2. **App Description**: Description for the app.
-   3. **App icon**: Select an app icon.
-   4. **App homepage URL**: Enter an app homepage URL.
+You'll see the details of your newly created application. Note the **Client ID** and **Client Secret** keys as they are necessary for connecting your app to Ampersand.
 
-5. Click **Continue**.
+   ![AWeber App Credentials](/images/6ce82da-Aweber2.jpeg)
 
-   ![Ampersand Project Selection](/images/provider-guides/a782325-webflow1.gif)
+## Add Your AWeber App Info to Ampersand
 
-6. Enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth` in the **Redirect URI** section.
+1. Log in to your [Ampersand Console](https://console.withampersand.com).
 
-7. Choose the scopes that are applicable for your application.
+2. Select the project where you want to create an AWeber integration.
 
-8. Click **Create App**.
+   ![Ampersand Project Selection](/images/dd47b7a-Ampersand.png)
 
-   ![Ampersand Project Selection](/images/provider-guides/18ea977-webflow2.gif)
+3. Select **Provider apps**.
 
-You can find the **Client ID** and **Client Secret** keys on the app details page. Note these keys, as they are essential for connecting your app to Ampersand.
+4. Select _AWeber_ from the **Provider** list.
 
-![Ampersand Project Selection](/images/provider-guides/39be07e-Screenshot_2024-07-16_at_13.36.05.png)
+5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
 
-## Add Webflow App Details in Ampersand
+6. Enter the scopes set for your application in _AWeber_.
 
-1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+   ![AWeber Integration in Ampersand](/images/f4ec7a9-aweber3.gif)
 
-2. Select the project where you want to add the Webflow App.
+7. Click **Save changes**.
 
-   ![Ampersand Project Selection](/images/provider-guides/eba5c80-Ampersand.png)
+## Using the connector
 
-3. Navigate to the **Provider Apps** section.
-
-4. Select **Webflow** from the Provider list.
-
-5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
-
-6. Enter the scopes set for your application in **Webflow**.
-
-   ![Ampersand Project Selection](/images/provider-guides/9764a07-webflow3.gif)
-
-7. Click **Save Changes**.
+To start integrating with AWeber:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.aweber.com`.
