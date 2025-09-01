@@ -7,13 +7,14 @@ title: Pylon
 ### Supported actions
 
 This connector supports:
-- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `issues` currently. For all other objects, a full read of the Github instance will be done per scheduled read.
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `issues` currently. For all other objects, a full read of the Pylon instance will be done per scheduled read.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.usepylon.com`.
 
 ### Supported Objects
 
-**Read Objects:**
+The Pylon connector supports reading from the following objects:
+
 - [accounts](https://docs.usepylon.com/pylon-docs/developer/api)
 - [contacts](https://docs.usepylon.com/pylon-docs/developer/api)
 - [issues](https://docs.usepylon.com/pylon-docs/developer/api)
@@ -24,7 +25,9 @@ This connector supports:
 - [user-roles](https://docs.usepylon.com/pylon-docs/developer/api)
 - [users](https://docs.usepylon.com/pylon-docs/developer/api)
 
-**Write Objects:**
+
+The Pylon connector supports writing to the following objects:
+
 - [attachments](https://docs.usepylon.com/pylon-docs/developer/api)
 - [accounts](https://docs.usepylon.com/pylon-docs/developer/api)
 - [contacts](https://docs.usepylon.com/pylon-docs/developer/api)
@@ -43,20 +46,10 @@ For an example manifest file of a Pylon integration, visit our [samples repo on 
 This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Pylon:
-- Create a manifest file like the example above.
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/pylon/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API Key.
 - Start making [Read Actions](/read-actions), [Write Actions](/write-actions), and [Proxy Calls](/proxy-actions). Ampersand will automatically attach the required authentication headers supplied by the customer. Please note that this connector's base URL is `https://api.usepylon.com`.
-
-### Creating API credentials
-
-1. Log in to your Pylon dashboard
-2. Navigate to **Settings** → **API Keys**
-3. Click **Generate New API Key**
-4. Copy the API key - you'll need this for the Ampersand connector
-5. Store the API key securely
-
-> **Note**: Pylon API keys have Bearer token format and provide access to all endpoints your account has permissions for.
 
 ## API documentation
 
