@@ -1,0 +1,58 @@
+---
+title: Pylon
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `issues` currently. For all other objects, a full read of the Pylon instance will be done per scheduled read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.usepylon.com`.
+
+> **Important Note on Issues Backfill**: The `issues` object has a 30-day limitation for historic backfill. To avoid timezone or timing issues, we recommend setting your backfill period to 29 days or less when syncing issues data.
+
+### Supported Objects
+
+The Pylon connector supports reading from the following objects:
+
+- [accounts](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/accounts#get-accounts)
+- [contacts](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/contacts#get-contacts)
+- [issues](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/issues#get-issues)
+- [knowledge-bases](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/knowledge-base#get-knowledge-bases)
+- [tags](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/tags#get-tags)
+- [teams](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/teams#get-teams)
+- [ticket-forms](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/ticket-forms#get-ticket-forms)
+- [user-roles](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/user-roles)
+- [users](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/users#get-users)
+
+
+The Pylon connector supports writing to the following objects:
+
+- [attachments](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/attachments)
+- [accounts](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/accounts#post-accounts)
+- [contacts](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/contacts#post-contacts)
+- [issues](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/issues#post-issues)
+- [tasks](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/tasks-and-projects#post-tasks)
+- [teams](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/teams#post-teams)
+- [projects](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/projects#post-projects)
+- [tags](https://docs.usepylon.com/pylon-docs/developer/api/api-reference/tags#post-tags)
+
+### Example integration
+
+For an example manifest file of a Pylon integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/pylon/amp.yaml).
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Pylon:
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/pylon/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API Key.
+- Start making [Read Actions](/read-actions), [Write Actions](/write-actions), and [Proxy Calls](/proxy-actions). Ampersand will automatically attach the required authentication headers supplied by the customer. Please note that this connector's base URL is `https://api.usepylon.com`.
+
+## API documentation
+
+For more detailed information about Pylon API, refer to the [Pylon API documentation](https://docs.usepylon.com/pylon-docs/developer/api).
