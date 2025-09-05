@@ -26171,6 +26171,2114 @@
         }
       }
     },
+    "/projects/{projectIdOrName}/integrations/{integrationId}/object-metadata": {
+      "put": {
+        "summary": "Upsert custom fields for installation",
+        "operationId": "upsertMetadataForInstallation",
+        "description": "Create or update custom fields for an integration installation.",
+        "tags": [
+          "Objects & Fields"
+        ],
+        "parameters": [
+          {
+            "name": "projectIdOrName",
+            "in": "path",
+            "required": true,
+            "description": "The Ampersand project ID or project name.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "my-project"
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "description": "The integration ID.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "32356abe-d2fd-49c7-9030-abdcbc6456d4"
+          },
+          {
+            "name": "groupRef",
+            "in": "query",
+            "required": true,
+            "description": "The groupRef for the installation",
+            "schema": {
+              "type": "string"
+            },
+            "example": "group-123"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Metadata upsert request containing field definitions to create or update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Request payload for upserting metadata (fields only)",
+                "properties": {
+                  "fields": {
+                    "type": "object",
+                    "description": "Maps object names to field definitions",
+                    "additionalProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Field definition for creating or updating custom fields",
+                        "properties": {
+                          "fieldName": {
+                            "type": "string",
+                            "description": "The identifier of the field",
+                            "example": "My_Custom_Field"
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "The human-readable name of the field",
+                            "example": "My Custom Field"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Optional description of the field"
+                          },
+                          "valueType": {
+                            "type": "string",
+                            "description": "The data type of the field",
+                            "example": "text"
+                          },
+                          "required": {
+                            "type": "boolean",
+                            "description": "Indicates if the field is required"
+                          },
+                          "unique": {
+                            "type": "boolean",
+                            "description": "Indicates if the field must be unique across all records"
+                          },
+                          "indexed": {
+                            "type": "boolean",
+                            "description": "Indicates if the field should be indexed for faster search"
+                          },
+                          "stringOptions": {
+                            "type": "object",
+                            "description": "Additional options for string fields",
+                            "properties": {
+                              "length": {
+                                "type": "integer",
+                                "description": "Maximum length of the string field"
+                              },
+                              "pattern": {
+                                "type": "string",
+                                "description": "Regex pattern that the string field value must match"
+                              },
+                              "values": {
+                                "type": "array",
+                                "description": "List of allowed values for enum fields",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "valuesRestricted": {
+                                "type": "boolean",
+                                "description": "Indicates if the field value must be limited to what's in Values"
+                              },
+                              "defaultValue": {
+                                "type": "string",
+                                "description": "Default value for the field"
+                              }
+                            }
+                          },
+                          "numericOptions": {
+                            "type": "object",
+                            "description": "Additional options for numeric fields",
+                            "properties": {
+                              "precision": {
+                                "type": "integer",
+                                "description": "Total number of digits (for decimal types)"
+                              },
+                              "scale": {
+                                "type": "integer",
+                                "description": "Number of digits to the right of the decimal point (for decimal types)"
+                              },
+                              "min": {
+                                "type": "number",
+                                "description": "Minimum value for numeric fields"
+                              },
+                              "max": {
+                                "type": "number",
+                                "description": "Maximum value for numeric fields"
+                              },
+                              "defaultValue": {
+                                "type": "number",
+                                "description": "Default value for the field"
+                              }
+                            }
+                          },
+                          "association": {
+                            "type": "object",
+                            "description": "Relationship information for a field to another object",
+                            "properties": {
+                              "associationType": {
+                                "type": "string",
+                                "description": "High-level association variety (e.g., 'foreignKey', 'lookup', 'ref')",
+                                "example": "foreignKey"
+                              },
+                              "targetObject": {
+                                "type": "string",
+                                "description": "Name of the referenced/parent object",
+                                "example": "Account"
+                              },
+                              "targetField": {
+                                "type": "string",
+                                "description": "Name of the referenced field on the target object"
+                              },
+                              "cardinality": {
+                                "type": "string",
+                                "description": "Association cardinality from the referencing field's perspective",
+                                "example": "many-to-one"
+                              },
+                              "onDelete": {
+                                "type": "string",
+                                "description": "Behavior upon foreign object deletion",
+                                "example": "setNull"
+                              },
+                              "required": {
+                                "type": "boolean",
+                                "description": "If true, a referenced record must exist"
+                              },
+                              "reverseLookupFieldName": {
+                                "type": "string",
+                                "description": "Optional inverse relationship/property name exposed on the target object"
+                              },
+                              "labels": {
+                                "type": "object",
+                                "description": "UI labels for an association",
+                                "properties": {
+                                  "singular": {
+                                    "type": "string",
+                                    "description": "Singular display label"
+                                  },
+                                  "plural": {
+                                    "type": "string",
+                                    "description": "Plural display label"
+                                  }
+                                }
+                              }
+                            },
+                            "required": [
+                              "associationType",
+                              "targetObject"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "fieldName",
+                          "displayName",
+                          "valueType"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "fields"
+                ]
+              },
+              "examples": {
+                "createTextFields": {
+                  "summary": "Create text fields on multiple objects",
+                  "value": {
+                    "fields": {
+                      "Account": [
+                        {
+                          "fieldName": "Industry",
+                          "displayName": "Industry Sector",
+                          "description": "The industry this account operates in",
+                          "valueType": "text",
+                          "required": false,
+                          "stringOptions": {
+                            "length": 255,
+                            "defaultValue": "Technology"
+                          }
+                        },
+                        {
+                          "fieldName": "Company_Size",
+                          "displayName": "Company Size",
+                          "valueType": "text",
+                          "stringOptions": {
+                            "values": [
+                              "Small",
+                              "Medium",
+                              "Large",
+                              "Enterprise"
+                            ],
+                            "valuesRestricted": true
+                          }
+                        }
+                      ],
+                      "Contact": [
+                        {
+                          "fieldName": "Seniority_Level",
+                          "displayName": "Seniority Level",
+                          "valueType": "text",
+                          "stringOptions": {
+                            "values": [
+                              "Junior",
+                              "Mid",
+                              "Senior",
+                              "Executive"
+                            ],
+                            "valuesRestricted": true
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "createNumericFields": {
+                  "summary": "Create numeric fields with constraints",
+                  "value": {
+                    "fields": {
+                      "Opportunity": [
+                        {
+                          "fieldName": "Deal_Score",
+                          "displayName": "Deal Score",
+                          "description": "Likelihood score from 0-100",
+                          "valueType": "number",
+                          "required": true,
+                          "numericOptions": {
+                            "precision": 5,
+                            "scale": 2,
+                            "min": 0,
+                            "max": 100,
+                            "defaultValue": 50
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "createAssociationField": {
+                  "summary": "Create field with association to another object",
+                  "value": {
+                    "fields": {
+                      "Task": [
+                        {
+                          "fieldName": "Related_Contact",
+                          "displayName": "Related Contact",
+                          "valueType": "reference",
+                          "association": {
+                            "associationType": "lookup",
+                            "targetObject": "Contact",
+                            "targetField": "Id",
+                            "cardinality": "many-to-one",
+                            "required": false,
+                            "labels": {
+                              "singular": "Contact",
+                              "plural": "Contacts"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Metadata creation completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Response containing results for all created/updated fields",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the upsert operation was successful"
+                    },
+                    "fields": {
+                      "type": "object",
+                      "description": "Maps object name -> field name -> upsert result",
+                      "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "object",
+                          "description": "Result of an upsert operation for a single field",
+                          "properties": {
+                            "fieldName": {
+                              "type": "string",
+                              "description": "Name of the field"
+                            },
+                            "action": {
+                              "type": "string",
+                              "description": "Action taken (create, update, none)"
+                            },
+                            "metadata": {
+                              "type": "object",
+                              "description": "Provider-specific metadata about the field",
+                              "additionalProperties": true
+                            },
+                            "warnings": {
+                              "type": "array",
+                              "description": "Warnings that occurred during the upsert operation",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "required": [
+                            "fieldName",
+                            "action"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "fields"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload or validation errors",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions for metadata operations",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project, integration, or installation not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectIdOrName}/providers/{provider}/object-metadata": {
+      "put": {
+        "summary": "Upsert custom fields for connection",
+        "operationId": "upsertMetadataForConnection",
+        "description": "Create or update fields in the SaaS instance tied to a connection.",
+        "tags": [
+          "Objects & Fields"
+        ],
+        "parameters": [
+          {
+            "name": "projectIdOrName",
+            "in": "path",
+            "required": true,
+            "description": "The Ampersand project ID or project name.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "my-project"
+          },
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "description": "The provider that this connection connects to.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "salesforce"
+          },
+          {
+            "name": "groupRef",
+            "in": "query",
+            "required": true,
+            "description": "The ID that your app uses to identify the group of users for this Connection.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "group-123"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Metadata upsert request containing field definitions to create or update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Request payload for upserting metadata (fields only)",
+                "properties": {
+                  "fields": {
+                    "type": "object",
+                    "description": "Maps object names to field definitions",
+                    "additionalProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Field definition for creating or updating custom fields",
+                        "properties": {
+                          "fieldName": {
+                            "type": "string",
+                            "description": "The identifier of the field",
+                            "example": "My_Custom_Field"
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "The human-readable name of the field",
+                            "example": "My Custom Field"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Optional description of the field"
+                          },
+                          "valueType": {
+                            "type": "string",
+                            "description": "The data type of the field",
+                            "example": "text"
+                          },
+                          "required": {
+                            "type": "boolean",
+                            "description": "Indicates if the field is required"
+                          },
+                          "unique": {
+                            "type": "boolean",
+                            "description": "Indicates if the field must be unique across all records"
+                          },
+                          "indexed": {
+                            "type": "boolean",
+                            "description": "Indicates if the field should be indexed for faster search"
+                          },
+                          "stringOptions": {
+                            "type": "object",
+                            "description": "Additional options for string fields",
+                            "properties": {
+                              "length": {
+                                "type": "integer",
+                                "description": "Maximum length of the string field"
+                              },
+                              "pattern": {
+                                "type": "string",
+                                "description": "Regex pattern that the string field value must match"
+                              },
+                              "values": {
+                                "type": "array",
+                                "description": "List of allowed values for enum fields",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "valuesRestricted": {
+                                "type": "boolean",
+                                "description": "Indicates if the field value must be limited to what's in Values"
+                              },
+                              "defaultValue": {
+                                "type": "string",
+                                "description": "Default value for the field"
+                              }
+                            }
+                          },
+                          "numericOptions": {
+                            "type": "object",
+                            "description": "Additional options for numeric fields",
+                            "properties": {
+                              "precision": {
+                                "type": "integer",
+                                "description": "Total number of digits (for decimal types)"
+                              },
+                              "scale": {
+                                "type": "integer",
+                                "description": "Number of digits to the right of the decimal point (for decimal types)"
+                              },
+                              "min": {
+                                "type": "number",
+                                "description": "Minimum value for numeric fields"
+                              },
+                              "max": {
+                                "type": "number",
+                                "description": "Maximum value for numeric fields"
+                              },
+                              "defaultValue": {
+                                "type": "number",
+                                "description": "Default value for the field"
+                              }
+                            }
+                          },
+                          "association": {
+                            "type": "object",
+                            "description": "Relationship information for a field to another object",
+                            "properties": {
+                              "associationType": {
+                                "type": "string",
+                                "description": "High-level association variety (e.g., 'foreignKey', 'lookup', 'ref')",
+                                "example": "foreignKey"
+                              },
+                              "targetObject": {
+                                "type": "string",
+                                "description": "Name of the referenced/parent object",
+                                "example": "Account"
+                              },
+                              "targetField": {
+                                "type": "string",
+                                "description": "Name of the referenced field on the target object"
+                              },
+                              "cardinality": {
+                                "type": "string",
+                                "description": "Association cardinality from the referencing field's perspective",
+                                "example": "many-to-one"
+                              },
+                              "onDelete": {
+                                "type": "string",
+                                "description": "Behavior upon foreign object deletion",
+                                "example": "setNull"
+                              },
+                              "required": {
+                                "type": "boolean",
+                                "description": "If true, a referenced record must exist"
+                              },
+                              "reverseLookupFieldName": {
+                                "type": "string",
+                                "description": "Optional inverse relationship/property name exposed on the target object"
+                              },
+                              "labels": {
+                                "type": "object",
+                                "description": "UI labels for an association",
+                                "properties": {
+                                  "singular": {
+                                    "type": "string",
+                                    "description": "Singular display label"
+                                  },
+                                  "plural": {
+                                    "type": "string",
+                                    "description": "Plural display label"
+                                  }
+                                }
+                              }
+                            },
+                            "required": [
+                              "associationType",
+                              "targetObject"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "fieldName",
+                          "displayName",
+                          "valueType"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "fields"
+                ]
+              },
+              "examples": {
+                "createTextFields": {
+                  "summary": "Create text fields on multiple objects",
+                  "value": {
+                    "fields": {
+                      "Account": [
+                        {
+                          "fieldName": "Industry",
+                          "displayName": "Industry Sector",
+                          "description": "The industry this account operates in",
+                          "valueType": "text",
+                          "required": false,
+                          "stringOptions": {
+                            "length": 255,
+                            "defaultValue": "Technology"
+                          }
+                        },
+                        {
+                          "fieldName": "Company_Size",
+                          "displayName": "Company Size",
+                          "valueType": "text",
+                          "stringOptions": {
+                            "values": [
+                              "Small",
+                              "Medium",
+                              "Large",
+                              "Enterprise"
+                            ],
+                            "valuesRestricted": true
+                          }
+                        }
+                      ],
+                      "Contact": [
+                        {
+                          "fieldName": "Seniority_Level",
+                          "displayName": "Seniority Level",
+                          "valueType": "text",
+                          "stringOptions": {
+                            "values": [
+                              "Junior",
+                              "Mid",
+                              "Senior",
+                              "Executive"
+                            ],
+                            "valuesRestricted": true
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "createNumericFields": {
+                  "summary": "Create numeric fields with constraints",
+                  "value": {
+                    "fields": {
+                      "Opportunity": [
+                        {
+                          "fieldName": "Deal_Score",
+                          "displayName": "Deal Score",
+                          "description": "Likelihood score from 0-100",
+                          "valueType": "number",
+                          "required": true,
+                          "numericOptions": {
+                            "precision": 5,
+                            "scale": 2,
+                            "min": 0,
+                            "max": 100,
+                            "defaultValue": 50
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "createAssociationField": {
+                  "summary": "Create field with association to another object",
+                  "value": {
+                    "fields": {
+                      "Task": [
+                        {
+                          "fieldName": "Related_Contact",
+                          "displayName": "Related Contact",
+                          "valueType": "reference",
+                          "association": {
+                            "associationType": "lookup",
+                            "targetObject": "Contact",
+                            "targetField": "Id",
+                            "cardinality": "many-to-one",
+                            "required": false,
+                            "labels": {
+                              "singular": "Contact",
+                              "plural": "Contacts"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Metadata creation completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Response containing results for all created/updated fields",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indicates if the upsert operation was successful"
+                    },
+                    "fields": {
+                      "type": "object",
+                      "description": "Maps object name -> field name -> upsert result",
+                      "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "object",
+                          "description": "Result of an upsert operation for a single field",
+                          "properties": {
+                            "fieldName": {
+                              "type": "string",
+                              "description": "Name of the field"
+                            },
+                            "action": {
+                              "type": "string",
+                              "description": "Action taken (create, update, none)"
+                            },
+                            "metadata": {
+                              "type": "object",
+                              "description": "Provider-specific metadata about the field",
+                              "additionalProperties": true
+                            },
+                            "warnings": {
+                              "type": "array",
+                              "description": "Warnings that occurred during the upsert operation",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "required": [
+                            "fieldName",
+                            "action"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "fields"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload or validation errors",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions for metadata operations",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project or connection not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}/operations": {
       "get": {
         "summary": "List operations",
@@ -55476,6 +57584,534 @@
             }
           }
         }
+      },
+      "UpsertMetadataRequest": {
+        "type": "object",
+        "description": "Request payload for upserting metadata (fields only)",
+        "properties": {
+          "fields": {
+            "type": "object",
+            "description": "Maps object names to field definitions",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "description": "Field definition for creating or updating custom fields",
+                "properties": {
+                  "fieldName": {
+                    "type": "string",
+                    "description": "The identifier of the field",
+                    "example": "My_Custom_Field"
+                  },
+                  "displayName": {
+                    "type": "string",
+                    "description": "The human-readable name of the field",
+                    "example": "My Custom Field"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Optional description of the field"
+                  },
+                  "valueType": {
+                    "type": "string",
+                    "description": "The data type of the field",
+                    "example": "text"
+                  },
+                  "required": {
+                    "type": "boolean",
+                    "description": "Indicates if the field is required"
+                  },
+                  "unique": {
+                    "type": "boolean",
+                    "description": "Indicates if the field must be unique across all records"
+                  },
+                  "indexed": {
+                    "type": "boolean",
+                    "description": "Indicates if the field should be indexed for faster search"
+                  },
+                  "stringOptions": {
+                    "type": "object",
+                    "description": "Additional options for string fields",
+                    "properties": {
+                      "length": {
+                        "type": "integer",
+                        "description": "Maximum length of the string field"
+                      },
+                      "pattern": {
+                        "type": "string",
+                        "description": "Regex pattern that the string field value must match"
+                      },
+                      "values": {
+                        "type": "array",
+                        "description": "List of allowed values for enum fields",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "valuesRestricted": {
+                        "type": "boolean",
+                        "description": "Indicates if the field value must be limited to what's in Values"
+                      },
+                      "defaultValue": {
+                        "type": "string",
+                        "description": "Default value for the field"
+                      }
+                    }
+                  },
+                  "numericOptions": {
+                    "type": "object",
+                    "description": "Additional options for numeric fields",
+                    "properties": {
+                      "precision": {
+                        "type": "integer",
+                        "description": "Total number of digits (for decimal types)"
+                      },
+                      "scale": {
+                        "type": "integer",
+                        "description": "Number of digits to the right of the decimal point (for decimal types)"
+                      },
+                      "min": {
+                        "type": "number",
+                        "description": "Minimum value for numeric fields"
+                      },
+                      "max": {
+                        "type": "number",
+                        "description": "Maximum value for numeric fields"
+                      },
+                      "defaultValue": {
+                        "type": "number",
+                        "description": "Default value for the field"
+                      }
+                    }
+                  },
+                  "association": {
+                    "type": "object",
+                    "description": "Relationship information for a field to another object",
+                    "properties": {
+                      "associationType": {
+                        "type": "string",
+                        "description": "High-level association variety (e.g., 'foreignKey', 'lookup', 'ref')",
+                        "example": "foreignKey"
+                      },
+                      "targetObject": {
+                        "type": "string",
+                        "description": "Name of the referenced/parent object",
+                        "example": "Account"
+                      },
+                      "targetField": {
+                        "type": "string",
+                        "description": "Name of the referenced field on the target object"
+                      },
+                      "cardinality": {
+                        "type": "string",
+                        "description": "Association cardinality from the referencing field's perspective",
+                        "example": "many-to-one"
+                      },
+                      "onDelete": {
+                        "type": "string",
+                        "description": "Behavior upon foreign object deletion",
+                        "example": "setNull"
+                      },
+                      "required": {
+                        "type": "boolean",
+                        "description": "If true, a referenced record must exist"
+                      },
+                      "reverseLookupFieldName": {
+                        "type": "string",
+                        "description": "Optional inverse relationship/property name exposed on the target object"
+                      },
+                      "labels": {
+                        "type": "object",
+                        "description": "UI labels for an association",
+                        "properties": {
+                          "singular": {
+                            "type": "string",
+                            "description": "Singular display label"
+                          },
+                          "plural": {
+                            "type": "string",
+                            "description": "Plural display label"
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "associationType",
+                      "targetObject"
+                    ]
+                  }
+                },
+                "required": [
+                  "fieldName",
+                  "displayName",
+                  "valueType"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "fields"
+        ]
+      },
+      "UpsertMetadataResponse": {
+        "type": "object",
+        "description": "Response containing results for all created/updated fields",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the upsert operation was successful"
+          },
+          "fields": {
+            "type": "object",
+            "description": "Maps object name -> field name -> upsert result",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "description": "Result of an upsert operation for a single field",
+                "properties": {
+                  "fieldName": {
+                    "type": "string",
+                    "description": "Name of the field"
+                  },
+                  "action": {
+                    "type": "string",
+                    "description": "Action taken (create, update, none)"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "description": "Provider-specific metadata about the field",
+                    "additionalProperties": true
+                  },
+                  "warnings": {
+                    "type": "array",
+                    "description": "Warnings that occurred during the upsert operation",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "fieldName",
+                  "action"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "success",
+          "fields"
+        ]
+      },
+      "FieldDefinition": {
+        "type": "object",
+        "description": "Field definition for creating or updating custom fields",
+        "properties": {
+          "fieldName": {
+            "type": "string",
+            "description": "The identifier of the field",
+            "example": "My_Custom_Field"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "The human-readable name of the field",
+            "example": "My Custom Field"
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional description of the field"
+          },
+          "valueType": {
+            "type": "string",
+            "description": "The data type of the field",
+            "example": "text"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Indicates if the field is required"
+          },
+          "unique": {
+            "type": "boolean",
+            "description": "Indicates if the field must be unique across all records"
+          },
+          "indexed": {
+            "type": "boolean",
+            "description": "Indicates if the field should be indexed for faster search"
+          },
+          "stringOptions": {
+            "type": "object",
+            "description": "Additional options for string fields",
+            "properties": {
+              "length": {
+                "type": "integer",
+                "description": "Maximum length of the string field"
+              },
+              "pattern": {
+                "type": "string",
+                "description": "Regex pattern that the string field value must match"
+              },
+              "values": {
+                "type": "array",
+                "description": "List of allowed values for enum fields",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "valuesRestricted": {
+                "type": "boolean",
+                "description": "Indicates if the field value must be limited to what's in Values"
+              },
+              "defaultValue": {
+                "type": "string",
+                "description": "Default value for the field"
+              }
+            }
+          },
+          "numericOptions": {
+            "type": "object",
+            "description": "Additional options for numeric fields",
+            "properties": {
+              "precision": {
+                "type": "integer",
+                "description": "Total number of digits (for decimal types)"
+              },
+              "scale": {
+                "type": "integer",
+                "description": "Number of digits to the right of the decimal point (for decimal types)"
+              },
+              "min": {
+                "type": "number",
+                "description": "Minimum value for numeric fields"
+              },
+              "max": {
+                "type": "number",
+                "description": "Maximum value for numeric fields"
+              },
+              "defaultValue": {
+                "type": "number",
+                "description": "Default value for the field"
+              }
+            }
+          },
+          "association": {
+            "type": "object",
+            "description": "Relationship information for a field to another object",
+            "properties": {
+              "associationType": {
+                "type": "string",
+                "description": "High-level association variety (e.g., 'foreignKey', 'lookup', 'ref')",
+                "example": "foreignKey"
+              },
+              "targetObject": {
+                "type": "string",
+                "description": "Name of the referenced/parent object",
+                "example": "Account"
+              },
+              "targetField": {
+                "type": "string",
+                "description": "Name of the referenced field on the target object"
+              },
+              "cardinality": {
+                "type": "string",
+                "description": "Association cardinality from the referencing field's perspective",
+                "example": "many-to-one"
+              },
+              "onDelete": {
+                "type": "string",
+                "description": "Behavior upon foreign object deletion",
+                "example": "setNull"
+              },
+              "required": {
+                "type": "boolean",
+                "description": "If true, a referenced record must exist"
+              },
+              "reverseLookupFieldName": {
+                "type": "string",
+                "description": "Optional inverse relationship/property name exposed on the target object"
+              },
+              "labels": {
+                "type": "object",
+                "description": "UI labels for an association",
+                "properties": {
+                  "singular": {
+                    "type": "string",
+                    "description": "Singular display label"
+                  },
+                  "plural": {
+                    "type": "string",
+                    "description": "Plural display label"
+                  }
+                }
+              }
+            },
+            "required": [
+              "associationType",
+              "targetObject"
+            ]
+          }
+        },
+        "required": [
+          "fieldName",
+          "displayName",
+          "valueType"
+        ]
+      },
+      "StringFieldOptions": {
+        "type": "object",
+        "description": "Additional options for string fields",
+        "properties": {
+          "length": {
+            "type": "integer",
+            "description": "Maximum length of the string field"
+          },
+          "pattern": {
+            "type": "string",
+            "description": "Regex pattern that the string field value must match"
+          },
+          "values": {
+            "type": "array",
+            "description": "List of allowed values for enum fields",
+            "items": {
+              "type": "string"
+            }
+          },
+          "valuesRestricted": {
+            "type": "boolean",
+            "description": "Indicates if the field value must be limited to what's in Values"
+          },
+          "defaultValue": {
+            "type": "string",
+            "description": "Default value for the field"
+          }
+        }
+      },
+      "NumericFieldOptions": {
+        "type": "object",
+        "description": "Additional options for numeric fields",
+        "properties": {
+          "precision": {
+            "type": "integer",
+            "description": "Total number of digits (for decimal types)"
+          },
+          "scale": {
+            "type": "integer",
+            "description": "Number of digits to the right of the decimal point (for decimal types)"
+          },
+          "min": {
+            "type": "number",
+            "description": "Minimum value for numeric fields"
+          },
+          "max": {
+            "type": "number",
+            "description": "Maximum value for numeric fields"
+          },
+          "defaultValue": {
+            "type": "number",
+            "description": "Default value for the field"
+          }
+        }
+      },
+      "AssociationDefinition": {
+        "type": "object",
+        "description": "Relationship information for a field to another object",
+        "properties": {
+          "associationType": {
+            "type": "string",
+            "description": "High-level association variety (e.g., 'foreignKey', 'lookup', 'ref')",
+            "example": "foreignKey"
+          },
+          "targetObject": {
+            "type": "string",
+            "description": "Name of the referenced/parent object",
+            "example": "Account"
+          },
+          "targetField": {
+            "type": "string",
+            "description": "Name of the referenced field on the target object"
+          },
+          "cardinality": {
+            "type": "string",
+            "description": "Association cardinality from the referencing field's perspective",
+            "example": "many-to-one"
+          },
+          "onDelete": {
+            "type": "string",
+            "description": "Behavior upon foreign object deletion",
+            "example": "setNull"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "If true, a referenced record must exist"
+          },
+          "reverseLookupFieldName": {
+            "type": "string",
+            "description": "Optional inverse relationship/property name exposed on the target object"
+          },
+          "labels": {
+            "type": "object",
+            "description": "UI labels for an association",
+            "properties": {
+              "singular": {
+                "type": "string",
+                "description": "Singular display label"
+              },
+              "plural": {
+                "type": "string",
+                "description": "Plural display label"
+              }
+            }
+          }
+        },
+        "required": [
+          "associationType",
+          "targetObject"
+        ]
+      },
+      "AssociationLabels": {
+        "type": "object",
+        "description": "UI labels for an association",
+        "properties": {
+          "singular": {
+            "type": "string",
+            "description": "Singular display label"
+          },
+          "plural": {
+            "type": "string",
+            "description": "Plural display label"
+          }
+        }
+      },
+      "FieldUpsertResult": {
+        "type": "object",
+        "description": "Result of an upsert operation for a single field",
+        "properties": {
+          "fieldName": {
+            "type": "string",
+            "description": "Name of the field"
+          },
+          "action": {
+            "type": "string",
+            "description": "Action taken (create, update, none)"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Provider-specific metadata about the field",
+            "additionalProperties": true
+          },
+          "warnings": {
+            "type": "array",
+            "description": "Warnings that occurred during the upsert operation",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "fieldName",
+          "action"
+        ]
       }
     },
     "securitySchemes": {
