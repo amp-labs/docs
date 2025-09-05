@@ -13,7 +13,7 @@
     "/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}": {
       "post": {
         "summary": "Trigger a read",
-        "description": "Triggers reading data from a SaaS instance. See [Trigger a read](https://docs.withampersand.com/define-integrations/read-actions#trigger-a-read) for details.",
+        "description": "Triggers reading data from a SaaS instance. See [Trigger a read](https://docs.withampersand.com/define-integrations/read-actions#trigger-a-read) for details. If you want scheduled reads or automatic backfills instead, you [can define them in the manifest](https://docs.withampersand.com/read-actions#defining-reads).",
         "operationId": "triggerRead",
         "tags": [
           "Read"
@@ -990,7 +990,7 @@
     "/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}:pause": {
       "post": {
         "summary": "Pause reads for an installation",
-        "description": "Pauses all reads for an installation. If reads are already paused, this will be a no-op. Accepts specific objects to pause reads for in the request body.",
+        "description": "Pauses all scheduled reads for an installation. If reads are already paused, this will be a no-op. Accepts specific objects to pause reads for in the request body.",
         "operationId": "pauseReads",
         "tags": [
           "Read"
@@ -1521,7 +1521,7 @@
     "/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}:unpause": {
       "post": {
         "summary": "Unpause reads for an installation",
-        "description": "Unpauses all reads for an installation. If no reads were paused, this will be a no-op. Accepts specific objects to unpause reads for in the request body.",
+        "description": "Unpauses all scheduled reads for an installation. If no reads were paused, this will be a no-op. Accepts specific objects to unpause reads for in the request body.",
         "operationId": "unpauseReads",
         "tags": [
           "Read"
