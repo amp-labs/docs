@@ -235,4 +235,28 @@ If you are using the Node.js framework [Express](https://expressjs.com) in your 
 
 ### Handling the message frequency
 
-By default, Ampersand will send you at most 1000 webhook messages per second across all your destinations. If you wish the change this limit, please contact `support@withampersand.com`. Alternatively, you can set the delivery mode to [on request](/read-actions#on-request) to only get webhook messages when you request for them via an API call. 
+By default, Ampersand will send you at most 1000 webhook messages per second across all your destinations. If you wish the change this limit, please contact `support@withampersand.com`. Alternatively, you can set the delivery mode to [on request](/read-actions#on-request) to only get webhook messages when you request for them via an API call.
+
+## Webhook signature verification
+
+Every webhook message from Ampersand that is sent to a webhook destination includes a cryptographic signature that allows you to verify the authenticity and integrity of the payload when it is delivered to your destination. This signature is included in the `svix-signature` header. Each destination has a unique secret used to sign the webhooks for that destination and is referred to as the "webhook signing secret".
+
+To verify the signature, you will need to know this secret which is available in the Ampersand dashboard. Once you have the secret, you can use any one of the [Svix libraries](https://docs.svix.com/receiving/verifying-payloads/how) to verify the signature for a webhook message.
+
+#### Viewing your secret
+
+To find a destination's webhook signing secret, navigate to the destination in the Ampersand dashboard and click on **"Click here to view the secret"**.
+
+1. Log in to the [Ampersand dashboard](https://dashboard.withampersand.com) & navigate to **[Destinations](https://dashboard.withampersand.com/projects/_/destinations)**
+3. Click on the destination you want to view the secret for
+4. Click on **"Click here to view the secret"**
+
+![Alt text](/images/dest-secret-view.png)
+
+#### Rotating your secret
+
+If you need to rotate your signing secret for security reasons, you can do so from the Ampersand dashboard.
+
+1. Navigate to the **[Destinations](https://dashboard.withampersand.com/projects/_/destinations)** section in the Ampersand dashboard & click on the destination you want to rotate the secret for
+2. Click on **"Click here to view the secret"**
+3. Click on **"Rotate secret"** to rotate the secret & confirm the rotation.
