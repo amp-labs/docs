@@ -4,7 +4,7 @@ title: QuickBooks
 
 ## What's Supported
 
-### Supported Actions
+### Supported actions
 
 - [Proxy Actions](/proxy-actions), using the base URL `https://quickbooks.api.intuit.com`.
 
@@ -21,7 +21,7 @@ integrations:
       enabled: true
 ```
 
-## Before You Get Started
+## Before you get started
 
 You'll need a QuickBooks account and will need to create a QuickBooks app to obtain the necessary OAuth2 credentials.
 
@@ -40,7 +40,6 @@ You'll need a QuickBooks account and will need to create a QuickBooks app to obt
    - **Client ID** 
    - **Client Secret**
 9. Under **Redirect URIs**, add: `https://api.withampersand.com/callbacks/v1/oauth`
-10. Configure the required scopes for your integration (QuickBooks requires explicit scope configuration)
 
 Common scopes include:
 - `com.intuit.quickbooks.accounting` - Full access to accounting data
@@ -48,15 +47,28 @@ Common scopes include:
 
 
 
-### Add QuickBooks App Details in Ampersand
+### Add your QuickBooks app info to Ampersand
 
-1. Log into your [Ampersand Dashboard](https://dashboard.withampersand.com)
-2. Select your project
-3. Navigate to **Provider apps** 
-4. Find **QuickBooks** and click **Configure**
-5. Enter your **Client ID** and **Client Secret** from the QuickBooks app
-6. Configure the required **Scopes** based on your integration needs
-7. Save your configuration
+## Add Your Discord App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a QuickBooks integration.
+
+   ![Alt text](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Select **Provider apps**.
+
+4. Select _QuickBooks_ from the **Provider** list.
+
+5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
+
+6. Enter the **scopes** required for your application in **Scopes**. For details on scopes, refer to the [QuickBooks Scopes](https://developer.intuit.com/app/developer/qbo/docs/learn/scopes) guide.
+
+   ![Alt text](/images/provider-guides/quickbooks_ampersand.gif)
+
+7. Click **Save Changes**.
+
 
 <Note>
 QuickBooks API returns XML responses by default. To receive JSON responses, make sure to set the `Accept` header to `application/json` in your proxy API calls.
@@ -65,10 +77,13 @@ QuickBooks API returns XML responses by default. To receive JSON responses, make
 
 ## Using the connector
 
-- Create a manifest file like the example above.
+To start integrating with Kit:
+- Create a manifest file as shown in the example above.
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) component.
-- Start making [Proxy API calls](/proxy-actions), specifying the QuickBooks endpoints you want to reach.
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
 
 ## API documentation
 
