@@ -1,0 +1,57 @@
+---
+title: Breakcold
+---
+## What's Supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.breakcold.com/rest`.
+
+### Supported Objects
+The Breakcold connector supports reading from the following objects:
+- [status](https://developer.breakcold.com/v3/api-reference/status/list-status)
+- [workspaces](https://developer.breakcold.com/v3/api-reference/workspaces/get-user-workspaces)
+- [members](https://developer.breakcold.com/v3/api-reference/members/get-members-of-a-workspace)
+- [leads](https://developer.breakcold.com/v3/api-reference/leads/list-leads-with-pagination-and-filters)
+- [tags](https://developer.breakcold.com/v3/api-reference/tags/list-tags)
+- [lists](https://developer.breakcold.com/v3/api-reference/lists/get-all-lists)
+- [notes](https://developer.breakcold.com/v3/api-reference/notes/list-notes)
+- [reminders](https://developer.breakcold.com/v3/api-reference/reminders/list-reminders-with-filters-and-pagination)
+
+The Breakcold connector supports writing from the following objects:
+- [status](https://developer.breakcold.com/v3/api-reference/status/create-a-status)
+- [tags](https://developer.breakcold.com/v3/api-reference/tags/create-a-tag)
+- [lists](https://developer.breakcold.com/v3/api-reference/lists/create-a-list)
+- [notes](https://developer.breakcold.com/v3/api-reference/notes/create-a-note)
+- [reminders](https://developer.breakcold.com/v3/api-reference/reminders/create-a-reminder)
+- [attribute](https://developer.breakcold.com/v3/api-reference/attributes/create-an-attributes)
+- [lead](https://developer.breakcold.com/v3/api-reference/leads/create-a-lead)
+- [leads/all-list](https://developer.breakcold.com/v3/api-reference/leads/add-a-list-to-leads)
+
+### Example integration
+
+For an example manifest file of an Breakcold integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/breakcold/amp.yaml).
+
+
+## Using the connector
+
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To integrate with breakcold:
+- Create a manifest file similar to the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for an API key.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Calls](/proxy-actions), you can start making Proxy API calls.
+
+## Creating an API key for Breakcold
+
+1. Log in to your [Breakcold account](https://app.breakcold.com/signin). 
+2. Click settings > API Keys > Create API key.
+
+![Generate Token](/images/provider-guides/breakcold.gif)

@@ -13,6 +13,7 @@
     "/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}": {
       "post": {
         "summary": "Write records",
+        "description": "Create or update records in a SaaS instance, synchronously or asynchronously. See [Write actions](https://docs.withampersand.com/write-actions) for details.",
         "operationId": "writeRecords",
         "tags": [
           "Write"
@@ -73,9 +74,24 @@
                     "type": "string",
                     "description": "The mode of write operation. The only supported mode currently is synchronous.",
                     "enum": [
-                      "synchronous"
+                      "synchronous",
+                      "asynchronous"
                     ],
                     "example": "synchronous"
+                  },
+                  "retryPolicy": {
+                    "type": "object",
+                    "description": "The retry policy for an asynchronous write operation.",
+                    "properties": {
+                      "deadlineHours": {
+                        "type": "integer",
+                        "description": "The maximum number of hours to wait for the write operation to complete. If not specified, defaults to 1 hour.",
+                        "example": 24,
+                        "default": 1,
+                        "minimum": 1,
+                        "maximum": 48
+                      }
+                    }
                   },
                   "record": {
                     "type": "object",
@@ -120,12 +136,12 @@
                   "title": "Sync Write Response Success",
                   "type": "object",
                   "required": [
-                    "result",
                     "operationId"
                   ],
                   "additionalProperties": false,
                   "properties": {
                     "result": {
+                      "description": "The result of the write operation. Only present for synchronous operations.",
                       "title": "Write Result",
                       "type": "object",
                       "required": [
@@ -423,9 +439,24 @@
             "type": "string",
             "description": "The mode of write operation. The only supported mode currently is synchronous.",
             "enum": [
-              "synchronous"
+              "synchronous",
+              "asynchronous"
             ],
             "example": "synchronous"
+          },
+          "retryPolicy": {
+            "type": "object",
+            "description": "The retry policy for an asynchronous write operation.",
+            "properties": {
+              "deadlineHours": {
+                "type": "integer",
+                "description": "The maximum number of hours to wait for the write operation to complete. If not specified, defaults to 1 hour.",
+                "example": 24,
+                "default": 1,
+                "minimum": 1,
+                "maximum": 48
+              }
+            }
           },
           "record": {
             "type": "object",
@@ -462,12 +493,12 @@
         "title": "Sync Write Response Success",
         "type": "object",
         "required": [
-          "result",
           "operationId"
         ],
         "additionalProperties": false,
         "properties": {
           "result": {
+            "description": "The result of the write operation. Only present for synchronous operations.",
             "title": "Write Result",
             "type": "object",
             "required": [
