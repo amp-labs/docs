@@ -1,0 +1,577 @@
+---
+title: "Manifest Schema"
+sidebarTitle: "Manifest schema"
+---
+
+## Introduction
+
+An Ampersand manifest (`amp.yaml`) is a YAML configuration file that defines how your application integrates with various SaaS platforms through the Ampersand integration platform. The manifest follows a structured schema that enables you to specify:
+
+- What data to read from external systems
+- What data to write to external systems
+- How to subscribe to events from external systems
+- How to proxy API calls
+
+This document provides a comprehensive reference for the Ampersand manifest schema, including detailed field descriptions and best practices.
+
+## Top-level structure
+
+The Ampersand manifest starts with a top-level structure that specifies the schema version and a list of integrations:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: integration1
+    provider: provider1
+    # ... integration 1 configuration
+  - name: integration2
+    provider: provider2
+    # ... integration 2 configuration
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `specVersion` | String | Yes | The version of the manifest specification. Format: `MAJOR.MINOR.PATCH`. Currently only `1.0.0` is supported. |
+| `integrations` | Array | Yes | An array of [integration configurations](#integration-configuration). Each element defines a complete integration with a specific provider. |
+
+<Note>
+Notes
+- Only one `specVersion` is allowed per manifest file.
+- The `integrations` array must contain at least one integration configuration.
+- Multiple integrations can reference the same provider with different configurations.
+</Note>
+
+## Integration Configuration
+
+Each integration defines a connection to a specific provider (e.g., Salesforce, HubSpot). This section contains the basic metadata about the integration:
+
+```yaml
+name: my-integration
+displayName: My Integration
+provider: salesforce
+read:
+  ...
+write:
+  ...
+proxy:
+  ...
+subscribe:
+  ...
+```
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | String | Yes | A unique identifier for this integration within your manifest. Use lowercase alphanumeric characters, hyphens and underscores only. Maximum length: 64 characters. |
+| `displayName` | String | No | A human-readable name for this integration. This name is displayed in the UI and logs. If not provided, `name` is used. Maximum length: 100 characters. |
+| `provider` | String | Yes | The provider/platform for this integration. Must be one of the supported providers (e.g., `salesforce`, `hubspot`, `intercom`). Case-sensitive. |
+| `read` | Object | No | The [read configuration](#read-configuration). |
+| `write` | Object | No | The [write configuration](#write-configuration). |
+| `proxy` | Object | No | The [proxy configuration](#proxy-configuration). |
+| `subscribe` | Object | No | The [subscribe configuration](#subscribe-configuration). |
+
+<Note>
+Naming Conventions
+
+- `name`: Use descriptive, unique names that identify the purpose of the integration. Examples: `salesforce-contacts-sync`, `hubspot-crm-integration`, `github-issues-tracker`.
+- `displayName`: Use proper capitalization and spacing for better readability in UIs. Examples: "Salesforce Contacts Sync", "HubSpot CRM Integration", "GitHub Issues Tracker".
+</Note>
+
+<Note>The `provider` field must match one of the [supported providers](https://github.com/amp-labs/connectors/tree/main/providers).</Note>
+
+## Read Configuration
+
+The `read` section defines what data to read from the provider. This section is optional - if your integration only writes data, subscribes to events, or uses proxy, you can omit this section.
+
+```yaml
+read:
+  objects:
+    - objectName: contact
+      destination: defaultWebhook
+      schedule: "*/30 * * * *"
+      requiredFields:
+        - fieldName: firstname
+        - fieldName: lastname
+      optionalFields:
+        - fieldName: phone
+      backfill:
+        defaultPeriod:
+          fullHistory: true
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objects` | Array | Yes | An array of [objects to read](#read-object) from the provider. Each element defines a specific object type (e.g., contacts, leads) to read. |
+
+<Note>
+Read Considerations
+
+- For complex integrations, consider combining read actions with [subscribe actions](#subscribe-configuration) to get both historical data and real-time updates.
+</Note>
+
+## Write Configuration
+
+The `write` section defines what data can be written to the provider. This section is optional - if your integration only reads data, subscribes to events, or uses proxy, you can omit this section.
+
+```yaml
+write:
+  objects:
+    - objectName: contact
+      inheritMapping: true
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objects` | Array | Yes | An array of [objects to write](#write-object) to the provider. Each element defines a specific object type (e.g., contacts, leads) that can be written to. |
+
+<Note>
+Write Considerations
+
+- Not all objects that can be read can also be written to.
+- Some providers have read-only objects or fields.
+- When `inheritMapping: true` is set, field mappings defined in the read configuration will be used for writing, which simplifies configuration for bidirectional syncs.
+</Note>
+
+## Subscribe Configuration
+
+The `subscribe` section defines how to subscribe to events from the provider. This section is optional - if your integration only reads or writes data or uses proxy, you can omit this section.
+
+```yaml
+subscribe:
+  objects:
+    - objectName: account
+      destination: accountWebhook
+      inheritFieldsAndMapping: true
+      createEvent:
+        enabled: always
+      updateEvent:
+        enabled: always
+        watchFieldsAuto: all  # Alternatively, use requiredWatchFields
+      deleteEvent:
+        enabled: always
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objects` | Array | Yes | An array of [objects to subscribe](#subscribe-object) to. Each element defines a specific object type to receive events for. |
+
+<Note>
+Subscribe Considerations
+
+- Currently, subscribe actions are only supported for Salesforce and HubSpot.
+- You must also have a read action specified for the object you wish to subscribe to.
+- Only one of `requiredWatchFields` or `watchFieldsAuto` should be provided for update events.
+</Note>
+
+## Proxy Configuration
+
+The `proxy` section configures API call proxying. This allows direct access to the provider's API through Ampersand's proxy. This section is optional - if your integration only reads or writes data or subscribes to events, you can omit this section.
+
+```yaml
+proxy:
+  enabled: true
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `enabled` | Boolean | No | Whether proxy is enabled for this integration. Default: `false`. |
+
+<Note>
+Proxy Considerations
+
+- Enabling proxy allows direct API calls to the provider through Ampersand.
+- This is useful for operations not covered by the standard read/write/subscribe functionality.
+- All proxy calls are authenticated using the integration's credentials.
+- API rate limits of the provider still apply.
+- Proxy requests may be logged by Ampersand for security and debugging purposes.
+</Note>
+
+## Configuration Objects
+
+### Read Object
+
+Each object in the `objects` array defines a specific data type to read from the provider:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objectName` | String | Yes | The [name of the object](#object-name) to read (e.g., `contact`, `lead`, `account`). This must match an object type supported by the provider's API (see note below). Case-sensitive. |
+| `destination` | String | Yes | The [webhook destination](#destination) for the read data. This determines where the data will be sent after it's read. Must match a webhook configured in your Ampersand account. |
+| `schedule` | String | Yes | A [cron schedule](#schedule) for reading the data. Defines how frequently the data should be read. Uses standard cron syntax. Examples: `*/10 * * * *` (every 10 minutes), `0 0 * * *` (daily at midnight). |
+| `backfill` | Object | No | [Configuration for backfilling](#backfill) historical data. Defines how historical data should be loaded. |
+| `delivery` | Object | No | [Configuration for delivery](#delivery) of the read data. Defines how the data will be delivered to the destination. |
+| `requiredFields` | Array | No | Fields that are always read for every customer. These fields will always be included in the data that's read. See [Field Configuration](#field) for more details. |
+| `optionalFields` | Array | No | Optional fields that can be included. Customers can choose which of these fields to include. See [Field Configuration](#field) for more details. |
+| `optionalFieldsAuto` | String | No | Set to `all` to automatically include all available fields. This can be used instead of explicitly listing optional fields. |
+| `mapToName` | String | No | An optional name mapping for this object. Used to standardize object names across different providers. |
+| `mapToDisplayName` | String | No | An optional display name mapping for this object. Used for UI display. |
+
+<Note>
+When configuring fields for a read object, keep these points in mind:
+
+- You can combine `requiredFields` and `optionalFields` in the same object definition.
+- For detailed options on configuring individual fields, see the [Field Configuration](#field) section.
+</Note>
+
+### Write Object
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objectName` | String | Yes | The [name of the object](#object-name) to write to. Must match an object type supported by the provider's API. Case-sensitive. |
+| `inheritMapping` | Boolean | No | Whether to inherit mappings from read configuration. If `true`, field mappings defined in the read configuration will be used for writing. Default: `false`. |
+| `valueDefaults` | Object | No | Configuration for default values when writing to this object. See [ValueDefaults](#default-values) for details. |
+
+### Subscribe Object
+
+Each object in the `objects` array defines a specific object type to subscribe to:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objectName` | String | Yes | The [name of the object](#object-name) to subscribe to. Must match an object type supported by the provider. Case-sensitive. |
+| `destination` | String | Yes | The [webhook destination](#destination) for the event data. This determines where the event data will be sent. Must match a webhook configured in your Ampersand account. |
+| `inheritFieldsAndMapping` | Boolean | Yes | Whether to inherit field mappings from read configuration. For Salesforce, this must be set to `true`. |
+| `createEvent` | Object | No | Configuration for create events. See [Event Configuration](#event) below. |
+| `updateEvent` | Object | No | Configuration for update events. See [Event Configuration](#event) below. |
+| `deleteEvent` | Object | No | Configuration for delete events. See [Event Configuration](#event) below. |
+| `associationChangeEvent` | Object | No | Configuration for association change events. |
+| `otherEvents` | Array | No | Array of non-standard events to subscribe to (e.g., `object.merged`, `object.restored`). |
+
+### Other Objects
+
+#### Object Name
+
+The `objectName` must match the API object name in the provider's system. Some common examples:
+
+- Salesforce: `contact`, `lead`, `account`, `opportunity`
+- HubSpot: `contacts`, `companies`, `deals`, `tickets`
+- GitHub: `repos`, `issues`, `pulls`, `users`
+- Intercom: `contacts`, `companies`, `conversations`, `teams`
+
+#### Destination
+
+The `destination` field must match a webhook configured in your Ampersand account. Common patterns include:
+
+- Provider-specific webhooks: `salesforceWebhook`, `hubspotWebhook`, `intercomWebhook`
+- Generic webhooks: `defaultWebhook`, `dataWebhook`, `analyticsWebhook`
+
+#### Schedule
+
+The `schedule` field uses standard cron syntax with five fields:
+
+```
+┌─────────────── minute (0 - 59)
+│ ┌───────────── hour (0 - 23)
+│ │ ┌─────────── day of month (1 - 31)
+│ │ │ ┌───────── month (1 - 12)
+│ │ │ │ ┌─────── day of week (0 - 6) (Sunday to Saturday)
+│ │ │ │ │
+│ │ │ │ │
+* * * * *
+```
+
+Common patterns:
+- `*/10 * * * *`: Every 10 minutes
+- `*/30 * * * *`: Every 30 minutes
+- `0 * * * *`: Every hour at minute 0
+- `0 0 * * *`: Every day at midnight
+- `0 12 * * *`: Every day at noon
+- `0 0 * * 1`: Every Monday at midnight
+
+<Note>
+Scheduling Considerations
+
+- Higher frequency (e.g., every 10 minutes) provides more up-to-date data but increases API usage.
+- Lower frequency (e.g., daily) reduces API usage but data may be less current.
+- Consider the provider's API rate limits when setting schedules.
+- For less frequently updated data (e.g., user profiles), a lower frequency may be sufficient.
+- For rapidly changing data (e.g., chat messages), a higher frequency is recommended.
+</Note>
+
+#### Backfill
+
+The `backfill` section configures how historical data is loaded:
+
+```yaml
+backfill:
+  defaultPeriod:
+    fullHistory: true
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `defaultPeriod` | Object | No | The default time period for backfilling. |
+| `defaultPeriod.fullHistory` | Boolean | No | Whether to backfill the full history (`true`) or just recent data (`false`). Default: `false`. |
+| `defaultPeriod.days` | Number | No | The number of days to backfill. Default: `0`. |
+
+<Note>
+Backfill Considerations
+
+- Setting `fullHistory: true` may result in longer initial sync times, especially for large datasets.
+- Some providers may have API rate limits that affect backfill performance.
+- By default, if `backfill` is not specified, only recent data will be loaded.
+</Note>
+
+#### Delivery
+
+The `delivery` section configures how data is delivered to your webhook destination after it's read from the provider. This gives you control over the timing and volume of data you receive.
+
+```yaml
+delivery:
+  mode: onRequest  # "auto" or "onRequest"
+  pageSize: 100    # Only used with "onRequest" mode (range: 50-500)
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `mode` | String | No | The delivery mode. Valid values: `auto` (default) or `onRequest`. |
+| `pageSize` | Number | No | The maximum number of records to include in each webhook payload when using `onRequest` mode. Range: 50-500. Default: 100. |
+
+**Delivery Modes**
+
+**Auto Mode**
+
+In `auto` mode (the default when no mode is specified), Ampersand sends data to your destination immediately as it's read from the provider. This is ideal for real-time data processing:
+
+```yaml
+delivery:
+  mode: auto
+```
+
+**OnRequest Mode**
+
+In `onRequest` mode, Ampersand reads data according to the schedule but stores it until you explicitly request it. This gives you control over when you receive the data:
+
+```yaml
+delivery:
+  mode: onRequest
+  pageSize: 200  # Receive up to 200 records per webhook payload
+```
+
+With this mode, you can:
+- Control the rate at which you process data
+- Prevent overwhelming your systems during large data syncs
+- Request data when your system is ready to process it
+
+To receive stored data, you call the [deliver results API endpoint](/reference/read/deliver-results) with the number of pages you want to receive.
+
+<Note>
+Delivery Considerations
+
+- If you don't specify a delivery mode, `auto` is used by default
+- The `pageSize` parameter only applies to `onRequest` mode
+- For `onRequest` mode, if you request more pages than are available, Ampersand will send all available data and then send new data as it becomes available until your requested number of pages is fulfilled
+- Configuring a larger `pageSize` means fewer webhook calls but larger payload sizes
+- For systems that process data in batches, `onRequest` mode often works better
+- For real-time data processing, `auto` mode is generally preferred
+</Note>
+
+#### Field
+
+Fields can be configured in two main ways - either using a simple `fieldName` reference or using a mapped field approach (`mapToName`, `mapToDisplayName`, `prompt`, `default`). This flexibility allows for both direct field references and more sophisticated field mapping options.
+
+**Simple Field Reference**
+
+For straightforward field access where you directly reference a provider's field without renaming it:
+
+```yaml
+- fieldName: firstname
+```
+
+<Tip>
+This approach is best when:
+- The field name in the provider's API is already meaningful to your application
+- You don't need to standardize field names across different providers
+- No user configuration is needed for the field
+</Tip>
+
+**Field Mapping**
+
+For more complex scenarios, you can use field mapping to standardize field names or prompt users for configuration:
+
+```yaml
+# Predefined mapping (no user input required)
+- fieldName: mobilephone
+  mapToName: phone
+  mapToDisplayName: Phone Number
+
+# User-defined mapping (prompts user during setup)
+- mapToName: priority
+  mapToDisplayName: Priority Score
+  prompt: Which field do you use to track the priority of a lead?
+  default: priority_level  # Optional default value
+```
+
+<Tip>
+Field mapping is useful when:
+- You want to standardize field names across different providers
+- Different customers use different field names for the same concept
+- You need to provide user-friendly display names
+- You want to prompt users to select the appropriate fields during setup
+</Tip>
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `fieldName` | String | Yes* | The name of the field in the provider's API. Must match a field available in the provider's API for the specified object. Case-sensitive. |
+| `mapToName` | String | No* | An optional name mapping for this field. Used to standardize field names across different providers. |
+| `mapToDisplayName` | String | No* | An optional display name mapping for this field. Used for UI display. |
+| `prompt` | String | No* | An optional prompt to show when configuring this field. Helps users understand what the field is for. |
+| `default` | String | No | An optional default field name to suggest when prompting users. Should only use standard fields as defaults. |
+
+*Either `fieldName` or all of `mapToName`, `mapToDisplayName`, and `prompt` are required.
+
+**Common Patterns and Best Practices**
+
+1. **Direct Field Access**: Use simple `fieldName` references for standard, unchanging fields:
+   ```yaml
+   - fieldName: email
+   - fieldName: firstname
+   - fieldName: lastname
+   ```
+
+2. **Standardized Field Names**: Use `fieldName` with `mapToName` to standardize field names:
+   ```yaml
+   - fieldName: FirstName  # Salesforce
+     mapToName: first_name
+   - fieldName: firstname  # HubSpot
+     mapToName: first_name
+   ```
+
+3. **User-Defined Mapping**: Use `mapToName` without `fieldName` when users need to select the field:
+   ```yaml
+   - mapToName: notes
+     mapToDisplayName: Contact Notes
+     prompt: Select the field where you store notes about your contacts
+   ```
+
+4. **Combined Approach**: For complex integrations, combine these patterns:
+   ```yaml
+   requiredFields:
+     - fieldName: email  # Direct field access
+     - fieldName: firstname
+       mapToName: first_name  # Standardized name
+   optionalFields:
+     - mapToName: lead_source  # User-defined mapping
+       mapToDisplayName: Lead Source
+       prompt: Which field tracks where this lead came from?
+   ```
+
+#### Default Values
+
+The default values or `valueDefaults` section configures how default values are handled when writing to an object:
+
+```yaml
+- objectName: contact
+  inheritMapping: true
+  valueDefaults:
+    allowAnyFields: true
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `allowAnyFields` | Boolean | No | If `true`, users can set default values for any field during installation through the UI. Default: `false`. |
+
+<Note>
+Default Values Considerations
+
+- Default values are applied when a field is missing from the write request
+- When `allowAnyFields` is set to `true`, users can configure default values for any field through the Ampersand UI
+- Default values can be different for each customer installation
+- Default values must be configured for each customer via the [Create Installation API](/reference/installation/create-a-new-installation) or through the UI
+- See the [Write Actions documentation](/write-actions#default-values) for implementation details
+</Note>
+
+#### Event
+
+Each event type can be configured with specific options:
+
+**1. Create Event Configuration**
+
+The `createEvent` configuration specifies how to handle create events:
+
+```yaml
+createEvent:
+  enabled: always
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `enabled` | String | Yes | Whether to enable create events. Currently, only `always` is supported. |
+
+**2. Update Event Configuration**
+
+The `updateEvent` configuration specifies how to handle update events:
+
+```yaml
+updateEvent:
+  enabled: always
+  watchFieldsAuto: all  # Watch all fields for changes
+```
+
+Or alternatively:
+
+```yaml
+updateEvent:
+  enabled: always
+  requiredWatchFields:  # Watch specific fields
+    - name
+    - email
+    - phone
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `enabled` | String | Yes | Whether to enable update events. Currently, only `always` is supported. |
+| `watchFieldsAuto` | String | No* | If set to `all`, all fields will be watched for changes. |
+| `requiredWatchFields` | Array | No* | An array of field names to watch for changes. These can include mapped fields. |
+
+*Note: Only one of `watchFieldsAuto` or `requiredWatchFields` should be specified.
+
+**3. Delete Event Configuration**
+
+The `deleteEvent` configuration specifies how to handle delete events:
+
+```yaml
+deleteEvent:
+  enabled: always
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `enabled` | String | Yes | Whether to enable delete events. Currently, only `always` is supported. |
+
+**4. Association Change Event Configuration**
+
+The `associationChangeEvent` configuration specifies how to handle association change events:
+
+```yaml
+associationChangeEvent:
+  enabled: always
+  includeFullRecords: true
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `enabled` | String | Yes | Whether to enable association change events. Currently, only `always` is supported. |
+| `includeFullRecords` | Boolean | No | Whether to include full records in the event payload. Default: `false`. |
+
+**5. Other Events**
+
+The `otherEvents` array allows you to subscribe to non-standard events specific to certain providers:
+
+```yaml
+otherEvents:
+  - object.merged
+  - object.restored
+```
+
+<Note>
+Event Configuration Notes
+
+- For Salesforce update events, you must specify either `watchFieldsAuto: all` or `requiredWatchFields` with specific fields to watch.
+- Event delivery happens in near real-time, allowing your application to react quickly to changes.
+- For HubSpot, you'll need to configure webhook subscriptions in your HubSpot app as described in the [Subscribe Actions documentation](/subscribe-actions#hubspot-subscribe-actions).
+- HubSpot subscribe actions cannot notify you of changes to custom fields without additional setup.
+</Note>
+
+<Tip>
+Combine subscribe actions with read actions to get a complete picture of your customers' data:
+- Use read actions with backfill to get initial historical data
+- Use subscribe actions to get real-time updates going forward
+</Tip>
