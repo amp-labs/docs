@@ -168,6 +168,31 @@ function InstallationComponent() {
 }
 ```
 
+### Get config from existing installation
+
+To access the configuration from an existing installation, you can use the `installation.config` property. The config structure follows the same format as described in the [API reference](/reference/installation/get-an-installation#response-config):
+
+```tsx
+import { useInstallation } from '@amp-labs/react';
+
+function ConfigDisplayComponent() {
+  const { installation } = useInstallation();
+
+  if (!installation) {
+    return <div>No installation found</div>;
+  }
+
+  // Access the configuration from the installation
+  const config = installation.config;
+
+  // Use the config to build your custom UI
+}
+```
+
+<Note>
+For more advanced config management including getting and setting specific parts of the config and managing a local draft copy, use the [`useLocalConfig()`](#config-management) helper hook.
+</Note>
+
 ### Create, update, and delete installations
 
 The following hooks provide granular control over [Installation](/concepts#installation) operations:
