@@ -302,12 +302,18 @@ The `getCustomerFieldsForObject` function returned by `useManifest` allows you t
 
 Managing the [Config](/terminology#config) that keeps track of each customer's preference for how the integration behaves can be complex, with deeply nested objects and the need to manage this state locally.
 
-The `useConfig` hook simplifies local state management of the config object by providing flexible utilities to manipulate the config through a set of setters and getters. It maintains a draft state, which you can modify before committing changes to the installation.
+The `useLocalConfig` hook simplifies local state management of the config object by providing flexible utilities to manipulate the config through a set of setters and getters. It maintains a draft state, which you can modify before committing changes to the installation.
+
+<Note>
+**Deprecated:** `useConfig` has been deprecated in React 2.9.0 to prevent confusion. Use `useLocalConfig()` for managing local config draft state instead.
+
+For fetching an existing config from an installation, use [`useInstallation`](#get-current-installation) which provides access to the current installation's configuration.
+</Note>
 
 It returns these fields:
 
 ```typescript
-// Return values of `useConfig` hook.
+// Return values of `useLocalConfig` hook.
 {
   draft: InstallationConfigContent;  // Current draft configuration
   get: () => InstallationConfigContent;  // Get current configuration
@@ -367,7 +373,7 @@ This is a basic example that hard-codes a Config and does not allow the user to 
 
 ```typescript
 function ConfigManager() {
-  const config = useConfig();
+  const config = useLocalConfig();
   const { createInstallation } = useCreateInstallation();
   
   config.setDraft({
@@ -403,7 +409,7 @@ This is an example for how to use helper functions to more easily construct a re
 
 ```typescript
 function ReadObjectConfig() {
-  const config = useConfig();
+  const config = useLocalConfig();
   const contactConfig = config.readObject("Contact");
   
   // Check if field is selected
@@ -429,7 +435,7 @@ The headless UI library provides helper functions to more easily construct a wri
 
 ```typescript
 function WriteObjectConfig() {
-  const config = useConfig();
+  const config = useLocalConfig();
   const contactWriteConfig = config.writeObject("Contact");
   
   // Enable write for Contact object
@@ -447,7 +453,7 @@ You can configure write settings for individual features using these methods:
 
 ```typescript
 function WriteObjectConfig() {
-  const config = useConfig();
+  const config = useLocalConfig();
   const contactWriteConfig = config.writeObject("Contact");
   
   // Set default value for a field
@@ -507,7 +513,7 @@ You can use `setFieldSettings` to set all advanced write features at once for a 
 
 ```typescript
 function WriteObjectConfig() {
-  const config = useConfig();
+  const config = useLocalConfig();
   const contactWriteConfig = config.writeObject("Contact");
   
   // Configure a field with both write behavior and default value
@@ -533,7 +539,7 @@ Here's a full example that uses the `ReadObjectConfig` and `WriteObjectConfig` c
 
 ```typescript
 function IntegrationConfig() {
-  const config = useConfig();
+  const config = useLocalConfig();
   const { updateInstallation } = useUpdateInstallation();
   
   const handleSave = async () => {
