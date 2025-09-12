@@ -37,50 +37,7 @@ yarn add @amp-labs/react
 
 In order for the headless hooks and functions to have relevant context, you can only use them inside `AmpersandProvider` and `InstallationProvider`.
 
-The `AmpersandProvider` needs to wrap all usages of headless hooks and functions as well as prebuilt UI components. See [Ampersand Provider](/embeddable-ui-components#ampersand-provider) for more details.
-
-### Authentication methods
-
-The `AmpersandProvider` supports both API key and JWT authentication through the `getToken` option. Only one authentication method can be used at a time.
-
-#### API Key Authentication
-**When to use API key authentication:**
-- Development and testing environments 
-- Simple integrations where you don't need user-specific permissions
-
-```tsx
-const options = {
-  project: 'PROJECT',
-  apiKey: 'API_KEY', // Direct API key
-};
-```
-
-#### JWT Authentication
-
-**When to use JWT authentication:**
-- Production client-side applications (browsers)
-- Multi-tenant applications where different users need different permissions
-- When you need to securely pass user context and permissions
-- Applications where API keys cannot be safely stored on the client
-
-
-```tsx
-const options = {
-  project: 'PROJECT',
-  getToken: async () => {
-    // Your logic to fetch JWT token
-    const response = await fetch('/api/token');
-    const data = await response.json();
-    return data.token;
-  },
-};
-```
-
-The `getToken` function should return a promise that resolves to a valid JWT token. 
-
-<Note>
-For more details on JWT authentication details, setup, and implementation, see [JWT Authentication](/jwt-auth).
-</Note>
+The `AmpersandProvider` needs to wrap all usages of headless hooks and functions as well as prebuilt UI components. See [AmpersandProvider](/embeddable-ui-components#ampersandprovider) for more details on configuration and authentication methods.
 
 The `InstallationProvider` needs to wrap any code that interacts with a particular installation. This means that if your UI needs to handle multiple installations (e.g., one for Asana and one for Zendesk), then you need two instances of `InstallationProvider`: one that wraps the code for Asana setup, and one that wraps the code for Zendesk setup.
 

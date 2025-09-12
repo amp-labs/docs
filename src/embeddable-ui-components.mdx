@@ -53,7 +53,104 @@ function App() {
 }
 ```
 
+See below for more details on the [authentication methods](#authentication-methods).
+
 ## Components
+
+### AmpersandProvider
+
+The `AmpersandProvider` is the foundational component that provides context for all Ampersand functionality, including both headless hooks and prebuilt UI components. It must wrap all Ampersand components and hooks in your application.
+
+#### Basic Setup
+
+The `AmpersandProvider` accepts an `options` object with the following required properties:
+
+* `project`: Your Ampersand project name or ID (found on your [General Settings page](https://dashboard.withampersand.com/projects/_/settings))
+* Authentication method: Either `apiKey` or `getToken` (but not both)
+
+```tsx
+import { AmpersandProvider } from '@amp-labs/react';
+
+const options = {
+  project: 'PROJECT', // Your Ampersand project name or ID
+
+  // Pick one of the following authentication methods:
+  apiKey: 'API_KEY',  // Your Ampersand API key
+  // OR 
+  getToken: async () => {  // JWT Authentication
+    // Your logic to fetch JWT token from your backend
+    const response = await fetch('/api/ampersand-token');
+    const data = await response.json();
+    return data.token;
+  },
+};
+
+function App() {
+  return (
+    <AmpersandProvider options={options}>
+      {/* All your Ampersand components and hooks go here */}
+    </AmpersandProvider>
+  );
+}
+```
+
+#### Authentication Methods
+
+The `AmpersandProvider` supports two authentication methods through the `options` parameter. Only one method can be used at a time.
+
+##### API Key Authentication
+
+**When to use API key authentication:**
+- Development and testing environments 
+- Simple integrations where you don't need user-specific permissions
+- Server-side applications where the API key can be securely stored
+
+```tsx
+const options = {
+  project: 'PROJECT',
+  apiKey: 'API_KEY', // Direct API key
+};
+```
+
+Create an API key on the [API keys page](https://dashboard.withampersand.com/projects/_/api-keys) of your Ampersand Dashboard.
+
+##### JWT Authentication
+
+**When to use JWT authentication:**
+- Production client-side applications (browsers)
+- Multi-tenant applications where different users need different permissions
+- When you need to securely pass user context and permissions
+- Applications where API keys cannot be safely stored on the client
+
+```tsx
+const options = {
+  project: 'PROJECT',
+  getToken: async () => {
+    // Your logic to fetch JWT token from your backend
+    const response = await fetch('/api/ampersand-token');
+    const data = await response.json();
+    return data.token;
+  },
+};
+```
+
+The `getToken` function should return a promise that resolves to a valid JWT token. Your backend should generate this token using your Ampersand API key and include any necessary user context.
+
+<Note>
+For detailed information on JWT authentication setup, token generation, and implementation best practices, see [JWT Authentication](/jwt-auth).
+</Note>
+
+#### Context Availability
+
+All Ampersand functionality requires the `AmpersandProvider` context:
+
+- **Prebuilt UI Components**: `InstallIntegration`, `ConnectProvider`
+- **Headless Hooks**: `useConnection`, `useInstallation`, `useManifest`, `useConfig`, etc.
+- **Installation Provider**: `InstallationProvider` (used with headless hooks)
+
+The provider can be placed at any level in your component tree, but it must wrap all components that use Ampersand functionality.
+
+
 
 ### Install integration
 
