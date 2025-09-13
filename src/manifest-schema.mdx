@@ -62,11 +62,11 @@ subscribe:
 |-------|------|----------|-------------|
 | `name` | String | Yes | A unique identifier for this integration within your manifest. Use lowercase alphanumeric characters, hyphens and underscores only. Maximum length: 64 characters. |
 | `displayName` | String | No | A human-readable name for this integration. This name is displayed in the UI and logs. If not provided, `name` is used. Maximum length: 100 characters. |
-| `provider` | String | Yes | The provider/platform for this integration. Must be one of the supported providers (e.g., `salesforce`, `hubspot`, `intercom`). Case-sensitive. |
-| `read` | Object | No | The [read configuration](#read-configuration). |
-| `write` | Object | No | The [write configuration](#write-configuration). |
-| `proxy` | Object | No | The [proxy configuration](#proxy-configuration). |
-| `subscribe` | Object | No | The [subscribe configuration](#subscribe-configuration). |
+| `provider` | String | Yes | The provider/platform for this integration. Must be one of the [supported providers](/provider-guides/overview) (e.g., `salesforce`, `hubspot`, `intercom`). Case-sensitive. |
+| `read` | Object | No | The [read configuration](#read-configuration). See [Read Actions](/read-actions) for implementation details. |
+| `write` | Object | No | The [write configuration](#write-configuration). See [Write Actions](/write-actions) for implementation details. |
+| `proxy` | Object | No | The [proxy configuration](#proxy-configuration). See [Proxy Actions](/proxy-actions) for implementation details. |
+| `subscribe` | Object | No | The [subscribe configuration](#subscribe-configuration). See [Subscribe Actions](/subscribe-actions) for implementation details. |
 
 <Note>
 Naming Conventions
@@ -75,11 +75,12 @@ Naming Conventions
 - `displayName`: Use proper capitalization and spacing for better readability in UIs. Examples: "Salesforce Contacts Sync", "HubSpot CRM Integration", "GitHub Issues Tracker".
 </Note>
 
-<Note>The `provider` field must match one of the [supported providers](https://github.com/amp-labs/connectors/tree/main/providers).</Note>
+<Note>The `provider` field must match one of the [supported providers](https://github.com/amp-labs/connectors/tree/main/providers). See the [Provider Guides](/provider-guides/overview) for provider-specific configuration details.</Note>
 
 ## Read Configuration
 
 The `read` section defines what data to read from the provider. This section is optional - if your integration only writes data, subscribes to events, or uses proxy, you can omit this section.
+> Learn more about [Read Actions](/read-actions).
 
 ```yaml
 read:
@@ -105,11 +106,13 @@ read:
 Read Considerations
 
 - For complex integrations, consider combining read actions with [subscribe actions](#subscribe-configuration) to get both historical data and real-time updates.
+- See [Read Actions documentation](/read-actions) for detailed implementation guidance.
 </Note>
 
 ## Write Configuration
 
 The `write` section defines what data can be written to the provider. This section is optional - if your integration only reads data, subscribes to events, or uses proxy, you can omit this section.
+> Learn more about [Write Actions](/write-actions).
 
 ```yaml
 write:
@@ -128,11 +131,13 @@ Write Considerations
 - Not all objects that can be read can also be written to.
 - Some providers have read-only objects or fields.
 - When `inheritMapping: true` is set, field mappings defined in the read configuration will be used for writing, which simplifies configuration for bidirectional syncs.
+- See [Write Actions documentation](/write-actions) for detailed implementation guidance.
 </Note>
 
 ## Subscribe Configuration
 
 The `subscribe` section defines how to subscribe to events from the provider. This section is optional - if your integration only reads or writes data or uses proxy, you can omit this section.
+> Learn more about [Subscribe Actions](/subscribe-actions).
 
 ```yaml
 subscribe:
@@ -159,11 +164,13 @@ Subscribe Considerations
 - Currently, subscribe actions are only supported for Salesforce and HubSpot.
 - You must also have a read action specified for the object you wish to subscribe to.
 - Only one of `requiredWatchFields` or `watchFieldsAuto` should be provided for update events.
+- See [Subscribe Actions documentation](/subscribe-actions) for detailed implementation guidance.
 </Note>
 
 ## Proxy Configuration
 
 The `proxy` section configures API call proxying. This allows direct access to the provider's API through Ampersand's proxy. This section is optional - if your integration only reads or writes data or subscribes to events, you can omit this section.
+> Learn more about [Proxy Actions](/proxy-actions).
 
 ```yaml
 proxy:
@@ -182,6 +189,7 @@ Proxy Considerations
 - All proxy calls are authenticated using the integration's credentials.
 - API rate limits of the provider still apply.
 - Proxy requests may be logged by Ampersand for security and debugging purposes.
+- See [Proxy Actions documentation](/proxy-actions) for implementation details.
 </Note>
 
 ## Configuration Objects
@@ -193,14 +201,14 @@ Each object in the `objects` array defines a specific data type to read from the
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `objectName` | String | Yes | The [name of the object](#object-name) to read (e.g., `contact`, `lead`, `account`). This must match an object type supported by the provider's API (see note below). Case-sensitive. |
-| `destination` | String | Yes | The [webhook destination](#destination) for the read data. This determines where the data will be sent after it's read. Must match a webhook configured in your Ampersand account. |
+| `destination` | String | Yes | The [webhook destination](#destination) for the read data. This determines where the data will be sent after it's read. Must match a webhook configured in your Ampersand account. See [Destinations](/destinations) for setup. |
 | `schedule` | String | Yes | A [cron schedule](#schedule) for reading the data. Defines how frequently the data should be read. Uses standard cron syntax. Examples: `*/10 * * * *` (every 10 minutes), `0 0 * * *` (daily at midnight). |
-| `backfill` | Object | No | [Configuration for backfilling](#backfill) historical data. Defines how historical data should be loaded. |
-| `delivery` | Object | No | [Configuration for delivery](#delivery) of the read data. Defines how the data will be delivered to the destination. |
+| `backfill` | Object | No | [Configuration for backfilling](#backfill) historical data. Defines how historical data should be loaded. See [backfill behavior](/read-actions#backfill-behavior) for details. |
+| `delivery` | Object | No | [Configuration for delivery](#delivery) of the read data. Defines how the data will be delivered to the destination. See [delivery modes](/read-actions#on-request) for details. |
 | `requiredFields` | Array | No | Fields that are always read for every customer. These fields will always be included in the data that's read. See [Field Configuration](#field) for more details. |
 | `optionalFields` | Array | No | Optional fields that can be included. Customers can choose which of these fields to include. See [Field Configuration](#field) for more details. |
 | `optionalFieldsAuto` | String | No | Set to `all` to automatically include all available fields. This can be used instead of explicitly listing optional fields. |
-| `mapToName` | String | No | An optional name mapping for this object. Used to standardize object names across different providers. |
+| `mapToName` | String | No | An optional name mapping for this object. Used to standardize object names across different providers. See [Object and Field Mapping](/object-and-field-mapping) for details. |
 | `mapToDisplayName` | String | No | An optional display name mapping for this object. Used for UI display. |
 
 <Note>
@@ -208,6 +216,7 @@ When configuring fields for a read object, keep these points in mind:
 
 - You can combine `requiredFields` and `optionalFields` in the same object definition.
 - For detailed options on configuring individual fields, see the [Field Configuration](#field) section.
+- Learn more about [Object and Field Mapping](/object-and-field-mapping).
 </Note>
 
 ### Write Object
@@ -216,7 +225,7 @@ When configuring fields for a read object, keep these points in mind:
 |-------|------|----------|-------------|
 | `objectName` | String | Yes | The [name of the object](#object-name) to write to. Must match an object type supported by the provider's API. Case-sensitive. |
 | `inheritMapping` | Boolean | No | Whether to inherit mappings from read configuration. If `true`, field mappings defined in the read configuration will be used for writing. Default: `false`. |
-| `valueDefaults` | Object | No | Configuration for default values when writing to this object. See [ValueDefaults](#default-values) for details. |
+| `valueDefaults` | Object | No | Configuration for default values when writing to this object. See [ValueDefaults](#default-values) and [Write Actions default values](/write-actions#default-values) for details. |
 
 ### Subscribe Object
 
@@ -225,7 +234,7 @@ Each object in the `objects` array defines a specific object type to subscribe t
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `objectName` | String | Yes | The [name of the object](#object-name) to subscribe to. Must match an object type supported by the provider. Case-sensitive. |
-| `destination` | String | Yes | The [webhook destination](#destination) for the event data. This determines where the event data will be sent. Must match a webhook configured in your Ampersand account. |
+| `destination` | String | Yes | The [webhook destination](#destination) for the event data. This determines where the event data will be sent. Must match a webhook configured in your Ampersand account. See [Destinations](/destinations) for setup. |
 | `inheritFieldsAndMapping` | Boolean | Yes | Whether to inherit field mappings from read configuration. For Salesforce, this must be set to `true`. |
 | `createEvent` | Object | No | Configuration for create events. See [Event Configuration](#event) below. |
 | `updateEvent` | Object | No | Configuration for update events. See [Event Configuration](#event) below. |
@@ -244,6 +253,8 @@ The `objectName` must match the API object name in the provider's system. Some c
 - GitHub: `repos`, `issues`, `pulls`, `users`
 - Intercom: `contacts`, `companies`, `conversations`, `teams`
 
+See the [Provider Guides](/provider-guides/overview) for provider-specific object names.
+
 #### Destination
 
 The `destination` field must match a webhook configured in your Ampersand account. Common patterns include:
@@ -251,16 +262,18 @@ The `destination` field must match a webhook configured in your Ampersand accoun
 - Provider-specific webhooks: `salesforceWebhook`, `hubspotWebhook`, `intercomWebhook`
 - Generic webhooks: `defaultWebhook`, `dataWebhook`, `analyticsWebhook`
 
+> Learn more about [Destinations](/destinations) and [Webhook Destinations](/destinations/webhooks).
+
 #### Schedule
 
 The `schedule` field uses standard cron syntax with five fields:
 
 ```
-┌─────────────── minute (0 - 59)
-│ ┌───────────── hour (0 - 23)
-│ │ ┌─────────── day of month (1 - 31)
-│ │ │ ┌───────── month (1 - 12)
-│ │ │ │ ┌─────── day of week (0 - 6) (Sunday to Saturday)
+┌───────────── minute (0 - 59)
+│ ┌─────────── hour (0 - 23)
+│ │ ┌───────── day of month (1 - 31)
+│ │ │ ┌─────── month (1 - 12)
+│ │ │ │ ┌───── day of week (0 - 6) (Sunday to Saturday)
 │ │ │ │ │
 │ │ │ │ │
 * * * * *
@@ -286,7 +299,8 @@ Scheduling Considerations
 
 #### Backfill
 
-The `backfill` section configures how historical data is loaded:
+The `backfill` section configures how historical data is loaded.
+> Learn more about [backfill behavior](/read-actions#backfill-behavior):
 
 ```yaml
 backfill:
@@ -306,11 +320,13 @@ Backfill Considerations
 - Setting `fullHistory: true` may result in longer initial sync times, especially for large datasets.
 - Some providers may have API rate limits that affect backfill performance.
 - By default, if `backfill` is not specified, only recent data will be loaded.
+- See [Read Actions backfill behavior](/read-actions#backfill-behavior) for detailed implementation guidance.
 </Note>
 
 #### Delivery
 
 The `delivery` section configures how data is delivered to your webhook destination after it's read from the provider. This gives you control over the timing and volume of data you receive.
+> Learn more about [delivery modes](/read-actions#on-request).
 
 ```yaml
 delivery:
@@ -320,7 +336,7 @@ delivery:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `mode` | String | No | The delivery mode. Valid values: `auto` (default) or `onRequest`. |
+| `mode` | String | No | The delivery mode. Valid values: `auto` (default) or `onRequest`. See [on-request delivery](/read-actions#on-request) for details. |
 | `pageSize` | Number | No | The maximum number of records to include in each webhook payload when using `onRequest` mode. Range: 50-500. Default: 100. |
 
 **Delivery Modes**
@@ -360,11 +376,13 @@ Delivery Considerations
 - Configuring a larger `pageSize` means fewer webhook calls but larger payload sizes
 - For systems that process data in batches, `onRequest` mode often works better
 - For real-time data processing, `auto` mode is generally preferred
+- See [Read Actions delivery modes](/read-actions#on-request) for implementation details
 </Note>
 
 #### Field
 
 Fields can be configured in two main ways - either using a simple `fieldName` reference or using a mapped field approach (`mapToName`, `mapToDisplayName`, `prompt`, `default`). This flexibility allows for both direct field references and more sophisticated field mapping options.
+> Learn more about [Object and Field Mapping](/object-and-field-mapping) and [Dynamic Field Mappings](/object-and-field-mapping#dynamic-field-mappings).
 
 **Simple Field Reference**
 
@@ -383,7 +401,8 @@ This approach is best when:
 
 **Field Mapping**
 
-For more complex scenarios, you can use field mapping to standardize field names or prompt users for configuration:
+For more complex scenarios, you can use field mapping to standardize field names or prompt users for configuration.
+> Learn more about [field mapping strategies](/object-and-field-mapping#field-mapping-strategies).
 
 ```yaml
 # Predefined mapping (no user input required)
@@ -404,6 +423,8 @@ Field mapping is useful when:
 - Different customers use different field names for the same concept
 - You need to provide user-friendly display names
 - You want to prompt users to select the appropriate fields during setup
+
+See [Dynamic Field Mappings](/object-and-field-mapping#dynamic-field-mappings) for implementation details.
 </Tip>
 
 | Field | Type | Required | Description |
@@ -452,9 +473,12 @@ Field mapping is useful when:
        prompt: Which field tracks where this lead came from?
    ```
 
+> Learn more about [Object and Field Mapping](/object-and-field-mapping).
+
 #### Default Values
 
-The default values or `valueDefaults` section configures how default values are handled when writing to an object:
+The default values or `valueDefaults` section configures how default values are handled when writing to an object.
+> Learn more about [Write Actions default values](/write-actions#default-values).
 
 ```yaml
 - objectName: contact
@@ -568,10 +592,12 @@ Event Configuration Notes
 - Event delivery happens in near real-time, allowing your application to react quickly to changes.
 - For HubSpot, you'll need to configure webhook subscriptions in your HubSpot app as described in the [Subscribe Actions documentation](/subscribe-actions#hubspot-subscribe-actions).
 - HubSpot subscribe actions cannot notify you of changes to custom fields without additional setup.
+- See [Subscribe Actions documentation](/subscribe-actions) for implementation details.
 </Note>
 
 <Tip>
 Combine subscribe actions with read actions to get a complete picture of your customers' data:
 - Use read actions with backfill to get initial historical data
 - Use subscribe actions to get real-time updates going forward
+- Learn more about [combining read and subscribe actions](/subscribe-actions#specify-backfill-behavior)
 </Tip>
