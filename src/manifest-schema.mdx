@@ -49,6 +49,7 @@ Each integration defines a connection to a specific provider (e.g., Salesforce, 
 name: my-integration
 displayName: My Integration
 provider: salesforce
+module: crm  # Optional: for providers with modules
 read:
   ...
 write:
@@ -58,11 +59,13 @@ proxy:
 subscribe:
   ...
 ```
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `name` | String | Yes | A unique identifier for this integration within your manifest. Use lowercase alphanumeric characters, hyphens and underscores only. Maximum length: 64 characters. |
 | `displayName` | String | No | A human-readable name for this integration. This name is displayed in the UI and logs. If not provided, `name` is used. Maximum length: 100 characters. |
 | `provider` | String | Yes | The provider/platform for this integration. Must be one of the [supported providers](/provider-guides/overview) (e.g., `salesforce`, `hubspot`, `intercom`). Case-sensitive. |
+| `module` | String | No | Module within the provider (e.g., `crm` for HubSpot CRM). Only applicable for certain providers. |
 | `read` | Object | No | The [read configuration](#read-configuration). See [Read Actions](/read-actions) for implementation details. |
 | `write` | Object | No | The [write configuration](#write-configuration). See [Write Actions](/write-actions) for implementation details. |
 | `proxy` | Object | No | The [proxy configuration](#proxy-configuration). See [Proxy Actions](/proxy-actions) for implementation details. |
@@ -175,11 +178,13 @@ The `proxy` section configures API call proxying. This allows direct access to t
 ```yaml
 proxy:
   enabled: true
+  useModule: false  # Optional: use module's base URL instead of provider's root
 ```
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `enabled` | Boolean | No | Whether proxy is enabled for this integration. Default: `false`. |
+| `useModule` | Boolean | No | If `true`, uses the module's base URL for proxy actions instead of the provider's root base URL. Default: `false`. |
 
 <Note>
 Proxy Considerations
@@ -203,6 +208,7 @@ Each object in the `objects` array defines a specific data type to read from the
 | `objectName` | String | Yes | The [name of the object](#object-name) to read (e.g., `contact`, `lead`, `account`). This must match an object type supported by the provider's API (see note below). Case-sensitive. |
 | `destination` | String | Yes | The [webhook destination](#destination) for the read data. This determines where the data will be sent after it's read. Must match a webhook configured in your Ampersand account. See [Destinations](/destinations) for setup. |
 | `schedule` | String | Yes | A [cron schedule](#schedule) for reading the data. Defines how frequently the data should be read. Uses standard cron syntax. Examples: `*/10 * * * *` (every 10 minutes), `0 0 * * *` (daily at midnight). |
+| `enabled` | String | No | If set to `always`, the integration automatically installs upon user connection and skips the user field selection step. |
 | `backfill` | Object | No | [Configuration for backfilling](#backfill) historical data. Defines how historical data should be loaded. See [backfill behavior](/read-actions#backfill-behavior) for details. |
 | `delivery` | Object | No | [Configuration for delivery](#delivery) of the read data. Defines how the data will be delivered to the destination. See [delivery modes](/read-actions#on-request) for details. |
 | `requiredFields` | Array | No | Fields that are always read for every customer. These fields will always be included in the data that's read. See [Field Configuration](#field) for more details. |
@@ -525,7 +531,7 @@ The `updateEvent` configuration specifies how to handle update events:
 ```yaml
 updateEvent:
   enabled: always
-  watchFieldsAuto: all  # Watch all fields for changes
+  watchFieldsAuto: all  # Options: "all" or "selected"
 ```
 
 Or alternatively:
@@ -542,10 +548,10 @@ updateEvent:
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `enabled` | String | Yes | Whether to enable update events. Currently, only `always` is supported. |
-| `watchFieldsAuto` | String | No* | If set to `all`, all fields will be watched for changes. |
+| `watchFieldsAuto` | String | No* | `all` watches all fields for changes. `selected` watches only user-selected fields when `inheritFieldsAndMapping` is true. |
 | `requiredWatchFields` | Array | No* | An array of field names to watch for changes. These can include mapped fields. |
 
-*Note: Only one of `watchFieldsAuto` or `requiredWatchFields` should be specified.
+<Note>Only one of `watchFieldsAuto` or `requiredWatchFields` should be specified.</Note>
 
 **3. Delete Event Configuration**
 
