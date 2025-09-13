@@ -11,7 +11,36 @@ updatedAt: "Mon Jul 08 2024 11:05:56 GMT+0000 (Coordinated Universal Time)"
 ### Supported Actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Drift instance will be done for each scheduled read. 
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://driftapi.com`.
+
+### Supported Objects
+
+The Drift connector supports reading from the following objects:
+
+- [users](https://devdocs.drift.com/docs/listing-users)
+- [conversations](https://devdocs.drift.com/docs/list-conversations)
+- [teams/org](https://devdocs.drift.com/docs/listing-teams-org)
+- [users/meetings/org](https://devdocs.drift.com/docs/get-booked-meetings)
+- [playbooks](https://devdocs.drift.com/docs/get-playbooks)
+- [playbooks/clp](https://devdocs.drift.com/docs/retrieve-conversational-landing-pages)
+- [conversations/stats](https://devdocs.drift.com/docs/bulk-conversation-statuses)
+- [scim/Users](https://devdocs.drift.com/docs/searching)
+
+The Drift connector supports writing to the following objects:
+
+- [contacts](https://devdocs.drift.com/docs/creating-a-contact)
+- [contacts/timeline](https://devdocs.drift.com/docs/posting-timeline-events)
+- [emails/unsubscribe](https://devdocs.drift.com/docs/unsubscribe-contacts-from-emails)
+- [conversations](https://devdocs.drift.com/docs/creating-a-conversation)
+- [accounts/create](https://devdocs.drift.com/docs/creating-an-account)
+- [accounts/update](https://devdocs.drift.com/docs/updating-accounts)
+- [scim/Users](https://devdocs.drift.com/docs/searching)
+
+### Example integration
+
+For an example manifest file of an Apollo integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/drift/amp.yaml).
 
 ## Before You Get Started
 
