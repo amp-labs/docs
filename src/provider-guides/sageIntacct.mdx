@@ -1,0 +1,90 @@
+---
+title: "Sage Intacct"
+slug: "sageIntacct"
+excerpt: ""
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Sage Intacct instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.intacct.com`.
+
+### Supported objects
+The Sage Intacct connector supports reading from the following objects:
+- companies
+- customers
+- vendors
+- items
+- employees
+- departments
+- locations
+- classes
+- projects
+- contracts
+- ap_bills
+- ar_invoices
+- journal_entries
+- gl_accounts
+
+
+### Example integration
+
+For an example manifest file of a Sage Intacct integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/sageintacct/amp.yaml).
+
+## Before you get started
+
+To integrate Sage Intacct with Ampersand, you will need access to a [Sage Developer Account](https://developer.sage.com/intacct/).
+
+Once you have access, you'll need to create an app in Sage Intacct, configure the Ampersand redirect URI within the app, and obtain the following credentials from your Sage Intacct instance:
+
+- Client ID
+- Secret Key 
+- Scopes
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Create a Sage Intacct app
+
+- Log in to your [Sage Developer Account](https://developer.sage.com/intacct/).
+- From the navigation menu, select **Applications** > **New Application**.
+- Select **Sage Intacct** and select **Continue**.
+- Enter the app details and click **Continue**.
+- In the **Redirect URIs** section and enter the Ampersand **Callback URI**: `https://api.withampersand.com/callbacks/v1/oauth`.
+- Add your Intacct Web Services License Password
+- From the Client Scope dropdown list, choose the environment type that the application will be used with.
+- Click **Create Application**.
+- After creating the application, you will see the **Client ID** and **Secret Key**. Make sure to copy these values as you will need them later.
+
+
+## Add Your Sage Intacct app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Sage Intacct integration.
+
+   ![Alt text](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Select **Provider apps**.
+
+4. Select _Sage Intacct_ from the **Provider** list.
+
+5. Enter the previously obtained _App ID_ in the **App ID** field and the _App Secret_ in the **App Secret** field.
+
+6. It supports only one scope i.e. `offline_access`. Enter this in the **Scopes** field.
+
+7. Click **Save changes**.
+
+## Using the connector
+
+To start integrating with Sage Intacct:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/sageintacct/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
