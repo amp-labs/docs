@@ -428,7 +428,6 @@ const baseConfig = {
             "customer-guides/salesforce",
             "customer-guides/hubspot",
             "customer-guides/marketo",
-            "customer-guides/zoho",
             "customer-guides/update-connection"
           ]
         },
