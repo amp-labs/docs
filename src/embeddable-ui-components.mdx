@@ -83,13 +83,13 @@ return (
 );
 ```
 
-The `getToken` function should return a promise that resolves to a valid JWT token by making a call to your backend. For detailed information on how to generate JWT tokens in you backend, see [JWT Authentication](/jwt-auth).
+The `getToken` function should return a promise that resolves to a valid JWT token by making a call to your backend. For detailed information on how to generate JWT tokens, see [JWT Authentication](/jwt-auth).
 
 ## Components
 
 ### Install integration
 
-The `InstallIntegration` component asks your customer for their SaaS credentials, and then guides them through the installation flow for an integration. If they've already installed this integration, then the component will display the current configuration of the integration and allow them to update it. 
+The `InstallIntegration` component prompts your customer for their SaaS credentials, and then guides them through the installation flow for an integration. If they've already installed this integration, then the component will display the current configuration of the integration and allow them to update it.
 
 Please note that each [group](/terminology#group) is able to install the integration once, so if someone else with the same `groupRef` has already installed the integration, then the user will not be able to install the same integration again.
 
@@ -146,7 +146,7 @@ The ConnectProvider component allows your customer to put in their SaaS credenti
 
 The parameters of the component are:
 
-* **provider** (string): the name SaaS provider, such as "salesforce".
+* **provider** (string): the name of the SaaS provider, such as "salesforce".
 * **consumerRef** (string): the ID that your app uses to identify this end user.
 * **consumerName** (string, optional): the display name for this end user.
 * **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
@@ -168,7 +168,7 @@ Both `onConnectSuccess` and `onDisconnectSuccess` should be functions with the f
   onConnectSuccess = {connection =>
     console.log(`Successfully created connection ${connection.id}`)
   }
-  onDisonnectSuccess = {connection =>
+  onDisconnectSuccess = {connection =>
     console.log(`Successfully deleted connection ${connection.id}`)
   }
 />
@@ -185,7 +185,7 @@ We provide a hook `useIsIntegrationInstalled` to check if an integration has bee
 * **integration** (string): the name of an integration that you've defined in `amp.yaml`.
 * **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
 
-It returns an object with fields `isLoaded`checking if API call is resolved and `isIntegrationInstalled` indicating whether the integration has already been installed by somebody in the group.
+It returns an object with fields isLoaded, indicating whether the API call has resolved, and isIntegrationInstalled, indicating whether the integration has already been installed by somebody in the group.
 
 ```TypeScript
 const {
@@ -246,7 +246,7 @@ import './App.css'; // Optional: your own css override
     --amp-colors-primary: #4360e0;
     --amp-default-border-radius: 8px;
 
-    /* Override with your own color pallette */ 
+    /* Override with your own color palette */
     --amp-colors-neutral-25: #FEFEFE;
     --amp-colors-neutral-50: #FDFCFD;
     --amp-colors-neutral-100: #FAFAFC;
@@ -287,7 +287,7 @@ import './App.css'; // Optional: your own CSS override
 
 ## Troubleshooting 
 
-### Why does does styling look so bare?
+### Why does styling look so bare?
 
 You likely forgot to import the stylesheet, please add this line once in your application.
 
