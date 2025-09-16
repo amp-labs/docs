@@ -66,7 +66,7 @@ You can create an API key on the [API keys page](https://dashboard.withampersand
 
 #### JWT authentication
 
-When you are ready to ship your integrations to product, we highly recommend that you move to JWT authentication, as it is more secure than using API keys in the frontend. JWT tokens are time-bound and also ensure that your users only has access to their own integration data.
+When you are ready to ship your integrations to production, we highly recommend that you move to JWT authentication, as it is more secure than using API keys in the frontend. JWT tokens are time-bound and also enforce that your users only have access to their own integration data.
 
 ```tsx
 const options = {
@@ -83,7 +83,7 @@ return (
 );
 ```
 
-The `getToken` function should return a promise that resolves to a valid JWT token. Your backend should generate this token using your Ampersand API key and include any necessary user context. For detailed information on how to implement this in your backend, see [JWT Authentication](/jwt-auth).
+The `getToken` function should return a promise that resolves to a valid JWT token by making a call to your backend. For detailed information on how to generate JWT tokens in you backend, see [JWT Authentication](/jwt-auth).
 
 ## Components
 
