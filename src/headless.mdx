@@ -55,8 +55,16 @@ import {
 } from "@amp-labs/react"
 
 const options = {
-  project: 'PROJECT', // Your Ampersand project name or ID.
-  apiKey: 'API_KEY',// Your Ampersand API key.
+  project: 'PROJECT', // Your Ampersand project name or ID
+
+  // Pick one of the following authentication methods.
+  apiKey: 'API_KEY',  // Ampersand API key (simple)
+  // OR 
+  getToken: async ({consumerRef, groupRef}) => {  // JWT Authentication (advanced)
+    // Custom logic to fetch JWT token from your backend, e.g.
+    return await getTokenFromMyBackend(consumerRef, groupRef);
+    // See https://docs.withampersand.com/jwt-auth
+  },
 };
 
 // Define variables that will be used for this code snippet and
