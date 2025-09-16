@@ -73,6 +73,24 @@ If you want to give your user the option to pick from any of the fields in their
 
 You might want to ask your users during the set up of the integration to map a field (standard or custom) to a concept in your product, because your various customers might be using different fields for the same purpose. You can also predefine object and field mappings that do not involve user interaction. Learn more in [Object and Field Mapping](/object-and-field-mapping).
 
+### Always enabled read without user configuration
+
+As a SaaS builder, you may want full control over integration installations by defining them in `amp.yaml`, rather than allowing users to choose which fields to include. By declaring the object as always enabled—and omitting optional fields or user-defined mappings—you ensure consistent behavior across installations. This approach also makes it easier to manage installations in bulk through `amp.yaml`, instead of updating each installation individually.
+
+```YAML YAML
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+          - fieldName: firstname 
+          - fieldName: lastname
+          - fieldName: email # builder defined mapping that will be applied to every installation
+            mapToName: contactEmail
+            mapToDisplayName: Contact Email Address
+          enabled: always
+```
+
 ## Backfill behavior
 
 Backfill behavior describes whether Ampersand will do an initial read of your customer's historic data when they connect their SaaS instance, and how far back data will be read. For example, if your integration reads a customer's contacts stored in their CRM, you can configure whether you want to only read new and updated contacts going forward, or if you also want to do an initial backfill of the pre-existing contacts in their CRM.
