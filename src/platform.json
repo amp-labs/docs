@@ -40482,25 +40482,25 @@
                           "Authorization": "Bearer 1234"
                         }
                       },
-                      "kinesisRegion": {
+                      "region": {
                         "type": "string",
                         "description": "The AWS region where the kinesis destination is hosted.",
                         "example": "us-east-1",
                         "x-go-type-skip-optional-pointer": true
                       },
-                      "kinesisStreamName": {
+                      "streamName": {
                         "type": "string",
                         "description": "The name of the Kinesis stream to send events to.",
                         "example": "my-kinesis-stream",
                         "x-go-type-skip-optional-pointer": true
                       },
-                      "kinesisEndpointUrl": {
+                      "endpointUrl": {
                         "type": "string",
                         "description": "The endpoint URL for the Kinesis stream.",
                         "example": "https://kinesis.us-east-1.amazonaws.com",
                         "x-go-type-skip-optional-pointer": true
                       },
-                      "kinesisPartitionKeyTemplate": {
+                      "partitionKeyTemplate": {
                         "type": "string",
                         "description": "The template for the partition key to use when sending events to Kinesis (a JMESPath template)",
                         "example": "data.user_id",
@@ -42245,10 +42245,12 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- name\n- metadata.url\n- metadata.headers\n",
+                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- name\n- metadata.url\n- metadata.headers\n- metadata.region\n- metadata.streamName\n- metadata.endpointUrl\n- metadata.partitionKeyTemplate\n- secrets.awsKeyId\n- secrets.awsSecretKey\n- secrets.awsSessionToken\n",
                     "example": [
                       "name",
-                      "metadata.url"
+                      "metadata.url",
+                      "metadata.region",
+                      "metadata.streamName"
                     ]
                   },
                   "destination": {
@@ -42279,6 +42281,47 @@
                             "example": {
                               "Authorization": "Bearer 1234"
                             }
+                          },
+                          "region": {
+                            "type": "string",
+                            "description": "The AWS region where the kinesis destination is hosted.",
+                            "example": "us-east-1"
+                          },
+                          "streamName": {
+                            "type": "string",
+                            "description": "The name of the Kinesis stream to send events to.",
+                            "example": "my-kinesis-stream"
+                          },
+                          "endpointUrl": {
+                            "type": "string",
+                            "description": "The endpoint URL for the Kinesis stream.",
+                            "example": "https://kinesis.us-east-1.amazonaws.com"
+                          },
+                          "partitionKeyTemplate": {
+                            "type": "string",
+                            "description": "The template for the partition key to use when sending events to Kinesis (a JMESPath template)",
+                            "example": "data.user_id"
+                          }
+                        }
+                      },
+                      "secrets": {
+                        "type": "object",
+                        "description": "Secrets for the destination.",
+                        "properties": {
+                          "awsKeyId": {
+                            "type": "string",
+                            "description": "The AWS access key ID for the Kinesis destination.",
+                            "example": "AKIAIOSFODNN7EXAMPLE"
+                          },
+                          "awsSecretKey": {
+                            "type": "string",
+                            "description": "The AWS secret access key for the Kinesis destination.",
+                            "example": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+                          },
+                          "awsSessionToken": {
+                            "type": "string",
+                            "description": "The AWS session token for the Kinesis destination.",
+                            "example": "AQoEXAMPLEH4aoAH0gNCAPy..."
                           }
                         }
                       }
