@@ -414,6 +414,7 @@ const baseConfig = {
             "provider-guides/whereby",
             "provider-guides/wordpress",
             "provider-guides/wrike",
+            "provider-guides/xero",
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
             "provider-guides/zohoDesk",
