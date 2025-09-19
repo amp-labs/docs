@@ -417,7 +417,6 @@ const baseConfig = {
             "provider-guides/xero",
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
-            "provider-guides/zohoDesk",
             "provider-guides/zoom"
           ]
         },
