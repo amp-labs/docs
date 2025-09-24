@@ -392,6 +392,7 @@ const baseConfig = {
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
+            "provider-guides/sageIntacct",
             "provider-guides/salesflare",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
