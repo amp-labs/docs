@@ -300,6 +300,7 @@ const baseConfig = {
             "provider-guides/chargebee",
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
+            "provider-guides/chorus",
             "provider-guides/clari",
             "provider-guides/clariCopilot",
             "provider-guides/clickup",
