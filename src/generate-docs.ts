@@ -273,6 +273,7 @@ const baseConfig = {
             "provider-guides/aha",
             "provider-guides/aircall",
             "provider-guides/airtable",
+            "provider-guides/amplitude",
             "provider-guides/anthropic",
             "provider-guides/apollo",
             "provider-guides/asana",

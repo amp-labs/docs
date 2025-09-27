@@ -1,0 +1,49 @@
+---
+title: Amplitude
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Amplitude instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://amplitude.com`.
+
+### Supported Objects
+
+The Amplitude connector supports reading from the following objects:
+- [annotations](https://amplitude.com/docs/apis/analytics/chart-annotations#get-all-chart-annotations)
+- [cohorts](https://amplitude.com/docs/apis/analytics/behavioral-cohorts#get-all-cohorts)    
+- [events](https://amplitude.com/docs/apis/analytics/dashboard-rest#get-events-list)    
+- [lookup_table](https://amplitude.com/docs/apis/analytics/lookup-table#list-all-lookup-tables)    
+- [taxonomy/category](https://amplitude.com/docs/apis/analytics/taxonomy#get-all-event-categories)    
+- [taxonomy/event](https://amplitude.com/docs/apis/analytics/taxonomy#get-all-event-types)    
+- [taxonomy/event-property](https://amplitude.com/docs/apis/analytics/taxonomy#get-event-properties)     
+- [taxonomy/user-property](https://amplitude.com/docs/apis/analytics/taxonomy#get-all-user-properties)     
+- [taxonomy/group-property](https://amplitude.com/docs/apis/analytics/taxonomy#get-group-properties)     
+
+
+The Amplitude connector supports writing to the following objects:
+- [attribution](https://amplitude.com/docs/apis/analytics/attribution#send-an-attribution-event)
+- [release](https://amplitude.com/docs/apis/analytics/releases#create-a-release)
+- [annotations](https://amplitude.com/docs/apis/analytics/chart-annotations#create-an-annotation)
+
+
+### Example Integration
+
+For an example manifest file of a Amplitude integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/amplitude/amp.yaml).
+
+## Using the connector
+
+This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Amplitude:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/amplitude/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
