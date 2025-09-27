@@ -1,6 +1,6 @@
 .PHONY: run
 run:
-	cd src && mintlify dev
+	cd src && mint dev
 
 .PHONY: gen
 gen:
@@ -8,4 +8,4 @@ gen:
 
 .PHONY: validate_links
 validate_links:
-	cd src && mintlify broken-links
+	cd src && mint broken-links
