@@ -1,0 +1,44 @@
+---
+title: Loxo
+---
+## What's Supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.domain}}/api/{{.agency_slug}}`.
+  - To get the **domain**, log in to your Loxo account and check the URL in your browser’s address bar. It usually follows this pattern: `https://[your-domain-here]`.
+  - To get the **agency_slug**, go to **Settings > General** under **Workspace**. In the **Agency Info** section, look at the **Resume Forwarding Address** — the part before the @ symbol is the **agency_slug** value.
+
+### Example integration
+
+To define an integration for Loxo, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations: 
+  - name: loxo-integration
+    displayName: Loxo
+    provider: loxo
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To integrate with Loxo:
+- Create a manifest file similar to the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for an API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key provided by the customer. Please note that this connector's base URL is `https://{{.domain}}/api/{{.agency_slug}}`.
+
+## Creating an API key for Loxo
+
+1. Log in to your [Loxo account](https://app.loxo.co/login). 
+2. Navigate to **settings** and click  **API Keys** under **Workspace**.
+3. Click **Add** Button.
+
+![Generate Token](/images/provider-guides/loxo.gif)
