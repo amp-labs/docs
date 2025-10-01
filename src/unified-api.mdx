@@ -1,9 +1,9 @@
 ---
-title: "Building Unified APIs"
-description: "Create your own unified API across multiple providers"
+title: "Build your own unified API"
+sidebarTitle: "Unified API"
 ---
 
-## What is a Unified API?
+## What is a unified API?
 
 A unified API provides a single, consistent interface to interact with multiple third-party services. Instead of learning each provider's unique schema, you define one schema that works across all of them.
 
@@ -11,16 +11,16 @@ A unified API provides a single, consistent interface to interact with multiple 
 Unlike traditional unified API providers that force you into their predefined models, Ampersand lets you design your own unified schema while providing templates to get started quickly.
 </Note>
 
-## Why Build a Unified API?
+## Why build a unified API?
 
 - **Faster integration development** - Add new providers without changing your application logic
 - **Consistent data model** - Your application works with one schema regardless of the source
 - **Gradual migration** - Start with compatibility mode, customize as needed
 - **No vendor lock-in** - You control the schema, not limited by lowest common denominator
 
-## Core Concepts
+## Core concepts
 
-### Object Mapping
+### Object mapping
 Map different provider objects to a unified name:
 
 ```yaml
@@ -36,7 +36,7 @@ Map different provider objects to a unified name:
   mapToName: company
 ```
 
-### Field Standardization
+### Field standardization
 Create consistent field names across providers:
 
 ```yaml
@@ -50,7 +50,7 @@ requiredFields:
     mapToName: company_name
 ```
 
-### Provider-Specific Access
+### Provider-specific access
 Keep unique fields available without compromising the unified model:
 
 ```yaml
@@ -66,7 +66,7 @@ requiredFields:
 
 ## Examples
 
-### CRM Unified API
+### CRM unified API
 
 Create a unified CRM that works across Salesforce, HubSpot, Pipedrive, and more:
 
@@ -131,7 +131,7 @@ Create a unified CRM that works across Salesforce, HubSpot, Pipedrive, and more:
 ```
 </CodeGroup>
 
-### Ticketing Unified API
+### Ticketing unified API
 
 Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
 
@@ -177,43 +177,6 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
 ```
 </CodeGroup>
 
-## Migration from merge.dev
-
-<Steps>
-  <Step title="Use Compatible Templates">
-    Start with our merge.dev-compatible templates:
-    ```bash
-    # CRM template (matches merge.dev's model)
-    amp deploy samples/unifiedCRM
-    
-    # Ticketing template
-    amp deploy samples/unifiedTicketing
-    ```
-  </Step>
-  
-  <Step title="Update Your Code">
-    Replace merge.dev SDK calls:
-    ```javascript
-    // merge.dev
-    const contacts = await merge.crm.contacts.list()
-    
-    // Ampersand
-    const contacts = await ampersand.read('contact')
-    ```
-  </Step>
-  
-  <Step title="Customize Gradually">
-    Add provider-specific fields as needed:
-    ```yaml
-    # Start with merge compatibility
-    - fieldName: Name
-      mapToName: name
-    # Add custom fields later
-    - fieldName: CustomScore__c
-    ```
-  </Step>
-</Steps>
-
 ## Comparison with merge.dev
 
 | Feature | merge.dev | Ampersand |
@@ -224,10 +187,10 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
 | **Deployment** | One size fits all | Deploy per provider |
 | **Data Delivery** | Pull only | Push (webhooks) + Pull |
 
-## Best Practices
+## Best practices
 
 <AccordionGroup>
-  <Accordion title="Start with core fields">
+  <Accordion title="Start with core fields" defaultOpen>
     Begin with fields that exist across all your target providers, then add provider-specific fields as needed.
   </Accordion>
   
@@ -244,7 +207,7 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
   </Accordion>
 </AccordionGroup>
 
-## Complete Examples
+## Complete examples
 
 View full working examples in our samples repository:
 
@@ -254,18 +217,66 @@ View full working examples in our samples repository:
     href="https://github.com/amp-labs/samples/tree/main/unifiedCRM"
     icon="building"
   >
-    Salesforce, HubSpot, Pipedrive, Zoho, Dynamics 365
+    Salesforce, HubSpot, Zoho, Dynamics 365
   </Card>
   <Card 
     title="Unified Ticketing" 
     href="https://github.com/amp-labs/samples/tree/main/unifiedTicketing"
     icon="ticket"
   >
-    Jira, Linear, Zendesk, ServiceNow, GitHub Issues
+    Jira, Linear, Zendesk
   </Card>
 </CardGroup>
 
-## Related Resources
+## Migration from merge.dev
+
+<Steps>
+  <Step title="Use compatible templates">
+    Start with our merge.dev-compatible templates:
+    ```bash
+    git clone https://github.com/amp-labs/samples.git
+    cd samples
+
+    # CRM template
+    cd unifiedCRM
+    amp deploy --project=my-project
+    
+    # Ticketing template
+    cd unifiedTicketing
+    amp deploy --project=my-project
+    ```
+  </Step>
+  
+  <Step title="Update Your Code">
+    Switch from pull-based to push-based data flow:
+    ```javascript
+    // merge.dev: You pull data
+    const contacts = await merge.crm.contacts.list()
+    processContacts(contacts)
+    
+    // Ampersand: Data pushed to you via webhooks
+    app.post('/webhook/contacts', (req, res) => {
+      const contacts = req.body.result
+      processContacts(contacts)  // Same processing logic
+      res.sendStatus(200)
+    })
+    ```
+  </Step>
+  
+  <Step title="Customize gradually">
+    Add provider-specific fields as needed:
+    ```yaml
+    # Start with merge compatibility
+    - fieldName: Name
+      mapToName: name
+    # Add custom fields later
+    - fieldName: CustomScore__c
+    ```
+  </Step>
+</Steps>
+
+
+## Related resources
 
 - [Object and Field Mapping](/object-and-field-mapping) - Technical details on mapping configuration
 - [Read Actions](/read-actions) - How to read data from unified objects
