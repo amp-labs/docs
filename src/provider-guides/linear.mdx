@@ -6,22 +6,48 @@ title: Linear
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.linear.app/graphql`.
+
+
+
+### Supported Objects
+The Linear connector supports reading to the following objects:
+- [attachments](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [auditEntries](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [comments](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [customers](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [cycles](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [documents](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [favorites](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [initiatives](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [issues](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [notifications](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [projects](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [projectStatuses](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [teamMemberships](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [teams](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [triageResponsibilities](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [users](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [workflowStates](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+
+
+The Linear connector supports writing to the following objects:
+- [attachments](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [comments](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [customers](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [cycles](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [documents](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [issues](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [projects](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+- [teams](https://studio.apollographql.com/public/Linear-API/variant/current/explorer)
+
 
 ### Example integration
 
-To define an integration for Linear, create a manifest file that looks like this:
+For an example manifest file of an Linear integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/linear/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: proxyLinear
-    displayName: Linear Proxy
-    provider: linear
-    proxy:
-      enabled: true
-```
 ## Before you get started
 
 To connect Linear with Ampersand, you need [a Linear Account](https://linear.app/signup).
@@ -74,3 +100,14 @@ Follow the steps below to create a Linear app.
 5. Enter the previously obtained Client ID in the **Client ID** field, the Client Secret in the **Client Secret** field and scopes in the **Scopes** field.
 
    ![Ampersand Integration](/images/provider-guides/linear.gif)
+
+
+To start integrating with Linear:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/linear/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
