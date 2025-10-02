@@ -28,7 +28,7 @@ Map different provider objects to a unified name:
 # HubSpot companies → company  
 # Pipedrive organizations → company
 
-- objectName: Account        # Salesforce
+- objectName: account        # Salesforce
   mapToName: company
 - objectName: companies      # HubSpot
   mapToName: company
@@ -42,13 +42,45 @@ Create consistent field names across providers:
 ```yaml
 # Different providers, same unified fields
 requiredFields:
-  - fieldName: Name           # Salesforce
+  - fieldName: name           # Salesforce
     mapToName: company_name
   - fieldName: name           # HubSpot
     mapToName: company_name
-  - fieldName: Account_Name   # Zoho
+  - fieldName: account_name   # Zoho
     mapToName: company_name
 ```
+
+### Raw data access
+
+Every payload includes both unified fields AND the original provider data:
+
+```json
+{
+  "mappedFields": {
+    "remote_id": "001abc", // Original provider ID
+    "name": "Acme Corp",
+    "remote_created_at": "2024-01-15",  // Original creation timestamp
+    "remote_updated_at": "2024-08-23"   // Original update timestamp
+  },
+  "raw": {
+    // Complete original response from provider
+    "Id": "001abc",
+    "Name": "Acme Corp",
+    "CreatedDate": "2024-01-15T10:30:00Z",
+    "SystemModstamp": "2024-08-23T14:20:07Z"
+  }
+}
+```
+
+**Key fields:**
+- `mappedFields` - Your unified schema (like merge.dev's common model)
+- `raw` - Original provider response (like merge.dev's remote_data, but always included)
+- `remote_id` - Preserves the provider's original ID for lookups
+- `remote_created_at` / `remote_updated_at` - Original provider timestamps
+
+<Tip>
+Unlike merge.dev where you need `include_remote_data=true`, Ampersand always provides raw data alongside mapped fields in every payload.
+</Tip>
 
 ### Provider-specific access
 Keep unique fields available without compromising the unified model:
@@ -56,12 +88,12 @@ Keep unique fields available without compromising the unified model:
 ```yaml
 # Unified fields + provider-specific
 requiredFields:
-  - fieldName: Name
+  - fieldName: name
     mapToName: company_name
-  # Salesforce-specific fields remain accessible
-  - fieldName: AccountNumber
-  - fieldName: Type
-  - fieldName: SLA__c  # Custom fields too
+  # Salesforce-specific fields remain accessible via raw
+  - fieldName: accountnumber
+  - fieldName: type
+  - fieldName: sla__c  # Custom fields too
 ```
 
 ## Examples
@@ -72,60 +104,53 @@ Create a unified CRM that works across Salesforce, HubSpot, Pipedrive, and more:
 
 <CodeGroup>
 ```yaml Salesforce
-- objectName: Account
+- objectName: account
   mapToName: company
   requiredFields:
-    - fieldName: Id
-      mapToName: id
-    - fieldName: Name
+    - fieldName: id
+      mapToName: remote_id
+    - fieldName: name
       mapToName: name
-    - fieldName: Website
+    - fieldName: website
       mapToName: website
+    - fieldName: createddate
+      mapToName: remote_created_at
+    - fieldName: lastmodifieddate
+      mapToName: remote_updated_at
 ```
 
 ```yaml HubSpot
 - objectName: companies
   mapToName: company
   requiredFields:
-    - fieldName: id
-      mapToName: id
+    - fieldName: hs_object_id
+      mapToName: remote_id
     - fieldName: name
       mapToName: name
-    - fieldName: domain
+    - fieldName: website
       mapToName: website
+    - fieldName: createdate
+      mapToName: remote_created_at
+    - fieldName: hs_lastmodifieddate
+      mapToName: remote_updated_at
 ```
 
-```yaml Zoho CRM
-- objectName: Accounts
-  mapToName: company
-  requiredFields:
-    - fieldName: id
-      mapToName: id
-    - fieldName: Account_Name
-      mapToName: name
-    - fieldName: Website
-      mapToName: website
-```
-
-```Dynamics 365
-- objectName: accounts
-  mapToName: company
-  requiredFields:
-    - fieldName: accountid
-      mapToName: id
-    - fieldName: name
-      mapToName: name
-    - fieldName: websiteurl
-      mapToName: website
-```
-
-```yaml Result
+```yaml Result Payload
 {
-  "object": "company",
-  "data": {
-    "id": "123",
+  "mappedFields": {
+    "remote_id": "22575402281",
     "name": "Acme Corp",
-    "website": "acme.com"
+    "website": "acme.com",
+    "remote_created_at": "2024-08-23T14:04:57.739Z",
+    "remote_updated_at": "2024-08-23T14:20:07.660Z"
+  },
+  "raw": {
+    "id": "22575402281",
+    "name": "Acme Corp",
+    "domain": "acme.com",
+    "createdAt": "2024-08-23T14:04:57.739Z",
+    "updatedAt": "2024-08-23T14:20:07.660Z",
+    "hs_object_id": "22575402281"
   }
 }
 ```
@@ -140,6 +165,8 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
 - objectName: issue
   mapToName: ticket
   requiredFields:
+    - fieldName: id
+      mapToName: remote_id
     - fieldName: summary
       mapToName: title
     - fieldName: status
@@ -150,28 +177,27 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
 - objectName: issues
   mapToName: ticket
   requiredFields:
+    - fieldName: id
+      mapToName: remote_id
     - fieldName: title
       mapToName: title
     - fieldName: state
       mapToName: status
 ```
 
-```yaml Zendesk
-- objectName: tickets
-  mapToName: ticket
-  requiredFields:
-    - fieldName: subject
-      mapToName: title
-    - fieldName: status
-      mapToName: status
-```
-
 ```yaml Result
 {
-  "object": "ticket",
-  "data": {
-    "title": "Ticket 1",
-    "status": "open"
+  "mappedFields": {
+    "remote_id": "LIN-123",
+    "title": "Fix bug",
+    "status": "in_progress"
+  },
+  "raw": {
+    "id": "LIN-123",
+    "title": "Fix bug",
+    "state": { "name": "In Progress" },
+    "priority": 2,
+    "assignee": { "id": "user-456" }
   }
 }
 ```
@@ -182,24 +208,30 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
 | Feature | merge.dev | Ampersand |
 |---------|-----------|-----------|
 | **Schema Control** | Fixed common model | You define the schema |
-| **Custom Fields** | Via remote_data | Direct access |
-| **Provider Coverage** | Limited to common fields | All fields available |
-| **Deployment** | One size fits all | Deploy per provider |
+| **Raw Data** | Via `include_remote_data=true` | Always included in every payload |
+| **Remote IDs** | `remote_id` field | `remote_id` in mappedFields |
+| **Timestamps** | `remote_created_at`, `remote_updated_at` | Same, map from provider fields |
+| **Custom Fields** | Via remote_data or field mappings | Direct access in `raw` object |
+| **Provider Coverage** | Limited to common fields | All fields available via `raw` |
 | **Data Delivery** | Pull only | Push (webhooks) + Pull |
 
 ## Best practices
 
 <AccordionGroup>
-  <Accordion title="Start with core fields" defaultOpen>
+  <Accordion title="Always map remote_ fields" defaultOpen>
+    Include `remote_id`, `remote_created_at`, and `remote_updated_at` in your schema for proper tracking and syncing.
+  </Accordion>
+  
+  <Accordion title="Use raw for provider-specific logic">
+    Access custom or unmapped fields via the `raw` object without modifying your unified schema.
+  </Accordion>
+
+  <Accordion title="Start with core fields">
     Begin with fields that exist across all your target providers, then add provider-specific fields as needed.
   </Accordion>
   
   <Accordion title="Use consistent naming">
     Establish naming conventions early (e.g., `snake_case` for unified fields).
-  </Accordion>
-  
-  <Accordion title="Document your schema">
-    Maintain a schema reference for your team showing how each provider maps to your unified model.
   </Accordion>
   
   <Accordion title="Handle missing fields gracefully">
@@ -248,33 +280,54 @@ View full working examples in our samples repository:
   </Step>
   
   <Step title="Update Your Code">
-    Switch from pull-based to push-based data flow:
+    Ampersand provides both mapped and raw data in every payload:
     ```javascript
-    // merge.dev: You pull data
+    // merge.dev: Separate calls for mapped vs raw data
     const contacts = await merge.crm.contacts.list()
-    processContacts(contacts)
+    const contactsWithRaw = await merge.crm.contacts.list({ 
+      include_remote_data: true 
+    })
     
-    // Ampersand: Data pushed to you via webhooks
+    // Ampersand: Everything in one webhook payload
     app.post('/webhook/contacts', (req, res) => {
-      const contacts = req.body.result
-      processContacts(contacts)  // Same processing logic
+      const { mappedFields, raw } = req.body.result
+      
+      // Use unified fields
+      console.log(mappedFields.name, mappedFields.remote_id)
+      
+      // Access provider-specific fields
+      console.log(raw.CustomField__c)
+      
       res.sendStatus(200)
     })
     ```
   </Step>
   
-  <Step title="Customize gradually">
-    Add provider-specific fields as needed:
+  <Step title="Map remote_ fields">
+    Always map the provider's ID and timestamp fields:
     ```yaml
-    # Start with merge compatibility
-    - fieldName: Name
-      mapToName: name
-    # Add custom fields later
-    - fieldName: CustomScore__c
+    requiredFields:
+      - fieldName: id              # Salesforce
+        mapToName: remote_id
+      - fieldName: createddate
+        mapToName: remote_created_at
+      - fieldName: lastmodifieddate
+        mapToName: remote_updated_at
+      - fieldName: name
+        mapToName: name
+    ```
+  </Step>
+
+  <Step title="Customize gradually">
+    Add provider-specific fields as needed without changing your schema:
+    ```javascript
+    // Provider-specific logic using raw data
+    if (provider === 'salesforce' && raw.AccountNumber) {
+      // Handle Salesforce-specific field
+    }
     ```
   </Step>
 </Steps>
-
 
 ## Related resources
 
