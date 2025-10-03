@@ -195,6 +195,10 @@ const baseConfig = {
       destination: "/proxy-actions"
     },
     {
+      "source": "/defining-integrations",
+      "destination": "/quickstart"
+    },
+    {
       source: "/define-integrations/read-actions",
       destination: "/read-actions"
     },
