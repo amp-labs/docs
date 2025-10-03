@@ -394,6 +394,7 @@ const baseConfig = {
             "provider-guides/podium",
             "provider-guides/productBoard",
             "provider-guides/quickbooks",
+            "provider-guides/ramp",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
