@@ -6,7 +6,52 @@ title: "Gorgias"
 
 ### Supported Actions
 This connector supports:
-* **Proxy Actions**, using the base URL `https://{{.workspace}}.gorgias.com`.
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported. A full read of the Gorgias instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.gorgias.com`.
+
+### Supported Objects
+The Gorgias connector supports reading from the following objects:
+- [account/settings](https://developers.gorgias.com/reference/list-account-settings)
+- [customers](https://developers.gorgias.com/reference/list-customers)
+- [custom-fields](https://developers.gorgias.com/reference/list-custom-fields)
+- [events](https://developers.gorgias.com/reference/list-events)
+- [integrations](https://developers.gorgias.com/reference/list-integrations)
+- [jobs](https://developers.gorgias.com/reference/list-jobs)
+- [macros](https://developers.gorgias.com/reference/list-macros)
+- [rules](https://developers.gorgias.com/reference/list-rules)
+- [satisfaction-surveys](https://developers.gorgias.com/reference/list-satisfaction-surveys)
+- [tags](https://developers.gorgias.com/reference/list-tags)
+- [teams](https://developers.gorgias.com/reference/list-teams)
+- [tickets](https://developers.gorgias.com/reference/list-tickets)
+- [messages](https://developers.gorgias.com/reference/list-messages)
+- [users](https://developers.gorgias.com/reference/list-users)
+- [views](https://developers.gorgias.com/reference/list-views)
+- [phone/voice-calls](https://developers.gorgias.com/reference/list-voice-calls)
+- [phone/voice-call-recordings](https://developers.gorgias.com/reference/list-voice-call-recordings)
+- [phone/voice-call-events](https://developers.gorgias.com/reference/list-voice-call-events)
+- [widgets](https://developers.gorgias.com/reference/list-widgets)
+
+The Gorgias connector supports writing to the following objects:
+- [account/settings](https://developers.gorgias.com/reference/update-account-settings)
+- [customers](https://developers.gorgias.com/reference/create-customer)
+- [custom-fields](https://developers.gorgias.com/reference/create-custom-field)
+- [integrations](https://developers.gorgias.com/reference/create-integration)
+- [jobs](https://developers.gorgias.com/reference/create-job)
+- [macros](https://developers.gorgias.com/reference/create-macro)
+- [rules](https://developers.gorgias.com/reference/create-rule)
+- [satisfaction-surveys](https://developers.gorgias.com/reference/create-satisfaction-survey)
+- [search](https://developers.gorgias.com/reference/search-1)
+- [tags](https://developers.gorgias.com/reference/create-tag)
+- [teams](https://developers.gorgias.com/reference/create-team)
+- [tickets](https://developers.gorgias.com/reference/create-ticket)
+- [users](https://developers.gorgias.com/reference/create-user)
+- [views](https://developers.gorgias.com/reference/create-view)
+- [widgets](https://developers.gorgias.com/reference/create-widget)
+
+### Example integration
+
+To define an integration for Kit, create a manifest file that looks like this: https://github.com/amp-labs/samples/blob/main/gorgias/amp.yaml
 
 ## Before You Get Started
 
@@ -57,4 +102,17 @@ You will see the **Client ID** and **Client Secret** in the app details. Note th
 ![Alt text](/images/provider-guides/gorgias.gif)
 
 6. Enter the scopes set for your application in _Gorgias_.
+
 7. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Kit:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/gorgias/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
