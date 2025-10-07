@@ -9980,6 +9980,15 @@
               "type": "string"
             },
             "example": "my-project"
+          },
+          {
+            "name": "destructive",
+            "in": "query",
+            "required": false,
+            "description": "Defaults to false. This flag controls whether to perform destructive actions when deploying integrations, like pausing all read actions for an object that was removed in the latest revision.",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "requestBody": {
@@ -13588,6 +13597,11 @@
                                               "example": "*/15 * * * *",
                                               "x-go-type-skip-optional-pointer": true
                                             },
+                                            "disabled": {
+                                              "type": "boolean",
+                                              "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                              "default": false
+                                            },
                                             "destination": {
                                               "description": "The name of the destination that the result should be sent to.",
                                               "example": "accountWebhook",
@@ -13936,6 +13950,11 @@
                                                   "example": "*/15 * * * *",
                                                   "x-go-type-skip-optional-pointer": true
                                                 },
+                                                "disabled": {
+                                                  "type": "boolean",
+                                                  "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                  "default": false
+                                                },
                                                 "destination": {
                                                   "description": "The name of the destination that the result should be sent to.",
                                                   "example": "accountWebhook",
@@ -14109,6 +14128,11 @@
                                                       "description": "The schedule for reading the object, in cron syntax.",
                                                       "example": "*/15 * * * *",
                                                       "x-go-type-skip-optional-pointer": true
+                                                    },
+                                                    "disabled": {
+                                                      "type": "boolean",
+                                                      "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                      "default": false
                                                     },
                                                     "destination": {
                                                       "description": "The name of the destination that the result should be sent to.",
@@ -15422,6 +15446,11 @@
                                           "example": "*/15 * * * *",
                                           "x-go-type-skip-optional-pointer": true
                                         },
+                                        "disabled": {
+                                          "type": "boolean",
+                                          "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                          "default": false
+                                        },
                                         "destination": {
                                           "description": "The name of the destination that the result should be sent to.",
                                           "example": "accountWebhook",
@@ -15770,6 +15799,11 @@
                                               "example": "*/15 * * * *",
                                               "x-go-type-skip-optional-pointer": true
                                             },
+                                            "disabled": {
+                                              "type": "boolean",
+                                              "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                              "default": false
+                                            },
                                             "destination": {
                                               "description": "The name of the destination that the result should be sent to.",
                                               "example": "accountWebhook",
@@ -15943,6 +15977,11 @@
                                                   "description": "The schedule for reading the object, in cron syntax.",
                                                   "example": "*/15 * * * *",
                                                   "x-go-type-skip-optional-pointer": true
+                                                },
+                                                "disabled": {
+                                                  "type": "boolean",
+                                                  "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                  "default": false
                                                 },
                                                 "destination": {
                                                   "description": "The name of the destination that the result should be sent to.",
@@ -17167,6 +17206,11 @@
                                             "example": "*/15 * * * *",
                                             "x-go-type-skip-optional-pointer": true
                                           },
+                                          "disabled": {
+                                            "type": "boolean",
+                                            "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                            "default": false
+                                          },
                                           "destination": {
                                             "description": "The name of the destination that the result should be sent to.",
                                             "example": "accountWebhook",
@@ -17515,6 +17559,11 @@
                                                 "example": "*/15 * * * *",
                                                 "x-go-type-skip-optional-pointer": true
                                               },
+                                              "disabled": {
+                                                "type": "boolean",
+                                                "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                "default": false
+                                              },
                                               "destination": {
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
@@ -17688,6 +17737,11 @@
                                                     "description": "The schedule for reading the object, in cron syntax.",
                                                     "example": "*/15 * * * *",
                                                     "x-go-type-skip-optional-pointer": true
+                                                  },
+                                                  "disabled": {
+                                                    "type": "boolean",
+                                                    "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                    "default": false
                                                   },
                                                   "destination": {
                                                     "description": "The name of the destination that the result should be sent to.",
@@ -19734,6 +19788,11 @@
                                             "example": "*/15 * * * *",
                                             "x-go-type-skip-optional-pointer": true
                                           },
+                                          "disabled": {
+                                            "type": "boolean",
+                                            "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                            "default": false
+                                          },
                                           "destination": {
                                             "description": "The name of the destination that the result should be sent to.",
                                             "example": "accountWebhook",
@@ -20082,6 +20141,11 @@
                                                 "example": "*/15 * * * *",
                                                 "x-go-type-skip-optional-pointer": true
                                               },
+                                              "disabled": {
+                                                "type": "boolean",
+                                                "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                "default": false
+                                              },
                                               "destination": {
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
@@ -20255,6 +20319,11 @@
                                                     "description": "The schedule for reading the object, in cron syntax.",
                                                     "example": "*/15 * * * *",
                                                     "x-go-type-skip-optional-pointer": true
+                                                  },
+                                                  "disabled": {
+                                                    "type": "boolean",
+                                                    "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                    "default": false
                                                   },
                                                   "destination": {
                                                     "description": "The name of the destination that the result should be sent to.",
@@ -21761,6 +21830,11 @@
                                               "example": "*/15 * * * *",
                                               "x-go-type-skip-optional-pointer": true
                                             },
+                                            "disabled": {
+                                              "type": "boolean",
+                                              "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                              "default": false
+                                            },
                                             "destination": {
                                               "description": "The name of the destination that the result should be sent to.",
                                               "example": "accountWebhook",
@@ -22565,6 +22639,11 @@
                                             "example": "*/15 * * * *",
                                             "x-go-type-skip-optional-pointer": true
                                           },
+                                          "disabled": {
+                                            "type": "boolean",
+                                            "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                            "default": false
+                                          },
                                           "destination": {
                                             "description": "The name of the destination that the result should be sent to.",
                                             "example": "accountWebhook",
@@ -22913,6 +22992,11 @@
                                                 "example": "*/15 * * * *",
                                                 "x-go-type-skip-optional-pointer": true
                                               },
+                                              "disabled": {
+                                                "type": "boolean",
+                                                "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                "default": false
+                                              },
                                               "destination": {
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
@@ -23086,6 +23170,11 @@
                                                     "description": "The schedule for reading the object, in cron syntax.",
                                                     "example": "*/15 * * * *",
                                                     "x-go-type-skip-optional-pointer": true
+                                                  },
+                                                  "disabled": {
+                                                    "type": "boolean",
+                                                    "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                    "default": false
                                                   },
                                                   "destination": {
                                                     "description": "The name of the destination that the result should be sent to.",
@@ -25423,6 +25512,11 @@
                                               "example": "*/15 * * * *",
                                               "x-go-type-skip-optional-pointer": true
                                             },
+                                            "disabled": {
+                                              "type": "boolean",
+                                              "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                              "default": false
+                                            },
                                             "destination": {
                                               "description": "The name of the destination that the result should be sent to.",
                                               "example": "accountWebhook",
@@ -25771,6 +25865,11 @@
                                                   "example": "*/15 * * * *",
                                                   "x-go-type-skip-optional-pointer": true
                                                 },
+                                                "disabled": {
+                                                  "type": "boolean",
+                                                  "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                  "default": false
+                                                },
                                                 "destination": {
                                                   "description": "The name of the destination that the result should be sent to.",
                                                   "example": "accountWebhook",
@@ -25944,6 +26043,11 @@
                                                       "description": "The schedule for reading the object, in cron syntax.",
                                                       "example": "*/15 * * * *",
                                                       "x-go-type-skip-optional-pointer": true
+                                                    },
+                                                    "disabled": {
+                                                      "type": "boolean",
+                                                      "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                      "default": false
                                                     },
                                                     "destination": {
                                                       "description": "The name of the destination that the result should be sent to.",
@@ -54215,6 +54319,11 @@
                                   "example": "*/15 * * * *",
                                   "x-go-type-skip-optional-pointer": true
                                 },
+                                "disabled": {
+                                  "type": "boolean",
+                                  "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                  "default": false
+                                },
                                 "destination": {
                                   "description": "The name of the destination that the result should be sent to.",
                                   "example": "accountWebhook",
@@ -54563,6 +54672,11 @@
                                       "example": "*/15 * * * *",
                                       "x-go-type-skip-optional-pointer": true
                                     },
+                                    "disabled": {
+                                      "type": "boolean",
+                                      "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                      "default": false
+                                    },
                                     "destination": {
                                       "description": "The name of the destination that the result should be sent to.",
                                       "example": "accountWebhook",
@@ -54736,6 +54850,11 @@
                                           "description": "The schedule for reading the object, in cron syntax.",
                                           "example": "*/15 * * * *",
                                           "x-go-type-skip-optional-pointer": true
+                                        },
+                                        "disabled": {
+                                          "type": "boolean",
+                                          "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                          "default": false
                                         },
                                         "destination": {
                                           "description": "The name of the destination that the result should be sent to.",
@@ -55553,6 +55672,11 @@
                               "example": "*/15 * * * *",
                               "x-go-type-skip-optional-pointer": true
                             },
+                            "disabled": {
+                              "type": "boolean",
+                              "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                              "default": false
+                            },
                             "destination": {
                               "description": "The name of the destination that the result should be sent to.",
                               "example": "accountWebhook",
@@ -55901,6 +56025,11 @@
                                   "example": "*/15 * * * *",
                                   "x-go-type-skip-optional-pointer": true
                                 },
+                                "disabled": {
+                                  "type": "boolean",
+                                  "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                  "default": false
+                                },
                                 "destination": {
                                   "description": "The name of the destination that the result should be sent to.",
                                   "example": "accountWebhook",
@@ -56074,6 +56203,11 @@
                                       "description": "The schedule for reading the object, in cron syntax.",
                                       "example": "*/15 * * * *",
                                       "x-go-type-skip-optional-pointer": true
+                                    },
+                                    "disabled": {
+                                      "type": "boolean",
+                                      "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                      "default": false
                                     },
                                     "destination": {
                                       "description": "The name of the destination that the result should be sent to.",
