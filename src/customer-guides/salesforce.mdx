@@ -8,11 +8,11 @@ We recommend verifying the following requirements before installing the Salesfor
 
 ### 1. Verify your Salesforce edition supports API access
 
-Salesforce editions offer different levels of API access, which can affect Salesforce integrations in Ampersand.
+Salesforce editions offer different levels of API access, which can affect how Salesforce integrations work in Ampersand.
 
-Before setting up your Salesforce integrations, you must confirm whether your specific Salesforce edition includes API access. Some editions include full API access by default, while others may offer limited access or require additional purchases.
+Before setting up your Salesforce integration, confirm whether your Salesforce edition includes API access. Some editions include full API access by default, while others may offer limited access or require additional purchases.
 
-To evaluate if your Salesforce edition supports the necessary API access for this integration, please refer to [Salesforce's official documentation](https://help.salesforce.com/s/articleView?language=en_US&id=000385436&type=1) on API access by edition.
+To check if your Salesforce edition supports the necessary API access for this integration, please refer to [Salesforce's official documentation](https://help.salesforce.com/s/articleView?language=en_US&id=000385436&type=1) on API access by edition.
 
 If your Salesforce edition does not include the required API access, contact your Salesforce account representative to upgrade your edition.
 
@@ -62,30 +62,30 @@ If you need to modify these settings:
 
 The user that installs the Salesforce integration should either be:
 - a System Administrator
-- or a user that has been assigned a User Profile with sufficient permissions, it is best to create a new custom User Profile for this purpose.
+- or a user that has been assigned a user profile with sufficient permissions, it is best to create a new custom user profile for this purpose.
 
-#### Create a custom User Profile
+#### Create a custom user profile
 
-To create a new User Profile:
+To create a new user profile:
 1. Log in to Salesforce.
 2. Go to **Setup**.
 3. In the **Quick Find** box, search for "Profiles".
 4. Click on the **New** button.
-5. Choose an existing profile to clone, we recommend *Standard User*. Please ensure that you clone a User Profile with the *Salesforce* User License. The *Salesforce Platform* User License is insufficient.
+5. Choose an existing profile to clone, we recommend *Standard User*. Please ensure that you clone a user profile with the *Salesforce* User License. The *Salesforce Platform* User License is insufficient.
 
-![Create User Profile](/images/customer-guides/CreateSalesforceProfile.gif)
+![Create user profile](/images/customer-guides/CreateSalesforceProfile.gif)
 
-#### View and edit permissions for a User Profile
+#### View and edit permissions for user profile
 
 Follow the steps above to go to the **Profiles** page, and then:
-1. Select the User Profile you'd like to view and edit.
+1. Select the user profile you'd like to view and edit.
 2. Click **Edit** at the top of the page.
-![Edit User Profile](/images/customer-guides/SalesforceEditProfileRole.png)
+![Edit user profile](/images/customer-guides/SalesforceEditProfileRole.png)
 
 3. Ensure the checkboxes for the necessary permissions below are checked.
 4. Click **Save** at the top or bottom of the page.
 
-Ensure that the following permissions are checked in the User Profile:
+Ensure that the following permissions are checked in the user profile:
 1. `API Enabled`
 2. One of the following:
   * `Approve Uninstalled Connected Apps`
@@ -100,17 +100,38 @@ Ensure that the following permissions are checked in the User Profile:
   * `Modify Metadata Through Metadata API Functions`
   * `Allows Users to Modify Named Credentials and External Credentials`
 
-#### How to set field-level security in Salesforce
+#### Object and field permissions for custom user profile
+
 1. Click the gear icon in the top-right corner and select **Setup**.
+
 2. In the left-hand search bar, type **Object Manager** and open it.
 ![Setup Object Manager](/images/customer-guides/objectManager-salesforce.png)
 
-3. Choose the object you need (for example, **Contact**) and go to **Fields & Relationships**.
-![Setup Object Manager Account](/images/customer-guides/setup-objectManager-account.png)
+3. Choose the object you need (for example, **Account**) and go to **Object Access** in the left navbar. Select the **Profiles** tab at the top. Click **Edit** and grant the necessary permissions for the custom user profile that you created.
+- If the integration needs to read data, ensure that `Read`, `View All Records`, and `View All Fields` are checked.
+- If the integration needs to write data, ensure that all boxes are checked.
+
+![Edit Object Access](/images/customer-guides/salesforceObjectAccess.png)
+
+#### Field permissions for standard user profile
+
+<Warning>We highly recommend creating a custom user profile for integrations. However if this is not possible, then here is how you can ensure the correct field permissions for a standard user profile. Please note that it is not possible to modify object permissions for standard user profiles.</Warning>
+
+1. Click the gear icon in the top-right corner and select **Setup**.
+
+2. In the left-hand search bar, type **Object Manager** and open it.
+![Setup Object Manager](/images/customer-guides/objectManager-salesforce.png)
+
+3. Select **Fields & Relationships** from the left navbar.
+![Setup Object Manager Account](/images/customer-guides/salesforceFieldSecurity1.png)
 
 4. Find the field you want to adjust and click it.
-5. Click **Set Field-Level Security**. 
-![Set Field Level Security](/images/customer-guides/set-field-level-security.png)
 
-6. Ensure the checkbox for **Visible** is selected for the User Profile(s) you're interested in. 
-![Check Visible for profile](/images/customer-guides/profile-visible.png)
+5. Click **Set Field-Level Security**. 
+![Set Field Level Security](/images/customer-guides/salesforceFieldSecurity2.png)
+
+6. Ensure the checkbox for **Visible** is selected for the user profile you're interested in. If the user profile is not visible in this list, it means that it does not have access to the this object. This is not possible to modify, so you should choose a different user profile to use for the integration, or [create a custom user profile](#create-a-custom-user-profile).
+
+![Check Visible for profile](/images/customer-guides/salesforceFieldSecurity3.png)
+
+7. Repeat steps 4-6 for all the fields that the integration needs to read.
