@@ -51362,79 +51362,74 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "targets": {
-                      "type": "array",
-                      "items": {
-                        "title": "Notification Target",
-                        "required": [
-                          "id",
-                          "label",
-                          "type",
-                          "metadata",
-                          "createTime"
+                  "type": "array",
+                  "items": {
+                    "title": "Notification Target",
+                    "required": [
+                      "id",
+                      "label",
+                      "type",
+                      "metadata",
+                      "createTime"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The notification target ID."
+                      },
+                      "label": {
+                        "type": "string",
+                        "description": "A human-readable label for the notification target.",
+                        "example": "Production Slack Alerts"
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "The type of notification target.",
+                        "enum": [
+                          "webhook"
                         ],
+                        "example": "webhook"
+                      },
+                      "metadata": {
                         "type": "object",
+                        "required": [
+                          "url"
+                        ],
                         "properties": {
-                          "id": {
+                          "url": {
                             "type": "string",
-                            "description": "The notification target ID."
+                            "description": "Webhook URL, must start with \"https://\".",
+                            "example": "https://webhooks.mailmonkey.com/salesforce-lead-converted"
                           },
-                          "label": {
-                            "type": "string",
-                            "description": "A human-readable label for the notification target.",
-                            "example": "Production Slack Alerts"
-                          },
-                          "type": {
-                            "type": "string",
-                            "description": "The type of notification target.",
-                            "enum": [
-                              "webhook"
-                            ],
-                            "example": "webhook"
-                          },
-                          "metadata": {
+                          "headers": {
+                            "title": "Webhook Headers",
                             "type": "object",
-                            "required": [
-                              "url"
-                            ],
-                            "properties": {
-                              "url": {
-                                "type": "string",
-                                "description": "Webhook URL, must start with \"https://\".",
-                                "example": "https://webhooks.mailmonkey.com/salesforce-lead-converted"
-                              },
-                              "headers": {
-                                "title": "Webhook Headers",
-                                "type": "object",
-                                "nullable": true,
-                                "description": "Additional headers to add when Ampersand sends a webhook message",
-                                "additionalProperties": {
-                                  "type": "string",
-                                  "nullable": false
-                                },
-                                "example": {
-                                  "Authorization": "Bearer 1234"
-                                }
-                              }
+                            "nullable": true,
+                            "description": "Additional headers to add when Ampersand sends a webhook message",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": false
+                            },
+                            "example": {
+                              "Authorization": "Bearer 1234"
                             }
-                          },
-                          "secrets": {
-                            "type": "object",
-                            "description": "Secrets for the target."
-                          },
-                          "createTime": {
-                            "type": "string",
-                            "format": "date-time",
-                            "description": "The time when the notification target was created."
-                          },
-                          "updateTime": {
-                            "type": "string",
-                            "format": "date-time",
-                            "description": "The time when the notification target was last updated."
                           }
                         }
+                      },
+                      "secrets": {
+                        "type": "object",
+                        "description": "Secrets for the target."
+                      },
+                      "createTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The time when the notification target was created."
+                      },
+                      "updateTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The time when the notification target was last updated."
                       }
                     }
                   }
