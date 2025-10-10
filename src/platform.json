@@ -54058,44 +54058,39 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "topics": {
-                      "type": "array",
-                      "items": {
-                        "title": "Notification Topic",
-                        "required": [
-                          "id",
-                          "label",
-                          "projectId",
-                          "createTime"
-                        ],
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "description": "The notification topic ID."
-                          },
-                          "label": {
-                            "type": "string",
-                            "description": "A human-readable label for the notification topic.",
-                            "example": "System Alerts"
-                          },
-                          "projectId": {
-                            "type": "string",
-                            "description": "The Ampersand project ID."
-                          },
-                          "createTime": {
-                            "type": "string",
-                            "format": "date-time",
-                            "description": "The time when the notification topic was created."
-                          },
-                          "updateTime": {
-                            "type": "string",
-                            "format": "date-time",
-                            "description": "The time when the notification topic was last updated."
-                          }
-                        }
+                  "type": "array",
+                  "items": {
+                    "title": "Notification Topic",
+                    "required": [
+                      "id",
+                      "label",
+                      "projectId",
+                      "createTime"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The notification topic ID."
+                      },
+                      "label": {
+                        "type": "string",
+                        "description": "A human-readable label for the notification topic.",
+                        "example": "System Alerts"
+                      },
+                      "projectId": {
+                        "type": "string",
+                        "description": "The Ampersand project ID."
+                      },
+                      "createTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The time when the notification topic was created."
+                      },
+                      "updateTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The time when the notification topic was last updated."
                       }
                     }
                   }
@@ -56698,57 +56693,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "eventTopicRoutes": {
-                      "type": "array",
-                      "items": {
-                        "title": "Notification Event Topic Route",
-                        "required": [
-                          "id",
-                          "eventType",
-                          "topicId",
-                          "projectId",
-                          "createTime"
+                  "type": "array",
+                  "items": {
+                    "title": "Notification Event Topic Route",
+                    "required": [
+                      "id",
+                      "eventType",
+                      "topicId",
+                      "projectId",
+                      "createTime"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The event-topic route ID."
+                      },
+                      "eventType": {
+                        "type": "string",
+                        "description": "The type of notification event.",
+                        "enum": [
+                          "read.backfill.done",
+                          "connection.created",
+                          "installation.created",
+                          "installation.updated",
+                          "installation.deleted",
+                          "read.schedule.paused"
                         ],
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "description": "The event-topic route ID."
-                          },
-                          "eventType": {
-                            "type": "string",
-                            "description": "The type of notification event.",
-                            "enum": [
-                              "read.backfill.done",
-                              "connection.created",
-                              "installation.created",
-                              "installation.updated",
-                              "installation.deleted",
-                              "read.schedule.paused"
-                            ],
-                            "example": "installation.created"
-                          },
-                          "topicId": {
-                            "type": "string",
-                            "description": "The ID of the notification topic to route events to."
-                          },
-                          "projectId": {
-                            "type": "string",
-                            "description": "The Ampersand project ID."
-                          },
-                          "createTime": {
-                            "type": "string",
-                            "format": "date-time",
-                            "description": "The time when the event-topic route was created."
-                          },
-                          "updateTime": {
-                            "type": "string",
-                            "format": "date-time",
-                            "description": "The time when the event-topic route was last updated."
-                          }
-                        }
+                        "example": "installation.created"
+                      },
+                      "topicId": {
+                        "type": "string",
+                        "description": "The ID of the notification topic to route events to."
+                      },
+                      "projectId": {
+                        "type": "string",
+                        "description": "The Ampersand project ID."
+                      },
+                      "createTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The time when the event-topic route was created."
+                      },
+                      "updateTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The time when the event-topic route was last updated."
                       }
                     }
                   }
@@ -58092,43 +58082,38 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "topicTargetRoutes": {
-                      "type": "array",
-                      "items": {
-                        "title": "Notification Topic Target Route",
-                        "required": [
-                          "id",
-                          "topicId",
-                          "targetId",
-                          "projectId",
-                          "createTime"
-                        ],
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "description": "The topic-target route ID."
-                          },
-                          "topicId": {
-                            "type": "string",
-                            "description": "The ID of the notification topic."
-                          },
-                          "targetId": {
-                            "type": "string",
-                            "description": "The ID of the notification target."
-                          },
-                          "projectId": {
-                            "type": "string",
-                            "description": "The Ampersand project ID."
-                          },
-                          "createTime": {
-                            "type": "string",
-                            "format": "date-time",
-                            "description": "The time when the topic-target route was created."
-                          }
-                        }
+                  "type": "array",
+                  "items": {
+                    "title": "Notification Topic Target Route",
+                    "required": [
+                      "id",
+                      "topicId",
+                      "targetId",
+                      "projectId",
+                      "createTime"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The topic-target route ID."
+                      },
+                      "topicId": {
+                        "type": "string",
+                        "description": "The ID of the notification topic."
+                      },
+                      "targetId": {
+                        "type": "string",
+                        "description": "The ID of the notification target."
+                      },
+                      "projectId": {
+                        "type": "string",
+                        "description": "The Ampersand project ID."
+                      },
+                      "createTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The time when the topic-target route was created."
                       }
                     }
                   }
