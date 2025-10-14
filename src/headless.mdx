@@ -37,7 +37,7 @@ yarn add @amp-labs/react
 
 In order for the headless hooks and functions to have relevant context, you can only use them inside `AmpersandProvider` and `InstallationProvider`.
 
-The `AmpersandProvider` needs to wrap all usages of headless hooks and functions as well as prebuilt UI components. See [Ampersand Provider](/embeddable-ui-components#ampersand-provider) for more details.
+The `AmpersandProvider` needs to wrap all usages of headless hooks and functions as well as prebuilt UI components. See [AmpersandProvider](/embeddable-ui-components#ampersandprovider) for more details on configuration and authentication methods.
 
 The `InstallationProvider` needs to wrap any code that interacts with a particular installation. This means that if your UI needs to handle multiple installations (e.g., one for Asana and one for Zendesk), then you need two instances of `InstallationProvider`: one that wraps the code for Asana setup, and one that wraps the code for Zendesk setup.
 
@@ -55,8 +55,16 @@ import {
 } from "@amp-labs/react"
 
 const options = {
-  project: 'PROJECT', // Your Ampersand project name or ID.
-  apiKey: 'API_KEY',// Your Ampersand API key.
+  project: 'PROJECT', // Your Ampersand project name or ID
+
+  // Pick one of the following authentication methods.
+  apiKey: 'API_KEY',  // Ampersand API key (simple)
+  // OR 
+  getToken: async ({consumerRef, groupRef}) => {  // JWT Authentication (advanced)
+    // Custom logic to fetch JWT token from your backend, e.g.
+    return await getTokenFromMyBackend(consumerRef, groupRef);
+    // See https://docs.withampersand.com/jwt-auth
+  },
 };
 
 // Define variables that will be used for this code snippet and

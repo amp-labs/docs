@@ -195,6 +195,10 @@ const baseConfig = {
       destination: "/proxy-actions"
     },
     {
+      "source": "/defining-integrations",
+      "destination": "/quickstart"
+    },
+    {
       source: "/define-integrations/read-actions",
       destination: "/read-actions"
     },
@@ -273,6 +277,7 @@ const baseConfig = {
             "provider-guides/aha",
             "provider-guides/aircall",
             "provider-guides/airtable",
+            "provider-guides/amplitude",
             "provider-guides/anthropic",
             "provider-guides/apollo",
             "provider-guides/asana",
@@ -300,6 +305,7 @@ const baseConfig = {
             "provider-guides/chargebee",
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
+            "provider-guides/chorus",
             "provider-guides/clari",
             "provider-guides/clariCopilot",
             "provider-guides/clickup",
@@ -389,9 +395,11 @@ const baseConfig = {
             "provider-guides/podium",
             "provider-guides/productBoard",
             "provider-guides/quickbooks",
+            "provider-guides/ramp",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
+            "provider-guides/sageIntacct",
             "provider-guides/salesflare",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
@@ -414,9 +422,9 @@ const baseConfig = {
             "provider-guides/whereby",
             "provider-guides/wordpress",
             "provider-guides/wrike",
+            "provider-guides/xero",
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
-            "provider-guides/zohoDesk",
             "provider-guides/zoom"
           ]
         },
@@ -438,6 +446,7 @@ const baseConfig = {
       group: "Authentication",
       pages: [
         "reference/auth",
+        "jwt-auth",
       ],
     },
     {

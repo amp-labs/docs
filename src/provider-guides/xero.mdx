@@ -1,0 +1,120 @@
+---
+title: "Xero"
+slug: "Xero"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `accounts`, `contacts`, `bankTransactions`, `bankTransfers`, `batchPayments`, `creditNotes`, `items`, `journals`, `manualJournals`, `overpayments`, `payments`, `prepayments`, `purchaseOrders` and `users`. For all other objects, a full read of the Xero instance will be done per scheduled read.
+- [Write Actions](/write-actions).
+
+### Supported objects
+The Xero connector supports reading from the following objects:
+- [accounts](https://developer.xero.com/documentation/api/accounting/accounts)
+- [contacts](https://developer.xero.com/documentation/api/accounting/contacts)
+- [bankTransactions](https://developer.xero.com/documentation/api/accounting/banktransactions)
+- [bankTransfers](https://developer.xero.com/documentation/api/accounting/banktransfers)
+- [batchPayments](https://developer.xero.com/documentation/api/accounting/batchpayments)
+- [brandingThemes](https://developer.xero.com/documentation/api/accounting/brandingthemes)
+- [budgets](https://developer.xero.com/documentation/api/accounting/budgets)
+- [contactGroups](https://developer.xero.com/documentation/api/accounting/contactgroups)
+- [creditNotes](https://developer.xero.com/documentation/api/accounting/creditnotes)
+- [currencies](https://developer.xero.com/documentation/api/accounting/currencies)
+- [invoices](https://developer.xero.com/documentation/api/accounting/invoices)
+- [items](https://developer.xero.com/documentation/api/accounting/items)
+- [journals](https://developer.xero.com/documentation/api/accounting/journals)
+- [linkedTransactions](https://developer.xero.com/documentation/api/accounting/linkedtransactions)
+- [manualJournals](https://developer.xero.com/documentation/api/accounting/manualjournals)
+- [organisation](https://developer.xero.com/documentation/api/accounting/organisation)
+- [overpayments](https://developer.xero.com/documentation/api/accounting/overpayments)
+- [paymentServices](https://developer.xero.com/documentation/api/accounting/paymentservices)
+- [payments](https://developer.xero.com/documentation/api/accounting/payments)
+- [prepayments](https://developer.xero.com/documentation/api/accounting/prepayments)
+- [purchaseOrders](https://developer.xero.com/documentation/api/accounting/purchaseorders)
+- [quotes](https://developer.xero.com/documentation/api/accounting/quotes)
+- [repeatingInvoices](https://developer.xero.com/documentation/api/accounting/repeatinginvoices)
+- [reports](https://developer.xero.com/documentation/api/accounting/reports)
+- [taxRates](https://developer.xero.com/documentation/api/accounting/taxrates)
+- [trackingCategories](https://developer.xero.com/documentation/api/accounting/trackingcategories)
+- [users](https://developer.xero.com/documentation/api/accounting/users)
+
+The Xero connector supports writing to the following objects:
+- [bankTransactions](https://developer.xero.com/documentation/api/accounting/banktransactions)
+- [bankTransfers](https://developer.xero.com/documentation/api/accounting/banktransfers)
+- [contactGroups](https://developer.xero.com/documentation/api/accounting/contactgroups)
+- [trackingCategories](https://developer.xero.com/documentation/api/accounting/trackingcategories)
+- [taxRates](https://developer.xero.com/documentation/api/accounting/taxrates)
+- [quotes](https://developer.xero.com/documentation/api/accounting/quotes)
+- [purchaseOrders](https://developer.xero.com/documentation/api/accounting/purchaseorders)
+- [paymentServices](https://developer.xero.com/documentation/api/accounting/paymentservices)
+- [manualJournals](https://developer.xero.com/documentation/api/accounting/manualjournals)
+- [linkedTransactions](https://developer.xero.com/documentation/api/accounting/linkedtransactions)
+- [items](https://developer.xero.com/documentation/api/accounting/items)
+- [invoices](https://developer.xero.com/documentation/api/accounting/invoices)
+- [currencies](https://developer.xero.com/documentation/api/accounting/currencies)
+- [creditNotes](https://developer.xero.com/documentation/api/accounting/creditnotes)
+- [contacts](https://developer.xero.com/documentation/api/accounting/contacts)
+
+### Example integration
+
+For an example manifest file of an Xero integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/xero/amp.yaml).
+
+## Before you get started
+
+To integrate Xero with Ampersand, you will need a [Xero developer account](https://developer.xero.com/).
+
+Once your account is created, you'll need to create an app in Xero, configure the Ampersand redirect URI within the app, and obtain the following credentials from your app:
+
+- Client ID
+- Client Secret
+- [Scopes](https://developer.xero.com/documentation/guides/oauth2/scopes)
+
+You will then use these credentials and scopes to connect your application to Ampersand.
+
+
+### Creating a Xero app
+
+Follow the steps below to create a Xero app in the Xero developer console:
+
+1. Sign in to the [Xero developer portal](https://developer.xero.com/).
+2. Open the [My apps](https://developer.xero.com/app/manage) page.
+3. Click **New app** (or **Create app**).
+4. Enter your app name, company/website, and set the Redirect URI to the Ampersand callback URI: `https://api.withampersand.com/callbacks/v1/oauth`.
+5. Save the app and copy the **Client ID** and **Client Secret** shown on the app details page.
+   ![Alt text](/images/provider-guides/xero_oauth.gif)
+
+
+## Add Your Xero app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Xero integration.
+
+   ![Alt text](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Select **Provider apps**.
+
+4. Select _Xero_ from the **Provider** list.
+
+5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
+
+6. Enter the [scopes](https://developer.xero.com/documentation/oauth2/scopes) set for your application.
+
+7. Click **Save changes**.
+
+
+![Alt text](/images/provider-guides/xero_provider.gif)
+
+
+## Using the connector
+
+To start integrating with Xero:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/xero/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
