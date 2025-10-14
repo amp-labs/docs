@@ -56645,7 +56645,7 @@
         "x-codegen-request-body-name": "eventTopicRoute"
       },
       "get": {
-        "summary": "List notification event-topic routes with optional filtering for topic ID and event type.",
+        "summary": "List notification event-topic routes",
         "operationId": "listEventTopicRoutes",
         "tags": [
           "Notification"
@@ -57379,7 +57379,7 @@
     },
     "/projects/{projectIdOrName}/notifications/topic-target-routes": {
       "post": {
-        "summary": "Create a notification topic-target route that maps notification topics to targets for delivery.",
+        "summary": "Create a notification topic-target route",
         "operationId": "createTopicTargetRoute",
         "tags": [
           "Notification"
@@ -58071,6 +58071,24 @@
             "in": "path",
             "required": true,
             "description": "The Ampersand project ID or project name.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "topicId",
+            "in": "query",
+            "required": false,
+            "description": "Filter by notification topic ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "targetId",
+            "in": "query",
+            "required": false,
+            "description": "Filter by notification target ID.",
             "schema": {
               "type": "string"
             }
