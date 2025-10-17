@@ -6,29 +6,43 @@ title: Chorus
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported for `emails` and `scorecards` only. For all other objects, a full read of the Chorus instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://chorus.ai/api`.
+
+### Supported Objects
+The Chorus connector supports reading from the following objects:
+- [emails](https://api-docs.chorus.ai/#3d962146-73fc-42db-afda-a943971ab1c4)
+- [filters](https://api-docs.chorus.ai/#68ee2093-f321-4564-b342-5520f974a1b7)
+- [playlists](https://api-docs.chorus.ai/#f8b34d44-df36-47eb-a42e-a112aa0ec474)
+- [scorecards](https://api-docs.chorus.ai/#4dc74394-9852-4b6b-9555-cb8ce951557b)
+- [teams](https://api-docs.chorus.ai/#894c7066-c68f-4c8a-9470-d1b2c998dd36)
+
+The Chorus connector supports writing from the following objects:
+- [filters](https://api-docs.chorus.ai/#610860f7-6eaf-4ca1-81d4-15c9b45eb005) 
+- [playlists](https://api-docs.chorus.ai/#139f8088-3c9b-42aa-bee4-0820142dd08b)
+- [moments](https://api-docs.chorus.ai/#c33b52cc-0443-4c2a-9d63-0308989b7233)           
+- [smart_playlists](https://api-docs.chorus.ai/#fce98614-e4b5-4d03-adbc-830daafbe2ed)
+- [playlists/moments](https://api-docs.chorus.ai/#123c5ee2-402c-45b4-85f8-b1a1be8b9415)     
+- [scorecards:export](https://api-docs.chorus.ai/#a10eb090-a5da-4c3c-b1a6-7adb2e62c726)   
+- [video_conferences](https://api-docs.chorus.ai/#2fbb92e0-59e7-4702-98ec-0496a379eb18)   
+- [conversations:validate](https://api-docs.chorus.ai/#17f15cef-eabe-440e-ad16-0d0bbc0910fb)
+- [conversations:export](https://api-docs.chorus.ai/#04e72d8e-81fa-49f5-901e-29ccce832a21)
+- [join](https://api-docs.chorus.ai/#206f6045-5c4d-4fed-b086-051903cae649)
 
 ### Example integration
 
-To define an integration for Chorus, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: chorus-integration
-    displayName: Chorus
-    provider: chorus
-    proxy:
-      enabled: true
-```
+For an example manifest file of a Chorus integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/chorus/amp.yaml).
 
 ## Using the connector
 
 This connector uses Basic auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Chorus:
-- Create a manifest file like the example above.
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/chorus/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username, password.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://chorus.ai/api`.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
