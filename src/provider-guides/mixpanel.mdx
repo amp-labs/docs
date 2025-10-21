@@ -1,0 +1,54 @@
+---
+title: "Mixpanel"
+slug: "mixpanel"
+hidden: false
+---
+
+## What's Supported
+
+### Supported Actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://{subdomain}.mixpanel.com`, where `{subdomain}` is the subdomain for a particular API.
+
+## Before You Get Started
+
+To integrate Mixpanel with Ampersand, you will need [a Mixpanel Account](https://mixpanel.com).
+
+### Example integration
+
+To define an integration for Mixpanel, create a manifest file that looks like this:
+
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: mixpanel-integration
+    displayName: My mixpanel Integration
+    provider: mixpanel
+    proxy:
+      enabled: true
+```
+
+
+## Using the connector
+
+This connector uses Basic Auth, which means you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Guru:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. This UI component will prompt the customer for their subdomain,username and password.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://{subdomain}.mixpanel.com`.
+
+## Creating Basic Auth credentials
+
+To begin using the API in your Mixpanel account, you need to create service account credentials:
+
+- Navigate to Settings.
+- Click on Organization Settings > Service Accounts.
+- Click the Add Service Account button in the top right corner.
+- Provide the required field details. Once done, your username and password for Basic Authentication will be displayed.
+
+![Mixpanel Credentials](/images/provider-guides/mixpanel.png)
