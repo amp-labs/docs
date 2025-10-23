@@ -48327,9 +48327,15 @@
     "/orgs/{orgId}/memberships": {
       "post": {
         "summary": "Add user to an organization",
+        "description": "Adds a builder to an organization. Two authorization modes - Org owner inviting another user, or self-joining via claimed domain (authenticated user's email domain should be claimed by this organization).",
         "operationId": "addUserToOrg",
         "tags": [
           "Org"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ],
         "parameters": [
           {
@@ -61801,11 +61807,16 @@
       "get": {
         "operationId": "checkClaimedDomain",
         "summary": "Check if a domain is claimed",
-        "description": "Check if a domain is claimed by an organization. Accepts email, domain, or URL.",
+        "description": "Returns claimed domain information if authenticated user is an owner of the organization that claimed the domain, or if the user's email domain matches the claimed domain.",
         "tags": [
           "Org"
         ],
         "x-excluded": true,
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "domain",
@@ -62461,6 +62472,11 @@
           "Org"
         ],
         "x-excluded": true,
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
