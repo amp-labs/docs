@@ -50,47 +50,15 @@ console.log('RSA key pair generated successfully!');
 
 ## 2. Register public key with Ampersand
 
-Once you have the public key, register it with Ampersand using the [Create a new JWT key endpoint](/reference/jwt-key/create-a-new-jwt-key).
-
-```javascript
-const fs = require('fs');
-
-async function registerJWTKey(projectId, label) {
-  const publicKeyPem = fs.readFileSync('public_key.pem', 'utf8');
-  
-  const requestBody = {
-    label: label,                    // Descriptive label for the key
-    algorithm: 'RS256',              // Only RS256 is supported
-    publicKeyPem: publicKeyPem       // PEM-formatted public key
-  };
-
-  const response = await fetch(`https://api.withampersand.com/v1/projects/${projectId}/jwt-keys`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Api-Key': 'MY_AMPERSAND_API_KEY'
-    },
-    body: JSON.stringify(requestBody)
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to register key: ${response.status}`);
-  }
-
-  const result = await response.json();
-  console.log('Key registered with ID:', result.kid);
-  return result.kid; // This is your Key ID for JWT signing in the next step
-}
-
-// Call the function
-const keyId = await registerJWTKey('my-project-id', 'My Frontend App Public Key');
-```
-
 ### Using the Ampersand Dashboard
 
-You can also add your RSA public key and view your existing Key IDs (kid) directly in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/jwt-keys).
+You can add your RSA public key and view your existing Key IDs (kid) directly in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/jwt-keys).
 
 ![JWT Key Management in Dashboard](/images/jwt-dashboard.png)
+
+### Using the API
+
+You can also register the public key programmatically using the [Create a new JWT key endpoint](/reference/jwt-key/create-a-new-jwt-key).
 
 ## 3. Generate JWT tokens in server
 
