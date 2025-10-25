@@ -4,11 +4,11 @@ title: Kinesis destinations
 
 For more information on destinations, see the [Destinations](/destinations) page.
 
-When new data is read from a SaaS instance via a [Read Action](/read-actions), Ampersand can send the payload to your AWS Kinesis stream.
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can send the payload to your AWS Kinesis stream.
 
 ## Prerequisites
 
-Before setting up a Kinesis destination, ensure you have:
+Before setting up a Kinesis destination, ensure that you have:
 - An AWS account with access to Kinesis
 - A Kinesis stream (or permissions to create one)
 - AWS credentials with the following permissions:
@@ -29,7 +29,7 @@ aws kinesis create-stream \
   --region us-west-2
 ```
 
-Wait for the stream to become active:
+Wait for the stream to become active, you can check by running this command:
 
 ```bash
 aws kinesis describe-stream \
@@ -80,11 +80,11 @@ You'll need to provide:
 | **AWS Access Key ID** | string | Yes | AWS access key with Kinesis permissions |
 | **AWS Secret Access Key** | string | Yes | AWS secret access key |
 | **AWS Session Token** | string | No | Session token for temporary credentials |
-| **Partition key template** | string | No | [JMESPath](https://jmespath.org) template for partition key (default: `metadata.eventId`) |
-| **Endpoint URL** | string | No | Custom Kinesis endpoint (for testing or LocalStack) |
+| **Partition key template** | string | No | [JMESPath](https://jmespath.org) template for partition key |
+| **Endpoint URL** | string | No | Custom Kinesis endpoint if applicable (e.g. when using [LocalStack](https://www.localstack.cloud)) |
 
 <Info>
-AWS credentials are encrypted and stored securely.
+Ampersand encrypts and stores your AWS credentials securely.
 </Info>
 
 ## Refer to the destination in your integration
@@ -237,15 +237,13 @@ Subscribe action messages follow the same structure as read actions, but include
 
 ## Partition key configuration
 
-Kinesis uses partition keys to distribute messages across shards. You can customize the partition key using a JMESPath template.
+Kinesis uses partition keys to distribute messages across shards. (Learn more in [the AWS docs](https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html)). You can customize the partition key using a JMESPath template. JMESPath is a query language for JSON. See [jmespath.org](https://jmespath.org) for the full specification.
 
-**Default partition key template:** `metadata.eventId`
-
-This uses the event ID as the partition key, ensuring all records from the same event are sent to the same shard.
+You can specify a partition key template when creating a Kinesis destination in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/destinations/new). If you don't specify one, by default we use the message ID as the partition key, so the messages we send will be evenly distributed across your shards.
 
 ### Custom partition key examples
 
-Since all message data is wrapped in a `data` object, you need to prefix your JMESPath expressions with `data.`:
+You can customize the partition key by using any of the attributes inside of the message. Since all message data is wrapped in a `data` object, you need to prefix your JMESPath expressions with `data.`. Here are some examples:
 
 **Use installation ID:**
 ```
@@ -267,14 +265,10 @@ data.objectName
 join('_', [data.groupRef, data.objectName])
 ```
 
-**Use operation ID for unique partitioning:**
+**Use operation ID:**
 ```
 data.operationId
 ```
-
-<Info>
-JMESPath is a query language for JSON. See [jmespath.org](https://jmespath.org) for the full specification.
-</Info>
 
 ## Troubleshooting
 
@@ -282,21 +276,21 @@ JMESPath is a query language for JSON. See [jmespath.org](https://jmespath.org) 
 
 **Check destination configuration:**
 
-1. Verify stream name and region are correct
-2. Test AWS credentials:
+1. Verify that the stream name and region are correct in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/destinations/new).
+2. Test your AWS credentials:
    ```bash
    aws kinesis describe-stream \
      --stream-name your-stream-name \
      --region your-region
    ```
-3. Check IAM permissions include `kinesis:PutRecord` and `kinesis:PutRecords`
+3. Check that IAM permissions for the credential include `kinesis:PutRecord` and `kinesis:PutRecords`.
 
 ## Limitations
 
-- **Message size**: Individual records cannot exceed 1 MB (AWS Kinesis limit)
-- **Throughput**: Limited by Kinesis shard capacity (1 MB/sec write per shard)
-- **Retention**: Messages are retained for 24 hours to 365 days (configurable in AWS)
-- **Ordering**: Only guaranteed within a single partition key
+- **Message size**: Individual records cannot exceed 1 MB (AWS Kinesis limit). If a single record is bigger than this limit, we send it to you in a download URL, similar to what we do for webhook destinations. ([More details here](/destinations/webhooks#read-action-webhooks)).
+- **Throughput**: Limited by Kinesis shard capacity (1 MB/sec write per shard).
+- **Retention**: Messages are retained for 24 hours to 365 days (configurable in AWS).
+- **Ordering**: Only guaranteed within a single partition key.
 
 <Info>
 If you hit these limits, contact `support@withampersand.com` to discuss scaling strategies.
