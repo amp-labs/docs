@@ -8,93 +8,128 @@ sidebarTitle: "Unified API"
 A unified API provides a single, consistent interface to interact with multiple third-party services. Instead of learning each provider's unique schema, you define one schema that works across all of them.
 
 <Note>
-Unlike traditional unified API providers that force you into their predefined models, Ampersand lets you design your own unified schema while providing templates to get started quickly.
+This guide covers one of Ampersand's use cases: building unified APIs. You can also use Ampersand for provider-specific integrations or mix both approaches. Unlike traditional unified API providers that force you into their predefined models, Ampersand lets you design your own schema.
 </Note>
 
 ## Why build a unified API?
 
-- **Faster integration development** - Add new providers without changing your application logic
-- **Consistent data model** - Your application works with one schema regardless of the source
-- **Gradual migration** - Start with compatibility mode, customize as needed
-- **No vendor lock-in** - You control the schema, not limited by lowest common denominator
+- **Faster development** - Add providers without changing application logic
+- **Consistent data model** - One schema regardless of source
+- **Real-time updates** - Subscribe to field-level changes
+- **No vendor lock-in** - You control the schema and where data lives
 
-## Core concepts
+## How it works
 
-### Object mapping
-Map different provider objects to a unified name:
+### 1. Map objects and fields
 
 ```yaml
-# Salesforce Account → company
-# HubSpot companies → company  
-# Pipedrive organizations → company
-
+# Map different provider objects to unified names
 - objectName: account        # Salesforce
   mapToName: company
+  requiredFields:
+    - fieldName: name
+      mapToName: company_name
+    - fieldName: annualrevenue
+      mapToName: revenue
+
 - objectName: companies      # HubSpot
   mapToName: company
-- objectName: organizations  # Pipedrive
-  mapToName: company
+  requiredFields:
+    - fieldName: name
+      mapToName: company_name
+    - fieldName: annualrevenue
+      mapToName: revenue
 ```
 
-### Field standardization
-Create consistent field names across providers:
+### 2. Receive unified + raw data
 
-```yaml
-# Different providers, same unified fields
-requiredFields:
-  - fieldName: name           # Salesforce
-    mapToName: company_name
-  - fieldName: name           # HubSpot
-    mapToName: company_name
-  - fieldName: account_name   # Zoho
-    mapToName: company_name
-```
-
-### Raw data access
-
-Every payload includes both unified fields AND the original provider data:
+Every webhook includes both your unified fields and the complete provider response:
 
 ```json
 {
   "mappedFields": {
-    "remote_id": "001abc", // Original provider ID
-    "name": "Acme Corp",
-    "remote_created_at": "2024-01-15",  // Original creation timestamp
-    "remote_updated_at": "2024-08-23"   // Original update timestamp
+    "remote_id": "001abc",
+    "company_name": "Acme Corp",
+    "revenue": 5000000,
+    "remote_created_at": "2024-01-15",
+    "remote_updated_at": "2024-08-23"
   },
   "raw": {
-    // Complete original response from provider
     "Id": "001abc",
     "Name": "Acme Corp",
+    "AnnualRevenue": 5000000,
     "CreatedDate": "2024-01-15T10:30:00Z",
-    "SystemModstamp": "2024-08-23T14:20:07Z"
+    "SystemModstamp": "2024-08-23T14:20:07Z",
+    "Custom_Field__c": "value"  // All fields available
   }
 }
 ```
 
-**Key fields:**
-- `mappedFields` - Your unified schema (like merge.dev's common model)
-- `raw` - Original provider response (like merge.dev's remote_data, but always included)
-- `remote_id` - Preserves the provider's original ID for lookups
-- `remote_created_at` / `remote_updated_at` - Original provider timestamps
-
 <Tip>
-Unlike merge.dev where you need `include_remote_data=true`, Ampersand always provides raw data alongside mapped fields in every payload.
+Unlike merge.dev where you need `include_remote_data=true`, Ampersand always includes raw data. This means you can use your unified schema while still accessing provider-specific fields.
 </Tip>
 
-### Provider-specific access
-Keep unique fields available without compromising the unified model:
+### 3. Real-time updates with subscribe actions
+
+Get webhooks when data changes (1-2 minutes latency):
 
 ```yaml
-# Unified fields + provider-specific
-requiredFields:
-  - fieldName: name
-    mapToName: company_name
-  # Salesforce-specific fields remain accessible via raw
-  - fieldName: accountnumber
-  - fieldName: type
-  - fieldName: sla__c  # Custom fields too
+subscribe:
+  objects:
+    - objectName: account
+      destination: webhook
+      inheritFieldsAndMapping: true
+      updateEvent:
+        enabled: always
+        requiredWatchFields:
+          - company_name  # Your unified field
+          - revenue
 ```
+
+```json
+// Webhook payload on update
+{
+  "subscribeEventType": "update",
+  "mappedFields": {
+    "company_name": "Acme Corp Updated",
+    "revenue": 6000000
+  },
+  "raw": { /* full provider data */ }
+}
+```
+
+## Key architectural differences from merge.dev
+
+### Data persistence
+
+**Ampersand:** No data storage. Data streams directly from providers to your webhooks. You control where and how to persist data.
+
+**Merge.dev:** Stores all customer data in their cloud by default. Enables faster syncs but requires them as a data sub-processor. "Merge Destinations" (Enterprise) bypasses storage.
+
+**Why it matters:** For healthcare, finance, or regulated industries, Ampersand's passthrough architecture eliminates compliance concerns around third-party data storage.
+
+### Two-way sync
+
+**Ampersand:**
+- **Read**: Scheduled syncs OR real-time subscribe actions (field-level granularity)
+- **Write**: Direct write actions with field mapping
+- **Pattern**: Subscribe + Write = true bidirectional real-time
+
+**Merge.dev:**
+- **Read**: Scheduled syncs + poll after webhook notifications (model-level)
+- **Write**: Instant POST/PATCH operations
+- **Pattern**: Polling + Writes (third-party webhooks on Pro/Enterprise)
+
+### Comparison table
+
+| Feature | Ampersand | Merge.dev |
+|---------|-----------|-----------|
+| **Schema** | You define it | Fixed common model |
+| **Raw data** | Always included | `include_remote_data=true` flag |
+| **Data storage** | None (you control) | Stored in Merge cloud |
+| **Real-time** | Subscribe actions (all plans) | Third-party webhooks (Pro/Enterprise) |
+| **Event detail** | Field-level changes | Model-level notifications |
+| **Sub-processor** | No | Yes |
 
 ## Examples
 
@@ -135,7 +170,7 @@ Create a unified CRM that works across Salesforce, HubSpot, Pipedrive, and more:
       mapToName: remote_updated_at
 ```
 
-```yaml Result Payload
+```yaml Result
 {
   "mappedFields": {
     "remote_id": "22575402281",
@@ -203,45 +238,73 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
 ```
 </CodeGroup>
 
-## Comparison with merge.dev
+## Migration from merge.dev
 
-| Feature | merge.dev | Ampersand |
-|---------|-----------|-----------|
-| **Schema Control** | Fixed common model | You define the schema |
-| **Raw Data** | Via `include_remote_data=true` | Always included in every payload |
-| **Remote IDs** | `remote_id` field | `remote_id` in mappedFields |
-| **Timestamps** | `remote_created_at`, `remote_updated_at` | Same, map from provider fields |
-| **Custom Fields** | Via remote_data or field mappings | Direct access in `raw` object |
-| **Provider Coverage** | Limited to common fields | All fields available via `raw` |
-| **Data Delivery** | Pull only | Push (webhooks) + Pull |
+<Steps>
+  <Step title="Understand the persistence model">
+    **Merge.dev:** Stores your customer data; you poll their API  
+    **Ampersand:** Streams data to your webhooks; you store it
+    
+    Set up webhook endpoints and decide on your storage strategy (database, warehouse, etc.)
+  </Step>
 
-## Best practices
-
-<AccordionGroup>
-  <Accordion title="Always map remote_ fields" defaultOpen>
-    Include `remote_id`, `remote_created_at`, and `remote_updated_at` in your schema for proper tracking and syncing.
-  </Accordion>
+  <Step title="Use compatible templates">
+    ```bash
+    git clone https://github.com/amp-labs/samples.git
+    cd samples/unifiedCRM  # or unifiedTicketing
+    amp deploy --project=my-project
+    ```
+  </Step>
   
-  <Accordion title="Use raw for provider-specific logic">
-    Access custom or unmapped fields via the `raw` object without modifying your unified schema.
-  </Accordion>
+  <Step title="Update webhook handlers">
+    ```javascript
+    // merge.dev: Poll after webhook notification
+    app.post('/merge-webhook', async (req, res) => {
+      const contacts = await merge.crm.contacts.list({
+        modified_after: lastSync,
+        include_remote_data: true
+      });
+      await db.contacts.bulkUpsert(contacts);
+      res.sendStatus(200);
+    });
+    
+    // Ampersand: Data arrives in webhook
+    app.post('/webhook/contacts', async (req, res) => {
+      const { mappedFields, raw } = req.body.result;
+      await db.contacts.upsert({
+        ...mappedFields,
+        providerData: raw
+      });
+      res.sendStatus(200);
+    });
+    ```
+  </Step>
 
-  <Accordion title="Start with core fields">
-    Begin with fields that exist across all your target providers, then add provider-specific fields as needed.
-  </Accordion>
-  
-  <Accordion title="Use consistent naming">
-    Establish naming conventions early (e.g., `snake_case` for unified fields).
-  </Accordion>
-  
-  <Accordion title="Handle missing fields gracefully">
-    Use optional fields for data that might not exist in all providers.
-  </Accordion>
-</AccordionGroup>
+  <Step title="Add real-time with subscribe actions">
+    ```yaml
+    subscribe:
+      objects:
+        - objectName: contact
+          inheritFieldsAndMapping: true
+          updateEvent:
+            enabled: always
+            requiredWatchFields:
+              - email
+              - status
+    ```
+    
+    Handle events in your webhook:
+    ```javascript
+    const { subscribeEventType, mappedFields } = req.body.result[0];
+    
+    if (subscribeEventType === 'update' && mappedFields.status === 'closed-won') {
+      await triggerSalesWorkflow(mappedFields);
+    }
+    ```
+  </Step>
+</Steps>
 
 ## Complete examples
-
-View full working examples in our samples repository:
 
 <CardGroup cols={2}>
   <Card 
@@ -260,77 +323,10 @@ View full working examples in our samples repository:
   </Card>
 </CardGroup>
 
-## Migration from merge.dev
-
-<Steps>
-  <Step title="Use compatible templates">
-    Start with our merge.dev-compatible templates:
-    ```bash
-    git clone https://github.com/amp-labs/samples.git
-    cd samples
-
-    # CRM template
-    cd unifiedCRM
-    amp deploy --project=my-project
-    
-    # Ticketing template
-    cd unifiedTicketing
-    amp deploy --project=my-project
-    ```
-  </Step>
-  
-  <Step title="Update Your Code">
-    Ampersand provides both mapped and raw data in every payload:
-    ```javascript
-    // merge.dev: Separate calls for mapped vs raw data
-    const contacts = await merge.crm.contacts.list()
-    const contactsWithRaw = await merge.crm.contacts.list({ 
-      include_remote_data: true 
-    })
-    
-    // Ampersand: Everything in one webhook payload
-    app.post('/webhook/contacts', (req, res) => {
-      const { mappedFields, raw } = req.body.result
-      
-      // Use unified fields
-      console.log(mappedFields.name, mappedFields.remote_id)
-      
-      // Access provider-specific fields
-      console.log(raw.CustomField__c)
-      
-      res.sendStatus(200)
-    })
-    ```
-  </Step>
-  
-  <Step title="Map remote_ fields">
-    Always map the provider's ID and timestamp fields:
-    ```yaml
-    requiredFields:
-      - fieldName: id              # Salesforce
-        mapToName: remote_id
-      - fieldName: createddate
-        mapToName: remote_created_at
-      - fieldName: lastmodifieddate
-        mapToName: remote_updated_at
-      - fieldName: name
-        mapToName: name
-    ```
-  </Step>
-
-  <Step title="Customize gradually">
-    Add provider-specific fields as needed without changing your schema:
-    ```javascript
-    // Provider-specific logic using raw data
-    if (provider === 'salesforce' && raw.AccountNumber) {
-      // Handle Salesforce-specific field
-    }
-    ```
-  </Step>
-</Steps>
-
 ## Related resources
 
 - [Object and Field Mapping](/object-and-field-mapping) - Technical details on mapping configuration
-- [Read Actions](/read-actions) - How to read data from unified objects
-- [Write Actions](/write-actions) - Writing data back through unified mappings
+- [Read Actions](/read-actions) - Scheduled data syncs and backfills
+- [Subscribe Actions](/subscribe-actions) - Real-time event subscriptions
+- [Write Actions](/write-actions) - Writing data back to providers
+- [Destinations](/destinations) - Configuring webhook destinations
