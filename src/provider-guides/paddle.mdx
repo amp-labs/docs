@@ -1,38 +1,70 @@
 ---
 title: Paddle
 ---
+
 ## What's supported
 
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental reading is only supported for `transactions`. For all other objects, a full read of the Paddle instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.paddle.com`.
+
+### Supported objects
+The Paddle connector supports reading from the following objects:
+
+
+- [adjustments](https://developer.paddle.com/api-reference/adjustments/list-adjustments)
+- [client-tokens](https://developer.paddle.com/api-reference/client-tokens/list-client-tokens)
+- [customers](https://developer.paddle.com/api-reference/customers/list-customers)
+- [discount-groups](https://developer.paddle.com/api-reference/discounts/list-discount-groups)
+- [discounts](https://developer.paddle.com/api-reference/discounts/list-discounts)
+- [event-types](https://developer.paddle.com/api-reference/events/list-event-types)
+- [events](https://developer.paddle.com/api-reference/events/list-events)
+- [notification-settings](https://developer.paddle.com/api-reference/notifications/list-notification-settings)
+- [notifications](https://developer.paddle.com/api-reference/notifications/list-notifications)
+- [prices](https://developer.paddle.com/api-reference/prices/list-prices)
+- [products](https://developer.paddle.com/api-reference/products/list-products)
+- [reports](https://developer.paddle.com/api-reference/reports/list-reports)
+- [simulation-types](https://developer.paddle.com/api-reference/simulations/list-simulation-types)
+- [simulations](https://developer.paddle.com/api-reference/simulations/list-simulations)
+- [subscriptions](https://developer.paddle.com/api-reference/subscriptions/list-subscriptions)
+- [transactions](https://developer.paddle.com/api-reference/transactions/list-transactions)
+
+The Paddle connector supports writing to the following objects:
+
+- [adjustments](https://developer.paddle.com/api-reference/adjustments/create-adjustment)
+- [client-tokens](https://developer.paddle.com/api-reference/client-tokens/create-client-token)
+- [customers](https://developer.paddle.com/api-reference/customers/create-customer)
+- [discount-groups](https://developer.paddle.com/api-reference/discounts/create-discount-group)
+- [discounts](https://developer.paddle.com/api-reference/discounts/create-discount)
+- [notification-settings](https://developer.paddle.com/api-reference/notifications/create-notification-setting)
+- [prices](https://developer.paddle.com/api-reference/prices/create-price)
+- [products](https://developer.paddle.com/api-reference/products/create-product)
+- [reports](https://developer.paddle.com/api-reference/reports/create-report)
+- [simulations](https://developer.paddle.com/api-reference/simulations/create-simulation)
+- [transactions](https://developer.paddle.com/api-reference/transactions/create-transaction)
 
 ### Example integration
 
-To define an integration for Paddle, create a manifest file that looks like this:
+For an example manifest file of an Paddle integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/paddle/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: paddle-integration
-    displayName: My Paddle Integration
-    provider: paddle
-    proxy:
-      enabled: true
-```
+
+## Creating an API key
+
+[Click here](https://developer.paddle.com/api-reference/about/authentication) for more information about generating an API key for Paddle.
 
 ## Using the connector
 
 This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Paddle:
-- Create a manifest file like the example above.
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/paddle/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.paddle.com`.
-
-## Creating an API key for Paddle
-
-[Click here](https://developer.paddle.com/api-reference/about/authentication) for more information about generating an API key for Paddle. The UI components will display this link, so that your users can successfully create API keys.
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.

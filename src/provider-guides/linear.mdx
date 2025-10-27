@@ -71,17 +71,11 @@ Follow the steps below to create a Linear app.
 
 4. Click **New OAuth Application**.
 
-5. Upload an **icon** for the application with a minimum resolution of 256x256 pixels.
+5. Enter the Application name, Developer name and Developer URL in the respective sections.
 
-6. Enter the Application name, Developer name, Developer URL and Description in the respective sections.
+6. Enter the Ampersand Callback URLs: `https://api.withampersand.com/callbacks/v1/oauth` in the **Callback URLs** section.
 
-7. Enter the Ampersand Callback URLs: `https://api.withampersand.com/callbacks/v1/oauth` in the **Callback URLs** section.
-
-8. Enter the github username in the **GitHub username** section.
-
-9. Enable the **Public** option which leads to allow a application to be installed by other workspaces.
-
-10. Enable the **Webhooks** option to receive HTTP push notifications on a specified URL and then click **Create** button.
+7. [Optional] Enable the **Public** option if you wish to allow this app to be installed by other workspaces.
 
    ![Linear OAuth Creation](/images/provider-guides/Linear_OAuth.gif)
 
@@ -97,10 +91,13 @@ Follow the steps below to create a Linear app.
 
 4. Select Linear from the **Provider** list.
 
-5. Enter the previously obtained Client ID in the **Client ID** field, the Client Secret in the **Client Secret** field and scopes in the **Scopes** field.
+5. Enter the previously obtained Client ID in the **Client ID** field and the Client Secret in the **Client Secret** field.
+
+6. For Scopes you can start with `write` (_which grants the app write access to all objects_) or use more targeted scopes `issues:create` or `comments:create`.
+
+<Note>Check [Linear's documentation](https://linear.app/developers/oauth-2-0-authentication#redirect-user-access-requests-to-linear) for more details.</Note>
 
    ![Ampersand Integration](/images/provider-guides/linear.gif)
-
 
 To start integrating with Linear:
 - Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/linear/amp.yaml).

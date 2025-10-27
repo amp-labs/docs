@@ -195,6 +195,10 @@ const baseConfig = {
       destination: "/proxy-actions"
     },
     {
+      "source": "/defining-integrations",
+      "destination": "/quickstart"
+    },
+    {
       source: "/define-integrations/read-actions",
       destination: "/read-actions"
     },
@@ -264,6 +268,7 @@ const baseConfig = {
           pages: [
             "destinations/overview",
             "destinations/webhooks",
+            "destinations/kinesis",
           ]
         },
         {
@@ -274,6 +279,7 @@ const baseConfig = {
             "provider-guides/aha",
             "provider-guides/aircall",
             "provider-guides/airtable",
+            "provider-guides/amplitude",
             "provider-guides/anthropic",
             "provider-guides/apollo",
             "provider-guides/asana",
@@ -368,12 +374,14 @@ const baseConfig = {
             "provider-guides/linear",
             "provider-guides/linkedin",
             "provider-guides/livestorm",
+            "provider-guides/loxo",
             "provider-guides/mailgun",
             "provider-guides/marketo",
             "provider-guides/meta",
             "provider-guides/microsoft",
             "provider-guides/miro",
             "provider-guides/mixmax",
+            "provider-guides/mixpanel",
             "provider-guides/monday",
             "provider-guides/mural",
             "provider-guides/netsuite",
@@ -391,6 +399,7 @@ const baseConfig = {
             "provider-guides/podium",
             "provider-guides/productBoard",
             "provider-guides/quickbooks",
+            "provider-guides/ramp",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
