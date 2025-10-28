@@ -1,0 +1,108 @@
+---
+title: Receiving webhooks
+---
+
+## Notification webhook messages
+
+Webhook messages include `notificationType` and `data` fields. The `data` structure varies by event type.
+
+<AccordionGroup>
+<Accordion title="Installation events (created, updated, deleted)">
+```json
+{
+  "notificationType": "installation.created",
+  "data": {
+    "projectId": "uuid",
+    "integrationId": "uuid",
+    "integrationName": "Salesforce Integration",
+    "installationId": "uuid",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "config": {
+      "read": {
+        "objects": {
+          "Account": {
+            "objectName": "Account",
+            "destination": "my-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Note: `config` contains the complete installation configuration object including read, write, subscribe, and proxy settings. `installation.updated` includes an additional `lastConfig` field with the previous configuration.
+</Accordion>
+
+<Accordion title="read.backfill.done">
+```json
+{
+  "notificationType": "read.backfill.done",
+  "data": {
+    "projectId": "uuid",
+    "integrationId": "uuid",
+    "integrationName": "Salesforce Integration",
+    "installationId": "uuid",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "objectName": "Account"
+  }
+}
+```
+</Accordion>
+
+<Accordion title="read.schedule.paused">
+```json
+{
+  "notificationType": "read.schedule.paused",
+  "data": {
+    "projectId": "uuid",
+    "integrationId": "uuid",
+    "integrationName": "Salesforce Integration",
+    "installationId": "uuid",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "config": {
+      "read": {
+        "objects": {
+          "Account": {
+            "objectName": "Account",
+            "destination": "my-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    },
+    "error": "Error message if applicable"
+  }
+}
+```
+
+Note: `config` contains the complete installation configuration object including read, write, subscribe, and proxy settings.
+</Accordion>
+
+<Accordion title="connection.created">
+```json
+{
+  "notificationType": "connection.created",
+  "data": {
+    "projectId": "uuid",
+    "connectionId": "uuid",
+    "provider": "salesforce",
+    "userId": "uuid"
+  }
+}
+```
+</Accordion>
+</AccordionGroup>
+
+## Webhook signature verification
+
+Every notification webhook includes a cryptographic signature in the `svix-signature` header. This signature lets you confirm that the payload is authentic and unchanged when it reaches your system.
+
+Ampersand uses Svix to deliver notification webhooks. To verify a webhook, use the Svix webhook signing secret with any of the Svix libraries to verify the `svix-signature` header. You can find more information on how to verify webhooks [here](https://docs.svix.com/receiving/verifying-payloads/how).
+

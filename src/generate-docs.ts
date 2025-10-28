@@ -271,6 +271,13 @@ const baseConfig = {
           ]
         },
         {
+          group: "Notifications",
+          pages: [
+            "notifications/overview",
+            "notifications/receiving-webhooks"
+          ]
+        },
+        {
           group: "Provider guides",
           pages: [
             "provider-guides/overview",
