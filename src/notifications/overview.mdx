@@ -1,0 +1,116 @@
+---
+title: Overview
+---
+
+Ampersand notifications deliver real-time webhooks about important lifecycle changes in your project. Track when customers install, update, or delete integrations, when backfills complete, and when sync issues occur.
+
+## Why use notifications?
+
+<AccordionGroup>
+  <Accordion title="Track customer installations">
+    Monitor when new customers install your integration and when existing customers make configuration changes.
+  </Accordion>
+  <Accordion title="Monitor sync health">
+    Get alerted immediately when data syncs fail or are paused, enabling proactive troubleshooting.
+  </Accordion>
+  <Accordion title="Process data efficiently">
+    Know exactly when backfills complete so you can start processing historical data without polling.
+  </Accordion>
+</AccordionGroup>
+
+## How notifications work
+
+Notifications use four components that give you fine-grained control over which events reach which webhooks:
+
+1. **Notification Targets** → Your webhook endpoints
+2. **Notification Topics** → Group events with targets
+3. **Event-Topic Routes** → Select which events go to each topic
+4. **Topic-Target Routes** → Route topics to specific webhooks
+
+<Note>
+Events are routed: Event → Topic → Target. This lets you send different event types to different webhooks or group multiple events to a single webhook.
+</Note>
+
+## Available events
+
+Ampersand supports the following notification event types:
+
+- **`installation.created`**: Fires when a customer installs your integration to their SaaS instance
+- **`installation.updated`**: Fires when a customer modifies their integration configuration (e.g., changes field mappings)
+- **`installation.deleted`**: Fires when a customer uninstalls your integration from their SaaS instance
+- **`read.backfill.done`**: Fires when historical data sync completes so you know backfill data is ready to process
+- **`read.schedule.paused`**: Fires when a scheduled data sync is paused, often due to authentication issues or errors
+- **`connection.created`**: Fires when a new OAuth connection is established with a SaaS provider
+
+## Setting up notifications
+
+There are two ways to set up notifications:
+
+- **[Using the Dashboard](#setup-via-dashboard)**: Visual interface for quick setup
+- **[Using the API](#setup-via-api)**: Programmatic setup for automation and integration
+
+### Setup via Dashboard
+
+1. **Create notification targets**
+   - Go to [Notifications](https://dashboard.withampersand.com/projects/_/notifications/)
+   - Click **Manage Targets**
+   - Click **New Target** and configure:
+     - **Label**: A descriptive name (e.g., "production-alerts")
+     - **Webhook URL**: Your webhook endpoint URL
+   - Click **Create Target**
+
+2. **Create notification topics**
+   - Click **New Topic**
+   - Configure your topic:
+     - **Label**: A descriptive name (e.g., "installation-events")
+     - **Event types**: Select the events this topic should receive
+     - **Targets**: Select which webhook targets should receive notifications
+   - Click **Create Topic**
+
+### Setup via API
+
+See the [API Reference](/reference/notification/create-a-notification-target) for complete endpoint documentation.
+
+<Accordion title="1. Create a notification target">
+```bash
+POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/targets
+{
+  "label": "target-name",
+  "type": "webhook",
+  "provider": "svix",
+  "metadata": {
+    "url": "https://your-webhook.com"
+  }
+}
+```
+</Accordion>
+
+<Accordion title="2. Create a notification topic">
+```bash
+POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/topics
+{
+  "label": "topic-name"
+}
+```
+</Accordion>
+
+<Accordion title="3. Route events to topics">
+```bash
+POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/event-topic-routes
+{
+  "notificationTopicId": "your-topic-id",
+  "eventType": "installation.created"
+}
+```
+</Accordion>
+
+<Accordion title="4. Route topics to targets">
+```bash
+POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/topic-target-routes
+{
+  "notificationTopicId": "your-topic-id",
+  "notificationTargetId": "your-target-id"
+}
+```
+</Accordion>
+
