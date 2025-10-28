@@ -1,0 +1,45 @@
+---
+title: Greenhouse (Job board)
+---
+## What's Supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://boards-api.greenhouse.io`.
+
+### Example integration
+
+To define an integration for Greenhouse (Job board), create a manifest file that looks like this:
+
+```YAML
+#amp.yaml
+specVersion: 1.0.0
+integrations: 
+  - name: greenhouseJobBoard-proxy
+    displayName: Greenhouse (Job board)
+    provider: greenhouseJobBoard
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To integrate with Greenhouse (Job board):
+- Create a manifest file similar to the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for an API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key provided by the customer. Please note that this connector's base URL is `https://boards-api.greenhouse.io`.
+
+## Creating an API key for Greenhouse (Job board)
+
+1. Log in to your [Greenhouse (Job board) account](https://app8.greenhouse.io/users/sign_in). 
+2. Click the **Configure** icon on your navigation bar, then click **Dev Center**.
+3. Click **API Credential Management**.
+4. Click **Create new API credentials**. A pop-up window will appear.  
+5. Choose **API Type** as **Job Board**, and select any partner in the **Partner** field.  
+6. Add a description and click **Create**. An API key will be generated.
+
+![Generate Token](/images/provider-guides/greenhouseJobBoard.gif)
