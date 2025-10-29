@@ -6,24 +6,73 @@ title: Loxo
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `email_tracking`, `person_events` and `sms` currently. For all other objects, a full read of the Loxo instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://{{.domain}}/api/{{.agency_slug}}`.
-  - To get the **domain**, log in to your Loxo account and check the URL in your browser’s address bar. It usually follows this pattern: `https://[your-domain-here]`.
-  - To get the **agency_slug**, go to **Settings > General** under **Workspace**. In the **Agency Info** section, look at the **Resume Forwarding Address** — the part before the @ symbol is the **agency_slug** value.
+> **Note:**
+> - To get the **domain**, log in to your Loxo account and check the URL in your browser’s address bar. It usually follows this pattern: `https://[your-domain-here]`.
+> - To get the **agency_slug**, go to **Settings > General** under **Workspace**. In the **Agency Info** section, look at the **Resume Forwarding Address** — the part before the @ symbol is the **agency_slug** value.
+
+### Supported Objects
+The Loxo connector supports writing and reading from the following objects:
+- [activity_types](https://loxo.readme.io/reference/activity_typesindex) (read)
+- [address_types](https://loxo.readme.io/reference/address_typesindex) (read)
+- [bonus_payment_types](https://loxo.readme.io/reference/bonus_payment_typesindex) (read)
+- [bonus_types](https://loxo.readme.io/reference/bonus_typesindex) (read)
+- [companies](https://loxo.readme.io/reference/companiescreate) (read, write)
+- [company_global_statuses](https://loxo.readme.io/reference/company_global_statusesindex) (read)
+- [company_types](https://loxo.readme.io/reference/company_typesindex) (read)
+- [compensation_types](https://loxo.readme.io/reference/compensation_typesindex) (read)
+- [countries](https://loxo.readme.io/reference/countriesindex) (read)
+- [currencies](https://loxo.readme.io/reference/currenciesindex) (read)
+- [deal_workflows](https://loxo.readme.io/reference/deal_workflowsindex) (read)
+- [deals](https://loxo.readme.io/reference/dealsindex) (read, write)
+- [disability_statuses](https://loxo.readme.io/reference/disability_statusesindex) (read)
+- [diversity_types](https://loxo.readme.io/reference/diversity_typesindex) (read)
+- [dynamic_fields](https://loxo.readme.io/reference/dynamic_fieldsindex) (read)
+- [education_types](https://loxo.readme.io/reference/education_typesindex) (read)
+- [email_tracking](https://loxo.readme.io/reference/email_trackingindex) (read)
+- [email_types](https://loxo.readme.io/reference/email_typesindex) (read)
+- [equity_types](https://loxo.readme.io/reference/equity_typesindex) (read)
+- [ethnicities](https://loxo.readme.io/reference/ethnicitiesindex) (read)
+- [fee_types](https://loxo.readme.io/reference/fee_typesindex) (read)
+- [form_templates](https://loxo.readme.io/reference/form_templatesindex) (read)
+- [forms](https://loxo.readme.io/reference/formscreate) (read, write)
+- [genders](https://loxo.readme.io/reference/gendersindex) (read)
+- [job_categories](https://loxo.readme.io/reference/job_categoriesindex) (read)
+- [job_contact_types](https://loxo.readme.io/reference/job_contact_typesindex) (read)
+- [job_owner_types](https://loxo.readme.io/reference/job_owner_typesindex) (read)
+- [job_statuses](https://loxo.readme.io/reference/job_statusesindex ) (read)
+- [job_types](https://loxo.readme.io/reference/job_typesindex) (read)
+- [jobs](https://loxo.readme.io/reference/jobscreate) (read, write)
+- [people](https://loxo.readme.io/reference/peoplecreate) (read, write)
+- [person_events](https://loxo.readme.io/reference/person_eventsindex) (read, write)
+- [person_global_statuses](https://loxo.readme.io/reference/person_global_statusesindex) (read)
+- [person_lists](https://loxo.readme.io/reference/person_listsindex) (read)
+- [person_share_field_types](https://loxo.readme.io/reference/person_share_field_typesindex) (read)
+- [person_types](https://loxo.readme.io/reference/person_typesindex) (read)
+- [phone_types](https://loxo.readme.io/reference/phone_typesindex) (read)
+- [placements](https://loxo.readme.io/reference/placementscreate) (read, write)
+- [pronouns](https://loxo.readme.io/reference/pronounsindex) (read)
+- [question_types](https://loxo.readme.io/reference/question_typesindex) (read)
+- [schedule_items](https://loxo.readme.io/reference/schedule_itemsindex) (read)
+- [scorecards](https://loxo.readme.io/reference/scorecardsindex) (read, write)
+- [scorecards/scorecard_recommendation_types](https://loxo.readme.io/reference/scorecard_recommendation_typesindex) (read)
+- [scorecards/scorecard_types](https://loxo.readme.io/reference/scorecard_typesindex) (read)
+- [scorecards/scorecard_templates](https://loxo.readme.io/reference/scorecard_templatescreate) (read, write)
+- [scorecards/scorecard_visibility_types](https://loxo.readme.io/reference/scorecard_visibility_typesindex) (read)
+- [seniority_levels](https://loxo.readme.io/reference/seniority_levelsindex) (read)
+- [sms](https://loxo.readme.io/reference/smsindex) (read, write)
+- [social_profile_types](https://loxo.readme.io/reference/social_profile_typesindex) (read)
+- [source_types](https://loxo.readme.io/reference/source_typescreate) (read, write)
+- [users](https://loxo.readme.io/reference/usersindex) (read)
+- [veteran_statuses](https://loxo.readme.io/reference/veteran_statusesindex) (read)
+- [workflow_stages](https://loxo.readme.io/reference/workflow_stagesindex) (read)
+- [workflows](https://loxo.readme.io/reference/workflowsindex) (read)
 
 ### Example integration
 
-To define an integration for Loxo, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations: 
-  - name: loxo-integration
-    displayName: Loxo
-    provider: loxo
-    proxy:
-      enabled: true
-```
+For an example manifest file of an Loxo integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/loxo/amp.yaml).
 
 ## Using the connector
 
@@ -33,7 +82,10 @@ To integrate with Loxo:
 - Create a manifest file similar to the example above.
 - Deploy it using the [amp CLI](/cli/overview).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for an API key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key provided by the customer. Please note that this connector's base URL is `https://{{.domain}}/api/{{.agency_slug}}`.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 
 ## Creating an API key for Loxo
 
