@@ -11,9 +11,9 @@ With subscribe actions, you'll receive near-instant webhooks as events occur in 
   - It takes 1-2 minutes, and occasionally up to 10 minutes, for the first events to arrive after the initial installation.
 </Note>
 
-## Salesforce subscribe actions
+## Define a subscribe action
 
-To subscribe to an object in Salesforce, you currently need to also have a read action specified for the object. In addition, you need to specify:
+To subscribe to an object, you currently need to also have a read action specified for the object. In addition, you need to specify:
 
 - **objectName:** to indicate which object you'd like to subscribe to. This should match the name of the object in the official documentation for the SaaS API.
 - **destination:** the name of the [destination](/destinations) that you've defined
@@ -27,8 +27,6 @@ You then need to specify the particular events you want to subscribe to. We supp
 
 - **deleteEvent**: triggers when a record is removed from the system.
 
-If you do not already have a Salesforce integration, follow the instructions in the [Salesforce provider guide](/provider-guides/salesforce) to get started.
-
 ### Specify fields to watch
 You can provide fields to watch for update events and specify them in a list.
 
@@ -39,7 +37,7 @@ Here is an example `amp.yaml`
 ```yaml
 specVersion: 1.0.0
 integrations:
-  - name: readWriteSalesforceWithInheritanceMapping
+  - name: subscribeToSalesforce
     provider: salesforce
     subscribe:
       objects:
@@ -156,15 +154,15 @@ integrations:
          # Omit schedule and backfill
 ```
 
-## HubSpot Subscribe actions
+## Special set up for HubSpot
 
 <Note>
   HubSpot subscribe actions cannot notify you of changes to custom fields. There is a workaround that requires additional set up, please contact support@withampersand.com for details.
 </Note>
 
 To enable HubSpot subscribe actions, you will need to:
-- Have a Read Action defined for the object. You can [specify backfill behavior](#specify-backfill-behavior) in the Read Action, to combine backfills with subscribe actions to get a full picture of your customer's HubSpot
-- Make modifications to the HubSpot app
+- Define the subscribe action in your `amp.yaml` file, please refer to the previous section.
+- Make modifications to the HubSpot app.
 
 If you do not yet have a HubSpot app, follow the instructions in the [HubSpot provider guide](/provider-guides/hubspot#creating-a-hubspot-app) to create one. Here are the steps to modify the HubSpot app to enable subscribe actions:
 
