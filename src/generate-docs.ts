@@ -346,7 +346,7 @@ const baseConfig = {
             "provider-guides/gong",
             "provider-guides/google",
             "provider-guides/gorgias",
-            "provider-guides/greenhouseJobBoard",
+            // "provider-guides/greenhouseJobBoard",
             "provider-guides/groove",
             "provider-guides/guru",
             "provider-guides/happyfox",
