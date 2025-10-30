@@ -6,7 +6,57 @@ title: "Jobber"
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Jobber instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.getjobber.com/api/graphql`.
+
+### Supported Objects
+The Jobber connector supports reading from the following objects:
+- appAlerts
+- apps
+- capitalLoans
+- clientEmails
+- clientPhones
+- clients
+- expenses
+- invoices
+- jobs
+- paymentsRecords
+- payoutRecords
+- products
+- properties
+- quotes
+- requestSettingsCollection
+- requests
+- scheduledItems
+- similarClients
+- tasks
+- taxRates
+- timeSheetEntries
+- users
+- vehicles
+- visits
+
+The Jobber connector supports writing to the following objects:
+- clients
+- events
+- expenses
+- jobs
+- productsAndServices
+- quotes
+- requests
+- taxes
+- taxGroups
+- vehicles
+
+<Note>
+For detailed information about available objects, refer to the [Jobber Developer Documentation](https://developer.getjobber.com/docs/).
+The full list of read and write objects can be retrieved after logging in. To explore them, go to "Manage Apps", click "Actions" from the respective app, and then click "Test in GraphiQL".
+</Note>
+
+### Example integration
+
+For an example manifest file of an Jobber integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/jobber/amp.yaml).
 
 ## Before you get started
 
@@ -57,5 +107,14 @@ Upon creation, the app will display the necessary credentials: **Client ID** and
 5. Enter the previously obtained **Client ID** and **Client Secret**.
 6. Click **Save changes**.
 
+## Using the connector
 
-For detailed information about available queries, mutations, and the complete schema, refer to the [Jobber Developer Documentation](https://developer.getjobber.com/docs/) and use their GraphiQL tool for testing.
+To start integrating with Jobber:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/jobber/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
