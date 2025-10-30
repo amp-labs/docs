@@ -8,15 +8,13 @@ If you want to be notified when there are changes in your customer's SaaS instan
 
 ## How notifications work
 
-Notifications use four components that give you fine-grained control over which events reach which webhooks:
+Notifications use two main components that give you fine-grained control over which events reach which webhooks:
 
-1. **Notification Targets** → Your webhook endpoints
-2. **Notification Topics** → Group events with topics
-3. **Event-Topic Routes** → Select which events go to each topic
-4. **Topic-Target Routes** → Route topics to specific webhooks
+1. **Notification Targets** → Your webhook endpoints where notifications are delivered
+2. **Notification Topics** → Groups of events that can be routed to specific targets
 
 <Note>
-Events are routed: Event → Topic → Target. This lets you send different event types to different webhooks or group multiple events to a single webhook.
+When you create a topic, you select which event types it should receive and which targets should receive notifications. Events are routed: Event → Topic → Target. This lets you send different event types to different webhooks or group multiple events to a single webhook.
 </Note>
 
 ## Available events
@@ -34,8 +32,8 @@ Ampersand supports the following notification event types:
 
 There are two ways to set up notifications:
 
-- **[Using the Dashboard](#setup-via-dashboard)**: Visual interface for quick setup
-- **[Using the API](#setup-via-api)**: Programmatic setup for automation and integration
+- **[Using the Dashboard](#set-up-via-dashboard)**: Visual interface for quick setup
+- **[Using the API](#set-up-via-api)**: Programmatic setup for automation and integration
 
 ### Set up via Dashboard
 
@@ -56,6 +54,8 @@ There are two ways to set up notifications:
    - Click **Create Topic**
 
 ### Set up via API
+
+When using the API, you need to create routes explicitly to connect events to topics and topics to targets. The dashboard handles this automatically when you create a topic.
 
 See the [API Reference](/reference/notification/create-a-notification-target) for complete endpoint documentation.
 
@@ -82,7 +82,9 @@ POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/t
 ```
 </Accordion>
 
-<Accordion title="3. Route events to topics">
+<Accordion title="3. Create event-topic routes">
+**Event-Topic Routes** connect specific event types to topics. This determines which events are sent to each topic.
+
 ```bash
 POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/event-topic-routes
 {
@@ -92,7 +94,9 @@ POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/e
 ```
 </Accordion>
 
-<Accordion title="4. Route topics to targets">
+<Accordion title="4. Create topic-target routes">
+**Topic-Target Routes** connect topics to webhook targets. This determines which targets receive notifications for each topic.
+
 ```bash
 POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/topic-target-routes
 {
