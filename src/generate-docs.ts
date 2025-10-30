@@ -274,7 +274,7 @@ const baseConfig = {
           group: "Notifications",
           pages: [
             "notifications/overview",
-            "notifications/receiving-webhooks"
+            "notifications/receiving-notifications"
           ]
         },
         {
