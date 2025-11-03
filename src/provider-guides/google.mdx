@@ -14,9 +14,11 @@ This connector supports:
 - [Proxy Actions](/proxy-actions), using the base URL `https://www.googleapis.com`.
 
 Additionally, the Google **Calendar** module supports:
-- [Read Actions](/read-actions), including full historical backfill. Please note that incremental
-read **is only supported for the Calendar “Events” object**; otherwise, a full read of the Google instance will be performed for each scheduled run.
+- [Read Actions](/read-actions), including historical backfill. Please note that incremental
+read **is only supported for the Calendar "Events" object**; otherwise, a full read of the Google instance will be performed for each scheduled run.
 - [Write Actions](/write-actions).
+
+> **Important Note on Events Backfill**: The `events` object has a 28-day limitation for historic backfill and does not support fullHistory. When syncing events data, ensure your backfill period does not exceed 28 days.
 
 ### Supported Calendar objects
 
