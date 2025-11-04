@@ -2,15 +2,20 @@
 title: "Zoho"
 ---
 
-## What's Supported
+The Zoho connector supports the following Zoho products:
+
+- Zoho CRM (default)
+- Zoho Desk
+
+## Zoho CRM
 
 ### Supported Actions
 
 This connector supports:
 
-- [Read Actions](/read-actions), including full historic backfill and incremental read.
-- [Write Actions](/write-actions).
-- [Proxy Actions](/proxy-actions), using the base URL `https://www.zohoapis.com`.
+- [Read Actions](/read-actions), including full historic backfill and incremental read
+- [Write Actions](/write-actions)
+- [Proxy Actions](/proxy-actions), using the base URL `https://www.zohoapis.com`
 
 ### Supported Objects
 
@@ -28,7 +33,7 @@ The Zoho connector allows you to read from and write to these objects:
 - Solutions
 - Products
 - Vendors
-- Price
+- Price 
 - Books
 - Quotes
 - Sales Orders
@@ -38,17 +43,65 @@ The Zoho connector allows you to read from and write to these objects:
 - Appointments Rescheduled History
 - Services
 - Custom
-- users
+- Users
 
-### Example integration
+## Zoho Desk
 
-For an example manifest file of a Zoho integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/zoho/amp.yaml).
+### Supported Actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill and incremental read for most objects.
+- [Write Actions](/write-actions)
+
+### Supported Objects
+
+The Zoho connector allows you to read from and write to these objects:
+
+- [organizations](https://desk.zoho.com/DeskAPIDocument#Organizations#Organizations_Getallorganizations)
+- [agents](https://desk.zoho.com/DeskAPIDocument#Agents#Agents_Listagents)
+- [profiles](https://desk.zoho.com/DeskAPIDocument#Profiles#Profiles_Listprofiles)
+- [roles](https://desk.zoho.com/DeskAPIDocument#Roles#Roles_Listroles)
+- [departments](https://desk.zoho.com/DeskAPIDocument#Departments#Departments_Listdepartments)
+- [channels](https://desk.zoho.com/DeskAPIDocument#Channels#Channels_Listconfiguredchannels)
+- [tickets](https://desk.zoho.com/DeskAPIDocument#Tickets)
+- [contacts](https://desk.zoho.com/DeskAPIDocument#Contacts#Contacts_Listcontacts)
+- [accounts](https://desk.zoho.com/DeskAPIDocument#Accounts#Accounts_Listaccounts)
+- [tasks](https://desk.zoho.com/DeskAPIDocument#Tasks#Tasks_Gettask)
+- [products](https://desk.zoho.com/DeskAPIDocument#Products#Products_Listproducts)
+- [helpCenters](https://desk.zoho.com/DeskAPIDocument#HelpCenter#HelpCenter_Listhelpcenters)
+- [users](https://desk.zoho.com/DeskAPIDocument#Users#Users_Listhelpcenterusers)
+- [labels](https://desk.zoho.com/DeskAPIDocument#Labels#Labels_Listlabels)
+- [groups](https://desk.zoho.com/DeskAPIDocument#Groups#Groups_Listgroups)
+- [articles](https://desk.zoho.com/DeskAPIDocument#Articles#Articles_Listarticles)
+- [articleFeedbacks](https://desk.zoho.com/DeskAPIDocument#ArticleFeedback#ArticleFeedback_Listfeedbackcomments)
+- [kbRootCategories](https://desk.zoho.com/DeskAPIDocument#KBCategory#KBCategory_Listrootcategories)
+- [contracts](https://desk.zoho.com/DeskAPIDocument#Contracts#Contracts_Listallcontracts)
+- [ticketTemplates](https://desk.zoho.com/DeskAPIDocument#TicketTemplates#TicketTemplates_Listtickettemplates)
+- [calls](https://desk.zoho.com/DeskAPIDocument#Calls#Calls_Listcalls)
+- [events](https://desk.zoho.com/DeskAPIDocument#Events#Events_Listevents)
+- [organizationModules](https://desk.zoho.com/DeskAPIDocument#Modules#Modules_GetAllModules)
+- [languages](https://desk.zoho.com/DeskAPIDocument#Locales#Locales_Listalllanguages)
+- [countries](https://desk.zoho.com/DeskAPIDocument#Locales#Locales_Listallcountries)
+- [timeZones](https://desk.zoho.com/DeskAPIDocument#Locales#Locales_Listalltimezones)
+- [businessHours](https://desk.zoho.com/DeskAPIDocument#Businesshours#Businesshours_Listbusinesshoursets)
+- [domains](https://desk.zoho.com/DeskAPIDocument#DomainMapping#DomainMapping_Listdomains)
+- [holidayList](https://desk.zoho.com/DeskAPIDocument#HolidayList#HolidayList_Listholidaylists)
+- [im/channels](https://desk.zoho.com/DeskAPIDocument#IMChannel#IMChannel_ListChannels)
+- [im/sessions](https://desk.zoho.com/DeskAPIDocument#IMSession#IMSession_ListSessions)
+
+### Example Integration
+
+For an example manifest file of a Zoho integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/zoho).
 
 ## Before You Get Started
 
-To connect _Zoho_ with _Ampersand_, you will need [a Zoho Account](https://www.zoho.com/crm/).
+To connect Zoho with Ampersand, you will need an account in an appropriate Zoho product:
 
-Once your account is created, you'll need to configure an app in _Zoho_ and obtain the following credentials from your app:
+- [Zoho CRM Account](https://www.zoho.com/crm/)
+- [Zoho Desk Account](https://www.zoho.com/desk/)
+
+Once your account is created, you'll need to configure an app in Zoho and obtain the following credentials from your app:
 
 - Client ID
 - Client Secret
@@ -58,49 +111,51 @@ You will use these credentials to connect your application to Ampersand.
 
 ### Create a Zoho Account
 
-Here's how you can sign up for a **Zoho** account:
+Go to the particular Zoho product sign-up page and create an account:
 
-- Go to the [Zoho Sign Up page](https://www.zoho.com/crm/signup.html) and create an account.
+- [Zoho CRM Sign Up page](https://www.zoho.com/crm/signup.html)
+- [Zoho Desk Sign Up page](https://www.zoho.com/desk/signup.html)
 
 ### Creating a Zoho App
 
-Follow the steps below to create a _Zoho_ app and add the Ampersand redirect URL in the app:
+Follow the steps below to create a Zoho app and add the Ampersand redirect URL:
 
-1. Log in the [Zoho API Console Account](https://api-console.zoho.com/) using your Zoho account.
+1. Log in to the [Zoho API Console Account](https://api-console.zoho.com/) using your Zoho account.
 2. Click **Get Started** to create your first app. If you have already created an application, click **Add Client** to create a new app.
 3. Select **Server-based Applications**.
 4. Enter the following details:
-   1. **Client Name**: Name of the client app.
-   2. **Homepage URL**: The home page URL of your app.
-   3. **Authorized Redirect URIs**: The Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+   - **Client Name**: Name of the client app
+   - **Homepage URL**: The home page URL of your app
+   - **Authorized Redirect URIs**: The Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`
 5. Click **Create**.
 
 You'll see the details of your newly created application. Note the **Client ID** and **Client Secret** keys as they are necessary for connecting your app to Ampersand.
 
 ![Alt text](/images/provider-guides/8dcf7de-zohocrm1.gif)
 
-6. Select the checkbox Use the same OAuth credentials for all data centers in the settings tab. Also toggle all regions where you expect to have customers.
+6. Select the checkbox "Use the same OAuth credentials for all data centers" in the settings tab. Also toggle all regions where you expect to have customers.
    ![Toggle regions](/images/provider-guides/zoho-region.png)
 
 ## Add Your Zoho App Info to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
-
 2. Select the project where you want to create a Zoho integration.
-
    ![Alt text](/images/provider-guides/dd47b7a-Ampersand.png)
-
 3. Select **Provider apps**.
+4. Select **Zoho** from the **Provider** list.
+5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
+6. In the **Scopes** field, enter the list of desired scopes for your integration. We recommend the following scopes. If you want more granular scopes, please refer to the [Zoho documentation](https://www.zoho.com/accounts/protocol/oauth/scope.html) for syntax.
 
-4. Select _Zoho_ from the **Provider** list.
-
-5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
-
-6. In the **Scopes** field, enter the list of desired scopes for your integration. We recommend the following two scopes. If you want more granular scopes, please refer to the [Zoho documentation](https://www.zoho.com/accounts/protocol/oauth/scope.html) for syntax. 
-
+**Zoho CRM:**
 ```
 ZohoCRM.modules.ALL
 ZohoCRM.settings.ALL
+```
+
+**Zoho Desk:**
+```
+Desk.basic.READ 
+Desk.settings.ALL 
 ```
 
 7. Click **Save changes**.
@@ -111,18 +166,12 @@ The [Zoho Customer Guide](/customer-guides/zoho) can be shared with your custome
 
 ## List on Zoho Marketplace
 
-The final step, which is optional, is to list your application on the Zoho Marketplace.
-Follow the steps below to list your application.
+The final step, which is optional, is to list your application on the Zoho Marketplace. Follow the steps below to list your application:
 
-1.  Sign up and create a company profile on the [Zoho Marketplace](https://marketplace.zoho.com/home).
-
-2.  Click on the profile icon on the home page and select **Partner Console**.
-
-3.  Select **Company Profile** on the left panel.
-
-4.  Provide your company details. Note that these are your own company's details, not Ampersand's.
-    ![Zoho marketplace](/images/provider-guides/zoho-cp.png)
-
-5.  After a successful registration, go to **Apps** on the left sidebar and click **Submit App**.
-
-6.  Complete the process by adding your app's details and submitting it.
+1. Sign up and create a company profile on the [Zoho Marketplace](https://marketplace.zoho.com/home).
+2. Click on the profile icon on the home page and select **Partner Console**.
+3. Select **Company Profile** on the left panel.
+4. Provide your company details. Note that these are your own company's details, not Ampersand's.
+   ![Zoho marketplace](/images/provider-guides/zoho-cp.png)
+5. After successful registration, go to **Apps** on the left sidebar and click **Submit App**.
+6. Complete the process by adding your app's details and submitting it.
