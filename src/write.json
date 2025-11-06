@@ -66,7 +66,9 @@
                     "description": "The type of write operation. The only supported types currently are create and update.",
                     "enum": [
                       "create",
-                      "update"
+                      "update",
+                      "batchCreate",
+                      "batchUpdate"
                     ],
                     "example": "create"
                   },
@@ -119,6 +121,16 @@
                             "associationTypeId": 279
                           }
                         ]
+                      }
+                    ]
+                  },
+                  "records": {
+                    "type": "array",
+                    "description": "The records to write",
+                    "example": [
+                      {
+                        "email": "david@withampersand.com",
+                        "warmthScore": "ready-for-close"
                       }
                     ]
                   }
@@ -431,7 +443,9 @@
             "description": "The type of write operation. The only supported types currently are create and update.",
             "enum": [
               "create",
-              "update"
+              "update",
+              "batchCreate",
+              "batchUpdate"
             ],
             "example": "create"
           },
@@ -484,6 +498,16 @@
                     "associationTypeId": 279
                   }
                 ]
+              }
+            ]
+          },
+          "records": {
+            "type": "array",
+            "description": "The records to write",
+            "example": [
+              {
+                "email": "david@withampersand.com",
+                "warmthScore": "ready-for-close"
               }
             ]
           }
