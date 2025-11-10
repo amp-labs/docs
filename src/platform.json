@@ -58820,10 +58820,10 @@
         }
       }
     },
-    "/projects/{projectIdOrName}/notifications/topic-destination-routes": {
+    "/projects/{projectIdOrName}/topic-destination-routes": {
       "post": {
-        "summary": "Create a notification topic-destination route",
-        "description": "Create a new route that connects a notification topic to a destination for notification delivery.",
+        "summary": "Create a topic destination route",
+        "description": "Create a new route that connects a topic to a destination.",
         "operationId": "createTopicDestinationRoute",
         "tags": [
           "Notification"
@@ -58853,17 +58853,17 @@
                 "properties": {
                   "topicId": {
                     "type": "string",
-                    "description": "The ID of the notification topic."
+                    "description": "The ID of the topic."
                   },
                   "destinationId": {
                     "type": "string",
-                    "description": "The ID of the notification destination."
+                    "description": "The ID of the destination."
                   }
                 }
               },
               "examples": {
                 "route_example": {
-                  "summary": "Create topic-destination route",
+                  "summary": "Create topic destination route",
                   "value": {
                     "topicId": "1234567890abcdef",
                     "destinationId": "abcdef1234567890"
@@ -58879,7 +58879,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Notification Topic Destination Route",
+                  "title": "Topic Destination Route",
                   "required": [
                     "id",
                     "topicId",
@@ -58891,15 +58891,15 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The topic-destination route ID."
+                      "description": "The topic destination route ID."
                     },
                     "topicId": {
                       "type": "string",
-                      "description": "The ID of the notification topic."
+                      "description": "The ID of the topic."
                     },
                     "destinationId": {
                       "type": "string",
-                      "description": "The ID of the notification destination."
+                      "description": "The ID of the destination."
                     },
                     "projectId": {
                       "type": "string",
@@ -58908,7 +58908,7 @@
                     "createTime": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "The time when the topic-destination route was created."
+                      "description": "The time when the topic destination route was created."
                     }
                   }
                 }
@@ -59648,7 +59648,7 @@
         "x-codegen-request-body-name": "topicDestinationRoute"
       },
       "get": {
-        "summary": "List notification topic-destination routes",
+        "summary": "List topic destination routes",
         "description": "Retrieve all topic-to-destination routes for a project with optional filtering.",
         "operationId": "listTopicDestinationRoutes",
         "tags": [
@@ -59668,7 +59668,7 @@
             "name": "topicId",
             "in": "query",
             "required": false,
-            "description": "Filter by notification topic ID.",
+            "description": "Filter by topic ID.",
             "schema": {
               "type": "string"
             }
@@ -59677,7 +59677,7 @@
             "name": "destinationId",
             "in": "query",
             "required": false,
-            "description": "Filter by notification destination ID.",
+            "description": "Filter by destination ID.",
             "schema": {
               "type": "string"
             }
@@ -59685,13 +59685,13 @@
         ],
         "responses": {
           "200": {
-            "description": "List of topic-destination routes",
+            "description": "List of topic destination routes",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "title": "Notification Topic Destination Route",
+                    "title": "Topic Destination Route",
                     "required": [
                       "id",
                       "topicId",
@@ -59703,15 +59703,15 @@
                     "properties": {
                       "id": {
                         "type": "string",
-                        "description": "The topic-destination route ID."
+                        "description": "The topic destination route ID."
                       },
                       "topicId": {
                         "type": "string",
-                        "description": "The ID of the notification topic."
+                        "description": "The ID of the topic."
                       },
                       "destinationId": {
                         "type": "string",
-                        "description": "The ID of the notification destination."
+                        "description": "The ID of the destination."
                       },
                       "projectId": {
                         "type": "string",
@@ -59720,7 +59720,7 @@
                       "createTime": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "The time when the topic-destination route was created."
+                        "description": "The time when the topic destination route was created."
                       }
                     }
                   }
@@ -59866,9 +59866,9 @@
         }
       }
     },
-    "/projects/{projectIdOrName}/notifications/topic-destination-routes/{routeId}": {
+    "/projects/{projectIdOrName}/topic-destination-routes/{routeId}": {
       "delete": {
-        "summary": "Delete a notification topic-destination route",
+        "summary": "Delete a topic destination route",
         "description": "Remove the link between a topic and a destination.",
         "operationId": "deleteTopicDestinationRoute",
         "tags": [
@@ -59888,7 +59888,7 @@
             "name": "routeId",
             "in": "path",
             "required": true,
-            "description": "The topic-destination route ID.",
+            "description": "The topic destination route ID.",
             "schema": {
               "type": "string"
             }
@@ -73225,8 +73225,8 @@
           }
         }
       },
-      "NotificationTopicDestinationRoute": {
-        "title": "Notification Topic Destination Route",
+      "TopicDestinationRoute": {
+        "title": "Topic Destination Route",
         "required": [
           "id",
           "topicId",
@@ -73238,15 +73238,15 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The topic-destination route ID."
+            "description": "The topic destination route ID."
           },
           "topicId": {
             "type": "string",
-            "description": "The ID of the notification topic."
+            "description": "The ID of the topic."
           },
           "destinationId": {
             "type": "string",
-            "description": "The ID of the notification destination."
+            "description": "The ID of the destination."
           },
           "projectId": {
             "type": "string",
@@ -73255,7 +73255,7 @@
           "createTime": {
             "type": "string",
             "format": "date-time",
-            "description": "The time when the topic-destination route was created."
+            "description": "The time when the topic destination route was created."
           }
         }
       }
