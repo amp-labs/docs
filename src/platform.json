@@ -54527,10 +54527,10 @@
         }
       }
     },
-    "/projects/{projectIdOrName}/notifications/topics": {
+    "/projects/{projectIdOrName}/topics": {
       "post": {
-        "summary": "Create a notification topic",
-        "description": "Create a new notification topic for the project. Topics are used to categorize and organize notifications.",
+        "summary": "Create a topic",
+        "description": "Create a new topic for the project. Topics are used to categorize and organize notifications.",
         "operationId": "createTopic",
         "tags": [
           "Notification"
@@ -54554,13 +54554,14 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "label"
+                  "name"
                 ],
                 "properties": {
-                  "label": {
+                  "name": {
                     "type": "string",
-                    "description": "A human-readable label for the notification topic.",
-                    "example": "System Alerts"
+                    "description": "The name of the topic. Must contain only letters, numbers, and dashes.",
+                    "example": "system-alerts",
+                    "maxLength": 64
                   }
                 }
               }
@@ -54576,7 +54577,7 @@
                   "title": "Notification Topic",
                   "required": [
                     "id",
-                    "label",
+                    "name",
                     "projectId",
                     "createTime"
                   ],
@@ -54584,12 +54585,13 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The notification topic ID."
+                      "description": "The topic ID."
                     },
-                    "label": {
+                    "name": {
                       "type": "string",
-                      "description": "A human-readable label for the notification topic.",
-                      "example": "System Alerts"
+                      "description": "The name of the topic. Must contain only letters, numbers, and dashes.",
+                      "example": "system-alerts",
+                      "maxLength": 64
                     },
                     "projectId": {
                       "type": "string",
@@ -54598,12 +54600,12 @@
                     "createTime": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "The time when the notification topic was created."
+                      "description": "The time when the topic was created."
                     },
                     "updateTime": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "The time when the notification topic was last updated."
+                      "description": "The time when the topic was last updated."
                     }
                   }
                 }
@@ -54746,7 +54748,7 @@
             }
           },
           "409": {
-            "description": "Conflict - A notification topic with this label already exists in this project. Please choose a different label",
+            "description": "Conflict - A topic with this name already exists in this project. Please choose a different name",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -55343,7 +55345,7 @@
         "x-codegen-request-body-name": "topic"
       },
       "get": {
-        "summary": "List notification topics",
+        "summary": "List topics",
         "operationId": "listTopics",
         "tags": [
           "Notification"
@@ -55362,7 +55364,7 @@
         ],
         "responses": {
           "200": {
-            "description": "List of notification topics",
+            "description": "List of topics",
             "content": {
               "application/json": {
                 "schema": {
@@ -55371,7 +55373,7 @@
                     "title": "Notification Topic",
                     "required": [
                       "id",
-                      "label",
+                      "name",
                       "projectId",
                       "createTime"
                     ],
@@ -55379,12 +55381,13 @@
                     "properties": {
                       "id": {
                         "type": "string",
-                        "description": "The notification topic ID."
+                        "description": "The topic ID."
                       },
-                      "label": {
+                      "name": {
                         "type": "string",
-                        "description": "A human-readable label for the notification topic.",
-                        "example": "System Alerts"
+                        "description": "The name of the topic. Must contain only letters, numbers, and dashes.",
+                        "example": "system-alerts",
+                        "maxLength": 64
                       },
                       "projectId": {
                         "type": "string",
@@ -55393,12 +55396,12 @@
                       "createTime": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "The time when the notification topic was created."
+                        "description": "The time when the topic was created."
                       },
                       "updateTime": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "The time when the notification topic was last updated."
+                        "description": "The time when the topic was last updated."
                       }
                     }
                   }
@@ -55544,9 +55547,9 @@
         }
       }
     },
-    "/projects/{projectIdOrName}/notifications/topics/{topicId}": {
+    "/projects/{projectIdOrName}/topics/{topicId}": {
       "patch": {
-        "summary": "Update a notification topic",
+        "summary": "Update a topic",
         "operationId": "updateTopic",
         "tags": [
           "Notification"
@@ -55566,7 +55569,7 @@
             "name": "topicId",
             "in": "path",
             "required": true,
-            "description": "The notification topic ID.",
+            "description": "The topic ID.",
             "schema": {
               "type": "string"
             }
@@ -55601,7 +55604,7 @@
                   "title": "Notification Topic",
                   "required": [
                     "id",
-                    "label",
+                    "name",
                     "projectId",
                     "createTime"
                   ],
@@ -55609,12 +55612,13 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The notification topic ID."
+                      "description": "The topic ID."
                     },
-                    "label": {
+                    "name": {
                       "type": "string",
-                      "description": "A human-readable label for the notification topic.",
-                      "example": "System Alerts"
+                      "description": "The name of the topic. Must contain only letters, numbers, and dashes.",
+                      "example": "system-alerts",
+                      "maxLength": 64
                     },
                     "projectId": {
                       "type": "string",
@@ -55623,12 +55627,12 @@
                     "createTime": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "The time when the notification topic was created."
+                      "description": "The time when the topic was created."
                     },
                     "updateTime": {
                       "type": "string",
                       "format": "date-time",
-                      "description": "The time when the notification topic was last updated."
+                      "description": "The time when the topic was last updated."
                     }
                   }
                 }
@@ -56284,7 +56288,7 @@
             }
           },
           "409": {
-            "description": "Conflict - A notification topic with this label already exists in this project. Please choose a different label",
+            "description": "Conflict - A topic with this name already exists in this project. Please choose a different name",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -56881,7 +56885,7 @@
         "x-codegen-request-body-name": "updateTopicRequest"
       },
       "delete": {
-        "summary": "Delete a notification topic",
+        "summary": "Delete a topic",
         "operationId": "deleteTopic",
         "tags": [
           "Notification"
@@ -73112,7 +73116,7 @@
         "title": "Notification Topic",
         "required": [
           "id",
-          "label",
+          "name",
           "projectId",
           "createTime"
         ],
@@ -73120,12 +73124,13 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The notification topic ID."
+            "description": "The topic ID."
           },
-          "label": {
+          "name": {
             "type": "string",
-            "description": "A human-readable label for the notification topic.",
-            "example": "System Alerts"
+            "description": "The name of the topic. Must contain only letters, numbers, and dashes.",
+            "example": "system-alerts",
+            "maxLength": 64
           },
           "projectId": {
             "type": "string",
@@ -73134,12 +73139,12 @@
           "createTime": {
             "type": "string",
             "format": "date-time",
-            "description": "The time when the notification topic was created."
+            "description": "The time when the topic was created."
           },
           "updateTime": {
             "type": "string",
             "format": "date-time",
-            "description": "The time when the notification topic was last updated."
+            "description": "The time when the topic was last updated."
           }
         }
       },
