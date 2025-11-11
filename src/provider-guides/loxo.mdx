@@ -9,9 +9,6 @@ This connector supports:
 - [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `email_tracking`, `person_events` and `sms` currently. For all other objects, a full read of the Loxo instance will be done per scheduled read.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://{{.domain}}/api/{{.agency_slug}}`.
-> **Note:**
-> - To get the **domain**, log in to your Loxo account and check the URL in your browser’s address bar. It usually follows this pattern: `https://[your-domain-here]`.
-> - To get the **agency_slug**, go to **Settings > General** under **Workspace**. In the **Agency Info** section, look at the **Resume Forwarding Address** — the part before the @ symbol is the **agency_slug** value.
 
 ### Supported Objects
 The Loxo connector supports writing and reading from the following objects:
@@ -77,6 +74,12 @@ For an example manifest file of an Loxo integration, visit our [samples repo on 
 ## Using the connector
 
 This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+<Note>
+**Note:**
+> - To get the **domain**, log in to your Loxo account and check the URL in your browser’s address bar. It usually follows this pattern: `https://[your-domain-here]`.
+> - To get the **agency_slug**, go to **Settings > General** under **Workspace**. In the **Agency Info** section, look at the **Resume Forwarding Address** — the part before the @ symbol is the **agency_slug** value.
+</Note>
 
 To integrate with Loxo:
 - Create a manifest file similar to the example above.
