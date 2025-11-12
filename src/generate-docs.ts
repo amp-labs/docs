@@ -438,6 +438,7 @@ const baseConfig = {
           pages: [
             "customer-guides/overview",
             "customer-guides/salesforce",
+            "customer-guides/loxo",
             "customer-guides/hubspot",
             "customer-guides/marketo",
             "customer-guides/update-connection"
