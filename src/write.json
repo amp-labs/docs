@@ -51,11 +51,11 @@
             "application/json": {
               "schema": {
                 "title": "Write Request",
+                "type": "object",
                 "required": [
                   "groupRef",
                   "type"
                 ],
-                "type": "object",
                 "properties": {
                   "groupRef": {
                     "type": "string",
@@ -92,47 +92,98 @@
                         "maximum": 48
                       }
                     }
-                  },
-                  "record": {
-                    "type": "object",
-                    "description": "The record to write",
-                    "additionalProperties": true,
-                    "example": {
-                      "email": "david@withampersand.com",
-                      "warmthScore": "ready-for-close"
-                    }
-                  },
-                  "associations": {
-                    "type": "array",
-                    "items": {
-                      "type": "object"
-                    },
-                    "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
-                    "example": [
-                      {
-                        "to": {
-                          "id": "18417469260"
+                  }
+                },
+                "oneOf": [
+                  {
+                    "title": "Single Record Mode",
+                    "required": [
+                      "record"
+                    ],
+                    "properties": {
+                      "record": {
+                        "type": "object",
+                        "description": "The record to write (single record mode)",
+                        "additionalProperties": true,
+                        "example": {
+                          "email": "david@withampersand.com",
+                          "warmthScore": "ready-for-close"
+                        }
+                      },
+                      "associations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
                         },
-                        "types": [
+                        "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
+                        "example": [
                           {
-                            "associationCategory": "HUBSPOT_DEFINED",
-                            "associationTypeId": 279
+                            "to": {
+                              "id": "18417469260"
+                            },
+                            "types": [
+                              {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 279
+                              }
+                            ]
                           }
                         ]
                       }
-                    ]
+                    }
                   },
-                  "records": {
-                    "type": "array",
-                    "description": "The records to write",
-                    "example": [
-                      {
-                        "email": "david@withampersand.com",
-                        "warmthScore": "ready-for-close"
+                  {
+                    "title": "Batch Mode",
+                    "required": [
+                      "batch"
+                    ],
+                    "properties": {
+                      "batch": {
+                        "type": "array",
+                        "description": "Multiple records to write (batch mode). Supports 1-100 records per batch.Partial writes are not supported. If any record in a batch is invalid, all records in the batch will fail.",
+                        "minItems": 1,
+                        "maxItems": 100,
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "record"
+                          ],
+                          "properties": {
+                            "record": {
+                              "type": "object",
+                              "description": "The record to write",
+                              "additionalProperties": true,
+                              "example": {
+                                "email": "david@withampersand.com",
+                                "warmthScore": "ready-for-close"
+                              }
+                            },
+                            "associations": {
+                              "type": "array",
+                              "items": {
+                                "type": "object"
+                              },
+                              "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
+                              "example": [
+                                {
+                                  "to": {
+                                    "id": "18417469260"
+                                  },
+                                  "types": [
+                                    {
+                                      "associationCategory": "HUBSPOT_DEFINED",
+                                      "associationTypeId": 279
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        }
                       }
-                    ]
+                    }
                   }
-                }
+                ]
               }
             }
           }
@@ -143,47 +194,129 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Sync Write Response Success",
-                  "type": "object",
-                  "required": [
-                    "operationId"
-                  ],
-                  "additionalProperties": false,
-                  "properties": {
-                    "result": {
-                      "description": "The result of the write operation. Only present for synchronous operations.",
-                      "title": "Write Result",
+                  "oneOf": [
+                    {
+                      "title": "Sync Write Response Success",
                       "type": "object",
                       "required": [
-                        "success"
+                        "operationId"
                       ],
                       "additionalProperties": false,
                       "properties": {
-                        "success": {
-                          "type": "boolean",
-                          "description": "Whether the operation was successful",
-                          "example": true
-                        },
-                        "data": {
+                        "result": {
+                          "description": "The result of the write operation. Only present for synchronous operations.",
+                          "title": "Write Result",
                           "type": "object",
-                          "description": "The data returned by the operation",
-                          "example": {
-                            "email": "david@ampersand.com"
+                          "required": [
+                            "success"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "description": "Whether the operation was successful",
+                              "example": true
+                            },
+                            "data": {
+                              "type": "object",
+                              "description": "The data returned by the operation",
+                              "example": {
+                                "email": "david@ampersand.com"
+                              }
+                            },
+                            "recordId": {
+                              "type": "string",
+                              "description": "The ID of the object",
+                              "example": "003Dp0X#@RG7IAP"
+                            }
                           }
                         },
-                        "recordId": {
+                        "operationId": {
                           "type": "string",
-                          "description": "The ID of the object",
-                          "example": "003Dp0X#@RG7IAP"
+                          "description": "The operation ID",
+                          "example": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4"
                         }
                       }
                     },
-                    "operationId": {
-                      "type": "string",
-                      "description": "The operation ID",
-                      "example": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4"
+                    {
+                      "title": "Batch Write Response",
+                      "type": "object",
+                      "required": [
+                        "operationId",
+                        "successCount",
+                        "failureCount"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "operationId": {
+                          "type": "string",
+                          "description": "The operation ID",
+                          "example": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4"
+                        },
+                        "results": {
+                          "type": "array",
+                          "description": "Per-record results returned by the provider",
+                          "items": {
+                            "title": "Write Result",
+                            "type": "object",
+                            "required": [
+                              "success"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                              "success": {
+                                "type": "boolean",
+                                "description": "Whether the operation was successful",
+                                "example": true
+                              },
+                              "data": {
+                                "type": "object",
+                                "description": "The data returned by the operation",
+                                "example": {
+                                  "email": "david@ampersand.com"
+                                }
+                              },
+                              "recordId": {
+                                "type": "string",
+                                "description": "The ID of the object",
+                                "example": "003Dp0X#@RG7IAP"
+                              }
+                            }
+                          }
+                        },
+                        "successCount": {
+                          "type": "integer",
+                          "description": "Number of records that succeeded",
+                          "example": 3
+                        },
+                        "failureCount": {
+                          "type": "integer",
+                          "description": "Number of records that failed",
+                          "example": 1
+                        },
+                        "errors": {
+                          "type": "array",
+                          "description": "Top-level errors returned by the provider, if any",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "message": {
+                                "type": "string",
+                                "description": "Error summary message",
+                                "example": "Batch write failed: provider rolled back all records"
+                              }
+                            }
+                          }
+                        },
+                        "rawResponse": {
+                          "type": "string",
+                          "description": "Raw provider response body when available",
+                          "example": "{\"hasErrors\": true}",
+                          "x-go-type-skip-optional-pointer": true
+                        }
+                      }
                     }
-                  }
+                  ]
                 }
               }
             }
@@ -204,81 +337,163 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Sync Write Response Failure",
-                  "type": "object",
-                  "required": [
-                    "errors",
-                    "operationId"
-                  ],
-                  "additionalProperties": false,
-                  "properties": {
-                    "rawResponse": {
-                      "type": "string",
-                      "description": "The raw response from the provider, if available",
-                      "example": "{\"error\": \"Record not found\"}",
-                      "x-go-type-skip-optional-pointer": true
-                    },
-                    "errors": {
-                      "type": "array",
-                      "description": "Error messages resulted in failures",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string",
-                            "description": "errors messages when some unexpected event happened, but write to provider was successful",
-                            "example": "The record with ID 003Dp0X#@RG7IAP was not found"
-                          }
-                        }
-                      }
-                    },
-                    "result": {
-                      "title": "Write Result",
+                  "oneOf": [
+                    {
+                      "title": "Sync Write Response Failure",
                       "type": "object",
                       "required": [
-                        "success"
+                        "errors",
+                        "operationId"
                       ],
                       "additionalProperties": false,
                       "properties": {
-                        "success": {
-                          "type": "boolean",
-                          "description": "Whether the operation was successful",
-                          "example": true
-                        },
-                        "data": {
-                          "type": "object",
-                          "description": "The data returned by the operation",
-                          "example": {
-                            "email": "david@ampersand.com"
-                          }
-                        },
-                        "recordId": {
+                        "rawResponse": {
                           "type": "string",
-                          "description": "The ID of the object",
-                          "example": "003Dp0X#@RG7IAP"
-                        }
-                      }
-                    },
-                    "warnings": {
-                      "type": "array",
-                      "description": "Warnings messages when some unexpected event happened, but not blocking failures",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string",
-                            "description": "errors messages when some unexpected event happened, but write to provider was successful",
-                            "example": "The record with ID 003Dp0X#@RG7IAP was not found"
+                          "description": "The raw response from the provider, if available",
+                          "example": "{\"error\": \"Record not found\"}",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "errors": {
+                          "type": "array",
+                          "description": "Error messages resulted in failures",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "message": {
+                                "type": "string",
+                                "description": "errors messages when some unexpected event happened, but write to provider was successful",
+                                "example": "The record with ID 003Dp0X#@RG7IAP was not found"
+                              }
+                            }
                           }
+                        },
+                        "result": {
+                          "title": "Write Result",
+                          "type": "object",
+                          "required": [
+                            "success"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "description": "Whether the operation was successful",
+                              "example": true
+                            },
+                            "data": {
+                              "type": "object",
+                              "description": "The data returned by the operation",
+                              "example": {
+                                "email": "david@ampersand.com"
+                              }
+                            },
+                            "recordId": {
+                              "type": "string",
+                              "description": "The ID of the object",
+                              "example": "003Dp0X#@RG7IAP"
+                            }
+                          }
+                        },
+                        "warnings": {
+                          "type": "array",
+                          "description": "Warnings messages when some unexpected event happened, but not blocking failures",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "message": {
+                                "type": "string",
+                                "description": "errors messages when some unexpected event happened, but write to provider was successful",
+                                "example": "The record with ID 003Dp0X#@RG7IAP was not found"
+                              }
+                            }
+                          }
+                        },
+                        "operationId": {
+                          "type": "string",
+                          "description": "The operation ID",
+                          "example": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4"
                         }
                       }
                     },
-                    "operationId": {
-                      "type": "string",
-                      "description": "The operation ID",
-                      "example": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4"
+                    {
+                      "title": "Batch Write Response",
+                      "type": "object",
+                      "required": [
+                        "operationId",
+                        "successCount",
+                        "failureCount"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "operationId": {
+                          "type": "string",
+                          "description": "The operation ID",
+                          "example": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4"
+                        },
+                        "results": {
+                          "type": "array",
+                          "description": "Per-record results returned by the provider",
+                          "items": {
+                            "title": "Write Result",
+                            "type": "object",
+                            "required": [
+                              "success"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                              "success": {
+                                "type": "boolean",
+                                "description": "Whether the operation was successful",
+                                "example": true
+                              },
+                              "data": {
+                                "type": "object",
+                                "description": "The data returned by the operation",
+                                "example": {
+                                  "email": "david@ampersand.com"
+                                }
+                              },
+                              "recordId": {
+                                "type": "string",
+                                "description": "The ID of the object",
+                                "example": "003Dp0X#@RG7IAP"
+                              }
+                            }
+                          }
+                        },
+                        "successCount": {
+                          "type": "integer",
+                          "description": "Number of records that succeeded",
+                          "example": 3
+                        },
+                        "failureCount": {
+                          "type": "integer",
+                          "description": "Number of records that failed",
+                          "example": 1
+                        },
+                        "errors": {
+                          "type": "array",
+                          "description": "Top-level errors returned by the provider, if any",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "message": {
+                                "type": "string",
+                                "description": "Error summary message",
+                                "example": "Batch write failed: provider rolled back all records"
+                              }
+                            }
+                          }
+                        },
+                        "rawResponse": {
+                          "type": "string",
+                          "description": "Raw provider response body when available",
+                          "example": "{\"hasErrors\": true}",
+                          "x-go-type-skip-optional-pointer": true
+                        }
+                      }
                     }
-                  }
+                  ]
                 }
               }
             }
@@ -426,11 +641,11 @@
     "schemas": {
       "WriteRequest": {
         "title": "Write Request",
+        "type": "object",
         "required": [
           "groupRef",
           "type"
         ],
-        "type": "object",
         "properties": {
           "groupRef": {
             "type": "string",
@@ -467,47 +682,98 @@
                 "maximum": 48
               }
             }
-          },
-          "record": {
-            "type": "object",
-            "description": "The record to write",
-            "additionalProperties": true,
-            "example": {
-              "email": "david@withampersand.com",
-              "warmthScore": "ready-for-close"
-            }
-          },
-          "associations": {
-            "type": "array",
-            "items": {
-              "type": "object"
-            },
-            "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
-            "example": [
-              {
-                "to": {
-                  "id": "18417469260"
+          }
+        },
+        "oneOf": [
+          {
+            "title": "Single Record Mode",
+            "required": [
+              "record"
+            ],
+            "properties": {
+              "record": {
+                "type": "object",
+                "description": "The record to write (single record mode)",
+                "additionalProperties": true,
+                "example": {
+                  "email": "david@withampersand.com",
+                  "warmthScore": "ready-for-close"
+                }
+              },
+              "associations": {
+                "type": "array",
+                "items": {
+                  "type": "object"
                 },
-                "types": [
+                "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
+                "example": [
                   {
-                    "associationCategory": "HUBSPOT_DEFINED",
-                    "associationTypeId": 279
+                    "to": {
+                      "id": "18417469260"
+                    },
+                    "types": [
+                      {
+                        "associationCategory": "HUBSPOT_DEFINED",
+                        "associationTypeId": 279
+                      }
+                    ]
                   }
                 ]
               }
-            ]
+            }
           },
-          "records": {
-            "type": "array",
-            "description": "The records to write",
-            "example": [
-              {
-                "email": "david@withampersand.com",
-                "warmthScore": "ready-for-close"
+          {
+            "title": "Batch Mode",
+            "required": [
+              "batch"
+            ],
+            "properties": {
+              "batch": {
+                "type": "array",
+                "description": "Multiple records to write (batch mode). Supports 1-100 records per batch.Partial writes are not supported. If any record in a batch is invalid, all records in the batch will fail.",
+                "minItems": 1,
+                "maxItems": 100,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "record"
+                  ],
+                  "properties": {
+                    "record": {
+                      "type": "object",
+                      "description": "The record to write",
+                      "additionalProperties": true,
+                      "example": {
+                        "email": "david@withampersand.com",
+                        "warmthScore": "ready-for-close"
+                      }
+                    },
+                    "associations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      },
+                      "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
+                      "example": [
+                        {
+                          "to": {
+                            "id": "18417469260"
+                          },
+                          "types": [
+                            {
+                              "associationCategory": "HUBSPOT_DEFINED",
+                              "associationTypeId": 279
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
               }
-            ]
+            }
           }
-        }
+        ]
       },
       "WriteResponseSingleSuccess": {
         "title": "Sync Write Response Success",
@@ -626,6 +892,84 @@
             "type": "string",
             "description": "The operation ID",
             "example": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4"
+          }
+        }
+      },
+      "WriteResponseBatch": {
+        "title": "Batch Write Response",
+        "type": "object",
+        "required": [
+          "operationId",
+          "successCount",
+          "failureCount"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "operationId": {
+            "type": "string",
+            "description": "The operation ID",
+            "example": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4"
+          },
+          "results": {
+            "type": "array",
+            "description": "Per-record results returned by the provider",
+            "items": {
+              "title": "Write Result",
+              "type": "object",
+              "required": [
+                "success"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "description": "Whether the operation was successful",
+                  "example": true
+                },
+                "data": {
+                  "type": "object",
+                  "description": "The data returned by the operation",
+                  "example": {
+                    "email": "david@ampersand.com"
+                  }
+                },
+                "recordId": {
+                  "type": "string",
+                  "description": "The ID of the object",
+                  "example": "003Dp0X#@RG7IAP"
+                }
+              }
+            }
+          },
+          "successCount": {
+            "type": "integer",
+            "description": "Number of records that succeeded",
+            "example": 3
+          },
+          "failureCount": {
+            "type": "integer",
+            "description": "Number of records that failed",
+            "example": 1
+          },
+          "errors": {
+            "type": "array",
+            "description": "Top-level errors returned by the provider, if any",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error summary message",
+                  "example": "Batch write failed: provider rolled back all records"
+                }
+              }
+            }
+          },
+          "rawResponse": {
+            "type": "string",
+            "description": "Raw provider response body when available",
+            "example": "{\"hasErrors\": true}",
+            "x-go-type-skip-optional-pointer": true
           }
         }
       },
