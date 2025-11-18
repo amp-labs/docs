@@ -8,22 +8,40 @@ title: Outplay
 
 This connector supports:
 
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `call`, `prospectmails` and `callanalysis` currently. For all other objects, a full read of the Outplay instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}-api.outplayhq.com`.
+
+### Supported objects
+The Outplay connector supports writing and reading from the following objects:
+- [prospect](https://documenter.getpostman.com/view/16947449/TzsikPV1#21e32202-0bb8-411c-a46d-58da59313f49) (read, write)
+- [prospectaccount](https://documenter.getpostman.com/view/16947449/TzsikPV1#fd2bbb37-649b-43ce-b7ee-2485682d781b) (read, write)
+- [sequence](https://documenter.getpostman.com/view/16947449/TzsikPV1#46779d31-ea51-4872-8cc9-59aafc7a7102) (read, write)
+- [call](https://documenter.getpostman.com/view/16947449/TzsikPV1#b28babe6-9349-45dc-91a2-ef7dffcc6793) (read)
+- [task](https://documenter.getpostman.com/view/16947449/TzsikPV1#a23ee5cd-758c-43d6-a356-34b4d0859cb5) (read, write)
+- [callanalysis](https://documenter.getpostman.com/view/16947449/TzsikPV1#c44371cf-0819-4eb9-805a-7fdde9b4f9dc) (read)
+- [prospectmails](https://documenter.getpostman.com/view/16947449/TzsikPV1#dd63ab01-f0f9-4f18-b94f-e0bcdd4ac926) (read)
+- [note](https://documenter.getpostman.com/view/16947449/TzsikPV1#486b3fa0-4ea2-4b3e-aa1d-fcdeff0dd833) (write)
+
+<Note>
+**Note:**
+The `call` object always requires incremental read. If not set, it will only read records from the last 30 days.
+</Note>
 
 ### Example integration
 
-To define an integration for Outplay, create a manifest file that looks like this:
+For an example manifest file of an Outplay integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/outplay/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: Outplay-integration
-    displayName: My Outplay Integration
-    provider: outplay
-    proxy:
-      enabled: true
-```
+
+## Before you get started
+
+You'll need an Outplay account and API credentials to use this connector.
+
+### Creating Outplay credentials
+1. Log into your Outplay account.
+2. Navigate to **Settings** → **API Settings**.
+3. Generate an API key if you haven't already.
+4. Note your workspace identifier - this is the subdomain in your Outplay URL (e.g., if your Outplay URL is `https://mycompany-api.outplayhq.com`, your workspace is `mycompany`).
 
 ## Using the connector
 
@@ -31,7 +49,11 @@ This connector uses Basic Auth, which means that you do not need to set up a Pro
 
 To start integrating with Outplay:
 
-- Create a manifest file like the [example](#example-integration) above.
+- Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://{{.workspace}}-api.outplayhq.com`.
+- If using Read or Write actions: create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API credentials and workspace location.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
