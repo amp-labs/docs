@@ -92,98 +92,80 @@
                         "maximum": 48
                       }
                     }
-                  }
-                },
-                "oneOf": [
-                  {
-                    "title": "Single Record Mode",
-                    "required": [
-                      "record"
-                    ],
-                    "properties": {
-                      "record": {
-                        "type": "object",
-                        "description": "The record to write (single record mode)",
-                        "additionalProperties": true,
-                        "example": {
-                          "email": "david@withampersand.com",
-                          "warmthScore": "ready-for-close"
-                        }
-                      },
-                      "associations": {
-                        "type": "array",
-                        "items": {
-                          "type": "object"
-                        },
-                        "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
-                        "example": [
-                          {
-                            "to": {
-                              "id": "18417469260"
-                            },
-                            "types": [
-                              {
-                                "associationCategory": "HUBSPOT_DEFINED",
-                                "associationTypeId": 279
-                              }
-                            ]
-                          }
-                        ]
-                      }
+                  },
+                  "record": {
+                    "type": "object",
+                    "description": "The record to write. Use this for single record mode. Exactly one of 'record' or 'batch' must be provided.",
+                    "additionalProperties": true,
+                    "example": {
+                      "email": "david@withampersand.com",
+                      "warmthScore": "ready-for-close"
                     }
                   },
-                  {
-                    "title": "Batch Mode",
-                    "required": [
-                      "batch"
-                    ],
-                    "properties": {
-                      "batch": {
-                        "type": "array",
-                        "description": "Multiple records to write (batch mode). Supports 1-100 records per batch.Partial writes are not supported. If any record in a batch is invalid, all records in the batch will fail.",
-                        "minItems": 1,
-                        "maxItems": 100,
-                        "items": {
+                  "batch": {
+                    "type": "array",
+                    "description": "Multiple records to write (batch mode). Supports 1-100 records per batch. Partial writes are not supported. If any record in a batch is invalid, all records in the batch will fail. Exactly one of 'record' or 'batch' must be provided.",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "record"
+                      ],
+                      "properties": {
+                        "record": {
                           "type": "object",
-                          "required": [
-                            "record"
-                          ],
-                          "properties": {
-                            "record": {
-                              "type": "object",
-                              "description": "The record to write",
-                              "additionalProperties": true,
-                              "example": {
-                                "email": "david@withampersand.com",
-                                "warmthScore": "ready-for-close"
-                              }
-                            },
-                            "associations": {
-                              "type": "array",
-                              "items": {
-                                "type": "object"
+                          "description": "The record to write",
+                          "additionalProperties": true,
+                          "example": {
+                            "email": "david@withampersand.com",
+                            "warmthScore": "ready-for-close"
+                          }
+                        },
+                        "associations": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          },
+                          "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
+                          "example": [
+                            {
+                              "to": {
+                                "id": "18417469260"
                               },
-                              "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
-                              "example": [
+                              "types": [
                                 {
-                                  "to": {
-                                    "id": "18417469260"
-                                  },
-                                  "types": [
-                                    {
-                                      "associationCategory": "HUBSPOT_DEFINED",
-                                      "associationTypeId": 279
-                                    }
-                                  ]
+                                  "associationCategory": "HUBSPOT_DEFINED",
+                                  "associationTypeId": 279
                                 }
                               ]
                             }
-                          }
+                          ]
                         }
                       }
                     }
+                  },
+                  "associations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    },
+                    "description": "To write associations to the record (for single record mode). Note: currently only HubSpot associations are supported",
+                    "example": [
+                      {
+                        "to": {
+                          "id": "18417469260"
+                        },
+                        "types": [
+                          {
+                            "associationCategory": "HUBSPOT_DEFINED",
+                            "associationTypeId": 279
+                          }
+                        ]
+                      }
+                    ]
                   }
-                ]
+                }
               }
             }
           }
@@ -682,98 +664,80 @@
                 "maximum": 48
               }
             }
-          }
-        },
-        "oneOf": [
-          {
-            "title": "Single Record Mode",
-            "required": [
-              "record"
-            ],
-            "properties": {
-              "record": {
-                "type": "object",
-                "description": "The record to write (single record mode)",
-                "additionalProperties": true,
-                "example": {
-                  "email": "david@withampersand.com",
-                  "warmthScore": "ready-for-close"
-                }
-              },
-              "associations": {
-                "type": "array",
-                "items": {
-                  "type": "object"
-                },
-                "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
-                "example": [
-                  {
-                    "to": {
-                      "id": "18417469260"
-                    },
-                    "types": [
-                      {
-                        "associationCategory": "HUBSPOT_DEFINED",
-                        "associationTypeId": 279
-                      }
-                    ]
-                  }
-                ]
-              }
+          },
+          "record": {
+            "type": "object",
+            "description": "The record to write. Use this for single record mode. Exactly one of 'record' or 'batch' must be provided.",
+            "additionalProperties": true,
+            "example": {
+              "email": "david@withampersand.com",
+              "warmthScore": "ready-for-close"
             }
           },
-          {
-            "title": "Batch Mode",
-            "required": [
-              "batch"
-            ],
-            "properties": {
-              "batch": {
-                "type": "array",
-                "description": "Multiple records to write (batch mode). Supports 1-100 records per batch.Partial writes are not supported. If any record in a batch is invalid, all records in the batch will fail.",
-                "minItems": 1,
-                "maxItems": 100,
-                "items": {
+          "batch": {
+            "type": "array",
+            "description": "Multiple records to write (batch mode). Supports 1-100 records per batch. Partial writes are not supported. If any record in a batch is invalid, all records in the batch will fail. Exactly one of 'record' or 'batch' must be provided.",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": {
+              "type": "object",
+              "required": [
+                "record"
+              ],
+              "properties": {
+                "record": {
                   "type": "object",
-                  "required": [
-                    "record"
-                  ],
-                  "properties": {
-                    "record": {
-                      "type": "object",
-                      "description": "The record to write",
-                      "additionalProperties": true,
-                      "example": {
-                        "email": "david@withampersand.com",
-                        "warmthScore": "ready-for-close"
-                      }
-                    },
-                    "associations": {
-                      "type": "array",
-                      "items": {
-                        "type": "object"
+                  "description": "The record to write",
+                  "additionalProperties": true,
+                  "example": {
+                    "email": "david@withampersand.com",
+                    "warmthScore": "ready-for-close"
+                  }
+                },
+                "associations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
+                  "example": [
+                    {
+                      "to": {
+                        "id": "18417469260"
                       },
-                      "description": "To write associations to the record. Note: currently only HubSpot associations are supported",
-                      "example": [
+                      "types": [
                         {
-                          "to": {
-                            "id": "18417469260"
-                          },
-                          "types": [
-                            {
-                              "associationCategory": "HUBSPOT_DEFINED",
-                              "associationTypeId": 279
-                            }
-                          ]
+                          "associationCategory": "HUBSPOT_DEFINED",
+                          "associationTypeId": 279
                         }
                       ]
                     }
-                  }
+                  ]
                 }
               }
             }
+          },
+          "associations": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "To write associations to the record (for single record mode). Note: currently only HubSpot associations are supported",
+            "example": [
+              {
+                "to": {
+                  "id": "18417469260"
+                },
+                "types": [
+                  {
+                    "associationCategory": "HUBSPOT_DEFINED",
+                    "associationTypeId": 279
+                  }
+                ]
+              }
+            ]
           }
-        ]
+        }
       },
       "WriteResponseSingleSuccess": {
         "title": "Sync Write Response Success",
