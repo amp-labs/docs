@@ -6441,6 +6441,88 @@
                                     }
                                   }
                                 }
+                              },
+                              "watchSchema": {
+                                "title": "Provider schema watch",
+                                "type": "object",
+                                "description": "Configuration for monitoring provider schema changes.",
+                                "required": [
+                                  "destination",
+                                  "allObjects"
+                                ],
+                                "properties": {
+                                  "destination": {
+                                    "type": "string",
+                                    "description": "The destination to send schema change notifications to.",
+                                    "example": "fieldWatchStream",
+                                    "x-go-type-skip-optional-pointer": true
+                                  },
+                                  "schedule": {
+                                    "type": "string",
+                                    "description": "Cron schedule for checking schema changes. Minimum frequency is once per hour. Defaults to once a day.",
+                                    "default": "0 */24 * * *",
+                                    "example": "0 */6 * * *",
+                                    "x-go-type-skip-optional-pointer": true
+                                  },
+                                  "allObjects": {
+                                    "title": "Watch Schema All Objects",
+                                    "type": "object",
+                                    "description": "Schema change event configuration for all objects in the integration.",
+                                    "properties": {
+                                      "fieldsCreated": {
+                                        "title": "Fields Created Event",
+                                        "type": "object",
+                                        "description": "Configuration for detecting when new fields are created.",
+                                        "required": [
+                                          "enabled"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "string",
+                                            "description": "If always, the integration will monitor for new fields by default.",
+                                            "enum": [
+                                              "always"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "fieldDeleted": {
+                                        "title": "Field Deleted Event",
+                                        "type": "object",
+                                        "description": "Configuration for detecting when fields are deleted.",
+                                        "required": [
+                                          "enabled"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "string",
+                                            "description": "If always, the integration will monitor for deleted fields by default.",
+                                            "enum": [
+                                              "always"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "fieldTypeChanged": {
+                                        "title": "Field Type Changed Event",
+                                        "type": "object",
+                                        "description": "Configuration for detecting when field types change.",
+                                        "required": [
+                                          "enabled"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "string",
+                                            "description": "If always, the integration will monitor for field type changes by default.",
+                                            "enum": [
+                                              "always"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
                               }
                             }
                           }
@@ -7359,6 +7441,88 @@
                                         "example": [
                                           "object.merged",
                                           "object.restored"
+                                        ]
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "watchSchema": {
+                            "title": "Provider schema watch",
+                            "type": "object",
+                            "description": "Configuration for monitoring provider schema changes.",
+                            "required": [
+                              "destination",
+                              "allObjects"
+                            ],
+                            "properties": {
+                              "destination": {
+                                "type": "string",
+                                "description": "The destination to send schema change notifications to.",
+                                "example": "fieldWatchStream",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "schedule": {
+                                "type": "string",
+                                "description": "Cron schedule for checking schema changes. Minimum frequency is once per hour. Defaults to once a day.",
+                                "default": "0 */24 * * *",
+                                "example": "0 */6 * * *",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "allObjects": {
+                                "title": "Watch Schema All Objects",
+                                "type": "object",
+                                "description": "Schema change event configuration for all objects in the integration.",
+                                "properties": {
+                                  "fieldsCreated": {
+                                    "title": "Fields Created Event",
+                                    "type": "object",
+                                    "description": "Configuration for detecting when new fields are created.",
+                                    "required": [
+                                      "enabled"
+                                    ],
+                                    "properties": {
+                                      "enabled": {
+                                        "type": "string",
+                                        "description": "If always, the integration will monitor for new fields by default.",
+                                        "enum": [
+                                          "always"
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  "fieldDeleted": {
+                                    "title": "Field Deleted Event",
+                                    "type": "object",
+                                    "description": "Configuration for detecting when fields are deleted.",
+                                    "required": [
+                                      "enabled"
+                                    ],
+                                    "properties": {
+                                      "enabled": {
+                                        "type": "string",
+                                        "description": "If always, the integration will monitor for deleted fields by default.",
+                                        "enum": [
+                                          "always"
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  "fieldTypeChanged": {
+                                    "title": "Field Type Changed Event",
+                                    "type": "object",
+                                    "description": "Configuration for detecting when field types change.",
+                                    "required": [
+                                      "enabled"
+                                    ],
+                                    "properties": {
+                                      "enabled": {
+                                        "type": "string",
+                                        "description": "If always, the integration will monitor for field type changes by default.",
+                                        "enum": [
+                                          "always"
                                         ]
                                       }
                                     }
@@ -8665,6 +8829,88 @@
                                           "example": [
                                             "object.merged",
                                             "object.restored"
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "watchSchema": {
+                              "title": "Provider schema watch",
+                              "type": "object",
+                              "description": "Configuration for monitoring provider schema changes.",
+                              "required": [
+                                "destination",
+                                "allObjects"
+                              ],
+                              "properties": {
+                                "destination": {
+                                  "type": "string",
+                                  "description": "The destination to send schema change notifications to.",
+                                  "example": "fieldWatchStream",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "schedule": {
+                                  "type": "string",
+                                  "description": "Cron schedule for checking schema changes. Minimum frequency is once per hour. Defaults to once a day.",
+                                  "default": "0 */24 * * *",
+                                  "example": "0 */6 * * *",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "allObjects": {
+                                  "title": "Watch Schema All Objects",
+                                  "type": "object",
+                                  "description": "Schema change event configuration for all objects in the integration.",
+                                  "properties": {
+                                    "fieldsCreated": {
+                                      "title": "Fields Created Event",
+                                      "type": "object",
+                                      "description": "Configuration for detecting when new fields are created.",
+                                      "required": [
+                                        "enabled"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "string",
+                                          "description": "If always, the integration will monitor for new fields by default.",
+                                          "enum": [
+                                            "always"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "fieldDeleted": {
+                                      "title": "Field Deleted Event",
+                                      "type": "object",
+                                      "description": "Configuration for detecting when fields are deleted.",
+                                      "required": [
+                                        "enabled"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "string",
+                                          "description": "If always, the integration will monitor for deleted fields by default.",
+                                          "enum": [
+                                            "always"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "fieldTypeChanged": {
+                                      "title": "Field Type Changed Event",
+                                      "type": "object",
+                                      "description": "Configuration for detecting when field types change.",
+                                      "required": [
+                                        "enabled"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "string",
+                                          "description": "If always, the integration will monitor for field type changes by default.",
+                                          "enum": [
+                                            "always"
                                           ]
                                         }
                                       }
@@ -10482,6 +10728,88 @@
                                             "example": [
                                               "object.merged",
                                               "object.restored"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "watchSchema": {
+                                "title": "Provider schema watch",
+                                "type": "object",
+                                "description": "Configuration for monitoring provider schema changes.",
+                                "required": [
+                                  "destination",
+                                  "allObjects"
+                                ],
+                                "properties": {
+                                  "destination": {
+                                    "type": "string",
+                                    "description": "The destination to send schema change notifications to.",
+                                    "example": "fieldWatchStream",
+                                    "x-go-type-skip-optional-pointer": true
+                                  },
+                                  "schedule": {
+                                    "type": "string",
+                                    "description": "Cron schedule for checking schema changes. Minimum frequency is once per hour. Defaults to once a day.",
+                                    "default": "0 */24 * * *",
+                                    "example": "0 */6 * * *",
+                                    "x-go-type-skip-optional-pointer": true
+                                  },
+                                  "allObjects": {
+                                    "title": "Watch Schema All Objects",
+                                    "type": "object",
+                                    "description": "Schema change event configuration for all objects in the integration.",
+                                    "properties": {
+                                      "fieldsCreated": {
+                                        "title": "Fields Created Event",
+                                        "type": "object",
+                                        "description": "Configuration for detecting when new fields are created.",
+                                        "required": [
+                                          "enabled"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "string",
+                                            "description": "If always, the integration will monitor for new fields by default.",
+                                            "enum": [
+                                              "always"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "fieldDeleted": {
+                                        "title": "Field Deleted Event",
+                                        "type": "object",
+                                        "description": "Configuration for detecting when fields are deleted.",
+                                        "required": [
+                                          "enabled"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "string",
+                                            "description": "If always, the integration will monitor for deleted fields by default.",
+                                            "enum": [
+                                              "always"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "fieldTypeChanged": {
+                                        "title": "Field Type Changed Event",
+                                        "type": "object",
+                                        "description": "Configuration for detecting when field types change.",
+                                        "required": [
+                                          "enabled"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "string",
+                                            "description": "If always, the integration will monitor for field type changes by default.",
+                                            "enum": [
+                                              "always"
                                             ]
                                           }
                                         }
@@ -13200,13 +13528,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -13333,13 +13661,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -13372,13 +13700,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -13396,13 +13724,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -16789,13 +17117,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -16922,13 +17250,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -16961,13 +17289,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -16985,13 +17313,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -19361,13 +19689,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -19494,13 +19822,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -19533,13 +19861,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -19557,13 +19885,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -22192,13 +22520,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -22325,13 +22653,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -22364,13 +22692,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -22388,13 +22716,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -25064,13 +25392,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -25197,13 +25525,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -25236,13 +25564,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -25260,13 +25588,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -29433,7 +29761,7 @@
                             "type": "string",
                             "description": "The time the operation was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       }
@@ -30340,7 +30668,7 @@
                       "type": "string",
                       "description": "The time the operation was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     }
                   }
                 }
@@ -31180,7 +31508,7 @@
                       "timestamp": {
                         "type": "string",
                         "description": "The time the log was created.",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "message": {
                         "type": "object",
@@ -37801,13 +38129,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -37840,13 +38168,13 @@
                             "type": "string",
                             "description": "The time the consumer was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the consumer was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -37864,13 +38192,13 @@
                         "type": "string",
                         "description": "The time the connection was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the connection was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "authScheme": {
                         "type": "string",
@@ -38831,13 +39159,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -38870,13 +39198,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -38894,13 +39222,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -39992,13 +40320,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -40031,13 +40359,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -40055,13 +40383,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -41036,13 +41364,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -41075,13 +41403,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -41099,13 +41427,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -61470,6 +61798,88 @@
                         }
                       }
                     }
+                  },
+                  "watchSchema": {
+                    "title": "Provider schema watch",
+                    "type": "object",
+                    "description": "Configuration for monitoring provider schema changes.",
+                    "required": [
+                      "destination",
+                      "allObjects"
+                    ],
+                    "properties": {
+                      "destination": {
+                        "type": "string",
+                        "description": "The destination to send schema change notifications to.",
+                        "example": "fieldWatchStream",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "schedule": {
+                        "type": "string",
+                        "description": "Cron schedule for checking schema changes. Minimum frequency is once per hour. Defaults to once a day.",
+                        "default": "0 */24 * * *",
+                        "example": "0 */6 * * *",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "allObjects": {
+                        "title": "Watch Schema All Objects",
+                        "type": "object",
+                        "description": "Schema change event configuration for all objects in the integration.",
+                        "properties": {
+                          "fieldsCreated": {
+                            "title": "Fields Created Event",
+                            "type": "object",
+                            "description": "Configuration for detecting when new fields are created.",
+                            "required": [
+                              "enabled"
+                            ],
+                            "properties": {
+                              "enabled": {
+                                "type": "string",
+                                "description": "If always, the integration will monitor for new fields by default.",
+                                "enum": [
+                                  "always"
+                                ]
+                              }
+                            }
+                          },
+                          "fieldDeleted": {
+                            "title": "Field Deleted Event",
+                            "type": "object",
+                            "description": "Configuration for detecting when fields are deleted.",
+                            "required": [
+                              "enabled"
+                            ],
+                            "properties": {
+                              "enabled": {
+                                "type": "string",
+                                "description": "If always, the integration will monitor for deleted fields by default.",
+                                "enum": [
+                                  "always"
+                                ]
+                              }
+                            }
+                          },
+                          "fieldTypeChanged": {
+                            "title": "Field Type Changed Event",
+                            "type": "object",
+                            "description": "Configuration for detecting when field types change.",
+                            "required": [
+                              "enabled"
+                            ],
+                            "properties": {
+                              "enabled": {
+                                "type": "string",
+                                "description": "If always, the integration will monitor for field type changes by default.",
+                                "enum": [
+                                  "always"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -61898,6 +62308,88 @@
                             "example": [
                               "object.merged",
                               "object.restored"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "watchSchema": {
+                "title": "Provider schema watch",
+                "type": "object",
+                "description": "Configuration for monitoring provider schema changes.",
+                "required": [
+                  "destination",
+                  "allObjects"
+                ],
+                "properties": {
+                  "destination": {
+                    "type": "string",
+                    "description": "The destination to send schema change notifications to.",
+                    "example": "fieldWatchStream",
+                    "x-go-type-skip-optional-pointer": true
+                  },
+                  "schedule": {
+                    "type": "string",
+                    "description": "Cron schedule for checking schema changes. Minimum frequency is once per hour. Defaults to once a day.",
+                    "default": "0 */24 * * *",
+                    "example": "0 */6 * * *",
+                    "x-go-type-skip-optional-pointer": true
+                  },
+                  "allObjects": {
+                    "title": "Watch Schema All Objects",
+                    "type": "object",
+                    "description": "Schema change event configuration for all objects in the integration.",
+                    "properties": {
+                      "fieldsCreated": {
+                        "title": "Fields Created Event",
+                        "type": "object",
+                        "description": "Configuration for detecting when new fields are created.",
+                        "required": [
+                          "enabled"
+                        ],
+                        "properties": {
+                          "enabled": {
+                            "type": "string",
+                            "description": "If always, the integration will monitor for new fields by default.",
+                            "enum": [
+                              "always"
+                            ]
+                          }
+                        }
+                      },
+                      "fieldDeleted": {
+                        "title": "Field Deleted Event",
+                        "type": "object",
+                        "description": "Configuration for detecting when fields are deleted.",
+                        "required": [
+                          "enabled"
+                        ],
+                        "properties": {
+                          "enabled": {
+                            "type": "string",
+                            "description": "If always, the integration will monitor for deleted fields by default.",
+                            "enum": [
+                              "always"
+                            ]
+                          }
+                        }
+                      },
+                      "fieldTypeChanged": {
+                        "title": "Field Type Changed Event",
+                        "type": "object",
+                        "description": "Configuration for detecting when field types change.",
+                        "required": [
+                          "enabled"
+                        ],
+                        "properties": {
+                          "enabled": {
+                            "type": "string",
+                            "description": "If always, the integration will monitor for field type changes by default.",
+                            "enum": [
+                              "always"
                             ]
                           }
                         }
@@ -62413,13 +62905,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -62546,13 +63038,13 @@
                     "type": "string",
                     "description": "The time the group was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the group was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   }
                 }
               },
@@ -62585,13 +63077,13 @@
                     "type": "string",
                     "description": "The time the consumer was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the consumer was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   }
                 }
               },
@@ -62609,13 +63101,13 @@
                 "type": "string",
                 "description": "The time the connection was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the connection was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "authScheme": {
                 "type": "string",
@@ -65556,13 +66048,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -65595,13 +66087,13 @@
                 "type": "string",
                 "description": "The time the consumer was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the consumer was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -65619,13 +66111,13 @@
             "type": "string",
             "description": "The time the connection was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the connection was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "authScheme": {
             "type": "string",
@@ -66549,13 +67041,13 @@
             "type": "string",
             "description": "The time the group was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the group was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -66588,13 +67080,13 @@
             "type": "string",
             "description": "The time the consumer was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the consumer was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -66657,7 +67149,7 @@
             "type": "string",
             "description": "The time the operation was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -66673,7 +67165,7 @@
           "timestamp": {
             "type": "string",
             "description": "The time the log was created.",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "message": {
             "type": "object",
