@@ -2,22 +2,15 @@
 title: Overview
 ---
 
-Ampersand notifications deliver real-time webhooks about important lifecycle changes in your project. They allow you to track when customers install, update, or delete integrations; when backfills complete; and when sync issues occur.
+Ampersand notifications deliver real-time messages about important lifecycle changes in your project. They allow you to track when customers install, update, or delete integrations; when backfills complete; and when sync issues occur.
 
 If you want to be notified when there are changes in your customer's SaaS instances, use [Subscribe Actions](/subscribe-actions).
 
 ## How notifications work
 
-Notifications use two main components that give you fine-grained control over which events reach which webhooks:
-
-1. **Notification Targets** → Your webhook endpoints where notifications are delivered
-2. **Notification Topics** → Groups of events that can be routed to specific targets
+Notifications use topics to give you fine-grained control over which events reach which destinations. You can configure each topic to receive specific event types and route notifications to one or more destinations.
 
 <Frame caption="Notifications Diagram">![Notification Diagram](/images/notification-diagram.png)</Frame>
-
-<Note>
-When you create a topic, you select which event types it should receive and which targets should receive notifications. Events are routed: Event → Topic → Target. 
-</Note>
 
 ## Available events
 
@@ -39,71 +32,72 @@ There are two ways to set up notifications:
 
 ### Set up via Dashboard
 
-1. **Create notification targets**
-   - Go to [Notifications](https://dashboard.withampersand.com/projects/_/notifications/)
-   - Click **Manage Targets**
-   - Click **New Target** and configure:
-     - **Label**: A descriptive name (e.g., "production-alerts")
-     - **Webhook URL**: Your webhook endpoint URL
-   - Click **Create Target**
+1. **Create destinations**
+   - Go to [Destinations](https://dashboard.withampersand.com/projects/_/settings/destinations/)
+   - Click **New Destination** and configure:
+     - **Name**: A descriptive name (e.g., "production-alerts")
+     - **Type**: Choose webhook, Kinesis, or log destination
+     - **Configuration**: Provide the endpoint URL or stream details
+   - Click **Create Destination**
 
-2. **Create notification topics**
+2. **Create topics**
+   - Go to [Notifications](https://dashboard.withampersand.com/projects/_/notifications/)
    - Click **New Topic**
    - Configure your topic:
-     - **Label**: A descriptive name (e.g., "installation-events")
+     - **Name**: A descriptive name (e.g., "installation-events")
      - **Event types**: Select the events this topic should receive
-     - **Targets**: Select which webhook targets should receive notifications
+     - **Destinations**: Select which destinations should receive notifications
    - Click **Create Topic**
 
 ### Set up via API
 
-When using the API, you need to create routes explicitly to connect events to topics and topics to targets. The dashboard handles this automatically when you create a topic.
+When using the API, you need to create routes explicitly to connect events to topics and topics to destinations. The dashboard handles this automatically when you create a topic.
 
-See the [API Reference](/reference/notification/create-a-notification-target) for complete endpoint documentation.
+See the API Reference for complete endpoint documentation.
 
-<Accordion title="1. Create a notification target">
+<Accordion title="1. Create a destination">
 ```bash
-POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/targets
+POST https://api.withampersand.com/v1/projects/{projectIdOrName}/destinations
 {
-  "label": "target-name",
+  "name": "production-alerts",
   "type": "webhook",
-  "provider": "svix",
   "metadata": {
     "url": "https://your-webhook.com"
   }
 }
 ```
+
 </Accordion>
 
-<Accordion title="2. Create a notification topic">
+<Accordion title="2. Create a topic">
 ```bash
-POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/topics
+POST https://api.withampersand.com/v1/projects/{projectIdOrName}/topics
 {
-  "label": "topic-name"
+  "name": "installation-events"
 }
 ```
 </Accordion>
 
-<Accordion title="3. Create event-topic routes">
-**Event-Topic Routes** connect specific event types to topics. This determines which events are sent to each topic.
+<Accordion title="3. Create notification-event-topic routes">
+**Notification-Event-Topic Routes** connect specific event types to topics. This determines which events are sent to each topic.
 
 ```bash
-POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/event-topic-routes
+POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notification-event-topic-routes
 {
-  "notificationTopicId": "your-topic-id",
+  "topicId": "your-topic-id",
   "eventType": "installation.created"
 }
 ```
 </Accordion>
 
-<Accordion title="4. Create topic-target routes">
-**Topic-Target Routes** connect topics to webhook targets. This determines which targets receive notifications for each topic.
+<Accordion title="4. Create topic-destination routes">
+**Topic-Destination Routes** connect topics to destinations. This determines which destinations receive notifications for each topic.
 
 ```bash
-POST https://api.withampersand.com/v1/projects/{projectIdOrName}/notifications/topic-target-routes
+POST https://api.withampersand.com/v1/projects/{projectIdOrName}/topic-destination-routes
 {
-  "notificationTopicId": "your-topic-id",
-  "notificationTargetId": "your-target-id"
+  "topicId": "your-topic-id",
+  "destinationId": "your-destination-id"
 }
 ```
 </Accordion>
