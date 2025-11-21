@@ -271,6 +271,13 @@ const baseConfig = {
           ]
         },
         {
+          group: "Notifications",
+          pages: [
+            "notifications/overview",
+            "notifications/notification-payloads"
+          ]
+        },
+        {
           group: "Provider guides",
           pages: [
             "provider-guides/overview",
