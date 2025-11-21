@@ -19,6 +19,7 @@ The payload structure depends on your destination type:
     "integrationId": "uuid",
     "integrationName": "Salesforce Integration",
     "installationId": "uuid",
+    "connectionId": "uuid",
     "groupRef": "customer-group-ref",
     "groupName": "Customer Name",
     "consumerRef": "user-123",
@@ -80,6 +81,7 @@ Note: `config` contains the complete installation configuration object including
     "integrationId": "uuid",
     "integrationName": "Salesforce Integration",
     "installationId": "uuid",
+    "connectionId": "uuid",
     "groupRef": "customer-group-ref",
     "groupName": "Customer Name",
     "consumerRef": "user-123",
@@ -117,6 +119,7 @@ Note: `config` contains the complete installation configuration object including
     "integrationId": "uuid",
     "integrationName": "Salesforce Integration",
     "installationId": "uuid",
+    "connectionId": "uuid",
     "groupRef": "customer-group-ref",
     "groupName": "Customer Name",
     "consumerRef": "user-123",
@@ -196,6 +199,38 @@ Note: `config` contains the complete installation configuration object including
   "consumerName": "John Doe"
 }
 ```
+</Accordion>
+
+<Accordion title="connection.error">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "connection.error",
+  "data": {
+    "projectId": "uuid",
+    "connectionId": "uuid",
+    "provider": "salesforce",
+    "groupRef": "customer-group-ref",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "error": ["error message"]
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "connectionId": "uuid",
+  "provider": "salesforce",
+  "groupRef": "customer-group-ref",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "error": ["error message"]
+}
+```
+
 </Accordion>
 </AccordionGroup>
 
