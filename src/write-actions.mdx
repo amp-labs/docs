@@ -127,6 +127,39 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 }'
 ```
 
+
+### Passing additional headers to providers when creating or updating records
+
+If you need to pass additional headers when creating or updating records for a provider, you can include those headers directly in the request body when calling the write endpoint. Ampersand will forward those headers as part of the outbound request to the provider.
+
+<Info>This is currently only supported for Salesforce. </Info>
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_ID_OR_NAME>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: <API_KEY>' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "<GROUP_REF>",
+    "type": "create",
+    "record": {
+        "firstname": "Harry",
+        "lastname": "Potter",
+        "email": "harry@hogwarts.com",
+        "phone": "123456789"
+    },
+    "headers": [
+      {
+        "key": "header-key1",
+        "value": "header-value1"
+      },
+      {
+        "key": "header-key2",
+        "value": "header-value2"
+      }
+    ]
+}'
+```
+
 ## Advanced use cases
 
 <Info>These advanced use cases are currently only supported when creating or updating installations via the API or [Headless UI](/headless).</Info>
