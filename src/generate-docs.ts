@@ -234,6 +234,7 @@ const baseConfig = {
             "quickstart",
             "use-with-ai-ide",
             "concepts",
+            "unified-api"
           ]
         },
         "subscribe-actions",
