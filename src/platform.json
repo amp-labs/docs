@@ -24995,6 +24995,2691 @@
         "x-codegen-request-body-name": "installationUpdate"
       }
     },
+    "/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}/config-content": {
+      "patch": {
+        "summary": "Update an installation object",
+        "description": "Updates a single object's configuration within an installation using JSON Patch syntax (RFC 6902).\nApplies JSON Patch operations (add, remove, replace) to a specific object's config.\nSupports updating read, subscribe, and write object configurations.\n",
+        "operationId": "patchObjectConfigContent",
+        "tags": [
+          "Installation"
+        ],
+        "parameters": [
+          {
+            "name": "projectIdOrName",
+            "in": "path",
+            "required": true,
+            "description": "The Ampersand project ID or project name.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "my-project"
+          },
+          {
+            "name": "integrationId",
+            "in": "path",
+            "required": true,
+            "description": "The integration ID.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "objectName",
+            "in": "path",
+            "required": true,
+            "description": "The object name whose config content will be patched.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "account"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "action",
+                      "changes"
+                    ],
+                    "properties": {
+                      "action": {
+                        "type": "string",
+                        "enum": [
+                          "read",
+                          "subscribe",
+                          "write"
+                        ],
+                        "description": "The action type for the object config (read, subscribe, or write).",
+                        "example": "read"
+                      },
+                      "changes": {
+                        "type": "array",
+                        "minItems": 1,
+                        "description": "Array of JSON Patch operations to apply (RFC 6902).\nSupported operations: add, remove, replace.\nAll paths must start with \"/\" (e.g., \"/schedule\", \"/selectedFields/phone\").\n",
+                        "items": {
+                          "title": "JSON Patch Operation",
+                          "description": "Represents a single JSON Patch operation (RFC 6902).\nOnly supports add, remove, and replace operations for config updates.\n",
+                          "required": [
+                            "op",
+                            "path"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "op": {
+                              "type": "string",
+                              "enum": [
+                                "add",
+                                "remove",
+                                "replace"
+                              ],
+                              "description": "The operation to perform.\n- \"add\": Adds a new field or replaces an existing one at the specified path\n- \"remove\": Removes the field at the specified path\n- \"replace\": Replaces the value at the specified path \n",
+                              "example": "replace"
+                            },
+                            "path": {
+                              "type": "string",
+                              "description": "JSON Pointer path to the field to operate on (RFC 6901).\nAll paths must start with \"/\" (e.g., \"/schedule\", \"/selectedFields/phone\").\n",
+                              "example": "/schedule"
+                            },
+                            "value": {
+                              "description": "The value to set for add/replace operations.\nNot used for remove operations.\n",
+                              "example": "*/10 * * * *"
+                            }
+                          }
+                        },
+                        "example": [
+                          {
+                            "op": "replace",
+                            "path": "/schedule",
+                            "value": "*/10 * * * *"
+                          },
+                          {
+                            "op": "add",
+                            "path": "/selectedFields/phone",
+                            "value": true
+                          },
+                          {
+                            "op": "remove",
+                            "path": "/selectedFields/billingcity"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "groupRef"
+                        ],
+                        "properties": {
+                          "groupRef": {
+                            "type": "string",
+                            "description": "The ID of the user group that has access to this installation.\nEither groupRef or installationId must be provided.\n",
+                            "example": "group-123"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "required": [
+                          "installationId"
+                        ],
+                        "properties": {
+                          "installationId": {
+                            "type": "string",
+                            "description": "The installation ID.\nEither groupRef or installationId must be provided.\n",
+                            "example": "installation-123"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated installation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Installation",
+                  "required": [
+                    "config",
+                    "connection",
+                    "createTime",
+                    "createdBy",
+                    "healthStatus",
+                    "id",
+                    "integrationId",
+                    "projectId"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The installation ID."
+                    },
+                    "projectId": {
+                      "type": "string",
+                      "description": "The Ampersand project ID.",
+                      "example": "project-456"
+                    },
+                    "integrationId": {
+                      "type": "string",
+                      "description": "The integration ID."
+                    },
+                    "group": {
+                      "title": "Group",
+                      "required": [
+                        "createTime",
+                        "groupName",
+                        "groupRef",
+                        "projectId"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "groupRef": {
+                          "type": "string",
+                          "description": "The ID of the user group that has access to this installation.",
+                          "example": "group-123"
+                        },
+                        "groupName": {
+                          "type": "string",
+                          "description": "The name of the user group that has access to this installation.",
+                          "example": "Super Customer"
+                        },
+                        "projectId": {
+                          "type": "string",
+                          "description": "The Ampersand project ID.",
+                          "example": "project-456"
+                        },
+                        "createTime": {
+                          "type": "string",
+                          "description": "The time the group was created.",
+                          "format": "date-time",
+                          "example": "2023-07-13T21:34:44.816Z"
+                        },
+                        "updateTime": {
+                          "type": "string",
+                          "description": "The time the group was last updated.",
+                          "format": "date-time",
+                          "example": "2023-07-13T21:34:44.816Z"
+                        }
+                      }
+                    },
+                    "healthStatus": {
+                      "type": "string",
+                      "description": "The health status of the installation (\"healthy\", \"unhealthy\").",
+                      "example": "healthy"
+                    },
+                    "connection": {
+                      "title": "Connection",
+                      "required": [
+                        "id",
+                        "createTime",
+                        "group",
+                        "consumer",
+                        "projectId",
+                        "provider",
+                        "authScheme",
+                        "status"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "The connection ID.",
+                          "example": "connection-123"
+                        },
+                        "projectId": {
+                          "type": "string",
+                          "description": "The Ampersand project ID.",
+                          "example": "project-456"
+                        },
+                        "provider": {
+                          "type": "string",
+                          "description": "The SaaS provider that this Connection is for.",
+                          "example": "salesforce"
+                        },
+                        "providerApp": {
+                          "title": "Provider App",
+                          "required": [
+                            "clientId",
+                            "createTime",
+                            "id",
+                            "projectId",
+                            "provider"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "The provider app ID.",
+                              "example": "provider-app-123"
+                            },
+                            "projectId": {
+                              "type": "string",
+                              "description": "The Ampersand project ID.",
+                              "example": "project-456"
+                            },
+                            "externalRef": {
+                              "type": "string",
+                              "description": "The ID used by the provider to identify the app (optional).",
+                              "example": "external-id-123"
+                            },
+                            "provider": {
+                              "type": "string",
+                              "description": "The SaaS provider that this app connects to.",
+                              "example": "salesforce"
+                            },
+                            "clientId": {
+                              "type": "string",
+                              "description": "The OAuth client ID for this app.",
+                              "example": "client-id-123"
+                            },
+                            "scopes": {
+                              "type": "array",
+                              "description": "The OAuth scopes for this app.",
+                              "items": {
+                                "type": "string",
+                                "example": [
+                                  "oauth",
+                                  "offline",
+                                  "crm.read"
+                                ]
+                              }
+                            },
+                            "createTime": {
+                              "type": "string",
+                              "description": "The time the provider app was created.",
+                              "format": "date-time"
+                            },
+                            "updateTime": {
+                              "type": "string",
+                              "description": "The time the provider app was updated.",
+                              "format": "date-time"
+                            }
+                          }
+                        },
+                        "group": {
+                          "title": "Group",
+                          "required": [
+                            "createTime",
+                            "groupName",
+                            "groupRef",
+                            "projectId"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "groupRef": {
+                              "type": "string",
+                              "description": "The ID of the user group that has access to this installation.",
+                              "example": "group-123"
+                            },
+                            "groupName": {
+                              "type": "string",
+                              "description": "The name of the user group that has access to this installation.",
+                              "example": "Super Customer"
+                            },
+                            "projectId": {
+                              "type": "string",
+                              "description": "The Ampersand project ID.",
+                              "example": "project-456"
+                            },
+                            "createTime": {
+                              "type": "string",
+                              "description": "The time the group was created.",
+                              "format": "date-time",
+                              "example": "2023-07-13T21:34:44.816Z"
+                            },
+                            "updateTime": {
+                              "type": "string",
+                              "description": "The time the group was last updated.",
+                              "format": "date-time",
+                              "example": "2023-07-13T21:34:44.816Z"
+                            }
+                          }
+                        },
+                        "consumer": {
+                          "title": "Consumer",
+                          "required": [
+                            "consumerName",
+                            "consumerRef",
+                            "createTime",
+                            "projectId"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "consumerRef": {
+                              "type": "string",
+                              "description": "The consumer reference.",
+                              "example": "consumer-123"
+                            },
+                            "consumerName": {
+                              "type": "string",
+                              "description": "The name of the consumer.",
+                              "example": "Super Customer"
+                            },
+                            "projectId": {
+                              "type": "string",
+                              "description": "The Ampersand project ID.",
+                              "example": "project-456"
+                            },
+                            "createTime": {
+                              "type": "string",
+                              "description": "The time the consumer was created.",
+                              "format": "date-time",
+                              "example": "2023-07-13T21:34:44.816Z"
+                            },
+                            "updateTime": {
+                              "type": "string",
+                              "description": "The time the consumer was last updated.",
+                              "format": "date-time",
+                              "example": "2023-07-13T21:34:44.816Z"
+                            }
+                          }
+                        },
+                        "providerWorkspaceRef": {
+                          "type": "string",
+                          "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
+                          "example": "provider-workspace-123"
+                        },
+                        "providerConsumerRef": {
+                          "type": "string",
+                          "description": "If available, the ID that Salesforce/Hubspot uses to identify this user (e.g. Salesforce has IDs in the form of https://login.salesforce.com/id/00D4x0000019CQTEA2/0054x000000orJ4AA)",
+                          "example": "provider-consumer-123"
+                        },
+                        "createTime": {
+                          "type": "string",
+                          "description": "The time the connection was created.",
+                          "format": "date-time",
+                          "example": "2023-07-13T21:34:44.816Z"
+                        },
+                        "updateTime": {
+                          "type": "string",
+                          "description": "The time the connection was last updated.",
+                          "format": "date-time",
+                          "example": "2023-07-13T21:34:44.816Z"
+                        },
+                        "authScheme": {
+                          "type": "string",
+                          "description": "The authentication scheme used for this connection.",
+                          "example": "oauth2/authorizationCode",
+                          "enum": [
+                            "none",
+                            "apiKey",
+                            "basic",
+                            "oauth2/authorizationCode",
+                            "oauth2/authorizationCodePKCE",
+                            "oauth2/clientCredentials",
+                            "oauth2/password"
+                          ]
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "The status of the connection.\n- `created`: The connection has just been created or the access token was just refreshed.\n- `working`: The connection has successfully been used to make a request.\n- `bad_credentials`: The connection encountered credential-related issues when making a request, or when attempting to refresh the access token.\n",
+                          "example": "working",
+                          "enum": [
+                            "created",
+                            "working",
+                            "bad_credentials"
+                          ]
+                        },
+                        "oauth2AuthorizationCode": {
+                          "title": "OAuth2 AuthorizationCode Token",
+                          "type": "object",
+                          "properties": {
+                            "accessToken": {
+                              "type": "object",
+                              "required": [
+                                "token"
+                              ],
+                              "description": "The access token for the connection.",
+                              "properties": {
+                                "token": {
+                                  "type": "string"
+                                },
+                                "issuedAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2024-04-22T18:55:28.456076Z"
+                                },
+                                "expiresAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2024-10-22T18:55:28.456076Z"
+                                }
+                              }
+                            },
+                            "refreshToken": {
+                              "type": "object",
+                              "required": [
+                                "token"
+                              ],
+                              "description": "The refresh token to use for the connection.",
+                              "properties": {
+                                "token": {
+                                  "type": "string"
+                                },
+                                "issuedAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2024-04-22T18:55:28.456076Z"
+                                },
+                                "expiresAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2024-10-22T18:55:28.456076Z"
+                                }
+                              }
+                            },
+                            "scopes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "description": "The scopes for the tokens."
+                            }
+                          }
+                        },
+                        "apiKey": {
+                          "type": "string",
+                          "description": "The API key used while making the connection.",
+                          "example": "api-key-123"
+                        },
+                        "providerMetadata": {
+                          "title": "Provider Metadata",
+                          "type": "object",
+                          "additionalProperties": {
+                            "title": "Provider Metadata Info",
+                            "type": "object",
+                            "required": [
+                              "value",
+                              "source"
+                            ],
+                            "properties": {
+                              "value": {
+                                "type": "string",
+                                "description": "The value of the metadata field",
+                                "example": "1234567890"
+                              },
+                              "source": {
+                                "type": "string",
+                                "description": "The source of the metadata field",
+                                "enum": [
+                                  "input",
+                                  "token",
+                                  "provider"
+                                ],
+                                "example": "input"
+                              },
+                              "displayName": {
+                                "type": "string",
+                                "description": "The human-readable name for the field",
+                                "example": "Account ID"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "createTime": {
+                      "type": "string",
+                      "description": "The time the integration was first installed.",
+                      "format": "date-time"
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "description": "The person who did the installation, in the format of \"consumer:{consumer-id}\".",
+                      "example": "consumer:consumer-123"
+                    },
+                    "updateTime": {
+                      "type": "string",
+                      "description": "The time the installation was last updated with a new config.",
+                      "format": "date-time"
+                    },
+                    "config": {
+                      "title": "Config",
+                      "required": [
+                        "content",
+                        "createTime",
+                        "createdBy",
+                        "id",
+                        "revisionId"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "The config ID.",
+                          "example": "config-123"
+                        },
+                        "revisionId": {
+                          "type": "string",
+                          "description": "The ID of the revision that this config is based on.",
+                          "example": "revision-123"
+                        },
+                        "createTime": {
+                          "type": "string",
+                          "description": "The time the config was created.",
+                          "format": "date-time"
+                        },
+                        "createdBy": {
+                          "type": "string",
+                          "description": "The person who created the config, in the format of \"consumer:{consumer-id}\" or \"builder:{builder-id}\".",
+                          "example": "builder:builder-123"
+                        },
+                        "content": {
+                          "title": "Config Content",
+                          "allOf": [
+                            {
+                              "title": "Base Config Content",
+                              "type": "object",
+                              "properties": {
+                                "provider": {
+                                  "description": "The SaaS API that we are integrating with.",
+                                  "example": "hubspot",
+                                  "type": "string"
+                                },
+                                "read": {
+                                  "title": "Base Read Config",
+                                  "type": "object",
+                                  "properties": {
+                                    "objects": {
+                                      "type": "object",
+                                      "description": "This is a map of object names to their configuration.",
+                                      "additionalProperties": {
+                                        "title": "Base Read Config Object",
+                                        "type": "object",
+                                        "properties": {
+                                          "objectName": {
+                                            "description": "The name of the object to read from.",
+                                            "example": "account",
+                                            "type": "string",
+                                            "x-oapi-codegen-extra-tags": {
+                                              "validate": "required"
+                                            }
+                                          },
+                                          "schedule": {
+                                            "type": "string",
+                                            "description": "The schedule for reading the object, in cron syntax.",
+                                            "example": "*/15 * * * *",
+                                            "x-go-type-skip-optional-pointer": true
+                                          },
+                                          "disabled": {
+                                            "type": "boolean",
+                                            "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                            "default": false
+                                          },
+                                          "destination": {
+                                            "description": "The name of the destination that the result should be sent to.",
+                                            "example": "accountWebhook",
+                                            "type": "string",
+                                            "x-go-type-skip-optional-pointer": true
+                                          },
+                                          "selectedFields": {
+                                            "type": "object",
+                                            "description": "This is a map of field names to booleans indicating whether they should be read. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                            "example": "{ phone: true, fax: true }",
+                                            "additionalProperties": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "selectedValueMappings": {
+                                            "type": "object",
+                                            "description": "This is a map of field names to their value mappings.",
+                                            "example": {
+                                              "stage": {
+                                                "open": "scheduled",
+                                                "closedWon": "won",
+                                                "closedLost": "lost"
+                                              }
+                                            },
+                                            "x-go-type-skip-optional-pointer": true,
+                                            "additionalProperties": {
+                                              "title": "Selected Value Mappings",
+                                              "type": "object",
+                                              "description": "This is a map of values to their mappings. The key is the value delivered to the webhook, the value is the value coming from the provider API.",
+                                              "example": {
+                                                "open": "scheduled",
+                                                "closedWon": "won",
+                                                "closedLost": "lost"
+                                              },
+                                              "x-go-type-skip-optional-pointer": true,
+                                              "additionalProperties": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          "dynamicMappingsInput": {
+                                            "title": "Dynamic Mappings Input",
+                                            "description": "An array containing all available dynamic field and value mappings for this installation, provided by the InstallIntegration component. This array represents the complete set of possible mappings, regardless of which ones are currently selected. The actual selected mappings are stored separately in the selectedFieldMappings property.",
+                                            "type": "array",
+                                            "items": {
+                                              "title": "Field Mapping Entry",
+                                              "type": "object",
+                                              "required": [
+                                                "mapToName"
+                                              ],
+                                              "properties": {
+                                                "mapToName": {
+                                                  "type": "string",
+                                                  "description": "The name of the field in your application."
+                                                },
+                                                "mapToDisplayName": {
+                                                  "type": "string",
+                                                  "description": "Optional display name of the field to show the user in the mapping UI."
+                                                },
+                                                "prompt": {
+                                                  "type": "string",
+                                                  "description": "Optional prompt to show the user in the mapping UI."
+                                                },
+                                                "mappedValues": {
+                                                  "type": "array",
+                                                  "description": "If you would like the user to map a set of possible values, this is the list of possible values of the field in your application.",
+                                                  "items": {
+                                                    "title": "Mapped Value",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "mappedValue",
+                                                      "mappedDisplayValue"
+                                                    ],
+                                                    "properties": {
+                                                      "mappedValue": {
+                                                        "type": "string"
+                                                      },
+                                                      "mappedDisplayValue": {
+                                                        "type": "string"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "fieldName": {
+                                                  "type": "string",
+                                                  "description": "The name of the field in SaaS provider, if present, then we will not prompt the user to map the field."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "selectedFieldMappings": {
+                                            "type": "object",
+                                            "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.)",
+                                            "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                            "additionalProperties": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "selectedFieldsAuto": {
+                                            "title": "Selected Fields Auto Config",
+                                            "description": "If selectedFieldsAuto is set to all, all fields will be read.",
+                                            "type": "string",
+                                            "enum": [
+                                              "all"
+                                            ],
+                                            "x-enum-varnames": [
+                                              "SelectedFieldsAll"
+                                            ]
+                                          },
+                                          "backfill": {
+                                            "title": "Backfill Config",
+                                            "type": "object",
+                                            "required": [
+                                              "defaultPeriod"
+                                            ],
+                                            "properties": {
+                                              "defaultPeriod": {
+                                                "title": "Default Period Config",
+                                                "type": "object",
+                                                "properties": {
+                                                  "days": {
+                                                    "type": "integer",
+                                                    "description": "Number of days in past to backfill from. 0 is no backfill. e.g) if 10, then backfill last 10 days of data. Required if fullHistory is not set.",
+                                                    "minimum": 0,
+                                                    "example": 30,
+                                                    "x-oapi-codegen-extra-tags": {
+                                                      "validate": "required_without=FullHistory,omitempty,min=0"
+                                                    }
+                                                  },
+                                                  "fullHistory": {
+                                                    "type": "boolean",
+                                                    "description": "If true, backfill all history. Required if days is not set.",
+                                                    "example": false,
+                                                    "x-oapi-codegen-extra-tags": {
+                                                      "validate": "required_without=Days"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "write": {
+                                  "title": "Base Write Config",
+                                  "type": "object",
+                                  "properties": {
+                                    "objects": {
+                                      "type": "object",
+                                      "description": "This is a map of object names to their configuration.",
+                                      "additionalProperties": {
+                                        "title": "Base Write Config Object",
+                                        "type": "object",
+                                        "required": [
+                                          "objectName"
+                                        ],
+                                        "properties": {
+                                          "objectName": {
+                                            "description": "The name of the object to write to.",
+                                            "example": "account",
+                                            "type": "string",
+                                            "x-oapi-codegen-extra-tags": {
+                                              "validate": "required"
+                                            }
+                                          },
+                                          "selectedValueDefaults": {
+                                            "type": "object",
+                                            "deprecated": true,
+                                            "description": "This is a map of field names to default values. These values will be used when writing to the object.",
+                                            "x-go-type-skip-optional-pointer": true,
+                                            "additionalProperties": {
+                                              "title": "Value Default (Legacy)",
+                                              "deprecated": true,
+                                              "x-go-type": "any",
+                                              "oneOf": [
+                                                {
+                                                  "title": "Value Default String",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "value"
+                                                  ],
+                                                  "properties": {
+                                                    "value": {
+                                                      "type": "string",
+                                                      "description": "The value to be used as a default."
+                                                    },
+                                                    "applyOnUpdate": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "always",
+                                                        "never"
+                                                      ],
+                                                      "description": "Whether the default value should be applied when updating a record.\nIf set to `always`, the default value will be applied when updating a record.\nIf set to `never`, the default value will not be applied when updating a record,\nonly when creating a record.\nIf unspecified, then `always` is assumed.\n"
+                                                    }
+                                                  }
+                                                },
+                                                {
+                                                  "title": "Value Default Integer",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "value"
+                                                  ],
+                                                  "properties": {
+                                                    "value": {
+                                                      "type": "integer",
+                                                      "description": "The value to be used as a default."
+                                                    },
+                                                    "applyOnUpdate": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "always",
+                                                        "never"
+                                                      ],
+                                                      "description": "Whether the default value should be applied when updating a record.\nIf set to `always`, the default value will be applied when updating a record.\nIf set to `never`, the default value will not be applied when updating a record,\nonly when creating a record.\nIf unspecified, then `always` is assumed.\n"
+                                                    }
+                                                  }
+                                                },
+                                                {
+                                                  "title": "Value Default Boolean",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "value"
+                                                  ],
+                                                  "properties": {
+                                                    "value": {
+                                                      "type": "boolean",
+                                                      "description": "The value to be used as a default."
+                                                    },
+                                                    "applyOnUpdate": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "always",
+                                                        "never"
+                                                      ],
+                                                      "description": "Whether the default value should be applied when updating a record.\nIf set to `always`, the default value will be applied when updating a record.\nIf set to `never`, the default value will not be applied when updating a record,\nonly when creating a record.\nIf unspecified, then `always` is assumed.\n"
+                                                    }
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          "selectedFieldSettings": {
+                                            "type": "object",
+                                            "description": "This is a map of field names to their settings.",
+                                            "x-go-type-skip-optional-pointer": true,
+                                            "additionalProperties": {
+                                              "title": "Field setting",
+                                              "type": "object",
+                                              "properties": {
+                                                "default": {
+                                                  "title": "Default value for a field",
+                                                  "description": "Only use one of stringValue, integerValue, booleanValue.",
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "stringValue": {
+                                                      "type": "string",
+                                                      "description": "The default string value to apply to a field"
+                                                    },
+                                                    "integerValue": {
+                                                      "type": "integer",
+                                                      "description": "The default integer value to apply to a field"
+                                                    },
+                                                    "booleanValue": {
+                                                      "type": "boolean",
+                                                      "description": "The default boolean value to apply to a field"
+                                                    }
+                                                  }
+                                                },
+                                                "writeOnCreate": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "always",
+                                                    "never"
+                                                  ],
+                                                  "default": "always",
+                                                  "x-go-type-skip-optional-pointer": true,
+                                                  "description": "Whether the default value should be applied when creating a record."
+                                                },
+                                                "writeOnUpdate": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "always",
+                                                    "never"
+                                                  ],
+                                                  "default": "always",
+                                                  "x-go-type-skip-optional-pointer": true,
+                                                  "description": "Whether the default value should be applied when updating a record."
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "proxy": {
+                                  "title": "Base Proxy Config",
+                                  "type": "object",
+                                  "properties": {
+                                    "enabled": {
+                                      "type": "boolean"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "object",
+                              "required": [
+                                "provider"
+                              ],
+                              "properties": {
+                                "read": {
+                                  "title": "Read Config",
+                                  "allOf": [
+                                    {
+                                      "title": "Base Read Config",
+                                      "type": "object",
+                                      "properties": {
+                                        "objects": {
+                                          "type": "object",
+                                          "description": "This is a map of object names to their configuration.",
+                                          "additionalProperties": {
+                                            "title": "Base Read Config Object",
+                                            "type": "object",
+                                            "properties": {
+                                              "objectName": {
+                                                "description": "The name of the object to read from.",
+                                                "example": "account",
+                                                "type": "string",
+                                                "x-oapi-codegen-extra-tags": {
+                                                  "validate": "required"
+                                                }
+                                              },
+                                              "schedule": {
+                                                "type": "string",
+                                                "description": "The schedule for reading the object, in cron syntax.",
+                                                "example": "*/15 * * * *",
+                                                "x-go-type-skip-optional-pointer": true
+                                              },
+                                              "disabled": {
+                                                "type": "boolean",
+                                                "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                "default": false
+                                              },
+                                              "destination": {
+                                                "description": "The name of the destination that the result should be sent to.",
+                                                "example": "accountWebhook",
+                                                "type": "string",
+                                                "x-go-type-skip-optional-pointer": true
+                                              },
+                                              "selectedFields": {
+                                                "type": "object",
+                                                "description": "This is a map of field names to booleans indicating whether they should be read. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                "example": "{ phone: true, fax: true }",
+                                                "additionalProperties": {
+                                                  "type": "boolean"
+                                                }
+                                              },
+                                              "selectedValueMappings": {
+                                                "type": "object",
+                                                "description": "This is a map of field names to their value mappings.",
+                                                "example": {
+                                                  "stage": {
+                                                    "open": "scheduled",
+                                                    "closedWon": "won",
+                                                    "closedLost": "lost"
+                                                  }
+                                                },
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "additionalProperties": {
+                                                  "title": "Selected Value Mappings",
+                                                  "type": "object",
+                                                  "description": "This is a map of values to their mappings. The key is the value delivered to the webhook, the value is the value coming from the provider API.",
+                                                  "example": {
+                                                    "open": "scheduled",
+                                                    "closedWon": "won",
+                                                    "closedLost": "lost"
+                                                  },
+                                                  "x-go-type-skip-optional-pointer": true,
+                                                  "additionalProperties": {
+                                                    "type": "string"
+                                                  }
+                                                }
+                                              },
+                                              "dynamicMappingsInput": {
+                                                "title": "Dynamic Mappings Input",
+                                                "description": "An array containing all available dynamic field and value mappings for this installation, provided by the InstallIntegration component. This array represents the complete set of possible mappings, regardless of which ones are currently selected. The actual selected mappings are stored separately in the selectedFieldMappings property.",
+                                                "type": "array",
+                                                "items": {
+                                                  "title": "Field Mapping Entry",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "mapToName"
+                                                  ],
+                                                  "properties": {
+                                                    "mapToName": {
+                                                      "type": "string",
+                                                      "description": "The name of the field in your application."
+                                                    },
+                                                    "mapToDisplayName": {
+                                                      "type": "string",
+                                                      "description": "Optional display name of the field to show the user in the mapping UI."
+                                                    },
+                                                    "prompt": {
+                                                      "type": "string",
+                                                      "description": "Optional prompt to show the user in the mapping UI."
+                                                    },
+                                                    "mappedValues": {
+                                                      "type": "array",
+                                                      "description": "If you would like the user to map a set of possible values, this is the list of possible values of the field in your application.",
+                                                      "items": {
+                                                        "title": "Mapped Value",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "mappedValue",
+                                                          "mappedDisplayValue"
+                                                        ],
+                                                        "properties": {
+                                                          "mappedValue": {
+                                                            "type": "string"
+                                                          },
+                                                          "mappedDisplayValue": {
+                                                            "type": "string"
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "fieldName": {
+                                                      "type": "string",
+                                                      "description": "The name of the field in SaaS provider, if present, then we will not prompt the user to map the field."
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "selectedFieldMappings": {
+                                                "type": "object",
+                                                "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.)",
+                                                "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                "additionalProperties": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "selectedFieldsAuto": {
+                                                "title": "Selected Fields Auto Config",
+                                                "description": "If selectedFieldsAuto is set to all, all fields will be read.",
+                                                "type": "string",
+                                                "enum": [
+                                                  "all"
+                                                ],
+                                                "x-enum-varnames": [
+                                                  "SelectedFieldsAll"
+                                                ]
+                                              },
+                                              "backfill": {
+                                                "title": "Backfill Config",
+                                                "type": "object",
+                                                "required": [
+                                                  "defaultPeriod"
+                                                ],
+                                                "properties": {
+                                                  "defaultPeriod": {
+                                                    "title": "Default Period Config",
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "days": {
+                                                        "type": "integer",
+                                                        "description": "Number of days in past to backfill from. 0 is no backfill. e.g) if 10, then backfill last 10 days of data. Required if fullHistory is not set.",
+                                                        "minimum": 0,
+                                                        "example": 30,
+                                                        "x-oapi-codegen-extra-tags": {
+                                                          "validate": "required_without=FullHistory,omitempty,min=0"
+                                                        }
+                                                      },
+                                                      "fullHistory": {
+                                                        "type": "boolean",
+                                                        "description": "If true, backfill all history. Required if days is not set.",
+                                                        "example": false,
+                                                        "x-oapi-codegen-extra-tags": {
+                                                          "validate": "required_without=Days"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "object",
+                                      "required": [
+                                        "objects"
+                                      ],
+                                      "properties": {
+                                        "objects": {
+                                          "additionalProperties": {
+                                            "title": "Read Config Object",
+                                            "allOf": [
+                                              {
+                                                "title": "Base Read Config Object",
+                                                "type": "object",
+                                                "properties": {
+                                                  "objectName": {
+                                                    "description": "The name of the object to read from.",
+                                                    "example": "account",
+                                                    "type": "string",
+                                                    "x-oapi-codegen-extra-tags": {
+                                                      "validate": "required"
+                                                    }
+                                                  },
+                                                  "schedule": {
+                                                    "type": "string",
+                                                    "description": "The schedule for reading the object, in cron syntax.",
+                                                    "example": "*/15 * * * *",
+                                                    "x-go-type-skip-optional-pointer": true
+                                                  },
+                                                  "disabled": {
+                                                    "type": "boolean",
+                                                    "description": "If this flag is set to true, scheduled reads associated with this object will be paused, and on-demand reads will not be allowed.",
+                                                    "default": false
+                                                  },
+                                                  "destination": {
+                                                    "description": "The name of the destination that the result should be sent to.",
+                                                    "example": "accountWebhook",
+                                                    "type": "string",
+                                                    "x-go-type-skip-optional-pointer": true
+                                                  },
+                                                  "selectedFields": {
+                                                    "type": "object",
+                                                    "description": "This is a map of field names to booleans indicating whether they should be read. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                    "example": "{ phone: true, fax: true }",
+                                                    "additionalProperties": {
+                                                      "type": "boolean"
+                                                    }
+                                                  },
+                                                  "selectedValueMappings": {
+                                                    "type": "object",
+                                                    "description": "This is a map of field names to their value mappings.",
+                                                    "example": {
+                                                      "stage": {
+                                                        "open": "scheduled",
+                                                        "closedWon": "won",
+                                                        "closedLost": "lost"
+                                                      }
+                                                    },
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "additionalProperties": {
+                                                      "title": "Selected Value Mappings",
+                                                      "type": "object",
+                                                      "description": "This is a map of values to their mappings. The key is the value delivered to the webhook, the value is the value coming from the provider API.",
+                                                      "example": {
+                                                        "open": "scheduled",
+                                                        "closedWon": "won",
+                                                        "closedLost": "lost"
+                                                      },
+                                                      "x-go-type-skip-optional-pointer": true,
+                                                      "additionalProperties": {
+                                                        "type": "string"
+                                                      }
+                                                    }
+                                                  },
+                                                  "dynamicMappingsInput": {
+                                                    "title": "Dynamic Mappings Input",
+                                                    "description": "An array containing all available dynamic field and value mappings for this installation, provided by the InstallIntegration component. This array represents the complete set of possible mappings, regardless of which ones are currently selected. The actual selected mappings are stored separately in the selectedFieldMappings property.",
+                                                    "type": "array",
+                                                    "items": {
+                                                      "title": "Field Mapping Entry",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "mapToName"
+                                                      ],
+                                                      "properties": {
+                                                        "mapToName": {
+                                                          "type": "string",
+                                                          "description": "The name of the field in your application."
+                                                        },
+                                                        "mapToDisplayName": {
+                                                          "type": "string",
+                                                          "description": "Optional display name of the field to show the user in the mapping UI."
+                                                        },
+                                                        "prompt": {
+                                                          "type": "string",
+                                                          "description": "Optional prompt to show the user in the mapping UI."
+                                                        },
+                                                        "mappedValues": {
+                                                          "type": "array",
+                                                          "description": "If you would like the user to map a set of possible values, this is the list of possible values of the field in your application.",
+                                                          "items": {
+                                                            "title": "Mapped Value",
+                                                            "type": "object",
+                                                            "required": [
+                                                              "mappedValue",
+                                                              "mappedDisplayValue"
+                                                            ],
+                                                            "properties": {
+                                                              "mappedValue": {
+                                                                "type": "string"
+                                                              },
+                                                              "mappedDisplayValue": {
+                                                                "type": "string"
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        "fieldName": {
+                                                          "type": "string",
+                                                          "description": "The name of the field in SaaS provider, if present, then we will not prompt the user to map the field."
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "selectedFieldMappings": {
+                                                    "type": "object",
+                                                    "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.)",
+                                                    "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                    "additionalProperties": {
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "selectedFieldsAuto": {
+                                                    "title": "Selected Fields Auto Config",
+                                                    "description": "If selectedFieldsAuto is set to all, all fields will be read.",
+                                                    "type": "string",
+                                                    "enum": [
+                                                      "all"
+                                                    ],
+                                                    "x-enum-varnames": [
+                                                      "SelectedFieldsAll"
+                                                    ]
+                                                  },
+                                                  "backfill": {
+                                                    "title": "Backfill Config",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "defaultPeriod"
+                                                    ],
+                                                    "properties": {
+                                                      "defaultPeriod": {
+                                                        "title": "Default Period Config",
+                                                        "type": "object",
+                                                        "properties": {
+                                                          "days": {
+                                                            "type": "integer",
+                                                            "description": "Number of days in past to backfill from. 0 is no backfill. e.g) if 10, then backfill last 10 days of data. Required if fullHistory is not set.",
+                                                            "minimum": 0,
+                                                            "example": 30,
+                                                            "x-oapi-codegen-extra-tags": {
+                                                              "validate": "required_without=FullHistory,omitempty,min=0"
+                                                            }
+                                                          },
+                                                          "fullHistory": {
+                                                            "type": "boolean",
+                                                            "description": "If true, backfill all history. Required if days is not set.",
+                                                            "example": false,
+                                                            "x-oapi-codegen-extra-tags": {
+                                                              "validate": "required_without=Days"
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              {
+                                                "type": "object",
+                                                "required": [
+                                                  "objectName",
+                                                  "selectedFields",
+                                                  "selectedFieldMappings"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                "write": {
+                                  "title": "Write Config",
+                                  "allOf": [
+                                    {
+                                      "title": "Base Write Config",
+                                      "type": "object",
+                                      "properties": {
+                                        "objects": {
+                                          "type": "object",
+                                          "description": "This is a map of object names to their configuration.",
+                                          "additionalProperties": {
+                                            "title": "Base Write Config Object",
+                                            "type": "object",
+                                            "required": [
+                                              "objectName"
+                                            ],
+                                            "properties": {
+                                              "objectName": {
+                                                "description": "The name of the object to write to.",
+                                                "example": "account",
+                                                "type": "string",
+                                                "x-oapi-codegen-extra-tags": {
+                                                  "validate": "required"
+                                                }
+                                              },
+                                              "selectedValueDefaults": {
+                                                "type": "object",
+                                                "deprecated": true,
+                                                "description": "This is a map of field names to default values. These values will be used when writing to the object.",
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "additionalProperties": {
+                                                  "title": "Value Default (Legacy)",
+                                                  "deprecated": true,
+                                                  "x-go-type": "any",
+                                                  "oneOf": [
+                                                    {
+                                                      "title": "Value Default String",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "value"
+                                                      ],
+                                                      "properties": {
+                                                        "value": {
+                                                          "type": "string",
+                                                          "description": "The value to be used as a default."
+                                                        },
+                                                        "applyOnUpdate": {
+                                                          "type": "string",
+                                                          "enum": [
+                                                            "always",
+                                                            "never"
+                                                          ],
+                                                          "description": "Whether the default value should be applied when updating a record.\nIf set to `always`, the default value will be applied when updating a record.\nIf set to `never`, the default value will not be applied when updating a record,\nonly when creating a record.\nIf unspecified, then `always` is assumed.\n"
+                                                        }
+                                                      }
+                                                    },
+                                                    {
+                                                      "title": "Value Default Integer",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "value"
+                                                      ],
+                                                      "properties": {
+                                                        "value": {
+                                                          "type": "integer",
+                                                          "description": "The value to be used as a default."
+                                                        },
+                                                        "applyOnUpdate": {
+                                                          "type": "string",
+                                                          "enum": [
+                                                            "always",
+                                                            "never"
+                                                          ],
+                                                          "description": "Whether the default value should be applied when updating a record.\nIf set to `always`, the default value will be applied when updating a record.\nIf set to `never`, the default value will not be applied when updating a record,\nonly when creating a record.\nIf unspecified, then `always` is assumed.\n"
+                                                        }
+                                                      }
+                                                    },
+                                                    {
+                                                      "title": "Value Default Boolean",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "value"
+                                                      ],
+                                                      "properties": {
+                                                        "value": {
+                                                          "type": "boolean",
+                                                          "description": "The value to be used as a default."
+                                                        },
+                                                        "applyOnUpdate": {
+                                                          "type": "string",
+                                                          "enum": [
+                                                            "always",
+                                                            "never"
+                                                          ],
+                                                          "description": "Whether the default value should be applied when updating a record.\nIf set to `always`, the default value will be applied when updating a record.\nIf set to `never`, the default value will not be applied when updating a record,\nonly when creating a record.\nIf unspecified, then `always` is assumed.\n"
+                                                        }
+                                                      }
+                                                    }
+                                                  ]
+                                                }
+                                              },
+                                              "selectedFieldSettings": {
+                                                "type": "object",
+                                                "description": "This is a map of field names to their settings.",
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "additionalProperties": {
+                                                  "title": "Field setting",
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "default": {
+                                                      "title": "Default value for a field",
+                                                      "description": "Only use one of stringValue, integerValue, booleanValue.",
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "stringValue": {
+                                                          "type": "string",
+                                                          "description": "The default string value to apply to a field"
+                                                        },
+                                                        "integerValue": {
+                                                          "type": "integer",
+                                                          "description": "The default integer value to apply to a field"
+                                                        },
+                                                        "booleanValue": {
+                                                          "type": "boolean",
+                                                          "description": "The default boolean value to apply to a field"
+                                                        }
+                                                      }
+                                                    },
+                                                    "writeOnCreate": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "always",
+                                                        "never"
+                                                      ],
+                                                      "default": "always",
+                                                      "x-go-type-skip-optional-pointer": true,
+                                                      "description": "Whether the default value should be applied when creating a record."
+                                                    },
+                                                    "writeOnUpdate": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "always",
+                                                        "never"
+                                                      ],
+                                                      "default": "always",
+                                                      "x-go-type-skip-optional-pointer": true,
+                                                      "description": "Whether the default value should be applied when updating a record."
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "objects": {
+                                          "additionalProperties": {
+                                            "title": "Write Config Object",
+                                            "allOf": [
+                                              {
+                                                "title": "Base Write Config Object",
+                                                "type": "object",
+                                                "required": [
+                                                  "objectName"
+                                                ],
+                                                "properties": {
+                                                  "objectName": {
+                                                    "description": "The name of the object to write to.",
+                                                    "example": "account",
+                                                    "type": "string",
+                                                    "x-oapi-codegen-extra-tags": {
+                                                      "validate": "required"
+                                                    }
+                                                  },
+                                                  "selectedValueDefaults": {
+                                                    "type": "object",
+                                                    "deprecated": true,
+                                                    "description": "This is a map of field names to default values. These values will be used when writing to the object.",
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "additionalProperties": {
+                                                      "title": "Value Default (Legacy)",
+                                                      "deprecated": true,
+                                                      "x-go-type": "any",
+                                                      "oneOf": [
+                                                        {
+                                                          "title": "Value Default String",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "value"
+                                                          ],
+                                                          "properties": {
+                                                            "value": {
+                                                              "type": "string",
+                                                              "description": "The value to be used as a default."
+                                                            },
+                                                            "applyOnUpdate": {
+                                                              "type": "string",
+                                                              "enum": [
+                                                                "always",
+                                                                "never"
+                                                              ],
+                                                              "description": "Whether the default value should be applied when updating a record.\nIf set to `always`, the default value will be applied when updating a record.\nIf set to `never`, the default value will not be applied when updating a record,\nonly when creating a record.\nIf unspecified, then `always` is assumed.\n"
+                                                            }
+                                                          }
+                                                        },
+                                                        {
+                                                          "title": "Value Default Integer",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "value"
+                                                          ],
+                                                          "properties": {
+                                                            "value": {
+                                                              "type": "integer",
+                                                              "description": "The value to be used as a default."
+                                                            },
+                                                            "applyOnUpdate": {
+                                                              "type": "string",
+                                                              "enum": [
+                                                                "always",
+                                                                "never"
+                                                              ],
+                                                              "description": "Whether the default value should be applied when updating a record.\nIf set to `always`, the default value will be applied when updating a record.\nIf set to `never`, the default value will not be applied when updating a record,\nonly when creating a record.\nIf unspecified, then `always` is assumed.\n"
+                                                            }
+                                                          }
+                                                        },
+                                                        {
+                                                          "title": "Value Default Boolean",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "value"
+                                                          ],
+                                                          "properties": {
+                                                            "value": {
+                                                              "type": "boolean",
+                                                              "description": "The value to be used as a default."
+                                                            },
+                                                            "applyOnUpdate": {
+                                                              "type": "string",
+                                                              "enum": [
+                                                                "always",
+                                                                "never"
+                                                              ],
+                                                              "description": "Whether the default value should be applied when updating a record.\nIf set to `always`, the default value will be applied when updating a record.\nIf set to `never`, the default value will not be applied when updating a record,\nonly when creating a record.\nIf unspecified, then `always` is assumed.\n"
+                                                            }
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
+                                                  },
+                                                  "selectedFieldSettings": {
+                                                    "type": "object",
+                                                    "description": "This is a map of field names to their settings.",
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "additionalProperties": {
+                                                      "title": "Field setting",
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "default": {
+                                                          "title": "Default value for a field",
+                                                          "description": "Only use one of stringValue, integerValue, booleanValue.",
+                                                          "type": "object",
+                                                          "properties": {
+                                                            "stringValue": {
+                                                              "type": "string",
+                                                              "description": "The default string value to apply to a field"
+                                                            },
+                                                            "integerValue": {
+                                                              "type": "integer",
+                                                              "description": "The default integer value to apply to a field"
+                                                            },
+                                                            "booleanValue": {
+                                                              "type": "boolean",
+                                                              "description": "The default boolean value to apply to a field"
+                                                            }
+                                                          }
+                                                        },
+                                                        "writeOnCreate": {
+                                                          "type": "string",
+                                                          "enum": [
+                                                            "always",
+                                                            "never"
+                                                          ],
+                                                          "default": "always",
+                                                          "x-go-type-skip-optional-pointer": true,
+                                                          "description": "Whether the default value should be applied when creating a record."
+                                                        },
+                                                        "writeOnUpdate": {
+                                                          "type": "string",
+                                                          "enum": [
+                                                            "always",
+                                                            "never"
+                                                          ],
+                                                          "default": "always",
+                                                          "x-go-type-skip-optional-pointer": true,
+                                                          "description": "Whether the default value should be applied when updating a record."
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              {
+                                                "type": "object",
+                                                "required": [
+                                                  "objectName"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                "subscribe": {
+                                  "title": "Subscribe Config",
+                                  "allOf": [
+                                    {
+                                      "title": "Base Subscribe Config",
+                                      "type": "object",
+                                      "properties": {
+                                        "objects": {
+                                          "type": "object",
+                                          "additionalProperties": {
+                                            "title": "Base Subscribe Config Object",
+                                            "type": "object",
+                                            "required": [
+                                              "objectName",
+                                              "destination",
+                                              "inheritFieldsAndMappings"
+                                            ],
+                                            "properties": {
+                                              "inheritFieldsAndMappings": {
+                                                "type": "boolean",
+                                                "description": "Whether to inherit fields and mappings from the read config.",
+                                                "example": true
+                                              },
+                                              "objectName": {
+                                                "description": "The name of the object to subscribe to.",
+                                                "example": "account",
+                                                "type": "string",
+                                                "x-oapi-codegen-extra-tags": {
+                                                  "validate": "required"
+                                                }
+                                              },
+                                              "destination": {
+                                                "description": "The name of the destination that the result should be sent to.",
+                                                "example": "accountWebhook",
+                                                "type": "string"
+                                              },
+                                              "createEvent": {
+                                                "title": "Create Event",
+                                                "type": "object",
+                                                "required": [
+                                                  "enabled"
+                                                ],
+                                                "properties": {
+                                                  "enabled": {
+                                                    "type": "string",
+                                                    "description": "Conditions to enable create events.",
+                                                    "enum": [
+                                                      "always",
+                                                      "never"
+                                                    ],
+                                                    "x-oapi-codegen-extra-tags": {
+                                                      "validate": "oneof=always never"
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "updateEvent": {
+                                                "title": "Update Event",
+                                                "type": "object",
+                                                "required": [
+                                                  "enabled"
+                                                ],
+                                                "properties": {
+                                                  "enabled": {
+                                                    "type": "string",
+                                                    "description": "Conditions to enable update events.",
+                                                    "example": "always",
+                                                    "enum": [
+                                                      "always",
+                                                      "never"
+                                                    ],
+                                                    "x-oapi-codegen-extra-tags": {
+                                                      "validate": "oneof=always never"
+                                                    }
+                                                  },
+                                                  "watchFieldsAuto": {
+                                                    "type": "string",
+                                                    "description": "Whether to watch fields all fields automatically.",
+                                                    "example": "all",
+                                                    "enum": [
+                                                      "all"
+                                                    ]
+                                                  },
+                                                  "requiredWatchFields": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "string"
+                                                    },
+                                                    "description": "The fields that should be watched.",
+                                                    "example": [
+                                                      "name",
+                                                      "description"
+                                                    ]
+                                                  }
+                                                }
+                                              },
+                                              "deleteEvent": {
+                                                "title": "Delete Event",
+                                                "type": "object",
+                                                "required": [
+                                                  "enabled"
+                                                ],
+                                                "properties": {
+                                                  "enabled": {
+                                                    "type": "string",
+                                                    "description": "Conditions to enable delete events.",
+                                                    "example": "always",
+                                                    "x-oapi-codegen-extra-tags": {
+                                                      "validate": "oneof=always never"
+                                                    },
+                                                    "enum": [
+                                                      "always",
+                                                      "never"
+                                                    ]
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "object",
+                                      "required": [
+                                        "objects"
+                                      ],
+                                      "properties": {
+                                        "objects": {
+                                          "additionalProperties": {
+                                            "title": "Subscribe Config Object",
+                                            "allOf": [
+                                              {
+                                                "title": "Base Subscribe Config Object",
+                                                "type": "object",
+                                                "required": [
+                                                  "objectName",
+                                                  "destination",
+                                                  "inheritFieldsAndMappings"
+                                                ],
+                                                "properties": {
+                                                  "inheritFieldsAndMappings": {
+                                                    "type": "boolean",
+                                                    "description": "Whether to inherit fields and mappings from the read config.",
+                                                    "example": true
+                                                  },
+                                                  "objectName": {
+                                                    "description": "The name of the object to subscribe to.",
+                                                    "example": "account",
+                                                    "type": "string",
+                                                    "x-oapi-codegen-extra-tags": {
+                                                      "validate": "required"
+                                                    }
+                                                  },
+                                                  "destination": {
+                                                    "description": "The name of the destination that the result should be sent to.",
+                                                    "example": "accountWebhook",
+                                                    "type": "string"
+                                                  },
+                                                  "createEvent": {
+                                                    "title": "Create Event",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "string",
+                                                        "description": "Conditions to enable create events.",
+                                                        "enum": [
+                                                          "always",
+                                                          "never"
+                                                        ],
+                                                        "x-oapi-codegen-extra-tags": {
+                                                          "validate": "oneof=always never"
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "updateEvent": {
+                                                    "title": "Update Event",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "string",
+                                                        "description": "Conditions to enable update events.",
+                                                        "example": "always",
+                                                        "enum": [
+                                                          "always",
+                                                          "never"
+                                                        ],
+                                                        "x-oapi-codegen-extra-tags": {
+                                                          "validate": "oneof=always never"
+                                                        }
+                                                      },
+                                                      "watchFieldsAuto": {
+                                                        "type": "string",
+                                                        "description": "Whether to watch fields all fields automatically.",
+                                                        "example": "all",
+                                                        "enum": [
+                                                          "all"
+                                                        ]
+                                                      },
+                                                      "requiredWatchFields": {
+                                                        "type": "array",
+                                                        "items": {
+                                                          "type": "string"
+                                                        },
+                                                        "description": "The fields that should be watched.",
+                                                        "example": [
+                                                          "name",
+                                                          "description"
+                                                        ]
+                                                      }
+                                                    }
+                                                  },
+                                                  "deleteEvent": {
+                                                    "title": "Delete Event",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "string",
+                                                        "description": "Conditions to enable delete events.",
+                                                        "example": "always",
+                                                        "x-oapi-codegen-extra-tags": {
+                                                          "validate": "oneof=always never"
+                                                        },
+                                                        "enum": [
+                                                          "always",
+                                                          "never"
+                                                        ]
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              {
+                                                "type": "object",
+                                                "required": [
+                                                  "objectName",
+                                                  "destination",
+                                                  "inheritFieldsAndMappings"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "Input Validation Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "API Problem",
+                      "type": "object",
+                      "allOf": [
+                        {
+                          "title": "Problem",
+                          "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that identifies the problem type",
+                              "default": "about:blank"
+                            },
+                            "href": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                            },
+                            "title": {
+                              "type": "string",
+                              "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                              "example": "Service Unavailable"
+                            },
+                            "status": {
+                              "type": "integer",
+                              "format": "int32",
+                              "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                              "minimum": 400,
+                              "maximum": 600,
+                              "exclusiveMaximum": true,
+                              "example": 503
+                            },
+                            "detail": {
+                              "type": "string",
+                              "description": "A human-readable explanation specific to this occurrence of the problem"
+                            },
+                            "instance": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                            }
+                          },
+                          "example": {
+                            "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                            "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                            "title": "Description of the type of problem that occurred",
+                            "status": 400,
+                            "detail": "Description of specific occurrence of the problem",
+                            "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                          }
+                        }
+                      ],
+                      "properties": {
+                        "subsystem": {
+                          "type": "string",
+                          "description": "The subsystem that generated the problem",
+                          "example": "api"
+                        },
+                        "time": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "The time the problem occurred, formatted as RFC-3339",
+                          "example": "2024-04-22T18:55:28.456076Z"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "A unique identifier for the request, useful for debugging",
+                          "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                        },
+                        "causes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "description": "A brief description of something which caused the problem",
+                            "example": "database connection failed"
+                          },
+                          "example": [
+                            "database connection failed",
+                            "database query failed",
+                            "unable to fetch user"
+                          ],
+                          "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                        },
+                        "remedy": {
+                          "type": "string",
+                          "description": "A brief description of how to resolve the problem",
+                          "example": "Shorten your input to be under 100 characters"
+                        },
+                        "supportEmail": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "An email address to contact for support",
+                          "example": "support@withampersand.com"
+                        },
+                        "supportPhone": {
+                          "type": "string",
+                          "description": "A phone number to contact for support",
+                          "example": "+1-555-555-5555"
+                        },
+                        "supportUrl": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "A URL to contact for support",
+                          "example": "https://withampersand.com/support"
+                        },
+                        "retryable": {
+                          "type": "boolean",
+                          "description": "Whether the request can be retried",
+                          "example": false
+                        },
+                        "retryAfter": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                          "example": "2024-04-22T18:55:28.456076Z"
+                        },
+                        "context": {
+                          "type": "object",
+                          "description": "Additional context for the problem",
+                          "additionalProperties": true,
+                          "example": {
+                            "name": "Rick Sanchez"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "issues": {
+                      "type": "array",
+                      "items": {
+                        "title": "Input Validation Issue",
+                        "type": "object",
+                        "description": "An issue detected during input validation.\n",
+                        "allOf": [
+                          {
+                            "title": "API Problem",
+                            "type": "object",
+                            "allOf": [
+                              {
+                                "title": "Problem",
+                                "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that identifies the problem type",
+                                    "default": "about:blank"
+                                  },
+                                  "href": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                                    "example": "Service Unavailable"
+                                  },
+                                  "status": {
+                                    "type": "integer",
+                                    "format": "int32",
+                                    "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                                    "minimum": 400,
+                                    "maximum": 600,
+                                    "exclusiveMaximum": true,
+                                    "example": 503
+                                  },
+                                  "detail": {
+                                    "type": "string",
+                                    "description": "A human-readable explanation specific to this occurrence of the problem"
+                                  },
+                                  "instance": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                                  }
+                                },
+                                "example": {
+                                  "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                                  "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                                  "title": "Description of the type of problem that occurred",
+                                  "status": 400,
+                                  "detail": "Description of specific occurrence of the problem",
+                                  "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "subsystem": {
+                                "type": "string",
+                                "description": "The subsystem that generated the problem",
+                                "example": "api"
+                              },
+                              "time": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "The time the problem occurred, formatted as RFC-3339",
+                                "example": "2024-04-22T18:55:28.456076Z"
+                              },
+                              "requestId": {
+                                "type": "string",
+                                "description": "A unique identifier for the request, useful for debugging",
+                                "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                              },
+                              "causes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "description": "A brief description of something which caused the problem",
+                                  "example": "database connection failed"
+                                },
+                                "example": [
+                                  "database connection failed",
+                                  "database query failed",
+                                  "unable to fetch user"
+                                ],
+                                "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                              },
+                              "remedy": {
+                                "type": "string",
+                                "description": "A brief description of how to resolve the problem",
+                                "example": "Shorten your input to be under 100 characters"
+                              },
+                              "supportEmail": {
+                                "type": "string",
+                                "format": "email",
+                                "description": "An email address to contact for support",
+                                "example": "support@withampersand.com"
+                              },
+                              "supportPhone": {
+                                "type": "string",
+                                "description": "A phone number to contact for support",
+                                "example": "+1-555-555-5555"
+                              },
+                              "supportUrl": {
+                                "type": "string",
+                                "format": "uri",
+                                "description": "A URL to contact for support",
+                                "example": "https://withampersand.com/support"
+                              },
+                              "retryable": {
+                                "type": "boolean",
+                                "description": "Whether the request can be retried",
+                                "example": false
+                              },
+                              "retryAfter": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                                "example": "2024-04-22T18:55:28.456076Z"
+                              },
+                              "context": {
+                                "type": "object",
+                                "description": "Additional context for the problem",
+                                "additionalProperties": true,
+                                "example": {
+                                  "name": "Rick Sanchez"
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "properties": {
+                          "in": {
+                            "type": "string",
+                            "description": "The location of the invalid input",
+                            "enum": [
+                              "body",
+                              "header",
+                              "path",
+                              "query"
+                            ]
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the invalid input"
+                          },
+                          "value": {
+                            "description": "The value of the erroneous input"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "type": "about:blank",
+                    "title": "Bad Request",
+                    "status": 400,
+                    "detail": "The input message is incorrect",
+                    "instance": "123456-1234-1235-4567489798",
+                    "issues": [
+                      {
+                        "type": "about:blank",
+                        "detail": "exampleNumericProperty should be numeric",
+                        "in": "path",
+                        "name": "exampleNumericProperty",
+                        "value": "abc"
+                      },
+                      {
+                        "type": "about:blank",
+                        "title": "Input isn't valid with respect to schema",
+                        "detail": "examplePropertyWithPattern a2345678901 doesn't match pattern '^\\d{11}$'",
+                        "in": "body",
+                        "name": "items[0].examplePropertyWithPattern",
+                        "value": "a2345678901"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Installation not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "Input Validation Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "API Problem",
+                      "type": "object",
+                      "allOf": [
+                        {
+                          "title": "Problem",
+                          "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that identifies the problem type",
+                              "default": "about:blank"
+                            },
+                            "href": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                            },
+                            "title": {
+                              "type": "string",
+                              "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                              "example": "Service Unavailable"
+                            },
+                            "status": {
+                              "type": "integer",
+                              "format": "int32",
+                              "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                              "minimum": 400,
+                              "maximum": 600,
+                              "exclusiveMaximum": true,
+                              "example": 503
+                            },
+                            "detail": {
+                              "type": "string",
+                              "description": "A human-readable explanation specific to this occurrence of the problem"
+                            },
+                            "instance": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                            }
+                          },
+                          "example": {
+                            "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                            "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                            "title": "Description of the type of problem that occurred",
+                            "status": 400,
+                            "detail": "Description of specific occurrence of the problem",
+                            "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                          }
+                        }
+                      ],
+                      "properties": {
+                        "subsystem": {
+                          "type": "string",
+                          "description": "The subsystem that generated the problem",
+                          "example": "api"
+                        },
+                        "time": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "The time the problem occurred, formatted as RFC-3339",
+                          "example": "2024-04-22T18:55:28.456076Z"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "A unique identifier for the request, useful for debugging",
+                          "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                        },
+                        "causes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "description": "A brief description of something which caused the problem",
+                            "example": "database connection failed"
+                          },
+                          "example": [
+                            "database connection failed",
+                            "database query failed",
+                            "unable to fetch user"
+                          ],
+                          "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                        },
+                        "remedy": {
+                          "type": "string",
+                          "description": "A brief description of how to resolve the problem",
+                          "example": "Shorten your input to be under 100 characters"
+                        },
+                        "supportEmail": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "An email address to contact for support",
+                          "example": "support@withampersand.com"
+                        },
+                        "supportPhone": {
+                          "type": "string",
+                          "description": "A phone number to contact for support",
+                          "example": "+1-555-555-5555"
+                        },
+                        "supportUrl": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "A URL to contact for support",
+                          "example": "https://withampersand.com/support"
+                        },
+                        "retryable": {
+                          "type": "boolean",
+                          "description": "Whether the request can be retried",
+                          "example": false
+                        },
+                        "retryAfter": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                          "example": "2024-04-22T18:55:28.456076Z"
+                        },
+                        "context": {
+                          "type": "object",
+                          "description": "Additional context for the problem",
+                          "additionalProperties": true,
+                          "example": {
+                            "name": "Rick Sanchez"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "issues": {
+                      "type": "array",
+                      "items": {
+                        "title": "Input Validation Issue",
+                        "type": "object",
+                        "description": "An issue detected during input validation.\n",
+                        "allOf": [
+                          {
+                            "title": "API Problem",
+                            "type": "object",
+                            "allOf": [
+                              {
+                                "title": "Problem",
+                                "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that identifies the problem type",
+                                    "default": "about:blank"
+                                  },
+                                  "href": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                                    "example": "Service Unavailable"
+                                  },
+                                  "status": {
+                                    "type": "integer",
+                                    "format": "int32",
+                                    "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                                    "minimum": 400,
+                                    "maximum": 600,
+                                    "exclusiveMaximum": true,
+                                    "example": 503
+                                  },
+                                  "detail": {
+                                    "type": "string",
+                                    "description": "A human-readable explanation specific to this occurrence of the problem"
+                                  },
+                                  "instance": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                                  }
+                                },
+                                "example": {
+                                  "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                                  "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                                  "title": "Description of the type of problem that occurred",
+                                  "status": 400,
+                                  "detail": "Description of specific occurrence of the problem",
+                                  "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "subsystem": {
+                                "type": "string",
+                                "description": "The subsystem that generated the problem",
+                                "example": "api"
+                              },
+                              "time": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "The time the problem occurred, formatted as RFC-3339",
+                                "example": "2024-04-22T18:55:28.456076Z"
+                              },
+                              "requestId": {
+                                "type": "string",
+                                "description": "A unique identifier for the request, useful for debugging",
+                                "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                              },
+                              "causes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "description": "A brief description of something which caused the problem",
+                                  "example": "database connection failed"
+                                },
+                                "example": [
+                                  "database connection failed",
+                                  "database query failed",
+                                  "unable to fetch user"
+                                ],
+                                "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                              },
+                              "remedy": {
+                                "type": "string",
+                                "description": "A brief description of how to resolve the problem",
+                                "example": "Shorten your input to be under 100 characters"
+                              },
+                              "supportEmail": {
+                                "type": "string",
+                                "format": "email",
+                                "description": "An email address to contact for support",
+                                "example": "support@withampersand.com"
+                              },
+                              "supportPhone": {
+                                "type": "string",
+                                "description": "A phone number to contact for support",
+                                "example": "+1-555-555-5555"
+                              },
+                              "supportUrl": {
+                                "type": "string",
+                                "format": "uri",
+                                "description": "A URL to contact for support",
+                                "example": "https://withampersand.com/support"
+                              },
+                              "retryable": {
+                                "type": "boolean",
+                                "description": "Whether the request can be retried",
+                                "example": false
+                              },
+                              "retryAfter": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                                "example": "2024-04-22T18:55:28.456076Z"
+                              },
+                              "context": {
+                                "type": "object",
+                                "description": "Additional context for the problem",
+                                "additionalProperties": true,
+                                "example": {
+                                  "name": "Rick Sanchez"
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "properties": {
+                          "in": {
+                            "type": "string",
+                            "description": "The location of the invalid input",
+                            "enum": [
+                              "body",
+                              "header",
+                              "path",
+                              "query"
+                            ]
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the invalid input"
+                          },
+                          "value": {
+                            "description": "The value of the erroneous input"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "type": "about:blank",
+                    "title": "Bad Request",
+                    "status": 400,
+                    "detail": "The input message is incorrect",
+                    "instance": "123456-1234-1235-4567489798",
+                    "issues": [
+                      {
+                        "type": "about:blank",
+                        "detail": "exampleNumericProperty should be numeric",
+                        "in": "path",
+                        "name": "exampleNumericProperty",
+                        "value": "abc"
+                      },
+                      {
+                        "type": "about:blank",
+                        "title": "Input isn't valid with respect to schema",
+                        "detail": "examplePropertyWithPattern a2345678901 doesn't match pattern '^\\d{11}$'",
+                        "in": "body",
+                        "name": "items[0].examplePropertyWithPattern",
+                        "value": "a2345678901"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "patchObjectConfigContent"
+      }
+    },
     "/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}/metadata": {
       "get": {
         "summary": "Get object metadata for installation",
@@ -64578,6 +67263,36 @@
                 ]
               }
             }
+          }
+        }
+      },
+      "JSONPatchOperation": {
+        "title": "JSON Patch Operation",
+        "description": "Represents a single JSON Patch operation (RFC 6902).\nOnly supports add, remove, and replace operations for config updates.\n",
+        "required": [
+          "op",
+          "path"
+        ],
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "add",
+              "remove",
+              "replace"
+            ],
+            "description": "The operation to perform.\n- \"add\": Adds a new field or replaces an existing one at the specified path\n- \"remove\": Removes the field at the specified path\n- \"replace\": Replaces the value at the specified path \n",
+            "example": "replace"
+          },
+          "path": {
+            "type": "string",
+            "description": "JSON Pointer path to the field to operate on (RFC 6901).\nAll paths must start with \"/\" (e.g., \"/schedule\", \"/selectedFields/phone\").\n",
+            "example": "/schedule"
+          },
+          "value": {
+            "description": "The value to set for add/replace operations.\nNot used for remove operations.\n",
+            "example": "*/10 * * * *"
           }
         }
       },
