@@ -14,7 +14,6 @@ To do this, add `watchSchema` as a key in your integration defined in `amp.yaml`
 
 Once you deploy the integration, Ampersand will start monitoring the requested schema changes for all objects across all installations of your integration. If you wish to stop monitoring schema changes, you can remove the `watchSchema` key from your integration definition & redeploy the integration using `amp deploy`.
 
-
 ## Event types
 
 You can configure which types of schema changes to monitor:
@@ -114,3 +113,11 @@ Depending on the types of schema change events you've enabled, the webhook paylo
   }
 }
 ```
+
+## Observability
+
+Ampersand provides observability around this feature by creating an operation in your project for each schema change detection attempt made.
+
+To view these, in your Ampersand dashboard, navigate to the project, integration and installation where you'd like to inspect a schema change operation and look for a 'Schema Watch' operation.
+
+<Frame caption="Schema Change Operation">![Schema Change Operation](/images/schema-watch-op.png)</Frame>
