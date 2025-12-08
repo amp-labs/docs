@@ -6,15 +6,14 @@ title: "Detect schema changes"
 
 Ampersand allows you to monitor changes to the schema of objects in your customers' SaaS applications. This enables your application to react when fields are created, deleted, or have their types changed, helping you keep your integration in sync with your customers' evolving data structures.
 
-To do this, add `watchSchema` as a key in your integration defined in `amp.yaml`. You need to specify:
+To do this, add `watchSchema` as a key in your integration defined in `amp.yaml` & deploy the integration using `amp deploy`. You need to specify:
 
 - The name of the [destination](/destinations) where you want to receive schema change notifications.
 - The schedule frequency for Ampersand to check for schema changes. The minimum frequency is once per hour, and the default is once every 24 hours.
 - The type of schema changes to monitor (fields added, removed, or changed)
 
-<Note>
-Ampersand watches all objects in your integration for schema changes by default.
-</Note>
+Once you deploy the integration, Ampersand will start monitoring the requested schema changes for all objects across all installations of your integration. If you wish to stop monitoring schema changes, you can remove the `watchSchema` key from your integration definition & redeploy the integration using `amp deploy`.
+
 
 ## Event types
 
