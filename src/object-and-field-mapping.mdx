@@ -99,10 +99,10 @@ If you have an optional field mapping, and the user chose not to map the field (
 
 With regular field mappings, you can define a set of fields that all your users need to map. Sometimes, you may want different users to map different sets of fields.
 
-> For example: SampleApp is using Ampersand to integrate with their customer's HubSpot. 
+> For example: SampleApp is using Ampersand to integrate with their customer's HubSpot.
 > SampleApp needs to ask the customer to map their SampleApp fields to their HubSpot fields, and different customers can have different sets of fields in SampleApp.
 
-To achieve this, you can pass in the mapping configuration in the `fieldMapping` property of the `InstallIntegration` component: 
+To achieve this, you can pass in the mapping configuration in the `fieldMapping` property of the `InstallIntegration` component:
 
 ```TYPESCRIPT
 function MyComponent() {
@@ -120,7 +120,7 @@ function MyComponent() {
       {
         mapToName: 'priority',
         mapToDisplayName: 'Priority',
-        prompt: 'Which field do you use to track the priority of a contact?',        
+        prompt: 'Which field do you use to track the priority of a contact?',
       }
     ],
     // Field mapping for the companies object
@@ -132,7 +132,7 @@ function MyComponent() {
       }
     ]
   }
-  return (<InstallIntegration 
+  return (<InstallIntegration
     integration = "myHubSpotIntegration"
     consumerRef = {userId}
     consumerName = {userFullName}
@@ -150,7 +150,7 @@ Note you can also use this configuration in tandem with static field mappings (t
 
 ```YAML
 specVersion: 1.0.0
-integrations: 
+integrations:
   - name: myHubSpotIntegration
     provider: hubspot
     module: crm
@@ -273,6 +273,75 @@ This will ensure that your users see a mapping UI where they can select the valu
 
 <Tip> We only allow one-to-one mapping of values </Tip>
 
-## Full example
+## Nested field mapping
 
-To see a full example of how to define object and field mappings, check out the [unified CRM example](https://github.com/amp-labs/samples/blob/main/unifiedCRM/amp.yaml) in our samples repository.
+Providers may return data with nested structures. Ampersand supports mapping from and to nested fields using **JSONPath bracket notation**, allowing you to extract values from nested objects or write values into nested structures.
+
+Nested field paths use the format `$['parentField']['childField']['subChildField$With.Special"Characters"']`. Bracket notation ensures that field names containing dots, spaces, or other special characters are correctly parsed.
+
+Value mappings also support bracket notation.
+
+### Reading nested data
+
+When a provider returns nested data, you can use field mappings to extract nested values into mapped fields that may be flat or nested themselves.
+
+**Provider returns:**
+```JSON
+{
+  "userInfo": {
+    "email": "john@example.com",
+    "name": "John Doe"
+  },
+  "status": "active"
+}
+```
+
+**With this field mapping configuration in an installation config:**
+```JSON
+{
+  "selectedFieldMappings": {
+    "contactEmail": "$['userInfo']['email']",
+    "contactName": "$['userInfo']['name']",
+    "$['myAppInfo']['currentStatus']": "status"
+  }
+}
+```
+
+**Your destination receives:**
+```JSON
+{
+  "mappedFields": {
+    "contactEmail": "john@example.com",
+    "contactName": "John Doe",
+    "myAppInfo": {
+      "currentStatus": "active"
+    }
+  }
+}
+```
+
+### Writing nested data
+
+The same mappings will be converted to their original structure when writing to a provider.
+
+**Your app sends:**
+```JSON
+{
+  "contactEmail": "john@example.com",
+  "contactName": "John Doe",
+  "myAppInfo": {
+    "currentStatus": "deleted"
+  }
+}
+```
+
+**Provider receives:**
+```JSON
+{
+  "userInfo": {
+    "email": "john@example.com",
+    "name": "John Doe"
+  },
+  "status": "deleted"
+}
+```
