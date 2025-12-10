@@ -6,29 +6,81 @@ title: Recurly
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental reading is only supported for `accounts`, `acquisitions`, `subscriptions`, `items`, `plans`, `add_ons`, `measured_units`, `coupons`, `invoices`, `line_items`, `credit_payments`, `transactions`, `custom_field_definitions` and `shipping_methods`. For all other objects, a full read of the Recurly instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://v3.recurly.com`.
+
+### Supported objects
+
+The Recurly connector supports reading from the following objects:
+
+- [accounts](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_accounts)
+- [acquisitions](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_account_acquisition)
+- [add_ons](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_add_ons)
+- [business_entities](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_business_entities)
+- [coupons](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_coupons)
+- [credit_payments](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_credit_payments)
+- [custom_field_definitions](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_custom_field_definitions)
+- [dunning_campaigns](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_dunning_campaigns)
+- [external_invoices](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_external_invoices)
+- [external_products](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_external_products)
+- [external_subscriptions](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_external_subscriptions)
+- [general_ledger_accounts](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_general_ledger_accounts)
+- [gift_cards](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_gift_cards)
+- [invoices](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_invoices)
+- [items](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_items)
+- [line_items](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_line_items)
+- [measured_units](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_measured_unit)
+- [performance_obligations](https://recurly.com/developers/api/v2021-02-25/index.html#operation/get_performance_obligations)
+- [plans](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_plans)
+- [price_segments](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_price_segments)
+- [shipping_methods](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_shipping_methods)
+- [sites](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_sites)
+- [subscriptions](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_subscriptions)
+- [transactions](https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_transactions)
+
+The Recurly connector supports writing to the following objects:
+
+- [accounts](https://recurly.com/developers/api/v2021-02-25/index.html#tag/Accounts)
+- [coupons](https://recurly.com/developers/api/v2021-02-25/index.html#tag/Coupons)
+- [external_products](https://recurly.com/developers/api/v2021-02-25/index.html#tag/External-Products)
+- [external_subscriptions](https://recurly.com/developers/api/v2021-02-25/index.html#tag/External-Subscriptions)
+- [general_ledger_accounts](https://recurly.com/developers/api/v2021-02-25/index.html#tag/General-Ledger-Accounts)
+- [gift_cards](https://recurly.com/developers/api/v2021-02-25/index.html#tag/Gift-Cards)
+- [items](https://recurly.com/developers/api/v2021-02-25/index.html#tag/Items)
+- [measured_units](https://recurly.com/developers/api/v2021-02-25/index.html#tag/Measured-Units)
+- [plans](https://recurly.com/developers/api/v2021-02-25/index.html#tag/Plans)
+- [shipping_methods](https://recurly.com/developers/api/v2021-02-25/index.html#tag/Shipping-Methods)
+- [subscriptions](https://recurly.com/developers/api/v2021-02-25/index.html#tag/Subscriptions)
 
 ### Example integration
 
-To define an integration for Recurly, create a manifest file that looks like this:
+For an example manifest file of a Recurly integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/recurly/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: recurly-integration
-    displayName: My Recurly Integration
-    provider: recurly
-    proxy:
-      enabled: true
-```
+## Before you get started
+
+To integrate Recurly with Ampersand, you will need a Recurly API Key.
+
+### Creating a Recurly API key
+
+1. Log in to your [Recurly account](https://app.recurly.com/).
+2. Navigate to **Integrations** > **API Credentials**.
+3. Click **Add Private API Key**.
+4. Provide a name for your API key and select the appropriate permissions.
+5. Click **Save** to generate the key.
+6. Copy and securely store the API key.
 
 ## Using the connector
 
 This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Recurly:
-- Create a manifest file like the example above.
+- Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://v3.recurly.com`.
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password. Enter the API key as the username and leave the password field blank.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
