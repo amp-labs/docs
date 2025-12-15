@@ -9,7 +9,7 @@ Ampersand allows you to monitor changes to the schema of objects in your custome
 To do this, add `watchSchema` as a key in your integration defined in `amp.yaml` & deploy the integration using `amp deploy`. You need to specify:
 
 - The name of the [destination](/destinations) where you want to receive schema change notifications.
-- The schedule frequency for Ampersand to check for schema changes. The minimum frequency is once per hour, and the default is once every 24 hours.
+- The schedule frequency for Ampersand to check for schema changes. The most frequent schedule you can set is once per hour, and the default is once every 24 hours.
 - The type of schema changes to monitor (fields added, removed, or changed)
 
 Once you deploy the integration, Ampersand will start monitoring the requested schema changes for all objects across all installations of your integration. If you wish to stop monitoring schema changes, you can remove the `watchSchema` key from your integration definition & redeploy the integration using `amp deploy`.
@@ -22,7 +22,7 @@ You can configure which types of schema changes to monitor:
 - **fieldDeleted:** triggers when a field is removed from an object.
 - **fieldTypeChanged:** triggers when a field's data type, label, or description is modified.
 
-For each event type, set `enabled: always` to receive notifications for that type of change.
+For each event type, set `enabled: always` to be notified of that type of change.
 
 ```yaml
 specVersion: 1.0.0
@@ -35,8 +35,8 @@ integrations:
 
     watchSchema:
       destination: schemaChangeWebhook
-      # schedule: "0 0 */2 * *" # once every 2 days
-      allObjects:
+      schedule: "0 0 */2 * *" # once every 2 days
+      allObjects: # For now, you need to listen to changes on all objects in your read action.
         fieldCreated:
           enabled: always
         fieldDeleted:
@@ -113,11 +113,3 @@ Depending on the types of schema change events you've enabled, the webhook paylo
   }
 }
 ```
-
-## Observability
-
-Ampersand provides observability around this feature by creating an operation in your project for each schema change detection attempt made.
-
-To view these, in your Ampersand dashboard, navigate to the project, integration and installation where you'd like to inspect a schema change operation and look for a 'Schema Watch' operation.
-
-<Frame caption="Schema Change Operation">![Schema Change Operation](/images/schema-watch-op.png)</Frame>
