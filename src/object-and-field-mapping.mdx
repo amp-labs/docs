@@ -273,19 +273,17 @@ This will ensure that your users see a mapping UI where they can select the valu
 
 <Tip> We only allow one-to-one mapping of values </Tip>
 
-To see a full example of how to define object and field mappings, check out the [unified CRM example](https://github.com/amp-labs/samples/blob/main/unifiedCRM/amp.yaml) in our samples repository.
-
 ## Nested field mapping
 
-Providers may return data with nested structures. Ampersand supports mapping from and to nested fields using **JSONPath bracket notation**, allowing you to extract values from nested objects or write values into nested structures.
+Some provider APIs may have nested structures. Ampersand supports mapping from and to nested fields using **JSONPath bracket notation**, allowing you to extract values from nested objects or write values into nested structures.
 
-Nested field paths use the format `$['parentField']['childField']['subChildField$With.Special"Characters"']`. Bracket notation ensures that field names containing dots, spaces, or other special characters are correctly parsed.
+Nested field paths use the format `$['parentField']['childField']`. Bracket notation ensures that field names containing dots, spaces, or other special characters are correctly parsed. For example, `$['parentField']['childField$With.Special"Characters"']` is valid.
 
 Value mappings also support bracket notation.
 
 ### Reading nested data
 
-When a provider returns nested data, you can use field mappings to extract nested values into mapped fields that may be flat or nested themselves.
+When a provider API returns nested data, you can use field mappings to extract nested values into mapped fields. Here is an example:
 
 **Provider returns:**
 ```JSON
@@ -298,15 +296,20 @@ When a provider returns nested data, you can use field mappings to extract neste
 }
 ```
 
-**With this field mapping configuration in an installation config:**
-```JSON
-{
-  "selectedFieldMappings": {
-    "contactEmail": "$['userInfo']['email']",
-    "contactName": "$['userInfo']['name']",
-    "$['myAppInfo']['currentStatus']": "status"
-  }
-}
+**With this pre-defined field mapping in `amp.yaml`:**
+
+
+```YAML
+    read:
+      objects:
+        - objectName: contacts
+          requiredFields:
+            - mapToName: contactEmail
+              fieldName: $['userInfo']['email']
+            - mapToName: contactName
+              fieldName: $['userInfo']['name']
+            - mapToName: $['moreInfo']['currentStatus']
+              fieldName: status
 ```
 
 **Your destination receives:**
@@ -315,7 +318,7 @@ When a provider returns nested data, you can use field mappings to extract neste
   "mappedFields": {
     "contactEmail": "john@example.com",
     "contactName": "John Doe",
-    "myAppInfo": {
+    "moreInfo": {
       "currentStatus": "active"
     }
   }
@@ -324,14 +327,14 @@ When a provider returns nested data, you can use field mappings to extract neste
 
 ### Writing nested data
 
-The same mappings will be converted to their original structure when writing to a provider.
+The same mappings will be applied in reverse when writing to a provider using the [Write API](/write-actions).
 
 **Your app sends:**
 ```JSON
 {
   "contactEmail": "john@example.com",
   "contactName": "John Doe",
-  "myAppInfo": {
+  "moreInfo": {
     "currentStatus": "deleted"
   }
 }
@@ -347,3 +350,7 @@ The same mappings will be converted to their original structure when writing to 
   "status": "deleted"
 }
 ```
+
+## Full example
+
+To see a full example of how to define object and field mappings, check out the [unified CRM example](https://github.com/amp-labs/samples/blob/main/unifiedCRM/amp.yaml) in our samples repository.
