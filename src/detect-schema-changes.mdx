@@ -1,0 +1,115 @@
+---
+title: "Detect schema changes"
+---
+
+## Overview
+
+Ampersand allows you to monitor changes to the schema of objects in your customers' SaaS applications. This enables your application to react when fields are created, deleted, or have their types changed, helping you keep your integration in sync with your customers' evolving data structures.
+
+To do this, add `watchSchema` as a key in your integration defined in `amp.yaml` & deploy the integration using `amp deploy`. You need to specify:
+
+- The name of the [destination](/destinations) where you want to receive schema change notifications.
+- The schedule frequency for Ampersand to check for schema changes. The most frequent schedule you can set is once per hour, and the default is once every 24 hours.
+- The type of schema changes to monitor (fields added, removed, or changed)
+
+Once you deploy the integration, Ampersand will start monitoring the requested schema changes for all objects across all installations of your integration. If you wish to stop monitoring schema changes, you can remove the `watchSchema` key from your integration definition & redeploy the integration using `amp deploy`.
+
+## Event types
+
+You can configure which types of schema changes to monitor:
+
+- **fieldCreated:** triggers when a new field is added to an object.
+- **fieldDeleted:** triggers when a field is removed from an object.
+- **fieldTypeChanged:** triggers when a field's data type, label, or description is modified.
+
+For each event type, set `enabled: always` to be notified of that type of change.
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: hubspotIntegration
+    provider: hubspot
+    read:
+      objects:
+        .....
+
+    watchSchema:
+      destination: schemaChangeWebhook
+      schedule: "0 0 */2 * *" # once every 2 days
+      allObjects: # For now, you need to listen to changes on all objects in your read action.
+        fieldCreated:
+          enabled: always
+        fieldDeleted:
+          enabled: always
+        fieldTypeChanged:
+          enabled: always
+```
+
+## Receiving schema change events
+
+You will receive webhook messages when schema changes are detected in your customers' SaaS instances. These webhooks are sent to the destination you specified in your `watchSchema` configuration.
+
+Depending on the types of schema change events you've enabled, the webhook payload can contain different arrays in the `result` object:
+
+- **newFields:** fields that have been added to the object.
+- **removedFields:** fields that have been removed from the object.
+- **updatedFields:** fields that have been modified, including both the old and new field definitions.
+
+### Example webhook payload
+
+```json
+{
+  "action": "schema.watch",
+  "projectId": "my-project-id",
+  "provider": "hubspot",
+  "groupRef": "my-group-ref",
+  "groupName": "my-group-name",
+  "consumerRef": "my-consumer-ref",
+  "consumerName": "my-consumer-name",
+  "installationId": "my-installation-id",
+  "installationUpdateTime": "my-installation-update-time",
+  "objectName": "object-name",
+  "result": {
+    "newFields": [
+      {
+        "fieldName": "address",
+        "displayName": "Street Address",
+        "valueType": "string",
+        "providerType": "string",
+        "isCustom": false,
+        "readOnly": false
+      }
+    ],
+    "removedFields": [
+      {
+        "fieldName": "old_field",
+        "displayName": "Old Field",
+        "valueType": "string",
+        "providerType": "string",
+        "isCustom": true,
+        "readOnly": false
+      }
+    ],
+    "updatedFields": [
+      {
+        "oldValue": {
+          "fieldName": "email",
+          "displayName": "Email Address",
+          "valueType": "string",
+          "providerType": "string",
+          "isCustom": false,
+          "readOnly": true
+        },
+        "newValue": {
+          "fieldName": "email",
+          "displayName": "Email",
+          "valueType": "string",
+          "providerType": "string",
+          "isCustom": false,
+          "readOnly": false
+        }
+      }
+    ]
+  }
+}
+```
