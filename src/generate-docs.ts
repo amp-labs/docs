@@ -248,6 +248,7 @@ const baseConfig = {
           ]
         },
         "object-and-field-mapping",
+        "detect-schema-changes",
         {
           group: "UI library",
           pages: [
