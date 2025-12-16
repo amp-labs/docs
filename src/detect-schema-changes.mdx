@@ -20,7 +20,7 @@ You can configure which types of schema changes to monitor:
 
 - **fieldCreated:** triggers when a new field is added to an object.
 - **fieldDeleted:** triggers when a field is removed from an object.
-- **fieldTypeChanged:** triggers when a field's data type, label, or description is modified.
+- **fieldChanged:** triggers when a field's data type, label, or description is modified.
 
 For each event type, set `enabled: always` to be notified of that type of change.
 
@@ -41,7 +41,7 @@ integrations:
           enabled: always
         fieldDeleted:
           enabled: always
-        fieldTypeChanged:
+        fieldChanged:
           enabled: always
 ```
 
@@ -51,9 +51,9 @@ You will receive webhook messages when schema changes are detected in your custo
 
 Depending on the types of schema change events you've enabled, the webhook payload can contain different arrays in the `result` object:
 
-- **newFields:** fields that have been added to the object.
-- **removedFields:** fields that have been removed from the object.
-- **updatedFields:** fields that have been modified, including both the old and new field definitions.
+- **createdFields:** fields that have been added to the object.
+- **deletedFields:** fields that have been removed from the object.
+- **changedFields:** fields that have been modified, including both the old and new field definitions.
 
 ### Example webhook payload
 
@@ -70,7 +70,7 @@ Depending on the types of schema change events you've enabled, the webhook paylo
   "installationUpdateTime": "my-installation-update-time",
   "objectName": "object-name",
   "result": {
-    "newFields": [
+    "createdFields": [
       {
         "fieldName": "address",
         "displayName": "Street Address",
@@ -80,7 +80,7 @@ Depending on the types of schema change events you've enabled, the webhook paylo
         "readOnly": false
       }
     ],
-    "removedFields": [
+    "deletedFields": [
       {
         "fieldName": "old_field",
         "displayName": "Old Field",
@@ -90,7 +90,7 @@ Depending on the types of schema change events you've enabled, the webhook paylo
         "readOnly": false
       }
     ],
-    "updatedFields": [
+    "changedFields": [
       {
         "oldValue": {
           "fieldName": "email",
