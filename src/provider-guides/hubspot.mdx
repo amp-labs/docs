@@ -1,11 +1,13 @@
 ---
 title: "HubSpot"
 ---
+
 ## What's Supported
 
 ### Supported Actions
 
 The Hubspot connector supports:
+
 - [Read Actions](/read-actions), including full historic backfill and incremental reads.
 - [Subscribe Actions](/subscribe-actions).
 - [Write Actions](/write-actions).
@@ -14,6 +16,7 @@ The Hubspot connector supports:
 ### Supported Objects
 
 The Hubspot connector supports writing to and reading from the following objects:
+
 - [companies](https://developers.hubspot.com/docs/api/crm/companies)
 - [contacts](https://developers.hubspot.com/docs/api/crm/contacts)
 - [deals](https://developers.hubspot.com/docs/api/crm/deals)
@@ -24,130 +27,205 @@ The Hubspot connector supports writing to and reading from the following objects
 - All other [standard CRM objects](https://developers.hubspot.com/docs/guides/api/crm/understanding-the-crm#object-type-ids)
 - Custom CRM objects
 
-For each of these objects, the connector supports:
-- Standard fields, [here's a list of the standard fields](https://docs.google.com/spreadsheets/d/1FGc9zT_J9dyGghDxvqeioAva-5Gj7-2DQzKNMrbrPvw/view?usp=sharing) for common Hubspot objects
-- Custom fields
+For each of these objects, the connector supports standard fields ([list of standard fields](https://docs.google.com/spreadsheets/d/1FGc9zT_J9dyGghDxvqeioAva-5Gj7-2DQzKNMrbrPvw/view?usp=sharing)) and custom fields.
 
-The Hubspot connector only supports reading from the following objects:
-- [lists](https://developers.hubspot.com/docs/guides/api/crm/lists/overview). Please note that for Lists, incremental reads is not supported, which means that a full read of all Lists is done for each scheduled read. Incremental read is supported for other objects listed above.
-- Users and owners, please refer to the section below.
+The Hubspot connector only supports reading from:
+
+- [lists](https://developers.hubspot.com/docs/guides/api/crm/lists/overview) (note: incremental reads not supported for Lists)
+- Users and owners (see below)
 
 #### Reading users and owners
 
-In Hubspot, users and owners both refer to people that are using the Hubspot workspace. Each user is assigned an owner ID, and this is the ID that is used to identify owners for Deals, Contacts, etc.
-
-If you want to know the users in your customer's Hubspot workspace, enable the `crm.objects.users.read` scope for your [HubSpot App](/provider-guides/hubspot#creating-a-hubspot-app), and add `users` as an object in `amp.yaml`.
+To read users from your customer's HubSpot workspace, enable the `crm.objects.users.read` scope and add `users` as an object in `amp.yaml`:
 
 ```YAML
-        - objectName: users
-          destination: defaultWebhook
-          schedule: "0 0 * * *" # every day
-          requiredFields:
-            - fieldName: hs_object_id
-              mapToName: userId
-            - fieldName: hubspot_owner_id
-              mapToName: ownerId
-            - fieldName: hs_email
-              mapToName: emailAddress
-            - fieldName: hs_family_name
-              mapToName: lastName
-            - fieldName: hs_given_name
-              mapToName: firstName
-            - fieldName: hs_createdate
-              mapToName: createTime
-            - fieldName: hs_lastmodifieddate
-              mapToName: updateTime
-            - fieldName: hs_deactivated
-              mapToName: isDeactivated   
+- objectName: users
+  destination: defaultWebhook
+  schedule: "0 0 * * *"
+  requiredFields:
+    - fieldName: hs_object_id
+      mapToName: userId
+    - fieldName: hubspot_owner_id
+      mapToName: ownerId
+    - fieldName: hs_email
+      mapToName: emailAddress
 ```
 
 ### Example Integration
 
-For an example manifest file of a Hubspot integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/hubspot/amp.yaml).
+For an example manifest file, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/hubspot/amp.yaml).
 
 ## Before You Get Started
 
-To integrate HubSpot with Ampersand, you need to [Create a HubSpot Account](#create-a-hubspot-account) and obtain the following credentials from a HubSpot App:
+To integrate HubSpot with Ampersand, you'll need to create a HubSpot app and obtain:
 
 - Client ID
 - Client Secret
-- Scopes Requested
 
-### Create a HubSpot Account
-
-You need a **HubSpot** account to connect with Ampersand. If you do not have a HubSpot account, here's how you can sign up:
-
-- Go to the [HubSpot Developer site](https://app.hubspot.com/signup-hubspot/developers) and sign up for a free developer account.
-- Sign up using your preferred  account.
-- Verify your email and complete the registration process.
+Choose one of the methods below based on your HubSpot account type.
 
 ## Creating a HubSpot App
 
-Once your HubSpot Developer account is ready, you need to create a HubSpot application. Learn more about creating a HubSpot application here.
+There are three ways to create a HubSpot OAuth app. Choose the method based on your HubSpot account:
 
-1. Log in to Your [HubSpot Developer Dashboard](https://app.hubspot.com/signup-hubspot/developers?_ga=2.135957745.1749898245.1717410216-1887335227.1717410216&_gl=1*757l65*_ga*MTg4NzMzNTIyNy4xNzE3NDEwMjE2*_ga_LXTM6CQ0XK*MTcxNzQxMDIxNS4xLjEuMTcxNzQxMDg2OS40OS4wLjA.&step=existing_user).
-2. Click **Create an app**.
+### Method 1: Old Developer Portal
 
+<Warning>
+  HubSpot will be deprecating this method on Jan 12th 2026. Other methods below
+  are preferred.
+</Warning>
+
+If your account was created before 2025, you may see the old interface:
+
+1. Log in to your [HubSpot Developer Dashboard](https://app.hubspot.com/signup-hubspot/developers)
+2. Click **Create an app**
    ![Alt text](/images/provider-guides/a8c2c6f-hubspot1.gif)
-3. In the **Basic Info** section:
-
-   1. Enter **Public app name**. 
-   2. Add **Description**, **Logo**, and **Support contact** info for your app.
-
-   ![Alt text](/images/provider-guides/a8c2c6f-hubspot1.gif)
-
-
-1. Click **Save changes**.
-2. Click on the **Auth** tab to review your Auth settings.  This section includes the _client ID_ and _client secret_ which you need to add to the Ampersand console while setting up hubspot in Ampersand. You'll need this information for initiating an OAuth connection between your app and HubSpot.
-3. In the **Redirect URLs** section, add the Ampersand Callback URL: `https://api.withampersand.com/callbacks/v1/oauth`.
-
-   ![Alt text](/images/provider-guides/013943e-hubspot3.gif)
-4. In the **Scopes** section, select the scopes you'd like to use in your application. You will need add the same scopes in Ampersand to set up your app. 
-
+3. Enter **Public app name**, click the **Auth** tab, add Redirect URL: `https://api.withampersand.com/callbacks/v1/oauth` and click "Create app"
+   ![Alt text](/images/provider-guides/hubspot-old-portal-2.gif)
+4. Go to the **Scopes** tab and select your required scopes
+   <Note>
+     These should match the scopes defined in your Ampersand provider app.
+   </Note>
    ![Alt text](/images/provider-guides/1b56fb4-hubspot5.gif)
-5. Click **Save changes**.
+5. Copy your **Client ID** and **Client Secret** from the Auth tab
+   ![Alt text](/images/provider-guides/hubspot-old-portal-3.gif)
 
-### Obtaining Client Id, Client Secret, and Scopes
+Jump to [Add App to Ampersand](#add-app-to-ampersand)
 
-Here's how to grab the credentials you'll need:
+### Method 2: Legacy Apps
 
-1. Go to **Manage Apps** in HubSpot and select your app.
-2. Click on the **Auth** tab.
-3. You will find your _Client ID_ and _Client Secret_ under the **App Credentials** section. 
-4. The **Scopes** section lists the permissions your app has in HubSpot.
+This is the method for accessing your previously created apps in HubSpot using the old Developers Portal.
 
-## Add HubSpot App Details in Ampersand
+<Warning>
+  We recommend using Method 3 for creating new apps; [HubSpot will not push any
+  new features to Legacy
+  Apps](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/overview).
+</Warning>
 
-> ❕ Before adding the HubSpot App Details in Ampersand, ensure you have obtained the client ID, client secret, and scopes from HubSpot.
-> 
-> For instructions on how to obtain these details, refer to the section on [Obtaining Client ID, Client Secret, and Scopes](https://docs.withampersand.com/docs/hubspot-guide#obtaining-client-id-client-secret-and-scopes-section) .
+1. Log in to your HubSpot account (requires Super Admin access)
+2. Navigate to **Development** → **Legacy apps**
+   ![Alt text](/images/provider-guides/hubspot-new-dev-1.gif)
 
-1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
-2. Select the project where you want to add the Hubspot App.
+<Note>
+  If you don't see the Development menu, you need Super Admin permissions.
+</Note>
 
-   ![Alt text](/images/provider-guides/dd47b7a-Ampersand.png)
+3. Click **Create** → Select **Public**
 
-3. Select **Provider apps**.
-4. Select _HubSpot_ from the **Provider** list. 
-5. Enter the previously obtained _Consumer Key_ in the **Client ID** field and the _Consumer Secret_ in the **Client Secret** field.
-6. Enter the scopes set for your application in HubSpot.
+   ![Alt text](/images/provider-guides/hubspot-new-create-legacy-app.gif)
 
+4. Enter **Public app name** and go to the **Auth** tab
+
+   Add Redirect URL: `https://api.withampersand.com/callbacks/v1/oauth` and click "Create app"
+   ![Alt text](/images/provider-guides/hubspot-old-portal-2.gif)
+
+5. Go to the Scopes section, click "Add new scope" and **select your required scopes**
+   <Note>
+     These should match the scopes defined in your Ampersand provider app.
+   </Note>
+   ![Alt text](/images/provider-guides/1b56fb4-hubspot5.gif)
+6. **Copy your Client ID and Client Secret** from the Auth tab
+   ![Alt text](/images/provider-guides/hubspot-old-portal-3.gif)
+
+Jump to [Add App to Ampersand](#add-app-to-ampersand)
+
+### Method 3: New Project Apps
+
+This is HubSpot's recommended method for creating new apps. Use
+this if you prefer a CLI-based workflow or plan to build advanced
+features like UI extensions in the future.
+
+{" "}
+
+<Note>
+  For basic OAuth integrations, Method 2 and Method 3 are functionally
+  equivalent. Choose based on your preference: web UI (Method 2) or CLI (Method
+  3).
+</Note>
+
+1. **Open** the terminal
+2. **Install** the HubSpot CLI: `npm install -g @hubspot/cli`
+3. **Authenticate** using `hs account auth` and select open HubSpot to get your key
+   ![Alt text](/images/provider-guides/hubspot-cli-account-auth.png)
+
+   <Note>
+     If you already have a personal access key, select "Enter existing personal
+     access key" and skip to Step 7.
+   </Note>
+
+4. **Select** your account (if prompted)
+
+<Note>
+  When you have multiple accounts, you will be prompted to select the account
+  where you want to create the app. Make sure to select the correct one.
+</Note>
+![Alt text](/images/provider-guides/hubspot-cli-account-select.png)
+
+5. **Create** your Personal Access Key and copy it
+   ![Alt text](/images/provider-guides/hubspot-cli-create-key.gif)
+
+6. **Go back** to terminal, **paste** the key and **hit Enter**
+   ![Alt text](/images/provider-guides/hubspot-cli-paste-key.png)
+7. Create a project: `hs project create` and follow the prompts
+
+- Enter your project name: **your-project-name**
+- Choose where to create the project: **your-desired-path**
+- Choose what to include in your project: **App**
+- Choose how to distribute your application: **Privately**
+- Choose your authentication type: **OAuth**
+- Choose which features to add: **Leave blank (press Enter)**
+
+or use `hs project create --name your-project-name --project-base app --distribution private --auth oauth`
+
+![Alt text](/images/provider-guides/hubspot-cli-create-project.png)
+
+8. **Configure** OAuth redirect URL
+
+Open the folder where project was created and edit `src/app/app-hsmeta.json` to add the redirect URL:
+
+```json
+{
+  "auth": {
+    "type": "oauth",
+    "redirectUrls": ["https://api.withampersand.com/callbacks/v1/oauth"]
+  }
+}
+```
+
+9. **Deploy**: `hs project upload`
+
+- The project does not exist. Would you like to create it?: **Yes**
+
+![Alt text](/images/provider-guides/hubspot-cli-deploy-project.png)
+
+10. Get App credentials from **Development** → **Projects**
+
+- **Select the project** you just created
+- In **Project Components**, find the OAuth App
+- Go to the **Auth** tab to find your **Client ID** and **Client Secret**
+
+![Alt text](/images/provider-guides/hubspot-cli-get-credentials.gif)
+
+## Add App to Ampersand
+
+After creating your app using any method above:
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com)
+2. Select your project → **Provider apps**
+3. Select **HubSpot** from the Provider list
+4. Enter your **Client ID**, **Client Secret**, and **Scopes** and click **Save changes**
    ![Alt text](/images/provider-guides/f4ada70-hubspot6.gif)
-
-7. Click **Save changes**.
 
 ## Using the connector
 
-To start integrating with Hubspot:
-- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/hubspot/amp.yaml).
-- Deploy it using the [amp CLI](/cli/overview).
-- If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+To start integrating with HubSpot:
+
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/hubspot/amp.yaml)
+- Deploy it using the [amp CLI](/cli/overview)
+- If using Read or Subscribe Actions, create a [destination](/destinations)
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component
 - Start using the connector!
-   - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
-   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
-   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 
 ## Customer guide
 
-The [HubSpot customer guide](/customer-guides/hubspot) is a guide that can be shared with your customers to help them be successful in using your integration.
+Share the [HubSpot customer guide](/customer-guides/hubspot) with your customers to help them use your integration.
