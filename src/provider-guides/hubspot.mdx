@@ -96,11 +96,14 @@ Jump to [Add App to Ampersand](#add-app-to-ampersand)
 
 This is the method for accessing your previously created apps in HubSpot using the old Developers Portal.
 
-<Warning>
-  We recommend using Method 3 for creating new apps; [HubSpot will not push any
-  new features to Legacy
-  Apps](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/overview).
-</Warning>
+<Note>
+  **Method 2 vs Method 3**: Method 2 has no install limits but [won't receive
+  new HubSpot
+  features](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/overview).
+  Method 3 gets new features but has [install
+  limits](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits).
+  For most Ampersand integrations, Method 2 is sufficient.
+</Note>
 
 1. Log in to your HubSpot account (requires Super Admin access)
 2. Navigate to **Development** → **Legacy apps**
@@ -131,27 +134,18 @@ Jump to [Add App to Ampersand](#add-app-to-ampersand)
 
 ### Method 3: New Project Apps
 
-This is HubSpot's recommended method for creating new apps. Use
-this if you prefer a CLI-based workflow or plan to build advanced
-features like UI extensions in the future.
-
-{" "}
-
-<Note>
-  For basic OAuth integrations, Method 2 and Method 3 are functionally
-  equivalent. Choose based on your preference: web UI (Method 2) or CLI (Method
-  3).
-</Note>
+Use this method if you prefer a CLI-based workflow or need advanced features
+like UI extensions. Note that this method has [install
+limits](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits)
+that may require listing on the HubSpot Marketplace to overcome.
 
 1. **Open** the terminal
 2. **Install** the HubSpot CLI: `npm install -g @hubspot/cli`
 3. **Authenticate** using `hs account auth` and select open HubSpot to get your key
    ![Alt text](/images/provider-guides/hubspot-cli-account-auth.png)
 
-   <Note>
-     If you already have a personal access key, select "Enter existing personal
-     access key" and skip to Step 7.
-   </Note>
+   If you already have a personal access key, select "Enter existing personal
+   access key" and skip to [Step 7](#create-project).
 
 4. **Select** your account (if prompted)
 
@@ -166,12 +160,13 @@ features like UI extensions in the future.
 
 6. **Go back** to terminal, **paste** the key and **hit Enter**
    ![Alt text](/images/provider-guides/hubspot-cli-paste-key.png)
-7. Create a project: `hs project create` and follow the prompts
+7. <span id="create-project">Create a project</span>: `hs project create` and
+   follow the prompts
 
 - Enter your project name: **your-project-name**
 - Choose where to create the project: **your-desired-path**
 - Choose what to include in your project: **App**
-- Choose how to distribute your application: **Privately**
+- Choose how to distribute your application: **Privately** (See [HubSpot's distribution options](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/app-configuration#distribution))
 - Choose your authentication type: **OAuth**
 - Choose which features to add: **Leave blank (press Enter)**
 
@@ -179,15 +174,21 @@ or use `hs project create --name your-project-name --project-base app --distribu
 
 ![Alt text](/images/provider-guides/hubspot-cli-create-project.png)
 
-8. **Configure** OAuth redirect URL
+8. **Configure** OAuth redirect URL and scopes
 
-Open the folder where project was created and edit `src/app/app-hsmeta.json` to add the redirect URL:
+Open the folder where project was created and edit `src/app/app-hsmeta.json` to add the redirect URL and scopes:
 
+   <Note>
+     Scopes should match the ones defined in your Ampersand provider app.
+   </Note>
 ```json
 {
   "auth": {
     "type": "oauth",
-    "redirectUrls": ["https://api.withampersand.com/callbacks/v1/oauth"]
+    "redirectUrls": ["https://api.withampersand.com/callbacks/v1/oauth"],
+    "scopes": {
+      "required": ["crm.objects.contacts.read", "crm.objects.contacts.write"]
+    }
   }
 }
 ```
