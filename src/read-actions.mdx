@@ -146,7 +146,54 @@ There are 2 types of reads that can be triggered:
 
 ```
 
+## Full example
+
+```yaml yaml
+specVersion: 1.0.0
+integrations: 
+  - name: readSalesforce
+    provider: salesforce
+    read:
+      objects:
+      
+        - objectName: account
+          destination: accountWebhook
+          schedule: "*/10 * * * *" # every 10 minutes
+          # Read all accounts when integration is installed
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: industry
+          optionalFields:
+            - fieldName: annualrevenue
+            - fieldName: website
+                
+        - objectName: contact
+          destination: contactWebhook
+          schedule: "*/10 * * * *" # every 10 minutes
+          # Read contacts from the last 30 days when integration is installed
+          backfill:
+            defaultPeriod:
+              days: 30
+          requiredFields:
+            - fieldName: id
+            - fieldName: firstname
+            - fieldName: lastname
+            - mapToName: pronoun
+              mapToDisplayName: Pronoun
+              prompt: We will use this word in emails we send out.
+          # All other field are optional
+          optionalFieldsAuto: all
+```
+
 ## Delivery modes (deprecated)
+
+<Warning>
+Delivery modes are deprecated. If you don't want read results to be automatically delivered to you, you should omit `schedule` and `backfill` when defining a read action in `amp.yaml`, and [trigger a read](#trigger-a-read) when you want to receive data from your customer's SaaS.
+</Warning>
 
 Ampersand sends data to [destinations](/destinations/overview) that you specify in your manifest file. Please refer to [webhook destinations](/destinations/webhooks) for more information on the data schema of the webhooks.
 
@@ -204,46 +251,3 @@ For example, if you are ready to receive and process a maximum of 300 records, a
 If you request for more pages than are available, Ampersand will first send you all the available records at the time of your request. Then, as it reads new data, it will send you the new records as they become available until you have received your requested number of pages.
 
 For example, if you request for 10 pages of results, but there are only 4 pages available at the time of your request, Ampersand will send you the 4 pages immediately. If Ampersand reads 20 pages of results in the next scheduled read, Ampersand will send you 6 pages more, resulting in a total of 10 pages of results being delivered. Ampersand will then hold the next 14 pages until you request for more results.
-
-## Full example
-
-```yaml yaml
-specVersion: 1.0.0
-integrations: 
-  - name: readSalesforce
-    provider: salesforce
-    read:
-      objects:
-      
-        - objectName: account
-          destination: accountWebhook
-          schedule: "*/10 * * * *" # every 10 minutes
-          # Read all accounts when integration is installed
-          backfill:
-            defaultPeriod:
-              fullHistory: true
-          requiredFields:
-            - fieldName: id
-            - fieldName: name
-            - fieldName: industry
-          optionalFields:
-            - fieldName: annualrevenue
-            - fieldName: website
-                
-        - objectName: contact
-          destination: contactWebhook
-          schedule: "*/10 * * * *" # every 10 minutes
-          # Read contacts from the last 30 days when integration is installed
-          backfill:
-            defaultPeriod:
-              days: 30
-          requiredFields:
-            - fieldName: id
-            - fieldName: firstname
-            - fieldName: lastname
-            - mapToName: pronoun
-              mapToDisplayName: Pronoun
-              prompt: We will use this word in emails we send out.
-          # All other field are optional
-          optionalFieldsAuto: all
-```
