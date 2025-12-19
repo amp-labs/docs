@@ -334,6 +334,7 @@ const baseConfig = {
             "provider-guides/crunchbase",
             "provider-guides/customerJourneysApp",
             "provider-guides/customerJourneysTrack",
+            "provider-guides/ciscoWebex",
             "provider-guides/delighted",
             "provider-guides/discord",
             "provider-guides/discourse",
