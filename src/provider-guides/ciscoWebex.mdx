@@ -1,0 +1,103 @@
+---
+title: "Cisco Webex"
+---
+
+## What's Supported
+
+### Supported Actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historical backfill and incremental read.
+- [Write Actions](/write-actions), including create and update operations.
+- [Proxy Actions](/proxy-actions), using the base URL `https://webexapis.com`.
+
+### Supported Objects
+
+The Cisco Webex connector supports the following objects from the Admin API:
+
+- [people](https://developer.webex.com/docs/api/v1/people/list-people) (Read, Write)
+- [groups](https://developer.webex.com/admin/docs/api/v1/groups) (Read, Write)
+- [roles](https://developer.webex.com/docs/api/v1/roles/list-roles) (Read only)
+- [events](https://developer.webex.com/docs/api/v1/events/list-events) (Read only)
+- [organizations](https://developer.webex.com/docs/api/v1/organizations/list-organizations) (Read only)
+- [reports](https://developer.webex.com/admin/docs/api/v1/reports/list-reports) (Read only)
+- [meetings](https://developer.webex.com/meeting/docs/meetings) (Read,Write)
+
+## Before you get started
+
+To integrate Cisco Webex with Ampersand, you will need [a Cisco Webex Account](https://www.webex.com/signup).
+
+Once your account is created, you'll need to create an integration in Cisco Webex and obtain the following credentials from your integration:
+
+- Client ID
+- Client Secret
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Creating a Cisco Webex Integration
+
+<Note>
+  The Admin Suite integration requires organization-level access in Cisco Webex.
+  Ensure your integration is authorized with the required organization (admin)
+  scopes, as many supported objects are only accessible to organization
+  administrators.
+</Note>
+
+Follow the steps below to create a Cisco Webex integration and add the Ampersand redirect URL to the integration:
+
+1. Log in to your [Cisco Webex Developer Portal](https://developer.webex.com/) account.
+
+2. Click **My Apps** in the top navigation.
+
+3. Click **Create a New App**.
+
+4. Select **Integration** as the app type.
+
+5. Enter your **App Name**.
+
+6. Enter a **Description** for your integration.
+
+7. Enter Ampersand's **Redirect URI**: `https://api.withampersand.com/callbacks/v1/oauth`.
+
+8. Under **Scopes**, select the necessary [Scopes](https://developer.webex.com/create/docs/integrations#scopes) for your integration.
+
+9. Click **Add Integration**.
+
+On the next screen, you'll see a **Client ID** and **Client Secret** have been generated.
+
+You'll use these credentials while connecting your app to Ampersand.
+
+## Add Your Cisco Webex App Info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Cisco Webex integration.
+
+   ![Alt text](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Select **Provider apps**.
+
+4. Select _Cisco Webex_ from the **Provider** list.
+
+5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
+
+6. Click **Save changes**.
+
+## Using the connector
+
+To start integrating with Cisco Webex:
+
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/ciscowebex/amp.yaml).
+
+- Deploy it using the [amp CLI](/cli/overview).
+
+- If you're using Read Actions, create a [destination](/destinations).
+
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. This UI component will prompt the customer for OAuth authorization.
+
+- Start using the connector!
+
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
