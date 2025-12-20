@@ -331,7 +331,7 @@ The `getCustomerFieldsForObject` function returned by `useManifest` allows you t
 
 [The fields mapping page of the demo app](https://github.com/amp-labs/demo-headless/blob/main/src/components/FieldMappingTable/FieldMappingTable.tsx) provides a full example for using `useManifest` to build the UI for customers to configure the installation.
 
-## Config management
+## Local config management
 
 Managing the [Config](/terminology#config) that keeps track of each customer's preference for how the integration behaves can be complex, with deeply nested objects and the need to manage this state locally.
 
@@ -415,11 +415,13 @@ function ConfigManager() {
       objects: {
         Contact: {
           objectName: "Contact",
-          schedule: "0 0 * * *",
-          destination: "contacts",
           selectedFields: {
             "Name": true,
             "Email": true
+          },
+          selectedFieldsMappings: {
+            // Mapping from BillingAddress (in SaaS API) to Address (in your application).
+            "Address": "BillingAddress"
           }
         }
       }
@@ -443,22 +445,30 @@ This is an example for how to use helper functions to more easily construct a re
 ```typescript
 function ReadObjectConfig() {
   const config = useLocalConfig();
+  const { createInstallation } = useCreateInstallation();
   const contactConfig = config.readObject("Contact");
   
-  // Check if field is selected
+  // Check if field is already selected in local config
   const isNameSelected = contactConfig.getSelectedField("Name");
   
-  // Toggle field selection
+  // Select a field
   contactConfig.setSelectedField({ fieldName: "Email", selected: true });
   
+  // Get existing mapping for a field in local config
+  const mappedField = contactConfig.getFieldMapping("email_address");
+
   // Set field mapping
   contactConfig.setFieldMapping({ 
-    fieldName: "Email", 
-    mapToName: "email_address" 
+    fieldName: "Email", // raw field from provider API
+    mapToName: "email_address" // mapped field
   });
   
-  // Get field mapping
-  const mappedField = contactConfig.getFieldMapping("email_address");
+  // Create an installation with the current config
+  const handleSave = async () => {
+    await createInstallation({
+      config: config.get(),
+    });
+  };
 }
 ```
 
@@ -469,10 +479,19 @@ The headless UI library provides helper functions to more easily construct a wri
 ```typescript
 function WriteObjectConfig() {
   const config = useLocalConfig();
+  const { createInstallation } = useCreateInstallation();
+
   const contactWriteConfig = config.writeObject("Contact");
   
   // Enable write for Contact object
   contactWriteConfig.setEnableWrite();
+
+  // Create an installation with the current config
+  const handleSave = async () => {
+    await createInstallation({
+      config: config.get(),
+    });
+  };
 }
 ```
 
@@ -487,6 +506,7 @@ You can configure write settings for individual features using these methods:
 ```typescript
 function WriteObjectConfig() {
   const config = useLocalConfig();
+  const { createInstallation } = useCreateInstallation();
   const contactWriteConfig = config.writeObject("Contact");
   
   // Set default value for a field
@@ -533,10 +553,17 @@ function WriteObjectConfig() {
     value: "always"  // Always write notes field on update
   });
   
-  // Get current settings
+  // Get current local settings
   const defaultValues = contactWriteConfig.getDefaultValues("source");
   const writeOnCreate = contactWriteConfig.getWriteOnCreateSetting("source");
   const writeOnUpdate = contactWriteConfig.getWriteOnUpdateSetting("source");
+
+  // Create an installation with the current config
+  const handleSave = async () => {
+    await createInstallation({
+      config: config.get(),
+    });
+  };
 }
 ```
 
@@ -547,6 +574,7 @@ You can use `setFieldSettings` to set all advanced write features at once for a 
 ```typescript
 function WriteObjectConfig() {
   const config = useLocalConfig();
+  const { createInstallation } = useCreateInstallation();
   const contactWriteConfig = config.writeObject("Contact");
   
   // Configure a field with both write behavior and default value
@@ -563,41 +591,13 @@ function WriteObjectConfig() {
 
   // Get current settings
   const current = contactWriteConfig.getFieldSettings("customSource");
-}
-```
 
-### Full example
-
-Here's a full example that uses the `ReadObjectConfig` and `WriteObjectConfig` components defined above, and makes a call to `updateInstallation` with the config that has now been updated with both read actions and write actions.
-
-```typescript
-function IntegrationConfig() {
-  const config = useLocalConfig();
-  const { updateInstallation } = useUpdateInstallation();
-  
+  // Create an installation with the current config
   const handleSave = async () => {
-    try {
-      await updateInstallation({
-        config: config.get(),
-        onSuccess: () => {
-          console.log("Configuration updated successfully");
-        },
-        onError: (error) => {
-          console.error("Failed to update configuration:", error);
-        }
-      });
-    } catch (error) {
-      console.error("Error updating configuration:", error);
-    }
+    await createInstallation({
+      config: config.get(),
+    });
   };
-  
-  return (
-    <div>
-      <ReadObjectConfig />
-      <WriteObjectConfig />
-      <button onClick={handleSave}>Save Configuration</button>
-    </div>
-  );
 }
 ```
 
