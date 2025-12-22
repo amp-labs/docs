@@ -248,9 +248,9 @@ function InstallationForm() {
       config: {
         read: {
           objects: {
-            contacts: {
-              objectName: 'contacts',
-              selectedFieldsAuto: 'all',
+            companies: {
+              objectName: 'companies',
+              selectedFieldsAuto: 'all', // Read all fields
             },
           },
         },
@@ -416,12 +416,12 @@ function ConfigManager() {
         contact: {
           objectName: "contact",
           selectedFields: {
-            "Name": true,
-            "Email": true
+            "name": true,
+            "email": true
           },
           selectedFieldsMappings: {
-            // Mapping from BillingAddress (in SaaS API) to Address (in your application).
-            "Address": "BillingAddress"
+            // Mapping from billingaddress (in SaaS API) to address (in your application).
+            "address": "billingaddress"
           }
         }
       }
@@ -449,17 +449,17 @@ function ReadObjectConfig() {
   const contactConfig = config.readObject("contact");
   
   // Check if field is already selected in local config
-  const isNameSelected = contactConfig.getSelectedField("Name");
+  const isNameSelected = contactConfig.getSelectedField("name");
   
   // Select a field
-  contactConfig.setSelectedField({ fieldName: "Email", selected: true });
+  contactConfig.setSelectedField({ fieldName: "email", selected: true });
   
   // Get existing mapping for a field in local config
   const mappedField = contactConfig.getFieldMapping("email_address");
 
   // Set field mapping
   contactConfig.setFieldMapping({ 
-    fieldName: "Email", // raw field from provider API
+    fieldName: "email", // raw field from provider API
     mapToName: "email_address" // mapped field
   });
   
@@ -672,8 +672,8 @@ export function App() {
 const myConfig: ConfigContent = {
   read: {
     objects: {
-      contacts: {
-        objectName: 'contacts',
+      companies: {
+        objectName: 'companies',
         // Auto-select all fields to be read,
         // alternatively you can specify any desired fields & mappings here.
         selectedFieldsAuto: 'all',
