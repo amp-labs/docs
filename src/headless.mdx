@@ -413,10 +413,10 @@ function ConfigManager() {
     provider: "salesforce",
     read: {
       objects: {
-        Contact: {
-          objectName: "Contact",
+        contact: {
+          objectName: "contact",
           schedule: "0 0 * * *",
-          destination: "contacts",
+          destination: "contactsWebhook",
           selectedFields: {
             "Name": true,
             "Email": true
@@ -443,7 +443,7 @@ This is an example for how to use helper functions to more easily construct a re
 ```typescript
 function ReadObjectConfig() {
   const config = useLocalConfig();
-  const contactConfig = config.readObject("Contact");
+  const contactConfig = config.readObject("contact");
   
   // Check if field is selected
   const isNameSelected = contactConfig.getSelectedField("Name");
@@ -469,7 +469,7 @@ The headless UI library provides helper functions to more easily construct a wri
 ```typescript
 function WriteObjectConfig() {
   const config = useLocalConfig();
-  const contactWriteConfig = config.writeObject("Contact");
+  const contactWriteConfig = config.writeObject("contact");
   
   // Enable write for Contact object
   contactWriteConfig.setEnableWrite();
@@ -487,7 +487,7 @@ You can configure write settings for individual features using these methods:
 ```typescript
 function WriteObjectConfig() {
   const config = useLocalConfig();
-  const contactWriteConfig = config.writeObject("Contact");
+  const contactWriteConfig = config.writeObject("contact");
   
   // Set default value for a field
   contactWriteConfig.setDefaultValues({
@@ -547,7 +547,7 @@ You can use `setFieldSettings` to set all advanced write features at once for a 
 ```typescript
 function WriteObjectConfig() {
   const config = useLocalConfig();
-  const contactWriteConfig = config.writeObject("Contact");
+  const contactWriteConfig = config.writeObject("contact");
   
   // Configure a field with both write behavior and default value
   contactWriteConfig.setFieldSettings({
