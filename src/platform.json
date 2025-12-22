@@ -30376,16 +30376,6 @@
               "type": "string"
             },
             "example": "32356abe-d2fd-49c7-9030-abdcbc6456d4"
-          },
-          {
-            "name": "groupRef",
-            "in": "query",
-            "required": true,
-            "description": "The groupRef for the installation",
-            "schema": {
-              "type": "string"
-            },
-            "example": "group-123"
           }
         ],
         "requestBody": {
@@ -30397,6 +30387,11 @@
                 "type": "object",
                 "description": "Request payload for upserting metadata (fields only)",
                 "properties": {
+                  "groupRef": {
+                    "type": "string",
+                    "description": "The ID that your app uses to identify the group of users for this request.",
+                    "example": "group-123"
+                  },
                   "fields": {
                     "type": "object",
                     "description": "Maps object names to field definitions",
@@ -30559,6 +30554,7 @@
                   }
                 },
                 "required": [
+                  "groupRef",
                   "fields"
                 ]
               },
@@ -30566,6 +30562,7 @@
                 "createTextFields": {
                   "summary": "Create text fields on multiple objects",
                   "value": {
+                    "groupRef": "group-123",
                     "fields": {
                       "Account": [
                         {
@@ -30616,6 +30613,7 @@
                 "createNumericFields": {
                   "summary": "Create numeric fields with constraints",
                   "value": {
+                    "groupRef": "group-123",
                     "fields": {
                       "Opportunity": [
                         {
@@ -30639,6 +30637,7 @@
                 "createAssociationField": {
                   "summary": "Create field with association to another object",
                   "value": {
+                    "groupRef": "group-123",
                     "fields": {
                       "Task": [
                         {
@@ -31430,16 +31429,6 @@
               "type": "string"
             },
             "example": "salesforce"
-          },
-          {
-            "name": "groupRef",
-            "in": "query",
-            "required": true,
-            "description": "The ID that your app uses to identify the group of users for this Connection.",
-            "schema": {
-              "type": "string"
-            },
-            "example": "group-123"
           }
         ],
         "requestBody": {
@@ -31451,6 +31440,11 @@
                 "type": "object",
                 "description": "Request payload for upserting metadata (fields only)",
                 "properties": {
+                  "groupRef": {
+                    "type": "string",
+                    "description": "The ID that your app uses to identify the group of users for this request.",
+                    "example": "group-123"
+                  },
                   "fields": {
                     "type": "object",
                     "description": "Maps object names to field definitions",
@@ -31613,6 +31607,7 @@
                   }
                 },
                 "required": [
+                  "groupRef",
                   "fields"
                 ]
               },
@@ -31620,6 +31615,7 @@
                 "createTextFields": {
                   "summary": "Create text fields on multiple objects",
                   "value": {
+                    "groupRef": "group-123",
                     "fields": {
                       "Account": [
                         {
@@ -31670,6 +31666,7 @@
                 "createNumericFields": {
                   "summary": "Create numeric fields with constraints",
                   "value": {
+                    "groupRef": "group-123",
                     "fields": {
                       "Opportunity": [
                         {
@@ -31693,6 +31690,7 @@
                 "createAssociationField": {
                   "summary": "Create field with association to another object",
                   "value": {
+                    "groupRef": "group-123",
                     "fields": {
                       "Task": [
                         {
@@ -70894,6 +70892,11 @@
         "type": "object",
         "description": "Request payload for upserting metadata (fields only)",
         "properties": {
+          "groupRef": {
+            "type": "string",
+            "description": "The ID that your app uses to identify the group of users for this request.",
+            "example": "group-123"
+          },
           "fields": {
             "type": "object",
             "description": "Maps object names to field definitions",
@@ -71056,6 +71059,7 @@
           }
         },
         "required": [
+          "groupRef",
           "fields"
         ]
       },
