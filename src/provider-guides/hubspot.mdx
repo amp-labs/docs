@@ -66,79 +66,12 @@ Choose one of the methods below based on your HubSpot account type.
 
 ## Creating a HubSpot App
 
-There are three ways to create a HubSpot OAuth app. Choose the method based on your HubSpot account:
+### Method 1: New Project Apps
 
-### Method 1: Old Developer Portal
+New Project Apps are [limited to 25 installs
+](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits), until the app is listed on the HubSpot Marketplace. We recommend starting the process to [publish to HubSpot marketplace](#publish-to-hubspot-marketplace) as soon you've finished building your integration and tested it internally or with a customer.
 
-<Warning>
-  HubSpot will be deprecating this method on Jan 12th 2026. Other methods below
-  are preferred.
-</Warning>
-
-If your account was created before 2025, you may see the old interface:
-
-1. Log in to your [HubSpot Developer Dashboard](https://app.hubspot.com/signup-hubspot/developers)
-2. Click **Create an app**
-   ![Alt text](/images/provider-guides/a8c2c6f-hubspot1.gif)
-3. Enter **Public app name**, click the **Auth** tab, add Redirect URL: `https://api.withampersand.com/callbacks/v1/oauth` and click "Create app"
-   ![Alt text](/images/provider-guides/hubspot-old-portal-2.gif)
-4. Go to the **Scopes** tab and select your required scopes
-   <Note>
-     These should match the scopes defined in your Ampersand provider app.
-   </Note>
-   ![Alt text](/images/provider-guides/1b56fb4-hubspot5.gif)
-5. Copy your **Client ID** and **Client Secret** from the Auth tab
-   ![Alt text](/images/provider-guides/hubspot-old-portal-3.gif)
-
-Jump to [Add App to Ampersand](#add-app-to-ampersand)
-
-### Method 2: Legacy Apps
-
-This is the method for accessing your previously created apps in HubSpot using the old Developers Portal.
-
-<Note>
-  **Method 2 vs Method 3**: Method 2 has no install limits but [won't receive
-  new HubSpot
-  features](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/overview).
-  Method 3 gets new features but has [install
-  limits](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits).
-  For most Ampersand integrations, Method 2 is sufficient.
-</Note>
-
-1. Log in to your HubSpot account (requires Super Admin access)
-2. Navigate to **Development** → **Legacy apps**
-   ![Alt text](/images/provider-guides/hubspot-new-dev-1.gif)
-
-<Note>
-  If you don't see the Development menu, you need Super Admin permissions.
-</Note>
-
-3. Click **Create** → Select **Public**
-
-   ![Alt text](/images/provider-guides/hubspot-new-create-legacy-app.gif)
-
-4. Enter **Public app name** and go to the **Auth** tab
-
-   Add Redirect URL: `https://api.withampersand.com/callbacks/v1/oauth` and click "Create app"
-   ![Alt text](/images/provider-guides/hubspot-old-portal-2.gif)
-
-5. Go to the Scopes section, click "Add new scope" and **select your required scopes**
-   <Note>
-     These should match the scopes defined in your Ampersand provider app.
-   </Note>
-   ![Alt text](/images/provider-guides/1b56fb4-hubspot5.gif)
-6. **Copy your Client ID and Client Secret** from the Auth tab
-   ![Alt text](/images/provider-guides/hubspot-old-portal-3.gif)
-
-Jump to [Add App to Ampersand](#add-app-to-ampersand)
-
-### Method 3: New Project Apps
-
-Use this method if you prefer a CLI-based workflow or need advanced features
-like UI extensions. Note that this method has [install
-limits](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits)
-that may require listing on the HubSpot Marketplace to overcome.
-
+To create a New Project App:
 1. **Open** the terminal
 2. **Install** the HubSpot CLI: `npm install -g @hubspot/cli`
 3. **Authenticate** using `hs account auth` and select open HubSpot to get your key
@@ -151,7 +84,7 @@ that may require listing on the HubSpot Marketplace to overcome.
 
 <Note>
   When you have multiple accounts, you will be prompted to select the account
-  where you want to create the app. Make sure to select the correct one.
+  where you want to create the app. Make sure to select the developer account.
 </Note>
 ![Alt text](/images/provider-guides/hubspot-cli-account-select.png)
 
@@ -166,11 +99,15 @@ that may require listing on the HubSpot Marketplace to overcome.
 - Enter your project name: **your-project-name**
 - Choose where to create the project: **your-desired-path**
 - Choose what to include in your project: **App**
-- Choose how to distribute your application: **Privately** (See [HubSpot's distribution options](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/app-configuration#distribution))
+- Choose how to distribute your application: **Marketplace** (See [HubSpot's distribution options](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/app-configuration#distribution))
 - Choose your authentication type: **OAuth**
 - Choose which features to add: **Leave blank (press Enter)**
 
-or use `hs project create --name your-project-name --project-base app --distribution private --auth oauth`
+Alternatively you can use this one line in the terminal:
+
+ ```
+ hs project create --name your-project-name --project-base app --distribution marketplace --auth oauth
+ ```
 
 ![Alt text](/images/provider-guides/hubspot-cli-create-project.png)
 
@@ -178,9 +115,6 @@ or use `hs project create --name your-project-name --project-base app --distribu
 
 Open the folder where project was created and edit `src/app/app-hsmeta.json` to add the redirect URL and scopes:
 
-   <Note>
-     Scopes should match the ones defined in your Ampersand provider app.
-   </Note>
 ```json
 {
   "auth": {
@@ -207,6 +141,60 @@ Open the folder where project was created and edit `src/app/app-hsmeta.json` to 
 
 ![Alt text](/images/provider-guides/hubspot-cli-get-credentials.gif)
 
+Jump to [Add App to Ampersand](#add-app-to-ampersand).
+
+### Method 2: Legacy Apps
+
+<Note>
+  Legacy Apps has no install limits but [won't receive
+  new HubSpot
+  features](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/overview).
+  When you migrate a Legacy App to a new Project App, you will be subject to the 25 install limit until your app is listed in the HubSpot marketplace. Please see [HubSpot changelog](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits) for more details.
+</Note>
+
+Depending on when you created your HubSpot developer account, you will see different UI.
+
+#### Developer accounts created after September 2025
+
+1. Log in to your HubSpot developer account
+2. Navigate to **Development** → **Legacy apps**
+   ![Alt text](/images/provider-guides/hubspot-new-dev-1.gif)
+
+<Note>
+  If you don't see the Development menu, you need Super Admin permissions.
+</Note>
+
+3. Click **Create** → Select **Public**
+
+   ![Alt text](/images/provider-guides/hubspot-new-create-legacy-app.gif)
+
+4. Enter **Public app name** and go to the **Auth** tab
+
+   Add Redirect URL: `https://api.withampersand.com/callbacks/v1/oauth` and click "Create app"
+   ![Alt text](/images/provider-guides/hubspot-old-portal-2.gif)
+
+5. Go to the Scopes section, click "Add new scope" and **select your required scopes**
+   ![Alt text](/images/provider-guides/1b56fb4-hubspot5.gif)
+
+6. **Copy your Client ID and Client Secret** from the Auth tab
+   ![Alt text](/images/provider-guides/hubspot-old-portal-3.gif)
+
+Jump to [Add App to Ampersand](#add-app-to-ampersand).
+
+#### Developer accounts created before September 2025
+
+1. Log in to your [HubSpot Developer Dashboard](https://app.hubspot.com/signup-hubspot/developers)
+2. Click **Create an app**
+   ![Alt text](/images/provider-guides/a8c2c6f-hubspot1.gif)
+3. Enter **Public app name**, click the **Auth** tab, add Redirect URL: `https://api.withampersand.com/callbacks/v1/oauth` and click "Create app"
+   ![Alt text](/images/provider-guides/hubspot-old-portal-2.gif)
+4. Go to the **Scopes** tab and select your required scopes
+   ![Alt text](/images/provider-guides/1b56fb4-hubspot5.gif)
+5. Copy your **Client ID** and **Client Secret** from the Auth tab
+   ![Alt text](/images/provider-guides/hubspot-old-portal-3.gif)
+
+Jump to [Add App to Ampersand](#add-app-to-ampersand)
+
 ## Add App to Ampersand
 
 After creating your app using any method above:
@@ -214,7 +202,12 @@ After creating your app using any method above:
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com)
 2. Select your project → **Provider apps**
 3. Select **HubSpot** from the Provider list
-4. Enter your **Client ID**, **Client Secret**, and **Scopes** and click **Save changes**
+4. Enter your **Client ID**, **Client Secret**, and **Scopes** and click **Save changes**.
+
+<Note>
+   These scopes must should match the exact set of scopes defined in your HubSpot app.
+</Note>
+
    ![Alt text](/images/provider-guides/f4ada70-hubspot6.gif)
 
 ## Using the connector
@@ -230,3 +223,10 @@ To start integrating with HubSpot:
 ## Customer guide
 
 Share the [HubSpot customer guide](/customer-guides/hubspot) with your customers to help them use your integration.
+
+## Publish to HubSpot Marketplace
+
+When you are ready to list on the HubSpot marketplace, follow the instructions in the [HubSpot documentation](https://developers.hubspot.com/docs/apps/developer-platform/list-apps/listing-your-app/listing-your-app).
+
+- For the **App Information** section, you should use information about your company, not about Ampersand.
+- For **Install Button URL**, use the URL of your application that users go to to start the installation process (this is usually where you've embedded the Ampersand UI Component).
