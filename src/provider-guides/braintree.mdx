@@ -6,38 +6,54 @@ title: "Braintree"
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported for `customers`, `transactions`, `refunds`, `disputes`, `verifications`, and `payments` objects.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://payments.sandbox.braintree-api.com/graphql`.
+
+### Supported Objects
+
+The Braintree connector supports reading from the following objects:
+- [customers](https://developer.paypal.com/braintree/graphql/reference/query/search/searchCustomers)
+- [transactions](https://developer.paypal.com/braintree/graphql/reference/query/search/searchTransactions)
+- [refunds](https://developer.paypal.com/braintree/graphql/reference/query/search/searchRefunds)
+- [disputes](https://developer.paypal.com/braintree/graphql/reference/query/search/searchDisputes)
+- [verifications](https://developer.paypal.com/braintree/graphql/reference/query/search/searchVerifications)
+- [merchantAccounts](https://developer.paypal.com/braintree/graphql/reference/query/merchantAccounts)
+- [inStoreLocations](https://developer.paypal.com/braintree/graphql/reference/query/inStoreLocations)
+- [inStoreReaders](https://developer.paypal.com/braintree/graphql/reference/query/inStoreReaders)
+- [businessAccountCreationRequests](https://developer.paypal.com/braintree/graphql/reference/query/businessAccountCreationRequests)
+- [payments](https://developer.paypal.com/braintree/graphql/reference/query/search/searchPayments)
+
+The Braintree connector supports writing to the following objects:
+- [customers](https://developer.paypal.com/braintree/graphql/reference/mutation/createCustomer) (create/update)
+- [transactions](https://developer.paypal.com/braintree/graphql/reference/mutation/chargePaymentMethod) (charge/capture)
+- [paymentMethods](https://developer.paypal.com/braintree/graphql/reference/mutation/vaultPaymentMethod) (create/update)
 
 ### Example integration
 
-To define an integration for Braintree, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: braintree-integration
-    displayName: My Braintree Integration
-    provider: braintree
-    proxy:
-      enabled: true
-```
-
-## Before you get started
-
-[Click here](https://developer.paypal.com/braintree/articles/control-panel/important-gateway-credentials#api-keys) for detailed information about finding and generating your API credentials (Public Key, Private Key, and Merchant ID) in Braintree.
-
-Note: Make sure you're using the correct environment (Sandbox or Production) credentials.
+For an example manifest file of a Braintree integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/braintree/amp.yaml).
 
 ## Using the connector
 
-This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+This connector uses **Basic Auth**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
 
-To start integrating with Braintree:
-- Create a manifest file like the example above.
+To integrate with Braintree:
+- Create a manifest file similar to the example above.
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API credentials.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct Basic Auth headers to your requests.
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for their API credentials.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 
-For detailed information about available GraphQL queries and mutations, refer to the [Braintree API Reference](https://developer.paypal.com/braintree/graphql/).
+## Getting API credentials for Braintree
+
+1. Log in to your [Braintree Control Panel](https://www.braintreegateway.com/login).
+2. Navigate to **Settings** > **API Keys**.
+3. Generate or view your API credentials (Public Key, Private Key, and Merchant ID).
+
+For more details, see the [Braintree API Credentials documentation](https://developer.paypal.com/braintree/articles/control-panel/important-gateway-credentials#api-keys).
+
+Note: Make sure you're using the correct environment (Sandbox or Production) credentials.
 
