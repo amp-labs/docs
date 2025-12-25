@@ -13,29 +13,25 @@ This connector supports:
 ### Supported Objects
 
 The JustCall connector supports reading from the following objects:
-- [contacts](https://developer.justcall.io/reference/get_contacts_v21)
+- [contacts](https://developer.justcall.io/reference/contacts_list_v21)
 - [calls](https://developer.justcall.io/reference/call_list_v21)
-- [texts](https://developer.justcall.io/reference/sms_list_v21)
+- [texts](https://developer.justcall.io/reference/texts_list_v21)
 - [users](https://developer.justcall.io/reference/users_list_v21)
-- [tags](https://developer.justcall.io/reference/tags_list_v21)
-- [sales_dialer/contacts](https://developer.justcall.io/reference/sales-dialer-get-contact)
-- [sales_dialer/calls](https://developer.justcall.io/reference/sales-dialer-call-logs)
+- [tags](https://developer.justcall.io/reference/texts_tags_list_v21)
+- [sales_dialer/contacts](https://developer.justcall.io/reference/sales_dialer_campaign_contacts_list_v21)
+- [sales_dialer/calls](https://developer.justcall.io/reference/sales_dialer_call_list_v21)
 
 The JustCall connector supports writing to the following objects:
 - [contacts](https://developer.justcall.io/reference/create_contact_v21) (create/update)
-- [calls](https://developer.justcall.io/reference/update_call_v21) (update only)
-- [texts](https://developer.justcall.io/reference/send_sms_v21) (send SMS)
-
-### Example integration
-
-For an example manifest file of a JustCall integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/justCall/amp.yaml).
+- [calls](https://developer.justcall.io/reference/call_update_v21) (update only)
+- [texts](https://developer.justcall.io/reference/texts_new_v21) (send SMS)
 
 ## Using the connector
 
 This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
 
 To integrate with JustCall:
-- Create a manifest file similar to the example above.
+- Create a manifest file for your integration.
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for their API key and secret.

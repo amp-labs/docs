@@ -13,25 +13,47 @@ This connector supports:
 ### Supported Objects
 
 The Braintree connector supports reading from the following objects:
-- [customers](https://developer.paypal.com/braintree/graphql/reference/query/search/searchCustomers)
-- [transactions](https://developer.paypal.com/braintree/graphql/reference/query/search/searchTransactions)
-- [refunds](https://developer.paypal.com/braintree/graphql/reference/query/search/searchRefunds)
-- [disputes](https://developer.paypal.com/braintree/graphql/reference/query/search/searchDisputes)
-- [verifications](https://developer.paypal.com/braintree/graphql/reference/query/search/searchVerifications)
-- [merchantAccounts](https://developer.paypal.com/braintree/graphql/reference/query/merchantAccounts)
-- [inStoreLocations](https://developer.paypal.com/braintree/graphql/reference/query/inStoreLocations)
-- [inStoreReaders](https://developer.paypal.com/braintree/graphql/reference/query/inStoreReaders)
-- [businessAccountCreationRequests](https://developer.paypal.com/braintree/graphql/reference/query/businessAccountCreationRequests)
-- [payments](https://developer.paypal.com/braintree/graphql/reference/query/search/searchPayments)
+- [customers](https://developer.paypal.com/braintree/graphql/guides/customers/)
+- [transactions](https://developer.paypal.com/braintree/graphql/guides/transactions/)
+- [refunds](https://developer.paypal.com/braintree/graphql/guides/)
+- [disputes](https://developer.paypal.com/braintree/graphql/guides/disputes/)
+- [verifications](https://developer.paypal.com/braintree/graphql/guides/)
+- [merchantAccounts](https://developer.paypal.com/braintree/graphql/guides/)
+- [inStoreLocations](https://developer.paypal.com/braintree/graphql/guides/)
+- [inStoreReaders](https://developer.paypal.com/braintree/graphql/guides/)
+- [businessAccountCreationRequests](https://developer.paypal.com/braintree/graphql/guides/)
+- [payments](https://developer.paypal.com/braintree/graphql/guides/)
 
 The Braintree connector supports writing to the following objects:
-- [customers](https://developer.paypal.com/braintree/graphql/reference/mutation/createCustomer) (create/update)
-- [transactions](https://developer.paypal.com/braintree/graphql/reference/mutation/chargePaymentMethod) (charge/capture)
-- [paymentMethods](https://developer.paypal.com/braintree/graphql/reference/mutation/vaultPaymentMethod) (create/update)
+- [customers](https://developer.paypal.com/braintree/graphql/guides/customers/) (create/update)
+- [transactions](https://developer.paypal.com/braintree/graphql/guides/transactions/) (charge/capture)
+- [paymentMethods](https://developer.paypal.com/braintree/graphql/guides/) (create/update)
 
 ### Example integration
 
-For an example manifest file of a Braintree integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/braintree/amp.yaml).
+To define an integration for Braintree, create a manifest file that looks like this:
+
+```yaml
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: braintree-integration
+    displayName: My Braintree Integration
+    provider: braintree
+    read:
+      objects:
+        - objectName: customers
+          destination: myWebhook
+          schedule: "*/10 * * * *"
+        - objectName: transactions
+          destination: myWebhook
+          schedule: "*/10 * * * *"
+    write:
+      objects:
+        - objectName: customers
+    proxy:
+      enabled: true
+```
 
 ## Using the connector
 
