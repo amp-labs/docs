@@ -218,6 +218,10 @@ const baseConfig = {
       source: "/glossary",
       destination: "/terminology"
     },
+    {
+      source: "/provider-guides/webex",
+      destination: "/provider-guides/webex"
+    },
   ],
   footerSocials: {
     linkedin: "https://www.linkedin.com/company/withampersand",
@@ -325,6 +329,7 @@ const baseConfig = {
             "provider-guides/crunchbase",
             "provider-guides/customerJourneysApp",
             "provider-guides/customerJourneysTrack",
+            "provider-guides/webex",
             "provider-guides/delighted",
             "provider-guides/discord",
             "provider-guides/discourse",
