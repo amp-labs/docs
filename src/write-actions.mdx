@@ -43,6 +43,43 @@ integrations:
  The ability to programmatically create custom objects when a user installs your integration.
 </Note>
 
+## Creating custom fields
+
+You can programmatically create or update custom fields in your customer's SaaS instance using Ampersand's field management API. This is useful when you need to ensure specific custom fields exist before writing data to them.
+
+### When to use field creation
+
+- **Before installation**: Create fields using a connection (during the installation setup process)
+- **After installation**: Create fields using an existing installation
+
+### How it works
+
+Ampersand provides two endpoints for managing custom fields:
+
+- [Upsert custom fields for installation](/reference/objects-&-fields/upsert-custom-fields-for-installation) - Use this when you already have an installation
+- [Upsert custom fields for connection](/reference/objects-&-fields/upsert-custom-fields-for-connection) - Use this when you only have a connection (useful during installation setup)
+
+Both endpoints accept field definitions that specify the field name, type, display name, and other properties. The API will create the field if it doesn't exist, or update it if it does.
+
+### Provider-specific behavior
+
+#### Salesforce
+
+When creating custom fields in Salesforce, Ampersand automatically handles field permissions to ensure your integration can access the newly created fields:
+
+1. **Permission Set**: Ampersand creates a managed Permission Set named `IntegrationCustomFieldVisibility` that grants read and edit access to custom fields
+2. **Field Permissions**: Optional (non-required) custom fields are automatically added to this Permission Set
+3. **User Assignment**: The Permission Set is automatically assigned to the integration user
+
+This ensures that custom fields are immediately accessible to your integration after creation.
+
+#### HubSpot
+
+When creating custom fields in HubSpot, Ampersand automatically organizes them into a property group:
+
+1. **Property Group**: Ampersand creates a managed property group named `integrationcreatedproperties` (displayed as "Integration Created Properties")
+2. **Field Organization**: All custom fields created through Ampersand are organized under this group for easy management
+
 ## Writing records
 
 Once your users install an integration with a write action, your app can write data to their SaaS by making a POST call to Ampersand, the URL is in the format of:
