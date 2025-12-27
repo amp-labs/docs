@@ -361,6 +361,7 @@ const baseConfig = {
             "provider-guides/helpScoutMailbox",
             "provider-guides/heyreach",
             "provider-guides/highlevel",
+            "provider-guides/hightouch",
             "provider-guides/hive",
             "provider-guides/hubspot",
             "provider-guides/hunter",
