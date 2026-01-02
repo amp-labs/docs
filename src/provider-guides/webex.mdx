@@ -14,7 +14,7 @@ This connector supports:
 
 ### Supported Objects
 
-The Webex connector supports the following objects from the Admin API:
+The Webex connector supports the following objects from the API:
 
 - [people](https://developer.webex.com/docs/api/v1/people/list-people) (Read, Write)
 - [groups](https://developer.webex.com/admin/docs/api/v1/groups) (Read, Write)
@@ -22,7 +22,7 @@ The Webex connector supports the following objects from the Admin API:
 - [events](https://developer.webex.com/docs/api/v1/events/list-events) (Read only)
 - [organizations](https://developer.webex.com/docs/api/v1/organizations/list-organizations) (Read only)
 - [reports](https://developer.webex.com/admin/docs/api/v1/reports/list-reports) (Read only)
-- [meetings](https://developer.webex.com/meeting/docs/meetings) (Read,Write)
+- [meetings](https://developer.webex.com/meeting/docs/meetings) (Read, Write)
 
 ## Before you get started
 
@@ -38,10 +38,11 @@ You will then use these credentials to connect your application to Ampersand.
 ### Creating a Webex Integration
 
 <Note>
-  The Admin Suite integration requires organization-level access in Cisco Webex.
-  Ensure your integration is authorized with the required organization (admin)
-  scopes, as many supported objects are only accessible to organization
-  administrators.
+  The Admin API is a superset of user-level APIs. Some objects (such as events,
+  organizations, and reports) require organization-level admin scopes, while
+  others (such as meetings) can be accessed with user-level scopes. Refer to the
+  [Webex API documentation](https://developer.webex.com) to determine which
+  account type and scopes are required for your use case.
 </Note>
 
 Follow the steps below to create a Cisco Webex integration and add the Ampersand redirect URL to the integration:
