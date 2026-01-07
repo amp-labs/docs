@@ -166,11 +166,11 @@ Batch write allows you to create or update multiple records in a single API call
 
 <Info>Batch write is currently only supported for HubSpot and Salesforce.</Info>
 
-To perform a batch write, use the same write endpoint but provide a `batch` array instead of a single `record`:
+To perform a batch write, use the same [write endpoint](/reference/write/write-records) but provide a `batch` array instead of a single `record`:
 
 `https://write.withampersand.com/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
 
-Batch writes support both [synchronous and asynchronous modes](#write-modes). Note that synchronous batch writes follow an **all-or-nothing** approach: if any record in the batch fails to write, the entire batch operation fails and no records are written.
+Batch writes support both [synchronous and asynchronous modes](#write-modes). Note that batch writes follow an **all-or-nothing** approach: if any record in the batch fails to write, the entire batch operation fails and no records are written.
 
 #### Batch create
 
@@ -290,8 +290,6 @@ Write actions support two modes: `synchronous` and `asynchronous`. The mode dete
 In synchronous mode, the write operation is processed immediately and the API waits for the operation to complete before returning a response.
 
 For **single record writes**, the response includes the created/updated record immediately. If the write operation fails, the API will return the error response.
-
-For **batch writes**, synchronous mode follows an **all-or-nothing** approach: if any record in the batch fails to write, the entire batch operation fails and no records are written.
 
 ```bash
 curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
