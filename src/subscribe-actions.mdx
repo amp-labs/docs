@@ -11,18 +11,9 @@ With subscribe actions, you'll receive near-instant webhooks as events occur in 
   - It takes 1-2 minutes, and occasionally up to 10 minutes, for the first events to arrive after the initial installation.
 </Note>
 
-## Supported Providers
-**Providers:**
-- **Salesforce**
-- **Zoho**
-- **Outreach**
+## Defining subscriptions
 
-**Providers with Special Instructions:**
-- [Hubspot](/subscribe-actions#special-set-up-for-hubspot)
-
-## How to Subscribe to Providers
-
-To subscribe to an object from a provider, you currently need to also have a read action specified for the object. In addition, you need to specify:
+To subscribe to an object, you currently need to also have a read action specified for the object. In addition, you need to specify:
 
 - **objectName:** to indicate which object you'd like to subscribe to. This should match the name of the object in the official documentation for the SaaS API.
 - **destination:** the name of the [destination](/destinations) that you've defined
@@ -35,14 +26,6 @@ You then need to specify the particular events you want to subscribe to. We supp
 - **updateEvent**: triggers when any existing record is modified. The `watchFieldsAuto: all` setting ensures that you subscribe to all field changes. Alternatively, you can list specific fields to watch in `requiredWatchFields`. **Note**: Only one of `requiredWatchFields` or `watchFieldsAuto` should be provided.
 
 - **deleteEvent**: triggers when a record is removed from the system.
-
-If you do not already have an integration from a provider, follow the instructions in the provider guides to get started.
-
-**Providers Guides:**
-- [Salesforce](/provider-guides/salesforce)
-- [HubSpot](/provider-guides/hubspot)
-- [Zoho](/provider-guides/zoho)
-- [Outreach](/provider-guides/outreach)
 
 ### Specify fields to watch
 You can provide fields to watch for update events and specify them in a list.
