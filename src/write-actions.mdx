@@ -160,6 +160,237 @@ curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_ID_OR
 }'
 ```
 
+### Batch write
+
+Batch write allows you to create or update multiple records in a single API call. This is useful when you need to write large amounts of data efficiently. You can include 1-100 records per batch.
+
+<Info>Batch write is currently only supported for HubSpot and Salesforce.</Info>
+
+To perform a batch write, use the same [write endpoint](/reference/write/write-records) but provide a `batch` array instead of a single `record`:
+
+`https://write.withampersand.com/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
+
+Batch writes support both [synchronous and asynchronous modes](#write-modes). Note that batch writes follow an **all-or-nothing** approach: if any record in the batch fails to write, the entire batch operation fails and no records are written.
+
+#### Batch create
+
+To create multiple records in a batch, set `type` to `create`:
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "create",
+    "mode": "synchronous",
+    "batch": [
+        {
+            "record": {
+                "firstname": "Harry",
+                "lastname": "Potter",
+                "email": "harry@hogwarts.com"
+            }
+        },
+        {
+            "record": {
+                "firstname": "Hermione",
+                "lastname": "Granger",
+                "email": "hermione@hogwarts.com"
+            }
+        }
+    ]
+}'
+```
+
+#### Batch update
+
+To update multiple records in a batch, set `type` to `update` and include the record IDs:
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "update",
+    "mode": "synchronous",
+    "batch": [
+        {
+            "record": {
+                "id": "20scv09wer3klj",
+                "firstname": "Harry",
+                "lastname": "Potter-Weasley"
+            }
+        },
+        {
+            "record": {
+                "id": "30abc12xyz4mno",
+                "firstname": "Hermione",
+                "lastname": "Granger-Weasley"
+            }
+        }
+    ]
+}'
+```
+
+#### Batch write with associations
+
+You can create records with associations in batch mode. Each record in the batch can have its own associations.
+
+<Info>Associations in batch write are currently only supported for HubSpot.</Info>
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "create",
+    "mode": "synchronous",
+    "batch": [
+        {
+            "record": {
+                "firstname": "Harry",
+                "lastname": "Potter",
+                "email": "harry@hogwarts.com"
+            },
+            "associations": [{
+                "to": {"id": "18417469280"},
+                "types": [{
+                    "associationCategory": "HUBSPOT_DEFINED",
+                    "associationTypeId": 279
+                }]
+            }]
+        },
+        {
+            "record": {
+                "firstname": "Hermione",
+                "lastname": "Granger",
+                "email": "hermione@hogwarts.com"
+            },
+            "associations": [{
+                "to": {"id": "18417469281"},
+                "types": [{
+                    "associationCategory": "HUBSPOT_DEFINED",
+                    "associationTypeId": 279
+                }]
+            }]
+        }
+    ]
+}'
+```
+
+## Write modes
+
+Write actions support two modes: `synchronous` and `asynchronous`. The mode determines how the API handles your write request and when you receive a response. These modes apply to both single record writes and batch writes.
+
+### Synchronous mode
+
+In synchronous mode, the write operation is processed immediately and the API waits for the operation to complete before returning a response.
+
+For **single record writes**, the response includes the created/updated record immediately. If the write operation fails, the API will return the error response.
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "create",
+    "mode": "synchronous",
+    "record": {
+        "firstname": "John",
+        "lastname": "Doe",
+        "email": "john@example.com"
+    }
+}'
+```
+
+### Asynchronous mode
+
+In asynchronous mode, Ampersand validates the request and immediately returns an operation ID. The write is then processed in the background. This is recommended for large batch writes or when you don't need to wait for the result.
+
+If the write fails due to API quota issues or other retryable errors, Ampersand will automatically keep retrying for up to 1 hour. If needed, the [retry policy can be configured](#retry-policy-for-async-writes) to retry for up to 48 hours.
+
+To use async mode, set `mode: "asynchronous"` in your request:
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "create",
+    "mode": "asynchronous",
+    "record": {
+        "firstname": "Jane",
+        "lastname": "Smith"
+    }
+}'
+```
+
+The response returns an operation ID immediately:
+
+```json
+{
+    "operationId": "3efc0f0f-4bb9-498f-996c-9893d98ca4b5"
+}
+```
+
+### Checking status of an async write operation
+
+To check the status of an async write operation, use the [Get Operation endpoint](/reference/operation/get-an-operation) with the operation ID in the response body of the write API endpoint.
+
+```bash
+curl --location 'https://api.withampersand.com/v1/projects/<PROJECT_ID>/operations/<OPERATION_ID>' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY'
+```
+
+The response includes the operation status and result:
+
+```json
+{
+    "id": "<OPERATION_ID>",
+    "projectId": "<PROJECT_ID>",
+    "integrationId": "<INTEGRATION_ID>",
+    "installationId": "<INSTALLATION_ID>",
+    "configId": "<CONFIG_ID>",
+    "actionType": "write",
+    "status": "failure",
+    "result": "[contacts] Error writing to provider",
+    "createTime": "2025-08-26T23:19:27.616204Z",
+    "updateTime": "2025-08-26T23:19:28.424859Z",
+    "resource": "contacts"
+}
+```
+
+An operation can be in a `success`, `failure` or `in_progress` state.
+
+### Retry policy for async writes
+
+Ampersand will automatically retry failed operations with exponential backoff until the default deadline of 1 hour. If this is not enough, you can specify a longer deadline of up to 48 hours.
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "create",
+    "mode": "asynchronous",
+    "retryPolicy": {
+        "deadlineHours": 24
+    },
+    "record": {
+        "firstname": "Bob",
+        "lastname": "Johnson"
+    }
+}'
+```
+
+Retry policies only apply to asynchronous mode.
+
 ## Advanced use cases
 
 <Info>These advanced use cases are currently only supported when creating or updating installations via the API or [Headless UI](/headless).</Info>
@@ -308,114 +539,6 @@ As an alternative to headless UI, you can set this behavior on a customer-by-cus
 ### Remove unmapped fields
 
 If your write action is [sharing mapping with read actions](#share-mappings-with-read-actions), we can drop unmapped fields from the write request before sending the request to the provider API. Please contact support@withampersand.com if you want to use this preview feature.
-
-### Write modes
-
-Write actions support two modes: `synchronous` and `asynchronous`. The mode determines how the API handles your write request and when you receive a response.
-
-#### Synchronous mode
-
-In synchronous mode, the write operation is processed immediately and the API waits for the operation to complete before returning a response.
-
-```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
---header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
---header 'Content-Type: application/json' \
---data '{
-    "groupRef": "customer-123",
-    "type": "create",
-    "mode": "synchronous",
-    "record": {
-        "firstname": "John",
-        "lastname": "Doe",
-        "email": "john@example.com"
-    }
-}'
-```
-
-The response includes the created/updated record immediately. If the write operation fails, the API will return the error response.
-
-#### Asynchronous mode
-
-In asynchronous mode, Ampersand validates the request & immediately returns an operation ID. The write is then processed in the background. If the write fails due to API quota issues or other retryable errors, Ampersand will automatically keep retrying for up to 1 hour. If needed, the [retry policy can be configured](#retry-policy-for-async-writes) to retry for up to 48 hours.
-
-To use async mode, set `mode: "asynchronous"` in your request:
-
-```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
---header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
---header 'Content-Type: application/json' \
---data '{
-    "groupRef": "customer-123",
-    "type": "create",
-    "mode": "asynchronous",
-    "record": {
-        "firstname": "Jane",
-        "lastname": "Smith",
-    }
-}'
-```
-
-The response returns an operation ID immediately:
-
-```json
-{
-    "operationId": "3efc0f0f-4bb9-498f-996c-9893d98ca4b5"
-}
-```
-
-#### Checking status of an async write operation
-
-To check the status of an async write operation, use the [Get Operation endpoint](/reference/operation/get-an-operation) with the operation ID in the response body of the write API endpoint.
-
-```bash
-curl --location 'https://api.withampersand.com/v1/projects/<PROJECT_ID>/operations/<OPERATION_ID>' \
---header 'X-Api-Key: YOUR_AMPERSAND_KEY'
-```
-
-The response includes the operation status and result:
-
-```json
-{
-    "id": "<OPERATION_ID>",
-    "projectId": "<PROJECT_ID>",
-    "integrationId": "<INTEGRATION_ID>",
-    "installationId": "<INSTALLATION_ID>",
-    "configId": "<CONFIG_ID>",
-    "actionType": "write",
-    "status": "failure",
-    "result": "[contacts] Error writing to provider",
-    "createTime": "2025-08-26T23:19:27.616204Z",
-    "updateTime": "2025-08-26T23:19:28.424859Z",
-    "resource": "contacts"
-}
-```
-
-An operation can be in a `success`, `failure` or `in_progress` state.
-
-#### Retry policy for async writes
-
-Ampersand will automatically retry failed operations with exponential backoff until the default deadline of 1 hour. If this is not enough, you can specify a longer deadline of up to 48 hours.
-
-```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
---header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
---header 'Content-Type: application/json' \
---data '{
-    "groupRef": "customer-123",
-    "type": "create",
-    "mode": "asynchronous",
-    "retryPolicy": {
-        "deadlineHours": 24
-    },
-    "record": {
-        "firstname": "Bob",
-        "lastname": "Johnson",
-    }
-}'
-```
-
-Please note that retry policies only apply to asynchronous mode.
 
 ### Combine use cases
 
