@@ -81,7 +81,7 @@
                   },
                   "retryPolicy": {
                     "type": "object",
-                    "description": "The retry policy for an asynchronous write operation.",
+                    "description": "The retry policy for an asynchronous write operation. Ignored when autoBatchPolicy is specified.",
                     "properties": {
                       "deadlineHours": {
                         "type": "integer",
@@ -92,6 +92,30 @@
                         "maximum": 48
                       }
                     }
+                  },
+                  "autoBatchPolicy": {
+                    "type": "object",
+                    "description": "The auto-batch policy for asynchronous single-record write operations. When enabled, multiple single-record \nwrite requests are automatically grouped together and executed as a batch. The batch executes when either \n100 records accumulate or the maximum delay time expires. Only available for asynchronous mode and single-record writes.\n",
+                    "properties": {
+                      "maxDelayMinutes": {
+                        "type": "integer",
+                        "description": "The maximum time to wait before executing the batch, even if it hasn't reached 100 records. \nOnce this time expires, the batch will be executed even if it hasn't reached the limit.\n",
+                        "example": 5,
+                        "minimum": 1,
+                        "maximum": 1440
+                      },
+                      "retryDeadlineHours": {
+                        "type": "integer",
+                        "description": "The maximum time to keep retrying the batch write operation if it fails. \nIf not specified, defaults to 1 hour.\n",
+                        "example": 2,
+                        "default": 1,
+                        "minimum": 1,
+                        "maximum": 48
+                      }
+                    },
+                    "required": [
+                      "maxDelayMinutes"
+                    ]
                   },
                   "record": {
                     "type": "object",
@@ -680,7 +704,7 @@
           },
           "retryPolicy": {
             "type": "object",
-            "description": "The retry policy for an asynchronous write operation.",
+            "description": "The retry policy for an asynchronous write operation. Ignored when autoBatchPolicy is specified.",
             "properties": {
               "deadlineHours": {
                 "type": "integer",
@@ -691,6 +715,30 @@
                 "maximum": 48
               }
             }
+          },
+          "autoBatchPolicy": {
+            "type": "object",
+            "description": "The auto-batch policy for asynchronous single-record write operations. When enabled, multiple single-record \nwrite requests are automatically grouped together and executed as a batch. The batch executes when either \n100 records accumulate or the maximum delay time expires. Only available for asynchronous mode and single-record writes.\n",
+            "properties": {
+              "maxDelayMinutes": {
+                "type": "integer",
+                "description": "The maximum time to wait before executing the batch, even if it hasn't reached 100 records. \nOnce this time expires, the batch will be executed even if it hasn't reached the limit.\n",
+                "example": 5,
+                "minimum": 1,
+                "maximum": 1440
+              },
+              "retryDeadlineHours": {
+                "type": "integer",
+                "description": "The maximum time to keep retrying the batch write operation if it fails. \nIf not specified, defaults to 1 hour.\n",
+                "example": 2,
+                "default": 1,
+                "minimum": 1,
+                "maximum": 48
+              }
+            },
+            "required": [
+              "maxDelayMinutes"
+            ]
           },
           "record": {
             "type": "object",
