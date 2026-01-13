@@ -416,6 +416,7 @@ const baseConfig = {
             "provider-guides/salesflare",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
+            "provider-guides/segment",
             "provider-guides/seismic",
             "provider-guides/sellsy",
             "provider-guides/sendGrid",
