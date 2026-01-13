@@ -4,7 +4,7 @@ title: "Google"
 The Google connector supports Google products which have APIs with the root URL `googleapis.com`, these include:
 
 - Calendar
-- Gmail (Google Mail)
+- Gmail
 - Google Drive
 
 ## What's supported
@@ -14,16 +14,16 @@ The Google connector supports Google products which have APIs with the root URL 
 This connector supports:
 - [Proxy Actions](/proxy-actions), using the base URL `https://www.googleapis.com`.
 
-Additionally, the Google **Calendar** module supports:
+The **Calendar** module supports:
 - [Read Actions](/read-actions), including historical backfill. Please note that incremental
 read **is only supported for the Calendar "Events" object**; otherwise, a full read of the Google instance will be performed for each scheduled run.
 - [Write Actions](/write-actions).
 
 > **Important Note on Events Backfill**: The `events` object has a 28-day cap for historic backfill and does not support full history, due to limitations in the Google API. When syncing events data, ensure your backfill period does not exceed 28 days.
 
-Additionally, the Google **Mail (Gmail)** module supports:
+The **Gmail** module supports:
 - [Read Actions](/read-actions), including historical backfill. Please note that incremental read and pagination
-**are only supported for the Mail "Drafts", "Messages", and "Threads" objects**; otherwise, a full read of the Google instance will be performed for each scheduled run.
+**are only supported for "Drafts", "Messages", and "Threads" objects**; otherwise, a full read of the Gmail instance will be performed for each scheduled run.
 
 
 ### Supported Calendar objects
@@ -38,7 +38,7 @@ The Google connector supports the following read-only objects:
 
 ### Supported Mail objects
 
-The Google connector supports reading from the following **Mail (Gmail)** module objects:
+The Google connector supports reading from the following **Gmail** module objects:
 
 * [delegates](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.delegates/list)
 * [drafts](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.drafts/list)
@@ -53,7 +53,9 @@ The Google connector supports reading from the following **Mail (Gmail)** module
 
 ### Example integration
 
-For an example manifest file of a Google Calendar integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/google-calendar/amp.yaml).
+Example manifest files can be found in our samples repository on GitHub:
+- [Google Calendar example](https://github.com/amp-labs/samples/blob/main/google-calendar/amp.yaml)
+- [Gmail example](https://github.com/amp-labs/samples/blob/main/google-gmail/amp.yaml)
 
 ## Before you get started
 
