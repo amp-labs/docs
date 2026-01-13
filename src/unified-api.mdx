@@ -1,0 +1,332 @@
+---
+title: "Build your own unified API"
+sidebarTitle: "Unified API"
+---
+
+## What is a unified API?
+
+A unified API provides a single, consistent interface to interact with multiple third-party services. Instead of learning each provider's unique schema, you define one schema that works across all of them.
+
+<Note>
+This guide covers one of Ampersand's use cases: building unified APIs. You can also use Ampersand for provider-specific integrations or mix both approaches. Unlike traditional unified API providers that force you into their predefined models, Ampersand lets you design your own schema.
+</Note>
+
+## Why build a unified API?
+
+- **Faster development** - Add new integrations without changing application logic
+- **Consistent data model** - One schema regardless of source
+- **Real-time updates** - Subscribe to field-level changes
+- **No vendor lock-in** - You control the schema and where data lives
+
+## How it works
+
+### 1. Map objects and fields
+
+```yaml
+# Map different provider objects to unified names
+- objectName: account        # Salesforce
+  mapToName: company
+  requiredFields:
+    - fieldName: name
+      mapToName: company_name
+    - fieldName: annualrevenue
+      mapToName: revenue
+
+- objectName: companies      # HubSpot
+  mapToName: company
+  requiredFields:
+    - fieldName: name
+      mapToName: company_name
+    - fieldName: annualrevenue
+      mapToName: revenue
+```
+
+### 2. Receive unified + raw data
+
+Every webhook includes both your unified fields and the complete provider response:
+
+```json
+{
+  "mappedFields": {
+    "remote_id": "001abc",
+    "company_name": "Acme Corp",
+    "revenue": 5000000,
+    "remote_created_at": "2024-01-15",
+    "remote_updated_at": "2024-08-23"
+  },
+  "raw": {
+    "Id": "001abc",
+    "Name": "Acme Corp",
+    "AnnualRevenue": 5000000,
+    "CreatedDate": "2024-01-15T10:30:00Z",
+    "SystemModstamp": "2024-08-23T14:20:07Z",
+    "Custom_Field__c": "value"  // All fields available
+  }
+}
+```
+
+<Tip>
+Unlike merge.dev where you need `include_remote_data=true`, Ampersand always includes raw data. This means you can use your unified schema while still accessing provider-specific fields.
+</Tip>
+
+### 3. Real-time updates with subscribe actions
+
+Get webhooks when data changes (1-2 minutes latency):
+
+```yaml
+subscribe:
+  objects:
+    - objectName: account
+      destination: webhook
+      inheritFieldsAndMapping: true
+      updateEvent:
+        enabled: always
+        requiredWatchFields:
+          - company_name  # Your unified field
+          - revenue
+```
+
+```json
+// Webhook payload on update
+{
+  "subscribeEventType": "update",
+  "mappedFields": {
+    "company_name": "Acme Corp Updated",
+    "revenue": 6000000
+  },
+  "raw": { /* full provider data */ }
+}
+```
+
+## Key architectural differences from merge.dev
+
+### Data persistence
+
+**Ampersand:** No data storage for better security posture. Ampersand acts as the transport and transformation layer only. You control where and how to persist data.
+
+**Merge.dev:** Stores all customer data in Merge serves by default. "Merge Destinations" (Enterprise) enables you to turn off storage.
+
+**Why it matters:** For healthcare, finance, or regulated industries, Ampersand's transport-only architecture eliminates compliance concerns around third-party data storage.
+
+### Two-way sync
+
+**Ampersand:**
+- **Read**: Scheduled syncs or real-time subscribe actions with field-level granularity
+- **Write**: Direct write actions with field mapping
+- **Pattern**: Subscribe + write = true bidirectional real-time sync
+
+**Merge.dev:**
+- **Read**: Scheduled syncs + poll after webhook notifications (model-level)
+- **Write**: Instant POST/PATCH operations
+- **Pattern**: Polling + writes
+
+### Comparison table
+
+| Feature | Ampersand | Merge.dev |
+|---------|-----------|-----------|
+| **Schema** | You define it | Fixed common model |
+| **Raw data** | Always included | need `include_remote_data=true` flag |
+| **Data storage** | No persistent storage | Stored in Merge cloud |
+| **Real-time** | Subscribe actions (all plans) | Third-party webhooks (Pro/Enterprise) |
+| **Event granularity** | Field-level changes | Model-level notifications |
+| **Sub-processor** | No | Yes |
+
+## Examples
+
+### CRM unified API
+
+Create a unified CRM that works across Salesforce, HubSpot, Pipedrive, and more:
+
+<CodeGroup>
+```yaml Salesforce
+- objectName: account
+  mapToName: company
+  requiredFields:
+    - fieldName: id
+      mapToName: remote_id
+    - fieldName: name
+      mapToName: name
+    - fieldName: website
+      mapToName: website
+    - fieldName: createddate
+      mapToName: remote_created_at
+    - fieldName: lastmodifieddate
+      mapToName: remote_updated_at
+```
+
+```yaml HubSpot
+- objectName: companies
+  mapToName: company
+  requiredFields:
+    - fieldName: hs_object_id
+      mapToName: remote_id
+    - fieldName: name
+      mapToName: name
+    - fieldName: website
+      mapToName: website
+    - fieldName: createdate
+      mapToName: remote_created_at
+    - fieldName: hs_lastmodifieddate
+      mapToName: remote_updated_at
+```
+
+```yaml Result
+{
+  "mappedFields": {
+    "remote_id": "22575402281",
+    "name": "Acme Corp",
+    "website": "acme.com",
+    "remote_created_at": "2024-08-23T14:04:57.739Z",
+    "remote_updated_at": "2024-08-23T14:20:07.660Z"
+  },
+  "raw": {
+    "id": "22575402281",
+    "name": "Acme Corp",
+    "domain": "acme.com",
+    "createdAt": "2024-08-23T14:04:57.739Z",
+    "updatedAt": "2024-08-23T14:20:07.660Z",
+    "hs_object_id": "22575402281"
+  }
+}
+```
+</CodeGroup>
+
+### Ticketing unified API
+
+Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
+
+<CodeGroup>
+```yaml Jira
+- objectName: issue
+  mapToName: ticket
+  requiredFields:
+    - fieldName: id
+      mapToName: remote_id
+    - fieldName: summary
+      mapToName: title
+    - fieldName: status
+      mapToName: status
+```
+
+```yaml Linear
+- objectName: issues
+  mapToName: ticket
+  requiredFields:
+    - fieldName: id
+      mapToName: remote_id
+    - fieldName: title
+      mapToName: title
+    - fieldName: state
+      mapToName: status
+```
+
+```yaml Result
+{
+  "mappedFields": {
+    "remote_id": "LIN-123",
+    "title": "Fix bug",
+    "status": "in_progress"
+  },
+  "raw": {
+    "id": "LIN-123",
+    "title": "Fix bug",
+    "state": { "name": "In Progress" },
+    "priority": 2,
+    "assignee": { "id": "user-456" }
+  }
+}
+```
+</CodeGroup>
+
+## Migration from merge.dev
+
+<Steps>
+  <Step title="Understand the persistence model">
+    **Merge.dev:** Stores your customer data; you poll their API  
+    **Ampersand:** Streams data to your webhooks; you store it
+    
+    Set up webhook endpoints and decide on your storage strategy (database, warehouse, etc.)
+  </Step>
+
+  <Step title="Use compatible templates">
+    ```bash
+    git clone https://github.com/amp-labs/samples.git
+    cd samples/unifiedCRM  # or unifiedTicketing
+    amp deploy --project=my-project
+    ```
+  </Step>
+  
+  <Step title="Update webhook handlers">
+    ```javascript
+    // merge.dev: Poll after webhook notification
+    app.post('/merge-webhook', async (req, res) => {
+      const contacts = await merge.crm.contacts.list({
+        modified_after: lastSync,
+        include_remote_data: true
+      });
+      await db.contacts.bulkUpsert(contacts);
+      res.sendStatus(200);
+    });
+    
+    // Ampersand: Data arrives in webhook
+    app.post('/webhook/contacts', async (req, res) => {
+      const { mappedFields, raw } = req.body.result;
+      await db.contacts.upsert({
+        ...mappedFields,
+        providerData: raw
+      });
+      res.sendStatus(200);
+    });
+    ```
+  </Step>
+
+  <Step title="Add real-time with subscribe actions">
+    ```yaml
+    subscribe:
+      objects:
+        - objectName: contact
+          inheritFieldsAndMapping: true
+          updateEvent:
+            enabled: always
+            requiredWatchFields:
+              - email
+              - status
+    ```
+    
+    Handle events in your webhook:
+    ```javascript
+    const { subscribeEventType, mappedFields } = req.body.result[0];
+    
+    if (subscribeEventType === 'update' && mappedFields.status === 'closed-won') {
+      await triggerSalesWorkflow(mappedFields);
+    }
+    ```
+  </Step>
+</Steps>
+
+## Complete examples
+
+<CardGroup cols={2}>
+  <Card 
+    title="Unified CRM" 
+    href="https://github.com/amp-labs/samples/tree/main/unifiedCRM"
+    icon="building"
+  >
+    Salesforce, HubSpot, Zoho, Dynamics 365
+  </Card>
+  <Card 
+    title="Unified Ticketing" 
+    href="https://github.com/amp-labs/samples/tree/main/unifiedTicketing"
+    icon="ticket"
+  >
+    Jira, Linear, Zendesk
+  </Card>
+</CardGroup>
+
+## Related resources
+
+- [Object and Field Mapping](/object-and-field-mapping) - Technical details on mapping configuration
+- [Read Actions](/read-actions) - Scheduled data syncs and backfills
+- [Subscribe Actions](/subscribe-actions) - Real-time event subscriptions
+- [Write Actions](/write-actions) - Writing data back to providers
+- [Destinations](/destinations) - Configuring webhook destinations
