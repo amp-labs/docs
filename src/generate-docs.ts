@@ -112,12 +112,12 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
         {
           tab: 'Documentation',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            !group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
+            !group.group.match(/^(Overview|Authentication|WRITE API|READ API|PLATFORM API)$/)))
         },
         {
           tab: 'API Reference',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
+            group.group.match(/^(Overview|Authentication|WRITE API|READ API|PLATFORM API)$/)))
         }
       ]
     },
@@ -456,6 +456,12 @@ const baseConfig = {
         },
         "dev-and-prod-environments",
         "terminology",
+      ],
+    },
+    {
+      group: "Overview",
+      pages: [
+        "reference-overview",
       ],
     },
     {
