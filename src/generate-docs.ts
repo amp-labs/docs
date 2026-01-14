@@ -112,12 +112,12 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
         {
           tab: 'Documentation',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            !group.group.match(/^(Overview|Authentication|WRITE API|READ API|PLATFORM API)$/)))
+            !group.group.match(/^(Introduction|WRITE API|READ API|PLATFORM API)$/)))
         },
         {
           tab: 'API Reference',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            group.group.match(/^(Overview|Authentication|WRITE API|READ API|PLATFORM API)$/)))
+            group.group.match(/^(Introduction|WRITE API|READ API|PLATFORM API)$/)))
         }
       ]
     },
@@ -218,6 +218,14 @@ const baseConfig = {
       source: "/glossary",
       destination: "/terminology"
     },
+    {
+      source: "/jwt-auth",
+      destination: "/api/jwt-auth"
+    },
+    {
+      source: "/reference/auth",
+      destination: "/api/key-auth"
+    },
   ],
   footerSocials: {
     linkedin: "https://www.linkedin.com/company/withampersand",
@@ -225,7 +233,9 @@ const baseConfig = {
   },
   navigation: [
     {
-      group: "Getting started",
+      // In order for the group headers on the documentation tab to not be bolded,
+      // we need to nest all of them in a mega-group, but this mega-group shouldn't have a group name.
+      group: " ", // This is intentionally left empty, DO NOT MODIFY.
       pages: [
         {
           group: "Get started",
@@ -459,16 +469,11 @@ const baseConfig = {
       ],
     },
     {
-      group: "Overview",
+      group: "Introduction",
       pages: [
-        "reference-overview",
-      ],
-    },
-    {
-      group: "Authentication",
-      pages: [
-        "reference/auth",
-        "jwt-auth",
+        "api/overview",
+        "api/key-auth",
+        "api/jwt-auth",
       ],
     },
     {
