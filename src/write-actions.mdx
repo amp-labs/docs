@@ -281,6 +281,72 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 }'
 ```
 
+### Auto-batch policy
+
+The auto-batch policy automatically groups multiple single-record write requests together and executes them as a batch operation. This is useful when you're sending many individual write requests and want to optimize them into batches for better performance and efficiency.
+
+<Info>Auto-batch policy is currently only available for asynchronous mode and single-record writes (not batch writes).</Info>
+
+When you enable auto-batch policy, Ampersand will:
+
+1. **Accumulate records**: Multiple single-record write requests for the same installation, object, and write type (create or update) are automatically grouped together
+2. **Execute when ready**: The batch executes when either:
+   - **100 records** have been accumulated (immediate execution), or
+   - **Maximum delay time** expires (executes even if fewer than 100 records)
+
+Each batch uses a per-batch deadline based on when the first record in that batch arrived. This ensures records don't wait indefinitely.
+
+#### Configuration
+
+The auto-batch policy has two configuration options:
+
+- **`maxDelayMinutes`** (required): The maximum time to wait before executing the batch, even if it hasn't reached 100 records. Minimum: 1 minute, Maximum: 1440 minutes (24 hours).
+- **`retryDeadlineHours`** (optional): The maximum time to keep retrying the batch write operation if it fails. If not specified, defaults to 1 hour. Maximum allowed is 48 hours.
+
+#### Example: Using auto-batch policy
+
+To enable auto-batch policy, include `autoBatchPolicy` in your write request:
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "create",
+    "mode": "asynchronous",
+    "autoBatchPolicy": {
+        "maxDelayMinutes": 5,
+        "retryDeadlineHours": 2
+    },
+    "record": {
+        "firstname": "Alice",
+        "lastname": "Wonderland",
+        "email": "alice@example.com"
+    }
+}'
+```
+
+In this example:
+- Records will be batched together for up to **5 minutes**
+- If 100 records accumulate before 5 minutes, the batch executes immediately
+- If fewer than 100 records accumulate, the batch executes after 5 minutes
+- If the batch write fails, Ampersand will retry for up to **2 hours**
+
+#### Monitoring auto-batch operations
+
+You can monitor auto-batch operations using the operation ID returned in the response. The operation ID represents the master operation for the batch. Use the [Get Operation endpoint](/reference/operation/get-an-operation) to check the status:
+
+```bash
+curl --location 'https://api.withampersand.com/v1/projects/<PROJECT_ID>/operations/<OPERATION_ID>' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY'
+```
+
+The operation status will show:
+- `in_progress`: The batch is accumulating records or executing
+- `success`: The batch write completed successfully (may include partial success with some records failing)
+- `failure`: The batch write failed
+
 ## Write modes
 
 Write actions support two modes: `synchronous` and `asynchronous`. The mode determines how the API handles your write request and when you receive a response. These modes apply to both single record writes and batch writes.
@@ -312,6 +378,8 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 In asynchronous mode, Ampersand validates the request and immediately returns an operation ID. The write is then processed in the background. This is recommended for large batch writes or when you don't need to wait for the result.
 
 If the write fails due to API quota issues or other retryable errors, Ampersand will automatically keep retrying for up to 1 hour. If needed, the [retry policy can be configured](#retry-policy-for-async-writes) to retry for up to 48 hours.
+
+For single-record writes, you can also use the [auto-batch policy](#auto-batch-policy) to automatically group multiple requests together and execute them as a batch.
 
 To use async mode, set `mode: "asynchronous"` in your request:
 

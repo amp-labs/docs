@@ -93,6 +93,30 @@
                       }
                     }
                   },
+                  "autoBatchPolicy": {
+                    "type": "object",
+                    "description": "Automatically groups multiple asynchronous single-record write requests together and executes them as a batch when either 100 records accumulate or the maximum delay time expires. Only available for asynchronous mode and single-record writes.",
+                    "properties": {
+                      "maxDelayMinutes": {
+                        "type": "integer",
+                        "description": "The maximum time to wait before executing the batch, even if it hasn't reached 100 records. Once this time expires, the batch will be executed even if it hasn't reached the limit.",
+                        "example": 5,
+                        "minimum": 1,
+                        "maximum": 1440
+                      },
+                      "retryDeadlineHours": {
+                        "type": "integer",
+                        "description": "The maximum time to keep retrying the batch write operation if it fails. If not specified, defaults to 1 hour.",
+                        "example": 2,
+                        "default": 1,
+                        "minimum": 1,
+                        "maximum": 48
+                      }
+                    },
+                    "required": [
+                      "maxDelayMinutes"
+                    ]
+                  },
                   "record": {
                     "type": "object",
                     "description": "The record to write. Use this for single record mode. Exactly one of 'record' or 'batch' must be provided.",
@@ -189,6 +213,62 @@
                       {
                         "key": "custom-header-key2",
                         "value": "custom-header-value2"
+                      }
+                    ]
+                  }
+                }
+              },
+              "examples": {
+                "singleRecordWithAutoBatch": {
+                  "summary": "Single record with auto-batch policy",
+                  "value": {
+                    "groupRef": "customer-123",
+                    "type": "create",
+                    "mode": "asynchronous",
+                    "autoBatchPolicy": {
+                      "maxDelayMinutes": 5,
+                      "retryDeadlineHours": 2
+                    },
+                    "record": {
+                      "email": "alice@example.com",
+                      "firstname": "Alice",
+                      "lastname": "Wonderland"
+                    }
+                  }
+                },
+                "batchWrite": {
+                  "summary": "Batch write (explicit batching)",
+                  "value": {
+                    "groupRef": "customer-123",
+                    "type": "create",
+                    "mode": "synchronous",
+                    "batch": [
+                      {
+                        "record": {
+                          "email": "harry@hogwarts.com",
+                          "firstname": "Harry",
+                          "lastname": "Potter"
+                        },
+                        "associations": [
+                          {
+                            "to": {
+                              "id": "18417469260"
+                            },
+                            "types": [
+                              {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 279
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "record": {
+                          "email": "hermione@hogwarts.com",
+                          "firstname": "Hermione",
+                          "lastname": "Granger"
+                        }
                       }
                     ]
                   }
@@ -691,6 +771,30 @@
                 "maximum": 48
               }
             }
+          },
+          "autoBatchPolicy": {
+            "type": "object",
+            "description": "Automatically groups multiple asynchronous single-record write requests together and executes them as a batch when either 100 records accumulate or the maximum delay time expires. Only available for asynchronous mode and single-record writes.",
+            "properties": {
+              "maxDelayMinutes": {
+                "type": "integer",
+                "description": "The maximum time to wait before executing the batch, even if it hasn't reached 100 records. Once this time expires, the batch will be executed even if it hasn't reached the limit.",
+                "example": 5,
+                "minimum": 1,
+                "maximum": 1440
+              },
+              "retryDeadlineHours": {
+                "type": "integer",
+                "description": "The maximum time to keep retrying the batch write operation if it fails. If not specified, defaults to 1 hour.",
+                "example": 2,
+                "default": 1,
+                "minimum": 1,
+                "maximum": 48
+              }
+            },
+            "required": [
+              "maxDelayMinutes"
+            ]
           },
           "record": {
             "type": "object",
