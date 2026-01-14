@@ -227,22 +227,16 @@ const baseConfig = {
           group: "Get started",
           pages: [
             "overview",
+            "concepts",
             "quickstart",
             "use-with-ai-ide",
-            "concepts",
+            "terminology",
           ]
         },
         "subscribe-actions",
         "read-actions",
         "write-actions",
         "proxy-actions",
-        {
-          group: "AI Agents",
-          pages: [
-            "ai-sdk",
-            "mcp-server",
-          ]
-        },
         "object-and-field-mapping",
         {
           group: "UI library",
@@ -256,6 +250,13 @@ const baseConfig = {
           pages: [
             "cli/overview",
             "cli/reference"
+          ]
+        },
+        {
+          group: "AI Agents",
+          pages: [
+            "ai-sdk",
+            "mcp-server",
           ]
         },
         {
@@ -422,7 +423,6 @@ const baseConfig = {
             "provider-guides/zoom"
           ]
         },
-        "dev-and-prod-environments",
         {
           group: "Customer guides",
           pages: [
@@ -433,7 +433,8 @@ const baseConfig = {
             "customer-guides/update-connection"
           ]
         },
-        "terminology"
+        "dev-and-prod-environments",
+        "manifest-reference",
       ],
     },
     {
