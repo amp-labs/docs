@@ -436,6 +436,7 @@ const baseConfig = {
             "provider-guides/smartlead",
             "provider-guides/smartsheet",
             "provider-guides/snapchatAds",
+            "provider-guides/snowflake",
             "provider-guides/stripe",
             "provider-guides/surveyMonkey",
             "provider-guides/talkdesk",
@@ -461,6 +462,7 @@ const baseConfig = {
             "customer-guides/loxo",
             "customer-guides/hubspot",
             "customer-guides/marketo",
+            "customer-guides/snowflake",
             "customer-guides/update-connection"
           ]
         },
