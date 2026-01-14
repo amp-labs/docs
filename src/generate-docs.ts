@@ -234,7 +234,6 @@ const baseConfig = {
             "concepts",
             "quickstart",
             "use-with-ai-ide",
-            "terminology",
           ]
         },
         "subscribe-actions",
@@ -257,6 +256,7 @@ const baseConfig = {
             "cli/reference"
           ]
         },
+        "manifest-reference",
         {
           group: "AI Agents",
           pages: [
@@ -455,7 +455,7 @@ const baseConfig = {
           ]
         },
         "dev-and-prod-environments",
-        "manifest-reference",
+        "terminology",
       ],
     },
     {
