@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  check-reference-files:
+  check-generated-files:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,14 +24,14 @@ jobs:
           # Check if src/docs.json was modified
           if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q "^src/docs\.json$"; then
             echo "docs_json_modified=true" >> $GITHUB_OUTPUT
-            # Check if src/generate-docs.ts was also modified
-            if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q "^src/generate-docs\.ts$"; then
-              echo "generate_docs_modified=true" >> $GITHUB_OUTPUT
-            else
-              echo "generate_docs_modified=false" >> $GITHUB_OUTPUT
-            fi
           else
             echo "docs_json_modified=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Check if src/generate-docs.ts was modified
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q "^src/generate-docs\.ts$"; then
+            echo "generate_docs_modified=true" >> $GITHUB_OUTPUT
+          else
             echo "generate_docs_modified=false" >> $GITHUB_OUTPUT
           fi
 
@@ -52,16 +52,22 @@ jobs:
 
       - name: Comment on PR if issues found
         uses: actions/github-script@v7
-        if: (steps.check-docs-json.outputs.docs_json_modified == 'true' && steps.check-docs-json.outputs.generate_docs_modified == 'false') || steps.check-reference-mdx.outputs.new_mdx_files == 'true'
+        if: (steps.check-docs-json.outputs.docs_json_modified == 'true' && steps.check-docs-json.outputs.generate_docs_modified == 'false') || (steps.check-docs-json.outputs.generate_docs_modified == 'true' && steps.check-docs-json.outputs.docs_json_modified == 'false') || steps.check-reference-mdx.outputs.new_mdx_files == 'true'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issues = [];
-            
+
             // Check for docs.json modification without generate-docs.ts update
-            if ('${{ steps.check-docs-json.outputs.docs_json_modified }}' === 'true' && 
+            if ('${{ steps.check-docs-json.outputs.docs_json_modified }}' === 'true' &&
                 '${{ steps.check-docs-json.outputs.generate_docs_modified }}' === 'false') {
               issues.push('⚠️ **Warning:** `src/docs.json` was modified without updating `src/generate-docs.ts`. `src/docs.json` is auto-generated and should not be manually edited. Please update `src/generate-docs.ts` instead and run `make run` to regenerate the file.');
+            }
+
+            // Check for generate-docs.ts modification without docs.json update
+            if ('${{ steps.check-docs-json.outputs.generate_docs_modified }}' === 'true' &&
+                '${{ steps.check-docs-json.outputs.docs_json_modified }}' === 'false') {
+              issues.push('⚠️ **Warning:** `src/generate-docs.ts` was modified without regenerating `src/docs.json`. Please run `make run` to regenerate the file.');
             }
             
             // Check for new .mdx files in reference directory
@@ -71,7 +77,7 @@ jobs:
             }
             
             if (issues.length > 0) {
-              const body = `## ⚠️ Auto-generated Files Warning\n\n${issues.join('\n\n')}\n\nThese files are automatically generated and should not be manually modified.`;
+              const body = `## ⚠️ Auto-generated file warnings:\n\n${issues.join('\n\n')}`;
               
               // Find existing comment
               const comments = await github.rest.issues.listComments({
