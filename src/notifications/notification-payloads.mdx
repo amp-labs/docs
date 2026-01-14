@@ -1,0 +1,261 @@
+---
+title: Notification payloads
+---
+
+The payload structure depends on your destination type:
+
+- **Webhook destinations**: Payloads include `notificationType` and `data` fields.
+- **Kinesis destinations**: Payloads contain the `data` object. The `notificationType` is included in the event metadata.
+
+<AccordionGroup>
+<Accordion title="Installation events (created, updated, deleted)">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "installation.created",
+  "data": {
+    "projectId": "uuid",
+    "provider": "salesforce",
+    "integrationId": "uuid",
+    "integrationName": "Salesforce Integration",
+    "installationId": "uuid",
+    "connectionId": "uuid",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "config": {
+      "read": {
+        "objects": {
+          "Account": {
+            "objectName": "Account",
+            "destination": "my-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "provider": "salesforce",
+  "integrationId": "uuid",
+  "integrationName": "Salesforce Integration",
+  "installationId": "uuid",
+  "groupRef": "customer-group-ref",
+  "groupName": "Customer Name",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "config": {
+    "read": {
+      "objects": {
+        "Account": {
+          "objectName": "Account",
+          "destination": "my-webhook",
+          "requiredFields": [...],
+          "optionalFields": [...]
+        }
+      }
+    }
+  }
+}
+```
+
+Note: `config` contains the complete installation configuration object including read, write, subscribe, and proxy settings. `installation.updated` includes an additional `lastConfig` field with the previous configuration.
+</Accordion>
+
+<Accordion title="read.backfill.done">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "read.backfill.done",
+  "data": {
+    "projectId": "uuid",
+    "provider": "salesforce",
+    "integrationId": "uuid",
+    "integrationName": "Salesforce Integration",
+    "installationId": "uuid",
+    "connectionId": "uuid",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "objectName": "Account"
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "provider": "salesforce",
+  "integrationId": "uuid",
+  "integrationName": "Salesforce Integration",
+  "installationId": "uuid",
+  "groupRef": "customer-group-ref",
+  "groupName": "Customer Name",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "objectName": "Account"
+}
+```
+</Accordion>
+
+<Accordion title="read.schedule.paused">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "read.schedule.paused",
+  "data": {
+    "projectId": "uuid",
+    "provider": "salesforce",
+    "integrationId": "uuid",
+    "integrationName": "Salesforce Integration",
+    "installationId": "uuid",
+    "connectionId": "uuid",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "config": {
+      "read": {
+        "objects": {
+          "Account": {
+            "objectName": "Account",
+            "destination": "my-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    },
+    "error": "Error message if applicable"
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "provider": "salesforce",
+  "integrationId": "uuid",
+  "integrationName": "Salesforce Integration",
+  "installationId": "uuid",
+  "groupRef": "customer-group-ref",
+  "groupName": "Customer Name",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "config": {
+    "read": {
+      "objects": {
+        "Account": {
+          "objectName": "Account",
+          "destination": "my-webhook",
+          "requiredFields": [...],
+          "optionalFields": [...]
+        }
+      }
+    }
+  },
+  "error": "Error message if applicable"
+}
+```
+
+Note: `config` contains the complete installation configuration object including read, write, subscribe, and proxy settings.
+</Accordion>
+
+<Accordion title="connection.created">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "connection.created",
+  "data": {
+    "projectId": "uuid",
+    "connectionId": "uuid",
+    "provider": "salesforce",
+    "groupRef": "customer-group-ref",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe"
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "connectionId": "uuid",
+  "provider": "salesforce",
+  "groupRef": "customer-group-ref",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe"
+}
+```
+</Accordion>
+
+<Accordion title="connection.error">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "connection.error",
+  "data": {
+    "projectId": "uuid",
+    "connectionId": "uuid",
+    "provider": "salesforce",
+    "groupRef": "customer-group-ref",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "error": ["error message"]
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "connectionId": "uuid",
+  "provider": "salesforce",
+  "groupRef": "customer-group-ref",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "error": ["error message"]
+}
+```
+
+</Accordion>
+
+<Accordion title="destination.webhook.disabled">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "destination.webhook.disabled",
+  "data": {
+    "projectId": "uuid",
+    "destinationId": "uuid",
+    "destinationName": "production-alerts",
+    "url": "https://your-webhook.com"
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "destinationId": "uuid",
+  "destinationName": "production-alerts",
+  "url": "https://your-webhook.com"
+}
+```
+</Accordion>
+</AccordionGroup>
+

@@ -11,7 +11,41 @@ updatedAt: "Thu Aug 01 2024 00:49:17 GMT+0000 (Coordinated Universal Time)"
 ### Supported Actions
 
 This connector supports:
+- [Write Actions](/write-actions).
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.copper.com/developer_api`.
+
+### Supported Objects
+
+The Copper connector supports reading from and writing to the following objects:
+- [activities](https://developer.copper.com/activities/overview.html)
+- [companies](https://developer.copper.com/companies/overview.html)
+- [leads](https://developer.copper.com/leads/overview.html)
+- [opportunities](https://developer.copper.com/opportunities/overview.html)
+- [people](https://developer.copper.com/people/overview.html)
+- [projects](https://developer.copper.com/projects/overview.html)
+- [tasks](https://developer.copper.com/tasks/overview.html)
+
+The Copper connector supports reading from the following objects:
+- [activity_types](https://developer.copper.com/activities/list-activity-types.html)
+- [contact_types](https://developer.copper.com/people/list-contact-types.html)
+- [customer_sources](https://developer.copper.com/leads/list-customer-sources.html#__tabbed_1_1)
+- [lead_statuses](https://developer.copper.com/leads/list-lead-statuses.html)
+- [loss_reasons](https://developer.copper.com/opportunities/list-loss-reasons.html)
+- [pipeline_stages](https://developer.copper.com/opportunities/list-pipeline-stages.html)
+- [pipelines](https://developer.copper.com/opportunities/list-pipelines.html)
+- [tags](https://developer.copper.com/tags/overview.html)
+- [users](https://developer.copper.com/account-and-users/overview.html)
+
+#### Custom Fields
+In addition to standard fields, the connector supports any **custom fields** created through the Copper API.
+They behave the same way as built-in fields and can be queried alongside them.
+
+Copper does not provide a dedicated "field name" for custom fields.
+To represent them, the connector uses the **display name** rather than the numeric ID, and exposes it with the prefix `custom_field_`.
+* **Prefix**: Names always start with `custom_field_`.
+* **Display name**: Human-readable display names are used instead of IDs, with spaces replaced by underscores.
+> Example: A custom field with display name `Contract Start Date` in Copper is exposed as `custom_field_contract_start_date`.
 
 ## Before You Get Started
 

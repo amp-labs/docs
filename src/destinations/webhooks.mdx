@@ -4,7 +4,7 @@ title: Webhook destinations
 
 For more information on destinations, see the [Destinations](/destinations) page.
 
-When new data is read from a SaaS instance via a [Read Action](/read-actions), Ampersand sends a payload to your configured webhook.
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand sends a payload to your configured webhook.
 
 ## OpenAPI spec
 
@@ -30,14 +30,26 @@ Here's a sample webhook message for a Salesforce Contact object:
 
 ```JavaScript JavaScript
 {
-  "projectId": "ampersand-project-id",
-  "provider": "salesforce",
+  "action": "read",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
   "groupRef": "xyz-company",
   "groupName": "XYZ Company",
   "installationId": "installation-id",
   "installationUpdateTime": "2024-12-07T00:20:36Z",
   "objectName": "Contact",
-  // Only certain providers will have workspace available.
+  "operationId": "operation-uuid",
+  "operationTime": "2024-12-07T00:20:40Z",
+  "projectId": "ampersand-project-id",
+  "provider": "salesforce",
+    // If there is a mapping for this object, rawObjectName contains the original provider API name.
+  "rawObjectName": "Contact",
+    // readType indicates the type of read operation:
+    // - "backfill":  Initial backfill.
+    // - "scheduled": Regular scheduled read.
+    // - "triggered": On-demand read triggered via API.
+  "readType": "scheduled",
+    // Only certain providers will have workspace available.
   "workspace": "salesforce-subdomain",
   "resultInfo": {
     "type": "inline",
@@ -86,27 +98,33 @@ Here's a sample webhook message for a Salesforce Contact object:
 
 ```JavaScript JavaScript
 {
+  "action": "read",
   "projectId": "ampersand-project-id",
   "provider": "salesforce",
   "groupRef": "xyz-company",
   "groupName": "XYZ Company",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
   "installationId": "installation-id",
   "installationUpdateTime": "2024-12-07T00:20:36Z",
   "objectName": "Contact",
-  // Only certain providers will have workspace available.
+  "rawObjectName": "Contact",
   "workspace": "salesforce-subdomain",
+  "operationId": "operation-uuid",
+  "operationTime": "2024-12-07T00:20:40Z",
+  "readType": "backfill",
   "resultInfo": {
     "type": "url",
     "downloadUrl": "https://storage.googleapis.com/....",
     "numRecords": 1
-  },
+  }
 }
 ```
 ## Subscribe action webhooks
 
 Subscribe action webhooks look very similar to read action webhooks with a few additional fields in each result entry:
 - **subscribeEventType**: this is the normalized event type string, which can be: `create`, `update`, `delete`, `associationUpdate` (for HubSpot only).
-- **subscribeEventType**: this the raw event type string from the API provider.
+- **providerEventType**: this is the raw event type string from the API provider.
 - **rawEvent**: when available, this is the raw webhook event from the API provider.
 
 Here is a sample message:
@@ -114,14 +132,16 @@ Here is a sample message:
 ```JavaScript JavaScript
 {
     "action": "subscribe",
-    "groupName": "webhook-demo-group-name",
+    "projectId": "948234676-4874-43a4-beea-fa8081d13a07",
+    "provider": "salesforce",
     "groupRef": "webhook-demo-group-id",
+    "groupName": "webhook-demo-group-name",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
     "installationId": "0c9230e1c-8fbe-4b28-bf10-2beee8fbf4ce",
     "installationUpdateTime": "2025-04-10T23:00:52.618406Z",
     "objectName": "company",
     "rawObjectName": "account",
-    "projectId": "948234676-4874-43a4-beea-fa8081d13a07",
-    "provider": "salesforce",
     "workspace": "my-salesforce-workspace",
     "result": [
         {

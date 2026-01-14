@@ -248,9 +248,9 @@ function InstallationForm() {
       config: {
         read: {
           objects: {
-            contacts: {
-              objectName: 'contacts',
-              selectedFieldsAuto: 'all',
+            companies: {
+              objectName: 'companies',
+              selectedFieldsAuto: 'all', // Read all fields
             },
           },
         },
@@ -331,7 +331,7 @@ The `getCustomerFieldsForObject` function returned by `useManifest` allows you t
 
 [The fields mapping page of the demo app](https://github.com/amp-labs/demo-headless/blob/main/src/components/FieldMappingTable/FieldMappingTable.tsx) provides a full example for using `useManifest` to build the UI for customers to configure the installation.
 
-## Config management
+## Local config management
 
 Managing the [Config](/terminology#config) that keeps track of each customer's preference for how the integration behaves can be complex, with deeply nested objects and the need to manage this state locally.
 
@@ -413,13 +413,15 @@ function ConfigManager() {
     provider: "salesforce",
     read: {
       objects: {
-        Contact: {
-          objectName: "Contact",
-          schedule: "0 0 * * *",
-          destination: "contacts",
+        contact: {
+          objectName: "contact",
           selectedFields: {
-            "Name": true,
-            "Email": true
+            "name": true,
+            "email": true
+          },
+          selectedFieldsMappings: {
+            // Mapping from billingaddress (in SaaS API) to address (in your application).
+            "address": "billingaddress"
           }
         }
       }
@@ -443,22 +445,30 @@ This is an example for how to use helper functions to more easily construct a re
 ```typescript
 function ReadObjectConfig() {
   const config = useLocalConfig();
-  const contactConfig = config.readObject("Contact");
+  const { createInstallation } = useCreateInstallation();
+  const contactConfig = config.readObject("contact");
   
-  // Check if field is selected
-  const isNameSelected = contactConfig.getSelectedField("Name");
+  // Check if field is already selected in local config
+  const isNameSelected = contactConfig.getSelectedField("name");
   
-  // Toggle field selection
-  contactConfig.setSelectedField({ fieldName: "Email", selected: true });
+  // Select a field
+  contactConfig.setSelectedField({ fieldName: "email", selected: true });
   
+  // Get existing mapping for a field in local config
+  const mappedField = contactConfig.getFieldMapping("email_address");
+
   // Set field mapping
   contactConfig.setFieldMapping({ 
-    fieldName: "Email", 
-    mapToName: "email_address" 
+    fieldName: "email", // raw field from provider API
+    mapToName: "email_address" // mapped field
   });
   
-  // Get field mapping
-  const mappedField = contactConfig.getFieldMapping("email_address");
+  // Create an installation with the current config
+  const handleSave = async () => {
+    await createInstallation({
+      config: config.get(),
+    });
+  };
 }
 ```
 
@@ -468,11 +478,19 @@ The headless UI library provides helper functions to more easily construct a wri
 
 ```typescript
 function WriteObjectConfig() {
+  const { createInstallation } = useCreateInstallation();
   const config = useLocalConfig();
-  const contactWriteConfig = config.writeObject("Contact");
+  const contactWriteConfig = config.writeObject("contact");
   
   // Enable write for Contact object
   contactWriteConfig.setEnableWrite();
+
+  // Create an installation with the current config
+  const handleSave = async () => {
+    await createInstallation({
+      config: config.get(),
+    });
+  };
 }
 ```
 
@@ -487,7 +505,8 @@ You can configure write settings for individual features using these methods:
 ```typescript
 function WriteObjectConfig() {
   const config = useLocalConfig();
-  const contactWriteConfig = config.writeObject("Contact");
+  const { createInstallation } = useCreateInstallation();
+  const contactWriteConfig = config.writeObject("contact");
   
   // Set default value for a field
   contactWriteConfig.setDefaultValues({
@@ -533,10 +552,17 @@ function WriteObjectConfig() {
     value: "always"  // Always write notes field on update
   });
   
-  // Get current settings
+  // Get current local settings
   const defaultValues = contactWriteConfig.getDefaultValues("source");
   const writeOnCreate = contactWriteConfig.getWriteOnCreateSetting("source");
   const writeOnUpdate = contactWriteConfig.getWriteOnUpdateSetting("source");
+
+  // Create an installation with the current config
+  const handleSave = async () => {
+    await createInstallation({
+      config: config.get(),
+    });
+  };
 }
 ```
 
@@ -547,7 +573,8 @@ You can use `setFieldSettings` to set all advanced write features at once for a 
 ```typescript
 function WriteObjectConfig() {
   const config = useLocalConfig();
-  const contactWriteConfig = config.writeObject("Contact");
+  const { createInstallation } = useCreateInstallation();
+  const contactWriteConfig = config.writeObject("contact");
   
   // Configure a field with both write behavior and default value
   contactWriteConfig.setFieldSettings({
@@ -563,41 +590,13 @@ function WriteObjectConfig() {
 
   // Get current settings
   const current = contactWriteConfig.getFieldSettings("customSource");
-}
-```
 
-### Full example
-
-Here's a full example that uses the `ReadObjectConfig` and `WriteObjectConfig` components defined above, and makes a call to `updateInstallation` with the config that has now been updated with both read actions and write actions.
-
-```typescript
-function IntegrationConfig() {
-  const config = useLocalConfig();
-  const { updateInstallation } = useUpdateInstallation();
-  
+  // Create an installation with the current config
   const handleSave = async () => {
-    try {
-      await updateInstallation({
-        config: config.get(),
-        onSuccess: () => {
-          console.log("Configuration updated successfully");
-        },
-        onError: (error) => {
-          console.error("Failed to update configuration:", error);
-        }
-      });
-    } catch (error) {
-      console.error("Error updating configuration:", error);
-    }
+    await createInstallation({
+      config: config.get(),
+    });
   };
-  
-  return (
-    <div>
-      <ReadObjectConfig />
-      <WriteObjectConfig />
-      <button onClick={handleSave}>Save Configuration</button>
-    </div>
-  );
 }
 ```
 
@@ -673,8 +672,8 @@ export function App() {
 const myConfig: ConfigContent = {
   read: {
     objects: {
-      contacts: {
-        objectName: 'contacts',
+      companies: {
+        objectName: 'companies',
         // Auto-select all fields to be read,
         // alternatively you can specify any desired fields & mappings here.
         selectedFieldsAuto: 'all',

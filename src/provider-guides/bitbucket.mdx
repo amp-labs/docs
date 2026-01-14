@@ -8,7 +8,37 @@ excerpt: ""
 ### Supported Actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported for `repositories` only. For all other objects, a full read of the Bitbucket instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.bitbucket.org`.
+
+### Supported Objects
+
+The Bitbucket connector supports reading from the following objects:
+
+- [addon/linkers](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-addon/#api-addon-linkers-get)
+- [pipelines-config/variables](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pipelines/#api-workspaces-workspace-pipelines-config-variables-get)
+- [repositories](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-repositories/#api-repositories-workspace-get)
+- [user/emails](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-users/#api-user-emails-get)
+- [hook_events](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-webhooks/#api-hook-events-get)
+- [hooks](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-workspaces/#api-workspaces-workspace-hooks-get)
+- [members](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-workspaces/#api-workspaces-workspace-members-get)
+- [projects](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-workspaces/#api-workspaces-workspace-projects-get)
+
+
+The Bitbucket connector supports writing to the following objects:
+
+- [pipelines-config/variables](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pipelines/#api-workspaces-workspace-pipelines-config-variables-post)
+
+- [projects](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-projects/#api-workspaces-workspace-projects-post)
+- [snippets](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-snippets/#api-snippets-post)
+- [hooks](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-workspaces/#api-workspaces-workspace-hooks-post)
+
+
+### Example integration
+
+For an example manifest file of an Apollo integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/bitbucket/amp.yaml).
+
 
 ## Before You Get Started
 
