@@ -1,0 +1,110 @@
+name: Check for Manual Modifications to Generated Files
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-generated-files:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if docs.json is modified without generate-docs.ts being modified
+        id: check-docs-json
+        run: |
+          # Check if src/docs.json was modified
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q "^src/docs\.json$"; then
+            echo "docs_json_modified=true" >> $GITHUB_OUTPUT
+          else
+            echo "docs_json_modified=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Check if src/generate-docs.ts was modified
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q "^src/generate-docs\.ts$"; then
+            echo "generate_docs_modified=true" >> $GITHUB_OUTPUT
+          else
+            echo "generate_docs_modified=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check for new .mdx files in src/reference
+        id: check-reference-mdx
+        run: |
+          # Get list of new .mdx files in src/reference/
+          new_mdx_files=$(git diff --name-only --diff-filter=A origin/${{ github.base_ref }}...HEAD | grep "^src/reference/.*\.mdx$" || true)
+          
+          if [ -n "$new_mdx_files" ]; then
+            echo "new_mdx_files=true" >> $GITHUB_OUTPUT
+            echo "files<<EOF" >> $GITHUB_OUTPUT
+            echo "$new_mdx_files" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "new_mdx_files=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Comment on PR if issues found
+        uses: actions/github-script@v7
+        if: (steps.check-docs-json.outputs.docs_json_modified == 'true' && steps.check-docs-json.outputs.generate_docs_modified == 'false') || (steps.check-docs-json.outputs.generate_docs_modified == 'true' && steps.check-docs-json.outputs.docs_json_modified == 'false') || steps.check-reference-mdx.outputs.new_mdx_files == 'true'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issues = [];
+
+            // Check for docs.json modification without generate-docs.ts update
+            if ('${{ steps.check-docs-json.outputs.docs_json_modified }}' === 'true' &&
+                '${{ steps.check-docs-json.outputs.generate_docs_modified }}' === 'false') {
+              issues.push('⚠️ **Warning:** `src/docs.json` was modified without updating `src/generate-docs.ts`. `src/docs.json` is auto-generated and should not be manually edited. Please update `src/generate-docs.ts` instead and run `make run` to regenerate the file.');
+            }
+
+            // Check for generate-docs.ts modification without docs.json update
+            if ('${{ steps.check-docs-json.outputs.generate_docs_modified }}' === 'true' &&
+                '${{ steps.check-docs-json.outputs.docs_json_modified }}' === 'false') {
+              issues.push('⚠️ **Warning:** `src/generate-docs.ts` was modified without regenerating `src/docs.json`. Please run `make run` to regenerate the file.');
+            }
+            
+            // Check for new .mdx files in reference directory
+            if ('${{ steps.check-reference-mdx.outputs.new_mdx_files }}' === 'true') {
+              const files = `${{ steps.check-reference-mdx.outputs.files }}`.trim().split('\n').filter(f => f);
+              issues.push(`⚠️ **Warning:** New .mdx files were added to \`src/reference/\`: ${files.map(f => `\`${f}\``).join(', ')}. The entire src/reference/ directory is generated, so new .mdx files will be wiped out.`);
+            }
+            
+            if (issues.length > 0) {
+              const body = `## ⚠️ Auto-generated file warnings:\n\n${issues.join('\n\n')}`;
+              
+              // Find existing comment
+              const comments = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+              });
+              
+              const botComment = comments.data.find(
+                comment => comment.user.type === 'Bot' && comment.body.includes('Auto-generated Files Warning')
+              );
+              
+              if (botComment) {
+                // Update existing comment
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: body
+                });
+              } else {
+                // Create new comment
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: body
+                });
+              }
+            }
