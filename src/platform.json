@@ -57105,16 +57105,16 @@
                       "type": "string",
                       "description": "The type of notification event.",
                       "enum": [
-                        "read.backfill.done",
                         "connection.created",
                         "connection.error",
                         "installation.created",
                         "installation.updated",
                         "installation.deleted",
                         "read.schedule.paused",
+                        "read.backfill.done",
+                        "read.triggered.done",
                         "destination.webhook.disabled"
-                      ],
-                      "example": "installation.created"
+                      ]
                     },
                     "topicId": {
                       "type": "string",
@@ -57768,14 +57768,15 @@
             "description": "Filter by notification event type.",
             "schema": {
               "type": "string",
+              "description": "The type of notification event.",
               "enum": [
-                "read.backfill.done",
                 "connection.created",
                 "connection.error",
                 "installation.created",
                 "installation.updated",
                 "installation.deleted",
                 "read.schedule.paused",
+                "read.backfill.done",
                 "read.triggered.done",
                 "destination.webhook.disabled"
               ]
@@ -57808,16 +57809,16 @@
                         "type": "string",
                         "description": "The type of notification event.",
                         "enum": [
-                          "read.backfill.done",
                           "connection.created",
                           "connection.error",
                           "installation.created",
                           "installation.updated",
                           "installation.deleted",
                           "read.schedule.paused",
+                          "read.backfill.done",
+                          "read.triggered.done",
                           "destination.webhook.disabled"
-                        ],
-                        "example": "installation.created"
+                        ]
                       },
                       "topicId": {
                         "type": "string",
@@ -71652,16 +71653,16 @@
             "type": "string",
             "description": "The type of notification event.",
             "enum": [
-              "read.backfill.done",
               "connection.created",
               "connection.error",
               "installation.created",
               "installation.updated",
               "installation.deleted",
               "read.schedule.paused",
+              "read.backfill.done",
+              "read.triggered.done",
               "destination.webhook.disabled"
-            ],
-            "example": "installation.created"
+            ]
           },
           "topicId": {
             "type": "string",
@@ -71682,6 +71683,21 @@
             "description": "The time when the event-topic route was last updated."
           }
         }
+      },
+      "NotificationEventType": {
+        "type": "string",
+        "description": "The type of notification event.",
+        "enum": [
+          "connection.created",
+          "connection.error",
+          "installation.created",
+          "installation.updated",
+          "installation.deleted",
+          "read.schedule.paused",
+          "read.backfill.done",
+          "read.triggered.done",
+          "destination.webhook.disabled"
+        ]
       },
       "TopicDestinationRoute": {
         "title": "Topic Destination Route",
