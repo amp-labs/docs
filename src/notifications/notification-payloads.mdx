@@ -7,6 +7,8 @@ The payload structure depends on your destination type:
 - **Webhook destinations**: Payloads include `notificationType` and `data` fields.
 - **Kinesis destinations**: Payloads contain the `data` object. The `notificationType` is included in the event metadata.
 
+You can find the OpenAPI spec for notification payloads [on GitHub](https://github.com/amp-labs/openapi/blob/main/notifications/notifications.yaml), or refer to the examples below:
+
 <AccordionGroup>
 <Accordion title="Installation events (created, updated, deleted)">
 **Webhook destination payload:**
@@ -27,9 +29,21 @@ The payload structure depends on your destination type:
     "config": {
       "read": {
         "objects": {
-          "Account": {
-            "objectName": "Account",
+          "account": {
+            "objectName": "account",
             "destination": "my-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    }
+    "lastConfig": { // Only for `installation.updated` notifications
+      "read": {
+        "objects": {
+          "account": {
+            "objectName": "account",
+            "destination": "my-old-webhook",
             "requiredFields": [...],
             "optionalFields": [...]
           }
