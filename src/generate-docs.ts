@@ -226,6 +226,10 @@ const baseConfig = {
       source: "/reference/auth",
       destination: "/api/key-auth"
     },
+    {
+      source: "/detect-schema-changes",
+      destination: "/manage-customer-schemas"
+    }
   ],
   footerSocials: {
     linkedin: "https://www.linkedin.com/company/withampersand",
@@ -251,7 +255,7 @@ const baseConfig = {
         "write-actions",
         "proxy-actions",
         "object-and-field-mapping",
-        "detect-schema-changes",
+        "manage-customer-schemas",
         {
           group: "UI library",
           pages: [
@@ -267,13 +271,6 @@ const baseConfig = {
           ]
         },
         "manifest-reference",
-        {
-          group: "AI Agents",
-          pages: [
-            "ai-sdk",
-            "mcp-server",
-          ]
-        },
         {
           group: "Destinations",
           pages: [
@@ -469,6 +466,13 @@ const baseConfig = {
         },
         "dev-and-prod-environments",
         "terminology",
+        {
+          group: "AI Agents",
+          pages: [
+            "ai-sdk",
+            "mcp-server",
+          ]
+        },
       ],
     },
     {
