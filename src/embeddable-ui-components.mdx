@@ -200,6 +200,11 @@ const {
   isError,
   error
 } = useIsIntegrationInstalled("read-salesforce", groupRef);
+
+// Handle errors
+if (isError) {
+  console.error("Failed to check integration status:", error);
+}
 ```
 
 #### Using with JWT authentication
@@ -210,14 +215,7 @@ If you are using [JWT authentication](/embeddable-ui-components#jwt-authenticati
 const {
   isLoaded,
   isIntegrationInstalled,
-  isError,
-  error
 } = useIsIntegrationInstalled("read-salesforce", groupRef, consumerRef);
-
-// Handle errors
-if (isError) {
-  console.error("Failed to check integration status:", error);
-}
 ```
 
 ### Check if specific objects are installed
