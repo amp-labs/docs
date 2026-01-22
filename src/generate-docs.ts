@@ -247,7 +247,7 @@ const baseConfig = {
             "overview",
             "concepts",
             "quickstart",
-            "use-with-ai-ide",
+            // "use-with-ai-ide",
           ]
         },
         "subscribe-actions",
