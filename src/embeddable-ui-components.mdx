@@ -180,18 +180,44 @@ Both `onConnectSuccess` and `onDisconnectSuccess` should be functions with the f
 
 ### Check if integration is installed
 
-We provide a hook `useIsIntegrationInstalled` to check if an integration has been installed yet for this [group](/terminology#group). It takes in 2 parameters:
+We provide a hook `useIsIntegrationInstalled` to check if an integration has been installed yet for this [group](/terminology#group). It takes the following parameters:
 
 * **integration** (string): the name of an integration that you've defined in `amp.yaml`.
 * **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
+* **consumerRef** (string, optional): the ID that your app uses to identify this end user. When using JWT authentication, providing this parameter allows you to use the hook without wrapping components with `InstallationProvider`.
 
-It returns an object with fields isLoaded, indicating whether the API call has resolved, and isIntegrationInstalled, indicating whether the integration has already been installed by somebody in the group.
+It returns an object with the following fields:
+* **isLoaded** (boolean): indicates whether the API call has resolved.
+* **isIntegrationInstalled** (boolean): indicates whether the integration has already been installed by somebody in the group.
+* **isError** (boolean): indicates whether an error occurred while fetching the integration or installation data.
+* **error** (Error | null): contains the error object if an error occurred, otherwise null.
+* **config** (Config): the configuration object for the installation (see below for usage examples).
 
 ```TypeScript
 const {
   isLoaded,
-  isIntegrationInstalled
+  isIntegrationInstalled,
+  isError,
+  error
 } = useIsIntegrationInstalled("read-salesforce", groupRef);
+```
+
+#### Using with JWT authentication
+
+When using JWT authentication with `getToken`, you can optionally pass `consumerRef` to the hook to avoid wrapping components with `InstallationProvider`:
+
+```TypeScript
+const {
+  isLoaded,
+  isIntegrationInstalled,
+  isError,
+  error
+} = useIsIntegrationInstalled("read-salesforce", groupRef, consumerRef);
+
+// Handle errors
+if (isError) {
+  console.error("Failed to check integration status:", error);
+}
 ```
 
 ### Check if specific objects are installed
