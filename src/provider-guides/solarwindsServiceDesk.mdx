@@ -6,22 +6,47 @@ title: "SolarWinds Service Desk"
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported for `incidents` only. For all other objects, a full read of the SolarwindsServiceDesk instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.samanage.com`.
 
-### Example integration
+### Supported Objects
 
-To define an integration for SolarWinds Service Desk, create a manifest file that looks like this:
+The Solarwinds connector support writing to and reading from the following objects:
+- [incidents](https://apidoc.samanage.com/#tag/Incident/operation/getIncidents)
+- [users](https://apidoc.samanage.com/#tag/User/operation/getUsers)
+- [roles](https://apidoc.samanage.com/#tag/Role/operation/getRoles)
+- [problems](https://apidoc.samanage.com/#tag/Problem/operation/getProblems)
+- [changes](https://apidoc.samanage.com/#tag/Change/operation/getChanges)
+- [change_catalogs](https://apidoc.samanage.com/#tag/Change-Catalog/operation/getChangeCatalogs)
+- [releases](https://apidoc.samanage.com/#tag/Release/operation/getRelease)
+- [solutions](https://apidoc.samanage.com/#tag/Solution/operation/getSolutions)
+- [catalog_items](https://apidoc.samanage.com/#tag/Catalog-Item/operation/getCatalogItems)
+- [configuration_items](https://apidoc.samanage.com/#tag/Configuration-Item/operation/getConfigurationItems)
+- [sites](https://apidoc.samanage.com/#tag/Site/operation/getSites)
+- [departments](https://apidoc.samanage.com/#tag/Department/operation/getDepartments)
+- [groups](https://apidoc.samanage.com/#tag/Group/operation/getGroups)
+- [categories](https://apidoc.samanage.com/#tag/Category/operation/getCategories)
+- [hardwares](https://apidoc.samanage.com/#tag/Hardware/operation/getHardwares)
+- [mobiles](https://apidoc.samanage.com/#tag/Mobile-Device/operation/getMobiles)
+- [other_assets](https://apidoc.samanage.com/#tag/Other-Asset/operation/getAssets)
+- [contracts](https://apidoc.samanage.com/#tag/Contract/operation/getContracts)
+- [purchase_orders](https://apidoc.samanage.com/#tag/Purchase-Order/operation/getCPurchaseOrders)
+- [vendors](https://apidoc.samanage.com/#tag/Vendor/operation/getVendors)
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: solarWindsServiceDesk-integration
-    displayName: My SolarWinds Service Desk Integration
-    provider: solarWindsServiceDesk
-    proxy:
-      enabled: true
-```
+The SolarwindsServiceDesk connector supports writing only to the following objects:
+- [memberships](https://apidoc.samanage.com/#tag/Membership/operation/createMembership)
+
+The SolarwindsServiceDesk connector supports reading only from the following objects:
+- [softwares](https://apidoc.samanage.com/#tag/Software/operation/getSoftwares)
+- [printers](https://apidoc.samanage.com/#tag/Printer/operation/getPrinters)
+- [audits](https://apidoc.samanage.com/#tag/Audit/operation/getAudits)
+- [risks](https://apidoc.samanage.com/#tag/Risk/operation/getRisks)
+
+### Example Integration
+
+For an example manifest file of a Smartlead integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/solarwindsServiceDesk/amp.yaml).
+
 
 ## Using the connector
 
