@@ -9,7 +9,7 @@ title: "HubSpot"
 The Hubspot connector supports:
 
 - [Read Actions](/read-actions), including full historic backfill and incremental reads.
-- [Subscribe Actions](/subscribe-actions).
+- [Subscribe Actions](/subscribe-actions). Please note that [special set up](/subscribe-actions#special-set-up-for-hubspot) is needed for HubSpot.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.hubapi.com`.
 
@@ -57,19 +57,13 @@ For an example manifest file, visit our [samples repo on Github](https://github.
 
 ## Before You Get Started
 
-To integrate HubSpot with Ampersand, you'll need to create a HubSpot app and obtain:
+If you don't already have one, sign up for a [free HubSpot developer account](https://app.hubspot.com/signup-hubspot/crm?intent=developer).
 
-- Client ID
-- Client Secret
-
-Choose one of the methods below based on your HubSpot account type.
-
-## Creating a HubSpot App
+## Create a HubSpot App
 
 ### Method 1: New Project Apps
 
-New Project Apps are [limited to 25 installs
-](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits), until the app is listed on the HubSpot Marketplace. We recommend starting the process to [publish to HubSpot marketplace](#publish-to-hubspot-marketplace) as soon you've finished building your integration and tested it internally or with a customer.
+New Project Apps are [limited to 25 installs](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits), until the app is listed on the HubSpot Marketplace. We recommend starting the process to [publish to HubSpot marketplace](#publish-to-hubspot-marketplace) as soon you've finished building your integration and tested it internally or with a customer.
 
 To create a New Project App:
 1. **Open** the terminal
@@ -83,65 +77,86 @@ To create a New Project App:
 4. **Select** your account (if prompted)
 
 <Note>
-  When you have multiple accounts, you will be prompted to select the account
-  where you want to create the app. Make sure to select the developer account.
+  If you have multiple accounts, make sure to select the developer account.
 </Note>
-![Alt text](/images/provider-guides/hubspot-cli-account-select.png)
 
 5. **Create** your Personal Access Key and copy it
    ![Alt text](/images/provider-guides/hubspot-cli-create-key.gif)
 
 6. **Go back** to terminal, **paste** the key and **hit Enter**
    ![Alt text](/images/provider-guides/hubspot-cli-paste-key.png)
-7. <span id="create-project">Create a project</span>: `hs project create` and
-   follow the prompts
+7. <span id="create-project">Create a project</span>:
 
-- Enter your project name: **your-project-name**
-- Choose where to create the project: **your-desired-path**
-- Choose what to include in your project: **App**
-- Choose how to distribute your application: **Marketplace** (See [HubSpot's distribution options](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/app-configuration#distribution))
-- Choose your authentication type: **OAuth**
-- Choose which features to add: **Leave blank (press Enter)**
+Copy and paste this command in the terminal:
 
-Alternatively you can use this one line in the terminal:
+```
+hs project create --name your-project-name --project-base app --distribution marketplace --auth oauth --features
+```
 
- ```
- hs project create --name your-project-name --project-base app --distribution marketplace --auth oauth
- ```
+8. Configure OAuth redirect URL and scopes
 
-![Alt text](/images/provider-guides/hubspot-cli-create-project.png)
+Open the folder where the HubSpot project was created and edit `src/app/app-hsmeta.json`.
 
-8. **Configure** OAuth redirect URL and scopes
+Replace the `auth` section of the file with the snippet below. If you wish to read or write to more objects than **contacts**, then add more scopes. For example, if you also want to read **companies**, then you can add the following scopes:
+- crm.objects.companies.read
 
-Open the folder where project was created and edit `src/app/app-hsmeta.json` to add the redirect URL and scopes:
+For a full list of HubSpot scopes, please refer to [HubSpot documentation](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/scopes#list-of-available-scopes).
 
 ```json
 {
   "auth": {
-    "type": "oauth",
-    "redirectUrls": ["https://api.withampersand.com/callbacks/v1/oauth"],
-    "scopes": {
-      "required": ["crm.objects.contacts.read", "crm.objects.contacts.write"]
-    }
+   "type": "oauth",
+   "redirectUrls": ["https://api.withampersand.com/callbacks/v1/oauth"],
+   "requiredScopes": [
+      "oauth",
+      "crm.objects.contacts.read",
+      "crm.objects.contacts.write"
+   ],
+   "optionalScopes": [],
+   "conditionallyRequiredScopes": []   
   }
 }
 ```
 
-9. **Deploy**: `hs project upload`
+9. **Deploy**: run the following command
 
-- The project does not exist. Would you like to create it?: **Yes**
+```
+hs project upload
+```
+
+You will be prompted to create the new project, select "yes".
 
 ![Alt text](/images/provider-guides/hubspot-cli-deploy-project.png)
 
-10. Get App credentials from **Development** → **Projects**
+10. Accept HubSpot's Acceptable Use Policy
 
-- **Select the project** you just created
-- In **Project Components**, find the OAuth App
+If this is your first time create a HubSpot app, you will need to accept HubSpot's Acceptable Use Policy before any users can install your integration. 
+
+- Log into HubSpot
+- Select **Development** from the bottom of the left nav bar.
+
+<img width="250" src="/images/provider-guides/hubspot-development-tab.png" alt="Dev tab" />
+
+- Select the project you just created
+
+<img src="/images/provider-guides/hubspot-select-project.png" alt="Select Project" />
+
+- In the **Project Components** section, click on the app.
+
+<img src="/images/provider-guides/hubspot-select-app.png" alt="Select App" />
+
+- Navigate to the **Distribution** tab, click on "Begin Publishing" and complete the first step "Agree to HubSpot's Acceptable Use Policy". You do not need to complete the rest of the steps right now.
+
+![Acceptable Use Policy](/images/provider-guides/hubspot-acceptable-use-policy.gif)
+
+11. Get Client ID and Client Secret
+
+- Follow the steps from Step 10 above to navigate to your HubSpot app.
 - Go to the **Auth** tab to find your **Client ID** and **Client Secret**
 
-![Alt text](/images/provider-guides/hubspot-cli-get-credentials.gif)
+![Auth](/images/provider-guides/hubspot-auth.png)
 
-Jump to [Add App to Ampersand](#add-app-to-ampersand).
+12. Jump to [Add App to Ampersand](#add-app-to-ampersand).
 
 ### Method 2: Legacy Apps
 
