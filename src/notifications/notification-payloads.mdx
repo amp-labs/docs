@@ -26,7 +26,7 @@ You can find the OpenAPI spec for notification payloads [on GitHub](https://gith
     "groupName": "Customer Name",
     "consumerRef": "user-123",
     "consumerName": "John Doe",
-    "config": {
+    "config": { //If the config content is too large, the config field will be empty and you can retrieve the content from the URL provided in `configURL`.
       "read": {
         "objects": {
           "account": {
@@ -38,7 +38,8 @@ You can find the OpenAPI spec for notification payloads [on GitHub](https://gith
         }
       }
     },
-    "lastConfig": { // Only for `installation.updated` notifications
+    // "configURL": "https://example.com/config.json" // If the config content is too large to deliver directly, we will provide a signed URL where you can download the content as a JSON file.
+    "lastConfig": { // Only for `installation.updated` notifications. If the config is too large, it will be omitted and the content will be available in `lastConfigURL`.
       "read": {
         "objects": {
           "account": {
@@ -50,6 +51,7 @@ You can find the OpenAPI spec for notification payloads [on GitHub](https://gith
         }
       }
     }
+    // "lastConfigURL": "https://example.com/lastconfig.json"
   }
 }
 ```
