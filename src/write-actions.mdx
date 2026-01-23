@@ -281,31 +281,29 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 }'
 ```
 
-### Auto-batch policy
+### Auto batching
 
-The auto-batch policy automatically groups multiple single-record write requests together and executes them as a batch operation. This is useful when you're sending many individual write requests and want to optimize them into batches for better performance and efficiency.
+Ampersand can automatically groups multiple single-record write requests together and executes them as a batch operation. This is useful when you want to reduce the amount of API quota that you are consuming in your customer's SaaS instance.
 
-<Info>Auto-batch policy is currently only available for asynchronous mode and single-record writes (not batch writes).</Info>
+<Info>Auto batching is currently only available for asynchronous mode and single-record writes (not batch writes).</Info>
 
-When you enable auto-batch policy, Ampersand will:
+When you enable auto batching, Ampersand will:
 
-1. **Accumulate records**: Multiple single-record write requests for the same installation, object, and write type (create or update) are automatically grouped together
+1. **Accumulate records**: Multiple single-record write requests for the same installation, object, and write type (create or update) are automatically grouped together.
 2. **Execute when ready**: The batch executes when either:
-   - **100 records** have been accumulated (immediate execution), or
-   - **Maximum delay time** expires (executes even if fewer than 100 records)
+   - **100 records** have been accumulated, or
+   - **Maximum delay time** has been reached (executes even if current batch has fewer than 100 records)
 
-Each batch uses a per-batch deadline based on when the first record in that batch arrived. This ensures records don't wait indefinitely.
+Each batch uses a the max delay deadline set by the first record in that batch. This ensures records don't wait indefinitely.
 
 #### Configuration
 
-The auto-batch policy has two configuration options:
+The auto batch policy has two configuration options:
 
-- **`maxDelayMinutes`** (required): The maximum time to wait before executing the batch, even if it hasn't reached 100 records. Minimum: 1 minute, Maximum: 1440 minutes (24 hours).
-- **`retryDeadlineHours`** (optional): The maximum time to keep retrying the batch write operation if it fails. If not specified, defaults to 1 hour. Maximum allowed is 48 hours.
+- **`maxDelayMinutes`** (required): The maximum time to wait before executing the batch, even if it hasn't reached 100 records. Minimum: 1, Maximum: 1440 (24 hours).
+- **`retryDeadlineHours`** (optional): The maximum time to keep retrying the batch write operation if it fails due to a retryable error. If not specified, defaults to 1 hour. Maximum allowed is 48 hours.
 
-#### Example: Using auto-batch policy
-
-To enable auto-batch policy, include `autoBatchPolicy` in your write request:
+To enable auto batching, include `autoBatchPolicy` in the [write API](/reference/write/write-records) request, here's an example:
 
 ```bash
 curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
@@ -328,14 +326,13 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 ```
 
 In this example:
-- Records will be batched together for up to **5 minutes**
-- If 100 records accumulate before 5 minutes, the batch executes immediately
-- If fewer than 100 records accumulate, the batch executes after 5 minutes
-- If the batch write fails, Ampersand will retry for up to **2 hours**
+- Ampersand waits for up to **5 minutes** for additional records to come in before sending the current batch.
+- If 100 records accumulate before 5 minutes, the batch executes immediately.
+- If the batch write fails due to a retryable error, Ampersand will retry for up to **2 hours**.
 
-#### Monitoring auto-batch operations
+#### Monitor auto batch operations
 
-You can monitor auto-batch operations using the operation ID returned in the response. The operation ID represents the master operation for the batch. Use the [Get Operation endpoint](/reference/operation/get-an-operation) to check the status:
+You can monitor auto batch operations using the operation ID returned in the response. The operation ID represents the master operation for the batch. Use the [Get Operation endpoint](/reference/operation/get-an-operation) to check the status:
 
 ```bash
 curl --location 'https://api.withampersand.com/v1/projects/<PROJECT_ID>/operations/<OPERATION_ID>' \
@@ -343,9 +340,9 @@ curl --location 'https://api.withampersand.com/v1/projects/<PROJECT_ID>/operatio
 ```
 
 The operation status will show:
-- `in_progress`: The batch is accumulating records or executing
-- `success`: The batch write completed successfully (may include partial success with some records failing)
-- `failure`: The batch write failed
+- `in_progress`: The batch is accumulating records or executing.
+- `success`: The batch write completed successfully (may include partial success with some failed records).
+- `failure`: The batch write failed.
 
 ## Write modes
 
@@ -379,7 +376,7 @@ In asynchronous mode, Ampersand validates the request and immediately returns an
 
 If the write fails due to API quota issues or other retryable errors, Ampersand will automatically keep retrying for up to 1 hour. If needed, the [retry policy can be configured](#retry-policy-for-async-writes) to retry for up to 48 hours.
 
-For single-record writes, you can also use the [auto-batch policy](#auto-batch-policy) to automatically group multiple requests together and execute them as a batch.
+For single-record writes, you can also use the [auto batch policy](#auto batch-policy) to automatically group multiple requests together and execute them as a batch.
 
 To use async mode, set `mode: "asynchronous"` in your request:
 
