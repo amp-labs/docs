@@ -9,6 +9,49 @@ The payload structure depends on your destination type:
 
 You can find the OpenAPI spec for notification payloads [on GitHub](https://github.com/amp-labs/openapi/blob/main/notifications/notifications.yaml), or refer to the examples below:
 
+<Note>
+If applicable, some payloads will contain `config` field nested in `data` field which contains the complete installation configuration object including read, write, subscribe, and proxy settings. `installation.updated` includes an additional `lastConfig` field with the previous configuration.
+When the config object is too large, we will generate signed url for the config content downloadable in JSON file.
+
+<Accordion title="Example payload">
+```json
+{
+  "notificationType": "installation.updated",
+  "data": {
+    ...,
+    "config": { //If the config content is too large, the config field will be empty and you can retrieve the content from the URL provided in `configURL`.
+      "read": {
+        "objects": {
+          "account": {
+            "objectName": "account",
+            "destination": "my-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    },
+    // "configURL": "https://example.com/config.json" // If the config content is too large to deliver directly, we will provide a signed URL where you can download the content as a JSON file.
+    "lastConfig": { // Only for `installation.updated` notifications. If the config is too large, it will be omitted and the content will be available in `lastConfigURL`.
+      "read": {
+        "objects": {
+          "account": {
+            "objectName": "account",
+            "destination": "my-old-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    }
+    // "lastConfigURL": "https://example.com/lastconfig.json"
+  }
+}
+```
+</Accordion>
+
+</Note>
+
 <AccordionGroup>
 <Accordion title="Installation events (created, updated, deleted)">
 **Webhook destination payload:**
@@ -38,7 +81,6 @@ You can find the OpenAPI spec for notification payloads [on GitHub](https://gith
         }
       }
     },
-    // "configURL": "https://example.com/config.json" // If the config content is too large to deliver directly, we will provide a signed URL where you can download the content as a JSON file.
     "lastConfig": { // Only for `installation.updated` notifications. If the config is too large, it will be omitted and the content will be available in `lastConfigURL`.
       "read": {
         "objects": {
