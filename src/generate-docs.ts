@@ -423,6 +423,7 @@ const baseConfig = {
             "provider-guides/ringCentral",
             "provider-guides/sageIntacct",
             "provider-guides/salesflare",
+            "provider-guides/salesfinity",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
             "provider-guides/segment",
