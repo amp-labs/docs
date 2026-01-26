@@ -68,7 +68,7 @@ Create an IAM user or role with permissions to write to your Kinesis stream. You
 
 ### Step 3: Add the destination to Ampersand
 
-Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations/new) in the Ampersand Dashboard and create a new Kinesis destination.
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Kinesis destination.
 
 You'll need to provide:
 
@@ -239,7 +239,7 @@ Subscribe action messages follow the same structure as read actions, but include
 
 Kinesis uses partition keys to distribute messages across shards. (Learn more in [the AWS docs](https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html)). You can customize the partition key using a JMESPath template. JMESPath is a query language for JSON. See [jmespath.org](https://jmespath.org) for the full specification.
 
-You can specify a partition key template when creating a Kinesis destination in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/destinations/new). If you don't specify one, by default we use the message ID as the partition key, so the messages we send will be evenly distributed across your shards.
+You can specify a partition key template when creating a Kinesis destination in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/destinations). If you don't specify one, by default we use the message ID as the partition key, so the messages we send will be evenly distributed across your shards.
 
 ### Custom partition key examples
 
@@ -276,7 +276,7 @@ data.operationId
 
 **Check destination configuration:**
 
-1. Verify that the stream name and region are correct in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/destinations/new).
+1. Verify that the stream name and region are correct in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/destinations).
 2. Test your AWS credentials:
    ```bash
    aws kinesis describe-stream \
