@@ -427,6 +427,7 @@ const baseConfig = {
             "provider-guides/salesflare",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
+            "provider-guides/superSend",
             "provider-guides/segment",
             "provider-guides/seismic",
             "provider-guides/sellsy",
