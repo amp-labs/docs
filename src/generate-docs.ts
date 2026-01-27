@@ -395,6 +395,7 @@ const baseConfig = {
             "provider-guides/netsuite",
             "provider-guides/notion",
             "provider-guides/nutshell",
+            "provider-guides/okta",
             "provider-guides/openAI",
             "provider-guides/outplay",
             "provider-guides/outreach",
