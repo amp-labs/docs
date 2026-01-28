@@ -1,0 +1,70 @@
+---
+title: "Shopify"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.myshopify.com`.
+
+## Example integration
+
+To define an integration for Shopify, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: shopify-integration
+    displayName: My Shopify integration
+    provider: shopify
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To connect Shopify with Ampersand, you will need:
+- A Shopify Partner account (to create an app): [Shopify Partners](https://partners.shopify.com/)
+- A Shopify store to install and test the app (a development store is fine)
+
+## Create a Shopify app
+
+Shopify uses OAuth 2.0 (authorization code grant) for apps created in the Partner Dashboard.
+
+1. Log in to the [Shopify Partners portal](https://partners.shopify.com/) and open **Apps**.
+2. Click **Create app** and choose the app type that matches your use case.
+3. In your app settings, configure the OAuth redirect URL:
+   - `https://api.withampersand.com/callbacks/v1/oauth`
+4. Configure the access scopes your integration needs.
+5. Save the app and note the **Client ID** and **Client Secret**.
+
+### Protected customer data / approvals
+
+Some Shopify scopes and objects (for example, customer data) may require additional approval and configuration. If you see errors like “This app is not approved to access the Customer object”, review Shopify’s protected customer data requirements and ensure your app is eligible for the data you’re requesting.
+
+## Add your Shopify app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+2. Select the project where you want to create a Shopify integration.
+3. Select **Provider apps**.
+4. Select _Shopify_ from the **Provider** list.
+5. Enter the **Client ID** and **Client Secret** from your Shopify app and click **Save changes**.
+
+## Required metadata
+
+The Shopify connector requires the store name (subdomain) to be provided as `workspace`:
+
+| Metadata key | Description | Example |
+| --- | --- | --- |
+| `workspace` | Shopify store subdomain | `my-store` (from `my-store.myshopify.com`) |
+
+## Using the connector
+
+To start integrating with Shopify:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer to connect their Shopify store via OAuth.
+- Start making [Proxy Calls](/proxy-actions). Ampersand will automatically attach the OAuth credentials for the connected store.
