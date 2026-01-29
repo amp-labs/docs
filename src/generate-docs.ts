@@ -438,6 +438,7 @@ const baseConfig = {
             "provider-guides/smartsheet",
             "provider-guides/snapchatAds",
             "provider-guides/snowflake",
+            "provider-guides/solarwindsServiceDesk",
             "provider-guides/stripe",
             "provider-guides/surveyMonkey",
             "provider-guides/talkdesk",
