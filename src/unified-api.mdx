@@ -105,12 +105,12 @@ subscribe:
 
 **Ampersand:**
 - **Read**: Scheduled syncs or real-time subscribe actions with field-level granularity
-- **Write**: Direct write actions with field mapping
+- **Write**: Direct writes with automatic field mapping - your unified schema works for both reads and writes
 - **Pattern**: Subscribe + write = true bidirectional real-time sync
 
 **Merge:**
 - **Read**: Scheduled syncs + poll after webhook notifications (model-level)
-- **Write**: POST/PATCH operations
+- **Write**: Direct writes, but no unified mapping - you must query `/meta` per integration to discover required fields
 - **Pattern**: Polling + writes
 
 ### Comparison table
@@ -118,10 +118,11 @@ subscribe:
 | Feature | Ampersand | Merge |
 |---------|-----------|-----------|
 | **Schema** | You define it | Fixed common model |
-| **Raw data** | Always included | need `include_remote_data=true` flag |
+| **Raw data** | Always included | Requires `include_remote_data=true` flag |
 | **Data storage** | No persistent storage | Stored in Merge cloud |
 | **Real-time** | Subscribe actions (all plans) | Third-party webhooks (Pro/Enterprise) |
 | **Event granularity** | Field-level changes | Model-level notifications |
+| **Write mapping** | Automatic - reuses your read schema | Manual - query `/meta` per integration |
 
 ### Ticketing unified API
 
