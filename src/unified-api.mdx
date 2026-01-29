@@ -126,66 +126,6 @@ subscribe:
 | **Real-time** | Subscribe actions (all plans) | Third-party webhooks (Pro/Enterprise) |
 | **Event granularity** | Field-level changes | Model-level notifications |
 
-## Examples
-
-### CRM unified API
-
-Create a unified CRM that works across Salesforce, HubSpot, Pipedrive, and more:
-
-<CodeGroup>
-```yaml Salesforce
-- objectName: account
-  mapToName: company
-  requiredFields:
-    - fieldName: id
-      mapToName: remote_id
-    - fieldName: name
-      mapToName: name
-    - fieldName: website
-      mapToName: website
-    - fieldName: createddate
-      mapToName: remote_created_at
-    - fieldName: lastmodifieddate
-      mapToName: remote_updated_at
-```
-
-```yaml HubSpot
-- objectName: companies
-  mapToName: company
-  requiredFields:
-    - fieldName: hs_object_id
-      mapToName: remote_id
-    - fieldName: name
-      mapToName: name
-    - fieldName: website
-      mapToName: website
-    - fieldName: createdate
-      mapToName: remote_created_at
-    - fieldName: hs_lastmodifieddate
-      mapToName: remote_updated_at
-```
-
-```yaml Result
-{
-  "mappedFields": {
-    "remote_id": "22575402281",
-    "name": "Acme Corp",
-    "website": "acme.com",
-    "remote_created_at": "2024-08-23T14:04:57.739Z",
-    "remote_updated_at": "2024-08-23T14:20:07.660Z"
-  },
-  "raw": {
-    "id": "22575402281",
-    "name": "Acme Corp",
-    "domain": "acme.com",
-    "createdAt": "2024-08-23T14:04:57.739Z",
-    "updatedAt": "2024-08-23T14:20:07.660Z",
-    "hs_object_id": "22575402281"
-  }
-}
-```
-</CodeGroup>
-
 ### Ticketing unified API
 
 Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
