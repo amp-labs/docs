@@ -92,13 +92,13 @@ subscribe:
 }
 ```
 
-## Key architectural differences from merge.dev
+## Key architectural differences from Merge
 
 ### Data persistence
 
 **Ampersand:** No data storage for better security posture. Ampersand acts as the transport and transformation layer only. You control where and how to persist data.
 
-**Merge.dev:** Stores all customer data in Merge serves by default. "Merge Destinations" (Enterprise) enables you to turn off storage.
+**Merge:** Stores all customer data in Merge serves by default. "Merge Destinations" (Enterprise) enables you to turn off storage.
 
 **Why it matters:** For healthcare, finance, or regulated industries, Ampersand's transport-only architecture eliminates compliance concerns around third-party data storage.
 
@@ -109,14 +109,14 @@ subscribe:
 - **Write**: Direct write actions with field mapping
 - **Pattern**: Subscribe + write = true bidirectional real-time sync
 
-**Merge.dev:**
+**Merge:**
 - **Read**: Scheduled syncs + poll after webhook notifications (model-level)
 - **Write**: Instant POST/PATCH operations
 - **Pattern**: Polling + writes
 
 ### Comparison table
 
-| Feature | Ampersand | Merge.dev |
+| Feature | Ampersand | Merge |
 |---------|-----------|-----------|
 | **Schema** | You define it | Fixed common model |
 | **Raw data** | Always included | need `include_remote_data=true` flag |
@@ -171,11 +171,11 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
 ```
 </CodeGroup>
 
-## Migration from merge.dev
+## Migration from Merge
 
 <Steps>
   <Step title="Understand the persistence model">
-    **Merge.dev:** Stores your customer data; you poll their API  
+    **Merge:** Stores your customer data; you poll their API  
     **Ampersand:** Streams data to your webhooks; you store it
     
     Set up webhook endpoints and decide on your storage strategy (database, warehouse, etc.)
@@ -191,7 +191,7 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
   
   <Step title="Update webhook handlers">
     ```javascript
-    // merge.dev: Poll after webhook notification
+    // Merge: Poll after webhook notification
     app.post('/merge-webhook', async (req, res) => {
       const contacts = await merge.crm.contacts.list({
         modified_after: lastSync,
