@@ -6,7 +6,44 @@ title: "ServiceNow"
 
 ### Supported Actions
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the ServiceNow instance will be done for each scheduled read. 
+- [Write Actions](/write-actions).
 * **Proxy Actions**, using the base URL `https://{{.workspace}}.service-now.com`.
+
+### Supported Objects
+
+The ServiceNow connector supports reading and writing to and from the following objects:
+
+
+- [sn_lead_mgmt_core/lead](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/lead-api.html)(lead API)
+- [now/contact](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/contact-api.html)(Contact API)
+- [now/consumer](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/consumer-api.html)(Consumer API)
+- [sn_ind_tmf642/alarm_mgmt/alarm](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/alarm-open-api.html)(Alarm Management Open API)
+- [sn_customerservice/case](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/case-api.html)(Case API)
+- [sn_chg_rest/change](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/change-management-api.html)(Change Management API)
+- [now/table/[tableName]](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html)(Table API)
+
+The ServiceNow connector supports only reading from the following objects:
+
+- [now/account](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/account-api.html)
+
+The ServiceNow connector supports only writing to the following objects:
+
+- [sn_ind_tmt_orm/order](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/order_csm-api.html)(Order API)
+- [now/email](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/email-api.html)(Email API)
+- [sn_pss_core/entitlement](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/entitlement-api.html)(Entitlement API)
+- [sn_ent/asset/ai_prompt](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/ai-assets-api.html#title_ai-asset-POST-ai-prompt)(AI Assets API)
+- [sn_ent/asset/ai_model](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/ai-assets-api.html#title_ai-asset-ai-model-POST)(AI Assets API)
+- [api/sn_ent/asset/ai_dataset](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/ai-assets-api.html#title_ai-asset-dataset-POST-ai_dataset)(AI Assets API)
+- [sn_ent/asset/ai_system](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/ai-assets-api.html#title_ai-asset-system-POST)(AI Assets API)
+- [sn_spend_intg/ap_invoice/json](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/ap-invoice-api.html#title_ap_invoice-POST-json)(AP Invoice API)
+- [now/batch](https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/batch-api.html)(Batch API)
+
+
+### Example Integration
+
+For an example manifest file of an ServiceNow integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/servicenow/amp.yaml).
+
 
 ## Before You Get Started
 

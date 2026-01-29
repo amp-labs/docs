@@ -146,65 +146,6 @@ There are 2 types of reads that can be triggered:
 
 ```
 
-## Delivery modes
-
-Ampersand sends data to [destinations](/destinations/overview) that you specify in your manifest file. Please refer to [webhook destinations](/destinations/webhooks) for more information on the data schema of the webhooks.
-
-You can define the delivery mode within the manifest file.
-
-### Auto
-
-This is the default delivery mode if you do not specify one. When you set the delivery mode to `auto`, Ampersand will automatically send results to your destination as it reads new data from the SaaS instance.
-
-```yaml yaml
-specVersion: 1.0.0
-integrations:
-  - name: salesforce-buffered-read
-    provider: salesforce
-    read:
-      objects:
-        - objectName: contact
-          destination: contactWebhook
-          schedule: "*/30 * * * *" # Data will be read every 30 minutes
-          delivery:
-            mode: auto # Data is delivered as soon as it is available
-```
-
-### On request
-
-When you set the delivery mode to `onRequest`, Ampersand will not send webhooks as it reads new data, but only when you request for more results. This is useful when you want to control the rate at which you receive data. For precise control over how much data you receive each time, you can configure the page size, which specifies the number of records to send in each webhook payload.
-
-Please note that the page size is a *maximum*, and the actual number of records in each payload may be less if there are fewer records available in the SaaS instance. Currently, may configure a page size between 50 and 500. Please reach out to us if you need this to be lower or higher.
-
-Here's an example of how to configure the delivery mode to `onRequest` for a Salesforce Contact object, with a max page size of 50 records per webhook message:
-
-```yaml yaml
-specVersion: 1.0.0
-integrations:
-  - name: salesforce-buffered-read
-    provider: salesforce
-    read:
-      objects:
-        - objectName: contact
-          destination: contactWebhook
-          schedule: "*/30 * * * *" # Data will be read every 30 minutes
-          delivery:
-            mode: onRequest
-            pageSize: 50
-```
-
-#### Requesting results
-
-When you are ready to receive & process webhook messages, you can call the [deliver results endpoint](/reference/read/deliver-results), which will asynchronously send the stored results to the configured destination.
-
-For example, if you are ready to receive and process a maximum of 300 records, and you have a `pageSize` of 50 in your `amp.yaml`, you should request 6 pages (300 divided by 50).
-
-#### What happens if you request for more pages than are available?
-
-If you request for more pages than are available, Ampersand will first send you all the available records at the time of your request. Then, as it reads new data, it will send you the new records as they become available until you have received your requested number of pages.
-
-For example, if you request for 10 pages of results, but there are only 4 pages available at the time of your request, Ampersand will send you the 4 pages immediately. If Ampersand reads 20 pages of results in the next scheduled read, Ampersand will send you 6 pages more, resulting in a total of 10 pages of results being delivered. Ampersand will then hold the next 14 pages until you request for more results.
-
 ## Full example
 
 ```yaml yaml
@@ -247,3 +188,66 @@ integrations:
           # All other field are optional
           optionalFieldsAuto: all
 ```
+
+## Delivery modes (deprecated)
+
+<Warning>
+Delivery modes are deprecated. If you don't want read results to be automatically delivered to you, you should omit `schedule` and `backfill` when defining a read action in `amp.yaml`, and [trigger a read](#trigger-a-read) when you want to receive data from your customer's SaaS.
+</Warning>
+
+Ampersand sends data to [destinations](/destinations/overview) that you specify in your manifest file. Please refer to [webhook destinations](/destinations/webhooks) for more information on the data schema of the webhooks.
+
+You can define the delivery mode within the manifest file.
+
+### Auto
+
+This is the default delivery mode if you do not specify one. When you set the delivery mode to `auto`, Ampersand will automatically send results to your destination as it reads new data from the SaaS instance.
+
+```yaml yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforce-buffered-read
+    provider: salesforce
+    read:
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          schedule: "*/30 * * * *" # Data will be read every 30 minutes
+          delivery:
+            mode: auto # Data is delivered as soon as it is available
+```
+
+### On request (deprecated)
+
+When you set the delivery mode to `onRequest`, Ampersand will not send webhooks as it reads new data, but only when you request for more results. This is useful when you want to control the rate at which you receive data. For precise control over how much data you receive each time, you can configure the page size, which specifies the number of records to send in each webhook payload.
+
+Please note that the page size is a *maximum*, and the actual number of records in each payload may be less if there are fewer records available in the SaaS instance. Currently, may configure a page size between 50 and 500. Please reach out to us if you need this to be lower or higher.
+
+Here's an example of how to configure the delivery mode to `onRequest` for a Salesforce Contact object, with a max page size of 50 records per webhook message:
+
+```yaml yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforce-buffered-read
+    provider: salesforce
+    read:
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          schedule: "*/30 * * * *" # Data will be read every 30 minutes
+          delivery:
+            mode: onRequest
+            pageSize: 50
+```
+
+#### Requesting results
+
+When you are ready to receive & process webhook messages, you can call the [deliver results endpoint](/reference/read/deliver-results), which will asynchronously send the stored results to the configured destination.
+
+For example, if you are ready to receive and process a maximum of 300 records, and you have a `pageSize` of 50 in your `amp.yaml`, you should request 6 pages (300 divided by 50).
+
+#### What happens if you request for more pages than are available?
+
+If you request for more pages than are available, Ampersand will first send you all the available records at the time of your request. Then, as it reads new data, it will send you the new records as they become available until you have received your requested number of pages.
+
+For example, if you request for 10 pages of results, but there are only 4 pages available at the time of your request, Ampersand will send you the 4 pages immediately. If Ampersand reads 20 pages of results in the next scheduled read, Ampersand will send you 6 pages more, resulting in a total of 10 pages of results being delivered. Ampersand will then hold the next 14 pages until you request for more results.

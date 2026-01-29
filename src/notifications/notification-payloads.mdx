@@ -1,0 +1,320 @@
+---
+title: Notification payloads
+---
+
+The payload structure depends on your destination type:
+
+- **Webhook destinations**: Payloads include `notificationType` and `data` fields.
+- **Kinesis destinations**: Payloads contain the `data` object. The `notificationType` is included in the event metadata.
+
+You can find the OpenAPI spec for notification payloads [on GitHub](https://github.com/amp-labs/openapi/blob/main/notifications/notifications.yaml), or refer to the examples below:
+
+<Note>
+Some payloads may include a `config` field nested within the `data` field. This config contains the complete installation configuration, including read, write, subscribe, and proxy settings.
+The installation.updated event also includes an additional lastConfig field representing the previous configuration.
+If the configuration object is too large to include inline, we will generate a signed URL you can use to fetch full configuration via GET request as a JSON file.
+
+<Accordion title="Example payload">
+```json
+{
+  "notificationType": "installation.updated",
+  "data": {
+    ...,
+    "config": { //If the config content is too large, the config field will be empty and you can retrieve the content from the URL provided in `configURL`.
+      "read": {
+        "objects": {
+          "account": {
+            "objectName": "account",
+            "destination": "my-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    },
+    // "configURL": "https://example.com/config.json" // If the config content is too large to deliver directly, we will provide a signed URL where you can download the content as a JSON file.
+    "lastConfig": { // Only for `installation.updated` notifications. If the config is too large, it will be omitted and the content will be available in `lastConfigURL`.
+      "read": {
+        "objects": {
+          "account": {
+            "objectName": "account",
+            "destination": "my-old-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    }
+    // "lastConfigURL": "https://example.com/lastconfig.json"
+  }
+}
+```
+</Accordion>
+
+</Note>
+
+<AccordionGroup>
+<Accordion title="Installation events (created, updated, deleted)">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "installation.created",
+  "data": {
+    "projectId": "uuid",
+    "provider": "salesforce",
+    "integrationId": "uuid",
+    "integrationName": "Salesforce Integration",
+    "installationId": "uuid",
+    "connectionId": "uuid",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "config": { //If the config content is too large, the config field will be empty and you can retrieve the content from the URL provided in `configURL`.
+      "read": {
+        "objects": {
+          "account": {
+            "objectName": "account",
+            "destination": "my-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    },
+    "lastConfig": { // Only for `installation.updated` notifications. If the config is too large, it will be omitted and the content will be available in `lastConfigURL`.
+      "read": {
+        "objects": {
+          "account": {
+            "objectName": "account",
+            "destination": "my-old-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    }
+    // "lastConfigURL": "https://example.com/lastconfig.json"
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "provider": "salesforce",
+  "integrationId": "uuid",
+  "integrationName": "Salesforce Integration",
+  "installationId": "uuid",
+  "groupRef": "customer-group-ref",
+  "groupName": "Customer Name",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "config": {
+    "read": {
+      "objects": {
+        "Account": {
+          "objectName": "Account",
+          "destination": "my-webhook",
+          "requiredFields": [...],
+          "optionalFields": [...]
+        }
+      }
+    }
+  }
+}
+```
+
+Note: `config` contains the complete installation configuration object including read, write, subscribe, and proxy settings. `installation.updated` includes an additional `lastConfig` field with the previous configuration.
+</Accordion>
+
+<Accordion title="read.backfill.done">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "read.backfill.done",
+  "data": {
+    "projectId": "uuid",
+    "provider": "salesforce",
+    "integrationId": "uuid",
+    "integrationName": "Salesforce Integration",
+    "installationId": "uuid",
+    "connectionId": "uuid",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "objectName": "Account"
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "provider": "salesforce",
+  "integrationId": "uuid",
+  "integrationName": "Salesforce Integration",
+  "installationId": "uuid",
+  "groupRef": "customer-group-ref",
+  "groupName": "Customer Name",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "objectName": "Account"
+}
+```
+</Accordion>
+
+<Accordion title="read.schedule.paused">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "read.schedule.paused",
+  "data": {
+    "projectId": "uuid",
+    "provider": "salesforce",
+    "integrationId": "uuid",
+    "integrationName": "Salesforce Integration",
+    "installationId": "uuid",
+    "connectionId": "uuid",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "config": {
+      "read": {
+        "objects": {
+          "Account": {
+            "objectName": "Account",
+            "destination": "my-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    },
+    "error": "Error message if applicable"
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "provider": "salesforce",
+  "integrationId": "uuid",
+  "integrationName": "Salesforce Integration",
+  "installationId": "uuid",
+  "groupRef": "customer-group-ref",
+  "groupName": "Customer Name",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "config": {
+    "read": {
+      "objects": {
+        "Account": {
+          "objectName": "Account",
+          "destination": "my-webhook",
+          "requiredFields": [...],
+          "optionalFields": [...]
+        }
+      }
+    }
+  },
+  "error": "Error message if applicable"
+}
+```
+
+Note: `config` contains the complete installation configuration object including read, write, subscribe, and proxy settings.
+</Accordion>
+
+<Accordion title="connection.created">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "connection.created",
+  "data": {
+    "projectId": "uuid",
+    "connectionId": "uuid",
+    "provider": "salesforce",
+    "groupRef": "customer-group-ref",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe"
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "connectionId": "uuid",
+  "provider": "salesforce",
+  "groupRef": "customer-group-ref",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe"
+}
+```
+</Accordion>
+
+<Accordion title="connection.error">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "connection.error",
+  "data": {
+    "projectId": "uuid",
+    "connectionId": "uuid",
+    "provider": "salesforce",
+    "groupRef": "customer-group-ref",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "error": ["error message"]
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "connectionId": "uuid",
+  "provider": "salesforce",
+  "groupRef": "customer-group-ref",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "error": ["error message"]
+}
+```
+
+</Accordion>
+
+<Accordion title="destination.webhook.disabled">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "destination.webhook.disabled",
+  "data": {
+    "projectId": "uuid",
+    "destinationId": "uuid",
+    "destinationName": "production-alerts",
+    "url": "https://your-webhook.com"
+  }
+}
+```
+
+**Kinesis destination payload:**
+```json
+{
+  "projectId": "uuid",
+  "destinationId": "uuid",
+  "destinationName": "production-alerts",
+  "url": "https://your-webhook.com"
+}
+```
+</Accordion>
+</AccordionGroup>
+

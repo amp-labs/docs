@@ -112,12 +112,12 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
         {
           tab: 'Documentation',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            !group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
+            !group.group.match(/^(Introduction|WRITE API|READ API|PLATFORM API)$/)))
         },
         {
           tab: 'API Reference',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            group.group.match(/^(Authentication|WRITE API|READ API|PLATFORM API)$/)))
+            group.group.match(/^(Introduction|WRITE API|READ API|PLATFORM API)$/)))
         }
       ]
     },
@@ -218,6 +218,18 @@ const baseConfig = {
       source: "/glossary",
       destination: "/terminology"
     },
+    {
+      source: "/jwt-auth",
+      destination: "/api/jwt-auth"
+    },
+    {
+      source: "/reference/auth",
+      destination: "/api/key-auth"
+    },
+    {
+      source: "/detect-schema-changes",
+      destination: "/manage-customer-schemas"
+    }
   ],
   footerSocials: {
     linkedin: "https://www.linkedin.com/company/withampersand",
@@ -225,15 +237,17 @@ const baseConfig = {
   },
   navigation: [
     {
-      group: "Getting started",
+      // In order for the group headers on the documentation tab to not be bolded,
+      // we need to nest all of them in a mega-group, but this mega-group shouldn't have a group name.
+      group: " ", // This is intentionally left empty, DO NOT MODIFY.
       pages: [
         {
           group: "Get started",
           pages: [
             "overview",
-            "quickstart",
-            "use-with-ai-ide",
             "concepts",
+            "quickstart",
+            // "use-with-ai-ide",
             "unified-api"
           ]
         },
@@ -241,14 +255,8 @@ const baseConfig = {
         "read-actions",
         "write-actions",
         "proxy-actions",
-        {
-          group: "AI Agents",
-          pages: [
-            "ai-sdk",
-            "mcp-server",
-          ]
-        },
         "object-and-field-mapping",
+        "manage-customer-schemas",
         {
           group: "UI library",
           pages: [
@@ -263,12 +271,20 @@ const baseConfig = {
             "cli/reference"
           ]
         },
+        "manifest-reference",
         {
           group: "Destinations",
           pages: [
             "destinations/overview",
             "destinations/webhooks",
             "destinations/kinesis",
+          ]
+        },
+        {
+          group: "Notifications",
+          pages: [
+            "notifications/overview",
+            "notifications/notification-payloads"
           ]
         },
         {
@@ -279,6 +295,7 @@ const baseConfig = {
             "provider-guides/aha",
             "provider-guides/aircall",
             "provider-guides/airtable",
+            "provider-guides/amplemarket",
             "provider-guides/amplitude",
             "provider-guides/anthropic",
             "provider-guides/apollo",
@@ -289,7 +306,6 @@ const baseConfig = {
             "provider-guides/avoma",
             "provider-guides/aweber",
             "provider-guides/aws",
-            "provider-guides/breakcold",
             "provider-guides/bird",
             "provider-guides/bitbucket",
             "provider-guides/blackbaud",
@@ -298,6 +314,7 @@ const baseConfig = {
             "provider-guides/box",
             "provider-guides/braintree",
             "provider-guides/braze",
+            "provider-guides/breakcold",
             "provider-guides/brevo",
             "provider-guides/bynder",
             "provider-guides/calendly",
@@ -347,12 +364,14 @@ const baseConfig = {
             "provider-guides/gong",
             "provider-guides/google",
             "provider-guides/gorgias",
+            // "provider-guides/greenhouseJobBoard",
             "provider-guides/groove",
             "provider-guides/guru",
             "provider-guides/happyfox",
             "provider-guides/helpScoutMailbox",
             "provider-guides/heyreach",
             "provider-guides/highlevel",
+            "provider-guides/hightouch",
             "provider-guides/hive",
             "provider-guides/hubspot",
             "provider-guides/hunter",
@@ -364,8 +383,8 @@ const baseConfig = {
             "provider-guides/jira",
             "provider-guides/jobber",
             "provider-guides/joinMe",
-            "provider-guides/kaseyaVSAX",
             "provider-guides/jotform",
+            "provider-guides/kaseyaVSAX",
             "provider-guides/keap",
             "provider-guides/kit",
             "provider-guides/klaviyo",
@@ -392,21 +411,25 @@ const baseConfig = {
             "provider-guides/outreach",
             "provider-guides/paddle",
             "provider-guides/paddleSandbox",
+            "provider-guides/phoneBurner",
             "provider-guides/pinterest",
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
-            "provider-guides/pylon",
             "provider-guides/podium",
             "provider-guides/productBoard",
+            "provider-guides/pylon",
             "provider-guides/quickbooks",
             "provider-guides/ramp",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
             "provider-guides/sageIntacct",
+            "provider-guides/salesfinity",
             "provider-guides/salesflare",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
+            "provider-guides/superSend",
+            "provider-guides/segment",
             "provider-guides/seismic",
             "provider-guides/sellsy",
             "provider-guides/sendGrid",
@@ -415,6 +438,8 @@ const baseConfig = {
             "provider-guides/smartlead",
             "provider-guides/smartsheet",
             "provider-guides/snapchatAds",
+            "provider-guides/snowflake",
+            "provider-guides/solarwindsServiceDesk",
             "provider-guides/stripe",
             "provider-guides/surveyMonkey",
             "provider-guides/talkdesk",
@@ -429,28 +454,38 @@ const baseConfig = {
             "provider-guides/xero",
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
-            "provider-guides/zoom"
+            "provider-guides/zoom",
           ]
         },
-        "dev-and-prod-environments",
         {
           group: "Customer guides",
           pages: [
             "customer-guides/overview",
             "customer-guides/salesforce",
+            "customer-guides/loxo",
             "customer-guides/hubspot",
             "customer-guides/marketo",
+            "customer-guides/snowflake",
             "customer-guides/update-connection"
           ]
         },
-        "terminology"
+        "dev-and-prod-environments",
+        "terminology",
+        {
+          group: "AI Agents",
+          pages: [
+            "ai-sdk",
+            "mcp-server",
+          ]
+        },
       ],
     },
     {
-      group: "Authentication",
+      group: "Introduction",
       pages: [
-        "reference/auth",
-        "jwt-auth",
+        "api/overview",
+        "api/key-auth",
+        "api/jwt-auth",
       ],
     },
     {

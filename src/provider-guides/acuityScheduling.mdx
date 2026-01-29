@@ -1,12 +1,42 @@
 ---
 title: "Acuity Scheduling"
 ---
-## What's Supported
+## What's supported
 
-### Supported Actions
+### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental reading is only supported for `appointments`, `availability/classes`, `blocks`. For all other objects, a full read of the Acuity Scheduling instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://acuityscheduling.com`.
+
+### Supported objects
+
+The Acuity Scheduling connector supports reading from the following objects:
+
+- [appointments](https://developers.acuityscheduling.com/reference/get-appointments)
+- [appointment-addons](https://developers.acuityscheduling.com/reference/appointments-addons)
+- [appointment-types](https://developers.acuityscheduling.com/reference/appointment-types)
+- [availability/classes](https://developers.acuityscheduling.com/reference/get-availability-classes)
+- [blocks](https://developers.acuityscheduling.com/reference/blocks)
+- [calendars](https://developers.acuityscheduling.com/reference/get-calendars)
+- [certificates](https://developers.acuityscheduling.com/reference/get-certificates)
+- [clients](https://developers.acuityscheduling.com/reference/clients)
+- [forms](https://developers.acuityscheduling.com/reference/forms)
+- [labels](https://developers.acuityscheduling.com/reference/labels)
+- [orders](https://developers.acuityscheduling.com/reference/get-orders)
+- [products](https://developers.acuityscheduling.com/reference/get-products)
+
+The Acuity Scheduling connector supports writing to the following objects:
+
+- [appointments](https://developers.acuityscheduling.com/reference/post-appointments)
+- [blocks](https://developers.acuityscheduling.com/reference/post-blocks)
+- [certificates](https://developers.acuityscheduling.com/reference/post-certificates)
+- [clients](https://developers.acuityscheduling.com/reference/post-clients)
+
+### Example integration
+
+For an example manifest file of an Acuity Scheduling integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/acuityscheduling/amp.yaml).
 
 ## Before You Get Started
 
@@ -65,3 +95,15 @@ You will see the **Client ID** and **Client Secret** in the app details. Note th
    ![Ampersand Integration](/images/provider-guides/f4bc1a4-acuity3.gif)
 
 7. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Acuity Scheduling:
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.

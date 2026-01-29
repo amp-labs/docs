@@ -87,7 +87,17 @@ Follow the steps below to register a **Microsoft Dynamics 365 CRM** app:
 
    ![Ampersand Project Selection](/images/provider-guides/dynamics-amp.gif)
 
-6. Click **Save Changes**.
+6. In the **Scopes** field, enter the scopes your integration requires.
+
+   <Warning>You must include `offline_access` in the Scopes field. Without it, Ampersand will not receive a refresh token and your customers will need to reauthenticate each time their access token expires.</Warning>
+
+   <Info>
+   Dynamics requires certain scopes to have the resource prefixed to the scope, which in this case is the consumer's instance URL. Ampersand will prefix the instance URL for you, so you only need to provide the scope name.
+
+   For example, if you provide `.default` as the scope name and your customer's Dynamics instance URL is `https://org.crm.dynamics.com`, then Ampersand will transform this scope to be `https://org.crm.dynamics.com/.default`.
+   </Info>
+
+7. Click **Save Changes**.
 
 ## Using the connector
 

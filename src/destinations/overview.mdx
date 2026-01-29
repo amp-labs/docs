@@ -2,15 +2,15 @@
 title: Overview
 ---
 
-Ampersand currently supports webhook destinations. Destinations allow you to define where the data synced from SaaS instances via [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions) is routed to.
+Ampersand currently supports webhook and Kinesis destinations. Destinations allow you to route data synced from SaaS instances via [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), and to receive real-time [Notifications](/notifications) about important lifecycle events in your projects.
 
 ## Add a destination to the Ampersand Dashboard
 
-Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations/new) in the Ampersand Dashboard to add a new Destination. You'll need to provide:
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard to add a new Destination. You'll need to provide:
 * **Destination name**: this is an alias for the destination that you can then refer to in the `amp.yaml` file.
 * **URL**: this is the URL of your webhook destination. It must start with `https`. In the case of webhooks, you can easily create a temporary one using tools like [Hookdeck Console](https://console.hookdeck.com?provider=ampersand).
 
-## Refer to the destination in your integration
+## Using destinations for data delivery
 
 For read and subscribe actions, you can specify destinations for each object. You can either have one destination for each object or route multiple objects to the same destination. Here's what your `amp.yaml` file might look like if you had created 2 destinations in the Ampersand Dashboard, one named `accountWebhook` and one named `contactWebhook`.
 
@@ -28,9 +28,14 @@ integrations:
           destination: contactWebhook
 ```
 
+## Using destinations for notifications
+
+Destinations can also be used to receive [notifications](/notifications) about important lifecycle events in your project, such as when customers install or update integrations, when backfills complete, or when sync issues occur. Notifications use a topic-based routing system where you connect event types to topics, and topics to destinations. See the [Notifications overview](/notifications) for complete setup instructions.
+
 ## Supported destinations
 
 * [Webhook destinations](/destinations/webhooks)
+* [Kinesis destinations](/destinations/kinesis)
 
 ## Other Destinations
 
@@ -39,4 +44,8 @@ We have many other destination types on the roadmap, including:
 * Postgres
 * Ampersand-hosted Postgres
 * Amazon S3
+* Amazon SQS
 * Google Cloud Storage
+* Google PubSub
+* RabbitMQ
+* Azure Service Bus

@@ -7,7 +7,37 @@ title: "Snapchat Ads"
 ### Supported Actions
 
 This connector supports:
-* **Proxy Actions**, using the base URL `https://adsapi.snapchat.com`.
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is only supported for the `transactions` object.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://adsapi.snapchat.com`.
+
+### Supported Objects
+
+The Snapchat Ads connector supports writing to and reading from the following objects:
+- [fundingsources](https://developers.snap.com/api/marketing-api/Ads-API/funding-sources) (read)
+- [billingcenters](https://developers.snap.com/api/marketing-api/Ads-API/billing-centers) (read, write)
+- [transactions](https://developers.snap.com/api/marketing-api/Ads-API/transactions) (read)
+- [adaccounts](https://developers.snap.com/api/marketing-api/Ads-API/ad-accounts) (read, write)
+- [members](https://developers.snap.com/api/marketing-api/Ads-API/members) (read, write)
+- [roles](https://developers.snap.com/api/marketing-api/Ads-API/roles) (read, write)
+- [targeting/demographics/age_group](https://developers.snap.com/api/marketing-api/Ads-API/targeting#demographics---age-groups) (read)
+- [targeting/demographics/gender](https://developers.snap.com/api/marketing-api/Ads-API/targeting#demographics---gender) (read)
+- [targeting/demographics/languages](https://developers.snap.com/api/marketing-api/Ads-API/targeting#demographics---language) (read)
+- [targeting/demographics/advanced_demographics](https://developers.snap.com/api/marketing-api/Ads-API/targeting#demographics---advanced-demographics) (read)
+- [targeting/device/connection_type](https://developers.snap.com/api/marketing-api/Ads-API/targeting#device---connection-type) (read)
+- [targeting/device/os_type](https://developers.snap.com/api/marketing-api/Ads-API/targeting#device---os-type) (read)
+- [targeting/device/carrier](https://developers.snap.com/api/marketing-api/Ads-API/targeting#device---carrier) (read)
+- [targeting/device/marketing_name](https://developers.snap.com/api/marketing-api/Ads-API/targeting#device---make) (read)
+- [targeting/geo/country](https://developers.snap.com/api/marketing-api/Ads-API/targeting#geolocation---country) (read)
+- [targeting/interests/dlxs](https://developers.snap.com/api/marketing-api/Ads-API/targeting#interests---oracle-datalogix-dlx) (read)
+- [targeting/interests/dlxc](https://developers.snap.com/api/marketing-api/Ads-API/targeting#get-oracle-datalogix-dlxc-interest-targeting-options) (read)
+- [targeting/interests/dlxp](https://developers.snap.com/api/marketing-api/Ads-API/targeting#get-oracle-datalogix-dlxp-interest-targeting-options) (read)
+- [targeting/interests/nln](https://developers.snap.com/api/marketing-api/Ads-API/targeting#get-nielsen-interest-targeting-options) (read)
+- [targeting/location/categories_loi](https://developers.snap.com/api/marketing-api/Ads-API/targeting#location---categories) (read)
+
+### Example Integration
+
+For an example manifest file of a Snapchat Ads integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/snapchatAds/amp.yaml).
 
 ## Before You Get Started
 
@@ -57,3 +87,15 @@ You will see the **Client ID** and **Client Secret** for your new app. Note thes
 
 6. Enter the scopes set for your application in _Snapchat_.
 7. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Snapchat Ads:
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/snapchatAds/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.

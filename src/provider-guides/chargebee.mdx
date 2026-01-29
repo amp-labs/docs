@@ -1,27 +1,105 @@
 ---
 title: Chargebee
 ---
+
 ## What's supported
 
 ### Supported actions
 
 This connector supports:
-- [Proxy Actions](/proxy-actions), using the base URL `https://{{.site}}.chargebee.com/api`.
+- [Read Actions](/read-actions), including full historic backfill.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.chargebee.com/api`.
+
+
+
+### Supported objects
+
+The Chargebee connector supports reading from the following objects:
+- [attached_items](https://apidocs.chargebee.com/docs/api/attached_items)
+- [business_entities/transfers](https://apidocs.chargebee.com/docs/api/business_entities)
+- [comments](https://apidocs.chargebee.com/docs/api/comments)
+- [coupon_codes](https://apidocs.chargebee.com/docs/api/coupon_codes)
+- [coupon_sets](https://apidocs.chargebee.com/docs/api/coupon_sets)
+- [coupons](https://apidocs.chargebee.com/docs/api/coupons)
+- [credit_notes](https://apidocs.chargebee.com/docs/api/credit_notes)
+- [currencies](https://apidocs.chargebee.com/docs/api/currencies)
+- [customers](https://apidocs.chargebee.com/docs/api/customers)
+- [entitlements](https://apidocs.chargebee.com/docs/api/entitlements)
+- [events](https://apidocs.chargebee.com/docs/api/events)
+- [features](https://apidocs.chargebee.com/docs/api/features)
+- [gifts](https://apidocs.chargebee.com/docs/api/gifts)
+- [hosted_pages](https://apidocs.chargebee.com/docs/api/hosted_pages)
+- [invoices](https://apidocs.chargebee.com/docs/api/invoices)
+- [item_families](https://apidocs.chargebee.com/docs/api/item_families)
+- [item_prices](https://apidocs.chargebee.com/docs/api/item_prices)
+- [items](https://apidocs.chargebee.com/docs/api/items)
+- [omnichannel_one_time_orders](https://apidocs.chargebee.com/docs/api/omnichannel_transactions)
+- [omnichannel_subscriptions](https://apidocs.chargebee.com/docs/api/omnichannel_subscriptions)
+- [orders](https://apidocs.chargebee.com/docs/api/orders)
+- [payment_sources](https://apidocs.chargebee.com/docs/api/payment_sources)
+- [plans](https://apidocs.chargebee.com/docs/api/plans)
+- [promotional_credits](https://apidocs.chargebee.com/docs/api/promotional_credits)
+- [quotes](https://apidocs.chargebee.com/docs/api/quotes)
+- [subscriptions](https://apidocs.chargebee.com/docs/api/subscriptions)
+- [transactions](https://apidocs.chargebee.com/docs/api/transactions)
+- [unbilled_charges](https://apidocs.chargebee.com/docs/api/unbilled_charges)
+- [usages](https://apidocs.chargebee.com/docs/api/usages)
+- [virtual_bank_accounts](https://apidocs.chargebee.com/docs/api/virtual_bank_accounts)
+- [webhook_endpoints](https://apidocs.chargebee.com/docs/api/webhook_endpoints)
+
+### Objects supporting incremental read:
+  - `coupons`
+  - `credit_notes`
+  - `customers`
+  - `hosted_pages`
+  - `invoices`
+  - `item_prices`
+  - `items`
+  - `orders`
+  - `payment_sources`
+  - `quotes`
+  - `subscriptions`
+  - `transactions`
+  - `usages`
+  - `virtual_bank_accounts`
+
+  For all other objects, a full read of the Chargebee instance will be done per scheduled read.
+
+
+The Chargebee connector supports writing to the following objects:
+- [comments](https://apidocs.chargebee.com/docs/api/comments)
+- [coupons](https://apidocs.chargebee.com/docs/api/coupons)
+- [coupon_sets](https://apidocs.chargebee.com/docs/api/coupon_sets)
+- [credit_notes](https://apidocs.chargebee.com/docs/api/credit_notes)
+- [currencies](https://apidocs.chargebee.com/docs/api/currencies)
+- [customers](https://apidocs.chargebee.com/docs/api/customers)
+- [estimates](https://apidocs.chargebee.com/docs/api/estimates)
+- [features](https://apidocs.chargebee.com/docs/api/features)
+- [invoices](https://apidocs.chargebee.com/docs/api/invoices)
+- [item_families](https://apidocs.chargebee.com/docs/api/item_families)
+- [item_prices](https://apidocs.chargebee.com/docs/api/item_prices)
+- [items](https://apidocs.chargebee.com/docs/api/items)
+- [offer_events](https://apidocs.chargebee.com/docs/api/offer_events)
+- [offer_fulfillments](https://apidocs.chargebee.com/docs/api/offer_fulfillments)
+- [orders](https://apidocs.chargebee.com/docs/api/orders)
+- [payment_intents](https://apidocs.chargebee.com/docs/api/payment_intents)
+- [payment_schedule_schemes](https://apidocs.chargebee.com/docs/api/payment_schedule_schemes)
+- [payment_vouchers](https://apidocs.chargebee.com/docs/api/payment_vouchers)
+- [portal_sessions](https://apidocs.chargebee.com/docs/api/portal_sessions)
+- [promotional_credits](https://apidocs.chargebee.com/docs/api/promotional_credits)
+- [quotes](https://apidocs.chargebee.com/docs/api/quotes)
+- [recorded_purchases](https://apidocs.chargebee.com/docs/api/recorded_purchases)
+- [transactions](https://apidocs.chargebee.com/docs/api/transactions)
+- [unbilled_charges](https://apidocs.chargebee.com/docs/api/unbilled_charges)
+- [virtual_bank_accounts](https://apidocs.chargebee.com/docs/api/virtual_bank_accounts)
+- [webhook_endpoints](https://apidocs.chargebee.com/docs/api/webhook_endpoints)
+
 
 ### Example integration
 
-To define an integration for Bird (MessageBird), create a manifest file that looks like this:
+For an example manifest file of a Chargebee integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/chargebee/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: chargebee-integration
-    displayName: My Chargebee Integration
-    provider: chargebee
-    proxy:
-      enabled: true
-```
 
 ## Using the connector
 
