@@ -7,9 +7,23 @@ title: "Shopify"
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Incremental read support varies by object; if incremental read isn’t available for an object, scheduled reads will perform a full refresh for that object.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.myshopify.com`.
 
+### Supported objects
+
+The Shopify connector supports reading from and writing to the following objects:
+
+- [customers](https://shopify.dev/docs/api/admin-rest/latest/resources/customer)
+- [orders](https://shopify.dev/docs/api/admin-rest/latest/resources/order)
+- [products](https://shopify.dev/docs/api/admin-rest/latest/resources/product)
+
+For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/reference/objects-&-fields/get-object-metadata-for-connection) to inspect what’s available for a specific connection.
+
 ## Example integration
+
+For an example manifest file of a Shopify integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/shopify/amp.yaml).
 
 To define an integration for Shopify, create a manifest file that looks like this:
 
@@ -20,6 +34,34 @@ integrations:
   - name: shopify-integration
     displayName: My Shopify integration
     provider: shopify
+    read:
+      objects:
+        - objectName: customers
+          destination: defaultWebhook
+          schedule: "*/30 * * * *"
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+        - objectName: orders
+          destination: defaultWebhook
+          schedule: "*/30 * * * *"
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+        - objectName: products
+          destination: defaultWebhook
+          schedule: "*/30 * * * *"
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+    write:
+      objects:
+        - objectName: customers
+          inheritMapping: true
+        - objectName: products
+          inheritMapping: true
+        - objectName: orders
+          inheritMapping: true
     proxy:
       enabled: true
 ```
@@ -28,7 +70,7 @@ integrations:
 
 To connect Shopify with Ampersand, you will need:
 - A Shopify Partner account (to create an app): [Shopify Partners](https://partners.shopify.com/)
-- A Shopify store to install and test the app (a development store is fine)
+- A Shopify store to install and test the app (a development store is fine). See Shopify’s [development stores documentation](https://shopify.dev/docs/apps/build/development-stores).
 
 ## Create a Shopify app
 
@@ -36,22 +78,29 @@ Shopify uses OAuth 2.0 (authorization code grant) for apps created in the Partne
 
 1. Log in to the [Shopify Partners portal](https://partners.shopify.com/) and open **Apps**.
 2. Click **Create app** and choose the app type that matches your use case.
+![Create a Shopify app](/images/provider-guides/shopify-create-app.png)
 3. In your app settings, configure the OAuth redirect URL:
    - `https://api.withampersand.com/callbacks/v1/oauth`
 4. Configure the access scopes your integration needs.
 5. Save the app and note the **Client ID** and **Client Secret**.
 
+
 ### Protected customer data / approvals
 
-Some Shopify scopes and objects (for example, customer data) may require additional approval and configuration. If you see errors like “This app is not approved to access the Customer object”, review Shopify’s protected customer data requirements and ensure your app is eligible for the data you’re requesting.
+Some Shopify scopes and objects (for example, customer data) may require additional approval and configuration. If you see errors like “This app is not approved to access the Customer object”, review Shopify’s [protected customer data requirements](https://shopify.dev/docs/apps/launch/protected-customer-data) and ensure your app is eligible for the data you’re requesting.
+
+If your integration needs access to older orders, Shopify may require additional scopes (for example, `read_all_orders`). See Shopify’s [Orders API documentation](https://shopify.dev/docs/api/admin-rest/latest/resources/order) for details.
 
 ## Add your Shopify app info to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 2. Select the project where you want to create a Shopify integration.
+![Ampersand Project Selection](/images/provider-guides/dd47b7a-Ampersand.png)
 3. Select **Provider apps**.
 4. Select _Shopify_ from the **Provider** list.
 5. Enter the **Client ID** and **Client Secret** from your Shopify app and click **Save changes**.
+
+
 
 ## Required metadata
 
@@ -64,7 +113,17 @@ The Shopify connector requires the store name (subdomain) to be provided as `wor
 ## Using the connector
 
 To start integrating with Shopify:
-- Create a manifest file like the example above.
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/shopify/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer to connect their Shopify store via OAuth.
-- Start making [Proxy Calls](/proxy-actions). Ampersand will automatically attach the OAuth credentials for the connected store.
+- If your integration has [Read Actions](/read-actions), you’ll start getting webhook messages.
+- If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+- If your integration has [Proxy Actions](/proxy-actions), start making Proxy API calls. Ampersand will automatically attach the OAuth credentials for the connected store.
+
+## List on the Shopify App Store (optional)
+
+If you plan to distribute your app publicly (beyond a single merchant/store), you may need to submit it for review and create an App Store listing.
+
+- Review Shopify’s [App Store requirements](https://shopify.dev/docs/apps/launch/shopify-app-store/app-store-requirements)
+- Follow Shopify’s steps to [submit your app for review](https://shopify.dev/docs/apps/launch/app-store-review/submit-app-for-review)
