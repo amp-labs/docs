@@ -205,7 +205,7 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
     
     // Ampersand: Data arrives in webhook
     app.post('/webhook/contacts', async (req, res) => {
-      const { mappedFields, fields, raw } = req.body.result;
+      const { mappedFields, fields, raw } = req.body.result[0];
       await db.contacts.upsert({
         ...mappedFields,
         ...fields,
@@ -220,20 +220,20 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
     ```yaml
     subscribe:
       objects:
-        - objectName: contact
+        - objectName: opportunity
           inheritFieldsAndMapping: true
           updateEvent:
             enabled: always
             requiredWatchFields:
-              - email
-              - status
+              - amount
+              - stage
     ```
-    
+
     Handle events in your webhook:
     ```javascript
     const { subscribeEventType, mappedFields } = req.body.result[0];
-    
-    if (subscribeEventType === 'update' && mappedFields.status === 'closed-won') {
+
+    if (subscribeEventType === 'update' && mappedFields.stage === 'closed-won') {
       await triggerSalesWorkflow(mappedFields);
     }
     ```
