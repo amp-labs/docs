@@ -61,8 +61,10 @@ If you need to modify these settings:
 ### 4. Ensure sufficient permissions for installing user
 
 The user that installs the Salesforce integration should either be:
-- a System Administrator
-- or a user that has been assigned a user profile with sufficient permissions, it is best to create a new custom user profile for this purpose.
+- a System Administrator. Please note that you still need to ensure that the System Admin has the correct object and field level permissions, they may not be granted by default.
+- a user with the *Salesforce* User License and the necessary permissions as specified below. This user can either have a standard user profile (such as "Standard User") or a custom user profile.
+- a integration user. This type of user is specifically for integrations, and does not have access to the Salesforce UI.
+
 
 #### A. Create a custom user profile
 
@@ -135,3 +137,41 @@ Ensure that the following permissions are checked in the user profile:
 ![Check Visible for profile](/images/customer-guides/salesforceFieldSecurity3.png)
 
 7. Repeat steps 4-6 for all the fields that the integration needs to read, especially custom fields.
+
+## Using API user
+
+Create a new user
+
+Create a Permission Set
+
+Configure system permissions
+
+Configure object permissions
+
+Assign permission set to integration user
+
+
+
+## Terminology
+
+### User profile
+
+A **user profile** is a collection of settings that determines what objects, fields, and features a user can access in Salesforce. Each user has exactly one profile. Profiles also control default settings such as assigned apps, record types, and page layouts. Standard profiles (e.g. Standard User, System Administrator) are provided by Salesforce; you can also create custom profiles by cloning an existing one. A profile is always associated with a **user license**—when you create a custom profile, you clone from a profile that uses a specific license (e.g. Salesforce User License).
+
+### License
+
+A **license** is the agreement between Salesforce and your organization that defines which features and services are available to your org. License definitions describe both org-wide functionality (e.g. platform limits, custom object capacity) and user-level access. **User licenses** are assigned to individual users—one per user—and determine the baseline functionality they can use (e.g. Full CRM, Chatter Free). **Permission set licenses** (from add-ons) can be assigned in addition to a user license to grant access to extra features. Your org’s licenses also specify limits such as how many users can access Salesforce and how many custom objects you can create.
+
+### Permission set
+
+A **permission set** is a collection of permissions that you assign to users to grant access to specific objects, fields, and capabilities without changing their profile. Users can have only one profile but multiple permission sets. Permission sets are the recommended way to manage object, field, and user permissions—for example, to grant access needed for a particular task (e.g. managing leads) or to extend access for users who share a profile but need different capabilities. Some permission sets require a **permission set license** (from an add-on) to be assigned before you can assign the permission set to a user.
+
+### How they work together
+
+**Licenses** define what is available to your org and to each user. Every user has exactly one **user license**, which dictates the type of access they can have (e.g. full CRM vs. Chatter-only).
+
+**Profiles** are built on top of user licenses. Each user has exactly one profile, which must use that user’s license. The profile sets their base permissions, default apps, record types, and page layouts.
+
+**Permission sets** add to a user’s access without changing their profile. A user can have many permission sets. They extend the permissions from the profile—for example, to support a specific role or task—and are the main way to give different access to users who share the same profile. If a permission is enabled in either the profile or any assigned permission set, the user has it.
+
+In short: **license** → **profile** (one per user, defines base access) → **permission sets** (zero or more, add on top).
