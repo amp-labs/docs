@@ -27,6 +27,10 @@ You then need to specify the particular events you want to subscribe to. We supp
 
 - **deleteEvent**: triggers when a record is removed from the system.
 
+- **associationChangeEvent**: triggers when a record's associations have been modified. This is only supported for HubSpot. Please see [Association changes](#association-changes).
+
+- **otherEvents**: gives you the ability that listen to any other events that are available in the provide API that Ampersand doesn't natively support. Please see [Other Events](#other-events).
+
 ### Specify fields to watch
 You can provide fields to watch for update events and specify them in a list.
 
@@ -70,12 +74,93 @@ integrations:
           optionalFields:
             - fieldName: annualrevenue
             - fieldName: website
-        ...
-    write:
-      ...
 ```
 
 For an example of a webhook message delivered according to the above `amp.yaml`, please see [Subscribe action webhooks](/destinations/webhooks#subscribe-action-webhooks).
+
+### Association changes
+
+In HubSpot, association changes do not trigger update events, you must subscribe to them specifically using `associationChangeEvent`. On the other hand, in Salesforce, you can subscribe to fields that refer to associations (e.g. You can subscribe to update events on the `accountid` field of contacts).
+
+HubSpot example:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: hubspotAssociation
+    provider: hubspot
+    subscribe:
+      objects:
+        - objectName: contacts
+          destination: contactsWebhook
+          inheritFieldsAndMapping: true
+          associationChangeEvent:
+            enabled: always
+            # Whether we should retrieve the associated record
+            includeFullRecords: true
+    read: # Read action is required
+      objects:
+        - objectName: contacts
+          destination: contactsWebhook
+          ...
+```
+
+Salesforce example:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceAssociation
+    provider: salesforce
+    subscribe:
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          inheritFieldsAndMapping: true
+          updateEvent:
+            enabled: always
+            requiredWatchFields:
+              - accountid
+    read: # Read action is required
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          ...
+```
+
+### Other events
+
+Beyond the standard events that Amperand supports, you have the ability to subscribe to any other event that that underlying platform supports.
+
+For Salesforce this includes [events like](https://developer.salesforce.com/docs/atlas.en-us.change_data_capture.meta/change_data_capture/cdc_event_fields_header.htm):
+- `UNDELETE`
+
+For HubSpot, this includes [events like](https://developers.hubspot.com/docs/api-reference/webhooks-webhooks-v3/guide#webhook-subscriptions):
+- `{OBJECT_NAME}.restore` (e.g. `contact.restore`)
+- `{OBJECT_NAME}.merge` (e.g. `contact.merge`)
+
+To listen to these other events, add `otherEvents` to your amp.yaml file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: subscribeToSalesforce
+    provider: salesforce
+    subscribe:
+      objects:
+        - objectName: account
+          destination: accountWebhook
+          inheritFieldsAndMapping: true
+          createEvent:
+            enabled: always
+          otherEvents:
+            - UNDELETE
+    read: # Read action is required
+      objects:
+        - objectName: account
+          destination: accountWebhook
+          ...
+```
 
 ### Specify backfill behavior
 
