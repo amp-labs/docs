@@ -40,16 +40,18 @@ This guide covers one of Ampersand's use cases: building unified APIs. You can a
 
 ### 2. Receive unified + raw data
 
-Every webhook includes both your unified fields and the complete provider response:
+Every webhook includes your mapped fields, non-mapped fields, and the complete provider response:
 
 ```json
 {
   "mappedFields": {
-    "remote_id": "001abc",
     "company_name": "Acme Corp",
-    "revenue": 5000000,
-    "remote_created_at": "2024-01-15",
-    "remote_updated_at": "2024-08-23"
+    "revenue": 5000000
+  },
+  "fields": {
+    "id": "001abc",
+    "createddate": "2024-01-15T10:30:00Z",
+    "systemmodstamp": "2024-08-23T14:20:07Z"
   },
   "raw": {
     "Id": "001abc",
@@ -57,7 +59,7 @@ Every webhook includes both your unified fields and the complete provider respon
     "AnnualRevenue": 5000000,
     "CreatedDate": "2024-01-15T10:30:00Z",
     "SystemModstamp": "2024-08-23T14:20:07Z",
-    "Custom_Field__c": "value"  // All fields available
+    "Custom_Field__c": "value"
   }
 }
 ```
@@ -203,9 +205,10 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
     
     // Ampersand: Data arrives in webhook
     app.post('/webhook/contacts', async (req, res) => {
-      const { mappedFields, raw } = req.body.result;
+      const { mappedFields, fields, raw } = req.body.result;
       await db.contacts.upsert({
         ...mappedFields,
+        ...fields,
         providerData: raw
       });
       res.sendStatus(200);
