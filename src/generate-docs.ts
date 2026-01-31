@@ -329,6 +329,7 @@ const baseConfig = {
             "provider-guides/clariCopilot",
             "provider-guides/clickup",
             "provider-guides/close",
+            "provider-guides/cloudtalk",
             "provider-guides/coda",
             "provider-guides/constantContact",
             "provider-guides/copper",
