@@ -1,17 +1,28 @@
 ---
 title: "Salesforce"
 ---
-## What's Supported
-
-### Supported Actions
 
 The Salesforce connector supports:
+- **CRM**
+- **Account Engagement** (formerly Pardot)
+
+## What's Supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.my.salesforce.com`.
+
+The **CRM** module supports:
 - [Read Actions](/read-actions), including full historic backfill and incremental read.
 - [Subscribe Actions](/subscribe-actions).
 - [Write Actions](/write-actions), including Bulk Write.
-- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.my.salesforce.com`.
 
-### Supported Objects
+The **Account Engagement** module supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions).
+
+### Supported CRM objects
 
 export const Check = () => <span>✅</span>
 export const Cross = () => <span>🚫</span>
@@ -46,15 +57,74 @@ export const Maybe = () => <span>🟡</span>
 
 _* Only some standard objects are available for subscribe action. Check here for the [full list](https://developer.salesforce.com/docs/atlas.en-us.change_data_capture.meta/change_data_capture/cdc_object_support.htm) of supported objects._
 
-For each of these objects, the connector supports:
+For each of these CRM objects, the connector supports:
 - Standard fields
-- Custom fields 
+- Custom fields
 
-### Example Integration
+### Supported Account Engagement Objects
 
-For an example manifest file of a Salesforce integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml).
+The Salesforce connector supports the following **Account Engagement** module objects:
 
-## Before You Get Started
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+      <th style={{width: '20%'}}>Read</th>
+      <th style={{width: '20%'}}>Write</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/campaign-v5.html">campaigns</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/custom-redirect-v5.html">custom-redirects</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/dynamic-content-v5.html">dynamic-contents</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/dynamic-content-variation.html">dynamic-content-variations</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/email-template-v5.html">email-templates</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/email-v5.html">emails</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/engagement-studio-program-v5.html">engagement-studio-programs</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/file-v5.html">files</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/folder-contents-v5.html">folder-contents</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/folder-v5.html">folders</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/form-field-v5.html">form-fields</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/form-handler-field-v5.html">form-handler-fields</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/form-handler-v5.html">form-handlers</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/form-v5.html">forms</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/landing-page-v5.html">landing-pages</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/layout-template-v5.html">layout-templates</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/lifecycle-history-v5.html">lifecycle-histories</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/lifecycle-stage-v5.html">lifecycle-stages</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/list-email-v5.html">list-emails</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/list-membership-v5.html">list-memberships</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/list-v5.html">lists</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/opportunity-v5.html">opportunities</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/prospect-account-v5.html">prospect-accounts</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/prospect-v5.html">prospects</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/tag-v5.html">tags</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/tagged-object-v5.html">tagged-objects</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/tracker-domain-v5.html">tracker-domains</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/user-v5.html">users</a></td><td><Check/></td><td><Check/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/visit-v5.html">visits</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/visitor-activity-v5.html">visitor-activities</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/visitor-page-view-v5.html">visitor-page-views</a></td><td><Check/></td><td><Cross/></td></tr>
+      <tr style={{ display: 'table-row' }}><td style={{textAlign: 'left'}}><a href="https://developer.salesforce.com/docs/marketing/pardot/guide/visitor-v5.html">visitors</a></td><td><Check/></td><td><Cross/></td></tr>
+    </tbody>
+  </table>
+</div>
+
+### Example integration
+
+Example manifest files can be found in our samples repository on GitHub:
+- [Salesforce CRM example](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml)
+- [Salesforce Account Engagement example](https://github.com/amp-labs/samples/blob/main/salesforce-account-engagement-demo/amp.yaml)
+
+## Before you get started
 
 To integrate Salesforce with Ampersand, you need to Create a Salesforce Account and obtain the following credentials from a Salesforce Connected App:
 
@@ -111,11 +181,11 @@ To create Salesforce integrations with Ampersand, you'll need to first create a 
 
 Now that you have created a Connected App in Salesforce, you can obtain your Consumer Key and Consumer Secret. These credentials will be used in the next step, where you will [connect your application to Ampersand](https://docs.withampersand.com/docs/salesforce-guide#connecting--salesforce-to-ampersand) .
 
-In the **Platform Tools >> Apps >> App Manager** section, find your newly created connected App and follow the steps below to obtain Consumer Key and Consumer Secret. 
+In the **Platform Tools >> Apps >> App Manager** section, find your newly created connected App and follow the steps below to obtain Consumer Key and Consumer Secret.
 
 1. Click the dropdown arrow next to your app and select **View**.
 2. Click **Manage Consumer Details**.
-3. Complete the verification and you will be able to access the **Consumer Key** and **Consumer Secret**. 
+3. Complete the verification and you will be able to access the **Consumer Key** and **Consumer Secret**.
 
 Copy these keys and use them in the next step to connect Salesforce to Ampersand.
 
@@ -129,7 +199,7 @@ Copy these keys and use them in the next step to connect Salesforce to Ampersand
 
 3. Select **Provider apps**.
 
-4. Select _Salesforce_ from the **Provider** list. 
+4. Select _Salesforce_ from the **Provider** list.
 
 5. Enter the previously obtained _Consumer Key_ in the **Client ID** field and the _Consumer Secret_ in the **Client Secret** field.
 
@@ -139,7 +209,7 @@ Copy these keys and use them in the next step to connect Salesforce to Ampersand
 
 <br />
 
-> ℹ️ If you lose these keys, you can regenerate them by editing the Connected App in Salesforce and selecting **Regenerate Consumer Secret**.
+> ℹ️ If you lose the Consumer Key or Secret, you can regenerate them by editing the Connected App in Salesforce and selecting **Regenerate Consumer Secret**.
 
 ## Using the connector
 
