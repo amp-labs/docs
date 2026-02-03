@@ -451,6 +451,40 @@
                       }
                     }
                   ]
+                },
+                "examples": {
+                  "single-success": {
+                    "summary": "Single record success",
+                    "value": {
+                      "operationId": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4",
+                      "result": {
+                        "success": true,
+                        "recordId": "003xx000001",
+                        "data": {
+                          "email": "david@withampersand.com",
+                          "warmthScore": "ready-for-close"
+                        }
+                      }
+                    }
+                  },
+                  "batch-success": {
+                    "summary": "Batch success",
+                    "value": {
+                      "operationId": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4",
+                      "successCount": 2,
+                      "failureCount": 0,
+                      "results": [
+                        {
+                          "success": true,
+                          "recordId": "003xx000001"
+                        },
+                        {
+                          "success": true,
+                          "recordId": "003xx000002"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -628,6 +662,35 @@
                       }
                     }
                   ]
+                },
+                "examples": {
+                  "single-fail": {
+                    "summary": "Single record failure",
+                    "value": {
+                      "operationId": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4",
+                      "errors": [
+                        {
+                          "message": "The record with ID 003xx000001 was not found"
+                        }
+                      ],
+                      "result": {
+                        "success": false
+                      }
+                    }
+                  },
+                  "batch-fail": {
+                    "summary": "Batch failure",
+                    "value": {
+                      "operationId": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4",
+                      "successCount": 0,
+                      "failureCount": 2,
+                      "errors": [
+                        {
+                          "message": "Batch write failed: provider rolled back all records"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
