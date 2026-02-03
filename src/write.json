@@ -13,7 +13,7 @@
     "/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}": {
       "post": {
         "summary": "Write records",
-        "description": "Create or update records in a SaaS instance, synchronously or asynchronously. See [Write actions](https://docs.withampersand.com/write-actions) for details.",
+        "description": "Create, update, or delete records in a SaaS instance. Create and update support synchronous or asynchronous mode; delete is synchronous only. See [Write actions](https://docs.withampersand.com/write-actions) for details.",
         "operationId": "writeRecords",
         "tags": [
           "Write"
@@ -63,10 +63,11 @@
                   },
                   "type": {
                     "type": "string",
-                    "description": "The type of write operation. The only supported types currently are create and update.",
+                    "description": "The type of write operation. The only supported types currently are create, update, and delete.",
                     "enum": [
                       "create",
-                      "update"
+                      "update",
+                      "delete"
                     ],
                     "example": "create"
                   },
@@ -95,7 +96,7 @@
                   },
                   "autoBatchPolicy": {
                     "type": "object",
-                    "description": "The auto-batch policy for asynchronous single-record write operations. When enabled, multiple single-record \nwrite requests are automatically grouped together and executed as a batch. The batch executes when either \n100 records accumulate or the maximum delay time expires. Only available for asynchronous mode and single-record writes.\n",
+                    "description": "The auto-batch policy for asynchronous single-record write operations. When enabled, multiple single-record write requests are automatically grouped together and executed as a batch. The batch executes when either 100 records accumulate or the maximum delay time expires. \nAuto batching is currently only available for asynchronous mode and single-record writes.\n",
                     "properties": {
                       "maxDelayMinutes": {
                         "type": "integer",
@@ -119,7 +120,7 @@
                   },
                   "record": {
                     "type": "object",
-                    "description": "The record to write. Use this for single record mode. Exactly one of 'record' or 'batch' must be provided.",
+                    "description": "The record to write. Use this when sending a single record. Omit this and use `batch` instead when sending multiple records in one request.\nFor create and update, include the record fields. For delete, only the record `id` is required; deletion must be enabled for this object in the installation config.\n",
                     "additionalProperties": true,
                     "example": {
                       "email": "david@withampersand.com",
@@ -128,7 +129,7 @@
                   },
                   "batch": {
                     "type": "array",
-                    "description": "Multiple records to write (batch mode). Supports 1-100 records per batch. Partial writes are not supported. If any record in a batch is invalid, all records in the batch will fail. Exactly one of 'record' or 'batch' must be provided.",
+                    "description": "Write 1–100 records in one request. Omit this and use `record` instead when sending a single record.\nPartial writes are not supported; if any record in the batch is invalid, the entire batch fails.\nBatch is currently supported for create and update write requests.\n",
                     "minItems": 1,
                     "maxItems": 100,
                     "items": {
@@ -215,6 +216,106 @@
                         "value": "custom-header-value2"
                       }
                     ]
+                  }
+                }
+              },
+              "examples": {
+                "single-create": {
+                  "summary": "Single record create",
+                  "value": {
+                    "groupRef": "<groupRef>",
+                    "type": "create",
+                    "mode": "synchronous",
+                    "record": {
+                      "email": "david@withampersand.com",
+                      "warmthScore": "ready-for-close"
+                    }
+                  }
+                },
+                "single-create-associations": {
+                  "summary": "Single create with associations (HubSpot)",
+                  "value": {
+                    "groupRef": "<groupRef>",
+                    "type": "create",
+                    "mode": "synchronous",
+                    "record": {
+                      "email": "david@withampersand.com",
+                      "warmthScore": "ready-for-close"
+                    },
+                    "associations": [
+                      {
+                        "to": {
+                          "id": "18417469260"
+                        },
+                        "types": [
+                          {
+                            "associationCategory": "HUBSPOT_DEFINED",
+                            "associationTypeId": 279
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "single-update": {
+                  "summary": "Single record update",
+                  "value": {
+                    "groupRef": "<groupRef>",
+                    "type": "update",
+                    "mode": "synchronous",
+                    "record": {
+                      "id": "003xx000001",
+                      "email": "david@withampersand.com",
+                      "warmthScore": "ready-for-close"
+                    }
+                  }
+                },
+                "single-delete": {
+                  "summary": "Single record delete",
+                  "value": {
+                    "groupRef": "<groupRef>",
+                    "type": "delete",
+                    "record": {
+                      "id": "003xx000001"
+                    }
+                  }
+                },
+                "batch-create": {
+                  "summary": "Batch create",
+                  "value": {
+                    "groupRef": "<groupRef>",
+                    "type": "create",
+                    "mode": "synchronous",
+                    "batch": [
+                      {
+                        "record": {
+                          "email": "david@withampersand.com",
+                          "warmthScore": "ready-for-close"
+                        }
+                      },
+                      {
+                        "record": {
+                          "email": "hermione@withampersand.com",
+                          "warmthScore": "ready-for-close"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "auto-batch-create": {
+                  "summary": "Async create with auto-batch policy",
+                  "value": {
+                    "groupRef": "<groupRef>",
+                    "type": "create",
+                    "mode": "asynchronous",
+                    "autoBatchPolicy": {
+                      "maxDelayMinutes": 5,
+                      "retryDeadlineHours": 2
+                    },
+                    "record": {
+                      "email": "david@withampersand.com",
+                      "warmthScore": "ready-for-close"
+                    }
                   }
                 }
               }
@@ -686,10 +787,11 @@
           },
           "type": {
             "type": "string",
-            "description": "The type of write operation. The only supported types currently are create and update.",
+            "description": "The type of write operation. The only supported types currently are create, update, and delete.",
             "enum": [
               "create",
-              "update"
+              "update",
+              "delete"
             ],
             "example": "create"
           },
@@ -718,7 +820,7 @@
           },
           "autoBatchPolicy": {
             "type": "object",
-            "description": "The auto-batch policy for asynchronous single-record write operations. When enabled, multiple single-record \nwrite requests are automatically grouped together and executed as a batch. The batch executes when either \n100 records accumulate or the maximum delay time expires. Only available for asynchronous mode and single-record writes.\n",
+            "description": "The auto-batch policy for asynchronous single-record write operations. When enabled, multiple single-record write requests are automatically grouped together and executed as a batch. The batch executes when either 100 records accumulate or the maximum delay time expires. \nAuto batching is currently only available for asynchronous mode and single-record writes.\n",
             "properties": {
               "maxDelayMinutes": {
                 "type": "integer",
@@ -742,7 +844,7 @@
           },
           "record": {
             "type": "object",
-            "description": "The record to write. Use this for single record mode. Exactly one of 'record' or 'batch' must be provided.",
+            "description": "The record to write. Use this when sending a single record. Omit this and use `batch` instead when sending multiple records in one request.\nFor create and update, include the record fields. For delete, only the record `id` is required; deletion must be enabled for this object in the installation config.\n",
             "additionalProperties": true,
             "example": {
               "email": "david@withampersand.com",
@@ -751,7 +853,7 @@
           },
           "batch": {
             "type": "array",
-            "description": "Multiple records to write (batch mode). Supports 1-100 records per batch. Partial writes are not supported. If any record in a batch is invalid, all records in the batch will fail. Exactly one of 'record' or 'batch' must be provided.",
+            "description": "Write 1–100 records in one request. Omit this and use `record` instead when sending a single record.\nPartial writes are not supported; if any record in the batch is invalid, the entire batch fails.\nBatch is currently supported for create and update write requests.\n",
             "minItems": 1,
             "maxItems": 100,
             "items": {
