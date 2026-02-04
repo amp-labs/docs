@@ -442,6 +442,7 @@ const baseConfig = {
             "provider-guides/snowflake",
             "provider-guides/solarwindsServiceDesk",
             "provider-guides/stripe",
+            "provider-guides/superSend",
             "provider-guides/surveyMonkey",
             "provider-guides/talkdesk",
             "provider-guides/teamleader",

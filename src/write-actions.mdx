@@ -121,7 +121,30 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 }'
 ```
 
-### Add additional headers
+### Delete a record
+
+<Info>
+Deletion must be enabled for the object in the installation config. See [Enabling deletion for an object](#enabling-deletion-for-an-object) to enable deletion when creating or updating an installation.
+
+This is currently supported for HubSpot and Salesforce.
+</Info>
+
+To delete a record, call the [Write endpoint](/reference/write/write-records) with `type` set to `delete`. Provide the record `id` in the `record` object; no other fields are required. Delete operations are **synchronous only** and support **single-record** deletes.
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/<OBJECT_NAME>' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "demo-group-id",
+    "type": "delete",
+    "record": {
+        "id": "20scv09wer3klj"
+    }
+}'
+```
+
+### Pass additional headers
 
 If you need to pass additional headers when creating or updating records for a provider, you can include those headers directly in the request body when calling the write endpoint. Ampersand will forward those headers as part of the outbound request to the provider.
 
@@ -339,7 +362,7 @@ The operation status will show:
 
 ## Write modes
 
-Write actions support two modes: `synchronous` and `asynchronous`. The mode determines how the API handles your write request and when you receive a response. These modes apply to both single record writes and batch writes.
+Write actions support two modes: `synchronous` and `asynchronous`. The mode determines how the API handles your write request and when you receive a response. These modes apply to both single record writes and batch writes. **Delete operations are always synchronous** and do not use the `mode` field.
 
 ### Synchronous mode
 
@@ -452,6 +475,86 @@ Retry policies only apply to asynchronous mode.
 ## Advanced use cases
 
 <Info>These advanced use cases are currently only supported when creating or updating installations via the API or [Headless UI](/headless).</Info>
+
+### Enabling deletion for an object
+
+By default, delete operations are disabled. To enable deletion, set `deletionSettings.enabled` to `true` for the object when creating or updating an installation.
+
+You can use these APIs to set `deletionSettings.enabled`:
+
+<AccordionGroup>
+  <Accordion title="Create Installation">
+    [Create Installation API](/reference/installation/create-a-new-installation) — Include `deletionSettings` in the write object when creating the installation:
+
+```Javascript
+{
+  "groupRef": "customer-group-ref",
+  "connectionId": "connection-id",
+  "config": {
+    "revisionId": "revision-id",
+    "content": {
+      "provider": "salesforce",
+      "write": {
+        "objects": {
+          "contact": {
+            "objectName": "contact",
+            "deletionSettings": {
+              "enabled": true
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+  </Accordion>
+  <Accordion title="Update Installation">
+    [Update Installation API](/reference/installation/update-an-installation) — PATCH the installation with the write object config and an update mask that includes the object path:
+
+```Javascript
+{
+  "updateMask": ["config.content.write.objects.contact"],
+  "installation": {
+    "config": {
+      "content": {
+        "provider": "salesforce",
+        "write": {
+          "objects": {
+            "contact": {
+              "objectName": "contact",
+              "deletionSettings": {
+                "enabled": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+  </Accordion>
+  <Accordion title="Update Installation Object (JSON Patch)">
+    [Update Installation Object API](/reference/installation/update-an-installation-object) — PATCH the object's config content with a JSON Patch operation. Use this to change only this object without sending the full installation config:
+
+```Javascript
+{
+  "groupRef": "customer-group-ref",
+  "action": "write",
+  "changes": [
+    {
+      "op": "add",
+      "path": "/deletionSettings",
+      "value": { "enabled": true }
+    }
+  ]
+}
+```
+
+Use `"op": "replace"` if the object already has `deletionSettings` and you are changing it.
+  </Accordion>
+</AccordionGroup>
 
 ### Prevent overwriting of customer data
 
