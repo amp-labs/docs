@@ -1,12 +1,52 @@
 ---
 title: "PhoneBurner"
 ---
-## What's Supported
+## What's supported
 
-### Supported Actions
+### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including pagination and incremental read where supported.
+- [Write Actions](/write-actions) (create/update, plus single-record delete where supported).
 - [Proxy Actions](/proxy-actions), using the base URL `https://www.phoneburner.com`.
+- Subscribe Actions are not currently supported.
+
+### Supported objects
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+<div style={{ width: '100%', overflowX: 'auto' }}>
+<table style={{ width: '100%', minWidth: '900px', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse' }}>
+  <thead>
+    <tr style={{ width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '50%' }}>Object</th>
+      <th style={{ width: '12.5%' }}>Read</th>
+      <th style={{ width: '12.5%' }}>Write</th>
+      <th style={{ width: '12.5%' }}>Delete</th>
+      <th style={{ width: '12.5%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#contacts">contacts</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#folders">folders</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#customfields">customfields</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#members">members</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#dialsession">dialsession</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#voicemails">voicemails</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#phonenumber">phonenumber</a></td><td><Cross /></td><td><Cross /></td><td><Check /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
+
+### Incremental read support
+
+- **Supported**: `contacts`, `dialsession` (provider time filters), `members`, `voicemails` (connector-side filtering)
+- **Not supported** (full read only): `folders`, `customfields`
+
+### Notes and limitations
+
+- **`tags` is not supported** due to inconsistent behavior across create/update/delete routes in the upstream API.
 
 ### Example integration
 
