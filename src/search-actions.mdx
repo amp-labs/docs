@@ -1,0 +1,73 @@
+---
+title: "Search actions"
+---
+
+A search action allows you to search for records in your customer's SaaS instance by specifying filter criteria. The matching results are returned synchronously in the API response.
+
+## Enabling search for an object
+
+Search does not require a separate action type in the manifest. Instead, it uses the `read` action. An object is searchable as long as it is defined under `read` in your `amp.yaml` and is not disabled in the installation config. There are two ways to ensure an object is searchable:
+
+### Option 1: Set `enabled: "always"` in the manifest
+
+By setting `enabled: "always"` on an object, it will always be enabled for every installation, regardless of the installation config. This is useful when you want to guarantee that the object is always searchable.
+
+```YAML YAML
+specVersion: 1.0.0
+integrations:
+  - name: readSalesforce
+    provider: salesforce
+    read:
+      objects:
+        - objectName: contact
+          enabled: "always"
+```
+
+### Option 2: Ensure the object is not disabled in the installation config
+
+If you don't set `enabled: "always"` in the manifest, the object is searchable by default. However, the installation config must not set `disabled: true` for that object.
+
+```YAML YAML
+specVersion: 1.0.0
+integrations:
+  - name: readSalesforce
+    provider: salesforce
+    read:
+      objects:
+        - objectName: contact
+```
+
+With this manifest, search will work as long as the installation config does not disable the object. For example, the following installation config would **prevent** search from working:
+
+```json
+// This would disable search for the contact object — avoid this if you want search to work
+{
+  "read": {
+    "objects": {
+      "contact": {
+        "disabled": true
+      }
+    }
+  }
+}
+```
+
+## Execute a search
+
+You can call the [search API](/reference/search/search-records) to search for records in a customer's SaaS instance. The results are returned synchronously in the API response.
+
+## Full example
+
+```yaml yaml
+specVersion: 1.0.0
+integrations:
+  - name: readSalesforce
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          enabled: "always"
+
+        - objectName: contact
+          enabled: "always"
+```
