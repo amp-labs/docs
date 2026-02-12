@@ -448,6 +448,7 @@ const baseConfig = {
             "provider-guides/teamleader",
             "provider-guides/teamwork",
             "provider-guides/timely",
+            "provider-guides/tipalti",
             "provider-guides/vtiger",
             "provider-guides/webflow",
             "provider-guides/whereby",
