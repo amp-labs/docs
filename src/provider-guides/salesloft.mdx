@@ -8,8 +8,13 @@ title: "Salesloft"
 The Salesloft connector supports:
 - [Read Actions](/read-actions), including full historic backfill and incremental read.
 - [Write Actions](/write-actions).
-- [Subscribe Actions](/subscribe-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.salesloft.com`.
+- [Subscribe Actions](/subscribe-actions).
+
+<Note>
+If you are using Subscribe Actions, `watchFieldsAuto` is required to be set to `all` for Salesloft subscribe actions in your manifest [`amp.yaml`](https://github.com/amp-labs/samples/blob/main/salesloft/amp.yaml).
+</Note>
+
 
 ### Example Integration
 
@@ -143,11 +148,6 @@ Once your Salesloft account is ready, you need to create a Salesloft application
 
 To start integrating with Salesloft:
 - Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/salesloft/amp.yaml).
-
-<Note>
-If you are using Subscribe Actions, `watchFieldsAuto` is required to be set to `all` for Salesloft subscribe actions in your manifest `amp.yaml`.
-</Note>
-
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
