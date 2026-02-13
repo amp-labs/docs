@@ -248,7 +248,6 @@ const baseConfig = {
             "concepts",
             "quickstart",
             // "use-with-ai-ide",
-            "unified-api"
           ]
         },
         "subscribe-actions",
@@ -475,6 +474,7 @@ const baseConfig = {
         },
         "dev-and-prod-environments",
         "terminology",
+        "unified-api",
         {
           group: "AI Agents",
           pages: [
