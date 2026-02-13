@@ -7,6 +7,52 @@ The payload structure depends on your destination type:
 - **Webhook destinations**: Payloads include `notificationType` and `data` fields.
 - **Kinesis destinations**: Payloads contain the `data` object. The `notificationType` is included in the event metadata.
 
+You can find the OpenAPI spec for notification payloads [on GitHub](https://github.com/amp-labs/openapi/blob/main/notifications/notifications.yaml), or refer to the examples below:
+
+<Note>
+Some payloads may include a `config` field nested within the `data` field. This config contains the complete installation configuration, including read, write, subscribe, and proxy settings.
+The installation.updated event also includes an additional lastConfig field representing the previous configuration.
+If the configuration object is too large to include inline, we will generate a signed URL you can use to fetch full configuration via GET request as a JSON file.
+
+<Accordion title="Example payload">
+```json
+{
+  "notificationType": "installation.updated",
+  "data": {
+    ...,
+    "config": { //If the config content is too large, the config field will be empty and you can retrieve the content from the URL provided in `configURL`.
+      "read": {
+        "objects": {
+          "account": {
+            "objectName": "account",
+            "destination": "my-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    },
+    // "configURL": "https://example.com/config.json" // If the config content is too large to deliver directly, we will provide a signed URL where you can download the content as a JSON file.
+    "lastConfig": { // Only for `installation.updated` notifications. If the config is too large, it will be omitted and the content will be available in `lastConfigURL`.
+      "read": {
+        "objects": {
+          "account": {
+            "objectName": "account",
+            "destination": "my-old-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
+    }
+    // "lastConfigURL": "https://example.com/lastconfig.json"
+  }
+}
+```
+</Accordion>
+
+</Note>
+
 <AccordionGroup>
 <Accordion title="Installation events (created, updated, deleted)">
 **Webhook destination payload:**
@@ -24,18 +70,31 @@ The payload structure depends on your destination type:
     "groupName": "Customer Name",
     "consumerRef": "user-123",
     "consumerName": "John Doe",
-    "config": {
+    "config": { //If the config content is too large, the config field will be empty and you can retrieve the content from the URL provided in `configURL`.
       "read": {
         "objects": {
-          "Account": {
-            "objectName": "Account",
+          "account": {
+            "objectName": "account",
             "destination": "my-webhook",
             "requiredFields": [...],
             "optionalFields": [...]
           }
         }
       }
+    },
+    "lastConfig": { // Only for `installation.updated` notifications. If the config is too large, it will be omitted and the content will be available in `lastConfigURL`.
+      "read": {
+        "objects": {
+          "account": {
+            "objectName": "account",
+            "destination": "my-old-webhook",
+            "requiredFields": [...],
+            "optionalFields": [...]
+          }
+        }
+      }
     }
+    // "lastConfigURL": "https://example.com/lastconfig.json"
   }
 }
 ```

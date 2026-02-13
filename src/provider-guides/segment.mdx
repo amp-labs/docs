@@ -1,0 +1,41 @@
+---
+title: "Segment"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.segmentapis.com`.
+
+### Example integration
+
+To define an integration for segment, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: segment-integration
+    displayName: My Segment Integration
+    provider: segment
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To integrate with Segment:
+- Create a manifest file similar to the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for an API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key provided by the customer. Please note that this connector's base URL is `https://api.segmentapis.com`.
+
+
+## Creating an API key for Segment
+
+1. Log in to the Segment App, and choose the Workspace you want to generate a token for. Each Segment Workspace requires a separate token 
+2. Click **Settings** in the left menu to access Workspace Settings. Navigate to the **Access Management** tab, and click **Tokens**. This tab lists any existing tokens created for the Workspace.
+3. Click **+Create Token** , and follow the prompts to generate a new token. Be sure to select a Public API token, and not a Config API token. Once generated, store the token somewhere safe, like a password store or other secrets manager

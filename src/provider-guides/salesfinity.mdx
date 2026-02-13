@@ -1,0 +1,45 @@
+---
+title: Salesfinity
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://client-api.salesfinity.co`.
+
+### Example integration
+
+To define an integration for Salesfinity, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesfinityIntegration
+    displayName: Salesfinity Integration
+    provider: salesfinity
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To use the Salesfinity connector, you'll need an API key from your Salesfinity account. Here's how to get it:
+
+1. Log in to your Salesfinity account.
+2. Go to **Settings** and head over to **Connections & API**.
+3. Generate a new API key.
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Salesfinity:
+
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer.

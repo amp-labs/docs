@@ -1,0 +1,44 @@
+---
+title: "SuperSend"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.supersend.io`.
+
+### Example integration
+
+To define an integration for SuperSend, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: superSend-integration
+    displayName: My SuperSend Integration
+    provider: superSend
+    proxy:
+      enabled: true
+```
+
+## Using the connector
+
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To integrate with SuperSend:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for their API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.supersend.io`.
+
+## Creating an API key for SuperSend
+
+1. Log in to your [SuperSend account](https://app.supersend.io/).
+2. Navigate to **Admin** > **System** tab.
+3. Copy your API key from the settings.
+
+![SuperSend API Key](/images/provider-guides/supersend-api-key.gif)
+
+For more details, see the [SuperSend Authentication documentation](https://docs.supersend.io/docs/authentication).
