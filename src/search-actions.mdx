@@ -4,6 +4,10 @@ title: "Search actions"
 
 A search action allows you to search for records in your customer's SaaS instance by specifying filter criteria. The matching results are returned synchronously in the API response.
 
+<Note>
+The Search API returns only a single page of provider results and is intended for narrow, targeted queries.
+</Note>
+
 ## Enabling search for an object
 
 Search does not require a separate action type in the manifest. Instead, it uses the `read` action. An object is searchable as long as it is defined under `read` in your `amp.yaml` and is not disabled in the installation config. There are two ways to ensure an object is searchable:
@@ -56,18 +60,55 @@ With this manifest, search will work as long as the installation config does not
 
 You can call the [search API](/reference/search/search-records) to search for records in a customer's SaaS instance. The results are returned synchronously in the API response.
 
-## Full example
+Field mappings defined in `amp.yaml` and mappings selected by users during installation time will be respected and applied. See [Object and Field Mapping](/object-and-field-mapping) for more information.
 
-```yaml yaml
-specVersion: 1.0.0
-integrations:
-  - name: readSalesforce
-    provider: salesforce
-    read:
-      objects:
-        - objectName: account
-          enabled: "always"
+Request example
 
-        - objectName: contact
-          enabled: "always"
+```bash
+curl --location 'https://search.withampersand.com/v1/projects/04bbc51e-7b5e-43c4-a453-e6d77ee55cb2/integrations/9a22a71b-d90b-4118-84c6-558771f3f6db?groupRef=searchTest-group-ref' \
+  --header 'x-amp-request-type: search' \
+  --header 'Content-Type: application/json' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --data '{
+    "objectName": "account",
+    "fieldFilters": [
+      {
+        "fieldName": "phoneNumber", // this is mapped field name selected by users during installation or in `amp.yaml`
+        "operator": "eq",
+        "value": "1234567890"
+      },
+      {
+        "fieldName": "fax", // unmapped field name matching provider's field name.
+        "operator": "eq",
+        "value": "9876543210"
+      }
+    ]
+  }'
+```
+
+Response example
+```json
+{
+    "results": [
+        {
+            "fields": {
+                "id": "00000000000001",
+                "name": "test account"
+            },
+            "id": "00000000000001",
+            "mappedFields": { // mapped fields are returned in separate field in the result object.
+                "PhoneNumber": "1234567890"  
+            },
+            "raw": {
+                "Id": "00000000000001",
+                "Name": "test account",
+                "Phone": "1234567890",
+                "attributes": {
+                    "type": "Account",
+                    "url": "/services/data/v60.0/sobjects/Account/00000000000001"
+                }
+            }
+        }
+    ]
+}
 ```
