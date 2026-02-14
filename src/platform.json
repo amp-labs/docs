@@ -13531,13 +13531,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -13674,13 +13674,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -13713,13 +13713,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -13737,13 +13737,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -14123,6 +14123,20 @@
                                                 "validate": "required"
                                               }
                                             },
+                                            "deletionSettings": {
+                                              "title": "Deletion Settings",
+                                              "type": "object",
+                                              "required": [
+                                                "enabled"
+                                              ],
+                                              "properties": {
+                                                "enabled": {
+                                                  "type": "boolean",
+                                                  "description": "Whether deletion is enabled for this object",
+                                                  "example": true
+                                                }
+                                              }
+                                            },
                                             "selectedValueDefaults": {
                                               "type": "object",
                                               "deprecated": true,
@@ -14240,11 +14254,12 @@
                                                     "type": "string",
                                                     "enum": [
                                                       "always",
-                                                      "never"
+                                                      "never",
+                                                      "ifEmpty"
                                                     ],
                                                     "default": "always",
                                                     "x-go-type-skip-optional-pointer": true,
-                                                    "description": "Whether the default value should be applied when updating a record."
+                                                    "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                   }
                                                 }
                                               }
@@ -14666,6 +14681,20 @@
                                                     "validate": "required"
                                                   }
                                                 },
+                                                "deletionSettings": {
+                                                  "title": "Deletion Settings",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "enabled"
+                                                  ],
+                                                  "properties": {
+                                                    "enabled": {
+                                                      "type": "boolean",
+                                                      "description": "Whether deletion is enabled for this object",
+                                                      "example": true
+                                                    }
+                                                  }
+                                                },
                                                 "selectedValueDefaults": {
                                                   "type": "object",
                                                   "deprecated": true,
@@ -14783,11 +14812,12 @@
                                                         "type": "string",
                                                         "enum": [
                                                           "always",
-                                                          "never"
+                                                          "never",
+                                                          "ifEmpty"
                                                         ],
                                                         "default": "always",
                                                         "x-go-type-skip-optional-pointer": true,
-                                                        "description": "Whether the default value should be applied when updating a record."
+                                                        "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                       }
                                                     }
                                                   }
@@ -14817,6 +14847,20 @@
                                                       "type": "string",
                                                       "x-oapi-codegen-extra-tags": {
                                                         "validate": "required"
+                                                      }
+                                                    },
+                                                    "deletionSettings": {
+                                                      "title": "Deletion Settings",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "enabled"
+                                                      ],
+                                                      "properties": {
+                                                        "enabled": {
+                                                          "type": "boolean",
+                                                          "description": "Whether deletion is enabled for this object",
+                                                          "example": true
+                                                        }
                                                       }
                                                     },
                                                     "selectedValueDefaults": {
@@ -14936,11 +14980,12 @@
                                                             "type": "string",
                                                             "enum": [
                                                               "always",
-                                                              "never"
+                                                              "never",
+                                                              "ifEmpty"
                                                             ],
                                                             "default": "always",
                                                             "x-go-type-skip-optional-pointer": true,
-                                                            "description": "Whether the default value should be applied when updating a record."
+                                                            "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                           }
                                                         }
                                                       }
@@ -15962,6 +16007,20 @@
                                             "validate": "required"
                                           }
                                         },
+                                        "deletionSettings": {
+                                          "title": "Deletion Settings",
+                                          "type": "object",
+                                          "required": [
+                                            "enabled"
+                                          ],
+                                          "properties": {
+                                            "enabled": {
+                                              "type": "boolean",
+                                              "description": "Whether deletion is enabled for this object",
+                                              "example": true
+                                            }
+                                          }
+                                        },
                                         "selectedValueDefaults": {
                                           "type": "object",
                                           "deprecated": true,
@@ -16079,11 +16138,12 @@
                                                 "type": "string",
                                                 "enum": [
                                                   "always",
-                                                  "never"
+                                                  "never",
+                                                  "ifEmpty"
                                                 ],
                                                 "default": "always",
                                                 "x-go-type-skip-optional-pointer": true,
-                                                "description": "Whether the default value should be applied when updating a record."
+                                                "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                               }
                                             }
                                           }
@@ -16505,6 +16565,20 @@
                                                 "validate": "required"
                                               }
                                             },
+                                            "deletionSettings": {
+                                              "title": "Deletion Settings",
+                                              "type": "object",
+                                              "required": [
+                                                "enabled"
+                                              ],
+                                              "properties": {
+                                                "enabled": {
+                                                  "type": "boolean",
+                                                  "description": "Whether deletion is enabled for this object",
+                                                  "example": true
+                                                }
+                                              }
+                                            },
                                             "selectedValueDefaults": {
                                               "type": "object",
                                               "deprecated": true,
@@ -16622,11 +16696,12 @@
                                                     "type": "string",
                                                     "enum": [
                                                       "always",
-                                                      "never"
+                                                      "never",
+                                                      "ifEmpty"
                                                     ],
                                                     "default": "always",
                                                     "x-go-type-skip-optional-pointer": true,
-                                                    "description": "Whether the default value should be applied when updating a record."
+                                                    "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                   }
                                                 }
                                               }
@@ -16656,6 +16731,20 @@
                                                   "type": "string",
                                                   "x-oapi-codegen-extra-tags": {
                                                     "validate": "required"
+                                                  }
+                                                },
+                                                "deletionSettings": {
+                                                  "title": "Deletion Settings",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "enabled"
+                                                  ],
+                                                  "properties": {
+                                                    "enabled": {
+                                                      "type": "boolean",
+                                                      "description": "Whether deletion is enabled for this object",
+                                                      "example": true
+                                                    }
                                                   }
                                                 },
                                                 "selectedValueDefaults": {
@@ -16775,11 +16864,12 @@
                                                         "type": "string",
                                                         "enum": [
                                                           "always",
-                                                          "never"
+                                                          "never",
+                                                          "ifEmpty"
                                                         ],
                                                         "default": "always",
                                                         "x-go-type-skip-optional-pointer": true,
-                                                        "description": "Whether the default value should be applied when updating a record."
+                                                        "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                       }
                                                     }
                                                   }
@@ -17130,13 +17220,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -17273,13 +17363,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -17312,13 +17402,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -17336,13 +17426,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -17722,6 +17812,20 @@
                                               "validate": "required"
                                             }
                                           },
+                                          "deletionSettings": {
+                                            "title": "Deletion Settings",
+                                            "type": "object",
+                                            "required": [
+                                              "enabled"
+                                            ],
+                                            "properties": {
+                                              "enabled": {
+                                                "type": "boolean",
+                                                "description": "Whether deletion is enabled for this object",
+                                                "example": true
+                                              }
+                                            }
+                                          },
                                           "selectedValueDefaults": {
                                             "type": "object",
                                             "deprecated": true,
@@ -17839,11 +17943,12 @@
                                                   "type": "string",
                                                   "enum": [
                                                     "always",
-                                                    "never"
+                                                    "never",
+                                                    "ifEmpty"
                                                   ],
                                                   "default": "always",
                                                   "x-go-type-skip-optional-pointer": true,
-                                                  "description": "Whether the default value should be applied when updating a record."
+                                                  "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                 }
                                               }
                                             }
@@ -18265,6 +18370,20 @@
                                                   "validate": "required"
                                                 }
                                               },
+                                              "deletionSettings": {
+                                                "title": "Deletion Settings",
+                                                "type": "object",
+                                                "required": [
+                                                  "enabled"
+                                                ],
+                                                "properties": {
+                                                  "enabled": {
+                                                    "type": "boolean",
+                                                    "description": "Whether deletion is enabled for this object",
+                                                    "example": true
+                                                  }
+                                                }
+                                              },
                                               "selectedValueDefaults": {
                                                 "type": "object",
                                                 "deprecated": true,
@@ -18382,11 +18501,12 @@
                                                       "type": "string",
                                                       "enum": [
                                                         "always",
-                                                        "never"
+                                                        "never",
+                                                        "ifEmpty"
                                                       ],
                                                       "default": "always",
                                                       "x-go-type-skip-optional-pointer": true,
-                                                      "description": "Whether the default value should be applied when updating a record."
+                                                      "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                     }
                                                   }
                                                 }
@@ -18416,6 +18536,20 @@
                                                     "type": "string",
                                                     "x-oapi-codegen-extra-tags": {
                                                       "validate": "required"
+                                                    }
+                                                  },
+                                                  "deletionSettings": {
+                                                    "title": "Deletion Settings",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether deletion is enabled for this object",
+                                                        "example": true
+                                                      }
                                                     }
                                                   },
                                                   "selectedValueDefaults": {
@@ -18535,11 +18669,12 @@
                                                           "type": "string",
                                                           "enum": [
                                                             "always",
-                                                            "never"
+                                                            "never",
+                                                            "ifEmpty"
                                                           ],
                                                           "default": "always",
                                                           "x-go-type-skip-optional-pointer": true,
-                                                          "description": "Whether the default value should be applied when updating a record."
+                                                          "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                         }
                                                       }
                                                     }
@@ -19712,13 +19847,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -19855,13 +19990,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -19894,13 +20029,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -19918,13 +20053,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -20304,6 +20439,20 @@
                                               "validate": "required"
                                             }
                                           },
+                                          "deletionSettings": {
+                                            "title": "Deletion Settings",
+                                            "type": "object",
+                                            "required": [
+                                              "enabled"
+                                            ],
+                                            "properties": {
+                                              "enabled": {
+                                                "type": "boolean",
+                                                "description": "Whether deletion is enabled for this object",
+                                                "example": true
+                                              }
+                                            }
+                                          },
                                           "selectedValueDefaults": {
                                             "type": "object",
                                             "deprecated": true,
@@ -20421,11 +20570,12 @@
                                                   "type": "string",
                                                   "enum": [
                                                     "always",
-                                                    "never"
+                                                    "never",
+                                                    "ifEmpty"
                                                   ],
                                                   "default": "always",
                                                   "x-go-type-skip-optional-pointer": true,
-                                                  "description": "Whether the default value should be applied when updating a record."
+                                                  "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                 }
                                               }
                                             }
@@ -20847,6 +20997,20 @@
                                                   "validate": "required"
                                                 }
                                               },
+                                              "deletionSettings": {
+                                                "title": "Deletion Settings",
+                                                "type": "object",
+                                                "required": [
+                                                  "enabled"
+                                                ],
+                                                "properties": {
+                                                  "enabled": {
+                                                    "type": "boolean",
+                                                    "description": "Whether deletion is enabled for this object",
+                                                    "example": true
+                                                  }
+                                                }
+                                              },
                                               "selectedValueDefaults": {
                                                 "type": "object",
                                                 "deprecated": true,
@@ -20964,11 +21128,12 @@
                                                       "type": "string",
                                                       "enum": [
                                                         "always",
-                                                        "never"
+                                                        "never",
+                                                        "ifEmpty"
                                                       ],
                                                       "default": "always",
                                                       "x-go-type-skip-optional-pointer": true,
-                                                      "description": "Whether the default value should be applied when updating a record."
+                                                      "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                     }
                                                   }
                                                 }
@@ -20998,6 +21163,20 @@
                                                     "type": "string",
                                                     "x-oapi-codegen-extra-tags": {
                                                       "validate": "required"
+                                                    }
+                                                  },
+                                                  "deletionSettings": {
+                                                    "title": "Deletion Settings",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether deletion is enabled for this object",
+                                                        "example": true
+                                                      }
                                                     }
                                                   },
                                                   "selectedValueDefaults": {
@@ -21117,11 +21296,12 @@
                                                           "type": "string",
                                                           "enum": [
                                                             "always",
-                                                            "never"
+                                                            "never",
+                                                            "ifEmpty"
                                                           ],
                                                           "default": "always",
                                                           "x-go-type-skip-optional-pointer": true,
-                                                          "description": "Whether the default value should be applied when updating a record."
+                                                          "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                         }
                                                       }
                                                     }
@@ -21876,6 +22056,7 @@
         "tags": [
           "Installation"
         ],
+        "description": "Delete an Installation. This will also delete the associated Connection if it is not used by any other Installations.\n",
         "parameters": [
           {
             "name": "projectIdOrName",
@@ -22053,7 +22234,7 @@
         "tags": [
           "Installation"
         ],
-        "description": "NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system.\n",
+        "description": "Update an installation. NOTE: Updating an installation with the Subscribe action typically takes 1–2 minutes, but it may take up to 10 minutes to take effect due to delays in the provider’s system.\n",
         "parameters": [
           {
             "name": "projectIdOrName",
@@ -22336,6 +22517,20 @@
                                                 "validate": "required"
                                               }
                                             },
+                                            "deletionSettings": {
+                                              "title": "Deletion Settings",
+                                              "type": "object",
+                                              "required": [
+                                                "enabled"
+                                              ],
+                                              "properties": {
+                                                "enabled": {
+                                                  "type": "boolean",
+                                                  "description": "Whether deletion is enabled for this object",
+                                                  "example": true
+                                                }
+                                              }
+                                            },
                                             "selectedValueDefaults": {
                                               "type": "object",
                                               "deprecated": true,
@@ -22453,11 +22648,12 @@
                                                     "type": "string",
                                                     "enum": [
                                                       "always",
-                                                      "never"
+                                                      "never",
+                                                      "ifEmpty"
                                                     ],
                                                     "default": "always",
                                                     "x-go-type-skip-optional-pointer": true,
-                                                    "description": "Whether the default value should be applied when updating a record."
+                                                    "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                   }
                                                 }
                                               }
@@ -22553,13 +22749,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -22696,13 +22892,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -22735,13 +22931,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -22759,13 +22955,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -23145,6 +23341,20 @@
                                               "validate": "required"
                                             }
                                           },
+                                          "deletionSettings": {
+                                            "title": "Deletion Settings",
+                                            "type": "object",
+                                            "required": [
+                                              "enabled"
+                                            ],
+                                            "properties": {
+                                              "enabled": {
+                                                "type": "boolean",
+                                                "description": "Whether deletion is enabled for this object",
+                                                "example": true
+                                              }
+                                            }
+                                          },
                                           "selectedValueDefaults": {
                                             "type": "object",
                                             "deprecated": true,
@@ -23262,11 +23472,12 @@
                                                   "type": "string",
                                                   "enum": [
                                                     "always",
-                                                    "never"
+                                                    "never",
+                                                    "ifEmpty"
                                                   ],
                                                   "default": "always",
                                                   "x-go-type-skip-optional-pointer": true,
-                                                  "description": "Whether the default value should be applied when updating a record."
+                                                  "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                 }
                                               }
                                             }
@@ -23688,6 +23899,20 @@
                                                   "validate": "required"
                                                 }
                                               },
+                                              "deletionSettings": {
+                                                "title": "Deletion Settings",
+                                                "type": "object",
+                                                "required": [
+                                                  "enabled"
+                                                ],
+                                                "properties": {
+                                                  "enabled": {
+                                                    "type": "boolean",
+                                                    "description": "Whether deletion is enabled for this object",
+                                                    "example": true
+                                                  }
+                                                }
+                                              },
                                               "selectedValueDefaults": {
                                                 "type": "object",
                                                 "deprecated": true,
@@ -23805,11 +24030,12 @@
                                                       "type": "string",
                                                       "enum": [
                                                         "always",
-                                                        "never"
+                                                        "never",
+                                                        "ifEmpty"
                                                       ],
                                                       "default": "always",
                                                       "x-go-type-skip-optional-pointer": true,
-                                                      "description": "Whether the default value should be applied when updating a record."
+                                                      "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                     }
                                                   }
                                                 }
@@ -23839,6 +24065,20 @@
                                                     "type": "string",
                                                     "x-oapi-codegen-extra-tags": {
                                                       "validate": "required"
+                                                    }
+                                                  },
+                                                  "deletionSettings": {
+                                                    "title": "Deletion Settings",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether deletion is enabled for this object",
+                                                        "example": true
+                                                      }
                                                     }
                                                   },
                                                   "selectedValueDefaults": {
@@ -23958,11 +24198,12 @@
                                                           "type": "string",
                                                           "enum": [
                                                             "always",
-                                                            "never"
+                                                            "never",
+                                                            "ifEmpty"
                                                           ],
                                                           "default": "always",
                                                           "x-go-type-skip-optional-pointer": true,
-                                                          "description": "Whether the default value should be applied when updating a record."
+                                                          "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                         }
                                                       }
                                                     }
@@ -25126,7 +25367,7 @@
                                     "remove",
                                     "replace"
                                   ],
-                                  "description": "The operation to perform.\n- \"add\": Adds a new field or replaces an existing one at the specified path\n- \"remove\": Removes the field at the specified path\n- \"replace\": Replaces the value at the specified path \n",
+                                  "description": "The operation to perform.\n- \"add\": Adds a new field or replaces an existing one at the specified path\n- \"remove\": Removes the field at the specified path\n- \"replace\": Replaces the value at the specified path\n",
                                   "example": "replace"
                                 },
                                 "path": {
@@ -25202,7 +25443,7 @@
                                     "remove",
                                     "replace"
                                   ],
-                                  "description": "The operation to perform.\n- \"add\": Adds a new field or replaces an existing one at the specified path\n- \"remove\": Removes the field at the specified path\n- \"replace\": Replaces the value at the specified path \n",
+                                  "description": "The operation to perform.\n- \"add\": Adds a new field or replaces an existing one at the specified path\n- \"remove\": Removes the field at the specified path\n- \"replace\": Replaces the value at the specified path\n",
                                   "example": "replace"
                                 },
                                 "path": {
@@ -25304,13 +25545,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -25447,13 +25688,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -25486,13 +25727,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -25510,13 +25751,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -25896,6 +26137,20 @@
                                               "validate": "required"
                                             }
                                           },
+                                          "deletionSettings": {
+                                            "title": "Deletion Settings",
+                                            "type": "object",
+                                            "required": [
+                                              "enabled"
+                                            ],
+                                            "properties": {
+                                              "enabled": {
+                                                "type": "boolean",
+                                                "description": "Whether deletion is enabled for this object",
+                                                "example": true
+                                              }
+                                            }
+                                          },
                                           "selectedValueDefaults": {
                                             "type": "object",
                                             "deprecated": true,
@@ -26013,11 +26268,12 @@
                                                   "type": "string",
                                                   "enum": [
                                                     "always",
-                                                    "never"
+                                                    "never",
+                                                    "ifEmpty"
                                                   ],
                                                   "default": "always",
                                                   "x-go-type-skip-optional-pointer": true,
-                                                  "description": "Whether the default value should be applied when updating a record."
+                                                  "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                 }
                                               }
                                             }
@@ -26439,6 +26695,20 @@
                                                   "validate": "required"
                                                 }
                                               },
+                                              "deletionSettings": {
+                                                "title": "Deletion Settings",
+                                                "type": "object",
+                                                "required": [
+                                                  "enabled"
+                                                ],
+                                                "properties": {
+                                                  "enabled": {
+                                                    "type": "boolean",
+                                                    "description": "Whether deletion is enabled for this object",
+                                                    "example": true
+                                                  }
+                                                }
+                                              },
                                               "selectedValueDefaults": {
                                                 "type": "object",
                                                 "deprecated": true,
@@ -26556,11 +26826,12 @@
                                                       "type": "string",
                                                       "enum": [
                                                         "always",
-                                                        "never"
+                                                        "never",
+                                                        "ifEmpty"
                                                       ],
                                                       "default": "always",
                                                       "x-go-type-skip-optional-pointer": true,
-                                                      "description": "Whether the default value should be applied when updating a record."
+                                                      "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                     }
                                                   }
                                                 }
@@ -26590,6 +26861,20 @@
                                                     "type": "string",
                                                     "x-oapi-codegen-extra-tags": {
                                                       "validate": "required"
+                                                    }
+                                                  },
+                                                  "deletionSettings": {
+                                                    "title": "Deletion Settings",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether deletion is enabled for this object",
+                                                        "example": true
+                                                      }
                                                     }
                                                   },
                                                   "selectedValueDefaults": {
@@ -26709,11 +26994,12 @@
                                                           "type": "string",
                                                           "enum": [
                                                             "always",
-                                                            "never"
+                                                            "never",
+                                                            "ifEmpty"
                                                           ],
                                                           "default": "always",
                                                           "x-go-type-skip-optional-pointer": true,
-                                                          "description": "Whether the default value should be applied when updating a record."
+                                                          "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                         }
                                                       }
                                                     }
@@ -27791,7 +28077,7 @@
     "/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}/metadata": {
       "get": {
         "summary": "Get object metadata for installation",
-        "description": "Retrieves metadata about an object in a customer's SaaS instance, including its fields.\nThis endpoint requires that an Installation exists for the given groupRef.\nIt applies object mappings.\n",
+        "description": "Retrieves metadata about an object in a customer's SaaS instance, including its fields.\nThis endpoint requires that an Installation exists for the given groupRef.\nIt applies object mappings. This endpoint may return nested fields as a part of the response.\nNested fields are returned in JSONPath bracket notation (e.g. `$['billingaddress']['city']`).\nCurrently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future.\n",
         "tags": [
           "Objects & Fields"
         ],
@@ -28196,13 +28482,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -28339,13 +28625,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -28378,13 +28664,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -28402,13 +28688,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -28788,6 +29074,20 @@
                                                 "validate": "required"
                                               }
                                             },
+                                            "deletionSettings": {
+                                              "title": "Deletion Settings",
+                                              "type": "object",
+                                              "required": [
+                                                "enabled"
+                                              ],
+                                              "properties": {
+                                                "enabled": {
+                                                  "type": "boolean",
+                                                  "description": "Whether deletion is enabled for this object",
+                                                  "example": true
+                                                }
+                                              }
+                                            },
                                             "selectedValueDefaults": {
                                               "type": "object",
                                               "deprecated": true,
@@ -28905,11 +29205,12 @@
                                                     "type": "string",
                                                     "enum": [
                                                       "always",
-                                                      "never"
+                                                      "never",
+                                                      "ifEmpty"
                                                     ],
                                                     "default": "always",
                                                     "x-go-type-skip-optional-pointer": true,
-                                                    "description": "Whether the default value should be applied when updating a record."
+                                                    "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                   }
                                                 }
                                               }
@@ -29331,6 +29632,20 @@
                                                     "validate": "required"
                                                   }
                                                 },
+                                                "deletionSettings": {
+                                                  "title": "Deletion Settings",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "enabled"
+                                                  ],
+                                                  "properties": {
+                                                    "enabled": {
+                                                      "type": "boolean",
+                                                      "description": "Whether deletion is enabled for this object",
+                                                      "example": true
+                                                    }
+                                                  }
+                                                },
                                                 "selectedValueDefaults": {
                                                   "type": "object",
                                                   "deprecated": true,
@@ -29448,11 +29763,12 @@
                                                         "type": "string",
                                                         "enum": [
                                                           "always",
-                                                          "never"
+                                                          "never",
+                                                          "ifEmpty"
                                                         ],
                                                         "default": "always",
                                                         "x-go-type-skip-optional-pointer": true,
-                                                        "description": "Whether the default value should be applied when updating a record."
+                                                        "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                       }
                                                     }
                                                   }
@@ -29482,6 +29798,20 @@
                                                       "type": "string",
                                                       "x-oapi-codegen-extra-tags": {
                                                         "validate": "required"
+                                                      }
+                                                    },
+                                                    "deletionSettings": {
+                                                      "title": "Deletion Settings",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "enabled"
+                                                      ],
+                                                      "properties": {
+                                                        "enabled": {
+                                                          "type": "boolean",
+                                                          "description": "Whether deletion is enabled for this object",
+                                                          "example": true
+                                                        }
                                                       }
                                                     },
                                                     "selectedValueDefaults": {
@@ -29601,11 +29931,12 @@
                                                             "type": "string",
                                                             "enum": [
                                                               "always",
-                                                              "never"
+                                                              "never",
+                                                              "ifEmpty"
                                                             ],
                                                             "default": "always",
                                                             "x-go-type-skip-optional-pointer": true,
-                                                            "description": "Whether the default value should be applied when updating a record."
+                                                            "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                                           }
                                                         }
                                                       }
@@ -30035,7 +30366,7 @@
     "/projects/{projectIdOrName}/providers/{provider}/objects/{objectName}/metadata": {
       "get": {
         "summary": "Get object metadata for connection",
-        "description": "Retrieves metadata about an object in a customer's SaaS instance, including its fields.\nThis endpoint only requires that a Connection exists for the given groupRef.\nIt does not apply any object mappings.\n",
+        "description": "Retrieves metadata about an object in a customer's SaaS instance, including its fields.\nThis endpoint only requires that a Connection exists for the given groupRef.\nIt does not apply any object mappings. This endpoint may return nested fields as a part of the response.\nNested fields are returned in JSONPath bracket notation (e.g. `$['billingaddress']['city']`).\nCurrently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future.\n",
         "tags": [
           "Objects & Fields"
         ],
@@ -32583,7 +32914,7 @@
                             "type": "string",
                             "description": "The time the operation was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       }
@@ -33490,7 +33821,7 @@
                       "type": "string",
                       "description": "The time the operation was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     }
                   }
                 }
@@ -34330,7 +34661,7 @@
                       "timestamp": {
                         "type": "string",
                         "description": "The time the log was created.",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "message": {
                         "type": "object",
@@ -35360,6 +35691,54 @@
                               "access_type": "offline",
                               "duration": "permanent"
                             }
+                          },
+                          "accessTokenOpts": {
+                            "title": "Oauth2 Access Token Options",
+                            "type": "object",
+                            "description": "Configuration that defines how an OAuth 2.0 access token is attached to\noutbound API requests. When provided, this configuration overrides the\ndefault access-token handling behavior for the connector.\n",
+                            "required": [
+                              "attachmentType"
+                            ],
+                            "properties": {
+                              "attachmentType": {
+                                "type": "string",
+                                "description": "How the access token should be attached to requests.",
+                                "enum": [
+                                  "accessTokenHeaderAttachment"
+                                ],
+                                "x-oapi-codegen-extra-tags": {
+                                  "validate": "required"
+                                }
+                              },
+                              "header": {
+                                "title": "Access Token Header Options",
+                                "type": "object",
+                                "description": "Configuration for access token in header. Must be provided if type is in-header.",
+                                "required": [
+                                  "name"
+                                ],
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "example": "X-Access-Token",
+                                    "description": "The name of the header to be used for the access token.",
+                                    "x-go-type-skip-optional-pointer": true
+                                  },
+                                  "valuePrefix": {
+                                    "type": "string",
+                                    "example": "Bearer ",
+                                    "description": "The prefix to be added to the access token value when it is sent in the header.",
+                                    "x-go-type-skip-optional-pointer": true
+                                  }
+                                }
+                              },
+                              "docsURL": {
+                                "type": "string",
+                                "description": "URL with more information about how access token is used.",
+                                "example": "https://docs.example.com/oauth2-access-token-usage",
+                                "x-go-type-skip-optional-pointer": true
+                              }
+                            }
                           }
                         }
                       },
@@ -35589,7 +35968,9 @@
                           "proxy",
                           "read",
                           "subscribe",
-                          "write"
+                          "write",
+                          "delete",
+                          "search"
                         ],
                         "properties": {
                           "bulkWrite": {
@@ -35629,6 +36010,9 @@
                             "type": "boolean"
                           },
                           "write": {
+                            "type": "boolean"
+                          },
+                          "delete": {
                             "type": "boolean"
                           },
                           "subscribeSupport": {
@@ -35742,6 +36126,27 @@
                                     "additionalProperties": {
                                       "type": "integer"
                                     }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "search": {
+                            "title": "Search Support",
+                            "type": "object",
+                            "required": [
+                              "operators"
+                            ],
+                            "properties": {
+                              "operators": {
+                                "title": "Supported Operators for Search Action",
+                                "type": "object",
+                                "required": [
+                                  "equals"
+                                ],
+                                "properties": {
+                                  "equals": {
+                                    "type": "boolean"
                                   }
                                 }
                               }
@@ -35918,7 +36323,9 @@
                                 "proxy",
                                 "read",
                                 "subscribe",
-                                "write"
+                                "write",
+                                "delete",
+                                "search"
                               ],
                               "properties": {
                                 "bulkWrite": {
@@ -35958,6 +36365,9 @@
                                   "type": "boolean"
                                 },
                                 "write": {
+                                  "type": "boolean"
+                                },
+                                "delete": {
                                   "type": "boolean"
                                 },
                                 "subscribeSupport": {
@@ -36075,6 +36485,27 @@
                                       }
                                     }
                                   }
+                                },
+                                "search": {
+                                  "title": "Search Support",
+                                  "type": "object",
+                                  "required": [
+                                    "operators"
+                                  ],
+                                  "properties": {
+                                    "operators": {
+                                      "title": "Supported Operators for Search Action",
+                                      "type": "object",
+                                      "required": [
+                                        "equals"
+                                      ],
+                                      "properties": {
+                                        "equals": {
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    }
+                                  }
                                 }
                               }
                             }
@@ -36123,7 +36554,7 @@
                                   "x-go-type-skip-optional-pointer": true
                                 },
                                 "moduleDependencies": {
-                                  "description": "Module-specific dependencies for this metadata item.",
+                                  "description": "Which modules require this metadata item (see ModuleDependencies for naming clarification).",
                                   "title": "Module Dependencies",
                                   "type": "object",
                                   "additionalProperties": {
@@ -36153,7 +36584,7 @@
                                   "x-go-type-skip-optional-pointer": true
                                 },
                                 "moduleDependencies": {
-                                  "description": "Module-specific dependencies for this metadata item.",
+                                  "description": "Which modules require this metadata item (see ModuleDependencies for naming clarification).",
                                   "title": "Module Dependencies",
                                   "type": "object",
                                   "additionalProperties": {
@@ -36520,6 +36951,54 @@
                             "access_type": "offline",
                             "duration": "permanent"
                           }
+                        },
+                        "accessTokenOpts": {
+                          "title": "Oauth2 Access Token Options",
+                          "type": "object",
+                          "description": "Configuration that defines how an OAuth 2.0 access token is attached to\noutbound API requests. When provided, this configuration overrides the\ndefault access-token handling behavior for the connector.\n",
+                          "required": [
+                            "attachmentType"
+                          ],
+                          "properties": {
+                            "attachmentType": {
+                              "type": "string",
+                              "description": "How the access token should be attached to requests.",
+                              "enum": [
+                                "accessTokenHeaderAttachment"
+                              ],
+                              "x-oapi-codegen-extra-tags": {
+                                "validate": "required"
+                              }
+                            },
+                            "header": {
+                              "title": "Access Token Header Options",
+                              "type": "object",
+                              "description": "Configuration for access token in header. Must be provided if type is in-header.",
+                              "required": [
+                                "name"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "X-Access-Token",
+                                  "description": "The name of the header to be used for the access token.",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "valuePrefix": {
+                                  "type": "string",
+                                  "example": "Bearer ",
+                                  "description": "The prefix to be added to the access token value when it is sent in the header.",
+                                  "x-go-type-skip-optional-pointer": true
+                                }
+                              }
+                            },
+                            "docsURL": {
+                              "type": "string",
+                              "description": "URL with more information about how access token is used.",
+                              "example": "https://docs.example.com/oauth2-access-token-usage",
+                              "x-go-type-skip-optional-pointer": true
+                            }
+                          }
                         }
                       }
                     },
@@ -36749,7 +37228,9 @@
                         "proxy",
                         "read",
                         "subscribe",
-                        "write"
+                        "write",
+                        "delete",
+                        "search"
                       ],
                       "properties": {
                         "bulkWrite": {
@@ -36789,6 +37270,9 @@
                           "type": "boolean"
                         },
                         "write": {
+                          "type": "boolean"
+                        },
+                        "delete": {
                           "type": "boolean"
                         },
                         "subscribeSupport": {
@@ -36902,6 +37386,27 @@
                                   "additionalProperties": {
                                     "type": "integer"
                                   }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "search": {
+                          "title": "Search Support",
+                          "type": "object",
+                          "required": [
+                            "operators"
+                          ],
+                          "properties": {
+                            "operators": {
+                              "title": "Supported Operators for Search Action",
+                              "type": "object",
+                              "required": [
+                                "equals"
+                              ],
+                              "properties": {
+                                "equals": {
+                                  "type": "boolean"
                                 }
                               }
                             }
@@ -37078,7 +37583,9 @@
                               "proxy",
                               "read",
                               "subscribe",
-                              "write"
+                              "write",
+                              "delete",
+                              "search"
                             ],
                             "properties": {
                               "bulkWrite": {
@@ -37118,6 +37625,9 @@
                                 "type": "boolean"
                               },
                               "write": {
+                                "type": "boolean"
+                              },
+                              "delete": {
                                 "type": "boolean"
                               },
                               "subscribeSupport": {
@@ -37235,6 +37745,27 @@
                                     }
                                   }
                                 }
+                              },
+                              "search": {
+                                "title": "Search Support",
+                                "type": "object",
+                                "required": [
+                                  "operators"
+                                ],
+                                "properties": {
+                                  "operators": {
+                                    "title": "Supported Operators for Search Action",
+                                    "type": "object",
+                                    "required": [
+                                      "equals"
+                                    ],
+                                    "properties": {
+                                      "equals": {
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                }
                               }
                             }
                           }
@@ -37283,7 +37814,7 @@
                                 "x-go-type-skip-optional-pointer": true
                               },
                               "moduleDependencies": {
-                                "description": "Module-specific dependencies for this metadata item.",
+                                "description": "Which modules require this metadata item (see ModuleDependencies for naming clarification).",
                                 "title": "Module Dependencies",
                                 "type": "object",
                                 "additionalProperties": {
@@ -37313,7 +37844,7 @@
                                 "x-go-type-skip-optional-pointer": true
                               },
                               "moduleDependencies": {
-                                "description": "Module-specific dependencies for this metadata item.",
+                                "description": "Which modules require this metadata item (see ModuleDependencies for naming clarification).",
                                 "title": "Module Dependencies",
                                 "type": "object",
                                 "additionalProperties": {
@@ -40897,13 +41428,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -40936,13 +41467,13 @@
                             "type": "string",
                             "description": "The time the consumer was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the consumer was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -40960,13 +41491,13 @@
                         "type": "string",
                         "description": "The time the connection was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the connection was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "authScheme": {
                         "type": "string",
@@ -41927,13 +42458,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -41966,13 +42497,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -41990,13 +42521,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -43088,13 +43619,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -43127,13 +43658,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -43151,13 +43682,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -44132,13 +44663,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -44171,13 +44702,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -44195,13 +44726,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -45155,16 +45686,6 @@
                       "type": "string",
                       "description": "The time the destination was updated.",
                       "format": "date-time"
-                    },
-                    "secrets": {
-                      "type": "object",
-                      "description": "Destination secrets (only included when includeSecrets is true)",
-                      "properties": {
-                        "webhookSigningKey": {
-                          "type": "string",
-                          "description": "Webhook signing key for the destination (only included for webhook destinations)"
-                        }
-                      }
                     }
                   }
                 }
@@ -46054,16 +46575,6 @@
                         "type": "string",
                         "description": "The time the destination was updated.",
                         "format": "date-time"
-                      },
-                      "secrets": {
-                        "type": "object",
-                        "description": "Destination secrets (only included when includeSecrets is true)",
-                        "properties": {
-                          "webhookSigningKey": {
-                            "type": "string",
-                            "description": "Webhook signing key for the destination (only included for webhook destinations)"
-                          }
-                        }
                       }
                     }
                   }
@@ -46264,7 +46775,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Destination",
+                  "title": "DestinationWithSecrets",
+                  "description": "Destination object with secrets field (returned by getDestination when includeSecrets is true)",
                   "required": [
                     "id",
                     "name",
@@ -47019,16 +47531,6 @@
                       "type": "string",
                       "description": "The time the destination was updated.",
                       "format": "date-time"
-                    },
-                    "secrets": {
-                      "type": "object",
-                      "description": "Destination secrets (only included when includeSecrets is true)",
-                      "properties": {
-                        "webhookSigningKey": {
-                          "type": "string",
-                          "description": "Webhook signing key for the destination (only included for webhook destinations)"
-                        }
-                      }
                     }
                   }
                 }
@@ -57038,16 +57540,17 @@
                       "type": "string",
                       "description": "The type of notification event.",
                       "enum": [
-                        "read.backfill.done",
                         "connection.created",
                         "connection.error",
                         "installation.created",
                         "installation.updated",
                         "installation.deleted",
                         "read.schedule.paused",
+                        "read.backfill.done",
+                        "read.triggered.done",
+                        "read.triggered.error",
                         "destination.webhook.disabled"
-                      ],
-                      "example": "installation.created"
+                      ]
                     },
                     "topicId": {
                       "type": "string",
@@ -57701,14 +58204,17 @@
             "description": "Filter by notification event type.",
             "schema": {
               "type": "string",
+              "description": "The type of notification event.",
               "enum": [
-                "read.backfill.done",
                 "connection.created",
                 "connection.error",
                 "installation.created",
                 "installation.updated",
                 "installation.deleted",
                 "read.schedule.paused",
+                "read.backfill.done",
+                "read.triggered.done",
+                "read.triggered.error",
                 "destination.webhook.disabled"
               ]
             }
@@ -57740,16 +58246,17 @@
                         "type": "string",
                         "description": "The type of notification event.",
                         "enum": [
-                          "read.backfill.done",
                           "connection.created",
                           "connection.error",
                           "installation.created",
                           "installation.updated",
                           "installation.deleted",
                           "read.schedule.paused",
+                          "read.backfill.done",
+                          "read.triggered.done",
+                          "read.triggered.error",
                           "destination.webhook.disabled"
-                        ],
-                        "example": "installation.created"
+                        ]
                       },
                       "topicId": {
                         "type": "string",
@@ -63957,6 +64464,82 @@
             "type": "string",
             "description": "The time the destination was updated.",
             "format": "date-time"
+          }
+        }
+      },
+      "DestinationWithSecrets": {
+        "title": "DestinationWithSecrets",
+        "description": "Destination object with secrets field (returned by getDestination when includeSecrets is true)",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "metadata",
+          "createTime"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The destination ID."
+          },
+          "name": {
+            "type": "string",
+            "description": "User-defined name for the destination",
+            "example": "leadConvertedWebhook"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the destination",
+            "example": "webhook"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "description": "Webhook URL",
+                "example": "https://webhooks.mailmonkey.com/salesforce-lead-converted"
+              },
+              "headers": {
+                "title": "Webhook Headers",
+                "type": "object",
+                "nullable": true,
+                "description": "Additional headers to add when Ampersand sends a webhook message",
+                "additionalProperties": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "example": {
+                  "Authorization": "Bearer 1234"
+                }
+              },
+              "streamName": {
+                "type": "string",
+                "description": "The name of the Kinesis stream",
+                "example": "my-data-stream"
+              },
+              "region": {
+                "type": "string",
+                "description": "The AWS region for the destination",
+                "example": "us-east-1"
+              },
+              "partitionKeyTemplate": {
+                "type": "string",
+                "description": "Template for generating partition keys",
+                "example": "{{.integration_id}}"
+              }
+            }
+          },
+          "createTime": {
+            "type": "string",
+            "description": "The time the destination was created.",
+            "format": "date-time"
+          },
+          "updateTime": {
+            "type": "string",
+            "description": "The time the destination was updated.",
+            "format": "date-time"
           },
           "secrets": {
             "type": "object",
@@ -65668,13 +66251,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -65811,13 +66394,13 @@
                     "type": "string",
                     "description": "The time the group was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the group was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   }
                 }
               },
@@ -65850,13 +66433,13 @@
                     "type": "string",
                     "description": "The time the consumer was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the consumer was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   }
                 }
               },
@@ -65874,13 +66457,13 @@
                 "type": "string",
                 "description": "The time the connection was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the connection was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "authScheme": {
                 "type": "string",
@@ -66260,6 +66843,20 @@
                                     "validate": "required"
                                   }
                                 },
+                                "deletionSettings": {
+                                  "title": "Deletion Settings",
+                                  "type": "object",
+                                  "required": [
+                                    "enabled"
+                                  ],
+                                  "properties": {
+                                    "enabled": {
+                                      "type": "boolean",
+                                      "description": "Whether deletion is enabled for this object",
+                                      "example": true
+                                    }
+                                  }
+                                },
                                 "selectedValueDefaults": {
                                   "type": "object",
                                   "deprecated": true,
@@ -66377,11 +66974,12 @@
                                         "type": "string",
                                         "enum": [
                                           "always",
-                                          "never"
+                                          "never",
+                                          "ifEmpty"
                                         ],
                                         "default": "always",
                                         "x-go-type-skip-optional-pointer": true,
-                                        "description": "Whether the default value should be applied when updating a record."
+                                        "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                       }
                                     }
                                   }
@@ -66803,6 +67401,20 @@
                                         "validate": "required"
                                       }
                                     },
+                                    "deletionSettings": {
+                                      "title": "Deletion Settings",
+                                      "type": "object",
+                                      "required": [
+                                        "enabled"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "boolean",
+                                          "description": "Whether deletion is enabled for this object",
+                                          "example": true
+                                        }
+                                      }
+                                    },
                                     "selectedValueDefaults": {
                                       "type": "object",
                                       "deprecated": true,
@@ -66920,11 +67532,12 @@
                                             "type": "string",
                                             "enum": [
                                               "always",
-                                              "never"
+                                              "never",
+                                              "ifEmpty"
                                             ],
                                             "default": "always",
                                             "x-go-type-skip-optional-pointer": true,
-                                            "description": "Whether the default value should be applied when updating a record."
+                                            "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                           }
                                         }
                                       }
@@ -66954,6 +67567,20 @@
                                           "type": "string",
                                           "x-oapi-codegen-extra-tags": {
                                             "validate": "required"
+                                          }
+                                        },
+                                        "deletionSettings": {
+                                          "title": "Deletion Settings",
+                                          "type": "object",
+                                          "required": [
+                                            "enabled"
+                                          ],
+                                          "properties": {
+                                            "enabled": {
+                                              "type": "boolean",
+                                              "description": "Whether deletion is enabled for this object",
+                                              "example": true
+                                            }
                                           }
                                         },
                                         "selectedValueDefaults": {
@@ -67073,11 +67700,12 @@
                                                 "type": "string",
                                                 "enum": [
                                                   "always",
-                                                  "never"
+                                                  "never",
+                                                  "ifEmpty"
                                                 ],
                                                 "default": "always",
                                                 "x-go-type-skip-optional-pointer": true,
-                                                "description": "Whether the default value should be applied when updating a record."
+                                                "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                               }
                                             }
                                           }
@@ -67378,7 +68006,7 @@
               "remove",
               "replace"
             ],
-            "description": "The operation to perform.\n- \"add\": Adds a new field or replaces an existing one at the specified path\n- \"remove\": Removes the field at the specified path\n- \"replace\": Replaces the value at the specified path \n",
+            "description": "The operation to perform.\n- \"add\": Adds a new field or replaces an existing one at the specified path\n- \"remove\": Removes the field at the specified path\n- \"replace\": Replaces the value at the specified path\n",
             "example": "replace"
           },
           "path": {
@@ -67633,6 +68261,20 @@
                                 "validate": "required"
                               }
                             },
+                            "deletionSettings": {
+                              "title": "Deletion Settings",
+                              "type": "object",
+                              "required": [
+                                "enabled"
+                              ],
+                              "properties": {
+                                "enabled": {
+                                  "type": "boolean",
+                                  "description": "Whether deletion is enabled for this object",
+                                  "example": true
+                                }
+                              }
+                            },
                             "selectedValueDefaults": {
                               "type": "object",
                               "deprecated": true,
@@ -67750,11 +68392,12 @@
                                     "type": "string",
                                     "enum": [
                                       "always",
-                                      "never"
+                                      "never",
+                                      "ifEmpty"
                                     ],
                                     "default": "always",
                                     "x-go-type-skip-optional-pointer": true,
-                                    "description": "Whether the default value should be applied when updating a record."
+                                    "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                   }
                                 }
                               }
@@ -68176,6 +68819,20 @@
                                     "validate": "required"
                                   }
                                 },
+                                "deletionSettings": {
+                                  "title": "Deletion Settings",
+                                  "type": "object",
+                                  "required": [
+                                    "enabled"
+                                  ],
+                                  "properties": {
+                                    "enabled": {
+                                      "type": "boolean",
+                                      "description": "Whether deletion is enabled for this object",
+                                      "example": true
+                                    }
+                                  }
+                                },
                                 "selectedValueDefaults": {
                                   "type": "object",
                                   "deprecated": true,
@@ -68293,11 +68950,12 @@
                                         "type": "string",
                                         "enum": [
                                           "always",
-                                          "never"
+                                          "never",
+                                          "ifEmpty"
                                         ],
                                         "default": "always",
                                         "x-go-type-skip-optional-pointer": true,
-                                        "description": "Whether the default value should be applied when updating a record."
+                                        "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                       }
                                     }
                                   }
@@ -68327,6 +68985,20 @@
                                       "type": "string",
                                       "x-oapi-codegen-extra-tags": {
                                         "validate": "required"
+                                      }
+                                    },
+                                    "deletionSettings": {
+                                      "title": "Deletion Settings",
+                                      "type": "object",
+                                      "required": [
+                                        "enabled"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "boolean",
+                                          "description": "Whether deletion is enabled for this object",
+                                          "example": true
+                                        }
                                       }
                                     },
                                     "selectedValueDefaults": {
@@ -68446,11 +69118,12 @@
                                             "type": "string",
                                             "enum": [
                                               "always",
-                                              "never"
+                                              "never",
+                                              "ifEmpty"
                                             ],
                                             "default": "always",
                                             "x-go-type-skip-optional-pointer": true,
-                                            "description": "Whether the default value should be applied when updating a record."
+                                            "description": "Whether the default value should be applied when updating a record.\n- always: Always write to the field on update\n- never: Never write to the field on update\n- ifEmpty: Only write to the field if it's currently empty (unset or empty string). \n"
                                           }
                                         }
                                       }
@@ -68851,13 +69524,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -68890,13 +69563,13 @@
                 "type": "string",
                 "description": "The time the consumer was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the consumer was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -68914,13 +69587,13 @@
             "type": "string",
             "description": "The time the connection was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the connection was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "authScheme": {
             "type": "string",
@@ -69844,13 +70517,13 @@
             "type": "string",
             "description": "The time the group was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the group was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -69883,13 +70556,13 @@
             "type": "string",
             "description": "The time the consumer was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the consumer was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -69952,7 +70625,7 @@
             "type": "string",
             "description": "The time the operation was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -69968,7 +70641,7 @@
           "timestamp": {
             "type": "string",
             "description": "The time the log was created.",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "message": {
             "type": "object",
@@ -71508,16 +72181,17 @@
             "type": "string",
             "description": "The type of notification event.",
             "enum": [
-              "read.backfill.done",
               "connection.created",
               "connection.error",
               "installation.created",
               "installation.updated",
               "installation.deleted",
               "read.schedule.paused",
+              "read.backfill.done",
+              "read.triggered.done",
+              "read.triggered.error",
               "destination.webhook.disabled"
-            ],
-            "example": "installation.created"
+            ]
           },
           "topicId": {
             "type": "string",
@@ -71538,6 +72212,22 @@
             "description": "The time when the event-topic route was last updated."
           }
         }
+      },
+      "NotificationEventType": {
+        "type": "string",
+        "description": "The type of notification event.",
+        "enum": [
+          "connection.created",
+          "connection.error",
+          "installation.created",
+          "installation.updated",
+          "installation.deleted",
+          "read.schedule.paused",
+          "read.backfill.done",
+          "read.triggered.done",
+          "read.triggered.error",
+          "destination.webhook.disabled"
+        ]
       },
       "TopicDestinationRoute": {
         "title": "Topic Destination Route",

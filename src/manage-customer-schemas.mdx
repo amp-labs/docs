@@ -1,8 +1,71 @@
 ---
-title: "Detect schema changes"
+title: "Manage customer schemas"
 ---
 
-## Overview
+Ampersand helps you manage the schema of objects in your customer's SaaS instances by giving you the ability to:
+- Get a list of the current fields (including standard and custom fields)
+- Create or update custom fields
+- Detect when fields have been created, deleted, or have their types changed
+
+On the other hand, if you are looking to manage the schema of the data that Ampersand sends you, you can use [Object and field mappings](/object-and-field-mapping).
+
+## Fetch existing fields
+
+### Using headless UI
+
+Use the `useManifest` hook to retrieve existing fields from your customer's SaaS instance. The `getCustomerFieldsForObject` function returns all fields for a given object, including both standard and custom fields.
+
+```tsx
+const { getCustomerFieldsForObject } = useManifest();
+
+// Get all fields for a specific object
+const fields = getCustomerFieldsForObject("account");
+```
+
+See the [headless UI library page](/headless#get-fields-from-customer’s-saas) for more details.
+
+### Using API
+
+Use the Ampersand API to get object metadata that includes all fields for an object:
+
+- [Get object metadata for installation](/reference/objects-&-fields/get-object-metadata-for-installation) - Use this when you have an installation
+- [Get object metadata for connection](/reference/objects-&-fields/get-object-metadata-for-connection) - Use this when you only have a connection, this is helpful if you need to retrieve fields while a customer is setting up their integration.
+
+Both endpoints return field metadata such as field names, types, display names, and whether fields are custom or read-only.
+
+## Create or update custom fields
+
+
+
+You can programmatically create or update custom fields in your customer's SaaS instance using Ampersand's API. This is useful when you need to ensure specific custom fields exist before writing data to them. **Please note that only Salesforce and HubSpot support this feature at the moment.**
+
+Ampersand provides two endpoints for managing custom fields:
+
+- [Upsert custom fields for installation](/reference/objects-&-fields/upsert-custom-fields-for-installation) - Use this when you already have an installation
+- [Upsert custom fields for connection](/reference/objects-&-fields/upsert-custom-fields-for-connection) - Use this when you only have a connection (useful during installation setup)
+
+Both endpoints accept field definitions that specify the field name, type, display name, and other properties. The API will create the field if it doesn't exist, or update it if it does.
+
+### Provider-specific behavior
+
+#### Salesforce
+
+When creating custom fields in Salesforce, Ampersand automatically handles field permissions to ensure your integration can access the newly created fields:
+
+1. **Permission Set**: Ampersand creates a managed Permission Set named `IntegrationCustomFieldVisibility` that grants read and edit access to custom fields
+2. **Field Permissions**: View and write permissions for the new custom fields are automatically added to this Permission Set
+3. **User Assignment**: The Permission Set is automatically assigned to the user that provided their credentials for the Connection
+
+This ensures that custom fields are immediately accessible to your integration after creation.
+
+#### HubSpot
+
+When creating custom fields in HubSpot, Ampersand automatically organizes them into a property group:
+
+1. **Property Group**: Ampersand creates a managed property group named `integrationcreatedproperties` (displayed as "Integration Created Properties")
+2. **Field Organization**: All custom fields created through Ampersand are organized under this group for easy management
+
+## Watch schema changes
 
 Ampersand allows you to monitor changes to the schema of objects in your customers' SaaS applications. This enables your application to react when fields are created, deleted, or have their types changed, helping you keep your integration in sync with your customers' evolving data structures.
 
@@ -14,7 +77,7 @@ To do this, add `watchSchema` as a key in your integration defined in `amp.yaml`
 
 Once you deploy the integration, Ampersand will start monitoring the requested schema changes for all objects across all installations of your integration. If you wish to stop monitoring schema changes, you can remove the `watchSchema` key from your integration definition & redeploy the integration using `amp deploy`.
 
-## Event types
+### Event types
 
 You can configure which types of schema changes to monitor:
 
@@ -45,7 +108,7 @@ integrations:
           enabled: always
 ```
 
-## Receiving schema change events
+### Receiving schema change events
 
 You will receive webhook messages when schema changes are detected in your customers' SaaS instances. These webhooks are sent to the destination you specified in your `watchSchema` configuration.
 
@@ -55,7 +118,7 @@ Depending on the types of schema change events you've enabled, the webhook paylo
 - **deletedFields:** fields that have been removed from the object.
 - **changedFields:** fields that have been modified, including both the old and new field definitions.
 
-### Example webhook payload
+### Example payload
 
 ```json
 {

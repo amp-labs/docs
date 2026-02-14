@@ -2,12 +2,41 @@
 title: "Dropbox Sign"
 ---
 
-## What's Supported
+## What's supported
 
-### Supported Actions
+### Supported actions
 
 This connector supports:
-- [Proxy Actions](/proxy-actions), using the base URL `https://api.dropboxapi.com`.
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Dropbox Sign instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.hellosign.com`.
+
+### Supported objects
+
+The Dropbox Sign connector supports reading from the following objects:
+
+- [api_app](https://developers.hellosign.com/api/reference/operation/apiAppList/)
+- [bulk_send_job](https://developers.hellosign.com/api/reference/operation/bulkSendJobList/)
+- [fax](https://developers.hellosign.com/api/reference/operation/faxList/)
+- [fax_line](https://developers.hellosign.com/api/reference/operation/faxLineList/)
+- [signature](https://developers.hellosign.com/api/reference/operation/signatureRequestList/)
+- [template](https://developers.hellosign.com/api/reference/operation/templateList/)
+
+The Dropbox Sign connector supports writing to the following objects:
+
+- [account](https://developers.hellosign.com/api/reference/operation/accountCreate/)
+- [api_app](https://developers.hellosign.com/api/reference/operation/apiAppCreate/)
+- [draft](https://developers.hellosign.com/api/reference/operation/unclaimedDraftCreate/)
+- [fax_line](https://developers.hellosign.com/api/reference/operation/faxLineCreate/)
+- [report](https://developers.hellosign.com/api/reference/operation/reportCreate/)
+- [signature/embedded](https://developers.hellosign.com/api/reference/operation/signatureRequestCreateEmbedded/)
+- [signature/embedded_with_template](https://developers.hellosign.com/api/reference/operation/signatureRequestCreateEmbeddedWithTemplate/)
+- [team](https://developers.hellosign.com/api/reference/operation/teamCreate/)
+- [template](https://developers.hellosign.com/api/reference/operation/templateCreate/)
+
+### Example integration
+
+For an example manifest file of a Dropbox Sign integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/dropbox-sign/amp.yaml).
 
 ## Before You Get Started
 
@@ -67,3 +96,15 @@ Once the app is created, you'll find the **Client ID** and **OAuth Secret** keys
 
 
 6. Click **Save changes**.
+
+## Using the connector
+
+To start integrating with Dropbox Sign:
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.

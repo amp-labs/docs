@@ -1,41 +1,59 @@
 ---
 title: "Salesforce"
 ---
-## What's Supported
 
-### Supported Actions
+### Supported actions
 
-The Salesforce connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.my.salesforce.com`.
 - [Read Actions](/read-actions), including full historic backfill and incremental read.
 - [Subscribe Actions](/subscribe-actions).
 - [Write Actions](/write-actions), including Bulk Write.
-- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.my.salesforce.com`.
 
-### Supported Objects
+### Supported CRM objects
 
-The Salesforce connector supports writing to and reading from the following objects:
-- [Account](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_account.htm)
-- [Contact](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_contact.htm)
-- [Lead](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_lead.htm)
-- [Opportunity](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_opportunity.htm)
-- [Case](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm)
-- [Task](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_task.htm)
-- [Event](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_event.htm)
-- [Campaign](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_campaign.htm)
-- [Product](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_product.htm)
-- [User](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_user.htm)
-- All other [standard objects](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_list.htm)
-- All custom objects
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+export const Maybe = () => <span>🟡</span>
 
-For each of these objects, the connector supports:
+<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
+<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
+  <thead style={{ display: 'table-header-group', width: '100%' }}>
+    <tr style={{ display: 'table-row', width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '40%' }}>Object</th>
+      <th style={{ width: '20%' }}>Read</th>
+      <th style={{ width: '20%' }}>Write</th>
+      <th style={{ width: '20%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody style={{ display: 'table-row-group', width: '100%' }}>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_account.htm">Account</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_campaign.htm">Campaign</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm">Case</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_contact.htm">Contact</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_event.htm">Event</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_lead.htm">Lead</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_opportunity.htm">Opportunity</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_product.htm">Product</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_task.htm">Task</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_user.htm">User</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>All other <a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_list.htm">standard objects</a></td><td><Check /></td><td><Check /></td><td><Maybe /><br /><a href="https://developer.salesforce.com/docs/atlas.en-us.change_data_capture.meta/change_data_capture/cdc_object_support.htm">(See the full list*)</a></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>All custom objects</td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+  </tbody>
+</table>
+</div>
+
+_* Only some standard objects are available for subscribe action. Check here for the [full list](https://developer.salesforce.com/docs/atlas.en-us.change_data_capture.meta/change_data_capture/cdc_object_support.htm) of supported objects._
+
+For each of these CRM objects, the connector supports:
 - Standard fields
-- Custom fields 
+- Custom fields
 
-### Example Integration
+### Example integration
 
-For an example manifest file of a Salesforce integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml).
+Example manifest files can be found in our samples repository on GitHub:
+- [Salesforce CRM example](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml)
 
-## Before You Get Started
+## Before you get started
 
 To integrate Salesforce with Ampersand, you need to Create a Salesforce Account and obtain the following credentials from a Salesforce Connected App:
 
@@ -92,11 +110,11 @@ To create Salesforce integrations with Ampersand, you'll need to first create a 
 
 Now that you have created a Connected App in Salesforce, you can obtain your Consumer Key and Consumer Secret. These credentials will be used in the next step, where you will [connect your application to Ampersand](https://docs.withampersand.com/docs/salesforce-guide#connecting--salesforce-to-ampersand) .
 
-In the **Platform Tools >> Apps >> App Manager** section, find your newly created connected App and follow the steps below to obtain Consumer Key and Consumer Secret. 
+In the **Platform Tools >> Apps >> App Manager** section, find your newly created connected App and follow the steps below to obtain Consumer Key and Consumer Secret.
 
 1. Click the dropdown arrow next to your app and select **View**.
 2. Click **Manage Consumer Details**.
-3. Complete the verification and you will be able to access the **Consumer Key** and **Consumer Secret**. 
+3. Complete the verification and you will be able to access the **Consumer Key** and **Consumer Secret**.
 
 Copy these keys and use them in the next step to connect Salesforce to Ampersand.
 
@@ -110,7 +128,7 @@ Copy these keys and use them in the next step to connect Salesforce to Ampersand
 
 3. Select **Provider apps**.
 
-4. Select _Salesforce_ from the **Provider** list. 
+4. Select _Salesforce_ from the **Provider** list.
 
 5. Enter the previously obtained _Consumer Key_ in the **Client ID** field and the _Consumer Secret_ in the **Client Secret** field.
 
@@ -120,7 +138,7 @@ Copy these keys and use them in the next step to connect Salesforce to Ampersand
 
 <br />
 
-> ℹ️ If you lose these keys, you can regenerate them by editing the Connected App in Salesforce and selecting **Regenerate Consumer Secret**.
+> ℹ️ If you lose the Consumer Key or Secret, you can regenerate them by editing the Connected App in Salesforce and selecting **Regenerate Consumer Secret**.
 
 ## Using the connector
 
