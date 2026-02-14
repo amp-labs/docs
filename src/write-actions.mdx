@@ -480,6 +480,25 @@ Retry policies only apply to asynchronous mode.
 
 By default, delete operations are disabled. To enable deletion, set `deletionSettings.enabled` to `true` for the object when creating or updating an installation.
 
+#### Using headless UI
+
+You can enable or disable deletion on a customer-by-customer basis using `setEnableDeletion` and `setDisableDeletion` from `config.writeObject()`. Learn more about [pre-requisites for headless UI here](/headless#prerequisites).
+
+```typescript
+function WriteObjectConfig() {
+  const config = useLocalConfig();
+  const contactWriteConfig = config.writeObject("Contact");
+
+  // Enable deletion for the Contact object
+  contactWriteConfig.setEnableDeletion();
+
+  // Or disable deletion
+  contactWriteConfig.setDisableDeletion();
+}
+```
+
+#### Using API
+
 You can use these APIs to set `deletionSettings.enabled`:
 
 <AccordionGroup>
