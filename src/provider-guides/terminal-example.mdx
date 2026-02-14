@@ -1,0 +1,42 @@
+export const Terminal = ({ copyText, command, output }) => {
+  const copyCommand = async () => {
+    await navigator.clipboard.writeText(copyText);
+  };
+
+  let commandComponent =
+    <div className="flex items-start px-3 py-2">
+      <span className="text-green-400 pr-2">$</span>
+      <span className="flex-1 break-words whitespace-pre-wrap">{command}</span>
+      <button
+        onClick={copyCommand}
+        className="ml-2 text-gray-400 hover:text-white text-xs"
+        title="Copy command">Copy</button>
+    </div>
+
+  let outputComponent =
+    <div className="px-3 py-2 text-sm whitespace-pre-wrap overflow-x-auto bg-gray-950 rounded-md font-mono">
+      {output}
+    </div>
+
+  return (
+    <div className="terminal bg-gray-900 text-gray-100 font-mono text-sm rounded-md border border-gray-800 max-w-3xl mx-auto">
+      {commandComponent}
+      {outputComponent}
+    </div>
+  );
+};
+
+<Terminal
+  copyText="git clone my-repo ./tmp"
+  command={
+    <>
+      git clone <span className="text-blue-400">my-repo</span> ./tmp
+    </>
+  }
+  output={
+    <>
+      added 2 packages, and audited 123 packages in 2s{"\n"}
+      found <span className="text-green-400">0</span> vulnerabilities
+    </>
+  }>
+</Terminal>
