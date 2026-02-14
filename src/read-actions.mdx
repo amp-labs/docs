@@ -116,6 +116,16 @@ You can select a specific time frame for backfill, such as "the last 30 days" or
           ...
 ```
 
+### Monitor backfill progress
+
+To monitor the progress of your backfill, poll the [backfill progress API](/reference/operation/get-backfill-progress) for an installation and object. Call it while the backfill runs to track sync status.
+
+The API returns:
+- **recordsProcessed** — How many records have been synced so far; updates as the backfill runs
+- **recordsEstimatedTotal** — The estimated total at the start of the backfill (Salesforce and HubSpot only)
+- **operationId** — The ID of the backfill operation
+- **createTime** — When the backfill started
+- **updateTime** — When progress was last updated
 
 ## Trigger a read
 
