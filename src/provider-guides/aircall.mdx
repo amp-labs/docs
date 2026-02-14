@@ -4,14 +4,28 @@ slug: "aircall"
 excerpt: ""
 hidden: false
 createdAt: "Mon Jun 24 2024 08:32:49 GMT+0000 (Coordinated Universal Time)"
-updatedAt: "Thu Aug 08 2024 22:39:27 GMT+0000 (Coordinated Universal Time)"
+updatedAt: "Sat Jan 10 2026 00:21:13 GMT+0000 (Coordinated Universal Time)"
 ---
+
 ## What's Supported
 
 ### Supported Actions
 
 This connector supports:
-- [Proxy Actions](/proxy-actions), using the base URL `https://api.aircall.io`.
+- [Read Action](/read-actions), including full historic backfill. Incremental read is supported for Contact, User, Number, and Call. Note that for Team and Tag, a full read of the Aircall instance will be done for each scheduled read.
+- [Write Action](/write-actions).
+- [Proxy Action](/proxy-actions), using the base URL `https://api.aircall.io`.
+
+### Supported Objects
+
+The Aircall connector supports writing to and reading from the following objects:
+
+- [Call](https://developer.aircall.io/api-references/#call) (`call`)
+- [User](https://developer.aircall.io/api-references/#user) (`user`)
+- [Contact](https://developer.aircall.io/api-references/#contact) (`contact`)
+- [Number](https://developer.aircall.io/api-references/#number) (`number`)
+- [Team](https://developer.aircall.io/api-references/#team) (`team`)
+- [Tag](https://developer.aircall.io/api-references/#tag) (`tag`)
 
 ## Before You Get Started
 
@@ -44,3 +58,15 @@ Once you have your Aircall app set up and registered, you can proceed to connect
 ![Dashboard](/images/provider-guides/053beed-aircall.gif)
 
 7. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Aircall:
+
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/aircall/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+  - If your integration has [Read Action](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Action](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Action](/proxy-actions), you can start making Proxy API calls.
