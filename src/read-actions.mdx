@@ -1,5 +1,5 @@
 ---
-title: "Read actions" 
+title: "Read actions"
 ---
 
 A read action reads data from your customer's SaaS and send them to Destinations that you define.
@@ -27,7 +27,7 @@ To read an object, you need to specify:
 
 <Note>
  **On the roadmap**
- 
+
  The ability for your users to define their own sync schedules.
 </Note>
 
@@ -49,6 +49,24 @@ Fields can be either be required or optional. If a field is required, then all u
           - fieldName: email
           optionalFields:
           - fieldName: company
+```
+
+#### Nested fields
+
+Some providers return data with nested structures. You can reference nested fields using [JSONPath bracket notation](/object-and-field-mapping#nested-field-mapping): `$['parentField']['childField']`.
+
+This works in both `requiredFields` and `optionalFields`, with or without [field mapping](/object-and-field-mapping):
+
+```YAML YAML
+   objects:
+        - objectName: contact
+          destination: contactWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+          - fieldName: $['address']['street']
+          - fieldName: $['address']['city']
+          optionalFields:
+          - fieldName: $['metadata']['tags']
 ```
 
 ### Allow users to pick from all fields
@@ -150,12 +168,12 @@ There are 2 types of reads that can be triggered:
 
 ```yaml yaml
 specVersion: 1.0.0
-integrations: 
+integrations:
   - name: readSalesforce
     provider: salesforce
     read:
       objects:
-      
+
         - objectName: account
           destination: accountWebhook
           schedule: "*/10 * * * *" # every 10 minutes
@@ -170,7 +188,7 @@ integrations:
           optionalFields:
             - fieldName: annualrevenue
             - fieldName: website
-                
+
         - objectName: contact
           destination: contactWebhook
           schedule: "*/10 * * * *" # every 10 minutes

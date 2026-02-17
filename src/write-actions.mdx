@@ -43,6 +43,25 @@ integrations:
  The ability to programmatically create custom objects when a user installs your integration.
 </Note>
 
+#### Nested fields
+
+When writing to providers that have nested data structures, you can use [JSONPath bracket notation](/object-and-field-mapping#nested-field-mapping) in your record keys:
+
+```JSON
+{
+    "groupRef": "demo-group-id",
+    "type": "create",
+    "record": {
+        "$['address']['street']": "123 Main St",
+        "$['address']['city']": "Springfield"
+    }
+}
+```
+
+Ampersand will automatically unflatten these into the nested structure the provider expects.
+
+If the write action uses `inheritMapping: true` and the read action has nested field mappings, the same mappings will be applied in reverse when writing. See [Writing nested data](/object-and-field-mapping#writing-nested-data) for details.
+
 ## Writing records
 
 Once your users install an integration with a write action, your app can write data to their SaaS by making a POST call to Ampersand, the URL is in the format of:
