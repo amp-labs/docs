@@ -25,47 +25,6 @@ For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/r
 
 For an example manifest file of a Shopify integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/shopify/amp.yaml).
 
-To define an integration for Shopify, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: shopify-integration
-    displayName: My Shopify integration
-    provider: shopify
-    read:
-      objects:
-        - objectName: customers
-          destination: defaultWebhook
-          schedule: "*/30 * * * *"
-          backfill:
-            defaultPeriod:
-              fullHistory: true
-        - objectName: orders
-          destination: defaultWebhook
-          schedule: "*/30 * * * *"
-          backfill:
-            defaultPeriod:
-              fullHistory: true
-        - objectName: products
-          destination: defaultWebhook
-          schedule: "*/30 * * * *"
-          backfill:
-            defaultPeriod:
-              fullHistory: true
-    write:
-      objects:
-        - objectName: customers
-          inheritMapping: true
-        - objectName: products
-          inheritMapping: true
-        - objectName: orders
-          inheritMapping: true
-    proxy:
-      enabled: true
-```
-
 ## Before you get started
 
 To connect Shopify with Ampersand, you will need:
