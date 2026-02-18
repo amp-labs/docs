@@ -87,9 +87,16 @@ Shopify uses OAuth 2.0 (authorization code grant) for apps created in the Partne
 
 ### Protected customer data / approvals
 
-Some Shopify scopes and objects (for example, customer data) may require additional approval and configuration. If you see errors like “This app is not approved to access the Customer object”, review Shopify’s [protected customer data requirements](https://shopify.dev/docs/apps/launch/protected-customer-data) and ensure your app is eligible for the data you’re requesting.
+Some Shopify scopes and objects (especially those that expose customer data) can require additional approval and compliance steps before Shopify will allow access.
 
-If your integration needs access to older orders, Shopify may require additional scopes (for example, `read_all_orders`). See Shopify’s [Orders API documentation](https://shopify.dev/docs/api/admin-rest/latest/resources/order) for details.
+If you see errors like “This app is not approved to access the Customer object”, use the checklist below.
+
+- **Confirm you actually need protected customer data**: only request the minimum scopes and data required for your integration.
+- **Complete Shopify’s protected customer data requirements**: follow Shopify’s guidance for requesting access and meeting the required compliance steps: [Work with protected customer data](https://shopify.dev/docs/apps/launch/protected-customer-data).
+
+#### Access to older orders
+
+Shopify may restrict access to older orders unless you request additional scopes (for example, `read_all_orders`). See Shopify’s [Orders API documentation](https://shopify.dev/docs/api/admin-rest/latest/resources/order) for details.
 
 ## Add your Shopify app info to Ampersand
 
