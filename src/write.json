@@ -133,7 +133,7 @@
                     "properties": {
                       "allOrNone": {
                         "type": "boolean",
-                        "description": "When set to true, the entire batch will fail if any record in the batch fails.\nWhen set to false (default), partial writes are supported — successful records will be committed even if some fail.\nNote: HubSpot batch updates always result in partial success due to a provider limitation, regardless of this setting.\n",
+                        "description": "When set to `true`, the entire batch will fail if any record in the batch fails.\nWhen set to `false` (default), partial writes are supported — successful records will be committed even if some fail.\nNote: HubSpot batch updates always result in partial success due to a provider limitation, regardless of this setting.\n",
                         "default": false,
                         "example": true
                       }
@@ -141,7 +141,7 @@
                   },
                   "batch": {
                     "type": "array",
-                    "description": "Write 1–100 records in one request. Omit this and use `record` instead when sending a single record.\nPartial writes are not supported; if any record in the batch is invalid, the entire batch fails.\nBatch is currently supported for create and update write requests.\n",
+                    "description": "Write 1–100 records in one request. Omit this and use `record` instead when sending a single record.\nThe default behavior is partial success, i.e., successful records will be committed even if some records in the batch fail. To disable partial writes and fail the entire batch, use the `allOrNone` flag in your request. See [`batchPolicy.allOrNone`](#/components/schemas/WriteRequest/properties/batchPolicy).\nBatch is currently supported for create and update write requests.\n",
                     "minItems": 1,
                     "maxItems": 100,
                     "items": {
@@ -923,7 +923,7 @@
             "properties": {
               "allOrNone": {
                 "type": "boolean",
-                "description": "When set to true, the entire batch will fail if any record in the batch fails.\nWhen set to false (default), partial writes are supported — successful records will be committed even if some fail.\nNote: HubSpot batch updates always result in partial success due to a provider limitation, regardless of this setting.\n",
+                "description": "When set to `true`, the entire batch will fail if any record in the batch fails.\nWhen set to `false` (default), partial writes are supported — successful records will be committed even if some fail.\nNote: HubSpot batch updates always result in partial success due to a provider limitation, regardless of this setting.\n",
                 "default": false,
                 "example": true
               }
@@ -931,7 +931,7 @@
           },
           "batch": {
             "type": "array",
-            "description": "Write 1–100 records in one request. Omit this and use `record` instead when sending a single record.\nPartial writes are not supported; if any record in the batch is invalid, the entire batch fails.\nBatch is currently supported for create and update write requests.\n",
+            "description": "Write 1–100 records in one request. Omit this and use `record` instead when sending a single record.\nThe default behavior is partial success, i.e., successful records will be committed even if some records in the batch fail. To disable partial writes and fail the entire batch, use the `allOrNone` flag in your request. See [`batchPolicy.allOrNone`](#/components/schemas/WriteRequest/properties/batchPolicy).\nBatch is currently supported for create and update write requests.\n",
             "minItems": 1,
             "maxItems": 100,
             "items": {
