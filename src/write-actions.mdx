@@ -579,11 +579,26 @@ Use `"op": "replace"` if the object already has `deletionSettings` and you are c
 
 ### Prevent overwriting of customer data
 
-There are certain fields that you may only want to write to when you are creating a record, not when you are updating a record. This helps prevent the scenario where you may accidentally overwrite a field that the customer has manually modified in their SaaS product. You may also have a need for the opposite behavior, where you want to leave a field blank when creating records, but write to that field when updating records.
+You can control whether a field is included in write requests. For example, you can avoid overwriting data the customer has changed, or leave a field blank on create and write to it only on update.
+
+**`writeOnCreate`** — whether to write the field when creating a record:
+- **always** (default): Always include the field on create
+- **never**: Never include the field on create
+
+**`writeOnUpdate`** — whether to write the field when updating a record:
+- **always** (default): Always include the field on update
+- **never**: Never include the field on update (avoids overwriting customer changes)
+- **ifEmpty**: Only include the field if it's currently empty. Supported for Salesforce and HubSpot only.
+
+**Example configurations:**
+- Only set a field on create, never overwrite on update → `writeOnCreate: "always"`, `writeOnUpdate: "never"`
+- Leave field blank on create, only fill on update → `writeOnCreate: "never"`, `writeOnUpdate: "always"`
+- Fill on update only when the field is empty → `writeOnUpdate: "ifEmpty"`
+- Never write to the field for this customer → `writeOnCreate: "never"`, `writeOnUpdate: "never"`
 
 #### Using headless UI
 
-You can set overwrite behavior on a customer-by-customer basis when using the function `setFieldSettings`. Learn more about [pre-requisites for headless UI here](/headless#prerequisites).
+You can set overwrite behavior on a customer-by-customer basis using the function `setFieldSettings`. Learn more about [pre-requisites for headless UI here](/headless#prerequisites).
 
 ```typescript
 function WriteObjectConfig() {
@@ -603,7 +618,7 @@ function WriteObjectConfig() {
 
 #### Using API
 
-As an alternative to headless UI, you can set overwrite behavior on a customer-by-customer when you make a call to the [Create Installation API](/reference/installation/create-a-new-installation). Here is a sample request body:
+As an alternative to headless UI, you can set overwrite behavior on a customer-by-customer basis when you make a call to the [Create Installation API](/reference/installation/create-a-new-installation). Here is a sample request body:
 
 ```Javascript
 {
