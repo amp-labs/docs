@@ -11,9 +11,13 @@ updatedAt: "Mon Jul 08 2024 17:16:37 GMT+0000 (Coordinated Universal Time)"
 ### Supported Actions
 
 This connector supports:
-- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Zoom instance will be done for each scheduled read.
+- [Read Actions](/read-actions), including full historic backfill for most objects. Incremental read is supported for `recordings`, `archive_files`, `meeting_summaries`, `activities_report`, `meetings`, `users_report`, `recordings_report`, `meetings_report`, `operation_logs_report`, `meeting_activities_report`, `telephone_report`, and `upcoming_events_report`. For all other objects, a full read of the Zoom instance will be done per scheduled read.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.zoom.us`.
+
+<Note>
+The following objects don't support historic backfill: `users_report`, `recordings_report`, `meetings_report`, `operation_logs_report`, `meeting_activities_report`, `telephone_report`, `upcoming_events_report`, and `recordings`. By default, the last 29 days are read. To retrieve more historical data, specify higher `defaultPeriod` in your read configuration.
+</Note>
 
 ### Supported Objects
 
@@ -21,12 +25,33 @@ The Zoom connector supports writing to and reading from the following objects:
 - [activities_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/GET/report/activities) (read only)
 - [archive_files](https://developers.zoom.us/docs/api/meetings/#tag/archiving/GET/archive_files) (read only)
 - [billing_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/GET/report/billing) (read only)
-- [device_groups](https://developers.zoom.us/docs/api/meetings/#tag/devices/GET/devices/groups) (read only)
+- [contacts_groups](https://developers.zoom.us/docs/api/users/#tag/contact-groups/get/contacts/groups) (read and write)
 - [devices](https://developers.zoom.us/docs/api/meetings/#tag/devices/GET/devices) (read and write)
+- [devices_groups](https://developers.zoom.us/docs/api/meetings/#tag/devices/get/devices/groups) (read only)
+- [groups](https://developers.zoom.us/docs/api/users/#tag/groups/get/groups) (read and write)
 - [h323_devices](https://developers.zoom.us/docs/api/meetings/#tag/h323-devices/POST/h323/devices) (read and write)
-- [meeting_summaries](https://developers.zoom.us/docs/api/meetings/#tag/meetings/GET/meetings/meeting_summaries) (read only)
-- [phones](https://developers.zoom.us/docs/api/meetings/#tag/sip-phone/GET/sip_phones/phones) (read only)
+- [meeting_activities_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/meeting_activities) (read only)
+- [meeting_summaries](https://developers.zoom.us/docs/api/meetings/#tag/summaries/get/meetings/meeting_summaries) (read only)
+- [meeting_templates](https://developers.zoom.us/docs/api/meetings/#tag/templates/get/users/{userId}/meeting_templates) (read only)
+- [meetings](https://developers.zoom.us/docs/api/meetings/#tag/meetings/get/users/{userId}/meetings) (read and write)
+- [meetings_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/users/{userId}/meetings) (read only)
+- [operation_logs_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/operationlogs) (read only)
+- [phones](https://developers.zoom.us/docs/api/meetings/#tag/sip-phone/get/sip_phones/phones) (read only)
+- [recordings](https://developers.zoom.us/docs/api/meetings/#tag/cloud-recording/get/users/{userId}/recordings) (read only)
+- [recordings_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/cloud_recording) (read only)
+- [telephone_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/telephone) (read only)
 - [tracking_fields](https://developers.zoom.us/docs/api/meetings/#tag/tracking-field) (read and write)
+- [tsp](https://developers.zoom.us/docs/api/meetings/#tag/tsp/get/users/{userId}/tsp) (read and write)
+- [upcoming_events_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/upcoming_events) (read only)
+- [upcoming_meetings](https://developers.zoom.us/docs/api/meetings/#tag/meetings/get/users/{userId}/upcoming_meetings) (read only)
+- [users](https://developers.zoom.us/docs/api/users/#tag/users/get/users) (read and write)
+- [users_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/users) (read only)
+- [webinars](https://developers.zoom.us/docs/api/meetings/#tag/webinars/get/users/{userId}/webinars) (read and write)
+
+
+### Example integration
+
+For an example manifest file of an Zoom integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/zoom/amp.yaml).
 
 
 ## Before You Get Started
