@@ -1,0 +1,73 @@
+---
+title: Coupa
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}`.
+
+### Example integration
+
+To define an integration for Coupa, create a manifest file that looks like this:
+
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: coupa-integration
+    displayName: My Coupa Integration
+    provider: coupa
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To connect _Coupa_ with _Ampersand_, you will need a [Coupa account](https://www.coupa.com).
+
+Once your account is ready, you'll need to create a Coupa OAuth2 app and obtain the following credentials:
+
+- Client ID
+- Client Secret
+- Scopes
+
+You will also need your **Coupa instance domain** (the `workspace` value), which is your Coupa instance URL (e.g., `mycompany.coupahost.com`).
+
+### Creating a Coupa app
+
+1. Log in to your Coupa instance as an administrator.
+2. Navigate to **Setup** → **Oauth2 / OpenID Connect Clients**.
+3. Click **Create** to register a new OAuth2 client.
+4. Fill in the application name and description.
+5. Under **Redirect URI**, add the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+6. Select the scopes your integration requires.
+7. Click **Save**.
+8. Copy the generated **Client ID** and **Client Secret**.
+
+For more details, refer to the [Coupa API get started guide](https://compass.coupa.com/en-us/products/product-documentation/integration-technical-documentation/the-coupa-core-api/get-started-with-the-api).
+
+### Add your Coupa app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+2. Select the project where you want to create a Coupa integration.
+   ![Ampersand Project Selection](/images/provider-guides/dd47b7a-Ampersand.png)
+3. Select **Provider apps**.
+4. Select _Coupa_ from the **Provider** list.
+5. Enter the **Client ID** and **Client Secret** you copied earlier.
+6. Enter the scopes your integration requires.
+7. Click **Save changes**.
+
+## Using the connector
+
+To start integrating with Coupa:
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization and their Coupa instance domain.
+- Start using the connector!
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+Please note that this connector's base URL is `https://{{.workspace}}`, where `workspace` is your Coupa instance domain (e.g., `mycompany.coupahost.com`).
