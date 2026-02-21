@@ -6,7 +6,7 @@ The Salesforce connector supports:
 - **CRM**
 - **Account Engagement** (formerly Pardot)
 
-## What's Supported
+## What's supported
 
 ### Supported actions
 
@@ -62,7 +62,7 @@ For each of these CRM objects, the connector supports:
 - Standard fields
 - Custom fields
 
-### Supported Account Engagement Objects
+### Supported Account Engagement objects
 
 The Salesforce connector supports the following **Account Engagement** module objects:
 
@@ -127,70 +127,110 @@ Example manifest files can be found in our samples repository on GitHub:
 
 ## Before you get started
 
-To integrate Salesforce with Ampersand, you need to Create a Salesforce Account and obtain the following credentials from a Salesforce Connected App:
+### Salesforce orgs needed
 
-- Consumer Key
-- Consumer Secret
+You will need two separate Salesforce orgs to complete this process:
 
-### Create a Salesforce Account
+1. **Dev Hub Org**: A Salesforce org with Dev Hub enabled. You will create the External Client App inside this org.
 
-You need a Salesforce account to create integrations using Ampersand. If you do not have a Salesforce account, here's how you can sign up for a free Developer Account:
+2. **Namespace Org**: A Developer Edition Salesforce org that is only used to register a namespace. You will link this namespace to the Dev Hub Org.
 
-- Go to the [Salesforce Developer site](https://developer.salesforce.com/signup) and sign up for a free developer account.
-- Fill in the required details and click on **Sign Me Up**.
-- Verify your email and complete the registration process.
 
-### Create a Salesforce Connected App
+### 1. Enable Dev Hub
 
-To create Salesforce integrations with Ampersand, you'll need to first create a Connected App in Salesforce. Follow the steps below:
+First you need to choose the Salesforce org to make into your "Dev Hub Org".
 
-1. Log in to your Salesforce account.
+**If you intend to become a Salesforce partner and distribute via AppExchange later:**
+
+- You can sign up for a [trial Salesforce Partner Business Org](https://partners.salesforce.com/pdx/s/trial-org-request), which is essentially a trial of a regular Salesforce org (typically 12 months long). Once you become an official partner, Salesforce will grant you two free Sales Cloud licenses. You can [request an extension of the trial or purchase more licenses](https://help.salesforce.com/s/articleView?id=000380510&type=1).
+
+- Alternatively, if you are already a Salesforce customer, then you can use your existing Salesforce org, and Salesforce will add these free licenses to your existing org when you are accepted as a partner. Please see [Salesforce documentation](https://partners.salesforce.com/s/education/general/Partner_Business_Org) for more information.
+
+**If you don't intend to become a Salesforce partner:**
+
+- You can sign up for a [free Developer Edition Salesforce org](https://developer.salesforce.com/signup) and use it as your Dev Hub Org. Please note that even though Developer Edition orgs are subject to deletion when there is inactivity, this [does not apply if you have an External Client App](https://help.salesforce.com/s/articleView?id=xcloud.admin_de_org_expiration.htm&type=5) in the org, so it is safe to use a free Developer Edition org as your Dev Hub Org.
+
+Once you have chosen the Salesforce org you will use as your Dev Hub org, you can enable Dev Hub by following these steps:
+1. Log in to your Salesforce org.
+2. From **Setup**, enter **Dev Hub** in the Quick Find box and select **Dev Hub**.
+3. Select **Enable Dev Hub**.
+4. Select **Enable Unlocked Packages and Second-Generation Managed Packages**.
+
+![Enable Dev Hub](/images/provider-guides/salesforce/enable-dev-hub.png)
+
+### 2. Register a namespace
+
+Please note that namespaces cannot be created in the Dev Hub Org you just enabled in the step above. You must use a separate Salesforce Developer Edition org (we will call this org the "Namespace Org").
+
+1. Sign up for a free [Developer Edition org](https://developer.salesforce.com/signup).
+2. Navigate to the gear icon in the top right corner and select **Setup**.
+
+   ![Alt text](/images/provider-guides/e8dc5f2-setup.gif)
+
+3. In the quick search box at the top, type in **Package Manager** in the Quick Find box and select **Package Manager**. In **Namespace Settings**, click **Edit**.
+4. Enter a namespace and select **Check Availability**. We recommend picking a namespace that is your product name or a shortened version of your product name.
+5. When prompted to select a package to associate with this namespace, select **None**, then click **Review**.
+6. Review your selections and click **Save**.
+
+![Create Namespace](/images/provider-guides/salesforce/create-namespace.png)
+
+### 3. Link namespace to Dev Hub Org
+
+* Log in to the Dev Hub Org from Step 1.
+* Open **App Launcher** (9 dots at the top left), and search for **Namespace Registries**.
+* Click **Link Namespace** on the top right.
+* When prompted to authenticate, log into the Namespace Org from Step 2. If you are having trouble with this step, try again in an incognito window.
+* After linking, select **All Namespace Registries** filter to view the namespace.
+
+![Link namespace](/images/provider-guides/salesforce/link-namespace.png)
+
+![View namespaces](/images/provider-guides/salesforce/view-all-namespaces.png)
+
+### 4. Create External Client App
+
+In order to connect with your customer's Salesforce instances, you'll need to create a Salesforce External Client App by following the steps below:
+
+1. Log in to your Dev Hub Org that you created above.
 
 2. Navigate to the gear icon in the top right corner and select **Setup**.
 
    ![Alt text](/images/provider-guides/e8dc5f2-setup.gif)
 
-3. In the left sidebar, go to **Platform Tools >> Apps >> External Client Apps >> Settings** and ensure the feature is enabled.
+3. Search for **External Client App Manager**.
 
-   ![Alt text](/images/provider-guides/salesforce-enable-app-creation.gif)
+4. Click **New External Client App**.
 
-4. In the **External Client Apps → Settings** panel, click **New Connected App** to start creating your app.
-    *(Note: The **New Connected App** button is located inside the **Settings** view, not in the **App Manager**)*
+![New ECA](/images/provider-guides/salesforce/new-app.png)
 
-   ![Alt text](/images/provider-guides/salesforce-create-app.gif)
-
-5. Enter  **Connected App Name**, **API Name**, and **Contact Email**.
-
-6. Select the **Enable OAuth Settings** checkbox to configure the OAuth settings:
-
-   1. Enter the **Callback URL**: `https://api.withampersand.com/callbacks/v1/oauth`
-   2. Select the applicable OAuth Scopes from the list and click **Add**. You must always include the following scopes:
+* Enter a **name** for the External Client App. This should match your product name.
+* Specify a **contact email**; this should be your support email address.
+* Set **Distribution State** to **"Packaged"**.
+* Enable **OAuth settings**.
+* In **callback URL** put `https://api.withampersand.com/callbacks/v1/oauth`.
+* Add the following **OAuth scopes** at the minimum:
    - Perform requests at any time (`refresh_token`, `offline_access`)
    - Manage user data via APIs (`api`)
 
-   > ✅ For more details on which OAuth scopes to include, refer to the [OAuth Tokens and Scopes](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_tokens_scopes.htm&language=en_US&type=5) guide.
+> ✅ For more details on which OAuth scopes to include, refer to the [OAuth Tokens and Scopes](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_tokens_scopes.htm&language=en_US&type=5) guide.
 
-   3. Uncheck the **Require Proof Key for Code Exchange (PKCE) Extension for Supported Authorization Flows** checkbox.
+* Uncheck the box for `Require Proof Key for Code Exchange (PKCE) extension for Supported Authorization Flows`
+* Check the box for `Enable Authorization Code and Credentials Flow`
 
-      <br />
+![Create ECA](/images/provider-guides/salesforce_eca_creation.gif)
 
-      ![Alt text](/images/provider-guides/fb527e1-oauth.gif)
+5. Go to the Policies tab, expand “OAuth Policies”, and click the edit button. In the “App Authorization” box, make the following modifications:
+  - In “Refresh Token Policy”, select “Refresh token is valid until revoked”
+  - In “IP Relaxation”, select “Relax IP restrictions”
 
-7. Click **Save**.
+<img src="/images/provider-guides/salesforce_eca_authorization.png"/>
 
-### Obtain Consumer Key and Consumer Secret
+6. Go to the Settings tab, expand “OAuth Settings”. Click on “Consumer Key and Secret”.
 
-Now that you have created a Connected App in Salesforce, you can obtain your Consumer Key and Consumer Secret. These credentials will be used in the next step, where you will [connect your application to Ampersand](https://docs.withampersand.com/docs/salesforce-guide#connecting--salesforce-to-ampersand) .
+<img src="/images/provider-guides/salesforce_eca_oauth.png" width="200"/>
 
-In the **Platform Tools >> Apps >> App Manager** section, find your newly created connected App and follow the steps below to obtain Consumer Key and Consumer Secret.
+Use these keys in the next step.
 
-1. Click the dropdown arrow next to your app and select **View**.
-2. Click **Manage Consumer Details**.
-3. Complete the verification and you will be able to access the **Consumer Key** and **Consumer Secret**.
-
-Copy these keys and use them in the next step to connect Salesforce to Ampersand.
-
-## Provide Salesforce Connected App info to Ampersand
+### 5. Create Provider App in Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 
@@ -210,7 +250,157 @@ Copy these keys and use them in the next step to connect Salesforce to Ampersand
 
 <br />
 
-> ℹ️ If you lose the Consumer Key or Secret, you can regenerate them by editing the Connected App in Salesforce and selecting **Regenerate Consumer Secret**.
+### 6. Package the External Client App
+
+In order for your External Client App to be able to make API calls to your customers' Salesforce instances, Salesforce requires that you create a package version, and have your customers install your package in their Salesforce org.
+
+1. **Install the Salesforce CLI** using npm or [another supported method](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm):
+
+```bash
+npm install -g @salesforce/cli
+```
+
+2. **Create a Salesforce DX project.** From a new directory, generate a project:
+
+```bash
+sf project generate --name MySalesforcePackage
+```
+
+Replace `MySalesforcePackage` with a name that fits your integration, such as your product name.
+
+3. **Authenticate with your Dev Hub Org.** From the project directory you just created, log in to your Dev Hub Org (the org where you created the External Client App):
+
+```bash
+sf org login web --set-default-dev-hub --alias DevHubOrg
+```
+
+A browser window will open for you to sign in.
+
+4. **Set the namespace in the project.** Edit `sfdx-project.json` in the project root. Set the `namespace` value to the namespace you registered and linked to your Dev Hub earlier:
+
+```json
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true
+    }
+  ],
+  "namespace": "MY_NAMESPACE",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "59.0"
+}
+```
+
+Replace `MY_NAMESPACE` with your actual namespace prefix.
+
+5. **Create the managed package.** Use the command below and replace these flags with actual values that are applicable to you:
+- `name`: replace with your product name
+- `error-notification-username`: this must match the email address of one of the users in the Dev Hub Org. For example, you can use your own email here. This is the email address that will receive notifications from Salesforce about errors in the package.
+
+```bash
+sf package create \
+  --name "My Package" \
+  --package-type Managed \
+  --path force-app \
+  --target-dev-hub DevHubOrg \
+  --error-notification-username your-notification-email@company.com
+```
+
+6. **Pull External Client App metadata into the project.** Run this command to programmatically fetch the settings that you had just configured for your External Client App:
+
+```bash
+sf project retrieve start --metadata ExternalClientApplication ExtlClntAppOauthSettings --target-org DevHubOrg
+```
+
+This creates (or updates) metadata under:
+
+- `force-app/main/default/extlClntAppOauthSettings/`
+- `force-app/main/default/externalClientApps/`
+
+If you have several External Client Apps and only want to package one, remove the XML files for the apps you do not want in the package.
+
+7. **Build and promote a package version.** Create a new package version (this can take several minutes). Replace `My Package` with the name you supplied in the `name` flag of the `sf package create` command above.
+
+```bash
+sf package version create \
+  --package "My Package" \
+  --installation-key-bypass \
+  --wait 20 \
+  --code-coverage
+```
+
+When it finishes, note the **Subscriber Package Version ID** that is printed. Please note that two IDs will be printed, you want the “Subscriber Package Version ID”, not the “Package Version”.
+
+8. Promote that version so it can be installed by customers:
+
+```bash
+sf package version promote --package SUBSCRIBER_PACKAGE_VERSION_ID --no-prompt
+```
+
+Replace `SUBSCRIBER_PACKAGE_VERSION_ID` with the ID from the previous step.
+
+9. **Get the package install URL.** Use the Subscriber Package Version ID to build the install URL for your package.
+
+For production orgs:
+
+```text
+https://login.salesforce.com/packaging/installPackage.apexp?p0=SUBSCRIBER_PACKAGE_VERSION_ID
+```
+
+For sandbox orgs:
+
+```text
+https://test.salesforce.com/packaging/installPackage.apexp?p0=SUBSCRIBER_PACKAGE_VERSION_ID
+```
+
+10. Ask your customers to install the package. Instruct your customers to go to the package install URL and click "Install for All Users". They must complete this step **before** connecting their Salesforce account using Ampersand's prebuilt UI components. Otherwise OAuth will fail.
+
+## Migrating Connected App to External Client App
+
+Salesforce no longer supports the creation of new Connected Apps. If you had previously created a Connected App to be used for Ampersand integrations, it will continue to work for your existing and new customers as long as their user profile has the `Approve Uninstalled Connected Apps` or `Use Any API Client` permissions. See [Salesforce customer guide](/customer-guides/salesforce#1-view-and-edit-permissions-for-profile) for details.
+
+Whenever you would like to, you can follow these steps to migrate a Connected App to an External Client App:
+
+1. Open Salesforce **Setup** and search for **Manage Connected Apps** and select the Connected App that you want to convert. Click **Migrate To External Client Application**.
+
+![Migrate connected app 1](/images/provider-guides/salesforce/migrate-1.png)
+
+2. Check both required checkboxes to confirm migration.
+
+![Migrate connected app 2](/images/provider-guides/salesforce/migrate-2.png)
+
+3. Click **Migrate**.
+
+![Migrate connected app 3](/images/provider-guides/salesforce/migrate-3.png)
+
+4. Click **OK**.
+
+![Migrate connected app 4](/images/provider-guides/salesforce/migrate-4.png)
+
+5. A **confirmation message** will appear.
+
+![Migrate connected app 5](/images/provider-guides/salesforce/migrate-5.png)
+
+6. Open **External Client App Manager**.
+
+![Migrate connected app 6](/images/provider-guides/salesforce/migrate-6.png)
+
+7. Select your app, go to the **Settings** tab and set "Distribution State" to **Packaged**.
+
+![Migrate connected app 7](/images/provider-guides/salesforce/migrate-7.png)
+
+8. Go to the Policies tab, expand “OAuth Policies”, and click the edit button. In the “App Authorization” box, make the following modifications:
+  - In “Refresh Token Policy”, select “Refresh token is valid until revoked”
+  - In “IP Relaxation”, select “Relax IP restrictions”
+
+<img src="/images/provider-guides/salesforce_eca_authorization.png"/>
+
+9. [Enable Dev Hub](#1-enable-dev-hub) on your Salesforce org that is hosting the Connected App (which is now an External Client App).
+
+10. Create a new Developer Edition Salesforce org and [register a namespace](#2-register-a-namespace), then [link the namespace](#3-link-namespace-to-dev-hub-org) to the Dev Hub Org.
+
+11. Package the External Client App by [following these instructions](#6-package-the-external-client-app).
 
 ## Using the connector
 

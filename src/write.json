@@ -127,9 +127,21 @@
                       "warmthScore": "ready-for-close"
                     }
                   },
+                  "batchPolicy": {
+                    "type": "object",
+                    "description": "Policy settings for batch write operations. Only applicable when using the `batch` field.\n",
+                    "properties": {
+                      "allOrNone": {
+                        "type": "boolean",
+                        "description": "When set to `true`, the entire batch will fail if any record in the batch fails.\nWhen set to `false` (default), partial writes are supported — successful records will be committed even if some fail.\nNote: HubSpot batch updates always result in partial success due to a provider limitation, regardless of this setting.\n",
+                        "default": false,
+                        "example": true
+                      }
+                    }
+                  },
                   "batch": {
                     "type": "array",
-                    "description": "Write 1–100 records in one request. Omit this and use `record` instead when sending a single record.\nPartial writes are not supported; if any record in the batch is invalid, the entire batch fails.\nBatch is currently supported for create and update write requests.\n",
+                    "description": "Write 1–100 records in one request. Omit this and use `record` instead when sending a single record.\nThe default behavior is partial success, i.e., successful records will be committed even if some records in the batch fail. To disable partial writes and fail the entire batch, use the `allOrNone` flag in your request. See [`batchPolicy.allOrNone`](#/components/schemas/WriteRequest/properties/batchPolicy).\nBatch is currently supported for create and update write requests.\n",
                     "minItems": 1,
                     "maxItems": 100,
                     "items": {
@@ -286,6 +298,9 @@
                     "groupRef": "<groupRef>",
                     "type": "create",
                     "mode": "synchronous",
+                    "batchPolicy": {
+                      "allOrNone": true
+                    },
                     "batch": [
                       {
                         "record": {
@@ -360,7 +375,7 @@
                             },
                             "recordId": {
                               "type": "string",
-                              "description": "The ID of the object",
+                              "description": "The ID of the record. Only present on a successful create or update.",
                               "example": "003Dp0X#@RG7IAP"
                             }
                           }
@@ -412,7 +427,7 @@
                               },
                               "recordId": {
                                 "type": "string",
-                                "description": "The ID of the object",
+                                "description": "The ID of the record. Only present on a successful create or update.",
                                 "example": "003Dp0X#@RG7IAP"
                               }
                             }
@@ -551,7 +566,7 @@
                             },
                             "recordId": {
                               "type": "string",
-                              "description": "The ID of the object",
+                              "description": "The ID of the record. Only present on a successful create or update.",
                               "example": "003Dp0X#@RG7IAP"
                             }
                           }
@@ -617,7 +632,7 @@
                               },
                               "recordId": {
                                 "type": "string",
-                                "description": "The ID of the object",
+                                "description": "The ID of the record. Only present on a successful create or update.",
                                 "example": "003Dp0X#@RG7IAP"
                               }
                             }
@@ -902,9 +917,21 @@
               "warmthScore": "ready-for-close"
             }
           },
+          "batchPolicy": {
+            "type": "object",
+            "description": "Policy settings for batch write operations. Only applicable when using the `batch` field.\n",
+            "properties": {
+              "allOrNone": {
+                "type": "boolean",
+                "description": "When set to `true`, the entire batch will fail if any record in the batch fails.\nWhen set to `false` (default), partial writes are supported — successful records will be committed even if some fail.\nNote: HubSpot batch updates always result in partial success due to a provider limitation, regardless of this setting.\n",
+                "default": false,
+                "example": true
+              }
+            }
+          },
           "batch": {
             "type": "array",
-            "description": "Write 1–100 records in one request. Omit this and use `record` instead when sending a single record.\nPartial writes are not supported; if any record in the batch is invalid, the entire batch fails.\nBatch is currently supported for create and update write requests.\n",
+            "description": "Write 1–100 records in one request. Omit this and use `record` instead when sending a single record.\nThe default behavior is partial success, i.e., successful records will be committed even if some records in the batch fail. To disable partial writes and fail the entire batch, use the `allOrNone` flag in your request. See [`batchPolicy.allOrNone`](#/components/schemas/WriteRequest/properties/batchPolicy).\nBatch is currently supported for create and update write requests.\n",
             "minItems": 1,
             "maxItems": 100,
             "items": {
@@ -1025,7 +1052,7 @@
               },
               "recordId": {
                 "type": "string",
-                "description": "The ID of the object",
+                "description": "The ID of the record. Only present on a successful create or update.",
                 "example": "003Dp0X#@RG7IAP"
               }
             }
@@ -1088,7 +1115,7 @@
               },
               "recordId": {
                 "type": "string",
-                "description": "The ID of the object",
+                "description": "The ID of the record. Only present on a successful create or update.",
                 "example": "003Dp0X#@RG7IAP"
               }
             }
@@ -1154,7 +1181,7 @@
                 },
                 "recordId": {
                   "type": "string",
-                  "description": "The ID of the object",
+                  "description": "The ID of the record. Only present on a successful create or update.",
                   "example": "003Dp0X#@RG7IAP"
                 }
               }
@@ -1208,7 +1235,7 @@
           },
           "recordId": {
             "type": "string",
-            "description": "The ID of the object",
+            "description": "The ID of the record. Only present on a successful create or update.",
             "example": "003Dp0X#@RG7IAP"
           }
         }
