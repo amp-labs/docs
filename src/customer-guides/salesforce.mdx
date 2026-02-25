@@ -2,7 +2,7 @@
 title: "Salesforce"
 ---
 
-## Checklist before installing a Salesforce integration
+## Before installing a Salesforce integration
 
 We recommend verifying the following requirements before installing the Salesforce integration:
 
@@ -35,28 +35,6 @@ Here's how to configure this setting in Salesforce:
 ![Refresh Token Settings](/images/customer-guides/salesforce-refresh-token.png)
 
 10.  Click **Save**.
-
-### 3. Check API access control settings
-
-Salesforce allows administrators to restrict which applications can access Salesforce data through APIs. You need to ensure that API access isn't limited to only specific connected apps.
-
-To verify your API access control settings:
-
-1. Log in to *Salesforce*.
-2. Go to **Setup**.
-3. In the *Quick Find* box, search for **Connected Apps OAuth Usage**.
-4. Under the list of connected apps, find your app and click **Manage App Policies**.
-5. In the *OAuth Policies* section, ensure the **Permitted Users** status is one of:
-- *Admin approved users are pre-authorized* - only selected users can access.
-- *All users may self-authorize* - all users can access the app.
-
-![Permitted Users](/images/customer-guides/salesforce-3.gif)
-
-If you need to modify these settings:
-
-1. Click on **Install** next to your connected app.
-2. In the **OAuth Usage and Policies** section, set the appropriate permissions level.
-3. Click **Save**.
 
 ## Ensure sufficient permissions
 
@@ -91,7 +69,8 @@ Ensure that the following permissions are checked in the profile:
   * `Manage Custom Permissions`
   * `Customize Application`
   * `Modify Metadata Through Metadata API Functions`
-  * `Allows Users to Modify Named Credentials and External Credentials`
+
+Please refer to [Explanation of Subscribe Action Permissions](#explanation-of-subscribe-action-permissions) to learn more about why these permissions are needed.
 
 #### 2a. Field permissions for standard profile
 
@@ -196,7 +175,8 @@ If your integration is using Subscribe actions, you also need to select the foll
   * `Manage Custom Permissions`
   * `Customize Application`
   * `Modify Metadata Through Metadata API Functions`
-  * `Allows Users to Modify Named Credentials and External Credentials`
+
+Please refer to [Explanation of Subscribe Action Permissions](#explanation-of-subscribe-action-permissions) to learn more about why these permissions are needed.
 
 <img src="/images/customer-guides/sf-api-permset-system.png" />
 
@@ -217,6 +197,28 @@ If your integration is using Subscribe actions, you also need to select the foll
 
 <img src="/images/customer-guides/sf-api-permset-assign3.png" />
 
+## After installing the integration
+
+Salesforce allows administrators to restrict which applications can access Salesforce data through APIs. You need to ensure that API access isn't limited to only specific connected apps.
+
+To verify your API access control settings:
+
+1. Log in to *Salesforce*.
+2. Go to **Setup**.
+3. In the *Quick Find* box, search for **Connected Apps OAuth Usage**.
+4. Under the list of connected apps, find the one for this integration and click **Manage App Policies**.
+5. In the *OAuth Policies* section, ensure the **Permitted Users** status is one of:
+- *Admin approved users are pre-authorized* - only selected users can access.
+- *All users may self-authorize* - all users can access the app.
+
+![Permitted Users](/images/customer-guides/salesforce-3.gif)
+
+If you need to modify these settings:
+
+1. Click on **Install** next to your connected app.
+2. In the **OAuth Usage and Policies** section, set the appropriate permissions level.
+3. Click **Save**.
+
 ## Salesforce terminology
 
 ### License
@@ -230,3 +232,13 @@ A **profile** is a collection of settings that determines what objects, fields, 
 ### Permission set
 
 A **permission set** is a collection of permissions that you assign to users to grant access to specific objects, fields, and capabilities. Permission sets extend the default permissions of a profile. Users can have only one profile but multiple permission sets. A permission set is tied to a license, and only users with that license type can be granted the permission set.
+
+## Explanation of Subscribe Action permissions
+
+If the integration contains Subscribe Actions, a number of special permissions are required, here's an explanation of why each permission is necessary.
+
+- `View Setup and Configuration`: Enables the integration to access Salesforce setup configuration in order to create webhook subscription settings.
+- `View Roles and Role Hierarchy`: Ensures the integration has the correct visibility context so Salesforce can successfully send events; without this, events may be generated but not delivered.
+- `Manage Custom Permissions`: Allows the integration to create and manage dedicated event channels and channel memberships used specifically for the installation’s subscription events.
+- `Customize Application`: Required to configure artifacts like Named Credentials, which allows subscription to happen in a secure way.
+- `Modify Metadata via Metadata API`: Allows the integration to programmatically create and manage Salesforce event subscription metadata.

@@ -1,0 +1,51 @@
+---
+title: "JustCall"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported for `calls` and `texts` objects.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.justcall.io`.
+
+### Supported Objects
+
+The JustCall connector supports reading from the following objects:
+- [contacts](https://developer.justcall.io/reference/contacts_list_v21)
+- [calls](https://developer.justcall.io/reference/call_list_v21)
+- [texts](https://developer.justcall.io/reference/texts_list_v21)
+- [users](https://developer.justcall.io/reference/users_list_v21)
+- [tags](https://developer.justcall.io/reference/texts_tags_list_v21)
+- [sales_dialer/contacts](https://developer.justcall.io/reference/sales_dialer_campaign_contacts_list_v21)
+- [sales_dialer/calls](https://developer.justcall.io/reference/sales_dialer_call_list_v21)
+
+The JustCall connector supports writing to the following objects:
+- [contacts](https://developer.justcall.io/reference/create_contact_v21) (create/update)
+- [calls](https://developer.justcall.io/reference/call_update_v21) (update only)
+- [texts](https://developer.justcall.io/reference/texts_new_v21) (send SMS)
+
+## Using the connector
+
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To integrate with JustCall:
+- Create a manifest file for your integration.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for their API key and secret.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Creating an API key for JustCall
+
+1. Log in to your [JustCall account](https://app.justcall.io/).
+2. Click on your profile icon, then navigate to **API and Webhooks** (or go directly to [API Settings](https://app.justcall.io/app/settings/api)).
+3. Copy your existing API key and secret, or generate a new pair.
+
+![JustCall API Key](/images/provider-guides/justcall-api-key.gif)
+
+For more details, see the [JustCall Authentication documentation](https://developer.justcall.io/reference/authentication).

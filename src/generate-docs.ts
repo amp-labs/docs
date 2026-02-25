@@ -3,6 +3,7 @@ import { join } from 'path';
 import platformApiPages from "./reference/platform.json";
 import readApiPages from "./reference/read.json";
 import writeApiPages from "./reference/write.json";
+import searchApiPages from "./reference/search.json";
 import matter from 'gray-matter';
 import fs from "fs";
 
@@ -12,6 +13,7 @@ import fs from "fs";
 const openApiPlatform = "platform";
 const openApiRead = "read";
 const openApiWrite = "write";
+const openApiSearch = "search";
 
 export interface DocsConfig {
   $schema: string;
@@ -112,18 +114,18 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
         {
           tab: 'Documentation',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            !group.group.match(/^(Introduction|WRITE API|READ API|PLATFORM API)$/)))
+            !group.group.match(/^(Introduction|WRITE API|READ API|SEARCH API|PLATFORM API)$/)))
         },
         {
           tab: 'API Reference',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            group.group.match(/^(Introduction|WRITE API|READ API|PLATFORM API)$/)))
+            group.group.match(/^(Introduction|WRITE API|READ API|SEARCH API|PLATFORM API)$/)))
         }
       ]
     },
     logo: mintConfig.logo,
     api: {
-      openapi: ['./platform.json', './read.json', './write.json']
+      openapi: ['./platform.json', './read.json', './write.json', './search.json']
     },
     navbar: {
       links: mintConfig.topbarLinks?.map((link: any) => ({
@@ -155,7 +157,7 @@ export function writeDocsJson(docsConfig: DocsConfig, outputPath: string = 'docs
 // Create the base configuration
 const baseConfig = {
   name: "Ampersand",
-  openapi: [openApiPlatform, openApiRead, openApiWrite],
+  openapi: [openApiPlatform, openApiRead, openApiWrite, openApiSearch],
   logo: {
     light: "/logos/dark.png",
     dark: "/logos/light.png",
@@ -248,13 +250,13 @@ const baseConfig = {
             "concepts",
             "quickstart",
             // "use-with-ai-ide",
-            "unified-api"
           ]
         },
         "subscribe-actions",
         "read-actions",
         "write-actions",
         "proxy-actions",
+        "search-actions",
         "object-and-field-mapping",
         "manage-customer-schemas",
         {
@@ -329,12 +331,14 @@ const baseConfig = {
             "provider-guides/clariCopilot",
             "provider-guides/clickup",
             "provider-guides/close",
+            "provider-guides/cloudtalk",
             "provider-guides/coda",
             "provider-guides/constantContact",
             "provider-guides/copper",
             "provider-guides/crunchbase",
             "provider-guides/customerJourneysApp",
             "provider-guides/customerJourneysTrack",
+            "provider-guides/webex",
             "provider-guides/delighted",
             "provider-guides/discord",
             "provider-guides/discourse",
@@ -384,6 +388,7 @@ const baseConfig = {
             "provider-guides/jobber",
             "provider-guides/joinMe",
             "provider-guides/jotform",
+            "provider-guides/justCall",
             "provider-guides/kaseyaVSAX",
             "provider-guides/keap",
             "provider-guides/kit",
@@ -406,6 +411,7 @@ const baseConfig = {
             "provider-guides/netsuite",
             "provider-guides/notion",
             "provider-guides/nutshell",
+            "provider-guides/okta",
             "provider-guides/openAI",
             "provider-guides/outplay",
             "provider-guides/outreach",
@@ -474,6 +480,7 @@ const baseConfig = {
         },
         "dev-and-prod-environments",
         "terminology",
+        "unified-api",
         {
           group: "AI Agents",
           pages: [
@@ -500,6 +507,11 @@ const baseConfig = {
       group: "READ API",
       pages: readApiPages,
       openapiSource: openApiRead,
+    },
+    {
+      group: "SEARCH API",
+      pages: searchApiPages,
+      openapiSource: openApiSearch,
     },
     {
       group: "PLATFORM API",
