@@ -66,6 +66,57 @@ If you see errors like “This app is not approved to access the Customer object
 
 Shopify may restrict access to older orders unless you request additional scopes (for example, `read_all_orders`). See Shopify’s [Orders API documentation](https://shopify.dev/docs/api/admin-rest/latest/resources/order) for details.
 
+## App distribution
+
+Your app’s distribution method determines which stores can install it.
+
+- **For installs across many independent Shopify organizations (Ampersand consumers)**: use **Public distribution** and publish an App Store listing.
+- **To keep the app from being searchable**: set the App Store listing to **limited visibility**. Merchants can still install the app from the listing URL.
+
+Shopify documentation:
+
+- [About app distribution](https://shopify.dev/docs/apps/launch/distribution)
+- [Select a distribution method](https://shopify.dev/docs/apps/launch/distribution/select-distribution-method)
+- [App listing visibility](https://shopify.dev/docs/apps/launch/distribution/visibility)
+- [Submit your app for review](https://shopify.dev/docs/apps/launch/app-store-review/submit-app-for-review)
+
+<Note>
+Shopify also supports **custom distribution** install links, but this method is limited to a single store or stores within the same Plus organization (and certain development stores). For general third-party installs, follow the public distribution path described in the section below.
+</Note>
+
+## Share your Shopify app with Ampersand consumers (third-party stores)
+
+To use your integration with third-party Shopify merchants (stores you don’t control), those merchants must be able to install and authorize your Shopify app. This installation step is what grants OAuth access for that merchant’s store.
+
+To support installs across many independent Shopify organizations (like Ampersand consumers), your app must use **Public distribution**.
+
+If you don’t want your app to be searchable in the Shopify App Store, set your app listing to **limited visibility**. Merchants can still install it from the listing URL, but it won’t appear in search results or category pages.
+
+### Builder (Account A): make the app installable (public, limited visibility)
+
+1. From your app’s home page, go to **App distribution**.
+   ![Open App distribution](/images/provider-guides/shopify/shopify-open-app-distribution.png)
+2. Select a distribution method and choose **Public distribution**:
+   - Shopify guide: [Select a distribution method](https://shopify.dev/docs/apps/launch/distribution/select-distribution-method)
+   ![Select Public distribution](/images/provider-guides/shopify/shopify-public-distribution.png)
+3. Create an App Store listing and complete Shopify’s requirements:
+   - Shopify guide: [App Store requirements](https://shopify.dev/docs/apps/launch/shopify-app-store/app-store-requirements)
+   ![Create App Store listing](/images/provider-guides/shopify/shopify-create-listing.png)
+4. Tell them about your business add add a credit card to pay $19 one-time app store registration fee.
+   ![Create App Store listing](/images/provider-guides/shopify/shopify-registration-fee.png)
+5. Set your app listing visibility to **limited visibility** (not searchable):
+   - Shopify guide: [App listing visibility](https://shopify.dev/docs/apps/launch/distribution/visibility)
+6. Submit your app for review:
+   - Shopify guide: [Submit your app for review](https://shopify.dev/docs/apps/launch/app-store-review/submit-app-for-review)
+7. After Shopify approves your app, share the **App Store listing URL** with your Ampersand consumers so they can install it.
+   ![Copy App Store listing URL](/images/provider-guides/shopify/shopify-app-approved.png)
+
+### Ampersand consumer (Account B): install and authorize
+
+1. Open the App Store listing URL shared by the builder.
+2. Install the app on your Shopify store and approve the requested access scopes.
+3. Complete the OAuth flow in the builder’s app (via the embedded [Install Integration](/embeddable-ui-components#install-integration) component).
+
 ## Add your Shopify app info to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
@@ -82,27 +133,7 @@ To start integrating with Shopify:
 - Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/shopify/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
-- Embed the [Install Integration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer to connect their Shopify store via OAuth.
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer to connect their Shopify store via OAuth.
 - If your integration has [Read Actions](/read-actions), you’ll start getting webhook messages.
 - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
 - If your integration has [Proxy Actions](/proxy-actions), start making Proxy API calls. Ampersand will automatically attach the OAuth credentials for the connected store.
-
-## Using the app with third-party Shopify stores
-
-To use your integration with a third-party Shopify merchant (a store you don’t control), the merchant must install and authorize your Shopify app. This installation step is what grants OAuth access for that merchant’s store.
-
-Shopify supports multiple app distribution methods. The one you choose determines whether App Store review is required:
-
-- **Public app (Shopify App Store)**: intended for distribution to many merchants. Requires meeting Shopify’s App Store requirements and passing Shopify review before publishing.
-- **Custom distribution**: share an install link directly with specific merchants (without listing publicly). Review requirements differ from public distribution.
-
-For details, see Shopify’s documentation:
-- [About app distribution](https://shopify.dev/docs/apps/launch/distribution)
-- [Select a distribution method](https://shopify.dev/docs/apps/launch/distribution/select-distribution-method)
-
-## List on the Shopify App Store (optional)
-
-If you plan to distribute your app publicly (beyond a single merchant/store), you may need to submit it for review and create an App Store listing.
-
-- Review Shopify’s [App Store requirements](https://shopify.dev/docs/apps/launch/shopify-app-store/app-store-requirements)
-- Follow Shopify’s steps to [submit your app for review](https://shopify.dev/docs/apps/launch/app-store-review/submit-app-for-review)
