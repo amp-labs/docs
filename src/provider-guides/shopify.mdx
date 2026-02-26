@@ -70,7 +70,7 @@ Shopify may restrict access to older orders unless you request additional scopes
 
 Your app’s distribution method determines which stores can install it.
 
-- **For installs across many independent Shopify organizations (Ampersand consumers)**: use **Public distribution** and publish an App Store listing.
+- **For installs across multiple Shopify stores**: use **Public distribution** and publish an App Store listing.
 - **To keep the app from being searchable**: set the App Store listing to **limited visibility**. Merchants can still install the app from the listing URL.
 
 Shopify documentation:
@@ -84,15 +84,15 @@ Shopify documentation:
 Shopify also supports **custom distribution** install links, but this method is limited to a single store or stores within the same Plus organization (and certain development stores). For general third-party installs, follow the public distribution path described in the section below.
 </Note>
 
-## Share your Shopify app with Ampersand consumers (third-party stores)
+## Share your Shopify app so merchants can install it
 
-To use your integration with third-party Shopify merchants (stores you don’t control), those merchants must be able to install and authorize your Shopify app. This installation step is what grants OAuth access for that merchant’s store.
+For a merchant to connect their Shopify store, they must install and authorize your Shopify app. That install step is what grants OAuth access for their store.
 
-To support installs across many independent Shopify organizations (like Ampersand consumers), your app must use **Public distribution**.
+If you want your app to be installable by multiple merchants, you must use **Public distribution** (an App Store listing).
 
-If you don’t want your app to be searchable in the Shopify App Store, set your app listing to **limited visibility**. Merchants can still install it from the listing URL, but it won’t appear in search results or category pages.
+If you don’t want your app to appear in Shopify App Store search results, set the listing to **limited visibility**. Merchants can still install the app using the **App Store listing URL** (available after approval).
 
-### Builder (Account A): make the app installable (public, limited visibility)
+### Make the app installable (public, limited visibility)
 
 1. From your app’s home page, go to **App distribution**.
    ![Open App distribution](/images/provider-guides/shopify/shopify-open-app-distribution.png)
@@ -108,14 +108,15 @@ If you don’t want your app to be searchable in the Shopify App Store, set your
    - Shopify guide: [App listing visibility](https://shopify.dev/docs/apps/launch/distribution/visibility)
 6. Submit your app for review:
    - Shopify guide: [Submit your app for review](https://shopify.dev/docs/apps/launch/app-store-review/submit-app-for-review)
-7. After Shopify approves your app, share the **App Store listing URL** with your Ampersand consumers so they can install it.
+7. After Shopify approves your app, share the **App Store listing URL** so merchants can install it.
    ![Copy App Store listing URL](/images/provider-guides/shopify/shopify-app-approved.png)
+8. Ask your customers to install the app from the App Store listing URL. For example:
 
-### Ampersand consumer (Account B): install and authorize
+```text
+https://apps.shopify.com/YOUR_APP_HANDLE
+```
 
-1. Open the App Store listing URL shared by the builder.
-2. Install the app on your Shopify store and approve the requested access scopes.
-3. Complete the OAuth flow in the builder’s app (via the embedded [Install Integration](/embeddable-ui-components#install-integration) component).
+After installation, they can complete the OAuth flow in your app (via the embedded [Install Integration](/embeddable-ui-components#install-integration) component).
 
 ## Add your Shopify app info to Ampersand
 
@@ -125,7 +126,6 @@ If you don’t want your app to be searchable in the Shopify App Store, set your
 3. Select **Provider apps**.
 4. Select _Shopify_ from the **Provider** list.
 5. Enter the **Client ID** and **Client Secret** from your Shopify app and click **Save changes**.
-
 
 ## Using the connector
 
