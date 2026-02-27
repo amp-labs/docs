@@ -1,0 +1,55 @@
+---
+title: Granola
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Proxy Actions](/proxy-actions), using the base URL `https://public-api.granola.ai`.
+
+### Supported Objects
+
+The Granola connector supports only reading from the following objects:
+
+- [notes](https://docs.granola.ai/api-reference/list-notes)
+
+### Example integration
+
+To define an integration for Granola, create a manifest file that looks like this:
+
+```yaml
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: granolaIntegration
+    displayName: Granola Integration
+    provider: granola
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To use the Granola connector, you’ll need an API key from your Granola account. Here’s how to get it:
+
+1. Navigate to **Settings** → **Workspaces**.
+2. Select the **API** tab.
+3. Click **Generate API Key**.
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To integrate with Granola:
+
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
