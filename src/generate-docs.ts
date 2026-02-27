@@ -443,6 +443,7 @@ const baseConfig = {
             "provider-guides/slack",
             "provider-guides/smartlead",
             "provider-guides/smartsheet",
+            "provider-guides/shopify",
             "provider-guides/snapchatAds",
             "provider-guides/snowflake",
             "provider-guides/solarwindsServiceDesk",
