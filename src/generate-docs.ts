@@ -333,6 +333,7 @@ const baseConfig = {
             "provider-guides/close",
             "provider-guides/cloudtalk",
             "provider-guides/coda",
+            "provider-guides/coupa",
             "provider-guides/constantContact",
             "provider-guides/copper",
             "provider-guides/crunchbase",
