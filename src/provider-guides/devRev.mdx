@@ -1,0 +1,49 @@
+---
+title: DevRev
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.devrev.ai`.
+
+### Example integration
+
+To define an integration for DevRev, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: devrevIntegration
+    displayName: DevRev Integration
+    provider: devrev
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To use the DevRev connector, you'll need a Personal Access Token (PAT) from your DevRev account. Here's how to get it:
+
+1. In the DevRev app, go to the relevant dev org.
+2. Go to **Settings** > **Account** > **Personal Access Token**.
+3. Click **New token** and follow the workflow to create your PAT.
+
+![DevRev API Key](/images/provider-guides/devrev.gif)
+
+For more details, see the [DevRev Authentication documentation](https://developer.devrev.ai/about/authentication).
+
+## Using the connector
+
+This connector uses Personal Access Token (PAT) authentication, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To integrate with DevRev:
+
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their PAT.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the PAT supplied by the customer.
