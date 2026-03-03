@@ -7,7 +7,7 @@ title: "PhoneBurner"
 
 This connector supports:
 - [Read Actions](/read-actions), including pagination and incremental read where supported.
-- [Write Actions](/write-actions) (create/update, plus single-record delete where supported).
+- [Write Actions](/write-actions) (create/update).
 - [Proxy Actions](/proxy-actions), using the base URL `https://www.phoneburner.com`.
 - Subscribe Actions are not currently supported.
 
@@ -24,17 +24,16 @@ export const Cross = () => <span>🚫</span>
       <th style={{ width: '11.2%' }}>Metadata</th>
       <th style={{ width: '11.2%' }}>Read</th>
       <th style={{ width: '11.2%' }}>Write</th>
-      <th style={{ width: '11.2%' }}>Delete</th>
       <th style={{ width: '11.2%' }}>Subscribe</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#contacts">contacts</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#folders">folders</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#members">members</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#dialsession">dialsession</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#voicemails">voicemails</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#tags">tags</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#contacts">contacts</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#folders">folders</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#members">members</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#dialsession">dialsession</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#voicemails">voicemails</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#tags">tags</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
   </tbody>
 </table>
 </div>
@@ -50,11 +49,10 @@ export const Cross = () => <span>🚫</span>
   - `contacts`, `folders`, `members`: create + update
   - `dialsession`: create only
 - **Read-only objects**: `voicemails`, `tags`
-- **Delete support**: supported for `contacts`, `folders`, and `members` only
 
 ### Example integration
 
-To define an integration for PhoneBurner, create a manifest file that looks like this:
+To define an integration for PhoneBurner, create a manifest file that looks like this. For a complete example, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/phoneBurner/amp.yaml).
 
 ```YAML
 # amp.yaml
@@ -68,30 +66,9 @@ integrations:
         - objectName: contacts
           destination: defaultWebhook
           schedule: "*/30 * * * *"
-        - objectName: folders
-          destination: defaultWebhook
-          schedule: "*/30 * * * *"
-        - objectName: members
-          destination: defaultWebhook
-          schedule: "*/30 * * * *"
-        - objectName: dialsession
-          destination: defaultWebhook
-          schedule: "*/30 * * * *"
-        - objectName: voicemails
-          destination: defaultWebhook
-          schedule: "*/30 * * * *"
-        - objectName: tags
-          destination: defaultWebhook
-          schedule: "*/30 * * * *"
     write:
       objects:
         - objectName: contacts
-          inheritMapping: true
-        - objectName: folders
-          inheritMapping: true
-        - objectName: members
-          inheritMapping: true
-        - objectName: dialsession
           inheritMapping: true
     proxy:
       enabled: true
