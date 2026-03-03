@@ -6,7 +6,7 @@ title: "PhoneBurner"
 ### Supported actions
 
 This connector supports:
-- [Read Actions](/read-actions), including pagination and incremental read where supported.
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `contacts`, `dialsession`, `members`, and `voicemails` currently. For all other objects, a full read of the PhoneBurner instance will be done per scheduled read.
 - [Write Actions](/write-actions) (create/update).
 - [Proxy Actions](/proxy-actions), using the base URL `https://www.phoneburner.com`.
 - Subscribe Actions are not currently supported.
@@ -37,11 +37,6 @@ export const Cross = () => <span>🚫</span>
   </tbody>
 </table>
 </div>
-
-### Incremental read support
-
-- **Supported**: `contacts`, `dialsession` (provider time filters), `members`, `voicemails` (connector-side filtering)
-- **Not supported** (full read only): `folders`, `tags`
 
 ### Notes and limitations
 
