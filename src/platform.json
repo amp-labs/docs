@@ -14093,6 +14093,94 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "filter": {
+                                                  "type": "array",
+                                                  "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                  "x-go-type-skip-optional-pointer": true,
+                                                  "items": {
+                                                    "title": "Read Filter",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "fieldName",
+                                                      "operator"
+                                                    ],
+                                                    "properties": {
+                                                      "fieldName": {
+                                                        "type": "string",
+                                                        "description": "The name of the field to filter on.",
+                                                        "example": "status"
+                                                      },
+                                                      "operator": {
+                                                        "type": "string",
+                                                        "description": "The comparison operator.",
+                                                        "enum": [
+                                                          "eq"
+                                                        ],
+                                                        "example": "eq"
+                                                      },
+                                                      "value": {
+                                                        "title": "Read Filter Value",
+                                                        "description": "The value to filter on.",
+                                                        "example": "active",
+                                                        "oneOf": [
+                                                          {
+                                                            "type": "string"
+                                                          },
+                                                          {
+                                                            "type": "boolean"
+                                                          },
+                                                          {
+                                                            "type": "number"
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "filter": {
+                                              "type": "array",
+                                              "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                              "x-go-type-skip-optional-pointer": true,
+                                              "items": {
+                                                "title": "Read Filter",
+                                                "type": "object",
+                                                "required": [
+                                                  "fieldName",
+                                                  "operator"
+                                                ],
+                                                "properties": {
+                                                  "fieldName": {
+                                                    "type": "string",
+                                                    "description": "The name of the field to filter on.",
+                                                    "example": "status"
+                                                  },
+                                                  "operator": {
+                                                    "type": "string",
+                                                    "description": "The comparison operator.",
+                                                    "enum": [
+                                                      "eq"
+                                                    ],
+                                                    "example": "eq"
+                                                  },
+                                                  "value": {
+                                                    "title": "Read Filter Value",
+                                                    "description": "The value to filter on.",
+                                                    "example": "active",
+                                                    "oneOf": [
+                                                      {
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "type": "boolean"
+                                                      },
+                                                      {
+                                                        "type": "number"
+                                                      }
+                                                    ]
+                                                  }
                                                 }
                                               }
                                             }
@@ -14457,6 +14545,94 @@
                                                           }
                                                         }
                                                       }
+                                                    },
+                                                    "filter": {
+                                                      "type": "array",
+                                                      "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                      "x-go-type-skip-optional-pointer": true,
+                                                      "items": {
+                                                        "title": "Read Filter",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "fieldName",
+                                                          "operator"
+                                                        ],
+                                                        "properties": {
+                                                          "fieldName": {
+                                                            "type": "string",
+                                                            "description": "The name of the field to filter on.",
+                                                            "example": "status"
+                                                          },
+                                                          "operator": {
+                                                            "type": "string",
+                                                            "description": "The comparison operator.",
+                                                            "enum": [
+                                                              "eq"
+                                                            ],
+                                                            "example": "eq"
+                                                          },
+                                                          "value": {
+                                                            "title": "Read Filter Value",
+                                                            "description": "The value to filter on.",
+                                                            "example": "active",
+                                                            "oneOf": [
+                                                              {
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "type": "boolean"
+                                                              },
+                                                              {
+                                                                "type": "number"
+                                                              }
+                                                            ]
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "filter": {
+                                                  "type": "array",
+                                                  "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                  "x-go-type-skip-optional-pointer": true,
+                                                  "items": {
+                                                    "title": "Read Filter",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "fieldName",
+                                                      "operator"
+                                                    ],
+                                                    "properties": {
+                                                      "fieldName": {
+                                                        "type": "string",
+                                                        "description": "The name of the field to filter on.",
+                                                        "example": "status"
+                                                      },
+                                                      "operator": {
+                                                        "type": "string",
+                                                        "description": "The comparison operator.",
+                                                        "enum": [
+                                                          "eq"
+                                                        ],
+                                                        "example": "eq"
+                                                      },
+                                                      "value": {
+                                                        "title": "Read Filter Value",
+                                                        "description": "The value to filter on.",
+                                                        "example": "active",
+                                                        "oneOf": [
+                                                          {
+                                                            "type": "string"
+                                                          },
+                                                          {
+                                                            "type": "boolean"
+                                                          },
+                                                          {
+                                                            "type": "number"
+                                                          }
+                                                        ]
+                                                      }
                                                     }
                                                   }
                                                 }
@@ -14635,6 +14811,94 @@
                                                                 "validate": "required_without=Days"
                                                               }
                                                             }
+                                                          }
+                                                        },
+                                                        "filter": {
+                                                          "type": "array",
+                                                          "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                          "x-go-type-skip-optional-pointer": true,
+                                                          "items": {
+                                                            "title": "Read Filter",
+                                                            "type": "object",
+                                                            "required": [
+                                                              "fieldName",
+                                                              "operator"
+                                                            ],
+                                                            "properties": {
+                                                              "fieldName": {
+                                                                "type": "string",
+                                                                "description": "The name of the field to filter on.",
+                                                                "example": "status"
+                                                              },
+                                                              "operator": {
+                                                                "type": "string",
+                                                                "description": "The comparison operator.",
+                                                                "enum": [
+                                                                  "eq"
+                                                                ],
+                                                                "example": "eq"
+                                                              },
+                                                              "value": {
+                                                                "title": "Read Filter Value",
+                                                                "description": "The value to filter on.",
+                                                                "example": "active",
+                                                                "oneOf": [
+                                                                  {
+                                                                    "type": "string"
+                                                                  },
+                                                                  {
+                                                                    "type": "boolean"
+                                                                  },
+                                                                  {
+                                                                    "type": "number"
+                                                                  }
+                                                                ]
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "filter": {
+                                                      "type": "array",
+                                                      "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                      "x-go-type-skip-optional-pointer": true,
+                                                      "items": {
+                                                        "title": "Read Filter",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "fieldName",
+                                                          "operator"
+                                                        ],
+                                                        "properties": {
+                                                          "fieldName": {
+                                                            "type": "string",
+                                                            "description": "The name of the field to filter on.",
+                                                            "example": "status"
+                                                          },
+                                                          "operator": {
+                                                            "type": "string",
+                                                            "description": "The comparison operator.",
+                                                            "enum": [
+                                                              "eq"
+                                                            ],
+                                                            "example": "eq"
+                                                          },
+                                                          "value": {
+                                                            "title": "Read Filter Value",
+                                                            "description": "The value to filter on.",
+                                                            "example": "active",
+                                                            "oneOf": [
+                                                              {
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "type": "boolean"
+                                                              },
+                                                              {
+                                                                "type": "number"
+                                                              }
+                                                            ]
                                                           }
                                                         }
                                                       }
@@ -15977,6 +16241,94 @@
                                                   }
                                                 }
                                               }
+                                            },
+                                            "filter": {
+                                              "type": "array",
+                                              "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                              "x-go-type-skip-optional-pointer": true,
+                                              "items": {
+                                                "title": "Read Filter",
+                                                "type": "object",
+                                                "required": [
+                                                  "fieldName",
+                                                  "operator"
+                                                ],
+                                                "properties": {
+                                                  "fieldName": {
+                                                    "type": "string",
+                                                    "description": "The name of the field to filter on.",
+                                                    "example": "status"
+                                                  },
+                                                  "operator": {
+                                                    "type": "string",
+                                                    "description": "The comparison operator.",
+                                                    "enum": [
+                                                      "eq"
+                                                    ],
+                                                    "example": "eq"
+                                                  },
+                                                  "value": {
+                                                    "title": "Read Filter Value",
+                                                    "description": "The value to filter on.",
+                                                    "example": "active",
+                                                    "oneOf": [
+                                                      {
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "type": "boolean"
+                                                      },
+                                                      {
+                                                        "type": "number"
+                                                      }
+                                                    ]
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "filter": {
+                                          "type": "array",
+                                          "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                          "x-go-type-skip-optional-pointer": true,
+                                          "items": {
+                                            "title": "Read Filter",
+                                            "type": "object",
+                                            "required": [
+                                              "fieldName",
+                                              "operator"
+                                            ],
+                                            "properties": {
+                                              "fieldName": {
+                                                "type": "string",
+                                                "description": "The name of the field to filter on.",
+                                                "example": "status"
+                                              },
+                                              "operator": {
+                                                "type": "string",
+                                                "description": "The comparison operator.",
+                                                "enum": [
+                                                  "eq"
+                                                ],
+                                                "example": "eq"
+                                              },
+                                              "value": {
+                                                "title": "Read Filter Value",
+                                                "description": "The value to filter on.",
+                                                "example": "active",
+                                                "oneOf": [
+                                                  {
+                                                    "type": "string"
+                                                  },
+                                                  {
+                                                    "type": "boolean"
+                                                  },
+                                                  {
+                                                    "type": "number"
+                                                  }
+                                                ]
+                                              }
                                             }
                                           }
                                         }
@@ -16341,6 +16693,94 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "filter": {
+                                                  "type": "array",
+                                                  "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                  "x-go-type-skip-optional-pointer": true,
+                                                  "items": {
+                                                    "title": "Read Filter",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "fieldName",
+                                                      "operator"
+                                                    ],
+                                                    "properties": {
+                                                      "fieldName": {
+                                                        "type": "string",
+                                                        "description": "The name of the field to filter on.",
+                                                        "example": "status"
+                                                      },
+                                                      "operator": {
+                                                        "type": "string",
+                                                        "description": "The comparison operator.",
+                                                        "enum": [
+                                                          "eq"
+                                                        ],
+                                                        "example": "eq"
+                                                      },
+                                                      "value": {
+                                                        "title": "Read Filter Value",
+                                                        "description": "The value to filter on.",
+                                                        "example": "active",
+                                                        "oneOf": [
+                                                          {
+                                                            "type": "string"
+                                                          },
+                                                          {
+                                                            "type": "boolean"
+                                                          },
+                                                          {
+                                                            "type": "number"
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "filter": {
+                                              "type": "array",
+                                              "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                              "x-go-type-skip-optional-pointer": true,
+                                              "items": {
+                                                "title": "Read Filter",
+                                                "type": "object",
+                                                "required": [
+                                                  "fieldName",
+                                                  "operator"
+                                                ],
+                                                "properties": {
+                                                  "fieldName": {
+                                                    "type": "string",
+                                                    "description": "The name of the field to filter on.",
+                                                    "example": "status"
+                                                  },
+                                                  "operator": {
+                                                    "type": "string",
+                                                    "description": "The comparison operator.",
+                                                    "enum": [
+                                                      "eq"
+                                                    ],
+                                                    "example": "eq"
+                                                  },
+                                                  "value": {
+                                                    "title": "Read Filter Value",
+                                                    "description": "The value to filter on.",
+                                                    "example": "active",
+                                                    "oneOf": [
+                                                      {
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "type": "boolean"
+                                                      },
+                                                      {
+                                                        "type": "number"
+                                                      }
+                                                    ]
+                                                  }
                                                 }
                                               }
                                             }
@@ -16519,6 +16959,94 @@
                                                             "validate": "required_without=Days"
                                                           }
                                                         }
+                                                      }
+                                                    },
+                                                    "filter": {
+                                                      "type": "array",
+                                                      "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                      "x-go-type-skip-optional-pointer": true,
+                                                      "items": {
+                                                        "title": "Read Filter",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "fieldName",
+                                                          "operator"
+                                                        ],
+                                                        "properties": {
+                                                          "fieldName": {
+                                                            "type": "string",
+                                                            "description": "The name of the field to filter on.",
+                                                            "example": "status"
+                                                          },
+                                                          "operator": {
+                                                            "type": "string",
+                                                            "description": "The comparison operator.",
+                                                            "enum": [
+                                                              "eq"
+                                                            ],
+                                                            "example": "eq"
+                                                          },
+                                                          "value": {
+                                                            "title": "Read Filter Value",
+                                                            "description": "The value to filter on.",
+                                                            "example": "active",
+                                                            "oneOf": [
+                                                              {
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "type": "boolean"
+                                                              },
+                                                              {
+                                                                "type": "number"
+                                                              }
+                                                            ]
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "filter": {
+                                                  "type": "array",
+                                                  "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                  "x-go-type-skip-optional-pointer": true,
+                                                  "items": {
+                                                    "title": "Read Filter",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "fieldName",
+                                                      "operator"
+                                                    ],
+                                                    "properties": {
+                                                      "fieldName": {
+                                                        "type": "string",
+                                                        "description": "The name of the field to filter on.",
+                                                        "example": "status"
+                                                      },
+                                                      "operator": {
+                                                        "type": "string",
+                                                        "description": "The comparison operator.",
+                                                        "enum": [
+                                                          "eq"
+                                                        ],
+                                                        "example": "eq"
+                                                      },
+                                                      "value": {
+                                                        "title": "Read Filter Value",
+                                                        "description": "The value to filter on.",
+                                                        "example": "active",
+                                                        "oneOf": [
+                                                          {
+                                                            "type": "string"
+                                                          },
+                                                          {
+                                                            "type": "boolean"
+                                                          },
+                                                          {
+                                                            "type": "number"
+                                                          }
+                                                        ]
                                                       }
                                                     }
                                                   }
@@ -17782,6 +18310,94 @@
                                                     }
                                                   }
                                                 }
+                                              },
+                                              "filter": {
+                                                "type": "array",
+                                                "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "items": {
+                                                  "title": "Read Filter",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "fieldName",
+                                                    "operator"
+                                                  ],
+                                                  "properties": {
+                                                    "fieldName": {
+                                                      "type": "string",
+                                                      "description": "The name of the field to filter on.",
+                                                      "example": "status"
+                                                    },
+                                                    "operator": {
+                                                      "type": "string",
+                                                      "description": "The comparison operator.",
+                                                      "enum": [
+                                                        "eq"
+                                                      ],
+                                                      "example": "eq"
+                                                    },
+                                                    "value": {
+                                                      "title": "Read Filter Value",
+                                                      "description": "The value to filter on.",
+                                                      "example": "active",
+                                                      "oneOf": [
+                                                        {
+                                                          "type": "string"
+                                                        },
+                                                        {
+                                                          "type": "boolean"
+                                                        },
+                                                        {
+                                                          "type": "number"
+                                                        }
+                                                      ]
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "filter": {
+                                            "type": "array",
+                                            "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                            "x-go-type-skip-optional-pointer": true,
+                                            "items": {
+                                              "title": "Read Filter",
+                                              "type": "object",
+                                              "required": [
+                                                "fieldName",
+                                                "operator"
+                                              ],
+                                              "properties": {
+                                                "fieldName": {
+                                                  "type": "string",
+                                                  "description": "The name of the field to filter on.",
+                                                  "example": "status"
+                                                },
+                                                "operator": {
+                                                  "type": "string",
+                                                  "description": "The comparison operator.",
+                                                  "enum": [
+                                                    "eq"
+                                                  ],
+                                                  "example": "eq"
+                                                },
+                                                "value": {
+                                                  "title": "Read Filter Value",
+                                                  "description": "The value to filter on.",
+                                                  "example": "active",
+                                                  "oneOf": [
+                                                    {
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "boolean"
+                                                    },
+                                                    {
+                                                      "type": "number"
+                                                    }
+                                                  ]
+                                                }
                                               }
                                             }
                                           }
@@ -18146,6 +18762,94 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  "filter": {
+                                                    "type": "array",
+                                                    "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "items": {
+                                                      "title": "Read Filter",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "fieldName",
+                                                        "operator"
+                                                      ],
+                                                      "properties": {
+                                                        "fieldName": {
+                                                          "type": "string",
+                                                          "description": "The name of the field to filter on.",
+                                                          "example": "status"
+                                                        },
+                                                        "operator": {
+                                                          "type": "string",
+                                                          "description": "The comparison operator.",
+                                                          "enum": [
+                                                            "eq"
+                                                          ],
+                                                          "example": "eq"
+                                                        },
+                                                        "value": {
+                                                          "title": "Read Filter Value",
+                                                          "description": "The value to filter on.",
+                                                          "example": "active",
+                                                          "oneOf": [
+                                                            {
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "type": "boolean"
+                                                            },
+                                                            {
+                                                              "type": "number"
+                                                            }
+                                                          ]
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "filter": {
+                                                "type": "array",
+                                                "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "items": {
+                                                  "title": "Read Filter",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "fieldName",
+                                                    "operator"
+                                                  ],
+                                                  "properties": {
+                                                    "fieldName": {
+                                                      "type": "string",
+                                                      "description": "The name of the field to filter on.",
+                                                      "example": "status"
+                                                    },
+                                                    "operator": {
+                                                      "type": "string",
+                                                      "description": "The comparison operator.",
+                                                      "enum": [
+                                                        "eq"
+                                                      ],
+                                                      "example": "eq"
+                                                    },
+                                                    "value": {
+                                                      "title": "Read Filter Value",
+                                                      "description": "The value to filter on.",
+                                                      "example": "active",
+                                                      "oneOf": [
+                                                        {
+                                                          "type": "string"
+                                                        },
+                                                        {
+                                                          "type": "boolean"
+                                                        },
+                                                        {
+                                                          "type": "number"
+                                                        }
+                                                      ]
+                                                    }
                                                   }
                                                 }
                                               }
@@ -18324,6 +19028,94 @@
                                                               "validate": "required_without=Days"
                                                             }
                                                           }
+                                                        }
+                                                      },
+                                                      "filter": {
+                                                        "type": "array",
+                                                        "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                        "x-go-type-skip-optional-pointer": true,
+                                                        "items": {
+                                                          "title": "Read Filter",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "fieldName",
+                                                            "operator"
+                                                          ],
+                                                          "properties": {
+                                                            "fieldName": {
+                                                              "type": "string",
+                                                              "description": "The name of the field to filter on.",
+                                                              "example": "status"
+                                                            },
+                                                            "operator": {
+                                                              "type": "string",
+                                                              "description": "The comparison operator.",
+                                                              "enum": [
+                                                                "eq"
+                                                              ],
+                                                              "example": "eq"
+                                                            },
+                                                            "value": {
+                                                              "title": "Read Filter Value",
+                                                              "description": "The value to filter on.",
+                                                              "example": "active",
+                                                              "oneOf": [
+                                                                {
+                                                                  "type": "string"
+                                                                },
+                                                                {
+                                                                  "type": "boolean"
+                                                                },
+                                                                {
+                                                                  "type": "number"
+                                                                }
+                                                              ]
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "filter": {
+                                                    "type": "array",
+                                                    "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "items": {
+                                                      "title": "Read Filter",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "fieldName",
+                                                        "operator"
+                                                      ],
+                                                      "properties": {
+                                                        "fieldName": {
+                                                          "type": "string",
+                                                          "description": "The name of the field to filter on.",
+                                                          "example": "status"
+                                                        },
+                                                        "operator": {
+                                                          "type": "string",
+                                                          "description": "The comparison operator.",
+                                                          "enum": [
+                                                            "eq"
+                                                          ],
+                                                          "example": "eq"
+                                                        },
+                                                        "value": {
+                                                          "title": "Read Filter Value",
+                                                          "description": "The value to filter on.",
+                                                          "example": "active",
+                                                          "oneOf": [
+                                                            {
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "type": "boolean"
+                                                            },
+                                                            {
+                                                              "type": "number"
+                                                            }
+                                                          ]
                                                         }
                                                       }
                                                     }
@@ -20409,6 +21201,94 @@
                                                     }
                                                   }
                                                 }
+                                              },
+                                              "filter": {
+                                                "type": "array",
+                                                "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "items": {
+                                                  "title": "Read Filter",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "fieldName",
+                                                    "operator"
+                                                  ],
+                                                  "properties": {
+                                                    "fieldName": {
+                                                      "type": "string",
+                                                      "description": "The name of the field to filter on.",
+                                                      "example": "status"
+                                                    },
+                                                    "operator": {
+                                                      "type": "string",
+                                                      "description": "The comparison operator.",
+                                                      "enum": [
+                                                        "eq"
+                                                      ],
+                                                      "example": "eq"
+                                                    },
+                                                    "value": {
+                                                      "title": "Read Filter Value",
+                                                      "description": "The value to filter on.",
+                                                      "example": "active",
+                                                      "oneOf": [
+                                                        {
+                                                          "type": "string"
+                                                        },
+                                                        {
+                                                          "type": "boolean"
+                                                        },
+                                                        {
+                                                          "type": "number"
+                                                        }
+                                                      ]
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "filter": {
+                                            "type": "array",
+                                            "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                            "x-go-type-skip-optional-pointer": true,
+                                            "items": {
+                                              "title": "Read Filter",
+                                              "type": "object",
+                                              "required": [
+                                                "fieldName",
+                                                "operator"
+                                              ],
+                                              "properties": {
+                                                "fieldName": {
+                                                  "type": "string",
+                                                  "description": "The name of the field to filter on.",
+                                                  "example": "status"
+                                                },
+                                                "operator": {
+                                                  "type": "string",
+                                                  "description": "The comparison operator.",
+                                                  "enum": [
+                                                    "eq"
+                                                  ],
+                                                  "example": "eq"
+                                                },
+                                                "value": {
+                                                  "title": "Read Filter Value",
+                                                  "description": "The value to filter on.",
+                                                  "example": "active",
+                                                  "oneOf": [
+                                                    {
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "boolean"
+                                                    },
+                                                    {
+                                                      "type": "number"
+                                                    }
+                                                  ]
+                                                }
                                               }
                                             }
                                           }
@@ -20773,6 +21653,94 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  "filter": {
+                                                    "type": "array",
+                                                    "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "items": {
+                                                      "title": "Read Filter",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "fieldName",
+                                                        "operator"
+                                                      ],
+                                                      "properties": {
+                                                        "fieldName": {
+                                                          "type": "string",
+                                                          "description": "The name of the field to filter on.",
+                                                          "example": "status"
+                                                        },
+                                                        "operator": {
+                                                          "type": "string",
+                                                          "description": "The comparison operator.",
+                                                          "enum": [
+                                                            "eq"
+                                                          ],
+                                                          "example": "eq"
+                                                        },
+                                                        "value": {
+                                                          "title": "Read Filter Value",
+                                                          "description": "The value to filter on.",
+                                                          "example": "active",
+                                                          "oneOf": [
+                                                            {
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "type": "boolean"
+                                                            },
+                                                            {
+                                                              "type": "number"
+                                                            }
+                                                          ]
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "filter": {
+                                                "type": "array",
+                                                "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "items": {
+                                                  "title": "Read Filter",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "fieldName",
+                                                    "operator"
+                                                  ],
+                                                  "properties": {
+                                                    "fieldName": {
+                                                      "type": "string",
+                                                      "description": "The name of the field to filter on.",
+                                                      "example": "status"
+                                                    },
+                                                    "operator": {
+                                                      "type": "string",
+                                                      "description": "The comparison operator.",
+                                                      "enum": [
+                                                        "eq"
+                                                      ],
+                                                      "example": "eq"
+                                                    },
+                                                    "value": {
+                                                      "title": "Read Filter Value",
+                                                      "description": "The value to filter on.",
+                                                      "example": "active",
+                                                      "oneOf": [
+                                                        {
+                                                          "type": "string"
+                                                        },
+                                                        {
+                                                          "type": "boolean"
+                                                        },
+                                                        {
+                                                          "type": "number"
+                                                        }
+                                                      ]
+                                                    }
                                                   }
                                                 }
                                               }
@@ -20951,6 +21919,94 @@
                                                               "validate": "required_without=Days"
                                                             }
                                                           }
+                                                        }
+                                                      },
+                                                      "filter": {
+                                                        "type": "array",
+                                                        "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                        "x-go-type-skip-optional-pointer": true,
+                                                        "items": {
+                                                          "title": "Read Filter",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "fieldName",
+                                                            "operator"
+                                                          ],
+                                                          "properties": {
+                                                            "fieldName": {
+                                                              "type": "string",
+                                                              "description": "The name of the field to filter on.",
+                                                              "example": "status"
+                                                            },
+                                                            "operator": {
+                                                              "type": "string",
+                                                              "description": "The comparison operator.",
+                                                              "enum": [
+                                                                "eq"
+                                                              ],
+                                                              "example": "eq"
+                                                            },
+                                                            "value": {
+                                                              "title": "Read Filter Value",
+                                                              "description": "The value to filter on.",
+                                                              "example": "active",
+                                                              "oneOf": [
+                                                                {
+                                                                  "type": "string"
+                                                                },
+                                                                {
+                                                                  "type": "boolean"
+                                                                },
+                                                                {
+                                                                  "type": "number"
+                                                                }
+                                                              ]
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "filter": {
+                                                    "type": "array",
+                                                    "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "items": {
+                                                      "title": "Read Filter",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "fieldName",
+                                                        "operator"
+                                                      ],
+                                                      "properties": {
+                                                        "fieldName": {
+                                                          "type": "string",
+                                                          "description": "The name of the field to filter on.",
+                                                          "example": "status"
+                                                        },
+                                                        "operator": {
+                                                          "type": "string",
+                                                          "description": "The comparison operator.",
+                                                          "enum": [
+                                                            "eq"
+                                                          ],
+                                                          "example": "eq"
+                                                        },
+                                                        "value": {
+                                                          "title": "Read Filter Value",
+                                                          "description": "The value to filter on.",
+                                                          "example": "active",
+                                                          "oneOf": [
+                                                            {
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "type": "boolean"
+                                                            },
+                                                            {
+                                                              "type": "number"
+                                                            }
+                                                          ]
                                                         }
                                                       }
                                                     }
@@ -22487,6 +23543,94 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "filter": {
+                                                  "type": "array",
+                                                  "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                  "x-go-type-skip-optional-pointer": true,
+                                                  "items": {
+                                                    "title": "Read Filter",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "fieldName",
+                                                      "operator"
+                                                    ],
+                                                    "properties": {
+                                                      "fieldName": {
+                                                        "type": "string",
+                                                        "description": "The name of the field to filter on.",
+                                                        "example": "status"
+                                                      },
+                                                      "operator": {
+                                                        "type": "string",
+                                                        "description": "The comparison operator.",
+                                                        "enum": [
+                                                          "eq"
+                                                        ],
+                                                        "example": "eq"
+                                                      },
+                                                      "value": {
+                                                        "title": "Read Filter Value",
+                                                        "description": "The value to filter on.",
+                                                        "example": "active",
+                                                        "oneOf": [
+                                                          {
+                                                            "type": "string"
+                                                          },
+                                                          {
+                                                            "type": "boolean"
+                                                          },
+                                                          {
+                                                            "type": "number"
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "filter": {
+                                              "type": "array",
+                                              "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                              "x-go-type-skip-optional-pointer": true,
+                                              "items": {
+                                                "title": "Read Filter",
+                                                "type": "object",
+                                                "required": [
+                                                  "fieldName",
+                                                  "operator"
+                                                ],
+                                                "properties": {
+                                                  "fieldName": {
+                                                    "type": "string",
+                                                    "description": "The name of the field to filter on.",
+                                                    "example": "status"
+                                                  },
+                                                  "operator": {
+                                                    "type": "string",
+                                                    "description": "The comparison operator.",
+                                                    "enum": [
+                                                      "eq"
+                                                    ],
+                                                    "example": "eq"
+                                                  },
+                                                  "value": {
+                                                    "title": "Read Filter Value",
+                                                    "description": "The value to filter on.",
+                                                    "example": "active",
+                                                    "oneOf": [
+                                                      {
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "type": "boolean"
+                                                      },
+                                                      {
+                                                        "type": "number"
+                                                      }
+                                                    ]
+                                                  }
                                                 }
                                               }
                                             }
@@ -23311,6 +24455,94 @@
                                                     }
                                                   }
                                                 }
+                                              },
+                                              "filter": {
+                                                "type": "array",
+                                                "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "items": {
+                                                  "title": "Read Filter",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "fieldName",
+                                                    "operator"
+                                                  ],
+                                                  "properties": {
+                                                    "fieldName": {
+                                                      "type": "string",
+                                                      "description": "The name of the field to filter on.",
+                                                      "example": "status"
+                                                    },
+                                                    "operator": {
+                                                      "type": "string",
+                                                      "description": "The comparison operator.",
+                                                      "enum": [
+                                                        "eq"
+                                                      ],
+                                                      "example": "eq"
+                                                    },
+                                                    "value": {
+                                                      "title": "Read Filter Value",
+                                                      "description": "The value to filter on.",
+                                                      "example": "active",
+                                                      "oneOf": [
+                                                        {
+                                                          "type": "string"
+                                                        },
+                                                        {
+                                                          "type": "boolean"
+                                                        },
+                                                        {
+                                                          "type": "number"
+                                                        }
+                                                      ]
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "filter": {
+                                            "type": "array",
+                                            "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                            "x-go-type-skip-optional-pointer": true,
+                                            "items": {
+                                              "title": "Read Filter",
+                                              "type": "object",
+                                              "required": [
+                                                "fieldName",
+                                                "operator"
+                                              ],
+                                              "properties": {
+                                                "fieldName": {
+                                                  "type": "string",
+                                                  "description": "The name of the field to filter on.",
+                                                  "example": "status"
+                                                },
+                                                "operator": {
+                                                  "type": "string",
+                                                  "description": "The comparison operator.",
+                                                  "enum": [
+                                                    "eq"
+                                                  ],
+                                                  "example": "eq"
+                                                },
+                                                "value": {
+                                                  "title": "Read Filter Value",
+                                                  "description": "The value to filter on.",
+                                                  "example": "active",
+                                                  "oneOf": [
+                                                    {
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "boolean"
+                                                    },
+                                                    {
+                                                      "type": "number"
+                                                    }
+                                                  ]
+                                                }
                                               }
                                             }
                                           }
@@ -23675,6 +24907,94 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  "filter": {
+                                                    "type": "array",
+                                                    "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "items": {
+                                                      "title": "Read Filter",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "fieldName",
+                                                        "operator"
+                                                      ],
+                                                      "properties": {
+                                                        "fieldName": {
+                                                          "type": "string",
+                                                          "description": "The name of the field to filter on.",
+                                                          "example": "status"
+                                                        },
+                                                        "operator": {
+                                                          "type": "string",
+                                                          "description": "The comparison operator.",
+                                                          "enum": [
+                                                            "eq"
+                                                          ],
+                                                          "example": "eq"
+                                                        },
+                                                        "value": {
+                                                          "title": "Read Filter Value",
+                                                          "description": "The value to filter on.",
+                                                          "example": "active",
+                                                          "oneOf": [
+                                                            {
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "type": "boolean"
+                                                            },
+                                                            {
+                                                              "type": "number"
+                                                            }
+                                                          ]
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "filter": {
+                                                "type": "array",
+                                                "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "items": {
+                                                  "title": "Read Filter",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "fieldName",
+                                                    "operator"
+                                                  ],
+                                                  "properties": {
+                                                    "fieldName": {
+                                                      "type": "string",
+                                                      "description": "The name of the field to filter on.",
+                                                      "example": "status"
+                                                    },
+                                                    "operator": {
+                                                      "type": "string",
+                                                      "description": "The comparison operator.",
+                                                      "enum": [
+                                                        "eq"
+                                                      ],
+                                                      "example": "eq"
+                                                    },
+                                                    "value": {
+                                                      "title": "Read Filter Value",
+                                                      "description": "The value to filter on.",
+                                                      "example": "active",
+                                                      "oneOf": [
+                                                        {
+                                                          "type": "string"
+                                                        },
+                                                        {
+                                                          "type": "boolean"
+                                                        },
+                                                        {
+                                                          "type": "number"
+                                                        }
+                                                      ]
+                                                    }
                                                   }
                                                 }
                                               }
@@ -23853,6 +25173,94 @@
                                                               "validate": "required_without=Days"
                                                             }
                                                           }
+                                                        }
+                                                      },
+                                                      "filter": {
+                                                        "type": "array",
+                                                        "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                        "x-go-type-skip-optional-pointer": true,
+                                                        "items": {
+                                                          "title": "Read Filter",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "fieldName",
+                                                            "operator"
+                                                          ],
+                                                          "properties": {
+                                                            "fieldName": {
+                                                              "type": "string",
+                                                              "description": "The name of the field to filter on.",
+                                                              "example": "status"
+                                                            },
+                                                            "operator": {
+                                                              "type": "string",
+                                                              "description": "The comparison operator.",
+                                                              "enum": [
+                                                                "eq"
+                                                              ],
+                                                              "example": "eq"
+                                                            },
+                                                            "value": {
+                                                              "title": "Read Filter Value",
+                                                              "description": "The value to filter on.",
+                                                              "example": "active",
+                                                              "oneOf": [
+                                                                {
+                                                                  "type": "string"
+                                                                },
+                                                                {
+                                                                  "type": "boolean"
+                                                                },
+                                                                {
+                                                                  "type": "number"
+                                                                }
+                                                              ]
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "filter": {
+                                                    "type": "array",
+                                                    "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "items": {
+                                                      "title": "Read Filter",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "fieldName",
+                                                        "operator"
+                                                      ],
+                                                      "properties": {
+                                                        "fieldName": {
+                                                          "type": "string",
+                                                          "description": "The name of the field to filter on.",
+                                                          "example": "status"
+                                                        },
+                                                        "operator": {
+                                                          "type": "string",
+                                                          "description": "The comparison operator.",
+                                                          "enum": [
+                                                            "eq"
+                                                          ],
+                                                          "example": "eq"
+                                                        },
+                                                        "value": {
+                                                          "title": "Read Filter Value",
+                                                          "description": "The value to filter on.",
+                                                          "example": "active",
+                                                          "oneOf": [
+                                                            {
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "type": "boolean"
+                                                            },
+                                                            {
+                                                              "type": "number"
+                                                            }
+                                                          ]
                                                         }
                                                       }
                                                     }
@@ -26107,6 +27515,94 @@
                                                     }
                                                   }
                                                 }
+                                              },
+                                              "filter": {
+                                                "type": "array",
+                                                "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "items": {
+                                                  "title": "Read Filter",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "fieldName",
+                                                    "operator"
+                                                  ],
+                                                  "properties": {
+                                                    "fieldName": {
+                                                      "type": "string",
+                                                      "description": "The name of the field to filter on.",
+                                                      "example": "status"
+                                                    },
+                                                    "operator": {
+                                                      "type": "string",
+                                                      "description": "The comparison operator.",
+                                                      "enum": [
+                                                        "eq"
+                                                      ],
+                                                      "example": "eq"
+                                                    },
+                                                    "value": {
+                                                      "title": "Read Filter Value",
+                                                      "description": "The value to filter on.",
+                                                      "example": "active",
+                                                      "oneOf": [
+                                                        {
+                                                          "type": "string"
+                                                        },
+                                                        {
+                                                          "type": "boolean"
+                                                        },
+                                                        {
+                                                          "type": "number"
+                                                        }
+                                                      ]
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "filter": {
+                                            "type": "array",
+                                            "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                            "x-go-type-skip-optional-pointer": true,
+                                            "items": {
+                                              "title": "Read Filter",
+                                              "type": "object",
+                                              "required": [
+                                                "fieldName",
+                                                "operator"
+                                              ],
+                                              "properties": {
+                                                "fieldName": {
+                                                  "type": "string",
+                                                  "description": "The name of the field to filter on.",
+                                                  "example": "status"
+                                                },
+                                                "operator": {
+                                                  "type": "string",
+                                                  "description": "The comparison operator.",
+                                                  "enum": [
+                                                    "eq"
+                                                  ],
+                                                  "example": "eq"
+                                                },
+                                                "value": {
+                                                  "title": "Read Filter Value",
+                                                  "description": "The value to filter on.",
+                                                  "example": "active",
+                                                  "oneOf": [
+                                                    {
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "boolean"
+                                                    },
+                                                    {
+                                                      "type": "number"
+                                                    }
+                                                  ]
+                                                }
                                               }
                                             }
                                           }
@@ -26471,6 +27967,94 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  "filter": {
+                                                    "type": "array",
+                                                    "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "items": {
+                                                      "title": "Read Filter",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "fieldName",
+                                                        "operator"
+                                                      ],
+                                                      "properties": {
+                                                        "fieldName": {
+                                                          "type": "string",
+                                                          "description": "The name of the field to filter on.",
+                                                          "example": "status"
+                                                        },
+                                                        "operator": {
+                                                          "type": "string",
+                                                          "description": "The comparison operator.",
+                                                          "enum": [
+                                                            "eq"
+                                                          ],
+                                                          "example": "eq"
+                                                        },
+                                                        "value": {
+                                                          "title": "Read Filter Value",
+                                                          "description": "The value to filter on.",
+                                                          "example": "active",
+                                                          "oneOf": [
+                                                            {
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "type": "boolean"
+                                                            },
+                                                            {
+                                                              "type": "number"
+                                                            }
+                                                          ]
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "filter": {
+                                                "type": "array",
+                                                "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                "x-go-type-skip-optional-pointer": true,
+                                                "items": {
+                                                  "title": "Read Filter",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "fieldName",
+                                                    "operator"
+                                                  ],
+                                                  "properties": {
+                                                    "fieldName": {
+                                                      "type": "string",
+                                                      "description": "The name of the field to filter on.",
+                                                      "example": "status"
+                                                    },
+                                                    "operator": {
+                                                      "type": "string",
+                                                      "description": "The comparison operator.",
+                                                      "enum": [
+                                                        "eq"
+                                                      ],
+                                                      "example": "eq"
+                                                    },
+                                                    "value": {
+                                                      "title": "Read Filter Value",
+                                                      "description": "The value to filter on.",
+                                                      "example": "active",
+                                                      "oneOf": [
+                                                        {
+                                                          "type": "string"
+                                                        },
+                                                        {
+                                                          "type": "boolean"
+                                                        },
+                                                        {
+                                                          "type": "number"
+                                                        }
+                                                      ]
+                                                    }
                                                   }
                                                 }
                                               }
@@ -26649,6 +28233,94 @@
                                                               "validate": "required_without=Days"
                                                             }
                                                           }
+                                                        }
+                                                      },
+                                                      "filter": {
+                                                        "type": "array",
+                                                        "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                        "x-go-type-skip-optional-pointer": true,
+                                                        "items": {
+                                                          "title": "Read Filter",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "fieldName",
+                                                            "operator"
+                                                          ],
+                                                          "properties": {
+                                                            "fieldName": {
+                                                              "type": "string",
+                                                              "description": "The name of the field to filter on.",
+                                                              "example": "status"
+                                                            },
+                                                            "operator": {
+                                                              "type": "string",
+                                                              "description": "The comparison operator.",
+                                                              "enum": [
+                                                                "eq"
+                                                              ],
+                                                              "example": "eq"
+                                                            },
+                                                            "value": {
+                                                              "title": "Read Filter Value",
+                                                              "description": "The value to filter on.",
+                                                              "example": "active",
+                                                              "oneOf": [
+                                                                {
+                                                                  "type": "string"
+                                                                },
+                                                                {
+                                                                  "type": "boolean"
+                                                                },
+                                                                {
+                                                                  "type": "number"
+                                                                }
+                                                              ]
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "filter": {
+                                                    "type": "array",
+                                                    "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                    "x-go-type-skip-optional-pointer": true,
+                                                    "items": {
+                                                      "title": "Read Filter",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "fieldName",
+                                                        "operator"
+                                                      ],
+                                                      "properties": {
+                                                        "fieldName": {
+                                                          "type": "string",
+                                                          "description": "The name of the field to filter on.",
+                                                          "example": "status"
+                                                        },
+                                                        "operator": {
+                                                          "type": "string",
+                                                          "description": "The comparison operator.",
+                                                          "enum": [
+                                                            "eq"
+                                                          ],
+                                                          "example": "eq"
+                                                        },
+                                                        "value": {
+                                                          "title": "Read Filter Value",
+                                                          "description": "The value to filter on.",
+                                                          "example": "active",
+                                                          "oneOf": [
+                                                            {
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "type": "boolean"
+                                                            },
+                                                            {
+                                                              "type": "number"
+                                                            }
+                                                          ]
                                                         }
                                                       }
                                                     }
@@ -29044,6 +30716,94 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "filter": {
+                                                  "type": "array",
+                                                  "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                  "x-go-type-skip-optional-pointer": true,
+                                                  "items": {
+                                                    "title": "Read Filter",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "fieldName",
+                                                      "operator"
+                                                    ],
+                                                    "properties": {
+                                                      "fieldName": {
+                                                        "type": "string",
+                                                        "description": "The name of the field to filter on.",
+                                                        "example": "status"
+                                                      },
+                                                      "operator": {
+                                                        "type": "string",
+                                                        "description": "The comparison operator.",
+                                                        "enum": [
+                                                          "eq"
+                                                        ],
+                                                        "example": "eq"
+                                                      },
+                                                      "value": {
+                                                        "title": "Read Filter Value",
+                                                        "description": "The value to filter on.",
+                                                        "example": "active",
+                                                        "oneOf": [
+                                                          {
+                                                            "type": "string"
+                                                          },
+                                                          {
+                                                            "type": "boolean"
+                                                          },
+                                                          {
+                                                            "type": "number"
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "filter": {
+                                              "type": "array",
+                                              "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                              "x-go-type-skip-optional-pointer": true,
+                                              "items": {
+                                                "title": "Read Filter",
+                                                "type": "object",
+                                                "required": [
+                                                  "fieldName",
+                                                  "operator"
+                                                ],
+                                                "properties": {
+                                                  "fieldName": {
+                                                    "type": "string",
+                                                    "description": "The name of the field to filter on.",
+                                                    "example": "status"
+                                                  },
+                                                  "operator": {
+                                                    "type": "string",
+                                                    "description": "The comparison operator.",
+                                                    "enum": [
+                                                      "eq"
+                                                    ],
+                                                    "example": "eq"
+                                                  },
+                                                  "value": {
+                                                    "title": "Read Filter Value",
+                                                    "description": "The value to filter on.",
+                                                    "example": "active",
+                                                    "oneOf": [
+                                                      {
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "type": "boolean"
+                                                      },
+                                                      {
+                                                        "type": "number"
+                                                      }
+                                                    ]
+                                                  }
                                                 }
                                               }
                                             }
@@ -29408,6 +31168,94 @@
                                                           }
                                                         }
                                                       }
+                                                    },
+                                                    "filter": {
+                                                      "type": "array",
+                                                      "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                      "x-go-type-skip-optional-pointer": true,
+                                                      "items": {
+                                                        "title": "Read Filter",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "fieldName",
+                                                          "operator"
+                                                        ],
+                                                        "properties": {
+                                                          "fieldName": {
+                                                            "type": "string",
+                                                            "description": "The name of the field to filter on.",
+                                                            "example": "status"
+                                                          },
+                                                          "operator": {
+                                                            "type": "string",
+                                                            "description": "The comparison operator.",
+                                                            "enum": [
+                                                              "eq"
+                                                            ],
+                                                            "example": "eq"
+                                                          },
+                                                          "value": {
+                                                            "title": "Read Filter Value",
+                                                            "description": "The value to filter on.",
+                                                            "example": "active",
+                                                            "oneOf": [
+                                                              {
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "type": "boolean"
+                                                              },
+                                                              {
+                                                                "type": "number"
+                                                              }
+                                                            ]
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "filter": {
+                                                  "type": "array",
+                                                  "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                  "x-go-type-skip-optional-pointer": true,
+                                                  "items": {
+                                                    "title": "Read Filter",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "fieldName",
+                                                      "operator"
+                                                    ],
+                                                    "properties": {
+                                                      "fieldName": {
+                                                        "type": "string",
+                                                        "description": "The name of the field to filter on.",
+                                                        "example": "status"
+                                                      },
+                                                      "operator": {
+                                                        "type": "string",
+                                                        "description": "The comparison operator.",
+                                                        "enum": [
+                                                          "eq"
+                                                        ],
+                                                        "example": "eq"
+                                                      },
+                                                      "value": {
+                                                        "title": "Read Filter Value",
+                                                        "description": "The value to filter on.",
+                                                        "example": "active",
+                                                        "oneOf": [
+                                                          {
+                                                            "type": "string"
+                                                          },
+                                                          {
+                                                            "type": "boolean"
+                                                          },
+                                                          {
+                                                            "type": "number"
+                                                          }
+                                                        ]
+                                                      }
                                                     }
                                                   }
                                                 }
@@ -29586,6 +31434,94 @@
                                                                 "validate": "required_without=Days"
                                                               }
                                                             }
+                                                          }
+                                                        },
+                                                        "filter": {
+                                                          "type": "array",
+                                                          "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                                          "x-go-type-skip-optional-pointer": true,
+                                                          "items": {
+                                                            "title": "Read Filter",
+                                                            "type": "object",
+                                                            "required": [
+                                                              "fieldName",
+                                                              "operator"
+                                                            ],
+                                                            "properties": {
+                                                              "fieldName": {
+                                                                "type": "string",
+                                                                "description": "The name of the field to filter on.",
+                                                                "example": "status"
+                                                              },
+                                                              "operator": {
+                                                                "type": "string",
+                                                                "description": "The comparison operator.",
+                                                                "enum": [
+                                                                  "eq"
+                                                                ],
+                                                                "example": "eq"
+                                                              },
+                                                              "value": {
+                                                                "title": "Read Filter Value",
+                                                                "description": "The value to filter on.",
+                                                                "example": "active",
+                                                                "oneOf": [
+                                                                  {
+                                                                    "type": "string"
+                                                                  },
+                                                                  {
+                                                                    "type": "boolean"
+                                                                  },
+                                                                  {
+                                                                    "type": "number"
+                                                                  }
+                                                                ]
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "filter": {
+                                                      "type": "array",
+                                                      "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                                      "x-go-type-skip-optional-pointer": true,
+                                                      "items": {
+                                                        "title": "Read Filter",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "fieldName",
+                                                          "operator"
+                                                        ],
+                                                        "properties": {
+                                                          "fieldName": {
+                                                            "type": "string",
+                                                            "description": "The name of the field to filter on.",
+                                                            "example": "status"
+                                                          },
+                                                          "operator": {
+                                                            "type": "string",
+                                                            "description": "The comparison operator.",
+                                                            "enum": [
+                                                              "eq"
+                                                            ],
+                                                            "example": "eq"
+                                                          },
+                                                          "value": {
+                                                            "title": "Read Filter Value",
+                                                            "description": "The value to filter on.",
+                                                            "example": "active",
+                                                            "oneOf": [
+                                                              {
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "type": "boolean"
+                                                              },
+                                                              {
+                                                                "type": "number"
+                                                              }
+                                                            ]
                                                           }
                                                         }
                                                       }
@@ -67543,6 +69479,94 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "filter": {
+                                      "type": "array",
+                                      "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                      "x-go-type-skip-optional-pointer": true,
+                                      "items": {
+                                        "title": "Read Filter",
+                                        "type": "object",
+                                        "required": [
+                                          "fieldName",
+                                          "operator"
+                                        ],
+                                        "properties": {
+                                          "fieldName": {
+                                            "type": "string",
+                                            "description": "The name of the field to filter on.",
+                                            "example": "status"
+                                          },
+                                          "operator": {
+                                            "type": "string",
+                                            "description": "The comparison operator.",
+                                            "enum": [
+                                              "eq"
+                                            ],
+                                            "example": "eq"
+                                          },
+                                          "value": {
+                                            "title": "Read Filter Value",
+                                            "description": "The value to filter on.",
+                                            "example": "active",
+                                            "oneOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "number"
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "filter": {
+                                  "type": "array",
+                                  "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                  "x-go-type-skip-optional-pointer": true,
+                                  "items": {
+                                    "title": "Read Filter",
+                                    "type": "object",
+                                    "required": [
+                                      "fieldName",
+                                      "operator"
+                                    ],
+                                    "properties": {
+                                      "fieldName": {
+                                        "type": "string",
+                                        "description": "The name of the field to filter on.",
+                                        "example": "status"
+                                      },
+                                      "operator": {
+                                        "type": "string",
+                                        "description": "The comparison operator.",
+                                        "enum": [
+                                          "eq"
+                                        ],
+                                        "example": "eq"
+                                      },
+                                      "value": {
+                                        "title": "Read Filter Value",
+                                        "description": "The value to filter on.",
+                                        "example": "active",
+                                        "oneOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "number"
+                                          }
+                                        ]
+                                      }
                                     }
                                   }
                                 }
@@ -67907,6 +69931,94 @@
                                               }
                                             }
                                           }
+                                        },
+                                        "filter": {
+                                          "type": "array",
+                                          "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                          "x-go-type-skip-optional-pointer": true,
+                                          "items": {
+                                            "title": "Read Filter",
+                                            "type": "object",
+                                            "required": [
+                                              "fieldName",
+                                              "operator"
+                                            ],
+                                            "properties": {
+                                              "fieldName": {
+                                                "type": "string",
+                                                "description": "The name of the field to filter on.",
+                                                "example": "status"
+                                              },
+                                              "operator": {
+                                                "type": "string",
+                                                "description": "The comparison operator.",
+                                                "enum": [
+                                                  "eq"
+                                                ],
+                                                "example": "eq"
+                                              },
+                                              "value": {
+                                                "title": "Read Filter Value",
+                                                "description": "The value to filter on.",
+                                                "example": "active",
+                                                "oneOf": [
+                                                  {
+                                                    "type": "string"
+                                                  },
+                                                  {
+                                                    "type": "boolean"
+                                                  },
+                                                  {
+                                                    "type": "number"
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "filter": {
+                                      "type": "array",
+                                      "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                      "x-go-type-skip-optional-pointer": true,
+                                      "items": {
+                                        "title": "Read Filter",
+                                        "type": "object",
+                                        "required": [
+                                          "fieldName",
+                                          "operator"
+                                        ],
+                                        "properties": {
+                                          "fieldName": {
+                                            "type": "string",
+                                            "description": "The name of the field to filter on.",
+                                            "example": "status"
+                                          },
+                                          "operator": {
+                                            "type": "string",
+                                            "description": "The comparison operator.",
+                                            "enum": [
+                                              "eq"
+                                            ],
+                                            "example": "eq"
+                                          },
+                                          "value": {
+                                            "title": "Read Filter Value",
+                                            "description": "The value to filter on.",
+                                            "example": "active",
+                                            "oneOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "number"
+                                              }
+                                            ]
+                                          }
                                         }
                                       }
                                     }
@@ -68085,6 +70197,94 @@
                                                     "validate": "required_without=Days"
                                                   }
                                                 }
+                                              }
+                                            },
+                                            "filter": {
+                                              "type": "array",
+                                              "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                              "x-go-type-skip-optional-pointer": true,
+                                              "items": {
+                                                "title": "Read Filter",
+                                                "type": "object",
+                                                "required": [
+                                                  "fieldName",
+                                                  "operator"
+                                                ],
+                                                "properties": {
+                                                  "fieldName": {
+                                                    "type": "string",
+                                                    "description": "The name of the field to filter on.",
+                                                    "example": "status"
+                                                  },
+                                                  "operator": {
+                                                    "type": "string",
+                                                    "description": "The comparison operator.",
+                                                    "enum": [
+                                                      "eq"
+                                                    ],
+                                                    "example": "eq"
+                                                  },
+                                                  "value": {
+                                                    "title": "Read Filter Value",
+                                                    "description": "The value to filter on.",
+                                                    "example": "active",
+                                                    "oneOf": [
+                                                      {
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "type": "boolean"
+                                                      },
+                                                      {
+                                                        "type": "number"
+                                                      }
+                                                    ]
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "filter": {
+                                          "type": "array",
+                                          "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                          "x-go-type-skip-optional-pointer": true,
+                                          "items": {
+                                            "title": "Read Filter",
+                                            "type": "object",
+                                            "required": [
+                                              "fieldName",
+                                              "operator"
+                                            ],
+                                            "properties": {
+                                              "fieldName": {
+                                                "type": "string",
+                                                "description": "The name of the field to filter on.",
+                                                "example": "status"
+                                              },
+                                              "operator": {
+                                                "type": "string",
+                                                "description": "The comparison operator.",
+                                                "enum": [
+                                                  "eq"
+                                                ],
+                                                "example": "eq"
+                                              },
+                                              "value": {
+                                                "title": "Read Filter Value",
+                                                "description": "The value to filter on.",
+                                                "example": "active",
+                                                "oneOf": [
+                                                  {
+                                                    "type": "string"
+                                                  },
+                                                  {
+                                                    "type": "boolean"
+                                                  },
+                                                  {
+                                                    "type": "number"
+                                                  }
+                                                ]
                                               }
                                             }
                                           }
@@ -68961,6 +71161,94 @@
                                       }
                                     }
                                   }
+                                },
+                                "filter": {
+                                  "type": "array",
+                                  "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                  "x-go-type-skip-optional-pointer": true,
+                                  "items": {
+                                    "title": "Read Filter",
+                                    "type": "object",
+                                    "required": [
+                                      "fieldName",
+                                      "operator"
+                                    ],
+                                    "properties": {
+                                      "fieldName": {
+                                        "type": "string",
+                                        "description": "The name of the field to filter on.",
+                                        "example": "status"
+                                      },
+                                      "operator": {
+                                        "type": "string",
+                                        "description": "The comparison operator.",
+                                        "enum": [
+                                          "eq"
+                                        ],
+                                        "example": "eq"
+                                      },
+                                      "value": {
+                                        "title": "Read Filter Value",
+                                        "description": "The value to filter on.",
+                                        "example": "active",
+                                        "oneOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "number"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "filter": {
+                              "type": "array",
+                              "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                              "x-go-type-skip-optional-pointer": true,
+                              "items": {
+                                "title": "Read Filter",
+                                "type": "object",
+                                "required": [
+                                  "fieldName",
+                                  "operator"
+                                ],
+                                "properties": {
+                                  "fieldName": {
+                                    "type": "string",
+                                    "description": "The name of the field to filter on.",
+                                    "example": "status"
+                                  },
+                                  "operator": {
+                                    "type": "string",
+                                    "description": "The comparison operator.",
+                                    "enum": [
+                                      "eq"
+                                    ],
+                                    "example": "eq"
+                                  },
+                                  "value": {
+                                    "title": "Read Filter Value",
+                                    "description": "The value to filter on.",
+                                    "example": "active",
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "number"
+                                      }
+                                    ]
+                                  }
                                 }
                               }
                             }
@@ -69325,6 +71613,94 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "filter": {
+                                      "type": "array",
+                                      "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                      "x-go-type-skip-optional-pointer": true,
+                                      "items": {
+                                        "title": "Read Filter",
+                                        "type": "object",
+                                        "required": [
+                                          "fieldName",
+                                          "operator"
+                                        ],
+                                        "properties": {
+                                          "fieldName": {
+                                            "type": "string",
+                                            "description": "The name of the field to filter on.",
+                                            "example": "status"
+                                          },
+                                          "operator": {
+                                            "type": "string",
+                                            "description": "The comparison operator.",
+                                            "enum": [
+                                              "eq"
+                                            ],
+                                            "example": "eq"
+                                          },
+                                          "value": {
+                                            "title": "Read Filter Value",
+                                            "description": "The value to filter on.",
+                                            "example": "active",
+                                            "oneOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "number"
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "filter": {
+                                  "type": "array",
+                                  "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                  "x-go-type-skip-optional-pointer": true,
+                                  "items": {
+                                    "title": "Read Filter",
+                                    "type": "object",
+                                    "required": [
+                                      "fieldName",
+                                      "operator"
+                                    ],
+                                    "properties": {
+                                      "fieldName": {
+                                        "type": "string",
+                                        "description": "The name of the field to filter on.",
+                                        "example": "status"
+                                      },
+                                      "operator": {
+                                        "type": "string",
+                                        "description": "The comparison operator.",
+                                        "enum": [
+                                          "eq"
+                                        ],
+                                        "example": "eq"
+                                      },
+                                      "value": {
+                                        "title": "Read Filter Value",
+                                        "description": "The value to filter on.",
+                                        "example": "active",
+                                        "oneOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "number"
+                                          }
+                                        ]
+                                      }
                                     }
                                   }
                                 }
@@ -69503,6 +71879,94 @@
                                                 "validate": "required_without=Days"
                                               }
                                             }
+                                          }
+                                        },
+                                        "filter": {
+                                          "type": "array",
+                                          "description": "Filters to apply only during backfill. Multiple conditions are joined by AND. Use this when you want different filter behavior for backfill vs. incremental reads.\n",
+                                          "x-go-type-skip-optional-pointer": true,
+                                          "items": {
+                                            "title": "Read Filter",
+                                            "type": "object",
+                                            "required": [
+                                              "fieldName",
+                                              "operator"
+                                            ],
+                                            "properties": {
+                                              "fieldName": {
+                                                "type": "string",
+                                                "description": "The name of the field to filter on.",
+                                                "example": "status"
+                                              },
+                                              "operator": {
+                                                "type": "string",
+                                                "description": "The comparison operator.",
+                                                "enum": [
+                                                  "eq"
+                                                ],
+                                                "example": "eq"
+                                              },
+                                              "value": {
+                                                "title": "Read Filter Value",
+                                                "description": "The value to filter on.",
+                                                "example": "active",
+                                                "oneOf": [
+                                                  {
+                                                    "type": "string"
+                                                  },
+                                                  {
+                                                    "type": "boolean"
+                                                  },
+                                                  {
+                                                    "type": "number"
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "filter": {
+                                      "type": "array",
+                                      "description": "Filters to apply when reading records during incremental reads and backfill. Multiple conditions are joined by AND. Each field can only have one condition.\n",
+                                      "x-go-type-skip-optional-pointer": true,
+                                      "items": {
+                                        "title": "Read Filter",
+                                        "type": "object",
+                                        "required": [
+                                          "fieldName",
+                                          "operator"
+                                        ],
+                                        "properties": {
+                                          "fieldName": {
+                                            "type": "string",
+                                            "description": "The name of the field to filter on.",
+                                            "example": "status"
+                                          },
+                                          "operator": {
+                                            "type": "string",
+                                            "description": "The comparison operator.",
+                                            "enum": [
+                                              "eq"
+                                            ],
+                                            "example": "eq"
+                                          },
+                                          "value": {
+                                            "title": "Read Filter Value",
+                                            "description": "The value to filter on.",
+                                            "example": "active",
+                                            "oneOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "number"
+                                              }
+                                            ]
                                           }
                                         }
                                       }
