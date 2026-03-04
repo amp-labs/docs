@@ -1,0 +1,135 @@
+---
+title: "PhoneBurner"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `contacts`, `dialsession`, `members`, and `voicemails` currently. For all other objects, a full read of the PhoneBurner instance will be done per scheduled read.
+- [Write Actions](/write-actions) (create/update).
+- [Proxy Actions](/proxy-actions), using the base URL `https://www.phoneburner.com`.
+- Subscribe Actions are not currently supported.
+
+### Supported objects
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+<div style={{ width: '100%', overflowX: 'auto' }}>
+<table style={{ width: '100%', minWidth: '1000px', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse' }}>
+  <thead>
+    <tr style={{ width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
+      <th style={{ width: '11.2%' }}>Metadata</th>
+      <th style={{ width: '11.2%' }}>Read</th>
+      <th style={{ width: '11.2%' }}>Write</th>
+      <th style={{ width: '11.2%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#contacts">contacts</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#folders">folders</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#members">members</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#dialsession">dialsession</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#voicemails">voicemails</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#tags">tags</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
+
+### Notes and limitations
+
+- **Write support**:
+  - `contacts`, `folders`, `members`: create + update
+  - `dialsession`: create only
+- **Read-only objects**: `voicemails`, `tags`
+
+### Example integration
+
+To define an integration for PhoneBurner, create a manifest file that looks like this. For a complete example, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/phoneBurner/amp.yaml).
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: phone-burner-integration
+    displayName: My PhoneBurner Integration
+    provider: phoneBurner
+    read:
+      objects:
+        - objectName: contacts
+          destination: defaultWebhook
+          schedule: "*/30 * * * *"
+    write:
+      objects:
+        - objectName: contacts
+          inheritMapping: true
+    proxy:
+      enabled: true
+```
+
+## Before You Get Started
+
+To connect _PhoneBurner_ with _Ampersand_, you will need [a PhoneBurner Account](https://www.phoneburner.com/).
+
+Once your account is created, you'll need to configure an app in _PhoneBurner_ and obtain the following credentials from your app:
+
+- Client ID
+- Client Secret
+
+You will use these credentials to connect your application to Ampersand.
+
+### Create a PhoneBurner account
+
+Here's how you can sign up for a **PhoneBurner Developer** account:
+
+- Visit the [Get Developer Account page](https://www.phoneburner.com/developer/getting_started#developer_account) and follow the step-by-step instructions to create your account.
+
+### Creating a PhoneBurner App
+
+Follow the steps below to create an _PhoneBurner_ app and add the Ampersand redirect URL in the app:
+
+1. Log in to your [PhoneBurner Developer Account](https://www.phoneburner.com/homepage/login).
+2. Click your avatar and select **My Account**
+3. Open the **Integrations** tab.
+4. From the left menu, select **Custom Applications**.
+5. Click **Register new application**.
+6. Enter the **Application Name** and **Contact** details.
+7. In the **OAuth2 Redirect URL** section, enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+8. Enter application **Description**.
+
+   ![PhoneBurner App Creation](/images/provider-guides/phoneBurner/phoneBurner-oauth2.gif)
+
+9. Click **Register application**.
+
+You'll see the details of your newly created application. Note the **Client ID** and **Client Secret** keys as they are necessary for connecting your app to Ampersand.
+
+   ![PhoneBurner App Credentials](/images/provider-guides/phoneBurner/phoneBurner-oauth2-creds.png)
+
+## Add your PhoneBurner app info to Ampersand
+
+1. Log in to your [Ampersand Console](https://console.withampersand.com).
+
+2. Select the project where you want to create a PhoneBurner integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Select **Provider apps**.
+
+4. Select _PhoneBurner_ from the **Provider** list.
+
+5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
+
+   ![PhoneBurner Integration in Ampersand](/images/provider-guides/phoneBurner/phoneBurner-amp-dashboard.gif)
+
+6. Click **Save changes**.
+
+## Using the connector
+
+To start integrating with PhoneBurner:
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start using the connector!
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.

@@ -3,6 +3,7 @@ import { join } from 'path';
 import platformApiPages from "./reference/platform.json";
 import readApiPages from "./reference/read.json";
 import writeApiPages from "./reference/write.json";
+import searchApiPages from "./reference/search.json";
 import matter from 'gray-matter';
 import fs from "fs";
 
@@ -12,6 +13,7 @@ import fs from "fs";
 const openApiPlatform = "platform";
 const openApiRead = "read";
 const openApiWrite = "write";
+const openApiSearch = "search";
 
 export interface DocsConfig {
   $schema: string;
@@ -112,18 +114,18 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
         {
           tab: 'Documentation',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            !group.group.match(/^(Introduction|WRITE API|READ API|PLATFORM API)$/)))
+            !group.group.match(/^(Introduction|WRITE API|READ API|SEARCH API|PLATFORM API)$/)))
         },
         {
           tab: 'API Reference',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            group.group.match(/^(Introduction|WRITE API|READ API|PLATFORM API)$/)))
+            group.group.match(/^(Introduction|WRITE API|READ API|SEARCH API|PLATFORM API)$/)))
         }
       ]
     },
     logo: mintConfig.logo,
     api: {
-      openapi: ['./platform.json', './read.json', './write.json']
+      openapi: ['./platform.json', './read.json', './write.json', './search.json']
     },
     navbar: {
       links: mintConfig.topbarLinks?.map((link: any) => ({
@@ -155,7 +157,7 @@ export function writeDocsJson(docsConfig: DocsConfig, outputPath: string = 'docs
 // Create the base configuration
 const baseConfig = {
   name: "Ampersand",
-  openapi: [openApiPlatform, openApiRead, openApiWrite],
+  openapi: [openApiPlatform, openApiRead, openApiWrite, openApiSearch],
   logo: {
     light: "/logos/dark.png",
     dark: "/logos/light.png",
@@ -226,6 +228,10 @@ const baseConfig = {
       source: "/reference/auth",
       destination: "/api/key-auth"
     },
+    {
+      source: "/detect-schema-changes",
+      destination: "/manage-customer-schemas"
+    }
   ],
   footerSocials: {
     linkedin: "https://www.linkedin.com/company/withampersand",
@@ -243,15 +249,16 @@ const baseConfig = {
             "overview",
             "concepts",
             "quickstart",
-            "use-with-ai-ide",
+            // "use-with-ai-ide",
           ]
         },
         "subscribe-actions",
         "read-actions",
         "write-actions",
         "proxy-actions",
+        "search-actions",
         "object-and-field-mapping",
-        "detect-schema-changes",
+        "manage-customer-schemas",
         {
           group: "UI library",
           pages: [
@@ -267,13 +274,6 @@ const baseConfig = {
           ]
         },
         "manifest-reference",
-        {
-          group: "AI Agents",
-          pages: [
-            "ai-sdk",
-            "mcp-server",
-          ]
-        },
         {
           group: "Destinations",
           pages: [
@@ -297,6 +297,7 @@ const baseConfig = {
             "provider-guides/aha",
             "provider-guides/aircall",
             "provider-guides/airtable",
+            "provider-guides/amplemarket",
             "provider-guides/amplitude",
             "provider-guides/anthropic",
             "provider-guides/apollo",
@@ -307,7 +308,6 @@ const baseConfig = {
             "provider-guides/avoma",
             "provider-guides/aweber",
             "provider-guides/aws",
-            "provider-guides/breakcold",
             "provider-guides/bird",
             "provider-guides/bitbucket",
             "provider-guides/blackbaud",
@@ -316,6 +316,7 @@ const baseConfig = {
             "provider-guides/box",
             "provider-guides/braintree",
             "provider-guides/braze",
+            "provider-guides/breakcold",
             "provider-guides/brevo",
             "provider-guides/bynder",
             "provider-guides/calendly",
@@ -330,12 +331,14 @@ const baseConfig = {
             "provider-guides/clariCopilot",
             "provider-guides/clickup",
             "provider-guides/close",
+            "provider-guides/cloudtalk",
             "provider-guides/coda",
             "provider-guides/constantContact",
             "provider-guides/copper",
             "provider-guides/crunchbase",
             "provider-guides/customerJourneysApp",
             "provider-guides/customerJourneysTrack",
+            "provider-guides/webex",
             "provider-guides/delighted",
             "provider-guides/discord",
             "provider-guides/discourse",
@@ -384,8 +387,9 @@ const baseConfig = {
             "provider-guides/jira",
             "provider-guides/jobber",
             "provider-guides/joinMe",
-            "provider-guides/kaseyaVSAX",
             "provider-guides/jotform",
+            "provider-guides/justCall",
+            "provider-guides/kaseyaVSAX",
             "provider-guides/keap",
             "provider-guides/kit",
             "provider-guides/klaviyo",
@@ -407,26 +411,30 @@ const baseConfig = {
             "provider-guides/netsuite",
             "provider-guides/notion",
             "provider-guides/nutshell",
+            "provider-guides/okta",
             "provider-guides/openAI",
             "provider-guides/outplay",
             "provider-guides/outreach",
             "provider-guides/paddle",
             "provider-guides/paddleSandbox",
+            "provider-guides/phoneBurner",
             "provider-guides/pinterest",
             "provider-guides/pipedrive",
             "provider-guides/pipeliner",
-            "provider-guides/pylon",
             "provider-guides/podium",
             "provider-guides/productBoard",
+            "provider-guides/pylon",
             "provider-guides/quickbooks",
             "provider-guides/ramp",
             "provider-guides/rebilly",
             "provider-guides/recurly",
             "provider-guides/ringCentral",
             "provider-guides/sageIntacct",
+            "provider-guides/salesfinity",
             "provider-guides/salesflare",
             "provider-guides/salesforce",
             "provider-guides/salesloft",
+            "provider-guides/superSend",
             "provider-guides/segment",
             "provider-guides/seismic",
             "provider-guides/sellsy",
@@ -435,13 +443,18 @@ const baseConfig = {
             "provider-guides/slack",
             "provider-guides/smartlead",
             "provider-guides/smartsheet",
+            "provider-guides/shopify",
             "provider-guides/snapchatAds",
+            "provider-guides/snowflake",
+            "provider-guides/solarwindsServiceDesk",
             "provider-guides/stripe",
+            "provider-guides/superSend",
             "provider-guides/surveyMonkey",
             "provider-guides/talkdesk",
             "provider-guides/teamleader",
             "provider-guides/teamwork",
             "provider-guides/timely",
+            "provider-guides/tipalti",
             "provider-guides/vtiger",
             "provider-guides/webflow",
             "provider-guides/whereby",
@@ -450,7 +463,7 @@ const baseConfig = {
             "provider-guides/xero",
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
-            "provider-guides/zoom"
+            "provider-guides/zoom",
           ]
         },
         {
@@ -461,11 +474,20 @@ const baseConfig = {
             "customer-guides/loxo",
             "customer-guides/hubspot",
             "customer-guides/marketo",
+            "customer-guides/snowflake",
             "customer-guides/update-connection"
           ]
         },
         "dev-and-prod-environments",
         "terminology",
+        "unified-api",
+        {
+          group: "AI Agents",
+          pages: [
+            "ai-sdk",
+            "mcp-server",
+          ]
+        },
       ],
     },
     {
@@ -485,6 +507,11 @@ const baseConfig = {
       group: "READ API",
       pages: readApiPages,
       openapiSource: openApiRead,
+    },
+    {
+      group: "SEARCH API",
+      pages: searchApiPages,
+      openapiSource: openApiSearch,
     },
     {
       group: "PLATFORM API",

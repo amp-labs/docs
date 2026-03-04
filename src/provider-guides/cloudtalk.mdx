@@ -1,0 +1,57 @@
+---
+title: "CloudTalk"
+slug: "cloudtalk"
+excerpt: ""
+hidden: false
+createdAt: "Sat Jan 10 2026 05:57:40 GMT+0000 (Coordinated Universal Time)"
+updatedAt: "Sat Jan 10 2026 05:57:40 GMT+0000 (Coordinated Universal Time)"
+---
+
+## What's Supported
+
+### Supported Actions
+
+This connector supports:
+
+- [Read Action](/read-actions), including full historic backfill. Incremental read is supported only for `Calls` and `Activities`. Note that for all other objects, a full read of the CloudTalk instance will be done for each scheduled read.
+- [Write Action](/write-actions).
+- [Proxy Action](/proxy-actions), using the base URL `https://my.cloudtalk.io/api`.
+
+### Supported Objects
+
+The CloudTalk connector supports writing to and reading from the following objects:
+
+- [Activity](https://developers.cloudtalk.io/reference/activity#tag/Contacts/paths/~1activity~1index.json/get) (`activity`)
+- [Agent](https://developers.cloudtalk.io/reference/agents#tag/Agents) (`agents`)
+- [Blacklist](https://developers.cloudtalk.io/reference/blacklist#tag/Other/paths/~1blacklist~1index.json/get) (`blacklist`)
+- [Call](https://developers.cloudtalk.io/reference/calls#tag/Calls) (`calls`)
+- [Campaign](https://developers.cloudtalk.io/reference/campaigns#tag/Campaigns) (`campaigns`)
+- [Contact](https://developers.cloudtalk.io/reference/contacts#tag/Contacts) (`contacts`)
+- [Group](https://developers.cloudtalk.io/reference/groups#tag/Groups) (`groups`)
+- [Note](https://developers.cloudtalk.io/reference/notes#tag/Contacts/paths/~1notes~1index.json/get) (`notes`)
+- [Number](https://developers.cloudtalk.io/reference/numbers#tag/Numbers) (`numbers`)
+- [Tag](https://developers.cloudtalk.io/reference/tags#tag/Tags) (`tags`)
+
+## Before You Get Started
+
+To integrate **CloudTalk** with **Ampersand**, you need your **Access Key ID** and **Access Key Secret**. To obtain these:
+
+1. Log in to your [CloudTalk Dashboard](https://my.cloudtalk.io/login).
+2. Navigate to **Account** > **Settings** > **API Keys**.
+3. Click **Add API Key** to generate a new pair of credentials.
+   ![CloudTalk API Keys](/images/provider-guides/cloudtalk-api-keys.png)
+
+## Using the connector
+
+This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with CloudTalk:
+
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/cloudtalk/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their Access Key ID and Access Key Secret.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.

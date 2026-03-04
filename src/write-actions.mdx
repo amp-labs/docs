@@ -2,7 +2,7 @@
 title: "Write actions"
 ---
 
-A write action writes data to your customer's SaaS whenever you make an API request to us.
+A write action writes data to your customer's SaaS whenever you make an API request to us. This page focuses on writing data to existing fields. If you are looking to create new custom fields prior to writing data, please see [Create or update custom fields](/manage-customer-schemas#create-or-update-custom-fields).
 
 ## Defining writes
 
@@ -36,31 +36,6 @@ integrations:
         - objectName: account
           inheritMapping: true
 ```
-
-<Note>
-**On the roadmap**
-
- The ability to programmatically create custom objects when a user installs your integration.
-</Note>
-
-#### Nested fields
-
-When writing to providers that have nested data structures, you can use [JSONPath bracket notation](/object-and-field-mapping#nested-field-mapping) in your record keys:
-
-```JSON
-{
-    "groupRef": "demo-group-id",
-    "type": "create",
-    "record": {
-        "$['address']['street']": "123 Main St",
-        "$['address']['city']": "Springfield"
-    }
-}
-```
-
-Ampersand will automatically transform these into the nested structure the provider API expects.
-
-If the write action uses `inheritMapping: true` and the read action has nested field mappings, the same mappings will be applied in reverse when writing. See [Writing nested data](/object-and-field-mapping#writing-nested-data) for details.
 
 ## Writing records
 
@@ -146,10 +121,32 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 }'
 ```
 
+### Delete a record
 
-### Passing additional headers to providers when creating or updating records
+<Info>
+Deletion must be enabled for the object in the installation config. See [Enabling deletion for an object](#enabling-deletion-for-an-object) to enable deletion when creating or updating an installation.
 
-If you need to pass additional headers when creating or updating records for a provider, you can include those headers directly in the request body when calling the write endpoint. Ampersand will forward those headers as part of the outbound request to the provider.
+This is currently supported for HubSpot and Salesforce.
+</Info>
+
+To delete a record, call the [Write endpoint](/reference/write/write-records) with `type` set to `delete`. Provide the record `id` in the `record` object; no other fields are required. Delete operations are **synchronous only** and support **single-record** deletes.
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/<OBJECT_NAME>' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "demo-group-id",
+    "type": "delete",
+    "record": {
+        "id": "20scv09wer3klj"
+    }
+}'
+```
+
+### Pass additional headers
+
+If you need to pass additional headers when creating, updating, or deleting records for a provider, you can include those headers directly in the request body when calling the write endpoint. Ampersand will forward those headers as part of the outbound request to the provider.
 
 <Info>This is currently only supported for Salesforce. </Info>
 
@@ -189,7 +186,9 @@ To perform a batch write, use the same [write endpoint](/reference/write/write-r
 
 `https://write.withampersand.com/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
 
-Batch writes support both [synchronous and asynchronous modes](#write-modes). Note that batch writes follow an **all-or-nothing** approach: if any record in the batch fails to write, the entire batch operation fails and no records are written.
+Batch writes support both [synchronous and asynchronous modes](#write-modes). By default, batch writes use **partial success**, i.e., successful records will be committed even if some records in the batch fail. To fail the entire batch when any record fails, set [`batchPolicy.allOrNone`](/reference/write/write-records) to `true` in your request.
+
+<Info>HubSpot batch updates always result in partial success due to a provider limitation, regardless of the `allOrNone` setting.</Info>
 
 #### Batch create
 
@@ -300,9 +299,72 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 }'
 ```
 
+### Auto batching
+
+Ampersand can automatically group multiple single-record write requests together and executes them as a batch operation. This is useful when you want to reduce the amount of API quota that you are consuming in your customer's SaaS instance.
+
+<Info>Auto batching is currently only available for asynchronous mode and single-record writes (not batch writes).</Info>
+
+When you enable auto batching, Ampersand will:
+
+1. **Accumulate records**: Multiple single-record write requests for the same installation, object, and write type (create or update) are automatically grouped together.
+2. **Execute when ready**: The batch executes when either:
+   - **100 records** have been accumulated, or
+   - **Maximum delay time** has been reached (executes even if current batch has fewer than 100 records)
+
+Each batch uses the max delay deadline set by the first record in that batch. This ensures records don't wait indefinitely.
+
+#### Configuration
+
+The auto batch policy has two configuration options:
+
+- **`maxDelayMinutes`** (required): The maximum time to wait before executing the batch, even if it hasn't reached 100 records. Minimum: 1, Maximum: 1440 (24 hours).
+- **`retryDeadlineHours`** (optional): The maximum time to keep retrying the batch write operation if it fails due to a retryable error. If not specified, defaults to 1 hour. Maximum allowed is 48 hours.
+
+To enable auto batching, include `autoBatchPolicy` in the [write API](/reference/write/write-records) request, here's an example:
+
+```bash
+curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "type": "create",
+    "mode": "asynchronous",
+    "autoBatchPolicy": {
+        "maxDelayMinutes": 5,
+        "retryDeadlineHours": 2
+    },
+    "record": {
+        "firstname": "Alice",
+        "lastname": "Wonderland",
+        "email": "alice@example.com"
+    }
+}'
+```
+
+In this example:
+- Ampersand waits for up to **5 minutes** for additional records to come in before sending the current batch.
+- If 100 records accumulate before 5 minutes, the batch executes immediately.
+- If the batch write fails due to a retryable error, Ampersand will retry for up to **2 hours**.
+
+#### Monitor auto batch operations
+
+You can monitor auto batch operations using the operation ID returned in the response. The operation ID represents the master operation for the batch. Use the [Get Operation endpoint](/reference/operation/get-an-operation) to check the status:
+
+```bash
+curl --location 'https://api.withampersand.com/v1/projects/<PROJECT_ID>/operations/<OPERATION_ID>' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY'
+```
+
+The operation status will show:
+- `in_progress`: The batch is accumulating records or executing.
+- `success`: The batch write completed successfully (may include partial success with some failed records).
+- `failure`: The batch write failed.
+
 ## Write modes
 
-Write actions support two modes: `synchronous` and `asynchronous`. The mode determines how the API handles your write request and when you receive a response. These modes apply to both single record writes and batch writes.
+Write actions support two modes: `synchronous` and `asynchronous`. The mode determines how the API handles your write request and when you receive a response. These modes apply to both single record writes and batch writes. **Delete operations are always synchronous** and do not use the `mode` field.
 
 ### Synchronous mode
 
@@ -331,6 +393,8 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 In asynchronous mode, Ampersand validates the request and immediately returns an operation ID. The write is then processed in the background. This is recommended for large batch writes or when you don't need to wait for the result.
 
 If the write fails due to API quota issues or other retryable errors, Ampersand will automatically keep retrying for up to 1 hour. If needed, the [retry policy can be configured](#retry-policy-for-async-writes) to retry for up to 48 hours.
+
+For single-record writes, you can also use the [auto batch policy](#auto-batching) to automatically group multiple requests together and execute them as a batch.
 
 To use async mode, set `mode: "asynchronous"` in your request:
 
@@ -414,13 +478,127 @@ Retry policies only apply to asynchronous mode.
 
 <Info>These advanced use cases are currently only supported when creating or updating installations via the API or [Headless UI](/headless).</Info>
 
-### Prevent overwriting of customer data
+### Enabling deletion for an object
 
-There are certain fields that you may only want to write to when you are creating a record, not when you are updating a record. This helps prevent the scenario where you may accidentally overwrite a field that the customer has manually modified in their SaaS product. You may also have a need for the opposite behavior, where you want to leave a field blank when creating records, but write to that field when updating records.
+By default, delete operations are disabled. To enable deletion, set `deletionSettings.enabled` to `true` for the object when creating or updating an installation.
 
 #### Using headless UI
 
-You can set overwrite behavior on a customer-by-customer basis when using the function `setFieldSettings`. Learn more about [pre-requisites for headless UI here](/headless#prerequisites).
+You can enable or disable deletion on a customer-by-customer basis using `setEnableDeletion` and `setDisableDeletion` from `config.writeObject()`. Learn more about [pre-requisites for headless UI here](/headless#prerequisites).
+
+```typescript
+function WriteObjectConfig() {
+  const config = useLocalConfig();
+  const contactWriteConfig = config.writeObject("Contact");
+
+  // Enable deletion for the Contact object
+  contactWriteConfig.setEnableDeletion();
+
+  // Or disable deletion
+  contactWriteConfig.setDisableDeletion();
+}
+```
+
+#### Using API
+
+You can use these APIs to set `deletionSettings.enabled`:
+
+<AccordionGroup>
+  <Accordion title="Create Installation">
+    [Create Installation API](/reference/installation/create-a-new-installation) — Include `deletionSettings` in the write object when creating the installation:
+
+```Javascript
+{
+  "groupRef": "customer-group-ref",
+  "connectionId": "connection-id",
+  "config": {
+    "revisionId": "revision-id",
+    "content": {
+      "provider": "salesforce",
+      "write": {
+        "objects": {
+          "contact": {
+            "objectName": "contact",
+            "deletionSettings": {
+              "enabled": true
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+  </Accordion>
+  <Accordion title="Update Installation">
+    [Update Installation API](/reference/installation/update-an-installation) — PATCH the installation with the write object config and an update mask that includes the object path:
+
+```Javascript
+{
+  "updateMask": ["config.content.write.objects.contact"],
+  "installation": {
+    "config": {
+      "content": {
+        "provider": "salesforce",
+        "write": {
+          "objects": {
+            "contact": {
+              "objectName": "contact",
+              "deletionSettings": {
+                "enabled": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+  </Accordion>
+  <Accordion title="Update Installation Object (JSON Patch)">
+    [Update Installation Object API](/reference/installation/update-an-installation-object) — PATCH the object's config content with a JSON Patch operation. Use this to change only this object without sending the full installation config:
+
+```Javascript
+{
+  "groupRef": "customer-group-ref",
+  "action": "write",
+  "changes": [
+    {
+      "op": "add",
+      "path": "/deletionSettings",
+      "value": { "enabled": true }
+    }
+  ]
+}
+```
+
+Use `"op": "replace"` if the object already has `deletionSettings` and you are changing it.
+  </Accordion>
+</AccordionGroup>
+
+### Prevent overwriting of customer data
+
+You can control whether a field is included in write requests. For example, you can avoid overwriting data the customer has changed, or leave a field blank on create and write to it only on update.
+
+**`writeOnCreate`** — whether to write the field when creating a record:
+- **always** (default): Always include the field on create
+- **never**: Never include the field on create
+
+**`writeOnUpdate`** — whether to write the field when updating a record:
+- **always** (default): Always include the field on update
+- **never**: Never include the field on update (avoids overwriting customer changes)
+- **ifEmpty**: Only include the field if it's currently empty. Supported for Salesforce and HubSpot only.
+
+**Example configurations:**
+- Only set a field on create, never overwrite on update → `writeOnCreate: "always"`, `writeOnUpdate: "never"`
+- Leave field blank on create, only fill on update → `writeOnCreate: "never"`, `writeOnUpdate: "always"`
+- Fill on update only when the field is empty → `writeOnUpdate: "ifEmpty"`
+- Never write to the field for this customer → `writeOnCreate: "never"`, `writeOnUpdate: "never"`
+
+#### Using headless UI
+
+You can set overwrite behavior on a customer-by-customer basis using the function `setFieldSettings`. Learn more about [pre-requisites for headless UI here](/headless#prerequisites).
 
 ```typescript
 function WriteObjectConfig() {
@@ -440,7 +618,7 @@ function WriteObjectConfig() {
 
 #### Using API
 
-As an alternative to headless UI, you can set overwrite behavior on a customer-by-customer when you make a call to the [Create Installation API](/reference/installation/create-a-new-installation). Here is a sample request body:
+As an alternative to headless UI, you can set overwrite behavior on a customer-by-customer basis when you make a call to the [Create Installation API](/reference/installation/create-a-new-installation). Here is a sample request body:
 
 ```Javascript
 {
@@ -473,7 +651,7 @@ As an alternative to headless UI, you can set overwrite behavior on a customer-b
 
 ### Default values
 
-Default values are applied to a field whenever that value is missing from the write request. We current support string, boolean and number values.
+Default values are applied to a field whenever that value is missing from the write request. We currently support string, boolean and number values.
 
 #### Using headless UI
 

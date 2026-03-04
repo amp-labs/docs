@@ -9,6 +9,12 @@ The Salesloft connector supports:
 - [Read Actions](/read-actions), including full historic backfill and incremental read.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.salesloft.com`.
+- [Subscribe Actions](/subscribe-actions).
+
+<Note>
+If you are using Subscribe Actions, `watchFieldsAuto` is required to be set to `all` for Salesloft subscribe actions in your manifest [`amp.yaml`](https://github.com/amp-labs/samples/blob/main/salesloft/amp.yaml).
+</Note>
+
 
 ### Example Integration
 
@@ -16,60 +22,81 @@ For an example manifest file of a Salesloft integration, visit our [samples repo
 
 ### Supported Objects
 
-The Salesloft connector supports reading from and writing to the following 47 objects. Refer to the [Salesloft API documentation](https://developers.salesloft.com/docs/api) for a description of them.
+Refer to the [Salesloft API documentation](https://developers.salesloft.com/docs/api) for a description of each object.
 
-- [Account Stages](https://developers.salesloft.com/docs/api/account-stages-index) (account_stages)
-- [Account Tiers](https://developers.salesloft.com/docs/api/account-tiers-index) (account_tiers)
-- [Accounts](https://developers.salesloft.com/docs/api/accounts-index) (accounts)
-- [Actions](https://developers.salesloft.com/docs/api/actions-index) (actions)
-- [Bulk Jobs](https://developers.salesloft.com/docs/api/bulk-jobs-index) (bulk_jobs)
-- [Cadence Memberships](https://developers.salesloft.com/docs/api/cadence-memberships-index) (cadence_memberships)
-- [Cadences](https://developers.salesloft.com/docs/api/cadences-index) (cadences)
-- [Calendar Events](https://developers.salesloft.com/docs/api/calendar-events-index) (calendar/events)
-- [Call Data Records](https://developers.salesloft.com/docs/api/call-data-records-index) (call_data_records)
-- [Call Dispositions](https://developers.salesloft.com/docs/api/call-dispositions-index) (call_dispositions)
-- [Call Instructions](https://developers.salesloft.com/docs/api/action-details-call-instructions-index) (action_details/call_instructions)
-- [Call Sentiments](https://developers.salesloft.com/docs/api/call-sentiments-index) (call_sentiments)
-- [Caller Ids](https://developers.salesloft.com/docs/api/phone-numbers-caller-ids-index) (phone_numbers/caller_ids)
-- [Calls](https://developers.salesloft.com/docs/api/activities-calls-index) (activities/calls)
-- [Conversations](https://developers.salesloft.com/docs/api/conversations-find-all) (conversations)
-- [Crm Account Team Member Roles](https://developers.salesloft.com/docs/api/account-team-member-roles-index) (account_team_member_roles)
-- [Crm Account Team Members](https://developers.salesloft.com/docs/api/crm-account-team-members-index) (crm_account_team_members)
-- [Crm Activities](https://developers.salesloft.com/docs/api/crm-activities-index) (crm_activities)
-- [Crm Activity Fields](https://developers.salesloft.com/docs/api/crm-activity-fields-index) (crm_activity_fields)
-- [Crm Users](https://developers.salesloft.com/docs/api/crm-users-index) (crm_users)
-- [Custom Fields](https://developers.salesloft.com/docs/api/custom-fields-index) (custom_fields)
-- [Custom Roles](https://developers.salesloft.com/docs/api/custom-roles-index) (custom_roles)
-- [Email Template Attachments](https://developers.salesloft.com/docs/api/email-template-attachments-index) (email_template_attachments)
-- [Email Templates](https://developers.salesloft.com/docs/api/email-templates-index) (email_templates)
-- [Emails](https://developers.salesloft.com/docs/api/activities-emails-index) (activities/emails)
-- [Groups](https://developers.salesloft.com/docs/api/groups-index) (groups)
-- [Imports](https://developers.salesloft.com/docs/api/imports-index) (imports)
-- [Meetings](https://developers.salesloft.com/docs/api/meetings-index) (meetings)
-- [Notes](https://developers.salesloft.com/docs/api/notes-index) (notes)
-- [Opportunities](https://developers.salesloft.com/docs/api/opportunities-index) (opportunities)
-- [Opportunity And Person Associations](https://developers.salesloft.com/docs/api/opportunity-people-index) (opportunity_people)
-- [Opportunity Stages](https://developers.salesloft.com/docs/api/opportunity-stages-index) (opportunity_stages)
-- [Past Activities](https://developers.salesloft.com/docs/api/activity-histories-index) (activity_histories)
-- [Pending Emails](https://developers.salesloft.com/docs/api/pending-emails-index) (pending_emails)
-- [People](https://developers.salesloft.com/docs/api/people-index) (people)
-- [Person Stages](https://developers.salesloft.com/docs/api/person-stages-index) (person_stages)
-- [Phone Number Assignments](https://developers.salesloft.com/docs/api/phone-number-assignments-index) (phone_number_assignments)
-- [Play Registrations](https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-index) (integrations/signals/registrations/plays)
-- [Requests](https://developers.salesloft.com/docs/api/data-control-requests-index) (data_control/requests)
-- [Saved List Views](https://developers.salesloft.com/docs/api/saved-list-views-index) (saved_list_views)
-- [Signal Registrations](https://developers.salesloft.com/docs/api/integrations-signals-registrations-index) (integrations/signals/registrations)
-- [Steps](https://developers.salesloft.com/docs/api/steps-index) (steps)
-- [Successes](https://developers.salesloft.com/docs/api/successes-index) (successes)
-- [Tasks](https://developers.salesloft.com/docs/api/tasks-index) (tasks)
-- [Team Configurations](https://developers.salesloft.com/docs/api/external-configurations-index) (external/configurations)
-- [Team Mappings](https://developers.salesloft.com/docs/api/external-mappings-index) (external/mappings)
-- [Team Tags](https://developers.salesloft.com/docs/api/tags-index) (tags)
-- [Team Template Attachments](https://developers.salesloft.com/docs/api/team-template-attachments-index) (team_template_attachments)
-- [Team Templates](https://developers.salesloft.com/docs/api/team-templates-index) (team_templates)
-- [Transcriptions](https://developers.salesloft.com/docs/api/conversations-transcriptions-find-all-transcripts) (transcriptions)
-- [Users](https://developers.salesloft.com/docs/api/users-index) (users)
-- [Webhook Subscriptions](https://developers.salesloft.com/docs/api/webhook-subscriptions-index) (webhook_subscriptions)
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+export const Maybe = () => <span>🟡</span>
+
+<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
+<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
+  <thead style={{ display: 'table-header-group', width: '100%' }}>
+    <tr style={{ display: 'table-row', width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '40%' }}>Object</th>
+      <th style={{ width: '20%' }}>Read</th>
+      <th style={{ width: '20%' }}>Write</th>
+      <th style={{ width: '20%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody style={{ display: 'table-row-group', width: '100%' }}>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/account-stages-index">Account Stages</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/account-tiers-index">Account Tiers</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/accounts-index">Accounts</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/actions-index">Actions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/bulk-jobs-index">Bulk Jobs</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/cadence-memberships-index">Cadence Memberships</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/cadences-index">Cadences</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/calendar-events-index">Calendar Events</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/call-data-records-index">Call Data Records</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/call-dispositions-index">Call Dispositions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/action-details-call-instructions-index">Call Instructions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/call-sentiments-index">Call Sentiments</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/phone-numbers-caller-ids-index">Caller Ids</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/activities-calls-index">Calls</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>Conversation Recordings</td><td><Cross /></td><td><Cross /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>Conversation Transcripts</td><td><Cross /></td><td><Cross /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/conversations-find-all">Conversations</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/account-team-member-roles-index">Crm Account Team Member Roles</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/crm-account-team-members-index">Crm Account Team Members</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/crm-activities-index">Crm Activities</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/crm-activity-fields-index">Crm Activity Fields</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/crm-users-index">Crm Users</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/custom-fields-index">Custom Fields</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/custom-roles-index">Custom Roles</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/email-template-attachments-index">Email Template Attachments</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/email-templates-index">Email Templates</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/activities-emails-index">Emails</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/groups-index">Groups</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/imports-index">Imports</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>Links</td><td><Cross /></td><td><Cross /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/meetings-index">Meetings</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/notes-index">Notes</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/opportunities-index">Opportunities</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/opportunity-people-index">Opportunity And Person Associations</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/opportunity-stages-index">Opportunity Stages</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/activity-histories-index">Past Activities</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/pending-emails-index">Pending Emails</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/people-index">People</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/person-stages-index">Person Stages</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/phone-number-assignments-index">Phone Number Assignments</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-index">Play Registrations</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/data-control-requests-index">Requests</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/saved-list-views-index">Saved List Views</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/integrations-signals-registrations-index">Signal Registrations</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/steps-index">Steps</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/successes-index">Successes</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/tasks-index">Tasks</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/external-configurations-index">Team Configurations</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/external-mappings-index">Team Mappings</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/tags-index">Team Tags</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/team-template-attachments-index">Team Template Attachments</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/team-templates-index">Team Templates</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/conversations-transcriptions-find-all-transcripts">Transcriptions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/users-index">Users</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.salesloft.com/docs/api/webhook-subscriptions-index">Webhook Subscriptions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
 
 ## Before You Get Started
 
@@ -111,9 +138,9 @@ Once your Salesloft account is ready, you need to create a Salesloft application
 
 4. Select _Salesloft_ from the **Provider** list.
 
-5. Enter the previously obtained _Application ID_ in the **Client ID** field, the _Secret_ in the **Client Secret** field, and the requested scopes in the **Permissions** field.
+5. Enter the previously obtained _Application ID_ in the **Client ID** field, the _Secret_ in the **Client Secret** field, and the requested scopes in the **Permissions** field. See [Salesloft API Scopes](https://developers.salesloft.com/docs/platform/api-basics/scopes/) for more details on available scopes. If you are using Subscribe Actions, you will need additional scopes for webhooks; see [Salesloft Webhook Event Types](https://developers.salesloft.com/docs/platform/webhooks/event-types/) for more information.
 
-   ![Add Salesloft App Details](/images/provider-guides/afc4d83-salesloft.gif) 
+   ![Add Salesloft App Details](/images/provider-guides/afc4d83-salesloft.gif)
 
 6. Click **Save Changes**.
 
@@ -122,10 +149,10 @@ Once your Salesloft account is ready, you need to create a Salesloft application
 To start integrating with Salesloft:
 - Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/salesloft/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
-- If you are using Read Actions, create a [destination](/destinations).
+- If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
 - Start using the connector!
-   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
    - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
    

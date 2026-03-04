@@ -21,16 +21,16 @@
                 "pages": [
                   "overview",
                   "concepts",
-                  "quickstart",
-                  "use-with-ai-ide"
+                  "quickstart"
                 ]
               },
               "subscribe-actions",
               "read-actions",
               "write-actions",
               "proxy-actions",
+              "search-actions",
               "object-and-field-mapping",
-              "detect-schema-changes",
+              "manage-customer-schemas",
               {
                 "group": "UI library",
                 "pages": [
@@ -46,13 +46,6 @@
                 ]
               },
               "manifest-reference",
-              {
-                "group": "AI Agents",
-                "pages": [
-                  "ai-sdk",
-                  "mcp-server"
-                ]
-              },
               {
                 "group": "Destinations",
                 "pages": [
@@ -76,6 +69,7 @@
                   "provider-guides/aha",
                   "provider-guides/aircall",
                   "provider-guides/airtable",
+                  "provider-guides/amplemarket",
                   "provider-guides/amplitude",
                   "provider-guides/anthropic",
                   "provider-guides/apollo",
@@ -86,7 +80,6 @@
                   "provider-guides/avoma",
                   "provider-guides/aweber",
                   "provider-guides/aws",
-                  "provider-guides/breakcold",
                   "provider-guides/bird",
                   "provider-guides/bitbucket",
                   "provider-guides/blackbaud",
@@ -95,6 +88,7 @@
                   "provider-guides/box",
                   "provider-guides/braintree",
                   "provider-guides/braze",
+                  "provider-guides/breakcold",
                   "provider-guides/brevo",
                   "provider-guides/bynder",
                   "provider-guides/calendly",
@@ -109,12 +103,14 @@
                   "provider-guides/clariCopilot",
                   "provider-guides/clickup",
                   "provider-guides/close",
+                  "provider-guides/cloudtalk",
                   "provider-guides/coda",
                   "provider-guides/constantContact",
                   "provider-guides/copper",
                   "provider-guides/crunchbase",
                   "provider-guides/customerJourneysApp",
                   "provider-guides/customerJourneysTrack",
+                  "provider-guides/webex",
                   "provider-guides/delighted",
                   "provider-guides/discord",
                   "provider-guides/discourse",
@@ -162,8 +158,9 @@
                   "provider-guides/jira",
                   "provider-guides/jobber",
                   "provider-guides/joinMe",
-                  "provider-guides/kaseyaVSAX",
                   "provider-guides/jotform",
+                  "provider-guides/justCall",
+                  "provider-guides/kaseyaVSAX",
                   "provider-guides/keap",
                   "provider-guides/kit",
                   "provider-guides/klaviyo",
@@ -185,26 +182,30 @@
                   "provider-guides/netsuite",
                   "provider-guides/notion",
                   "provider-guides/nutshell",
+                  "provider-guides/okta",
                   "provider-guides/openAI",
                   "provider-guides/outplay",
                   "provider-guides/outreach",
                   "provider-guides/paddle",
                   "provider-guides/paddleSandbox",
+                  "provider-guides/phoneBurner",
                   "provider-guides/pinterest",
                   "provider-guides/pipedrive",
                   "provider-guides/pipeliner",
-                  "provider-guides/pylon",
                   "provider-guides/podium",
                   "provider-guides/productBoard",
+                  "provider-guides/pylon",
                   "provider-guides/quickbooks",
                   "provider-guides/ramp",
                   "provider-guides/rebilly",
                   "provider-guides/recurly",
                   "provider-guides/ringCentral",
                   "provider-guides/sageIntacct",
+                  "provider-guides/salesfinity",
                   "provider-guides/salesflare",
                   "provider-guides/salesforce",
                   "provider-guides/salesloft",
+                  "provider-guides/superSend",
                   "provider-guides/segment",
                   "provider-guides/seismic",
                   "provider-guides/sellsy",
@@ -213,13 +214,18 @@
                   "provider-guides/slack",
                   "provider-guides/smartlead",
                   "provider-guides/smartsheet",
+                  "provider-guides/shopify",
                   "provider-guides/snapchatAds",
+                  "provider-guides/snowflake",
+                  "provider-guides/solarwindsServiceDesk",
                   "provider-guides/stripe",
+                  "provider-guides/superSend",
                   "provider-guides/surveyMonkey",
                   "provider-guides/talkdesk",
                   "provider-guides/teamleader",
                   "provider-guides/teamwork",
                   "provider-guides/timely",
+                  "provider-guides/tipalti",
                   "provider-guides/vtiger",
                   "provider-guides/webflow",
                   "provider-guides/whereby",
@@ -239,11 +245,20 @@
                   "customer-guides/loxo",
                   "customer-guides/hubspot",
                   "customer-guides/marketo",
+                  "customer-guides/snowflake",
                   "customer-guides/update-connection"
                 ]
               },
               "dev-and-prod-environments",
-              "terminology"
+              "terminology",
+              "unified-api",
+              {
+                "group": "AI Agents",
+                "pages": [
+                  "ai-sdk",
+                  "mcp-server"
+                ]
+              }
             ]
           }
         ]
@@ -280,6 +295,17 @@
                   "reference/read/pause-reads-for-an-installation",
                   "reference/read/unpause-reads-for-an-installation",
                   "reference/read/deliver-results"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "SEARCH API",
+            "pages": [
+              {
+                "group": "Search",
+                "pages": [
+                  "reference/search/search-records"
                 ]
               }
             ]
@@ -354,6 +380,7 @@
                 "group": "Operation",
                 "pages": [
                   "reference/operation/list-operations",
+                  "reference/operation/get-backfill-progress",
                   "reference/operation/get-an-operation",
                   "reference/operation/list-logs-for-an-operation"
                 ]
@@ -472,7 +499,8 @@
     "openapi": [
       "./platform.json",
       "./read.json",
-      "./write.json"
+      "./write.json",
+      "./search.json"
     ]
   },
   "navbar": {
@@ -542,6 +570,10 @@
     {
       "source": "/reference/auth",
       "destination": "/api/key-auth"
+    },
+    {
+      "source": "/detect-schema-changes",
+      "destination": "/manage-customer-schemas"
     }
   ]
 }

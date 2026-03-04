@@ -1,0 +1,139 @@
+---
+title: "Shopify"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read for all supported objects.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.myshopify.com`.
+
+### Supported objects
+
+The Shopify connector supports reading from and writing to the following objects:
+
+- [customers](https://shopify.dev/docs/api/admin-rest/latest/resources/customer)
+- [orders](https://shopify.dev/docs/api/admin-rest/latest/resources/order)
+- [products](https://shopify.dev/docs/api/admin-rest/latest/resources/product)
+
+All supported objects support incremental read.
+
+For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/reference/objects-&-fields/get-object-metadata-for-connection) to inspect what’s available for a specific connection.
+
+## Example integration
+
+For an example manifest file of a Shopify integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/shopify/amp.yaml).
+
+## Before you get started
+
+To connect Shopify with Ampersand, you will need:
+- A Shopify Partner account (to create an app): [Shopify Partners](https://partners.shopify.com/)
+- A Shopify store to install and test the app. For development and testing, we recommend using a Shopify dev store. See Shopify’s documentation: [Create dev stores](https://shopify.dev/docs/apps/build/dev-dashboard/development-stores).
+
+## Create a Shopify app
+
+Shopify uses OAuth 2.0 (authorization code grant) for apps created in the Partner Dashboard.
+
+For Shopify’s full, up-to-date instructions for creating an app and configuring OAuth, see Shopify’s documentation: [Create an app](https://shopify.dev/docs/apps/build/dev-dashboard/create-apps-using-dev-dashboard).
+
+At a high level:
+
+1. Log in to the [Shopify Partners portal](https://partners.shopify.com/) and open **Apps**.
+![Shopify Partners dashboard (Apps)](/images/provider-guides/shopify/shopify-dev-dasboard.png)
+2. Create an app. After the app is created, you’ll land on **Create a version**.
+![Shopify Partners dashboard (Apps)](/images/provider-guides/shopify/shopify-app-create.png)
+3. Configure the access scopes your integration needs.
+![Shopify Partners dashboard (Apps)](/images/provider-guides/shopify/shopify-select-scope.png)
+4. Configure the OAuth redirect URL:
+   - `https://api.withampersand.com/callbacks/v1/oauth`
+![Shopify Partners dashboard (Apps)](/images/provider-guides/shopify/shopify-configuare-oauth-url.png)
+5. Release the version. Then go to the app’s settings page and note the **Client ID** and **Client Secret**.
+![Shopify Partners dashboard (Apps)](/images/provider-guides/shopify/shopify-setting-page.png)
+
+### Protected customer data / approvals
+
+Some Shopify scopes and objects (especially those that expose customer data) can require additional approval and compliance steps before Shopify will allow access.
+
+If you see errors like “This app is not approved to access the Customer object”, use the checklist below.
+
+- **Confirm you actually need protected customer data**: only request the minimum scopes and data required for your integration.
+- **Complete Shopify’s protected customer data requirements**: follow Shopify’s guidance for requesting access and meeting the required compliance steps: [Work with protected customer data](https://shopify.dev/docs/apps/launch/protected-customer-data).
+
+#### Access to older orders
+
+Shopify may restrict access to older orders unless you request additional scopes (for example, `read_all_orders`). See Shopify’s [Orders API documentation](https://shopify.dev/docs/api/admin-rest/latest/resources/order) for details.
+
+## App distribution
+
+Your app’s distribution method determines which stores can install it.
+
+- **For installs across multiple Shopify stores**: use **Public distribution** and publish an App Store listing.
+- **To keep the app from being searchable**: set the App Store listing to **limited visibility**. Merchants can still install the app from the listing URL.
+
+Shopify documentation:
+
+- [About app distribution](https://shopify.dev/docs/apps/launch/distribution)
+- [Select a distribution method](https://shopify.dev/docs/apps/launch/distribution/select-distribution-method)
+- [App listing visibility](https://shopify.dev/docs/apps/launch/distribution/visibility)
+- [Submit your app for review](https://shopify.dev/docs/apps/launch/app-store-review/submit-app-for-review)
+
+<Note>
+Shopify also supports **custom distribution** install links, but this method is limited to a single store or stores within the same Plus organization (and certain development stores). For general third-party installs, follow the public distribution path described in the section below.
+</Note>
+
+## Share your Shopify app so merchants can install it
+
+For a merchant to connect their Shopify store, they must install and authorize your Shopify app. That install step is what grants OAuth access for their store.
+
+If you want your app to be installable by multiple merchants, you must use **Public distribution** (an App Store listing).
+
+If you don’t want your app to appear in Shopify App Store search results, set the listing to **limited visibility**. Merchants can still install the app using the **App Store listing URL** (available after approval).
+
+### Make the app installable (public, limited visibility)
+
+1. From your app’s home page, go to **App distribution**.
+   ![Open App distribution](/images/provider-guides/shopify/shopify-open-app-distribution.png)
+2. Select a distribution method and choose **Public distribution**:
+   - Shopify guide: [Select a distribution method](https://shopify.dev/docs/apps/launch/distribution/select-distribution-method)
+   ![Select Public distribution](/images/provider-guides/shopify/shopify-public-distribution.png)
+3. Create an App Store listing and complete Shopify’s requirements:
+   - Shopify guide: [App Store requirements](https://shopify.dev/docs/apps/launch/shopify-app-store/app-store-requirements)
+   ![Create App Store listing](/images/provider-guides/shopify/shopify-create-listing.png)
+4. Tell them about your business and add a credit card to pay $19 one-time app store registration fee.
+   ![Create App Store listing](/images/provider-guides/shopify/shopify-registration-fee.png)
+5. Set your app listing visibility to **limited visibility** (not searchable):
+   - Shopify guide: [App listing visibility](https://shopify.dev/docs/apps/launch/distribution/visibility)
+6. Submit your app for review:
+   - Shopify guide: [Submit your app for review](https://shopify.dev/docs/apps/launch/app-store-review/submit-app-for-review)
+7. After Shopify approves your app, share the **App Store listing URL** so merchants can install it.
+   ![Copy App Store listing URL](/images/provider-guides/shopify/shopify-app-approved.png)
+8. Ask your customers to install the app from the App Store listing URL. For example:
+
+```text
+https://apps.shopify.com/YOUR_APP_HANDLE
+```
+
+After installation, they can complete the OAuth flow in your app (via the embedded [Install Integration](/embeddable-ui-components#install-integration) component).
+
+## Add your Shopify app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+2. Select the project where you want to create a Shopify integration.
+![Ampersand Project Selection](/images/provider-guides/dd47b7a-Ampersand.png)
+3. Select **Provider apps**.
+4. Select _Shopify_ from the **Provider** list.
+5. Enter the **Client ID** and **Client Secret** from your Shopify app and click **Save changes**.
+
+## Using the connector
+
+To start integrating with Shopify:
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/shopify/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer to connect their Shopify store via OAuth.
+- If your integration has [Read Actions](/read-actions), you’ll start getting webhook messages.
+- If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+- If your integration has [Proxy Actions](/proxy-actions), start making Proxy API calls. Ampersand will automatically attach the OAuth credentials for the connected store.

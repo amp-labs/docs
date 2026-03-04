@@ -1,0 +1,64 @@
+---
+title: Salesfinity
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://client-api.salesfinity.co`.
+
+### Supported Objects
+
+The Salesfinity connector supports writing to and reading from the following objects:
+
+- [contact-lists](https://docs.salesfinity.ai/api-reference/endpoint/get-contact-lists)
+
+The Salesfinity connector supports only reading from the following objects:
+
+- [call-log](https://docs.salesfinity.ai/api-reference/endpoint/call-log)
+- [contact-lists/csv](https://docs.salesfinity.ai/api-reference/endpoint/get-contact-lists-csv)
+- [sdr-performance](https://docs.salesfinity.ai/api-reference/endpoint/analytics-sdr-performance)
+- [list-performance](https://docs.salesfinity.ai/api-reference/endpoint/analytics-list-performance)
+
+### Example integration
+
+To define an integration for Salesfinity, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesfinityIntegration
+    displayName: Salesfinity Integration
+    provider: salesfinity
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To use the Salesfinity connector, you'll need an API key from your Salesfinity account. Here's how to get it:
+
+1. Log in to your Salesfinity account.
+2. Go to **Settings** and head over to **Connections & API**.
+3. Generate a new API key.
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Salesfinity:
+
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
