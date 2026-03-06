@@ -367,6 +367,7 @@ const baseConfig = {
             "provider-guides/gitlab",
             "provider-guides/goTo",
             "provider-guides/gong",
+            "provider-guides/granola",
             "provider-guides/google",
             "provider-guides/gorgias",
             // "provider-guides/greenhouseJobBoard",
