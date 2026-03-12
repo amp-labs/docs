@@ -483,13 +483,13 @@ const baseConfig = {
         "dev-and-prod-environments",
         "terminology",
         "unified-api",
-        {
-          group: "AI Agents",
-          pages: [
-            "ai-sdk",
-            "mcp-server",
-          ]
-        },
+        // {
+        //   group: "AI Agents",
+        //   pages: [
+        //     "ai-sdk",
+        //     "mcp-server",
+        //   ]
+        // },
       ],
     },
     {
