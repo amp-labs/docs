@@ -308,6 +308,7 @@ const baseConfig = {
             "provider-guides/avoma",
             "provider-guides/aweber",
             "provider-guides/aws",
+            "provider-guides/bentley",
             "provider-guides/bird",
             "provider-guides/bitbucket",
             "provider-guides/blackbaud",

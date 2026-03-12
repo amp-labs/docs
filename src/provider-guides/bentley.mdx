@@ -1,0 +1,89 @@
+---
+title: Bentley
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.bentley.com`.
+
+
+### Example integration
+
+To define an integration for Bentley, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: bentley-integration
+    displayName: My Bentley Integration
+    provider: bentley
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To connect Bentley with Ampersand, you will need [a Bentley Account](https://developer.bentley.com).
+
+Once your account is created, you'll need to register an application in the Bentley developer portal and obtain the following credentials:
+
+- Client ID
+- Client Secret
+- Scopes
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Creating a Bentley app
+
+1. Log in to the [Bentley Developer Portal](https://developer.bentley.com).
+
+2. Navigate to **[My Apps](https://developer.bentley.com/my-apps/)** and click **Register New**.
+
+3. Enter the following details for your application:
+   - **Application Name**: The name of your app.
+   - **Application Type**: Select **Web App** (for Authorization Code grant).
+
+4. Under **Redirect URIs**, add: `https://api.withampersand.com/callbacks/v1/oauth`
+
+5. Select the scopes required for your integration.
+
+6. Click **Register**. Note the **Client ID** and **Client Secret**. You will need these to connect your app to Ampersand.
+
+![Bentley App Creation](/images/provider-guides/bentley_oauth.gif)
+
+
+
+### Add your Bentley app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Bentley integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.
+
+4. Select **Bentley** from the **Provider** list.
+
+5. Enter the **Client ID** and **Client Secret** obtained from your Bentley app.
+
+6. Enter the scopes configured for your application in Bentley.
+
+   ![Ampersand Integration](/images/provider-guides/bentley_amp.gif)
+
+7. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Bentley:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start using the connector!
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
