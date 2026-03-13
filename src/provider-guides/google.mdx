@@ -5,6 +5,7 @@ The Google connector supports Google products which have APIs with the root URL 
 
 - Calendar
 - Gmail
+- Contacts
 - Google Drive
 
 ## What's supported
@@ -24,6 +25,10 @@ read **is only supported for the Calendar `Events` object**; otherwise, a full r
 The **Gmail** module supports:
 - [Read Actions](/read-actions), including historical backfill. Please note that incremental read and pagination
 **are only supported for `Drafts`, `Messages`, and `Threads` objects**; otherwise, a full read of the Gmail instance will be performed for each scheduled run.
+- [Write Actions](/write-actions).
+
+The **Contacts** module supports:
+- [Read Actions](/read-actions), including historical backfill. Please note that incremental read is not supported, a full read of the Google Contacts will be done for each scheduled read.
 - [Write Actions](/write-actions).
 
 ### Supported Calendar objects
@@ -53,11 +58,22 @@ The Google connector supports the following read-only objects:
 * [messages](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message)
 * [threads](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.threads/list)
 
+### Supported Contacts objects
+
+The Google connector supports reading from and writing to the following **Contacts** module objects:
+* [contactGroups](https://developers.google.com/people/api/rest/v1/contactGroups)
+* [myConnections](https://developers.google.com/people/api/rest/v1/people.connections)
+* [peopleDirectory](https://developers.google.com/people/api/rest/v1/people)
+
+The Google connector supports the following read-only objects:
+* [otherContacts](https://developers.google.com/people/api/rest/v1/otherContacts)
+
 ### Example integration
 
 Example manifest files can be found in our samples repository on GitHub:
 - [Google Calendar example](https://github.com/amp-labs/samples/blob/main/google-calendar/amp.yaml)
 - [Gmail example](https://github.com/amp-labs/samples/blob/main/google-gmail/amp.yaml)
+- [Google Contacts example](https://github.com/amp-labs/samples/blob/main/google-contacts/amp.yaml)
 
 ## Before you get started
 
