@@ -1,0 +1,94 @@
+---
+title: DevRev
+---
+
+## What's Supported
+
+### Supported actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported for most objects.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.devrev.ai`.
+
+### Supported Objects
+
+The DevRev connector supports the following objects.
+
+- [accounts](https://developer.devrev.ai/api-reference/accounts/list) (read, write)
+- [articles](https://developer.devrev.ai/api-reference/articles/list-articles) (read, write)
+- [auth-tokens](https://developer.devrev.ai/api-reference/auth-tokens/list) (read, write)
+- [dev-orgs.auth-connections](https://developer.devrev.ai/beta/api-reference/auth-connections/dev-org-auth-connections-list) (read, write)
+- [chats](https://developer.devrev.ai/api-reference/chats/create) (write)
+- [code-changes](https://developer.devrev.ai/api-reference/code-changes/list) (read, write)
+- [commands](https://developer.devrev.ai/api-reference/commands/list) (read, write)
+- [content-template](https://developer.devrev.ai/beta/api-reference/notifications/content-template-list) (read, write)
+- [conversations](https://developer.devrev.ai/api-reference/conversations/list) (read, write)
+- [custom-objects](https://developer.devrev.ai/api-reference/customization/custom-objects-create) (write)
+- [dev-users](https://developer.devrev.ai/api-reference/dev-users/list) (read, write)
+- [directories](https://developer.devrev.ai/api-reference/directory/directories-list) (read, write)
+- [engagements](https://developer.devrev.ai/api-reference/works/list) (read, write)
+- [groups](https://developer.devrev.ai/api-reference/groups/list) (read, write)
+- [incidents](https://developer.devrev.ai/api-reference/works/list) (read, write)
+- [link-types.custom](https://developer.devrev.ai/api-reference/links/list) (read, write)
+- [meetings](https://developer.devrev.ai/api-reference/meetings/list) (read, write)
+- [metric-definitions](https://developer.devrev.ai/api-reference/works/list) (read, write)
+- [org-schedule-fragments](https://developer.devrev.ai/api-reference/schedules/org-schedule-fragments-create) (write)
+- [org-schedules](https://developer.devrev.ai/api-reference/schedules/org-schedules-list) (read, write)
+- [parts](https://developer.devrev.ai/api-reference/parts/list) (read, write)
+- [question-answers](https://developer.devrev.ai/api-reference/surveys/list) (read, write)
+- [rev-orgs](https://developer.devrev.ai/api-reference/rev-orgs/list) (read, write)
+- [rev-users](https://developer.devrev.ai/api-reference/rev-users/list) (read, write)
+- [roles](https://developer.devrev.ai/api-reference/dev-users/list) (write)
+- [schemas.custom](https://developer.devrev.ai/beta/api-reference/customization/custom-schema-fragments-list) (read, write)
+- [schemas.stock](https://developer.devrev.ai/beta/api-reference/customization/stock-schema-fragments-list) (read, write)
+- [schemas.subtypes](https://developer.devrev.ai/beta/api-reference/customization/subtypes-list) (read, write)
+- [sla-trackers](https://developer.devrev.ai/api-reference/slas/sla-trackers-list) (read, write)
+- [service-accounts](https://developer.devrev.ai/beta/api-reference/service-accounts/create) (write)
+- [slas](https://developer.devrev.ai/api-reference/slas/list) (read, write)
+- [snap-widgets](https://developer.devrev.ai/beta/api-reference/snap-widgets/create) (write)
+- [stage-diagrams](https://developer.devrev.ai/api-reference/works/list) (read, write)
+- [stages.custom](https://developer.devrev.ai/api-reference/works/list) (read, write)
+- [states.custom](https://developer.devrev.ai/api-reference/works/list) (read, write)
+- [surveys](https://developer.devrev.ai/api-reference/surveys/list) (read, write)
+- [surveys.responses](https://developer.devrev.ai/api-reference/surveys/list) (read, write)
+- [sys-users](https://developer.devrev.ai/api-reference/sys-users/list) (read, write)
+- [tags](https://developer.devrev.ai/api-reference/tags/list) (read, write)
+- [uoms](https://developer.devrev.ai/api-reference/works/list) (read, write)
+- [vistas](https://developer.devrev.ai/api-reference/vistas/list) (read)
+- [vistas.groups](https://developer.devrev.ai/api-reference/vistas/list) (read)
+- [web-crawler-jobs](https://developer.devrev.ai/api-reference/web-crawler-job/list-web-crawler-jobs) (read, write)
+- [webhooks](https://developer.devrev.ai/api-reference/webhooks/list) (read, write)
+- [works](https://developer.devrev.ai/api-reference/works/list) (read, write)
+
+### Example integration
+
+For an example manifest file of a DevRev integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/devrev/amp.yaml).
+
+## Before you get started
+
+To use the DevRev connector, you'll need a Personal Access Token (PAT) from your DevRev account. Here's how to get it:
+
+1. In the DevRev app, go to the relevant dev org.
+2. Go to **Settings** > **Account** > **Personal Access Token**.
+3. Click **New token** and follow the workflow to create your PAT.
+
+![DevRev API Key](/images/provider-guides/devrev.gif)
+
+For more details, see the [DevRev Authentication documentation](https://developer.devrev.ai/about/authentication).
+
+## Using the connector
+
+This connector uses Personal Access Token (PAT) authentication, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with DevRev:
+
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/devrev/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
