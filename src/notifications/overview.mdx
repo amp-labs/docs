@@ -16,13 +16,25 @@ Notifications use topics to give you fine-grained control over which events reac
 
 Ampersand supports the following notification event types:
 
+**Installation lifecycle**
 - **`installation.created`**: Fires when a customer installs your integration to their SaaS instance
 - **`installation.updated`**: Fires when a customer modifies their integration configuration (e.g., changes field mappings)
 - **`installation.deleted`**: Fires when a customer uninstalls your integration from their SaaS instance
+
+**Read operations**
 - **`read.backfill.done`**: Fires when historical data sync completes so you know backfill data is ready to process
 - **`read.schedule.paused`**: Fires when a scheduled data sync is paused, often due to authentication issues or other errors
+- **`read.triggered.done`**: Fires when an on-demand triggered read completes successfully
+- **`read.triggered.error`**: Fires when an on-demand triggered read fails
+
+**Write operations**
+- **`write.async.done`**: Fires when an asynchronous write operation completes, indicating success or failure and which records were written or had errors
+
+**Connection**
 - **`connection.created`**: Fires when a new OAuth connection is established with a SaaS provider
 - **`connection.error`**: Fires when there's an error with an OAuth connection, such as authentication failures or token refresh issues
+
+**Destination**
 - **`destination.webhook.disabled`**: Fires when a webhook destination endpoint is disabled
 
 ## Setting up notifications

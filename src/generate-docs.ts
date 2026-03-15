@@ -333,6 +333,7 @@ const baseConfig = {
             "provider-guides/close",
             "provider-guides/cloudtalk",
             "provider-guides/coda",
+            "provider-guides/coupa",
             "provider-guides/constantContact",
             "provider-guides/copper",
             "provider-guides/crunchbase",
@@ -366,6 +367,7 @@ const baseConfig = {
             "provider-guides/gitlab",
             "provider-guides/goTo",
             "provider-guides/gong",
+            "provider-guides/granola",
             "provider-guides/google",
             "provider-guides/gorgias",
             // "provider-guides/greenhouseJobBoard",
@@ -481,13 +483,13 @@ const baseConfig = {
         "dev-and-prod-environments",
         "terminology",
         "unified-api",
-        {
-          group: "AI Agents",
-          pages: [
-            "ai-sdk",
-            "mcp-server",
-          ]
-        },
+        // {
+        //   group: "AI Agents",
+        //   pages: [
+        //     "ai-sdk",
+        //     "mcp-server",
+        //   ]
+        // },
       ],
     },
     {

@@ -1,16 +1,53 @@
 ---
 title: "PhoneBurner"
 ---
-## What's Supported
+## What's supported
 
-### Supported Actions
+### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `contacts`, `dialsession`, `members`, and `voicemails` currently. For all other objects, a full read of the PhoneBurner instance will be done per scheduled read.
+- [Write Actions](/write-actions) (create/update).
 - [Proxy Actions](/proxy-actions), using the base URL `https://www.phoneburner.com`.
+- Subscribe Actions are not currently supported.
+
+### Supported objects
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+<div style={{ width: '100%', overflowX: 'auto' }}>
+<table style={{ width: '100%', minWidth: '1000px', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse' }}>
+  <thead>
+    <tr style={{ width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
+      <th style={{ width: '11.2%' }}>Metadata</th>
+      <th style={{ width: '11.2%' }}>Read</th>
+      <th style={{ width: '11.2%' }}>Write</th>
+      <th style={{ width: '11.2%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#contacts">contacts</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#folders">folders</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#members">members</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#dialsession">dialsession</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#voicemails">voicemails</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.phoneburner.com/developer/route_list#tags">tags</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
+
+### Notes and limitations
+
+- **Write support**:
+  - `contacts`, `folders`, `members`: create + update
+  - `dialsession`: create only
+- **Read-only objects**: `voicemails`, `tags`
 
 ### Example integration
 
-To define an integration for PhoneBurner, create a manifest file that looks like this:
+To define an integration for PhoneBurner, create a manifest file that looks like this. For a complete example, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/phoneBurner/amp.yaml).
 
 ```YAML
 # amp.yaml
@@ -19,6 +56,15 @@ integrations:
   - name: phone-burner-integration
     displayName: My PhoneBurner Integration
     provider: phoneBurner
+    read:
+      objects:
+        - objectName: contacts
+          destination: defaultWebhook
+          schedule: "*/30 * * * *"
+    write:
+      objects:
+        - objectName: contacts
+          inheritMapping: true
     proxy:
       enabled: true
 ```
