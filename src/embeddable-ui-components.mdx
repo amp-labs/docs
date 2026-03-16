@@ -151,6 +151,7 @@ The parameters of the component are:
 * **consumerName** (string, optional): the display name for this end user.
 * **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
 * **groupName** (string, optional): the display name for this group.
+* **module** (string, optional): the module to use for this connection. If the provider has modules defined, this determines which module-specific metadata to collect. Falls back to the provider's default module if not specified. If the provider does not have modules, this prop is ignored. When a connection already exists but is missing metadata required by the specified module, a prefilled metadata form will be automatically shown. Supported in `@amp-labs/react` `v2.12.0+`.
 * **redirectUrl** (string, optional): if provided, the page will be redirected to this URL once a consumer successfully connects. This can either be an absolute or relative URL.
 * **onConnectSuccess** (function, optional): a callback function that gets invoked after a consumer successfully connects.
 * **onDisconnectSuccess** (function, optional): a callback function that gets invoked after a consumer successfully disconnects.
@@ -158,12 +159,13 @@ The parameters of the component are:
 Both `onConnectSuccess` and `onDisconnectSuccess` should be functions with the following signature: `(connection: Connection) => void`. `Connection` is an exported type from `@amp-labs/react`.
 
 ```TypeScript
- <ConnectProvider 
+ <ConnectProvider
   provider = "salesforce"
   consumerRef = {userId}
   consumerName = {userFullName}
   groupRef = {teamId}
   groupName = {teamName}
+  module = "account-engagement"
   redirectUrl = "/connection-success"
   onConnectSuccess = {connection =>
     console.log(`Successfully created connection ${connection.id}`)
