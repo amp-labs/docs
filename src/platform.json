@@ -34527,7 +34527,7 @@
                           },
                           "metadata": {
                             "type": "object",
-                            "description": "Additional operation details. May include `objects` (array of object names), `retry` (retry attempt info), `progress` (backfill progress with recordsProcessed, recordsEstimatedTotal) for backfill read operations, and `resultDetails` (write operation results including successfulRecordIds) for write operations.\n",
+                            "description": "Additional operation details. May include `objects` (array of object names), `retry` (retry attempt info), `progress` (backfill progress with recordsProcessed, recordsEstimatedTotal) for backfill read operations, and `successfulRecordIds` (provider-assigned IDs of successfully created or updated records) for write operations.\n",
                             "properties": {
                               "objects": {
                                 "type": "array",
@@ -34573,23 +34573,12 @@
                                   }
                                 }
                               },
-                              "resultDetails": {
-                                "type": "object",
-                                "description": "Only present for write operations.",
-                                "properties": {
-                                  "write": {
-                                    "type": "object",
-                                    "properties": {
-                                      "successfulRecordIds": {
-                                        "type": "array",
-                                        "items": {
-                                          "type": "string"
-                                        },
-                                        "description": "Provider-assigned IDs of successfully created or updated records."
-                                      }
-                                    }
-                                  }
-                                }
+                              "successfulRecordIds": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "description": "Provider-assigned IDs of successfully created or updated records. Only present for write operations."
                               }
                             },
                             "example": {
@@ -34603,14 +34592,10 @@
                                 "recordsProcessed": 1250,
                                 "recordsEstimatedTotal": 5000
                               },
-                              "resultDetails": {
-                                "write": {
-                                  "successfulRecordIds": [
-                                    "001xx000003DGbYAAW",
-                                    "001xx000003DGbZAAW"
-                                  ]
-                                }
-                              }
+                              "successfulRecordIds": [
+                                "001xx000003DGbYAAW",
+                                "001xx000003DGbZAAW"
+                              ]
                             }
                           },
                           "createTime": {
@@ -36225,7 +36210,7 @@
                     },
                     "metadata": {
                       "type": "object",
-                      "description": "Additional operation details. May include `objects` (array of object names), `retry` (retry attempt info), `progress` (backfill progress with recordsProcessed, recordsEstimatedTotal) for backfill read operations, and `resultDetails` (write operation results including successfulRecordIds) for write operations.\n",
+                      "description": "Additional operation details. May include `objects` (array of object names), `retry` (retry attempt info), `progress` (backfill progress with recordsProcessed, recordsEstimatedTotal) for backfill read operations, and `successfulRecordIds` (provider-assigned IDs of successfully created or updated records) for write operations.\n",
                       "properties": {
                         "objects": {
                           "type": "array",
@@ -36271,23 +36256,12 @@
                             }
                           }
                         },
-                        "resultDetails": {
-                          "type": "object",
-                          "description": "Only present for write operations.",
-                          "properties": {
-                            "write": {
-                              "type": "object",
-                              "properties": {
-                                "successfulRecordIds": {
-                                  "type": "array",
-                                  "items": {
-                                    "type": "string"
-                                  },
-                                  "description": "Provider-assigned IDs of successfully created or updated records."
-                                }
-                              }
-                            }
-                          }
+                        "successfulRecordIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Provider-assigned IDs of successfully created or updated records. Only present for write operations."
                         }
                       },
                       "example": {
@@ -36301,14 +36275,10 @@
                           "recordsProcessed": 1250,
                           "recordsEstimatedTotal": 5000
                         },
-                        "resultDetails": {
-                          "write": {
-                            "successfulRecordIds": [
-                              "001xx000003DGbYAAW",
-                              "001xx000003DGbZAAW"
-                            ]
-                          }
-                        }
+                        "successfulRecordIds": [
+                          "001xx000003DGbYAAW",
+                          "001xx000003DGbZAAW"
+                        ]
                       }
                     },
                     "createTime": {
@@ -73560,7 +73530,7 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Additional operation details. May include `objects` (array of object names), `retry` (retry attempt info), `progress` (backfill progress with recordsProcessed, recordsEstimatedTotal) for backfill read operations, and `resultDetails` (write operation results including successfulRecordIds) for write operations.\n",
+            "description": "Additional operation details. May include `objects` (array of object names), `retry` (retry attempt info), `progress` (backfill progress with recordsProcessed, recordsEstimatedTotal) for backfill read operations, and `successfulRecordIds` (provider-assigned IDs of successfully created or updated records) for write operations.\n",
             "properties": {
               "objects": {
                 "type": "array",
@@ -73606,23 +73576,12 @@
                   }
                 }
               },
-              "resultDetails": {
-                "type": "object",
-                "description": "Only present for write operations.",
-                "properties": {
-                  "write": {
-                    "type": "object",
-                    "properties": {
-                      "successfulRecordIds": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "description": "Provider-assigned IDs of successfully created or updated records."
-                      }
-                    }
-                  }
-                }
+              "successfulRecordIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Provider-assigned IDs of successfully created or updated records. Only present for write operations."
               }
             },
             "example": {
@@ -73636,14 +73595,10 @@
                 "recordsProcessed": 1250,
                 "recordsEstimatedTotal": 5000
               },
-              "resultDetails": {
-                "write": {
-                  "successfulRecordIds": [
-                    "001xx000003DGbYAAW",
-                    "001xx000003DGbZAAW"
-                  ]
-                }
-              }
+              "successfulRecordIds": [
+                "001xx000003DGbYAAW",
+                "001xx000003DGbZAAW"
+              ]
             }
           },
           "createTime": {
