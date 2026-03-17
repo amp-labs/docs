@@ -594,7 +594,7 @@
       "patch": {
         "operationId": "oauthUpdate",
         "summary": "Get URL for updating OAuth connection",
-        "description": "Generate a URL for the browser to render to kick off OAuth flow that updates an existing connection.",
+        "description": "Generate a URL for the browser to render to kick off an OAuth flow that updates an existing connection. Use this when the connection's credentials have need to be refreshed. To start an OAuth flow without specifying a connection ID, use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/ get-url-for-oauth-flow) instead.\n",
         "tags": [
           "OAuth"
         ],
@@ -606,7 +606,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Ampersand Project ID or name."
+            "description": "Ampersand project ID or name."
           },
           {
             "name": "connectionId",
@@ -615,17 +615,18 @@
             "schema": {
               "type": "string"
             },
-            "description": "ID of connection to update."
+            "description": "The ID of the connection to update."
           }
         ],
         "responses": {
           "200": {
-            "description": "OAuth update initiated successfully",
+            "description": "URL generated successfully",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string",
-                  "description": "URL to initiate OAuth flow"
+                  "description": "URL to initiate OAuth flow",
+                  "example": "https://login.salesforce.com/services/oauth2/authorize?client_id=xxx&redirect_uri=https%3A%2F%2Fapi.withampersand.com%2Fcallbacks%2Fv1%2Foauth&state=xxx"
                 }
               }
             }
