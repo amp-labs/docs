@@ -23122,7 +23122,7 @@
         "tags": [
           "Installation"
         ],
-        "description": "Update an installation config. Use `updateMask` to specify which fields to update; unmasked fields\nare left unchanged. Each masked field is **replaced**, so provide the complete value for\neach field you include.\n\nUpdates to subscribe config (`config.content.subscribe.objects` or `config.content.subscribe.objects.<objectName>`)\ntrigger a subscription change in the provider's system, which typically takes 1-2 minutes but may take\nup to 10 minutes.\n",
+        "description": "Update an installation using field masks. Note: subscribe config changes trigger a subscription change in the provider’s system, which typically takes 1-2 minutes but may take up to 10 minutes.\n",
         "parameters": [
           {
             "name": "projectIdOrName",
@@ -23170,7 +23170,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "Array of field paths specifying which fields to update. Each path must have a corresponding\nvalue in the `installation` object. A field included in `installation` but not listed here\nwill be ignored. Allowed values:\n- `connectionId` - switch the SaaS connection tied to this installation.\n- `config.createdBy` - change the attribution for who created this config.\n- `config.content.read.objects.<objectName>` - replace the read config for a single object (e.g. `config.content.read.objects.contacts`).\n- `config.content.write.objects.<objectName>` - replace the write config for a single object.\n- `config.content.write.objects` - replace the entire write objects map.\n- `config.content.subscribe.objects.<objectName>` - replace the subscribe config for a single object.\n- `config.content.subscribe.objects` - replace the entire subscribe objects map.\n- `config.content.proxy.enabled` - enable or disable the proxy.\n\nReplace `<objectName>` with the provider object name (e.g. `contacts`, `leads`, `accounts`).\n",
+                    "description": "Array of field paths specifying which fields to update. Each path must have a corresponding value in the `installation` object. A field included in `installation` but not listed here will be ignored. Allowed values:\n- `connectionId` - switch the SaaS connection tied to this installation.\n- `config.createdBy` - change the attribution for who created this config.\n- `config.content.read.objects.<objectName>` - replace the read config for a single object (e.g. `config.content.read.objects.contacts`).\n- `config.content.write.objects.<objectName>` - replace the write config for a single object.\n- `config.content.write.objects` - replace the entire write objects map.\n- `config.content.subscribe.objects.<objectName>` - replace the subscribe config for a single object.\n- `config.content.subscribe.objects` - replace the entire subscribe objects map.\n- `config.content.proxy.enabled` - enable or disable the proxy.\n\nReplace `<objectName>` with the provider object name (e.g. `contacts`, `leads`, `accounts`).\n",
                     "example": [
                       "config.content.read.objects.contacts",
                       "config.content.write.objects.leads"
