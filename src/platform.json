@@ -12194,8 +12194,8 @@
     },
     "/projects/{projectIdOrName}/integrations/{integrationId}/revisions/{revisionId}:hydrate": {
       "get": {
-        "summary": "Hydrate a revision",
-        "description": "Hydrate a revision with information from the consumer's SaaS instance.",
+        "summary": "Get a hydrated revision",
+        "description": "Returns the integration revision enriched with live field metadata from the consumer's connected SaaS instance, such as available fields, display names, and type for each object defined in the integration.\n",
         "operationId": "getHydratedRevision",
         "tags": [
           "Revision"
@@ -12218,30 +12218,33 @@
             "description": "The integration ID.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
           },
           {
             "name": "revisionId",
             "in": "path",
             "required": true,
-            "description": "The revision ID.",
+            "description": "The revision ID. You can find this on the integration object's `latestRevision.id` field.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "f0e1d2c3-b4a5-6789-0abc-def123456789"
           },
           {
             "name": "connectionId",
             "in": "query",
             "required": true,
-            "description": "The connection ID.",
+            "description": "The ID of the consumer's connection to the SaaS provider. This connection's credentials are used to fetch field metadata from the provider's API.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "1a2b3c4d-5e6f-7890-abcd-ef0123456789"
           }
         ],
         "responses": {
           "200": {
-            "description": "Hydrated revision",
+            "description": "Hydrated revision.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12257,7 +12260,7 @@
                     "id": {
                       "type": "string",
                       "description": "The revision ID.",
-                      "example": "revision-id-1"
+                      "example": "f0e1d2c3-b4a5-6789-0abc-def123456789"
                     },
                     "specVersion": {
                       "type": "string",
@@ -12278,18 +12281,22 @@
                       ],
                       "properties": {
                         "name": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "readSalesforceAccounts"
                         },
                         "displayName": {
                           "type": "string",
+                          "example": "Salesforce Accounts",
                           "x-go-type-skip-optional-pointer": true
                         },
                         "module": {
                           "type": "string",
+                          "example": "crm",
                           "x-go-type-skip-optional-pointer": true
                         },
                         "provider": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "salesforce"
                         },
                         "read": {
                           "title": "Hydrated Read Integration",
@@ -12310,32 +12317,35 @@
                                   "error": {
                                     "type": "string",
                                     "description": "Error message if there was an issue hydrating this object.",
-                                    "example": "Failed to fetch fields from provider",
                                     "x-go-type-skip-optional-pointer": true
                                   },
                                   "objectName": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "account"
                                   },
                                   "displayName": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "Account"
                                   },
                                   "mapToName": {
                                     "type": "string",
                                     "description": "An object name to map to.",
-                                    "example": "people",
+                                    "example": "accounts",
                                     "x-go-type-skip-optional-pointer": true
                                   },
                                   "mapToDisplayName": {
                                     "type": "string",
                                     "description": "A display name to map to.",
-                                    "example": "People",
+                                    "example": "Accounts",
                                     "x-go-type-skip-optional-pointer": true
                                   },
                                   "destination": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "accountWebhook"
                                   },
                                   "schedule": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "*/10 * * * *"
                                   },
                                   "requiredFields": {
                                     "type": "array",
@@ -12350,21 +12360,23 @@
                                           ],
                                           "properties": {
                                             "fieldName": {
-                                              "type": "string"
+                                              "type": "string",
+                                              "example": "billingcity"
                                             },
                                             "displayName": {
-                                              "type": "string"
+                                              "type": "string",
+                                              "example": "Billing City"
                                             },
                                             "mapToName": {
                                               "type": "string",
                                               "description": "The field name to map to in the destination.",
-                                              "example": "account_id",
+                                              "example": "billing_city",
                                               "x-go-type-skip-optional-pointer": true
                                             },
                                             "mapToDisplayName": {
                                               "type": "string",
                                               "description": "The display name to map to in the destination.",
-                                              "example": "Account ID",
+                                              "example": "Billing City",
                                               "x-go-type-skip-optional-pointer": true
                                             }
                                           }
@@ -12406,21 +12418,23 @@
                                           ],
                                           "properties": {
                                             "fieldName": {
-                                              "type": "string"
+                                              "type": "string",
+                                              "example": "billingcity"
                                             },
                                             "displayName": {
-                                              "type": "string"
+                                              "type": "string",
+                                              "example": "Billing City"
                                             },
                                             "mapToName": {
                                               "type": "string",
                                               "description": "The field name to map to in the destination.",
-                                              "example": "account_id",
+                                              "example": "billing_city",
                                               "x-go-type-skip-optional-pointer": true
                                             },
                                             "mapToDisplayName": {
                                               "type": "string",
                                               "description": "The display name to map to in the destination.",
-                                              "example": "Account ID",
+                                              "example": "Billing City",
                                               "x-go-type-skip-optional-pointer": true
                                             }
                                           }
@@ -12471,7 +12485,7 @@
                                         "fieldName": {
                                           "type": "string",
                                           "description": "The name of the field from the provider API.",
-                                          "example": "Account ID"
+                                          "example": "accountid"
                                         },
                                         "displayName": {
                                           "type": "string",
@@ -12542,6 +12556,36 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "example": {
+                                      "name": {
+                                        "fieldName": "name",
+                                        "displayName": "Account Name",
+                                        "valueType": "string",
+                                        "providerType": "string",
+                                        "readOnly": false,
+                                        "isCustom": false,
+                                        "isRequired": true
+                                      },
+                                      "type": {
+                                        "fieldName": "type",
+                                        "displayName": "Account Type",
+                                        "valueType": "singleSelect",
+                                        "providerType": "picklist",
+                                        "readOnly": false,
+                                        "isCustom": false,
+                                        "isRequired": false,
+                                        "values": [
+                                          {
+                                            "value": "prospect",
+                                            "displayValue": "Prospect"
+                                          },
+                                          {
+                                            "value": "customer",
+                                            "displayValue": "Customer - Direct"
+                                          }
+                                        ]
+                                      }
                                     }
                                   },
                                   "allFields": {
@@ -12559,21 +12603,23 @@
                                           ],
                                           "properties": {
                                             "fieldName": {
-                                              "type": "string"
+                                              "type": "string",
+                                              "example": "billingcity"
                                             },
                                             "displayName": {
-                                              "type": "string"
+                                              "type": "string",
+                                              "example": "Billing City"
                                             },
                                             "mapToName": {
                                               "type": "string",
                                               "description": "The field name to map to in the destination.",
-                                              "example": "account_id",
+                                              "example": "billing_city",
                                               "x-go-type-skip-optional-pointer": true
                                             },
                                             "mapToDisplayName": {
                                               "type": "string",
                                               "description": "The display name to map to in the destination.",
-                                              "example": "Account ID",
+                                              "example": "Billing City",
                                               "x-go-type-skip-optional-pointer": true
                                             }
                                           }
@@ -12652,10 +12698,12 @@
                                 ],
                                 "properties": {
                                   "objectName": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "account"
                                   },
                                   "displayName": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "Account"
                                   },
                                   "valueDefaults": {
                                     "title": "Value Defaults",
@@ -12689,654 +12737,6 @@
                         }
                       }
                     }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "title": "Input Validation Problem",
-                  "type": "object",
-                  "allOf": [
-                    {
-                      "title": "API Problem",
-                      "type": "object",
-                      "allOf": [
-                        {
-                          "title": "Problem",
-                          "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that identifies the problem type",
-                              "default": "about:blank"
-                            },
-                            "href": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
-                            },
-                            "title": {
-                              "type": "string",
-                              "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
-                              "example": "Service Unavailable"
-                            },
-                            "status": {
-                              "type": "integer",
-                              "format": "int32",
-                              "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-                              "minimum": 400,
-                              "maximum": 600,
-                              "exclusiveMaximum": true,
-                              "example": 503
-                            },
-                            "detail": {
-                              "type": "string",
-                              "description": "A human-readable explanation specific to this occurrence of the problem"
-                            },
-                            "instance": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
-                            }
-                          },
-                          "example": {
-                            "type": "urn:problem-type:exampleOrganization:exampleProblem",
-                            "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
-                            "title": "Description of the type of problem that occurred",
-                            "status": 400,
-                            "detail": "Description of specific occurrence of the problem",
-                            "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
-                          }
-                        }
-                      ],
-                      "properties": {
-                        "subsystem": {
-                          "type": "string",
-                          "description": "The subsystem that generated the problem",
-                          "example": "api"
-                        },
-                        "time": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "The time the problem occurred, formatted as RFC-3339",
-                          "example": "2024-04-22T18:55:28.456076Z"
-                        },
-                        "requestId": {
-                          "type": "string",
-                          "description": "A unique identifier for the request, useful for debugging",
-                          "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
-                        },
-                        "causes": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "description": "A brief description of something which caused the problem",
-                            "example": "database connection failed"
-                          },
-                          "example": [
-                            "database connection failed",
-                            "database query failed",
-                            "unable to fetch user"
-                          ],
-                          "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
-                        },
-                        "remedy": {
-                          "type": "string",
-                          "description": "A brief description of how to resolve the problem",
-                          "example": "Shorten your input to be under 100 characters"
-                        },
-                        "supportEmail": {
-                          "type": "string",
-                          "format": "email",
-                          "description": "An email address to contact for support",
-                          "example": "support@withampersand.com"
-                        },
-                        "supportPhone": {
-                          "type": "string",
-                          "description": "A phone number to contact for support",
-                          "example": "+1-555-555-5555"
-                        },
-                        "supportUrl": {
-                          "type": "string",
-                          "format": "uri",
-                          "description": "A URL to contact for support",
-                          "example": "https://withampersand.com/support"
-                        },
-                        "retryable": {
-                          "type": "boolean",
-                          "description": "Whether the request can be retried",
-                          "example": false
-                        },
-                        "retryAfter": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
-                          "example": "2024-04-22T18:55:28.456076Z"
-                        },
-                        "context": {
-                          "type": "object",
-                          "description": "Additional context for the problem",
-                          "additionalProperties": true,
-                          "example": {
-                            "name": "Rick Sanchez"
-                          }
-                        }
-                      }
-                    }
-                  ],
-                  "properties": {
-                    "issues": {
-                      "type": "array",
-                      "items": {
-                        "title": "Input Validation Issue",
-                        "type": "object",
-                        "description": "An issue detected during input validation.\n",
-                        "allOf": [
-                          {
-                            "title": "API Problem",
-                            "type": "object",
-                            "allOf": [
-                              {
-                                "title": "Problem",
-                                "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that identifies the problem type",
-                                    "default": "about:blank"
-                                  },
-                                  "href": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
-                                  },
-                                  "title": {
-                                    "type": "string",
-                                    "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
-                                    "example": "Service Unavailable"
-                                  },
-                                  "status": {
-                                    "type": "integer",
-                                    "format": "int32",
-                                    "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-                                    "minimum": 400,
-                                    "maximum": 600,
-                                    "exclusiveMaximum": true,
-                                    "example": 503
-                                  },
-                                  "detail": {
-                                    "type": "string",
-                                    "description": "A human-readable explanation specific to this occurrence of the problem"
-                                  },
-                                  "instance": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
-                                  }
-                                },
-                                "example": {
-                                  "type": "urn:problem-type:exampleOrganization:exampleProblem",
-                                  "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
-                                  "title": "Description of the type of problem that occurred",
-                                  "status": 400,
-                                  "detail": "Description of specific occurrence of the problem",
-                                  "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
-                                }
-                              }
-                            ],
-                            "properties": {
-                              "subsystem": {
-                                "type": "string",
-                                "description": "The subsystem that generated the problem",
-                                "example": "api"
-                              },
-                              "time": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "The time the problem occurred, formatted as RFC-3339",
-                                "example": "2024-04-22T18:55:28.456076Z"
-                              },
-                              "requestId": {
-                                "type": "string",
-                                "description": "A unique identifier for the request, useful for debugging",
-                                "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
-                              },
-                              "causes": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "description": "A brief description of something which caused the problem",
-                                  "example": "database connection failed"
-                                },
-                                "example": [
-                                  "database connection failed",
-                                  "database query failed",
-                                  "unable to fetch user"
-                                ],
-                                "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
-                              },
-                              "remedy": {
-                                "type": "string",
-                                "description": "A brief description of how to resolve the problem",
-                                "example": "Shorten your input to be under 100 characters"
-                              },
-                              "supportEmail": {
-                                "type": "string",
-                                "format": "email",
-                                "description": "An email address to contact for support",
-                                "example": "support@withampersand.com"
-                              },
-                              "supportPhone": {
-                                "type": "string",
-                                "description": "A phone number to contact for support",
-                                "example": "+1-555-555-5555"
-                              },
-                              "supportUrl": {
-                                "type": "string",
-                                "format": "uri",
-                                "description": "A URL to contact for support",
-                                "example": "https://withampersand.com/support"
-                              },
-                              "retryable": {
-                                "type": "boolean",
-                                "description": "Whether the request can be retried",
-                                "example": false
-                              },
-                              "retryAfter": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
-                                "example": "2024-04-22T18:55:28.456076Z"
-                              },
-                              "context": {
-                                "type": "object",
-                                "description": "Additional context for the problem",
-                                "additionalProperties": true,
-                                "example": {
-                                  "name": "Rick Sanchez"
-                                }
-                              }
-                            }
-                          }
-                        ],
-                        "properties": {
-                          "in": {
-                            "type": "string",
-                            "description": "The location of the invalid input",
-                            "enum": [
-                              "body",
-                              "header",
-                              "path",
-                              "query"
-                            ]
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "The name of the invalid input"
-                          },
-                          "value": {
-                            "description": "The value of the erroneous input"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "example": {
-                    "type": "about:blank",
-                    "title": "Bad Request",
-                    "status": 400,
-                    "detail": "The input message is incorrect",
-                    "instance": "123456-1234-1235-4567489798",
-                    "issues": [
-                      {
-                        "type": "about:blank",
-                        "detail": "exampleNumericProperty should be numeric",
-                        "in": "path",
-                        "name": "exampleNumericProperty",
-                        "value": "abc"
-                      },
-                      {
-                        "type": "about:blank",
-                        "title": "Input isn't valid with respect to schema",
-                        "detail": "examplePropertyWithPattern a2345678901 doesn't match pattern '^\\d{11}$'",
-                        "in": "body",
-                        "name": "items[0].examplePropertyWithPattern",
-                        "value": "a2345678901"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Unprocessable Entity",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "title": "Input Validation Problem",
-                  "type": "object",
-                  "allOf": [
-                    {
-                      "title": "API Problem",
-                      "type": "object",
-                      "allOf": [
-                        {
-                          "title": "Problem",
-                          "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that identifies the problem type",
-                              "default": "about:blank"
-                            },
-                            "href": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
-                            },
-                            "title": {
-                              "type": "string",
-                              "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
-                              "example": "Service Unavailable"
-                            },
-                            "status": {
-                              "type": "integer",
-                              "format": "int32",
-                              "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-                              "minimum": 400,
-                              "maximum": 600,
-                              "exclusiveMaximum": true,
-                              "example": 503
-                            },
-                            "detail": {
-                              "type": "string",
-                              "description": "A human-readable explanation specific to this occurrence of the problem"
-                            },
-                            "instance": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
-                            }
-                          },
-                          "example": {
-                            "type": "urn:problem-type:exampleOrganization:exampleProblem",
-                            "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
-                            "title": "Description of the type of problem that occurred",
-                            "status": 400,
-                            "detail": "Description of specific occurrence of the problem",
-                            "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
-                          }
-                        }
-                      ],
-                      "properties": {
-                        "subsystem": {
-                          "type": "string",
-                          "description": "The subsystem that generated the problem",
-                          "example": "api"
-                        },
-                        "time": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "The time the problem occurred, formatted as RFC-3339",
-                          "example": "2024-04-22T18:55:28.456076Z"
-                        },
-                        "requestId": {
-                          "type": "string",
-                          "description": "A unique identifier for the request, useful for debugging",
-                          "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
-                        },
-                        "causes": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "description": "A brief description of something which caused the problem",
-                            "example": "database connection failed"
-                          },
-                          "example": [
-                            "database connection failed",
-                            "database query failed",
-                            "unable to fetch user"
-                          ],
-                          "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
-                        },
-                        "remedy": {
-                          "type": "string",
-                          "description": "A brief description of how to resolve the problem",
-                          "example": "Shorten your input to be under 100 characters"
-                        },
-                        "supportEmail": {
-                          "type": "string",
-                          "format": "email",
-                          "description": "An email address to contact for support",
-                          "example": "support@withampersand.com"
-                        },
-                        "supportPhone": {
-                          "type": "string",
-                          "description": "A phone number to contact for support",
-                          "example": "+1-555-555-5555"
-                        },
-                        "supportUrl": {
-                          "type": "string",
-                          "format": "uri",
-                          "description": "A URL to contact for support",
-                          "example": "https://withampersand.com/support"
-                        },
-                        "retryable": {
-                          "type": "boolean",
-                          "description": "Whether the request can be retried",
-                          "example": false
-                        },
-                        "retryAfter": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
-                          "example": "2024-04-22T18:55:28.456076Z"
-                        },
-                        "context": {
-                          "type": "object",
-                          "description": "Additional context for the problem",
-                          "additionalProperties": true,
-                          "example": {
-                            "name": "Rick Sanchez"
-                          }
-                        }
-                      }
-                    }
-                  ],
-                  "properties": {
-                    "issues": {
-                      "type": "array",
-                      "items": {
-                        "title": "Input Validation Issue",
-                        "type": "object",
-                        "description": "An issue detected during input validation.\n",
-                        "allOf": [
-                          {
-                            "title": "API Problem",
-                            "type": "object",
-                            "allOf": [
-                              {
-                                "title": "Problem",
-                                "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that identifies the problem type",
-                                    "default": "about:blank"
-                                  },
-                                  "href": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
-                                  },
-                                  "title": {
-                                    "type": "string",
-                                    "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
-                                    "example": "Service Unavailable"
-                                  },
-                                  "status": {
-                                    "type": "integer",
-                                    "format": "int32",
-                                    "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-                                    "minimum": 400,
-                                    "maximum": 600,
-                                    "exclusiveMaximum": true,
-                                    "example": 503
-                                  },
-                                  "detail": {
-                                    "type": "string",
-                                    "description": "A human-readable explanation specific to this occurrence of the problem"
-                                  },
-                                  "instance": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
-                                  }
-                                },
-                                "example": {
-                                  "type": "urn:problem-type:exampleOrganization:exampleProblem",
-                                  "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
-                                  "title": "Description of the type of problem that occurred",
-                                  "status": 400,
-                                  "detail": "Description of specific occurrence of the problem",
-                                  "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
-                                }
-                              }
-                            ],
-                            "properties": {
-                              "subsystem": {
-                                "type": "string",
-                                "description": "The subsystem that generated the problem",
-                                "example": "api"
-                              },
-                              "time": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "The time the problem occurred, formatted as RFC-3339",
-                                "example": "2024-04-22T18:55:28.456076Z"
-                              },
-                              "requestId": {
-                                "type": "string",
-                                "description": "A unique identifier for the request, useful for debugging",
-                                "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
-                              },
-                              "causes": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "description": "A brief description of something which caused the problem",
-                                  "example": "database connection failed"
-                                },
-                                "example": [
-                                  "database connection failed",
-                                  "database query failed",
-                                  "unable to fetch user"
-                                ],
-                                "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
-                              },
-                              "remedy": {
-                                "type": "string",
-                                "description": "A brief description of how to resolve the problem",
-                                "example": "Shorten your input to be under 100 characters"
-                              },
-                              "supportEmail": {
-                                "type": "string",
-                                "format": "email",
-                                "description": "An email address to contact for support",
-                                "example": "support@withampersand.com"
-                              },
-                              "supportPhone": {
-                                "type": "string",
-                                "description": "A phone number to contact for support",
-                                "example": "+1-555-555-5555"
-                              },
-                              "supportUrl": {
-                                "type": "string",
-                                "format": "uri",
-                                "description": "A URL to contact for support",
-                                "example": "https://withampersand.com/support"
-                              },
-                              "retryable": {
-                                "type": "boolean",
-                                "description": "Whether the request can be retried",
-                                "example": false
-                              },
-                              "retryAfter": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
-                                "example": "2024-04-22T18:55:28.456076Z"
-                              },
-                              "context": {
-                                "type": "object",
-                                "description": "Additional context for the problem",
-                                "additionalProperties": true,
-                                "example": {
-                                  "name": "Rick Sanchez"
-                                }
-                              }
-                            }
-                          }
-                        ],
-                        "properties": {
-                          "in": {
-                            "type": "string",
-                            "description": "The location of the invalid input",
-                            "enum": [
-                              "body",
-                              "header",
-                              "path",
-                              "query"
-                            ]
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "The name of the invalid input"
-                          },
-                          "value": {
-                            "description": "The value of the erroneous input"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "example": {
-                    "type": "about:blank",
-                    "title": "Bad Request",
-                    "status": 400,
-                    "detail": "The input message is incorrect",
-                    "instance": "123456-1234-1235-4567489798",
-                    "issues": [
-                      {
-                        "type": "about:blank",
-                        "detail": "exampleNumericProperty should be numeric",
-                        "in": "path",
-                        "name": "exampleNumericProperty",
-                        "value": "abc"
-                      },
-                      {
-                        "type": "about:blank",
-                        "title": "Input isn't valid with respect to schema",
-                        "detail": "examplePropertyWithPattern a2345678901 doesn't match pattern '^\\d{11}$'",
-                        "in": "body",
-                        "name": "items[0].examplePropertyWithPattern",
-                        "value": "a2345678901"
-                      }
-                    ]
                   }
                 }
               }
@@ -29458,7 +28858,7 @@
                           "fieldName": {
                             "type": "string",
                             "description": "The name of the field from the provider API.",
-                            "example": "Account ID"
+                            "example": "accountid"
                           },
                           "displayName": {
                             "type": "string",
@@ -31969,7 +31369,7 @@
                           "fieldName": {
                             "type": "string",
                             "description": "The name of the field from the provider API.",
-                            "example": "Account ID"
+                            "example": "accountid"
                           },
                           "displayName": {
                             "type": "string",
@@ -67541,7 +66941,7 @@
           "id": {
             "type": "string",
             "description": "The revision ID.",
-            "example": "revision-id-1"
+            "example": "f0e1d2c3-b4a5-6789-0abc-def123456789"
           },
           "specVersion": {
             "type": "string",
@@ -67562,18 +66962,22 @@
             ],
             "properties": {
               "name": {
-                "type": "string"
+                "type": "string",
+                "example": "readSalesforceAccounts"
               },
               "displayName": {
                 "type": "string",
+                "example": "Salesforce Accounts",
                 "x-go-type-skip-optional-pointer": true
               },
               "module": {
                 "type": "string",
+                "example": "crm",
                 "x-go-type-skip-optional-pointer": true
               },
               "provider": {
-                "type": "string"
+                "type": "string",
+                "example": "salesforce"
               },
               "read": {
                 "title": "Hydrated Read Integration",
@@ -67594,32 +66998,35 @@
                         "error": {
                           "type": "string",
                           "description": "Error message if there was an issue hydrating this object.",
-                          "example": "Failed to fetch fields from provider",
                           "x-go-type-skip-optional-pointer": true
                         },
                         "objectName": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "account"
                         },
                         "displayName": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "Account"
                         },
                         "mapToName": {
                           "type": "string",
                           "description": "An object name to map to.",
-                          "example": "people",
+                          "example": "accounts",
                           "x-go-type-skip-optional-pointer": true
                         },
                         "mapToDisplayName": {
                           "type": "string",
                           "description": "A display name to map to.",
-                          "example": "People",
+                          "example": "Accounts",
                           "x-go-type-skip-optional-pointer": true
                         },
                         "destination": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "accountWebhook"
                         },
                         "schedule": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "*/10 * * * *"
                         },
                         "requiredFields": {
                           "type": "array",
@@ -67634,21 +67041,23 @@
                                 ],
                                 "properties": {
                                   "fieldName": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "billingcity"
                                   },
                                   "displayName": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "Billing City"
                                   },
                                   "mapToName": {
                                     "type": "string",
                                     "description": "The field name to map to in the destination.",
-                                    "example": "account_id",
+                                    "example": "billing_city",
                                     "x-go-type-skip-optional-pointer": true
                                   },
                                   "mapToDisplayName": {
                                     "type": "string",
                                     "description": "The display name to map to in the destination.",
-                                    "example": "Account ID",
+                                    "example": "Billing City",
                                     "x-go-type-skip-optional-pointer": true
                                   }
                                 }
@@ -67690,21 +67099,23 @@
                                 ],
                                 "properties": {
                                   "fieldName": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "billingcity"
                                   },
                                   "displayName": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "Billing City"
                                   },
                                   "mapToName": {
                                     "type": "string",
                                     "description": "The field name to map to in the destination.",
-                                    "example": "account_id",
+                                    "example": "billing_city",
                                     "x-go-type-skip-optional-pointer": true
                                   },
                                   "mapToDisplayName": {
                                     "type": "string",
                                     "description": "The display name to map to in the destination.",
-                                    "example": "Account ID",
+                                    "example": "Billing City",
                                     "x-go-type-skip-optional-pointer": true
                                   }
                                 }
@@ -67755,7 +67166,7 @@
                               "fieldName": {
                                 "type": "string",
                                 "description": "The name of the field from the provider API.",
-                                "example": "Account ID"
+                                "example": "accountid"
                               },
                               "displayName": {
                                 "type": "string",
@@ -67826,6 +67237,36 @@
                                 }
                               }
                             }
+                          },
+                          "example": {
+                            "name": {
+                              "fieldName": "name",
+                              "displayName": "Account Name",
+                              "valueType": "string",
+                              "providerType": "string",
+                              "readOnly": false,
+                              "isCustom": false,
+                              "isRequired": true
+                            },
+                            "type": {
+                              "fieldName": "type",
+                              "displayName": "Account Type",
+                              "valueType": "singleSelect",
+                              "providerType": "picklist",
+                              "readOnly": false,
+                              "isCustom": false,
+                              "isRequired": false,
+                              "values": [
+                                {
+                                  "value": "prospect",
+                                  "displayValue": "Prospect"
+                                },
+                                {
+                                  "value": "customer",
+                                  "displayValue": "Customer - Direct"
+                                }
+                              ]
+                            }
                           }
                         },
                         "allFields": {
@@ -67843,21 +67284,23 @@
                                 ],
                                 "properties": {
                                   "fieldName": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "billingcity"
                                   },
                                   "displayName": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "example": "Billing City"
                                   },
                                   "mapToName": {
                                     "type": "string",
                                     "description": "The field name to map to in the destination.",
-                                    "example": "account_id",
+                                    "example": "billing_city",
                                     "x-go-type-skip-optional-pointer": true
                                   },
                                   "mapToDisplayName": {
                                     "type": "string",
                                     "description": "The display name to map to in the destination.",
-                                    "example": "Account ID",
+                                    "example": "Billing City",
                                     "x-go-type-skip-optional-pointer": true
                                   }
                                 }
@@ -67936,10 +67379,12 @@
                       ],
                       "properties": {
                         "objectName": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "account"
                         },
                         "displayName": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "Account"
                         },
                         "valueDefaults": {
                           "title": "Value Defaults",
@@ -73569,7 +73014,7 @@
                 "fieldName": {
                   "type": "string",
                   "description": "The name of the field from the provider API.",
-                  "example": "Account ID"
+                  "example": "accountid"
                 },
                 "displayName": {
                   "type": "string",
