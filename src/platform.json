@@ -28849,8 +28849,8 @@
     },
     "/projects/{projectIdOrName}/integrations/{integrationId}/objects/{objectName}/metadata": {
       "get": {
-        "summary": "Get object metadata for installation",
-        "description": "Retrieves metadata about an object in a customer's SaaS instance, including its fields.\nThis endpoint requires that an Installation exists for the given groupRef.\nIt applies object mappings. This endpoint may return nested fields as a part of the response.\nNested fields are returned in JSONPath bracket notation (e.g. `$['billingaddress']['city']`).\nCurrently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future.\n",
+        "summary": "Get object metadata via installation",
+        "description": "Retrieves metadata about an object in a customer's SaaS instance, including its fields. An installation must exist for the given `groupRef` and `integrationId`. The `objectName` can be either the mapped name from your integration config or the native provider name. For Salesforce, nested fields may be included using JSONPath bracket notation (e.g. `$['billingaddress']['city']`).\n",
         "tags": [
           "Objects & Fields"
         ],
@@ -28860,7 +28860,7 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
-            "description": "The unique identifier or name of the project.",
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
             },
@@ -28870,25 +28870,27 @@
             "name": "integrationId",
             "in": "path",
             "required": true,
-            "description": "The integration ID.",
+            "description": "The unique identifier of the integration.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "e3a7f9c1-4b2d-4e8a-9f6b-2d5c8a1e3b7f"
           },
           {
             "name": "objectName",
             "in": "path",
             "required": true,
-            "description": "Object name (mapped or unmapped)",
+            "description": "The name of the object to retrieve metadata for. You can use either the mapped name from your integration config (e.g. `people`) or the native provider object name (e.g. `contact`).\n",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "account"
           },
           {
             "name": "groupRef",
             "in": "query",
-            "required": false,
-            "description": "The groupRef for the installation",
+            "required": true,
+            "description": "The ID of the user group that has access to this installation.",
             "example": "group-123",
             "schema": {
               "type": "string"
@@ -28907,7 +28909,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The retrieved object metadata",
+            "description": "The retrieved object metadata.",
             "content": {
               "application/json": {
                 "schema": {
@@ -28930,6 +28932,7 @@
                     },
                     "mappedObjectName": {
                       "type": "string",
+                      "description": "The mapped name of the object as defined in your integration config, if a mapping was applied. Only present when using the installation-scoped metadata endpoint.",
                       "example": "people"
                     },
                     "fields": {
@@ -29019,6 +29022,50 @@
                           }
                         }
                       }
+                    }
+                  }
+                },
+                "example": {
+                  "name": "account",
+                  "displayName": "Account",
+                  "mappedObjectName": "companies",
+                  "fields": {
+                    "name": {
+                      "fieldName": "name",
+                      "displayName": "Account Name",
+                      "valueType": "string",
+                      "providerType": "string",
+                      "readOnly": false,
+                      "isCustom": false,
+                      "isRequired": true
+                    },
+                    "billingcity": {
+                      "fieldName": "billingcity",
+                      "displayName": "Billing City",
+                      "valueType": "string",
+                      "providerType": "string",
+                      "readOnly": false,
+                      "isCustom": false,
+                      "isRequired": false
+                    },
+                    "industry": {
+                      "fieldName": "industry",
+                      "displayName": "Industry",
+                      "valueType": "singleSelect",
+                      "providerType": "picklist",
+                      "readOnly": false,
+                      "isCustom": false,
+                      "isRequired": false,
+                      "values": [
+                        {
+                          "value": "technology",
+                          "displayValue": "Technology"
+                        },
+                        {
+                          "value": "finance",
+                          "displayValue": "Finance"
+                        }
+                      ]
                     }
                   }
                 }
@@ -31364,8 +31411,8 @@
     },
     "/projects/{projectIdOrName}/providers/{provider}/objects/{objectName}/metadata": {
       "get": {
-        "summary": "Get object metadata for connection",
-        "description": "Retrieves metadata about an object in a customer's SaaS instance, including its fields.\nThis endpoint only requires that a Connection exists for the given groupRef.\nIt does not apply any object mappings. This endpoint may return nested fields as a part of the response.\nNested fields are returned in JSONPath bracket notation (e.g. `$['billingaddress']['city']`).\nCurrently, nested fields are only returned for Salesforce, but this may be expanded to other providers in the future.\n",
+        "summary": "Get object metadata via connection",
+        "description": "Retrieves metadata about an object in a customer's SaaS instance, including its fields. A connection must exist for the given `groupRef` and `provider`. For Salesforce, nested fields may be included using JSONPath bracket notation (e.g. `$['billingaddress']['city']`).\n",
         "tags": [
           "Objects & Fields"
         ],
@@ -31375,7 +31422,7 @@
             "name": "projectIdOrName",
             "in": "path",
             "required": true,
-            "description": "The unique identifier or name of the project.",
+            "description": "The Ampersand project ID or project name.",
             "schema": {
               "type": "string"
             },
@@ -31385,25 +31432,27 @@
             "name": "provider",
             "in": "path",
             "required": true,
-            "description": "The API Provider",
+            "description": "The provider name (e.g. `salesforce`, `hubspot`).",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "salesforce"
           },
           {
             "name": "objectName",
             "in": "path",
             "required": true,
-            "description": "Object name (mapped or unmapped)",
+            "description": "The native provider object name to retrieve metadata for.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "contact"
           },
           {
             "name": "groupRef",
             "in": "query",
-            "required": false,
-            "description": "The groupRef for the connection.",
+            "required": true,
+            "description": "The ID of the user group whose connection should be used to fetch the metadata.",
             "example": "group-123",
             "schema": {
               "type": "string"
@@ -31422,7 +31471,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The retrieved object metadata",
+            "description": "The retrieved object metadata.",
             "content": {
               "application/json": {
                 "schema": {
@@ -31445,6 +31494,7 @@
                     },
                     "mappedObjectName": {
                       "type": "string",
+                      "description": "The mapped name of the object as defined in your integration config, if a mapping was applied. Only present when using the installation-scoped metadata endpoint.",
                       "example": "people"
                     },
                     "fields": {
@@ -31534,6 +31584,49 @@
                           }
                         }
                       }
+                    }
+                  }
+                },
+                "example": {
+                  "name": "contact",
+                  "displayName": "Contact",
+                  "fields": {
+                    "firstname": {
+                      "fieldName": "firstname",
+                      "displayName": "First Name",
+                      "valueType": "string",
+                      "providerType": "string",
+                      "readOnly": false,
+                      "isCustom": false,
+                      "isRequired": true
+                    },
+                    "email": {
+                      "fieldName": "email",
+                      "displayName": "Email",
+                      "valueType": "string",
+                      "providerType": "string",
+                      "readOnly": false,
+                      "isCustom": false,
+                      "isRequired": false
+                    },
+                    "lifecyclestage": {
+                      "fieldName": "lifecyclestage",
+                      "displayName": "Lifecycle Stage",
+                      "valueType": "singleSelect",
+                      "providerType": "enumeration",
+                      "readOnly": false,
+                      "isCustom": false,
+                      "isRequired": false,
+                      "values": [
+                        {
+                          "value": "lead",
+                          "displayValue": "Lead"
+                        },
+                        {
+                          "value": "customer",
+                          "displayValue": "Customer"
+                        }
+                      ]
                     }
                   }
                 }
@@ -73152,6 +73245,7 @@
           },
           "mappedObjectName": {
             "type": "string",
+            "description": "The mapped name of the object as defined in your integration config, if a mapping was applied. Only present when using the installation-scoped metadata endpoint.",
             "example": "people"
           },
           "fields": {
