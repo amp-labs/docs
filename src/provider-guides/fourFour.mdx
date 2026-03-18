@@ -1,0 +1,74 @@
+---
+title: Four/Four
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://fourfour.ai`.
+
+
+### Example integration
+
+To define an integration for Four/Four, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: fourfour-integration
+    displayName: My Four/Four Integration
+    provider: fourFour
+    proxy:
+      enabled: true
+```
+
+
+## Before you get started
+
+To connect _Four/Four_ with _Ampersand_, you will need a [Four/Four account](https://fourfour.ai).
+
+Once your account is ready, you'll need to create a Four/Four OAuth2 app and obtain the following credentials:
+
+- Client ID
+- Client Secret
+
+
+### Creating a Four/Four app
+
+1. [Sign in](https://fourfour.ai/login) to your Four/Four account as an admin user.
+2. Go to **Settings** > **Connections** > **OAuth clients**.
+3. Click **ADD CLIENT** and fill in the form.
+4. Under **Redirect URI**, add the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+5. Save your app settings.
+6. Copy the generated **Client ID** and **Client Secret**.
+
+## Add your Four/Four app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Four/Four integration.
+
+   ![Alt text](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Select **Provider apps**.
+
+4. Select _Four/Four_ from the **Provider** list.
+
+5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
+
+   ![Alt text](/images/provider-guides/fourfour-amp.gif)
+
+6. Click **Save changes**.
+
+## Using the connector
+
+To start integrating with Four/Four:
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.

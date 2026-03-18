@@ -361,6 +361,7 @@ const baseConfig = {
             "provider-guides/freshchat",
             "provider-guides/freshdesk",
             "provider-guides/front",
+            "provider-guides/fourFour",
             "provider-guides/g2",
             "provider-guides/geckoboard",
             "provider-guides/getResponse",
