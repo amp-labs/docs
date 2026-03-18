@@ -36765,13 +36765,15 @@
     "/providers": {
       "get": {
         "summary": "List providers",
+        "description": "Returns all supported SaaS providers and their capabilities. The response is a JSON object keyed by provider name (e.g. `salesforce`, `hubspot`). Each value describes the provider's authentication type, supported operations, modules, and configuration options. No authentication is required.\n",
         "operationId": "listProviders",
         "tags": [
           "Provider"
         ],
+        "security": [],
         "responses": {
           "200": {
-            "description": "List of providers & their information",
+            "description": "All available providers and their capabilities.\n",
             "content": {
               "application/json": {
                 "schema": {
@@ -37871,6 +37873,60 @@
                       }
                     }
                   }
+                },
+                "example": {
+                  "salesforce": {
+                    "name": "salesforce",
+                    "displayName": "Salesforce",
+                    "authType": "oauth2",
+                    "baseURL": "https://{{.workspace}}.my.salesforce.com",
+                    "defaultModule": "crm",
+                    "support": {
+                      "read": true,
+                      "write": true,
+                      "delete": true,
+                      "subscribe": true,
+                      "proxy": true,
+                      "bulkWrite": {
+                        "insert": true,
+                        "update": true,
+                        "upsert": true,
+                        "delete": true
+                      },
+                      "search": {
+                        "operators": {
+                          "equals": true
+                        }
+                      }
+                    },
+                    "providerOpts": {}
+                  },
+                  "hubspot": {
+                    "name": "hubspot",
+                    "displayName": "HubSpot",
+                    "authType": "oauth2",
+                    "baseURL": "https://api.hubapi.com",
+                    "defaultModule": "",
+                    "support": {
+                      "read": true,
+                      "write": true,
+                      "delete": true,
+                      "subscribe": true,
+                      "proxy": true,
+                      "bulkWrite": {
+                        "insert": false,
+                        "update": false,
+                        "upsert": false,
+                        "delete": false
+                      },
+                      "search": {
+                        "operators": {
+                          "equals": true
+                        }
+                      }
+                    },
+                    "providerOpts": {}
+                  }
                 }
               }
             }
@@ -38016,16 +38072,18 @@
     "/providers/{provider}": {
       "get": {
         "summary": "Get provider",
+        "description": "Returns information about a single provider. No authentication is required.\n",
         "operationId": "getProvider",
         "tags": [
           "Provider"
         ],
+        "security": [],
         "parameters": [
           {
             "name": "provider",
             "in": "path",
             "required": true,
-            "description": "The API provider.",
+            "description": "The provider name (e.g. `salesforce`, `hubspot`).",
             "example": "hubspot",
             "schema": {
               "type": "string"
@@ -38034,7 +38092,7 @@
         ],
         "responses": {
           "200": {
-            "description": "ProviderInfo",
+            "description": "The requested provider.",
             "content": {
               "application/json": {
                 "schema": {
