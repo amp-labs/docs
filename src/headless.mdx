@@ -340,15 +340,13 @@ The `getCustomerFieldsForObject` function returned by `useManifest` allows you t
 
 ### Get all read objects from manifest
 
-The `getReadObjects` function returned by `useManifest` returns all read objects defined in the manifest. This is useful when you need to iterate over all objects rather than fetching them individually by name. Supported in `@amp-labs/react` `v2.12.1+`.
+The `getReadObjects` function returned by `useManifest` returns all read objects defined in the manifest, which is useful when you need to iterate over all objects rather than fetching them individually by name. Supported in `@amp-labs/react` `v2.12.1+`.
 
 ```tsx
 const { getReadObjects } = useManifest();
 
-// Get all read objects from the manifest
 const allReadObjects = getReadObjects(); // HydratedIntegrationObject[]
 
-// Iterate over all read objects to build your UI
 allReadObjects.forEach((obj) => {
   console.log(obj.objectName);
 });
@@ -503,31 +501,29 @@ function ReadObjectConfig() {
 
 ### Enable, disable, and remove read objects
 
-The `readObject()` handlers include `setEnableRead` and `setDisableRead` to control whether an object is read. `removeObject` fully deletes an object from the config. Supported in `@amp-labs/react` `v2.12.1+`.
+The `readObject()` handlers include `setEnableRead` and `setDisableRead` to control whether an object is read. `removeObject` fully deletes an object from the config. Supported in `@amp-labs/react` `v2.12.1+`. The naming mirrors the write pattern: `config.readObject("contacts").setEnableRead()` is consistent with `config.writeObject("contacts").setEnableWrite()`.
 
-`setEnableRead` initializes a read object in the draft config and sets it as enabled. It is idempotent, so it is safe to call multiple times for the same object. Note that setting a selected field (`setSelectedField`) or field mapping (`setFieldMapping`) will also automatically enable the read object in the config, so `setEnableRead` is primarily useful when you want to enable a read object without setting any fields, or to re-enable an object that was previously disabled.
+- **`setEnableRead`** — initializes a read object in the draft config and enables it. Safe to call multiple times (idempotent).
+- **`setDisableRead`** — pauses reads for the object without removing its config (sets a `disabled` flag).
+- **`removeObject`** — fully deletes an object from all actions (both read and write) in the draft config.
 
-`setDisableRead` sets the read object as disabled (pausing reads without removing it from the config).
-
-`removeObject` removes an object from all actions (both read and write) in the draft config.
-
-The naming mirrors the write pattern: `config.readObject("contacts").setEnableRead()` is consistent with `config.writeObject("contacts").setEnableWrite()`.
+<Note>
+Calling `setSelectedField` or `setFieldMapping` will also automatically enable the read object, so `setEnableRead` is primarily useful when you want to enable an object without configuring fields, or to re-enable an object that was previously disabled.
+</Note>
 
 ```typescript
 function ObjectManager() {
   const config = useLocalConfig();
   const { createInstallation } = useCreateInstallation();
 
-  // Enable reading for the "contact" object (initializes with defaults)
+  // Enable reading for the "contact" and "account" objects
   config.readObject("contact").setEnableRead();
-
-  // Enable another object
   config.readObject("account").setEnableRead();
 
-  // Disable reading for an object (sets disabled flag, keeps config)
+  // Pause reads for "account" (keeps its config intact)
   config.readObject("account").setDisableRead();
 
-  // Remove an object from all actions (read and write)
+  // Or fully remove "account" from both read and write config
   config.removeObject("account");
 
   const handleSave = async () => {
