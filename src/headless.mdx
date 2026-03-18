@@ -375,7 +375,6 @@ It returns these fields:
   get: () => InstallationConfigContent;  // Get current configuration
   reset: () => void;  // Reset to installation's current config
   setDraft: (config: InstallationConfigContent) => void;  // Update draft config
-  ensureObject: (objectName: string) => void;  // Initialize read object with manifest defaults (v2.12.0+)
   removeObject: (objectName: string) => void;  // Remove object from all actions (v2.12.0+)
   readObject: (objectName: string) => ReadObjectHandlers;  // Manage read object config
   writeObject: (objectName: string) => WriteObjectHandlers;  // Manage write object config
@@ -384,10 +383,13 @@ It returns these fields:
 // Shape of ReadObjectHandlers (returned by `readObject` function above).
 {
   object: BaseReadConfigObject | undefined;  // Current read object configuration
+  setEnableRead: () => void;  // Enable reading for object, initializes with defaults (v2.12.1+)
+  setDisableRead: () => void;  // Disable reading for object (v2.12.1+)
   getSelectedField: (fieldName: string) => boolean;  // Check if field is selected
   setSelectedField: (params: { fieldName: string; selected: boolean }) => void;  // Toggle field selection
   getFieldMapping: (fieldName: string) => string | undefined;  // Get field mapping
   setFieldMapping: (params: { fieldName: string; mapToName: string }) => void;  // Set field mapping
+  deleteFieldMapping: (mapToName: string) => void;  // Delete field mapping
 }
 
 // Shape of WriteObjectHandlers (returned by `writeObject` function above).
@@ -499,25 +501,31 @@ function ReadObjectConfig() {
 }
 ```
 
-### Add and remove objects
+### Enable, disable, and remove read objects
 
-The `ensureObject` and `removeObject` functions provide a simple way to add or remove objects from the draft config. Supported in `@amp-labs/react` `v2.12.0+`.
+The `readObject()` handlers include `setEnableRead` and `setDisableRead` to control whether an object is read. `removeObject` fully deletes an object from the config. Supported in `@amp-labs/react` `v2.12.1+`.
 
-`ensureObject` initializes a read object in the draft config with default values from the manifest (e.g., required fields are automatically selected). It is idempotent, so it is safe to call multiple times for the same object.
+`setEnableRead` initializes a read object in the draft config and sets it as enabled. It is idempotent, so it is safe to call multiple times for the same object. Note that setting a selected field (`setSelectedField`) or field mapping (`setFieldMapping`) will also automatically enable the read object in the config, so `setEnableRead` is primarily useful when you want to enable a read object without setting any fields, or to re-enable an object that was previously disabled.
+
+`setDisableRead` sets the read object as disabled (pausing reads without removing it from the config).
 
 `removeObject` removes an object from all actions (both read and write) in the draft config.
+
+The naming mirrors the write pattern: `config.readObject("contacts").setEnableRead()` is consistent with `config.writeObject("contacts").setEnableWrite()`.
 
 ```typescript
 function ObjectManager() {
   const config = useLocalConfig();
   const { createInstallation } = useCreateInstallation();
 
-  // Ensure the "contact" object is initialized with manifest defaults.
-  // Required fields will be pre-selected automatically.
-  config.ensureObject("contact");
+  // Enable reading for the "contact" object (initializes with defaults)
+  config.readObject("contact").setEnableRead();
 
-  // Ensure another object
-  config.ensureObject("account");
+  // Enable another object
+  config.readObject("account").setEnableRead();
+
+  // Disable reading for an object (sets disabled flag, keeps config)
+  config.readObject("account").setDisableRead();
 
   // Remove an object from all actions (read and write)
   config.removeObject("account");
