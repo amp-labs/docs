@@ -12991,7 +12991,11 @@
                       },
                       "healthStatus": {
                         "type": "string",
-                        "description": "The health status of the installation (\"healthy\", \"unhealthy\").",
+                        "enum": [
+                          "healthy",
+                          "unhealthy"
+                        ],
+                        "description": "The health status of the installation.",
                         "example": "healthy"
                       },
                       "lastOperationStatus": {
@@ -15408,6 +15412,7 @@
       "post": {
         "summary": "Create a new installation",
         "operationId": "createInstallation",
+        "description": "Install an integration for a specific group. The group must already have a SaaS connection — either provide its `connectionId`, or omit it to use the group's default. To create a connection, use the [OAuth Connect endpoint](https://docs.withampersand.com/reference/o-auth/generate-o-auth-authorization-url) or the [prebuilt UI components](https://docs.withampersand.com/embeddable-ui-components).\n",
         "tags": [
           "Installation"
         ],
@@ -15429,7 +15434,8 @@
             "description": "The integration ID.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "113e9685-9a51-42cc-8662-9d9725b17f14"
           }
         ],
         "requestBody": {
@@ -15449,7 +15455,8 @@
                   },
                   "connectionId": {
                     "type": "string",
-                    "description": "The ID of the SaaS connection tied to this installation. If omitted the default connection for this group will be used."
+                    "description": "The ID of the SaaS connection tied to this installation. If omitted the default connection for this group will be used.",
+                    "example": "a1c4e7b2-8f3d-4a6e-9c2b-5d8f1e4a7b3c"
                   },
                   "config": {
                     "required": [
@@ -15464,10 +15471,11 @@
                       },
                       "createdBy": {
                         "type": "string",
-                        "description": "The person who created the config, in the format of \"consumer:{consumer-id}\" or \"builder:{builder-id}\".",
+                        "description": "The person who created the config, in the format of \"consumer:{consumer-id}\", \"builder:{builder-id}\", or \"api:{api-caller}\".",
                         "default": "api:create-installation"
                       },
                       "content": {
+                        "description": "The content of the config.",
                         "title": "Config Content",
                         "allOf": [
                           {
@@ -17046,6 +17054,71 @@
                     "description": "The config of the installation."
                   }
                 }
+              },
+              "examples": {
+                "writeOnly": {
+                  "summary": "Minimal write-only installation",
+                  "value": {
+                    "groupRef": "group-123",
+                    "connectionId": "a1c4e7b2-8f3d-4a6e-9c2b-5d8f1e4a7b3c",
+                    "config": {
+                      "content": {
+                        "provider": "salesforce",
+                        "write": {
+                          "objects": {
+                            "contacts": {
+                              "objectName": "contacts"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "readWriteAndSubscribe": {
+                  "summary": "Read, write, and subscribe",
+                  "value": {
+                    "groupRef": "group-456",
+                    "connectionId": "b2d5f8a3-9e4c-4b7f-8d1a-6c9e2f5b8d4a",
+                    "config": {
+                      "content": {
+                        "provider": "salesforce",
+                        "read": {
+                          "objects": {
+                            "contacts": {
+                              "objectName": "contacts",
+                              "schedule": "*/15 * * * *",
+                              "selectedFields": {
+                                "phone": true,
+                                "email": true
+                              },
+                              "selectedFieldMappings": {
+                                "phoneNumber": "phone",
+                                "emailAddress": "email"
+                              }
+                            }
+                          }
+                        },
+                        "write": {
+                          "objects": {
+                            "contacts": {
+                              "objectName": "contacts"
+                            }
+                          }
+                        },
+                        "subscribe": {
+                          "objects": {
+                            "contacts": {
+                              "objectName": "contacts",
+                              "destination": "contactWebhook",
+                              "inheritFieldsAndMappings": true
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           },
@@ -17124,7 +17197,11 @@
                     },
                     "healthStatus": {
                       "type": "string",
-                      "description": "The health status of the installation (\"healthy\", \"unhealthy\").",
+                      "enum": [
+                        "healthy",
+                        "unhealthy"
+                      ],
+                      "description": "The health status of the installation.",
                       "example": "healthy"
                     },
                     "lastOperationStatus": {
@@ -19973,7 +20050,11 @@
                     },
                     "healthStatus": {
                       "type": "string",
-                      "description": "The health status of the installation (\"healthy\", \"unhealthy\").",
+                      "enum": [
+                        "healthy",
+                        "unhealthy"
+                      ],
+                      "description": "The health status of the installation.",
                       "example": "healthy"
                     },
                     "lastOperationStatus": {
@@ -23325,7 +23406,11 @@
                     },
                     "healthStatus": {
                       "type": "string",
-                      "description": "The health status of the installation (\"healthy\", \"unhealthy\").",
+                      "enum": [
+                        "healthy",
+                        "unhealthy"
+                      ],
+                      "description": "The health status of the installation.",
                       "example": "healthy"
                     },
                     "lastOperationStatus": {
@@ -26019,7 +26104,11 @@
                     },
                     "healthStatus": {
                       "type": "string",
-                      "description": "The health status of the installation (\"healthy\", \"unhealthy\").",
+                      "enum": [
+                        "healthy",
+                        "unhealthy"
+                      ],
+                      "description": "The health status of the installation.",
                       "example": "healthy"
                     },
                     "lastOperationStatus": {
@@ -29178,7 +29267,11 @@
                       },
                       "healthStatus": {
                         "type": "string",
-                        "description": "The health status of the installation (\"healthy\", \"unhealthy\").",
+                        "enum": [
+                          "healthy",
+                          "unhealthy"
+                        ],
+                        "description": "The health status of the installation.",
                         "example": "healthy"
                       },
                       "lastOperationStatus": {
@@ -67488,7 +67581,11 @@
           },
           "healthStatus": {
             "type": "string",
-            "description": "The health status of the installation (\"healthy\", \"unhealthy\").",
+            "enum": [
+              "healthy",
+              "unhealthy"
+            ],
+            "description": "The health status of the installation.",
             "example": "healthy"
           },
           "lastOperationStatus": {
