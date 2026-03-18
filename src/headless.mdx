@@ -212,7 +212,7 @@ The following hooks provide granular control over [Installation](/concepts#insta
 For example, the `useCreateInstallation` hook is used to create a new Installation.
 
 <Note>
-As of `v2.12.0`, `useCreateInstallation` automatically populates `config.provider` from the integration object if it is not explicitly set in the config. This means you no longer need to manually set the provider in most cases.
+As of `v2.12.1`, `useCreateInstallation` automatically populates `config.provider` from the integration object if it is not explicitly set in the config. This means you no longer need to manually set the provider in most cases.
 </Note>
 
 It returns the following:
@@ -297,7 +297,7 @@ The `useManifest` hook provides the data that you need to build input forms for 
 import { useManifest } from "@amp-labs/react";
 
 const {
-  getReadObjects: () => HydratedIntegrationObject[],  // Get all read objects from manifest (v2.12.0+)
+  getReadObjects: () => HydratedIntegrationObject[],  // Get all read objects from manifest (v2.12.1+)
   getReadObject: (objectName: string) => {
     object: HydratedIntegrationObject | null;
     getRequiredFields: () => HydratedIntegrationField[] | null;
@@ -340,7 +340,7 @@ The `getCustomerFieldsForObject` function returned by `useManifest` allows you t
 
 ### Get all read objects from manifest
 
-The `getReadObjects` function returned by `useManifest` returns all read objects defined in the manifest. This is useful when you need to iterate over all objects rather than fetching them individually by name. Supported in `@amp-labs/react` `v2.12.0+`.
+The `getReadObjects` function returned by `useManifest` returns all read objects defined in the manifest. This is useful when you need to iterate over all objects rather than fetching them individually by name. Supported in `@amp-labs/react` `v2.12.1+`.
 
 ```tsx
 const { getReadObjects } = useManifest();
@@ -375,7 +375,7 @@ It returns these fields:
   get: () => InstallationConfigContent;  // Get current configuration
   reset: () => void;  // Reset to installation's current config
   setDraft: (config: InstallationConfigContent) => void;  // Update draft config
-  removeObject: (objectName: string) => void;  // Remove object from all actions (v2.12.0+)
+  removeObject: (objectName: string) => void;  // Remove object from all actions (v2.12.1+)
   readObject: (objectName: string) => ReadObjectHandlers;  // Manage read object config
   writeObject: (objectName: string) => WriteObjectHandlers;  // Manage write object config
 }
