@@ -640,7 +640,7 @@
     "/projects/{projectIdOrName}/connections/{connectionId}:oauth-update": {
       "patch": {
         "operationId": "oauthUpdate",
-        "summary": "Get URL for updating OAuth connection",
+        "summary": "Generate OAuth authorization URL for existing connection",
         "description": "Generate a URL for the browser to render to kick off an OAuth flow that updates an existing connection. Use this when the connection's credentials need to be refreshed. To start an OAuth flow without specifying a connection ID, use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) instead.\n",
         "tags": [
           "OAuth"
@@ -667,12 +667,11 @@
         ],
         "responses": {
           "200": {
-            "description": "URL generated successfully",
+            "description": "URL to initiate OAuth flow",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string",
-                  "description": "URL to initiate OAuth flow",
                   "example": "https://login.salesforce.com/services/oauth2/authorize?client_id=xxx&redirect_uri=https%3A%2F%2Fapi.withampersand.com%2Fcallbacks%2Fv1%2Foauth&state=xxx"
                 }
               }
