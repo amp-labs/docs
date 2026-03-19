@@ -12882,7 +12882,8 @@
     },
     "/projects/{projectIdOrName}/integrations/{integrationId}/installations": {
       "get": {
-        "summary": "List installations",
+        "summary": "List installations for an integration",
+        "description": "Lists all installations for a specific integration within a project. To list installations across all integrations, use listInstallationsForProject instead.\n",
         "operationId": "listInstallations",
         "tags": [
           "Installation"
@@ -12902,14 +12903,16 @@
             "name": "integrationId",
             "in": "path",
             "required": true,
+            "description": "The unique identifier (UUID) of the integration.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "550e8400-e29b-41d4-a716-446655440000"
           },
           {
             "name": "groupRef",
             "in": "query",
-            "description": "The ID of the user group that has access to this installation.",
+            "description": "The ID that your app uses to identify a group of users (e.g. an org ID, workspace ID, or team ID). When provided, only returns installations belonging to this group.",
             "example": "group-123",
             "schema": {
               "type": "string"
@@ -13321,7 +13324,7 @@
                       },
                       "createTime": {
                         "type": "string",
-                        "description": "The time the integration was first installed.",
+                        "description": "The time the installation was created.",
                         "format": "date-time"
                       },
                       "createdBy": {
@@ -14944,7 +14947,65 @@
                       }
                     }
                   }
-                }
+                },
+                "example": [
+                  {
+                    "id": "3f8b2a1e-7c4d-4e9a-b5f6-1d2e3a4b5c6d",
+                    "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    "integrationId": "550e8400-e29b-41d4-a716-446655440000",
+                    "group": {
+                      "groupRef": "org_12345",
+                      "groupName": "Acme Corp",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "createTime": "2024-01-15T10:30:00.000000Z"
+                    },
+                    "healthStatus": "healthy",
+                    "connection": {
+                      "id": "9d8c7b6a-5e4f-3a2b-1c0d-ef9876543210",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "provider": "salesforce",
+                      "group": {
+                        "groupRef": "org_12345",
+                        "groupName": "Acme Corp",
+                        "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "createTime": "2024-01-15T10:30:00.000000Z"
+                      },
+                      "consumer": {
+                        "consumerRef": "user_67890",
+                        "consumerName": "Jane Smith",
+                        "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "createTime": "2024-01-15T10:30:00.000000Z"
+                      },
+                      "createTime": "2024-01-15T10:30:00.000000Z",
+                      "authScheme": "oauth2/authorizationCode",
+                      "status": "working"
+                    },
+                    "createTime": "2024-01-15T10:30:00.000000Z",
+                    "createdBy": "consumer:user_67890",
+                    "config": {
+                      "id": "e4d3c2b1-a098-7654-3210-fedcba987654",
+                      "revisionId": "f0e1d2c3-b4a5-6789-0abc-def123456789",
+                      "createTime": "2024-01-15T10:30:00.000000Z",
+                      "createdBy": "consumer:user_67890",
+                      "content": {
+                        "provider": "salesforce",
+                        "read": {
+                          "objects": {
+                            "account": {
+                              "objectName": "account",
+                              "schedule": "*/15 * * * *",
+                              "destination": "accountWebhook",
+                              "selectedFields": {
+                                "name": true,
+                                "industry": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
               }
             }
           },
@@ -17527,7 +17588,7 @@
                     },
                     "createTime": {
                       "type": "string",
-                      "description": "The time the integration was first installed.",
+                      "description": "The time the installation was created.",
                       "format": "date-time"
                     },
                     "createdBy": {
@@ -19943,6 +20004,7 @@
     "/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}": {
       "get": {
         "summary": "Get an installation",
+        "description": "Retrieves a single installation by ID, including its connection details, config, and health status.\n",
         "operationId": "getInstallation",
         "tags": [
           "Installation"
@@ -19962,19 +20024,21 @@
             "name": "integrationId",
             "in": "path",
             "required": true,
-            "description": "The integration ID.",
+            "description": "The unique identifier (UUID) of the integration.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "550e8400-e29b-41d4-a716-446655440000"
           },
           {
             "name": "installationId",
             "in": "path",
             "required": true,
-            "description": "The installation ID.",
+            "description": "The unique identifier (UUID) of the installation.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "7b3c9d2e-5a1f-4e8b-b6d4-9c8a2f1e5d3b"
           }
         ],
         "responses": {
@@ -20380,7 +20444,7 @@
                     },
                     "createTime": {
                       "type": "string",
-                      "description": "The time the integration was first installed.",
+                      "description": "The time the installation was created.",
                       "format": "date-time"
                     },
                     "createdBy": {
@@ -21998,6 +22062,62 @@
                               }
                             }
                           ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "id": "3f8b2a1e-7c4d-4e9a-b5f6-1d2e3a4b5c6d",
+                  "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                  "integrationId": "550e8400-e29b-41d4-a716-446655440000",
+                  "group": {
+                    "groupRef": "org_12345",
+                    "groupName": "Acme Corp",
+                    "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    "createTime": "2024-01-15T10:30:00.000000Z"
+                  },
+                  "healthStatus": "healthy",
+                  "connection": {
+                    "id": "9d8c7b6a-5e4f-3a2b-1c0d-ef9876543210",
+                    "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    "provider": "salesforce",
+                    "group": {
+                      "groupRef": "org_12345",
+                      "groupName": "Acme Corp",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "createTime": "2024-01-15T10:30:00.000000Z"
+                    },
+                    "consumer": {
+                      "consumerRef": "user_67890",
+                      "consumerName": "Jane Smith",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "createTime": "2024-01-15T10:30:00.000000Z"
+                    },
+                    "createTime": "2024-01-15T10:30:00.000000Z",
+                    "authScheme": "oauth2/authorizationCode",
+                    "status": "working"
+                  },
+                  "createTime": "2024-01-15T10:30:00.000000Z",
+                  "createdBy": "consumer:user_67890",
+                  "config": {
+                    "id": "e4d3c2b1-a098-7654-3210-fedcba987654",
+                    "revisionId": "f0e1d2c3-b4a5-6789-0abc-def123456789",
+                    "createTime": "2024-01-15T10:30:00.000000Z",
+                    "createdBy": "consumer:user_67890",
+                    "content": {
+                      "provider": "salesforce",
+                      "read": {
+                        "objects": {
+                          "account": {
+                            "objectName": "account",
+                            "schedule": "*/15 * * * *",
+                            "destination": "accountWebhook",
+                            "selectedFields": {
+                              "name": true,
+                              "industry": true
+                            }
+                          }
                         }
                       }
                     }
@@ -23736,7 +23856,7 @@
                     },
                     "createTime": {
                       "type": "string",
-                      "description": "The time the integration was first installed.",
+                      "description": "The time the installation was created.",
                       "format": "date-time"
                     },
                     "createdBy": {
@@ -26434,7 +26554,7 @@
                     },
                     "createTime": {
                       "type": "string",
-                      "description": "The time the integration was first installed.",
+                      "description": "The time the installation was created.",
                       "format": "date-time"
                     },
                     "createdBy": {
@@ -29213,7 +29333,7 @@
     "/projects/{projectIdOrName}/installations": {
       "get": {
         "summary": "List installations for a project",
-        "description": "Lists all installations for a given project and query parameters.\n",
+        "description": "Lists all installations across every integration in a project, giving you a complete view of all active customer integrations. To narrow results to a single integration, use listInstallations instead.\n",
         "operationId": "listInstallationsForProject",
         "tags": [
           "Installation"
@@ -29232,8 +29352,8 @@
           {
             "name": "groupRef",
             "in": "query",
-            "description": "The group ref to filter by.",
-            "example": "groupRef123",
+            "description": "The ID that your app uses to identify a group of users (e.g. an org ID, workspace ID, or team ID). When provided, only returns installations belonging to this group.",
+            "example": "group-123",
             "schema": {
               "type": "string"
             }
@@ -29644,7 +29764,7 @@
                       },
                       "createTime": {
                         "type": "string",
-                        "description": "The time the integration was first installed.",
+                        "description": "The time the installation was created.",
                         "format": "date-time"
                       },
                       "createdBy": {
@@ -31267,7 +31387,65 @@
                       }
                     }
                   }
-                }
+                },
+                "example": [
+                  {
+                    "id": "3f8b2a1e-7c4d-4e9a-b5f6-1d2e3a4b5c6d",
+                    "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    "integrationId": "550e8400-e29b-41d4-a716-446655440000",
+                    "group": {
+                      "groupRef": "org_12345",
+                      "groupName": "Acme Corp",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "createTime": "2024-01-15T10:30:00.000000Z"
+                    },
+                    "healthStatus": "healthy",
+                    "connection": {
+                      "id": "9d8c7b6a-5e4f-3a2b-1c0d-ef9876543210",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "provider": "salesforce",
+                      "group": {
+                        "groupRef": "org_12345",
+                        "groupName": "Acme Corp",
+                        "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "createTime": "2024-01-15T10:30:00.000000Z"
+                      },
+                      "consumer": {
+                        "consumerRef": "user_67890",
+                        "consumerName": "Jane Smith",
+                        "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "createTime": "2024-01-15T10:30:00.000000Z"
+                      },
+                      "createTime": "2024-01-15T10:30:00.000000Z",
+                      "authScheme": "oauth2/authorizationCode",
+                      "status": "working"
+                    },
+                    "createTime": "2024-01-15T10:30:00.000000Z",
+                    "createdBy": "consumer:user_67890",
+                    "config": {
+                      "id": "e4d3c2b1-a098-7654-3210-fedcba987654",
+                      "revisionId": "f0e1d2c3-b4a5-6789-0abc-def123456789",
+                      "createTime": "2024-01-15T10:30:00.000000Z",
+                      "createdBy": "consumer:user_67890",
+                      "content": {
+                        "provider": "salesforce",
+                        "read": {
+                          "objects": {
+                            "account": {
+                              "objectName": "account",
+                              "schedule": "*/15 * * * *",
+                              "destination": "accountWebhook",
+                              "selectedFields": {
+                                "name": true,
+                                "industry": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
               }
             }
           },
@@ -68062,7 +68240,7 @@
           },
           "createTime": {
             "type": "string",
-            "description": "The time the integration was first installed.",
+            "description": "The time the installation was created.",
             "format": "date-time"
           },
           "createdBy": {
