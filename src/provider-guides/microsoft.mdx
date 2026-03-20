@@ -25,7 +25,26 @@ We also have connectors for:
 ### Supported Actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://graph.microsoft.com`.
+
+### Supported Objects
+
+The Microsoft Graph connector supports **many Microsoft Graph API objects** including but not limited to:
+
+- [users](https://learn.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0)
+- [calendars](https://learn.microsoft.com/en-us/graph/api/resources/calendar?view=graph-rest-1.0)
+- [me/events](https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-1.0)
+- [me/messages](https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0)
+
+For the complete list of supported Graph API resources, refer to the [Microsoft Graph API documentation](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
+
+**Required Scopes**: Use the [Graph Permissions](https://graphpermissions.merill.net/permission/) to identify exact permissions needed for each object operation.
+
+### Example Integration
+
+For an example manifest file of a Microsoft integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/microsoft/amp.yaml).
 
 ## Before You Get Started
 
@@ -95,5 +114,17 @@ Follow the steps below to create a Microsoft app and add the Ampersand redirect 
 7. Enter the exact set of scopes that you had previously configured in your Microsoft app.
 
 8. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Microsoft:
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/microsoft/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 
 <Warning>In order to receive a refresh token and be able to access your customers' Microsoft Graph APIs without reauthenticating, you must include the `offline_access` permission when registering the app with Ampersand</Warning>
