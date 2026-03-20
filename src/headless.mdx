@@ -209,7 +209,13 @@ The following hooks provide granular control over [Installation](/concepts#insta
 - `useUpdateInstallation`
 - `useDeleteInstallation`
 
-For example, the `useCreateInstallation` hook is used to create a new Installation. It returns the following:
+For example, the `useCreateInstallation` hook is used to create a new Installation.
+
+<Note>
+As of `v2.12.1`, `useCreateInstallation` automatically populates `config.provider` from the integration object if it is not explicitly set in the config. This means you no longer need to manually set the provider in most cases.
+</Note>
+
+It returns the following:
   - `createInstallation`: a tanstack-query mutation function to create a new Installation. Its signature is:
   ```typescript
   (params: {
@@ -291,6 +297,7 @@ The `useManifest` hook provides the data that you need to build input forms for 
 import { useManifest } from "@amp-labs/react";
 
 const {
+  getReadObjects: () => HydratedIntegrationObject[],  // Get all read objects from manifest (v2.12.1+)
   getReadObject: (objectName: string) => {
     object: HydratedIntegrationObject | null;
     getRequiredFields: () => HydratedIntegrationField[] | null;
@@ -331,6 +338,20 @@ The `getCustomerFieldsForObject` function returned by `useManifest` allows you t
 
 [The fields mapping page of the demo app](https://github.com/amp-labs/demo-headless/blob/main/src/components/FieldMappingTable/FieldMappingTable.tsx) provides a full example for using `useManifest` to build the UI for customers to configure the installation.
 
+### Get all read objects from manifest
+
+The `getReadObjects` function returned by `useManifest` returns all read objects defined in the manifest, which is useful when you need to iterate over all objects rather than fetching them individually by name. Supported in `@amp-labs/react` `v2.12.1+`.
+
+```tsx
+const { getReadObjects } = useManifest();
+
+const allReadObjects = getReadObjects(); // HydratedIntegrationObject[]
+
+allReadObjects.forEach((obj) => {
+  console.log(obj.objectName);
+});
+```
+
 ## Local config management
 
 Managing the [Config](/terminology#config) that keeps track of each customer's preference for how the integration behaves can be complex, with deeply nested objects and the need to manage this state locally.
@@ -352,6 +373,7 @@ It returns these fields:
   get: () => InstallationConfigContent;  // Get current configuration
   reset: () => void;  // Reset to installation's current config
   setDraft: (config: InstallationConfigContent) => void;  // Update draft config
+  removeObject: (objectName: string) => void;  // Remove object from all actions (v2.12.1+)
   readObject: (objectName: string) => ReadObjectHandlers;  // Manage read object config
   writeObject: (objectName: string) => WriteObjectHandlers;  // Manage write object config
 }
@@ -359,10 +381,13 @@ It returns these fields:
 // Shape of ReadObjectHandlers (returned by `readObject` function above).
 {
   object: BaseReadConfigObject | undefined;  // Current read object configuration
+  setEnableRead: () => void;  // Enable reading for object, initializes with defaults (v2.12.1+)
+  setDisableRead: () => void;  // Disable reading for object (v2.12.1+)
   getSelectedField: (fieldName: string) => boolean;  // Check if field is selected
   setSelectedField: (params: { fieldName: string; selected: boolean }) => void;  // Toggle field selection
   getFieldMapping: (fieldName: string) => string | undefined;  // Get field mapping
   setFieldMapping: (params: { fieldName: string; mapToName: string }) => void;  // Set field mapping
+  deleteFieldMapping: (mapToName: string) => void;  // Delete field mapping
 }
 
 // Shape of WriteObjectHandlers (returned by `writeObject` function above).
@@ -471,6 +496,43 @@ function ReadObjectConfig() {
       config: config.get(),
     });
   };
+}
+```
+
+### Enable, disable, and remove read objects
+
+The `readObject()` handlers include `setEnableRead` and `setDisableRead` to control whether an object is read. `removeObject` fully deletes an object from the config. Supported in `@amp-labs/react` `v2.12.1+`. The naming mirrors the write pattern: `config.readObject("contacts").setEnableRead()` is consistent with `config.writeObject("contacts").setEnableWrite()`.
+
+- **`setEnableRead`** — initializes a read object in the draft config and enables it. Safe to call multiple times (idempotent).
+- **`setDisableRead`** — pauses reads for the object without removing its config (sets a `disabled` flag).
+- **`removeObject`** — fully deletes an object from all actions (both read and write) in the draft config.
+
+<Note>
+Calling `setSelectedField` or `setFieldMapping` will also automatically enable the read object, so `setEnableRead` is primarily useful when you want to enable an object without configuring fields, or to re-enable an object that was previously disabled.
+</Note>
+
+```typescript
+function ObjectManager() {
+  const config = useLocalConfig();
+  const { createInstallation } = useCreateInstallation();
+
+  // Enable reading for the "contact" and "account" objects
+  config.readObject("contact").setEnableRead();
+  config.readObject("account").setEnableRead();
+
+  // Pause reads for "account" (keeps its config intact)
+  config.readObject("account").setDisableRead();
+
+  // Or fully remove "account" from both read and write config
+  config.removeObject("account");
+
+  const handleSave = async () => {
+    await createInstallation({
+      config: config.get(),
+    });
+  };
+
+  return (<button onClick={handleSave}>Create installation</button>)
 }
 ```
 
