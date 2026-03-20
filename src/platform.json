@@ -640,7 +640,7 @@
     "/projects/{projectIdOrName}/connections/{connectionId}:oauth-update": {
       "patch": {
         "operationId": "oauthUpdate",
-        "summary": "Get URL for updating OAuth connection",
+        "summary": "Generate OAuth authorization URL for existing connection",
         "description": "Generate a URL for the browser to render to kick off an OAuth flow that updates an existing connection. Use this when the connection's credentials need to be refreshed. To start an OAuth flow without specifying a connection ID, use the [/oauth-connect endpoint](https://docs.withampersand.com/reference/oauth/generate-oauth-authorization-url) instead.\n",
         "tags": [
           "OAuth"
@@ -667,12 +667,11 @@
         ],
         "responses": {
           "200": {
-            "description": "URL generated successfully",
+            "description": "URL to initiate OAuth flow",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string",
-                  "description": "URL to initiate OAuth flow",
                   "example": "https://login.salesforce.com/services/oauth2/authorize?client_id=xxx&redirect_uri=https%3A%2F%2Fapi.withampersand.com%2Fcallbacks%2Fv1%2Foauth&state=xxx"
                 }
               }
@@ -1142,7 +1141,8 @@
     },
     "/projects": {
       "get": {
-        "summary": "List all projects that the API key or user credential has access to.",
+        "summary": "List projects",
+        "description": "Lists projects your credentials can access.",
         "operationId": "listProjects",
         "tags": [
           "Project"
@@ -1160,28 +1160,29 @@
                       "appName",
                       "createTime",
                       "id",
-                      "name"
+                      "name",
+                      "orgId"
                     ],
                     "type": "object",
                     "properties": {
                       "id": {
                         "type": "string",
-                        "description": "The project ID.",
-                        "example": "my-project"
+                        "description": "The unique identifier for the project.",
+                        "example": "proj_9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                       },
                       "name": {
                         "type": "string",
-                        "description": "The project name.",
+                        "description": "The unique name for the project.",
                         "example": "mailmonkey-staging"
                       },
                       "appName": {
                         "type": "string",
-                        "description": "The name of the application, which is displayed to end users.",
+                        "description": "The display name of the application, shown to end users during the connection flow.",
                         "example": "MailMonkey"
                       },
                       "orgId": {
                         "type": "string",
-                        "description": "The organization ID that this project belongs to.",
+                        "description": "The ID of the organization that this project belongs to.",
                         "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                       },
                       "createTime": {
@@ -1196,7 +1197,7 @@
                       },
                       "entitlements": {
                         "type": "object",
-                        "description": "The entitlements for the project.",
+                        "description": "Plan-based feature flags for the project. These are managed by Ampersand and cannot be set via the API.",
                         "properties": {
                           "brandingRemoval": {
                             "type": "object",
@@ -1204,11 +1205,11 @@
                               "value"
                             ],
                             "x-go-type-skip-optional-pointer": true,
-                            "description": "Whether branding can be removed from the UI library.",
+                            "description": "Controls whether Ampersand branding is removed from the embeddable UI components.",
                             "properties": {
                               "value": {
                                 "type": "boolean",
-                                "description": "Whether branding has been removed from the project."
+                                "description": "True if Ampersand branding has been removed for this project."
                               }
                             }
                           }
@@ -1359,6 +1360,7 @@
       },
       "post": {
         "summary": "Create a new project",
+        "description": "Creates a new project within an organization. A project is a container for provider apps, integrations, and connections.",
         "operationId": "createProject",
         "tags": [
           "Project"
@@ -1376,20 +1378,30 @@
                 "properties": {
                   "appName": {
                     "type": "string",
-                    "description": "The app name.",
+                    "description": "The display name of your application, shown to end users during the connection flow.",
+                    "minLength": 1,
+                    "maxLength": 128,
                     "example": "MailMonkey"
                   },
                   "name": {
                     "type": "string",
-                    "description": "The project name. Must be alphanumerics and hyphens only. Project names will be save in lowercase.",
+                    "description": "The unique name for the project. Must contain only letters, numbers, and hyphens. Values are normalized to lowercase on save.",
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$",
+                    "minLength": 2,
+                    "maxLength": 128,
                     "example": "mailmonkey-staging"
                   },
                   "orgId": {
                     "type": "string",
-                    "description": "The organization ID.",
+                    "description": "The ID of the organization this project belongs to. Obtain this from the Ampersand Dashboard or by calling `GET /orgs`.",
                     "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                   }
                 }
+              },
+              "example": {
+                "appName": "MailMonkey",
+                "name": "mailmonkey-staging",
+                "orgId": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
               }
             }
           },
@@ -1397,7 +1409,7 @@
         },
         "responses": {
           "201": {
-            "description": "The newly created project",
+            "description": "The newly created project.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1406,28 +1418,29 @@
                     "appName",
                     "createTime",
                     "id",
-                    "name"
+                    "name",
+                    "orgId"
                   ],
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The project ID.",
-                      "example": "my-project"
+                      "description": "The unique identifier for the project.",
+                      "example": "proj_9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "name": {
                       "type": "string",
-                      "description": "The project name.",
+                      "description": "The unique name for the project.",
                       "example": "mailmonkey-staging"
                     },
                     "appName": {
                       "type": "string",
-                      "description": "The name of the application, which is displayed to end users.",
+                      "description": "The display name of the application, shown to end users during the connection flow.",
                       "example": "MailMonkey"
                     },
                     "orgId": {
                       "type": "string",
-                      "description": "The organization ID that this project belongs to.",
+                      "description": "The ID of the organization that this project belongs to.",
                       "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "createTime": {
@@ -1442,7 +1455,7 @@
                     },
                     "entitlements": {
                       "type": "object",
-                      "description": "The entitlements for the project.",
+                      "description": "Plan-based feature flags for the project. These are managed by Ampersand and cannot be set via the API.",
                       "properties": {
                         "brandingRemoval": {
                           "type": "object",
@@ -1450,11 +1463,11 @@
                             "value"
                           ],
                           "x-go-type-skip-optional-pointer": true,
-                          "description": "Whether branding can be removed from the UI library.",
+                          "description": "Controls whether Ampersand branding is removed from the embeddable UI components.",
                           "properties": {
                             "value": {
                               "type": "boolean",
-                              "description": "Whether branding has been removed from the project."
+                              "description": "True if Ampersand branding has been removed for this project."
                             }
                           }
                         }
@@ -1466,7 +1479,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Entity — the request body failed validation (e.g. invalid characters in project name, missing required fields).",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -1931,6 +1944,7 @@
     "/projects/{projectIdOrName}": {
       "get": {
         "summary": "Get a project",
+        "description": "Get a project by its ID or name.",
         "operationId": "getProject",
         "tags": [
           "Project"
@@ -1950,6 +1964,7 @@
             "name": "includeEntitlements",
             "in": "query",
             "required": false,
+            "description": "If true, the response includes the project's entitlements (plan-based feature flags). Defaults to false.",
             "schema": {
               "type": "boolean",
               "default": false
@@ -1958,7 +1973,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Project",
+            "description": "The requested project.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1967,28 +1982,29 @@
                     "appName",
                     "createTime",
                     "id",
-                    "name"
+                    "name",
+                    "orgId"
                   ],
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The project ID.",
-                      "example": "my-project"
+                      "description": "The unique identifier for the project.",
+                      "example": "proj_9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "name": {
                       "type": "string",
-                      "description": "The project name.",
+                      "description": "The unique name for the project.",
                       "example": "mailmonkey-staging"
                     },
                     "appName": {
                       "type": "string",
-                      "description": "The name of the application, which is displayed to end users.",
+                      "description": "The display name of the application, shown to end users during the connection flow.",
                       "example": "MailMonkey"
                     },
                     "orgId": {
                       "type": "string",
-                      "description": "The organization ID that this project belongs to.",
+                      "description": "The ID of the organization that this project belongs to.",
                       "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "createTime": {
@@ -2003,7 +2019,7 @@
                     },
                     "entitlements": {
                       "type": "object",
-                      "description": "The entitlements for the project.",
+                      "description": "Plan-based feature flags for the project. These are managed by Ampersand and cannot be set via the API.",
                       "properties": {
                         "brandingRemoval": {
                           "type": "object",
@@ -2011,340 +2027,16 @@
                             "value"
                           ],
                           "x-go-type-skip-optional-pointer": true,
-                          "description": "Whether branding can be removed from the UI library.",
+                          "description": "Controls whether Ampersand branding is removed from the embeddable UI components.",
                           "properties": {
                             "value": {
                               "type": "boolean",
-                              "description": "Whether branding has been removed from the project."
+                              "description": "True if Ampersand branding has been removed for this project."
                             }
                           }
                         }
                       }
                     }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Project not found",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "title": "Input Validation Problem",
-                  "type": "object",
-                  "allOf": [
-                    {
-                      "title": "API Problem",
-                      "type": "object",
-                      "allOf": [
-                        {
-                          "title": "Problem",
-                          "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that identifies the problem type",
-                              "default": "about:blank"
-                            },
-                            "href": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
-                            },
-                            "title": {
-                              "type": "string",
-                              "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
-                              "example": "Service Unavailable"
-                            },
-                            "status": {
-                              "type": "integer",
-                              "format": "int32",
-                              "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-                              "minimum": 400,
-                              "maximum": 600,
-                              "exclusiveMaximum": true,
-                              "example": 503
-                            },
-                            "detail": {
-                              "type": "string",
-                              "description": "A human-readable explanation specific to this occurrence of the problem"
-                            },
-                            "instance": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
-                            }
-                          },
-                          "example": {
-                            "type": "urn:problem-type:exampleOrganization:exampleProblem",
-                            "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
-                            "title": "Description of the type of problem that occurred",
-                            "status": 400,
-                            "detail": "Description of specific occurrence of the problem",
-                            "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
-                          }
-                        }
-                      ],
-                      "properties": {
-                        "subsystem": {
-                          "type": "string",
-                          "description": "The subsystem that generated the problem",
-                          "example": "api"
-                        },
-                        "time": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "The time the problem occurred, formatted as RFC-3339",
-                          "example": "2024-04-22T18:55:28.456076Z"
-                        },
-                        "requestId": {
-                          "type": "string",
-                          "description": "A unique identifier for the request, useful for debugging",
-                          "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
-                        },
-                        "causes": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "description": "A brief description of something which caused the problem",
-                            "example": "database connection failed"
-                          },
-                          "example": [
-                            "database connection failed",
-                            "database query failed",
-                            "unable to fetch user"
-                          ],
-                          "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
-                        },
-                        "remedy": {
-                          "type": "string",
-                          "description": "A brief description of how to resolve the problem",
-                          "example": "Shorten your input to be under 100 characters"
-                        },
-                        "supportEmail": {
-                          "type": "string",
-                          "format": "email",
-                          "description": "An email address to contact for support",
-                          "example": "support@withampersand.com"
-                        },
-                        "supportPhone": {
-                          "type": "string",
-                          "description": "A phone number to contact for support",
-                          "example": "+1-555-555-5555"
-                        },
-                        "supportUrl": {
-                          "type": "string",
-                          "format": "uri",
-                          "description": "A URL to contact for support",
-                          "example": "https://withampersand.com/support"
-                        },
-                        "retryable": {
-                          "type": "boolean",
-                          "description": "Whether the request can be retried",
-                          "example": false
-                        },
-                        "retryAfter": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
-                          "example": "2024-04-22T18:55:28.456076Z"
-                        },
-                        "context": {
-                          "type": "object",
-                          "description": "Additional context for the problem",
-                          "additionalProperties": true,
-                          "example": {
-                            "name": "Rick Sanchez"
-                          }
-                        }
-                      }
-                    }
-                  ],
-                  "properties": {
-                    "issues": {
-                      "type": "array",
-                      "items": {
-                        "title": "Input Validation Issue",
-                        "type": "object",
-                        "description": "An issue detected during input validation.\n",
-                        "allOf": [
-                          {
-                            "title": "API Problem",
-                            "type": "object",
-                            "allOf": [
-                              {
-                                "title": "Problem",
-                                "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that identifies the problem type",
-                                    "default": "about:blank"
-                                  },
-                                  "href": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
-                                  },
-                                  "title": {
-                                    "type": "string",
-                                    "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
-                                    "example": "Service Unavailable"
-                                  },
-                                  "status": {
-                                    "type": "integer",
-                                    "format": "int32",
-                                    "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-                                    "minimum": 400,
-                                    "maximum": 600,
-                                    "exclusiveMaximum": true,
-                                    "example": 503
-                                  },
-                                  "detail": {
-                                    "type": "string",
-                                    "description": "A human-readable explanation specific to this occurrence of the problem"
-                                  },
-                                  "instance": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
-                                  }
-                                },
-                                "example": {
-                                  "type": "urn:problem-type:exampleOrganization:exampleProblem",
-                                  "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
-                                  "title": "Description of the type of problem that occurred",
-                                  "status": 400,
-                                  "detail": "Description of specific occurrence of the problem",
-                                  "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
-                                }
-                              }
-                            ],
-                            "properties": {
-                              "subsystem": {
-                                "type": "string",
-                                "description": "The subsystem that generated the problem",
-                                "example": "api"
-                              },
-                              "time": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "The time the problem occurred, formatted as RFC-3339",
-                                "example": "2024-04-22T18:55:28.456076Z"
-                              },
-                              "requestId": {
-                                "type": "string",
-                                "description": "A unique identifier for the request, useful for debugging",
-                                "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
-                              },
-                              "causes": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "description": "A brief description of something which caused the problem",
-                                  "example": "database connection failed"
-                                },
-                                "example": [
-                                  "database connection failed",
-                                  "database query failed",
-                                  "unable to fetch user"
-                                ],
-                                "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
-                              },
-                              "remedy": {
-                                "type": "string",
-                                "description": "A brief description of how to resolve the problem",
-                                "example": "Shorten your input to be under 100 characters"
-                              },
-                              "supportEmail": {
-                                "type": "string",
-                                "format": "email",
-                                "description": "An email address to contact for support",
-                                "example": "support@withampersand.com"
-                              },
-                              "supportPhone": {
-                                "type": "string",
-                                "description": "A phone number to contact for support",
-                                "example": "+1-555-555-5555"
-                              },
-                              "supportUrl": {
-                                "type": "string",
-                                "format": "uri",
-                                "description": "A URL to contact for support",
-                                "example": "https://withampersand.com/support"
-                              },
-                              "retryable": {
-                                "type": "boolean",
-                                "description": "Whether the request can be retried",
-                                "example": false
-                              },
-                              "retryAfter": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
-                                "example": "2024-04-22T18:55:28.456076Z"
-                              },
-                              "context": {
-                                "type": "object",
-                                "description": "Additional context for the problem",
-                                "additionalProperties": true,
-                                "example": {
-                                  "name": "Rick Sanchez"
-                                }
-                              }
-                            }
-                          }
-                        ],
-                        "properties": {
-                          "in": {
-                            "type": "string",
-                            "description": "The location of the invalid input",
-                            "enum": [
-                              "body",
-                              "header",
-                              "path",
-                              "query"
-                            ]
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "The name of the invalid input"
-                          },
-                          "value": {
-                            "description": "The value of the erroneous input"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "example": {
-                    "type": "about:blank",
-                    "title": "Bad Request",
-                    "status": 400,
-                    "detail": "The input message is incorrect",
-                    "instance": "123456-1234-1235-4567489798",
-                    "issues": [
-                      {
-                        "type": "about:blank",
-                        "detail": "exampleNumericProperty should be numeric",
-                        "in": "path",
-                        "name": "exampleNumericProperty",
-                        "value": "abc"
-                      },
-                      {
-                        "type": "about:blank",
-                        "title": "Input isn't valid with respect to schema",
-                        "detail": "examplePropertyWithPattern a2345678901 doesn't match pattern '^\\d{11}$'",
-                        "in": "body",
-                        "name": "items[0].examplePropertyWithPattern",
-                        "value": "a2345678901"
-                      }
-                    ]
                   }
                 }
               }
@@ -2490,6 +2182,7 @@
       "patch": {
         "summary": "Update a project",
         "operationId": "updateProject",
+        "description": "Update a project's mutable fields using field masks. Currently, the updatable fields are `appName` (the display name shown to end users) and `name` (the unique project identifier).",
         "tags": [
           "Project"
         ],
@@ -2520,10 +2213,9 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- appName\n- name\n",
+                    "description": "Array of field paths specifying which fields to update. Each path must have a\ncorresponding value in the `project` object. A field included in `project` but\nnot listed here will be ignored. Allowed values:\n- `appName` - the display name of the application, shown to end users during the connection flow.\n- `name` - the unique project identifier (must be unique within your organization).\n",
                     "example": [
-                      "appName",
-                      "name"
+                      "appName"
                     ]
                   },
                   "project": {
@@ -2531,17 +2223,25 @@
                     "properties": {
                       "appName": {
                         "type": "string",
-                        "description": "The app name.",
+                        "description": "The display name of the application, shown to end users during the connection flow.",
                         "example": "MailMonkey"
                       },
                       "name": {
                         "type": "string",
-                        "description": "The project name.",
+                        "description": "The unique name for the project. Must be unique within the organization.",
                         "example": "mailmonkey-staging"
                       }
                     },
-                    "description": "The project fields to update. (Only include the fields you'd like to update.)"
+                    "description": "The project fields to update. Only fields whose paths are listed in `updateMask`\nwill be applied; all other fields in this object are ignored.\n"
                   }
+                }
+              },
+              "example": {
+                "updateMask": [
+                  "appName"
+                ],
+                "project": {
+                  "appName": "MailMonkey Pro"
                 }
               }
             }
@@ -2559,28 +2259,29 @@
                     "appName",
                     "createTime",
                     "id",
-                    "name"
+                    "name",
+                    "orgId"
                   ],
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The project ID.",
-                      "example": "my-project"
+                      "description": "The unique identifier for the project.",
+                      "example": "proj_9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "name": {
                       "type": "string",
-                      "description": "The project name.",
+                      "description": "The unique name for the project.",
                       "example": "mailmonkey-staging"
                     },
                     "appName": {
                       "type": "string",
-                      "description": "The name of the application, which is displayed to end users.",
+                      "description": "The display name of the application, shown to end users during the connection flow.",
                       "example": "MailMonkey"
                     },
                     "orgId": {
                       "type": "string",
-                      "description": "The organization ID that this project belongs to.",
+                      "description": "The ID of the organization that this project belongs to.",
                       "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "createTime": {
@@ -2595,7 +2296,7 @@
                     },
                     "entitlements": {
                       "type": "object",
-                      "description": "The entitlements for the project.",
+                      "description": "Plan-based feature flags for the project. These are managed by Ampersand and cannot be set via the API.",
                       "properties": {
                         "brandingRemoval": {
                           "type": "object",
@@ -2603,664 +2304,16 @@
                             "value"
                           ],
                           "x-go-type-skip-optional-pointer": true,
-                          "description": "Whether branding can be removed from the UI library.",
+                          "description": "Controls whether Ampersand branding is removed from the embeddable UI components.",
                           "properties": {
                             "value": {
                               "type": "boolean",
-                              "description": "Whether branding has been removed from the project."
+                              "description": "True if Ampersand branding has been removed for this project."
                             }
                           }
                         }
                       }
                     }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "title": "Input Validation Problem",
-                  "type": "object",
-                  "allOf": [
-                    {
-                      "title": "API Problem",
-                      "type": "object",
-                      "allOf": [
-                        {
-                          "title": "Problem",
-                          "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that identifies the problem type",
-                              "default": "about:blank"
-                            },
-                            "href": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
-                            },
-                            "title": {
-                              "type": "string",
-                              "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
-                              "example": "Service Unavailable"
-                            },
-                            "status": {
-                              "type": "integer",
-                              "format": "int32",
-                              "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-                              "minimum": 400,
-                              "maximum": 600,
-                              "exclusiveMaximum": true,
-                              "example": 503
-                            },
-                            "detail": {
-                              "type": "string",
-                              "description": "A human-readable explanation specific to this occurrence of the problem"
-                            },
-                            "instance": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
-                            }
-                          },
-                          "example": {
-                            "type": "urn:problem-type:exampleOrganization:exampleProblem",
-                            "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
-                            "title": "Description of the type of problem that occurred",
-                            "status": 400,
-                            "detail": "Description of specific occurrence of the problem",
-                            "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
-                          }
-                        }
-                      ],
-                      "properties": {
-                        "subsystem": {
-                          "type": "string",
-                          "description": "The subsystem that generated the problem",
-                          "example": "api"
-                        },
-                        "time": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "The time the problem occurred, formatted as RFC-3339",
-                          "example": "2024-04-22T18:55:28.456076Z"
-                        },
-                        "requestId": {
-                          "type": "string",
-                          "description": "A unique identifier for the request, useful for debugging",
-                          "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
-                        },
-                        "causes": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "description": "A brief description of something which caused the problem",
-                            "example": "database connection failed"
-                          },
-                          "example": [
-                            "database connection failed",
-                            "database query failed",
-                            "unable to fetch user"
-                          ],
-                          "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
-                        },
-                        "remedy": {
-                          "type": "string",
-                          "description": "A brief description of how to resolve the problem",
-                          "example": "Shorten your input to be under 100 characters"
-                        },
-                        "supportEmail": {
-                          "type": "string",
-                          "format": "email",
-                          "description": "An email address to contact for support",
-                          "example": "support@withampersand.com"
-                        },
-                        "supportPhone": {
-                          "type": "string",
-                          "description": "A phone number to contact for support",
-                          "example": "+1-555-555-5555"
-                        },
-                        "supportUrl": {
-                          "type": "string",
-                          "format": "uri",
-                          "description": "A URL to contact for support",
-                          "example": "https://withampersand.com/support"
-                        },
-                        "retryable": {
-                          "type": "boolean",
-                          "description": "Whether the request can be retried",
-                          "example": false
-                        },
-                        "retryAfter": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
-                          "example": "2024-04-22T18:55:28.456076Z"
-                        },
-                        "context": {
-                          "type": "object",
-                          "description": "Additional context for the problem",
-                          "additionalProperties": true,
-                          "example": {
-                            "name": "Rick Sanchez"
-                          }
-                        }
-                      }
-                    }
-                  ],
-                  "properties": {
-                    "issues": {
-                      "type": "array",
-                      "items": {
-                        "title": "Input Validation Issue",
-                        "type": "object",
-                        "description": "An issue detected during input validation.\n",
-                        "allOf": [
-                          {
-                            "title": "API Problem",
-                            "type": "object",
-                            "allOf": [
-                              {
-                                "title": "Problem",
-                                "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that identifies the problem type",
-                                    "default": "about:blank"
-                                  },
-                                  "href": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
-                                  },
-                                  "title": {
-                                    "type": "string",
-                                    "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
-                                    "example": "Service Unavailable"
-                                  },
-                                  "status": {
-                                    "type": "integer",
-                                    "format": "int32",
-                                    "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-                                    "minimum": 400,
-                                    "maximum": 600,
-                                    "exclusiveMaximum": true,
-                                    "example": 503
-                                  },
-                                  "detail": {
-                                    "type": "string",
-                                    "description": "A human-readable explanation specific to this occurrence of the problem"
-                                  },
-                                  "instance": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
-                                  }
-                                },
-                                "example": {
-                                  "type": "urn:problem-type:exampleOrganization:exampleProblem",
-                                  "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
-                                  "title": "Description of the type of problem that occurred",
-                                  "status": 400,
-                                  "detail": "Description of specific occurrence of the problem",
-                                  "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
-                                }
-                              }
-                            ],
-                            "properties": {
-                              "subsystem": {
-                                "type": "string",
-                                "description": "The subsystem that generated the problem",
-                                "example": "api"
-                              },
-                              "time": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "The time the problem occurred, formatted as RFC-3339",
-                                "example": "2024-04-22T18:55:28.456076Z"
-                              },
-                              "requestId": {
-                                "type": "string",
-                                "description": "A unique identifier for the request, useful for debugging",
-                                "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
-                              },
-                              "causes": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "description": "A brief description of something which caused the problem",
-                                  "example": "database connection failed"
-                                },
-                                "example": [
-                                  "database connection failed",
-                                  "database query failed",
-                                  "unable to fetch user"
-                                ],
-                                "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
-                              },
-                              "remedy": {
-                                "type": "string",
-                                "description": "A brief description of how to resolve the problem",
-                                "example": "Shorten your input to be under 100 characters"
-                              },
-                              "supportEmail": {
-                                "type": "string",
-                                "format": "email",
-                                "description": "An email address to contact for support",
-                                "example": "support@withampersand.com"
-                              },
-                              "supportPhone": {
-                                "type": "string",
-                                "description": "A phone number to contact for support",
-                                "example": "+1-555-555-5555"
-                              },
-                              "supportUrl": {
-                                "type": "string",
-                                "format": "uri",
-                                "description": "A URL to contact for support",
-                                "example": "https://withampersand.com/support"
-                              },
-                              "retryable": {
-                                "type": "boolean",
-                                "description": "Whether the request can be retried",
-                                "example": false
-                              },
-                              "retryAfter": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
-                                "example": "2024-04-22T18:55:28.456076Z"
-                              },
-                              "context": {
-                                "type": "object",
-                                "description": "Additional context for the problem",
-                                "additionalProperties": true,
-                                "example": {
-                                  "name": "Rick Sanchez"
-                                }
-                              }
-                            }
-                          }
-                        ],
-                        "properties": {
-                          "in": {
-                            "type": "string",
-                            "description": "The location of the invalid input",
-                            "enum": [
-                              "body",
-                              "header",
-                              "path",
-                              "query"
-                            ]
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "The name of the invalid input"
-                          },
-                          "value": {
-                            "description": "The value of the erroneous input"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "example": {
-                    "type": "about:blank",
-                    "title": "Bad Request",
-                    "status": 400,
-                    "detail": "The input message is incorrect",
-                    "instance": "123456-1234-1235-4567489798",
-                    "issues": [
-                      {
-                        "type": "about:blank",
-                        "detail": "exampleNumericProperty should be numeric",
-                        "in": "path",
-                        "name": "exampleNumericProperty",
-                        "value": "abc"
-                      },
-                      {
-                        "type": "about:blank",
-                        "title": "Input isn't valid with respect to schema",
-                        "detail": "examplePropertyWithPattern a2345678901 doesn't match pattern '^\\d{11}$'",
-                        "in": "body",
-                        "name": "items[0].examplePropertyWithPattern",
-                        "value": "a2345678901"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Unprocessable Entity",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "title": "Input Validation Problem",
-                  "type": "object",
-                  "allOf": [
-                    {
-                      "title": "API Problem",
-                      "type": "object",
-                      "allOf": [
-                        {
-                          "title": "Problem",
-                          "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that identifies the problem type",
-                              "default": "about:blank"
-                            },
-                            "href": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
-                            },
-                            "title": {
-                              "type": "string",
-                              "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
-                              "example": "Service Unavailable"
-                            },
-                            "status": {
-                              "type": "integer",
-                              "format": "int32",
-                              "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-                              "minimum": 400,
-                              "maximum": 600,
-                              "exclusiveMaximum": true,
-                              "example": 503
-                            },
-                            "detail": {
-                              "type": "string",
-                              "description": "A human-readable explanation specific to this occurrence of the problem"
-                            },
-                            "instance": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
-                            }
-                          },
-                          "example": {
-                            "type": "urn:problem-type:exampleOrganization:exampleProblem",
-                            "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
-                            "title": "Description of the type of problem that occurred",
-                            "status": 400,
-                            "detail": "Description of specific occurrence of the problem",
-                            "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
-                          }
-                        }
-                      ],
-                      "properties": {
-                        "subsystem": {
-                          "type": "string",
-                          "description": "The subsystem that generated the problem",
-                          "example": "api"
-                        },
-                        "time": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "The time the problem occurred, formatted as RFC-3339",
-                          "example": "2024-04-22T18:55:28.456076Z"
-                        },
-                        "requestId": {
-                          "type": "string",
-                          "description": "A unique identifier for the request, useful for debugging",
-                          "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
-                        },
-                        "causes": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "description": "A brief description of something which caused the problem",
-                            "example": "database connection failed"
-                          },
-                          "example": [
-                            "database connection failed",
-                            "database query failed",
-                            "unable to fetch user"
-                          ],
-                          "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
-                        },
-                        "remedy": {
-                          "type": "string",
-                          "description": "A brief description of how to resolve the problem",
-                          "example": "Shorten your input to be under 100 characters"
-                        },
-                        "supportEmail": {
-                          "type": "string",
-                          "format": "email",
-                          "description": "An email address to contact for support",
-                          "example": "support@withampersand.com"
-                        },
-                        "supportPhone": {
-                          "type": "string",
-                          "description": "A phone number to contact for support",
-                          "example": "+1-555-555-5555"
-                        },
-                        "supportUrl": {
-                          "type": "string",
-                          "format": "uri",
-                          "description": "A URL to contact for support",
-                          "example": "https://withampersand.com/support"
-                        },
-                        "retryable": {
-                          "type": "boolean",
-                          "description": "Whether the request can be retried",
-                          "example": false
-                        },
-                        "retryAfter": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
-                          "example": "2024-04-22T18:55:28.456076Z"
-                        },
-                        "context": {
-                          "type": "object",
-                          "description": "Additional context for the problem",
-                          "additionalProperties": true,
-                          "example": {
-                            "name": "Rick Sanchez"
-                          }
-                        }
-                      }
-                    }
-                  ],
-                  "properties": {
-                    "issues": {
-                      "type": "array",
-                      "items": {
-                        "title": "Input Validation Issue",
-                        "type": "object",
-                        "description": "An issue detected during input validation.\n",
-                        "allOf": [
-                          {
-                            "title": "API Problem",
-                            "type": "object",
-                            "allOf": [
-                              {
-                                "title": "Problem",
-                                "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that identifies the problem type",
-                                    "default": "about:blank"
-                                  },
-                                  "href": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
-                                  },
-                                  "title": {
-                                    "type": "string",
-                                    "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
-                                    "example": "Service Unavailable"
-                                  },
-                                  "status": {
-                                    "type": "integer",
-                                    "format": "int32",
-                                    "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
-                                    "minimum": 400,
-                                    "maximum": 600,
-                                    "exclusiveMaximum": true,
-                                    "example": 503
-                                  },
-                                  "detail": {
-                                    "type": "string",
-                                    "description": "A human-readable explanation specific to this occurrence of the problem"
-                                  },
-                                  "instance": {
-                                    "type": "string",
-                                    "format": "uri",
-                                    "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
-                                  }
-                                },
-                                "example": {
-                                  "type": "urn:problem-type:exampleOrganization:exampleProblem",
-                                  "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
-                                  "title": "Description of the type of problem that occurred",
-                                  "status": 400,
-                                  "detail": "Description of specific occurrence of the problem",
-                                  "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
-                                }
-                              }
-                            ],
-                            "properties": {
-                              "subsystem": {
-                                "type": "string",
-                                "description": "The subsystem that generated the problem",
-                                "example": "api"
-                              },
-                              "time": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "The time the problem occurred, formatted as RFC-3339",
-                                "example": "2024-04-22T18:55:28.456076Z"
-                              },
-                              "requestId": {
-                                "type": "string",
-                                "description": "A unique identifier for the request, useful for debugging",
-                                "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
-                              },
-                              "causes": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "description": "A brief description of something which caused the problem",
-                                  "example": "database connection failed"
-                                },
-                                "example": [
-                                  "database connection failed",
-                                  "database query failed",
-                                  "unable to fetch user"
-                                ],
-                                "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
-                              },
-                              "remedy": {
-                                "type": "string",
-                                "description": "A brief description of how to resolve the problem",
-                                "example": "Shorten your input to be under 100 characters"
-                              },
-                              "supportEmail": {
-                                "type": "string",
-                                "format": "email",
-                                "description": "An email address to contact for support",
-                                "example": "support@withampersand.com"
-                              },
-                              "supportPhone": {
-                                "type": "string",
-                                "description": "A phone number to contact for support",
-                                "example": "+1-555-555-5555"
-                              },
-                              "supportUrl": {
-                                "type": "string",
-                                "format": "uri",
-                                "description": "A URL to contact for support",
-                                "example": "https://withampersand.com/support"
-                              },
-                              "retryable": {
-                                "type": "boolean",
-                                "description": "Whether the request can be retried",
-                                "example": false
-                              },
-                              "retryAfter": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
-                                "example": "2024-04-22T18:55:28.456076Z"
-                              },
-                              "context": {
-                                "type": "object",
-                                "description": "Additional context for the problem",
-                                "additionalProperties": true,
-                                "example": {
-                                  "name": "Rick Sanchez"
-                                }
-                              }
-                            }
-                          }
-                        ],
-                        "properties": {
-                          "in": {
-                            "type": "string",
-                            "description": "The location of the invalid input",
-                            "enum": [
-                              "body",
-                              "header",
-                              "path",
-                              "query"
-                            ]
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "The name of the invalid input"
-                          },
-                          "value": {
-                            "description": "The value of the erroneous input"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "example": {
-                    "type": "about:blank",
-                    "title": "Bad Request",
-                    "status": 400,
-                    "detail": "The input message is incorrect",
-                    "instance": "123456-1234-1235-4567489798",
-                    "issues": [
-                      {
-                        "type": "about:blank",
-                        "detail": "exampleNumericProperty should be numeric",
-                        "in": "path",
-                        "name": "exampleNumericProperty",
-                        "value": "abc"
-                      },
-                      {
-                        "type": "about:blank",
-                        "title": "Input isn't valid with respect to schema",
-                        "detail": "examplePropertyWithPattern a2345678901 doesn't match pattern '^\\d{11}$'",
-                        "in": "body",
-                        "name": "items[0].examplePropertyWithPattern",
-                        "value": "a2345678901"
-                      }
-                    ]
                   }
                 }
               }
@@ -12882,7 +11935,8 @@
     },
     "/projects/{projectIdOrName}/integrations/{integrationId}/installations": {
       "get": {
-        "summary": "List installations",
+        "summary": "List installations for an integration",
+        "description": "Lists all installations for a specific integration within a project. To list installations across all integrations, use listInstallationsForProject instead.\n",
         "operationId": "listInstallations",
         "tags": [
           "Installation"
@@ -12902,14 +11956,16 @@
             "name": "integrationId",
             "in": "path",
             "required": true,
+            "description": "The unique identifier (UUID) of the integration.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "550e8400-e29b-41d4-a716-446655440000"
           },
           {
             "name": "groupRef",
             "in": "query",
-            "description": "The ID of the user group that has access to this installation.",
+            "description": "The ID that your app uses to identify a group of users (e.g. an org ID, workspace ID, or team ID). When provided, only returns installations belonging to this group.",
             "example": "group-123",
             "schema": {
               "type": "string"
@@ -13321,7 +12377,7 @@
                       },
                       "createTime": {
                         "type": "string",
-                        "description": "The time the integration was first installed.",
+                        "description": "The time the installation was created.",
                         "format": "date-time"
                       },
                       "createdBy": {
@@ -14944,7 +14000,65 @@
                       }
                     }
                   }
-                }
+                },
+                "example": [
+                  {
+                    "id": "3f8b2a1e-7c4d-4e9a-b5f6-1d2e3a4b5c6d",
+                    "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    "integrationId": "550e8400-e29b-41d4-a716-446655440000",
+                    "group": {
+                      "groupRef": "org_12345",
+                      "groupName": "Acme Corp",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "createTime": "2024-01-15T10:30:00.000000Z"
+                    },
+                    "healthStatus": "healthy",
+                    "connection": {
+                      "id": "9d8c7b6a-5e4f-3a2b-1c0d-ef9876543210",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "provider": "salesforce",
+                      "group": {
+                        "groupRef": "org_12345",
+                        "groupName": "Acme Corp",
+                        "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "createTime": "2024-01-15T10:30:00.000000Z"
+                      },
+                      "consumer": {
+                        "consumerRef": "user_67890",
+                        "consumerName": "Jane Smith",
+                        "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "createTime": "2024-01-15T10:30:00.000000Z"
+                      },
+                      "createTime": "2024-01-15T10:30:00.000000Z",
+                      "authScheme": "oauth2/authorizationCode",
+                      "status": "working"
+                    },
+                    "createTime": "2024-01-15T10:30:00.000000Z",
+                    "createdBy": "consumer:user_67890",
+                    "config": {
+                      "id": "e4d3c2b1-a098-7654-3210-fedcba987654",
+                      "revisionId": "f0e1d2c3-b4a5-6789-0abc-def123456789",
+                      "createTime": "2024-01-15T10:30:00.000000Z",
+                      "createdBy": "consumer:user_67890",
+                      "content": {
+                        "provider": "salesforce",
+                        "read": {
+                          "objects": {
+                            "account": {
+                              "objectName": "account",
+                              "schedule": "*/15 * * * *",
+                              "destination": "accountWebhook",
+                              "selectedFields": {
+                                "name": true,
+                                "industry": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
               }
             }
           },
@@ -17527,7 +16641,7 @@
                     },
                     "createTime": {
                       "type": "string",
-                      "description": "The time the integration was first installed.",
+                      "description": "The time the installation was created.",
                       "format": "date-time"
                     },
                     "createdBy": {
@@ -19943,6 +19057,7 @@
     "/projects/{projectIdOrName}/integrations/{integrationId}/installations/{installationId}": {
       "get": {
         "summary": "Get an installation",
+        "description": "Retrieves a single installation by ID, including its connection details, config, and health status.\n",
         "operationId": "getInstallation",
         "tags": [
           "Installation"
@@ -19962,19 +19077,21 @@
             "name": "integrationId",
             "in": "path",
             "required": true,
-            "description": "The integration ID.",
+            "description": "The unique identifier (UUID) of the integration.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "550e8400-e29b-41d4-a716-446655440000"
           },
           {
             "name": "installationId",
             "in": "path",
             "required": true,
-            "description": "The installation ID.",
+            "description": "The unique identifier (UUID) of the installation.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "7b3c9d2e-5a1f-4e8b-b6d4-9c8a2f1e5d3b"
           }
         ],
         "responses": {
@@ -20380,7 +19497,7 @@
                     },
                     "createTime": {
                       "type": "string",
-                      "description": "The time the integration was first installed.",
+                      "description": "The time the installation was created.",
                       "format": "date-time"
                     },
                     "createdBy": {
@@ -21998,6 +21115,62 @@
                               }
                             }
                           ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "id": "3f8b2a1e-7c4d-4e9a-b5f6-1d2e3a4b5c6d",
+                  "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                  "integrationId": "550e8400-e29b-41d4-a716-446655440000",
+                  "group": {
+                    "groupRef": "org_12345",
+                    "groupName": "Acme Corp",
+                    "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    "createTime": "2024-01-15T10:30:00.000000Z"
+                  },
+                  "healthStatus": "healthy",
+                  "connection": {
+                    "id": "9d8c7b6a-5e4f-3a2b-1c0d-ef9876543210",
+                    "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    "provider": "salesforce",
+                    "group": {
+                      "groupRef": "org_12345",
+                      "groupName": "Acme Corp",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "createTime": "2024-01-15T10:30:00.000000Z"
+                    },
+                    "consumer": {
+                      "consumerRef": "user_67890",
+                      "consumerName": "Jane Smith",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "createTime": "2024-01-15T10:30:00.000000Z"
+                    },
+                    "createTime": "2024-01-15T10:30:00.000000Z",
+                    "authScheme": "oauth2/authorizationCode",
+                    "status": "working"
+                  },
+                  "createTime": "2024-01-15T10:30:00.000000Z",
+                  "createdBy": "consumer:user_67890",
+                  "config": {
+                    "id": "e4d3c2b1-a098-7654-3210-fedcba987654",
+                    "revisionId": "f0e1d2c3-b4a5-6789-0abc-def123456789",
+                    "createTime": "2024-01-15T10:30:00.000000Z",
+                    "createdBy": "consumer:user_67890",
+                    "content": {
+                      "provider": "salesforce",
+                      "read": {
+                        "objects": {
+                          "account": {
+                            "objectName": "account",
+                            "schedule": "*/15 * * * *",
+                            "destination": "accountWebhook",
+                            "selectedFields": {
+                              "name": true,
+                              "industry": true
+                            }
+                          }
                         }
                       }
                     }
@@ -23736,7 +22909,7 @@
                     },
                     "createTime": {
                       "type": "string",
-                      "description": "The time the integration was first installed.",
+                      "description": "The time the installation was created.",
                       "format": "date-time"
                     },
                     "createdBy": {
@@ -26434,7 +25607,7 @@
                     },
                     "createTime": {
                       "type": "string",
-                      "description": "The time the integration was first installed.",
+                      "description": "The time the installation was created.",
                       "format": "date-time"
                     },
                     "createdBy": {
@@ -29213,7 +28386,7 @@
     "/projects/{projectIdOrName}/installations": {
       "get": {
         "summary": "List installations for a project",
-        "description": "Lists all installations for a given project and query parameters.\n",
+        "description": "Lists all installations across every integration in a project, giving you a complete view of all active customer integrations. To narrow results to a single integration, use listInstallations instead.\n",
         "operationId": "listInstallationsForProject",
         "tags": [
           "Installation"
@@ -29232,8 +28405,8 @@
           {
             "name": "groupRef",
             "in": "query",
-            "description": "The group ref to filter by.",
-            "example": "groupRef123",
+            "description": "The ID that your app uses to identify a group of users (e.g. an org ID, workspace ID, or team ID). When provided, only returns installations belonging to this group.",
+            "example": "group-123",
             "schema": {
               "type": "string"
             }
@@ -29644,7 +28817,7 @@
                       },
                       "createTime": {
                         "type": "string",
-                        "description": "The time the integration was first installed.",
+                        "description": "The time the installation was created.",
                         "format": "date-time"
                       },
                       "createdBy": {
@@ -31267,7 +30440,65 @@
                       }
                     }
                   }
-                }
+                },
+                "example": [
+                  {
+                    "id": "3f8b2a1e-7c4d-4e9a-b5f6-1d2e3a4b5c6d",
+                    "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    "integrationId": "550e8400-e29b-41d4-a716-446655440000",
+                    "group": {
+                      "groupRef": "org_12345",
+                      "groupName": "Acme Corp",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "createTime": "2024-01-15T10:30:00.000000Z"
+                    },
+                    "healthStatus": "healthy",
+                    "connection": {
+                      "id": "9d8c7b6a-5e4f-3a2b-1c0d-ef9876543210",
+                      "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "provider": "salesforce",
+                      "group": {
+                        "groupRef": "org_12345",
+                        "groupName": "Acme Corp",
+                        "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "createTime": "2024-01-15T10:30:00.000000Z"
+                      },
+                      "consumer": {
+                        "consumerRef": "user_67890",
+                        "consumerName": "Jane Smith",
+                        "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "createTime": "2024-01-15T10:30:00.000000Z"
+                      },
+                      "createTime": "2024-01-15T10:30:00.000000Z",
+                      "authScheme": "oauth2/authorizationCode",
+                      "status": "working"
+                    },
+                    "createTime": "2024-01-15T10:30:00.000000Z",
+                    "createdBy": "consumer:user_67890",
+                    "config": {
+                      "id": "e4d3c2b1-a098-7654-3210-fedcba987654",
+                      "revisionId": "f0e1d2c3-b4a5-6789-0abc-def123456789",
+                      "createTime": "2024-01-15T10:30:00.000000Z",
+                      "createdBy": "consumer:user_67890",
+                      "content": {
+                        "provider": "salesforce",
+                        "read": {
+                          "objects": {
+                            "account": {
+                              "objectName": "account",
+                              "schedule": "*/15 * * * *",
+                              "destination": "accountWebhook",
+                              "selectedFields": {
+                                "name": true,
+                                "industry": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
               }
             }
           },
@@ -44893,7 +44124,7 @@
             "schema": {
               "type": "boolean"
             },
-            "description": "Whether to include the credentials in the response. Only access token will be included. Default is false."
+            "description": "Whether to include credentials for `oauth2AuthorizationCode` in the response. If true, `accessToken` and `scopes` are included. To include `refreshToken` as well, set `includeRefreshToken` to true. Default is false."
           },
           {
             "name": "includeRefreshToken",
@@ -44901,7 +44132,7 @@
             "schema": {
               "type": "boolean"
             },
-            "description": "Whether to include the refresh token in credentials in the response along with access token. If true, the `includeCreds` query parameter will be ignored. Default is false."
+            "description": "Whether to include `refreshToken` for `oauth2AuthorizationCode` credentials in the response (along with `accessToken` and `scopes`). If true, the `includeCreds` query parameter will be ignored. Default is false."
           },
           {
             "name": "refresh",
@@ -54633,28 +53864,29 @@
                               "appName",
                               "createTime",
                               "id",
-                              "name"
+                              "name",
+                              "orgId"
                             ],
                             "type": "object",
                             "properties": {
                               "id": {
                                 "type": "string",
-                                "description": "The project ID.",
-                                "example": "my-project"
+                                "description": "The unique identifier for the project.",
+                                "example": "proj_9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                               },
                               "name": {
                                 "type": "string",
-                                "description": "The project name.",
+                                "description": "The unique name for the project.",
                                 "example": "mailmonkey-staging"
                               },
                               "appName": {
                                 "type": "string",
-                                "description": "The name of the application, which is displayed to end users.",
+                                "description": "The display name of the application, shown to end users during the connection flow.",
                                 "example": "MailMonkey"
                               },
                               "orgId": {
                                 "type": "string",
-                                "description": "The organization ID that this project belongs to.",
+                                "description": "The ID of the organization that this project belongs to.",
                                 "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                               },
                               "createTime": {
@@ -54669,7 +53901,7 @@
                               },
                               "entitlements": {
                                 "type": "object",
-                                "description": "The entitlements for the project.",
+                                "description": "Plan-based feature flags for the project. These are managed by Ampersand and cannot be set via the API.",
                                 "properties": {
                                   "brandingRemoval": {
                                     "type": "object",
@@ -54677,11 +53909,11 @@
                                       "value"
                                     ],
                                     "x-go-type-skip-optional-pointer": true,
-                                    "description": "Whether branding can be removed from the UI library.",
+                                    "description": "Controls whether Ampersand branding is removed from the embeddable UI components.",
                                     "properties": {
                                       "value": {
                                         "type": "boolean",
-                                        "description": "Whether branding has been removed from the project."
+                                        "description": "True if Ampersand branding has been removed for this project."
                                       }
                                     }
                                   }
@@ -55024,28 +54256,29 @@
                               "appName",
                               "createTime",
                               "id",
-                              "name"
+                              "name",
+                              "orgId"
                             ],
                             "type": "object",
                             "properties": {
                               "id": {
                                 "type": "string",
-                                "description": "The project ID.",
-                                "example": "my-project"
+                                "description": "The unique identifier for the project.",
+                                "example": "proj_9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                               },
                               "name": {
                                 "type": "string",
-                                "description": "The project name.",
+                                "description": "The unique name for the project.",
                                 "example": "mailmonkey-staging"
                               },
                               "appName": {
                                 "type": "string",
-                                "description": "The name of the application, which is displayed to end users.",
+                                "description": "The display name of the application, shown to end users during the connection flow.",
                                 "example": "MailMonkey"
                               },
                               "orgId": {
                                 "type": "string",
-                                "description": "The organization ID that this project belongs to.",
+                                "description": "The ID of the organization that this project belongs to.",
                                 "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                               },
                               "createTime": {
@@ -55060,7 +54293,7 @@
                               },
                               "entitlements": {
                                 "type": "object",
-                                "description": "The entitlements for the project.",
+                                "description": "Plan-based feature flags for the project. These are managed by Ampersand and cannot be set via the API.",
                                 "properties": {
                                   "brandingRemoval": {
                                     "type": "object",
@@ -55068,11 +54301,11 @@
                                       "value"
                                     ],
                                     "x-go-type-skip-optional-pointer": true,
-                                    "description": "Whether branding can be removed from the UI library.",
+                                    "description": "Controls whether Ampersand branding is removed from the embeddable UI components.",
                                     "properties": {
                                       "value": {
                                         "type": "boolean",
-                                        "description": "Whether branding has been removed from the project."
+                                        "description": "True if Ampersand branding has been removed for this project."
                                       }
                                     }
                                   }
@@ -65983,28 +65216,29 @@
           "appName",
           "createTime",
           "id",
-          "name"
+          "name",
+          "orgId"
         ],
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "description": "The project ID.",
-            "example": "my-project"
+            "description": "The unique identifier for the project.",
+            "example": "proj_9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           },
           "name": {
             "type": "string",
-            "description": "The project name.",
+            "description": "The unique name for the project.",
             "example": "mailmonkey-staging"
           },
           "appName": {
             "type": "string",
-            "description": "The name of the application, which is displayed to end users.",
+            "description": "The display name of the application, shown to end users during the connection flow.",
             "example": "MailMonkey"
           },
           "orgId": {
             "type": "string",
-            "description": "The organization ID that this project belongs to.",
+            "description": "The ID of the organization that this project belongs to.",
             "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
           },
           "createTime": {
@@ -66019,7 +65253,7 @@
           },
           "entitlements": {
             "type": "object",
-            "description": "The entitlements for the project.",
+            "description": "Plan-based feature flags for the project. These are managed by Ampersand and cannot be set via the API.",
             "properties": {
               "brandingRemoval": {
                 "type": "object",
@@ -66027,11 +65261,11 @@
                   "value"
                 ],
                 "x-go-type-skip-optional-pointer": true,
-                "description": "Whether branding can be removed from the UI library.",
+                "description": "Controls whether Ampersand branding is removed from the embeddable UI components.",
                 "properties": {
                   "value": {
                     "type": "boolean",
-                    "description": "Whether branding has been removed from the project."
+                    "description": "True if Ampersand branding has been removed for this project."
                   }
                 }
               }
@@ -68062,7 +67296,7 @@
           },
           "createTime": {
             "type": "string",
-            "description": "The time the integration was first installed.",
+            "description": "The time the installation was created.",
             "format": "date-time"
           },
           "createdBy": {
@@ -73099,28 +72333,29 @@
                     "appName",
                     "createTime",
                     "id",
-                    "name"
+                    "name",
+                    "orgId"
                   ],
                   "type": "object",
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The project ID.",
-                      "example": "my-project"
+                      "description": "The unique identifier for the project.",
+                      "example": "proj_9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "name": {
                       "type": "string",
-                      "description": "The project name.",
+                      "description": "The unique name for the project.",
                       "example": "mailmonkey-staging"
                     },
                     "appName": {
                       "type": "string",
-                      "description": "The name of the application, which is displayed to end users.",
+                      "description": "The display name of the application, shown to end users during the connection flow.",
                       "example": "MailMonkey"
                     },
                     "orgId": {
                       "type": "string",
-                      "description": "The organization ID that this project belongs to.",
+                      "description": "The ID of the organization that this project belongs to.",
                       "example": "9f7c3e2a-61b8-4f5c-8d1a-eb24f3b05d79"
                     },
                     "createTime": {
@@ -73135,7 +72370,7 @@
                     },
                     "entitlements": {
                       "type": "object",
-                      "description": "The entitlements for the project.",
+                      "description": "Plan-based feature flags for the project. These are managed by Ampersand and cannot be set via the API.",
                       "properties": {
                         "brandingRemoval": {
                           "type": "object",
@@ -73143,11 +72378,11 @@
                             "value"
                           ],
                           "x-go-type-skip-optional-pointer": true,
-                          "description": "Whether branding can be removed from the UI library.",
+                          "description": "Controls whether Ampersand branding is removed from the embeddable UI components.",
                           "properties": {
                             "value": {
                               "type": "boolean",
-                              "description": "Whether branding has been removed from the project."
+                              "description": "True if Ampersand branding has been removed for this project."
                             }
                           }
                         }
