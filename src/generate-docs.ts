@@ -343,6 +343,7 @@ const baseConfig = {
             "provider-guides/customerJourneysTrack",
             "provider-guides/webex",
             "provider-guides/delighted",
+            "provider-guides/devrev",
             "provider-guides/discord",
             "provider-guides/discourse",
             "provider-guides/dixa",
