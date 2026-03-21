@@ -383,6 +383,7 @@ const baseConfig = {
             "provider-guides/highlevel",
             "provider-guides/hightouch",
             "provider-guides/hive",
+            "provider-guides/housecallPro",
             "provider-guides/hubspot",
             "provider-guides/hunter",
             "provider-guides/insightly",
