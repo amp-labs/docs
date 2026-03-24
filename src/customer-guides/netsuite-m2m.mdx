@@ -2,11 +2,11 @@
 title: "NetSuite (M2M)"
 ---
 
-This guide walks you through connecting your NetSuite account to an integration using OAuth 2.0 Client Credentials (Machine to Machine). You will enable required features, create an integration record, generate a certificate key pair, and share credentials with your integration provider.
+This guide walks you through connecting your NetSuite account to an integration using OAuth 2.0 Client Credentials (Machine to Machine).
 
 ## Before installing a NetSuite integration
 
-We recommend completing the following steps before your integration provider connects to your NetSuite account. You will need **Administrator access** to your NetSuite account.
+You will need **Administrator access** to your NetSuite account.
 
 ### 1. Enable required features
 
@@ -50,7 +50,7 @@ openssl req -new -x509 -key private-key.pem -out cert.pem -days 730
 You will be prompted for certificate details (country, organization, etc.). You can press Enter to accept defaults for all fields.
 
 This produces two files:
-- `private-key.pem` — Your private key. You will share this with your integration provider.
+- `private-key.pem` — Your private key. You will share this when installing the integration.
 - `cert.pem` — Your public certificate. You will upload this to NetSuite in the next step.
 
 ### 4. Create a machine-to-machine certificate mapping
@@ -63,14 +63,14 @@ This produces two files:
    - **Application**: Select the integration record you created in step 2.
    - **Certificate**: Upload the `cert.pem` file you generated in step 3.
 4. Click **Save**.
-5. Copy the **Certificate ID** from the list — your integration provider will need this value.
+5. Copy the **Certificate ID** from the list — you will need this value when installing the integration.
 
 <Note>Check that the `Valid Until` date for the certificate is two years in the future. NetSuite allows a maximum validity of 730 days.</Note>
 
 ### 5. Install the bundle
 
 1. Navigate to **Customization** > **SuiteBundler** > **Search & Install Bundles**.
-2. Search for the bundle name or ID provided by your integration provider.
+2. Search for the bundle name or ID.
 3. Select the bundle from the results and click **Install**.
 4. Wait for the installation to complete. This may take a few minutes.
 
