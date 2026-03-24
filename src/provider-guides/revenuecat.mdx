@@ -50,27 +50,7 @@ export const Cross = () => <span>🚫</span>
 
 ### Example integration
 
-To define an integration for RevenueCat, create a manifest file that looks like this. For a complete example, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/revenuecat/amp.yaml).
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: revenuecat-integration
-    displayName: My RevenueCat Integration
-    provider: revenuecat
-    read:
-      objects:
-        - objectName: customers
-          destination: defaultWebhook
-          schedule: "*/30 * * * *"
-    write:
-      objects:
-        - objectName: customers
-          inheritMapping: true
-    proxy:
-      enabled: true
-```
+To define an integration for RevenueCat, use a manifest file (`amp.yaml`). For a complete example, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/revenuecat/amp.yaml).
 
 ## Before you get started
 
@@ -104,7 +84,7 @@ Follow the steps below to obtain your Secret API key (v2) and Project ID from Re
 This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with RevenueCat:
-- Create a manifest file like the [example above](#example-integration).
+- Create a manifest file; see [Example integration](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key and Project ID.
