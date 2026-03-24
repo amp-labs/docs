@@ -1,0 +1,73 @@
+---
+title: "NetSuite (M2M)"
+slug: "netsuite-m2m"
+excerpt: ""
+hidden: false
+---
+## What's Supported
+
+### Supported Actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions).
+- [Search Actions](/search-actions)
+- [Proxy Actions](/proxy-actions), using the base URL `https://{account_id}.suitetalk.api.netsuite.com`, where `{account_id}` is your NetSuite account ID.
+
+### Supported Modules & Objects
+
+The NetSuite (M2M) connector supports the following modules:
+
+1) SuiteQL (referred to as `suiteql` in `amp.yaml`)
+   - This is a read-only module that allows you to read data from NetSuite using [SuiteQL](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156257770590.html).
+   - This module supports nearly all of the records documented in the [NetSuite Record Browser](https://system.netsuite.com/help/helpcenter/en_US/srbrowser/Browser2024_2/script/record/account.html).
+
+2) REST API (referred to as `restapi` in `amp.yaml`)
+   - This module allows you to read and write data to NetSuite using the REST API.
+   - It supports all the resources documented in the [NetSuite REST API Reference](https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2024.2/index.html).
+
+3) RESTlet (referred to as `restlet` in `amp.yaml`)
+   - This module allows you to install an Ampersand RESTlet into your customer’s NetSuite instance, giving you deep read & write access.
+   - This module is currently in private preview. Please get in touch with us at support@withampersand.com to learn more.
+
+By default, the connector will use the `restapi` module. To deploy the connector with a different module, specify the `module` field in the YAML manifest file.
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: netsuite-m2m-integration
+    provider: netsuiteM2M
+    module: restlet # default is restapi
+    ...
+```
+
+## Before You Get Started
+
+This connector uses OAuth 2.0 machine-to-machine (M2M) authentication with certificate-based credentials.
+
+To integrate NetSuite with Ampersand, your customer's NetSuite administrator will need to complete the setup steps in the [customer guide](/customer-guides/netsuite-m2m) and provide you with the following credentials:
+
+- Account ID
+- Client ID
+- Certificate ID
+- EC Private Key (PEM format)
+
+If you are using the RESTlet module, your customer will also need to install the Ampersand RESTlet bundle and provide:
+
+- Script ID
+- Deploy ID
+
+### Creating a NetSuite Integration
+
+Your customer's NetSuite administrator creates the integration record and M2M certificate mapping. The full steps are documented in the [customer guide](/customer-guides/netsuite-m2m).
+
+## Using the connector
+
+To start integrating with NetSuite:
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/netsuite/amp.yaml), using `netsuiteM2M` as the provider.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Collect your customer's credentials (Account ID, Client ID, Certificate ID, EC Private Key) and create a connection.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
