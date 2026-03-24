@@ -501,9 +501,9 @@ function ReadObjectConfig() {
 
 ### Enable, disable, and remove read objects
 
-The `readObject()` handlers include `setEnableRead` and `setDisableRead` to control whether an object is read. `removeObject` fully deletes an object from the config. Supported in `@amp-labs/react` `v2.12.1+`. The naming mirrors the write pattern: `config.readObject("contacts").setEnableRead()` is consistent with `config.writeObject("contacts").setEnableWrite()`.
+The `readObject()` handlers include `setEnableRead` and `setDisableRead` to control whether an object is read. `removeObject` fully deletes an object from the config. Supported in `@amp-labs/react` `v2.12.1+`.
 
-- **`setEnableRead`** — initializes a read object in the draft config and enables it. Safe to call multiple times (idempotent).
+- **`setEnableRead`** — initializes a read object in the draft config and enables it. Safe to call multiple times (idempotent). For convenience, you can skip calling this function if you are already calling `setFieldMapping` or `setSelectedField`.
 - **`setDisableRead`** — pauses reads for the object without removing its config (sets a `disabled` flag).
 - **`removeObject`** — fully deletes an object from all actions (both read and write) in the draft config.
 
