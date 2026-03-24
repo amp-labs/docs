@@ -1,0 +1,93 @@
+---
+title: "RevenueCat"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read. Incremental read is supported for `apps`, `customers`, `entitlements`, `integrations_webhooks`, `metrics_overview`, `offerings`, `products`, and `purchases` when a time window is used; for `subscriptions`, a full read is done per scheduled read.
+- [Write Actions](/write-actions) (create/update).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.revenuecat.com`.
+- Subscribe Actions are not currently supported.
+
+### Supported objects
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
+<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
+  <thead style={{ display: 'table-header-group', width: '100%' }}>
+    <tr style={{ display: 'table-row', width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
+      <th style={{ width: '14%' }}>Read</th>
+      <th style={{ width: '14%' }}>Write</th>
+      <th style={{ width: '14%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody style={{ display: 'table-row-group', width: '100%' }}>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.revenuecat.com/docs/api-v2#tag/App">apps</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.revenuecat.com/docs/api-v2#tag/Customer">customers</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.revenuecat.com/docs/api-v2#tag/Entitlement">entitlements</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.revenuecat.com/docs/api-v2#tag/Integration">integrations_webhooks</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.revenuecat.com/docs/api-v2#tag/Charts-and-Metrics">metrics_overview</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.revenuecat.com/docs/api-v2#tag/Offering">offerings</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.revenuecat.com/docs/api-v2#tag/Product">products</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.revenuecat.com/docs/api-v2#tag/Purchase">purchases</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.revenuecat.com/docs/api-v2#tag/Subscription">subscriptions</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
+
+### Notes and limitations
+
+- **Write support**: `apps`, `customers`, `entitlements`, `integrations_webhooks`, `offerings`, and `products` support create, update, and delete. Single-record operations only (no bulk write).
+- **Read-only objects**: `subscriptions`, `purchases`, and `metrics_overview` are read-only (store-derived or aggregated data).
+- **Incremental read**: When a time window is used, incremental read is supported for all objects except `subscriptions`, which uses a full read per schedule.
+- This connector uses the [RevenueCat API v2](https://www.revenuecat.com/docs/api-v2) only; v1 API keys are not valid.
+
+### Example integration
+
+To define an integration for RevenueCat, use a manifest file (`amp.yaml`). For a complete example, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/revenuecat/amp.yaml).
+
+## Before you get started
+
+To connect _RevenueCat_ with _Ampersand_, you will need [a RevenueCat account](https://www.revenuecat.com/).
+
+Once your account is created, you'll need to obtain the following from your project:
+
+- **API Key** — Secret API key (v2) for server-side use. The connector sends it as `Authorization: Bearer <key>`.
+- **Project ID** — Your project identifier (typically starts with `proj_`). This is required as metadata when using the connector.
+
+Your customers enter these when they install the integration via the InstallIntegration UI.
+
+### Create a RevenueCat account
+
+Here's how you can sign up for a RevenueCat account:
+
+- Sign up at [RevenueCat](https://www.revenuecat.com/) and create a project.
+
+### Obtain API credentials
+
+Follow the steps below to obtain your Secret API key (v2) and Project ID from RevenueCat:
+
+1. Log in to the [RevenueCat dashboard](https://app.revenuecat.com).
+2. Select your project.
+3. **Project ID**: Go to **Project settings** → **General**. Copy the **Project ID** (it typically starts with `proj_`).
+4. **Secret API key (v2)**: Go to  **API keys**. Click **+ New Secret API key**, choose **V2**, set the desired permissions, then **Generate**. Copy the secret key.
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with RevenueCat:
+- Create a manifest file; see [Example integration](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key and Project ID.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
