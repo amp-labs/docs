@@ -53,6 +53,14 @@ This produces two files:
 - `private-key.pem` — Your private key. You will share this when installing the integration.
 - `cert.pem` — Your public certificate. You will upload this to NetSuite in the next step.
 
+You will need to base64-encode your private key before sharing it during the installation process. To do this, run:
+
+```bash
+base64 -i private-key.pem
+```
+
+The output (a single line of text, e.g. `LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk...`) will be required during the installation process.
+
 ### 4. Create a machine-to-machine certificate mapping
 
 1. Navigate to **Setup** > **Integration** > **OAuth 2.0 Client Credentials (M2M) Setup**.
@@ -94,16 +102,8 @@ Provide the following values when installing the integration:
 | **Account ID** | Your NetSuite URL (e.g. `https://1234567.app.netsuite.com` → Account ID is `1234567`), or **Setup** > **Company** > **Company Information**. |
 | **Client ID** | The Consumer Key from step 2. |
 | **Certificate ID** | From step 4. |
-| **Private Key** | Base64-encode the contents of `private-key.pem` (see below). |
+| **Private Key** | Base64-encoded contents of `private-key.pem` (from step 3) |
 | **Script ID** | From the RESTlet deployment (e.g. `3277`). |
 | **Deploy ID** | From the RESTlet deployment (e.g. `1`). |
-
-To base64-encode your private key, run:
-
-```bash
-base64 -i private-key.pem
-```
-
-Copy the output (a single line of text) and paste it into the Private Key field.
 
 <Note>**Sandbox accounts**: If you are connecting a sandbox account, your Account ID may contain an underscore and suffix (e.g. `1234567_SB1`). Provide it exactly as shown in your NetSuite URL or Company Information page.</Note>
