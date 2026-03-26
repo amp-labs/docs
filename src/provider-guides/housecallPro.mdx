@@ -1,0 +1,51 @@
+---
+title: Housecall Pro
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.housecallpro.com`.
+
+### Example integration
+
+To define an integration for Housecall Pro, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: housecallProIntegration
+    displayName: Housecall Pro Integration
+    provider: housecallPro
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To use the Housecall Pro connector, you'll need an API Key from your Housecall Pro account. Here's how to get it:
+
+1. Sign into your Housecall Pro account and go to App Store.
+2. Find the API Key Management under My Apps, and click on it.
+3. On the right-hand side, click Generate API Key.
+4. Name your API Key.
+5. Copy the API Key.
+
+![Housecall Pro API Key](/images/provider-guides/housecallpro.gif)
+
+For more details, see the [Housecall Pro Authentication documentation](https://docs.housecallpro.com/docs/housecall-public-api/b87d37ae48a0d-authentication).
+
+## Using the connector
+
+This connector uses API Key authentication, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To integrate with Housecall Pro:
+
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API Key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API Key supplied by the customer.
