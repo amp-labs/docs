@@ -1,0 +1,55 @@
+---
+title: "FastSpring"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.fastspring.com`.
+
+### Example integration
+
+Define an integration with Proxy enabled and provider `fastSpring`:
+
+```yaml
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: fastSpringIntegration
+    displayName: My FastSpring integration
+    provider: fastSpring
+    proxy:
+      enabled: true
+```
+
+{/* TODO: Add `fastSpring/amp.yaml` (or match samples repo naming for camelCase providers) to [amp-labs/samples](https://github.com/amp-labs/samples) and link the example here. */}
+
+## Before you get started
+
+To integrate **FastSpring** with **Ampersand**, you need a [FastSpring](https://fastspring.com/) account and **API credentials** (API username and password) from FastSpring.
+
+FastSpring documents API access in [Getting started with your API](https://developer.fastspring.com/reference/getting-started-with-your-api), including the base URL, Basic authentication, required headers, and credential generation.
+
+### Creating FastSpring API credentials
+
+Per FastSpring’s documentation:
+
+1. In the FastSpring application, open **Developer Tools**.
+2. Go to **APIs** → **API Credentials**.
+3. Use **Create** to generate credentials. FastSpring shows the username and password; the password is available only at creation time—store it securely.
+
+{/* TODO: If the live dashboard labels differ from FastSpring’s docs, update the steps above after verifying in a real FastSpring account. */}
+
+## Using the connector
+
+This connector uses **Basic Auth** (username and password), the same credential shape as other Basic providers in the catalog. You do **not** set up a Provider App for OAuth before getting started—Provider apps are for providers that use the OAuth 2.0 Authorization Code flow.
+
+To start integrating with FastSpring:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. Your customers enter their FastSpring API username and password when they connect their account.
+- Start using the connector: with [Proxy Actions](/proxy-actions) enabled, you can make Proxy API calls to `https://api.fastspring.com`.
