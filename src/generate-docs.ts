@@ -355,6 +355,7 @@ const baseConfig = {
             "provider-guides/dynamicsBusinessCentral",
             "provider-guides/dynamicsCRM",
             "provider-guides/emailBison",
+            "provider-guides/fastSpring",
             "provider-guides/fathom",
             "provider-guides/figma",
             "provider-guides/fireflies",
