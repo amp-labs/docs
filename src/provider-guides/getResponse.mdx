@@ -7,7 +7,7 @@ title: "GetResponse"
 ### Supported actions
 
 This connector supports:
-- [Read Actions](/read-actions), including full historic backfill and incremental read. Incremental read is supported for `contacts` using provider-side filtering; all other objects use connector-side filtering based on their `createdOn` timestamp.
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
 - [Write Actions](/write-actions) (create/update/delete).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.getresponse.com`.
 - Subscribe Actions are not currently supported.
@@ -43,11 +43,9 @@ export const Cross = () => <span>🚫</span>
 
 ### Notes and limitations
 
-- **Write support**: `contacts` and `campaigns` support create and update. `tags` support create and delete only — the update operation is deprecated by GetResponse.
+- **Write support**: `contacts` and `campaigns` support create and update. For `tags`, create is supported; the update operation is deprecated by GetResponse.
 - **contacts**: Must be associated with an existing campaign on creation (a `campaignId` is required).
-- **Incremental read**: `contacts` uses provider-side filtering via `query[createdOn][from/to]`. All other readable objects use connector-side filtering based on the `createdOn` field in each record.
-- **Timestamp format**: GetResponse uses `+0000` (no colon in the UTC offset) rather than the standard `Z` suffix. The connector handles this automatically.
-- Single-record operations only (no bulk write).
+- **Incremental read (implementation)**: For `contacts`, the connector uses GetResponse’s `query[createdOn][from/to]` filters. For all other readable objects, it uses each record’s `createdOn` field to determine what changed since the last read.
 
 ### Example integration
 
