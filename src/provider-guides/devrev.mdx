@@ -8,15 +8,29 @@ title: DevRev
 
 This connector supports:
 
-- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported for most objects.
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.devrev.ai`.
+
+### Incremental read
+
+Incremental read is available for every object that supports read, except the following. For these objects, each scheduled read is a full read.
+
+- `articles`
+- `auth-tokens`
+- `code-changes`
+- `directories`
+- `org-schedules`
+- `question-answers`
+- `schemas.subtypes`
+- `webhooks`
+- `vistas.groups`
 
 ### Supported Objects
 
 The DevRev connector supports the following objects.
 
-- [accounts](https://developer.devrev.ai/api-reference/accounts/list) (read, write; incremental read supported)
+- [accounts](https://developer.devrev.ai/api-reference/accounts/list) (read, write)
 - [articles](https://developer.devrev.ai/api-reference/articles/list-articles) (read, write)
 - [auth-tokens](https://developer.devrev.ai/api-reference/auth-tokens/list) (read, write)
 - [dev-orgs.auth-connections](https://developer.devrev.ai/beta/api-reference/auth-connections/dev-org-auth-connections-list) (read, write)
@@ -24,7 +38,7 @@ The DevRev connector supports the following objects.
 - [code-changes](https://developer.devrev.ai/api-reference/code-changes/list) (read, write)
 - [commands](https://developer.devrev.ai/api-reference/commands/list) (read, write)
 - [content-template](https://developer.devrev.ai/beta/api-reference/notifications/content-template-list) (read, write)
-- [conversations](https://developer.devrev.ai/api-reference/conversations/list) (read, write; incremental read supported)
+- [conversations](https://developer.devrev.ai/api-reference/conversations/list) (read, write)
 - [custom-objects](https://developer.devrev.ai/api-reference/customization/custom-objects-create) (write)
 - [dev-users](https://developer.devrev.ai/api-reference/dev-users/list) (read, write)
 - [directories](https://developer.devrev.ai/api-reference/directory/directories-list) (read, write)
@@ -38,13 +52,13 @@ The DevRev connector supports the following objects.
 - [org-schedules](https://developer.devrev.ai/api-reference/schedules/org-schedules-list) (read, write)
 - [parts](https://developer.devrev.ai/api-reference/parts/list) (read, write)
 - [question-answers](https://developer.devrev.ai/api-reference/surveys/list) (read, write)
-- [rev-orgs](https://developer.devrev.ai/api-reference/rev-orgs/list) (read, write; incremental read supported)
-- [rev-users](https://developer.devrev.ai/api-reference/rev-users/list) (read, write; incremental read supported)
+- [rev-orgs](https://developer.devrev.ai/api-reference/rev-orgs/list) (read, write)
+- [rev-users](https://developer.devrev.ai/api-reference/rev-users/list) (read, write)
 - [roles](https://developer.devrev.ai/api-reference/dev-users/list) (write)
 - [schemas.custom](https://developer.devrev.ai/beta/api-reference/customization/custom-schema-fragments-list) (read, write)
 - [schemas.stock](https://developer.devrev.ai/beta/api-reference/customization/stock-schema-fragments-list) (read, write)
 - [schemas.subtypes](https://developer.devrev.ai/beta/api-reference/customization/subtypes-list) (read, write)
-- [sla-trackers](https://developer.devrev.ai/api-reference/slas/sla-trackers-list) (read, write; incremental read supported)
+- [sla-trackers](https://developer.devrev.ai/api-reference/slas/sla-trackers-list) (read, write)
 - [service-accounts](https://developer.devrev.ai/beta/api-reference/service-accounts/create) (write)
 - [slas](https://developer.devrev.ai/api-reference/slas/list) (read, write)
 - [snap-widgets](https://developer.devrev.ai/beta/api-reference/snap-widgets/create) (write)
