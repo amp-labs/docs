@@ -1,66 +1,123 @@
 ---
 title: "GetResponse"
 ---
-## What's Supported
 
-### Supported Actions
+## What's supported
+
+### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions) (create/update).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.getresponse.com`.
+- Subscribe Actions are not currently supported.
 
-## Before You Get Started
+### Supported objects
 
-To integrate GetResponse with Ampersand, you will need a [GetResponse Account](https://www.getresponse.com/).
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
 
-Once your account is created, you'll need to create an app in GetResponse and obtain the following credentials from your app:
+<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
+<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
+  <thead style={{ display: 'table-header-group', width: '100%' }}>
+    <tr style={{ display: 'table-row', width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
+      <th style={{ width: '14%' }}>Read</th>
+      <th style={{ width: '14%' }}>Write</th>
+      <th style={{ width: '14%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody style={{ display: 'table-row-group', width: '100%' }}>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://apireference.getresponse.com/#tag/Contacts">contacts</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://apireference.getresponse.com/#tag/Campaigns">campaigns</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://apireference.getresponse.com/#tag/Tags">tags</a></td><td><Cross /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://apireference.getresponse.com/#tag/Newsletters">newsletters</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://apireference.getresponse.com/#tag/Autoresponders">autoresponders</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://apireference.getresponse.com/#tag/Forms">forms</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://apireference.getresponse.com/#tag/Landing-Pages">landing-pages</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://apireference.getresponse.com/#tag/Custom-Events">custom-events</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://apireference.getresponse.com/#tag/Webinars">webinars</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
 
-- Client ID
-- Client Secret
+### Notes and limitations
 
-You will then use these credentials and scopes to connect your application to Ampersand.
+- **Write support**: `contacts` and `campaigns` support create and update. For `tags`, create is supported; the update operation is deprecated by GetResponse.
+- **contacts**: Must be associated with an existing campaign on creation (a `campaignId` is required).
+- **Incremental read (implementation)**: For `contacts`, the connector uses GetResponse’s `query[createdOn][from/to]` filters. For all other readable objects, it uses each record’s `createdOn` field to determine what changed since the last read.
 
-### Create a GetResponse Account
+### Example integration
+
+To define an integration for GetResponse, use a manifest file (`amp.yaml`). For a complete example, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/getresponse/amp.yaml).
+
+## Before you get started
+
+To integrate GetResponse with Ampersand, you will need a [GetResponse account](https://www.getresponse.com/).
+
+Once your account is created, you'll need to create an app in GetResponse and obtain the following credentials:
+
+- **Client ID**
+- **Client Secret**
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Create a GetResponse account
 
 Here's how to sign up for a GetResponse account:
 
-1. Go to the [GetResponse Sign Up page](https://www.getresponse.com/start-free?version=centered&pageinfo=homepage).
+1. Go to the [GetResponse sign up page](https://www.getresponse.com/start-free?version=centered&pageinfo=homepage).
 2. Sign up using your preferred method.
 
 ### Create an app in GetResponse
 
-Follow the steps below to generate an API key in GetResponse:
+Follow the steps below to create an OAuth app in GetResponse and obtain your credentials:
 
 1. Log in to your [GetResponse account](https://app.getresponse.com/login).
 
-2. Navigate to **Tools > Integrations and API** and click **Custom Apps**. 
+2. Navigate to **Tools > Integrations and API** and click **Custom Apps**.
 
 3. Click the **Add new app** button.
 
 4. Enter the following details for your app:
    1. **Application name**: Name for your app.
-   2. **Description**: Description of what your app does. 
+   2. **Description**: Description of what your app does.
    3. **Redirect URL**: Enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`
 
 5. Click **Add**.
 
-Once the app is created, the app details you will be able to view the **Client ID** and **Client Secret**. Copy these credentials, as you will need them to connect to Ampersand.
+Once the app is created, you will be able to view the **Client ID** and **Client Secret**. Copy these credentials — you will need them in the next step.
 
-![GetResponse API Key](/images/provider-guides/0696f04-GetResponse.gif)
+![Creating a GetResponse custom OAuth app](/images/provider-guides/0696f04-GetResponse.gif)
 
-### Add Your GetResponse API Key to Ampersand
+### Add your GetResponse app to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 
-2. Select the project where you want to create a _GetResponse_ integration.
+2. Select the project where you want to create a GetResponse integration.
 
    ![Ampersand Project](/images/provider-guides/dd47b7a-Ampersand.png)
 
 3. Select **Provider apps**.
 
-4. Select _GetResponse_ from the **Provider** list.
+4. Select **GetResponse** from the **Provider** list.
 
-5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
+5. Enter the **Client ID** and **Client Secret** obtained in the previous step.
 
    ![Ampersand GetResponse Integration](/images/provider-guides/f8f25dc-getresponse2.gif)
 
 6. Click **Save Changes**.
+
+## Using the connector
+
+This connector uses OAuth 2.0 (Authorization Code), which means that you must set up a Provider App before getting started.
+
+To start integrating with GetResponse:
+- Create a manifest file; see [Example integration](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt your customers to authorize their GetResponse account.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
