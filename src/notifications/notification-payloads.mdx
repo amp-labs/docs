@@ -403,6 +403,9 @@ Note: For partial failures, `success` is `false` with both `successfulRecordIds`
 </Accordion>
 
 <Accordion title="connection.error">
+
+<Note>The `error` field is deprecated and kept for backward compatibility. Use `errors` instead. Both fields contain the same value.</Note>
+
 **Webhook destination payload:**
 ```json
 {
@@ -414,6 +417,7 @@ Note: For partial failures, `success` is `false` with both `successfulRecordIds`
     "groupRef": "customer-group-ref",
     "consumerRef": "user-123",
     "consumerName": "John Doe",
+    "errors": ["Authentication failed", "Token refresh error"],
     "error": ["Authentication failed", "Token refresh error"]
   }
 }
@@ -428,6 +432,7 @@ Note: For partial failures, `success` is `false` with both `successfulRecordIds`
   "groupRef": "customer-group-ref",
   "consumerRef": "user-123",
   "consumerName": "John Doe",
+  "errors": ["Authentication failed", "Token refresh error"],
   "error": ["Authentication failed", "Token refresh error"]
 }
 ```
