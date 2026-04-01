@@ -42,7 +42,9 @@ The integration record identifies the external application that will connect to 
 
 ### 3. Generate a certificate key pair
 
-Open a terminal and run the following commands to generate an EC private key and a self-signed certificate:
+Open a terminal in the folder where you want to create the files. You need **OpenSSL** available in that environment (macOS and most Linux distributions include it by default). On **Windows**, use **Git Bash** (bundled with [Git for Windows](https://gitforwindows.org/), which includes OpenSSL), **WSL**, or install OpenSSL and ensure it is on your `PATH`.
+
+Run the following commands to generate an EC private key and a self-signed certificate:
 
 ```bash
 openssl ecparam -name prime256v1 -genkey -noout -out private-key.pem
@@ -58,13 +60,29 @@ This produces two files:
 - `private-key.pem` — Your private key. You will base64-encode this and share it when installing the integration.
 - `cert.pem` — Your public certificate. You will upload this to NetSuite in the next step.
 
-You will need to base64-encode your private key before sharing it during the installation process. To do this, run:
+You will then need to base64-encode your private key before sharing it during the installation process. Use the command that matches your environment:
+
+**macOS (Terminal)**
 
 ```bash
 base64 -i private-key.pem
 ```
 
-The output (a single line of text, e.g. `LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk...`) will be required during the installation process.
+**Linux, Git Bash, or WSL**
+
+```bash
+base64 -w 0 private-key.pem
+```
+
+**Windows (PowerShell)**
+
+From the directory that contains `private-key.pem`:
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes((Resolve-Path 'private-key.pem')))
+```
+
+Copy the encoded string (a long single line, e.g. starting with `LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0t...`). It will be required during the installation process.
 
 ### 4. Create a machine-to-machine certificate mapping
 
