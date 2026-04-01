@@ -231,6 +231,10 @@ const baseConfig = {
     {
       source: "/detect-schema-changes",
       destination: "/manage-customer-schemas"
+    },
+    {
+      source: "/customer-guides/netsuite-m2m",
+      destination: "/customer-guides/netsuite"
     }
   ],
   footerSocials: {
