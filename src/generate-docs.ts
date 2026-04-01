@@ -486,6 +486,7 @@ const baseConfig = {
             "customer-guides/hubspot",
             "customer-guides/marketo",
             "customer-guides/snowflake",
+            "customer-guides/netsuite",
             "customer-guides/update-connection"
           ]
         },
