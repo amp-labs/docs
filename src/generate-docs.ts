@@ -231,6 +231,10 @@ const baseConfig = {
     {
       source: "/detect-schema-changes",
       destination: "/manage-customer-schemas"
+    },
+    {
+      source: "/customer-guides/netsuite-m2m",
+      destination: "/customer-guides/netsuite"
     }
   ],
   footerSocials: {
@@ -482,6 +486,7 @@ const baseConfig = {
             "customer-guides/hubspot",
             "customer-guides/marketo",
             "customer-guides/snowflake",
+            "customer-guides/netsuite",
             "customer-guides/update-connection"
           ]
         },

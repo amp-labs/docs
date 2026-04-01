@@ -1,5 +1,5 @@
 ---
-title: "NetSuite (M2M)"
+title: "NetSuite"
 ---
 
 This guide walks you through connecting your NetSuite account to an integration using OAuth 2.0 Client Credentials (Machine to Machine).
@@ -33,11 +33,18 @@ The integration record identifies the external application that will connect to 
    - **RESTlets**
    - **REST Web Services**
 6. Click **Save**.
-7. After saving, NetSuite displays the **Consumer Key / Client ID**. Copy this value and store it securely — it is shown only once and cannot be retrieved later.
+
+<img src="/images/customer-guides/netsuite-m2m/netsuite-auth-record.png" />
+
+7. After saving, NetSuite displays the **Consumer Key / Client ID** under the **Client Credentials** section. Copy this value and store it securely — it is shown only once and cannot be retrieved later.
+
+<img src="/images/customer-guides/netsuite-m2m/netsuite-consumer-key.png" width="400"/>
 
 ### 3. Generate a certificate key pair
 
-Open a terminal and run the following commands to generate an EC private key and a self-signed certificate:
+Open a terminal in the folder where you want to create the files. You need **OpenSSL** available in that environment (macOS and most Linux distributions include it by default). On **Windows**, use **Git Bash** (bundled with [Git for Windows](https://gitforwindows.org/), which includes OpenSSL), **WSL**, or install OpenSSL and ensure it is on your `PATH`.
+
+Run the following commands to generate an EC private key and a self-signed certificate:
 
 ```bash
 openssl ecparam -name prime256v1 -genkey -noout -out private-key.pem
@@ -53,13 +60,29 @@ This produces two files:
 - `private-key.pem` — Your private key. You will base64-encode this and share it when installing the integration.
 - `cert.pem` — Your public certificate. You will upload this to NetSuite in the next step.
 
-You will need to base64-encode your private key before sharing it during the installation process. To do this, run:
+You will then need to base64-encode your private key before sharing it during the installation process. Use the command that matches your environment:
+
+**macOS (Terminal)**
 
 ```bash
 base64 -i private-key.pem
 ```
 
-The output (a single line of text, e.g. `LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk...`) will be required during the installation process.
+**Linux, Git Bash, or WSL**
+
+```bash
+base64 -w 0 private-key.pem
+```
+
+**Windows (PowerShell)**
+
+From the directory that contains `private-key.pem`:
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes((Resolve-Path 'private-key.pem')))
+```
+
+Copy the encoded string (a long single line, e.g. starting with `LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0t...`). It will be required during the installation process.
 
 ### 4. Create a machine-to-machine certificate mapping
 
@@ -67,11 +90,16 @@ The output (a single line of text, e.g. `LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0
 2. Click **Create New**.
 3. Configure the following fields:
    - **Entity**: Select the employee/user account the integration will run as.
-   - **Role**: Select a role with the [required permissions](#ensure-sufficient-permissions). The role must include the **Log in Using OAuth 2.0 Access Tokens** permission.
+   - **Role**: Select a role. The role must include the **Log in Using OAuth 2.0 Access Tokens** permission.
    - **Application**: Select the integration record you created in step 2.
    - **Certificate**: Upload the `cert.pem` file you generated in step 3.
 4. Click **Save**.
+
+<img src="/images/customer-guides/netsuite-m2m/netsuite-new-cc.png" width="400"/>
+
 5. Copy the **Certificate ID** from the list — you will need this value when installing the integration.
+
+<img src="/images/customer-guides/netsuite-m2m/netsuite-cert-id.png" />
 
 <Note>Check that the `Valid Until` date for the certificate is two years in the future. NetSuite allows a maximum validity of 730 days.</Note>
 
@@ -87,23 +115,28 @@ The output (a single line of text, e.g. `LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0
 1. Navigate to **Customization** > **Scripting** > **Scripts**.
 2. Find the RESTlet script installed by the bundle.
 3. Click into the script record, then go to the **Deployments** tab.
-4. Verify the deployment **Status** is **Released**.
-5. Note the **Script ID** and **Deploy ID** — you will need these when configuring the integration.
 
-![Deployment details](/images/customer-guides/restlet.png)
-For this deployment, the script ID is `3277` and the deploy ID is `1`.
+<img src="/images/customer-guides/netsuite-m2m/netsuite-script.png" />
+
+4. Verify the deployment **Status** is **Released**.
+5. Click on the name of the script, then note the **URL** — you will need it for the next step
+
+<img src="/images/customer-guides/restlet.png" />
 
 ## Installing the integration
 
-Provide the following values when installing the integration:
+When you are installing the integration, you will be prompted for a number of inputs:
 
-| Credential | Where to find it |
+<img src="/images/customer-guides/netsuite-m2m/netsuite-m2m-ui.png" width="400"/>
+
+Here is where to find each value:
+
+| Input | Where to find it |
 |---|---|
-| **Account ID** | Your NetSuite URL (e.g. `https://1234567.app.netsuite.com` → Account ID is `1234567`), or **Setup** > **Company** > **Company Information**. |
 | **Client ID** | The Consumer Key from step 2. |
 | **Certificate ID** | From step 4. |
 | **Private Key** | Base64-encoded contents of `private-key.pem` (from step 3) |
-| **Script ID** | From the RESTlet deployment (e.g. `3277`). |
-| **Deploy ID** | From the RESTlet deployment (e.g. `1`). |
+| **Account ID** | Your NetSuite URL (e.g. `https://1234567.app.netsuite.com` → Account ID is `1234567`), or **Setup** > **Company** > **Company Information**. |
+| **RESTlet Deployment URL** | This is printed out in the Deployments tab of the script (see previous step), and looks like `/app/site/hosting/restlet.nl?script=3045&deploy=1`. |
 
 <Note>**Sandbox accounts**: If you are connecting a sandbox account, your Account ID may contain an underscore and suffix (e.g. `1234567_SB1`). Provide it exactly as shown in your NetSuite URL or Company Information page.</Note>
