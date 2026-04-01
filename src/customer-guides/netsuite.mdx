@@ -8,7 +8,29 @@ This guide walks you through connecting your NetSuite account to an integration 
 
 You will need **Administrator access** to your NetSuite account.
 
-### 1. Enable required features
+### 1. Install the bundle
+
+1. Navigate to **Customization** > **SuiteBundler** > **Search & Install Bundles**.
+2. Search for the bundle name or ID.
+3. Select the bundle from the results and click **Install**.
+4. Wait for the installation to complete. This may take a few minutes.
+
+The bundle will install SuiteScripts and custom objects (fields, records, roles, etc) into your NetSuite account.
+
+### 2. Verify the deployment
+
+1. Navigate to **Customization** > **Scripting** > **Scripts**.
+2. Find the RESTlet script installed by the bundle.
+3. Click into the script record, then go to the **Deployments** tab.
+
+<img src="/images/customer-guides/netsuite-m2m/netsuite-script.png" />
+
+4. Verify the deployment **Status** is **Released**.
+5. Click on the name of the script, then note the **URL** — you will need it for the installation step.
+
+<img src="/images/customer-guides/restlet.png" />
+
+### 3. Enable required features
 
 1. Log in to *NetSuite* as an Administrator.
 2. Navigate to **Setup** > **Company** > **Enable Features** > **SuiteCloud**.
@@ -17,7 +39,7 @@ You will need **Administrator access** to your NetSuite account.
 5. Under **Manage Authentication** (or **SuiteTalk**), check **REST Web Services**.
 6. Click **Save**.
 
-### 2. Create an integration record
+### 4. Create an integration record
 
 The integration record identifies the external application that will connect to your NetSuite account.
 
@@ -40,7 +62,7 @@ The integration record identifies the external application that will connect to 
 
 <img src="/images/customer-guides/netsuite-m2m/netsuite-consumer-key.png" width="400"/>
 
-### 3. Generate a certificate key pair
+### 5. Generate a certificate key pair
 
 Open a terminal in the folder where you want to create the files. You need **OpenSSL** available in that environment (macOS and most Linux distributions include it by default). On **Windows**, use **Git Bash** (bundled with [Git for Windows](https://gitforwindows.org/), which includes OpenSSL), **WSL**, or install OpenSSL and ensure it is on your `PATH`.
 
@@ -84,15 +106,28 @@ From the directory that contains `private-key.pem`:
 
 Copy the encoded string (a long single line, e.g. starting with `LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0t...`). It will be required during the installation process.
 
-### 4. Create a machine-to-machine certificate mapping
+### 6. Assign the integration role to a user or create a new user
+
+The bundle will include a custom role with the permissions needed for the integration. You need to assign this role to the employee/user account that the integration will run as.
+
+1. Navigate to **Setup** > **Users/Roles** > **User Management** > **Employees** (or **Lists** > **Employees**).
+2. Find and edit the employee record you want the integration to run as. This can be an existing user or a dedicated integration user.
+3. Go to the **Access** tab.
+4. In the **Roles** subtab, click **Add**.
+5. Select the custom role from the dropdown.
+6. Click **Save**.
+
+<Note>If you prefer to use a dedicated integration user rather than an existing employee, create a new user/employee record first, then assign the role as described above. This is recommended for security purposes.</Note>
+
+### 7. Create a machine-to-machine certificate mapping
 
 1. Navigate to **Setup** > **Integration** > **OAuth 2.0 Client Credentials (M2M) Setup**.
 2. Click **Create New**.
 3. Configure the following fields:
-   - **Entity**: Select the employee/user account the integration will run as.
-   - **Role**: Select a role. The role must include the **Log in Using OAuth 2.0 Access Tokens** permission.
-   - **Application**: Select the integration record you created in step 2.
-   - **Certificate**: Upload the `cert.pem` file you generated in step 3.
+   - **Entity**: Select the employee/user account the integration will run as (from the previous step)
+   - **Role**: Select the custom role that the bundle installed. Please note that the role must include the **Log in Using OAuth 2.0 Access Tokens** permission.
+   - **Application**: Select the integration record you created in step 4.
+   - **Certificate**: Upload the `cert.pem` file you generated in step 5.
 4. Click **Save**.
 
 <img src="/images/customer-guides/netsuite-m2m/netsuite-new-cc.png" width="400"/>
@@ -102,26 +137,6 @@ Copy the encoded string (a long single line, e.g. starting with `LS0tLS1CRUdJTiB
 <img src="/images/customer-guides/netsuite-m2m/netsuite-cert-id.png" />
 
 <Note>Check that the `Valid Until` date for the certificate is two years in the future. NetSuite allows a maximum validity of 730 days.</Note>
-
-### 5. Install the bundle
-
-1. Navigate to **Customization** > **SuiteBundler** > **Search & Install Bundles**.
-2. Search for the bundle name or ID.
-3. Select the bundle from the results and click **Install**.
-4. Wait for the installation to complete. This may take a few minutes.
-
-### 6. Verify the deployment
-
-1. Navigate to **Customization** > **Scripting** > **Scripts**.
-2. Find the RESTlet script installed by the bundle.
-3. Click into the script record, then go to the **Deployments** tab.
-
-<img src="/images/customer-guides/netsuite-m2m/netsuite-script.png" />
-
-4. Verify the deployment **Status** is **Released**.
-5. Click on the name of the script, then note the **URL** — you will need it for the next step
-
-<img src="/images/customer-guides/restlet.png" />
 
 ## Installing the integration
 
