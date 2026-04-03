@@ -5,26 +5,62 @@ title: QuickBooks
 ## What's Supported
 
 ### Supported actions
-
+- [Read Actions](/read-actions), including full historic backfill and incremental reads.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://quickbooks.api.intuit.com`.
 
+### Supported Objects
+
+The QuickBooks connector supports reading from and writing to the following objects:
+
+- [account](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account#query-an-account)
+- [attachable](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/attachable#query-an-attachable)
+- [bill](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/bill#query-a-bill)
+- [billPayment](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/billpayment#query-a-billpayment)
+- [budget](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/budget#query-a-budget)
+- [class](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/class#query-a-class)
+- [companyCurrency](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/companycurrency#query-a-companycurrency)
+- [creditMemo](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/creditmemo#query-a-credit-memo)
+- [creditCardPayment](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/creditcardpayment#query-a-creditcardpayment)
+- [customer](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/customer#query-a-customer)
+- [department](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/department#query-a-department)
+- [deposit](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/deposit#query-a-deposit)
+- [employee](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/employee#query-an-employee)
+- [estimate](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/estimate#query-an-estimate)
+- [invoice](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/invoice#query-an-invoice)
+- [item](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/item#query-an-item)
+- [journalCode](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/journalcode#query-a-journalcode)
+- [journalEntry](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/journalentry#query-a-journalentry)
+- [payment](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/payment#query-a-payment)
+- [paymentMethod](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/paymentmethod#query-a-paymentmethod)
+- [purchase](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/purchase#query-a-purchase)
+- [purchaseOrder](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/purchaseorder#query-a-purchaseorder)
+- [recurringTransaction](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/recurringtransaction#query-a-recurring-transaction)
+- [refundReceipt](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/refundreceipt#query-a-refundreceipt)
+- [salesReceipt](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/salesreceipt#query-a-salesreceipt)
+- [taxAgency](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/taxagency#query-a-taxagency)
+- [term](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/term#query-a-term)
+- [timeActivity](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/timeactivity#query-a-timeactivity-object)
+- [transfer](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/transfer#query-a-transfer)
+- [vendor](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/vendor#query-a-vendor)
+- [vendorCredit](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/vendorcredit#query-a-vendorcredit)
+
+The QuickBooks connector supports reading from the following objects (read-only):
+
+- [customerType](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/customertype#query-a-customertype)
+- [exchangeRate](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/exchangerate#query-exchangerate-objects)
+- [reimburseCharge](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/reimbursecharge#query-a-reimbursecharge)
+- [taxCode](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/taxcode#query-a-taxcode)
+- [taxPayment](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/taxpayment#query-taxpayment)
+- [taxRate](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/taxrate#query-a-taxrate)
+
+The QuickBooks connector supports writing to the following objects (write-only):
+
+- [inventoryadjustment](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/inventoryadjustment#create-an-inventory-adjustment)
+- [taxservice/taxcode](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/taxservice#create-a-taxservice)
+
 ### Example Integration
-
-```yaml
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: quickbooksIntegration
-    displayName: QuickBooks Integration
-    provider: quickbooks
-    proxy:
-      enabled: true
-```
-
-<Note>
-QuickBooks API returns XML responses by default. To receive JSON responses, make sure to set the `Accept` header to `application/json` in your proxy API calls.
-</Note>
-
+For an example manifest file of a quickbooks integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/quickbooks/amp.yaml).
 
 ## Before you get started
 
@@ -82,6 +118,9 @@ To start integrating with Kit:
 - Start using the connector!
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 
+<Note>
+QuickBooks API returns XML responses by default. To receive JSON responses, make sure to set the `Accept` header to `application/json` in your proxy API calls.
+</Note>
 
 ## API documentation
 
