@@ -142,7 +142,7 @@ Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the follo
 
 ### Wizard mode (Beta)
 
-<Warning>The wizard mode is currently in beta preview. The `variant="wizard"` prop is hidden and does not appear in the public TypeScript declarations as of `@amp-labs/react` v2.13.1.</Warning>
+<Warning>The wizard mode is currently in beta preview. The `variant="wizard"` prop is hidden and does not appear in the public TypeScript declarations as of `@amp-labs/react` v2.13.1. Not all features are supported in the wizard.</Warning>
 
 The wizard mode replaces the standard "all-at-once" configuration view with a guided, multi-step installation flow. It walks your end users through connecting, selecting objects, configuring fields/mappings, and reviewing before creating an installation.
 
@@ -157,16 +157,16 @@ Pass `variant="wizard"` to the `InstallIntegration` component:
   consumerName={userFullName}
   groupRef={teamId}
   groupName={teamName}
+  // @ts-expect-error -- needed since hidden as an internal prop
   variant="wizard"
 />
 ```
+
 
 #### Behavior
 
 - **New installations**: When no installation exists, the wizard renders.
 - **Existing installations**: The standard configuration UI is shown instead.
-- **Sticky mode**: Once the wizard activates, it stays active until the user explicitly clicks "Edit Configuration" on the success screen.
-- **Reset**: If the component resets (e.g. after uninstall), wizard mode resets and can re-enter.
 
 #### The 5-step flow
 
@@ -178,11 +178,7 @@ The user authenticates with the integration provider via OAuth.
 
 **Step 2: Select Objects**
 
-The user picks which objects to sync from the provider.
-
-- Each available object is displayed as a selectable card with a checkbox.
-- If the integration manifest supports bidirectional sync for an object, a "Write Enabled" toggle appears when the object is selected. The tooltip explains: "Allow [App Name] to write back to [Object Name]".
-- At least one object must be selected to proceed.
+The user picks which objects to sync from the provider. A "Write Enabled" toggle appears when the object is selected and is supported via the deployed `amp.yaml`.
 
 ![](/images/wizard-step-2-select-objects.png)
 
@@ -190,43 +186,20 @@ The user picks which objects to sync from the provider.
 
 Per-object configuration with a tabbed multi-object interface.
 
-For each selected object, the user walks through up to 3 sub-pages (determined dynamically by the integration manifest). Tabs at the top show each selected object's name with progress dots indicating configuration progress. Users can click back to a previously configured object.
+For each selected object, the user walks through sub-pages. Users can click back to a previously configured object.
 
 ![](/images/wizard-step-3-configure-objects.png)
 
 **Step 4: Review & Create**
 
 A summary screen showing all configured objects:
-
-- Object name with read/write status
-- Field pills showing required and selected optional fields
-- Mapping visualizations (source → destination) for any configured field mappings
-- Object mapping info if the object maps to a destination
-
 The user clicks "Create Installation" to submit. Error messages are shown inline if submission fails.
 
 ![](/images/wizard-step-4-review.png)
 
 **Step 5: Success**
 
-A confirmation screen with:
-
-- Checkmark icon with "Integration Installation Successful"
-- "Your integration has been configured and is now active."
-- "Edit Configuration" button that exits wizard mode and shows the standard configuration view
-
-#### Visual components
-
-**Stepper** (always visible at the top, 4 steps shown):
-- Completed steps show a checkmark
-- The active step is highlighted
-- Future steps are dimmed
-- The Success step (step 5) is not shown in the stepper
-
-**Navigation bar** (bottom of each step):
-- Back / Next buttons
-- Next is disabled when validation fails (e.g. no objects selected, required mappings incomplete)
-- The Review step replaces Next with "Create Installation"
+A confirmation screen.
 
 ### Connect provider
 
