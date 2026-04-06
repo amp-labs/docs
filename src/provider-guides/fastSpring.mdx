@@ -12,20 +12,18 @@ This connector supports:
 
 ### Example integration
 
-Define an integration with Proxy enabled and provider `fastSpring`:
+To define an integration for FastSpring, create a manifest file that looks like this. For a complete example, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/fastSpring/amp.yaml).
 
-```yaml
+```YAML
 # amp.yaml
 specVersion: 1.0.0
 integrations:
   - name: fastSpringIntegration
-    displayName: My FastSpring integration
+    displayName: My FastSpring Integration
     provider: fastSpring
     proxy:
       enabled: true
 ```
-
-{/* TODO: Add `fastSpring/amp.yaml` (or match samples repo naming for camelCase providers) to [amp-labs/samples](https://github.com/amp-labs/samples) and link the example here. */}
 
 ## Before you get started
 
@@ -38,10 +36,15 @@ FastSpring documents API access in [Getting started with your API](https://devel
 Per FastSpring’s documentation:
 
 1. In the FastSpring application, open **Developer Tools**.
-2. Go to **APIs** → **API Credentials**.
-3. Use **Create** to generate credentials. FastSpring shows the username and password; the password is available only at creation time—store it securely.
 
-{/* TODO: If the live dashboard labels differ from FastSpring’s docs, update the steps above after verifying in a real FastSpring account. */}
+   ![FastSpring Developer Tools](/images/provider-guides/fastSpring/fastSpring-developer-tools.png)
+
+2. Go to **APIs** → **API Credentials**.
+
+   ![FastSpring APIs and API Credentials](/images/provider-guides/fastSpring/fastSpring-api-tab.png)
+   ![FastSpring APIs and API Credentials](/images/provider-guides/fastSpring/fastSpring-api-credentials.png)
+
+3. Use **Create** to generate credentials for the first time. FastSpring shows the username and password; the password is available only at creation time—store it securely.
 
 ## Using the connector
 
@@ -49,7 +52,11 @@ This connector uses **Basic Auth** (username and password), the same credential 
 
 To start integrating with FastSpring:
 
-- Create a manifest file like the [example above](#example-integration).
+- Create a manifest file; see [Example integration](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. Your customers enter their FastSpring API username and password when they connect their account.
 - Start using the connector: with [Proxy Actions](/proxy-actions) enabled, you can make Proxy API calls to `https://api.fastspring.com`.
+
+## Upstream API documentation
+
+- [FastSpring — Getting started with your API](https://developer.fastspring.com/reference/getting-started-with-your-api)
