@@ -1,0 +1,87 @@
+---
+title: "BigQuery"
+---
+
+This guide walks you through connecting your Google BigQuery dataset to an integration using a GCP service account.
+
+## Before installing a BigQuery integration
+
+You will need access to a Google Cloud Platform (GCP) project that contains the BigQuery dataset you want to connect. You must have sufficient permissions to create service accounts and manage IAM roles (typically **Owner** or **Editor** access).
+
+### 1. Enable the required APIs
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Select your project from the project picker at the top of the page.
+3. Navigate to **APIs & Services** > **Enabled APIs & Services**.
+4. Search for **BigQuery API** and verify it is enabled. If not, click **Enable**.
+5. Also search for and enable the **BigQuery Storage API**, as this is required for high-performance data reads.
+
+### 2. Create a service account
+
+A service account is a special-purpose GCP account used by applications to access resources.
+
+1. In the Google Cloud Console, navigate to **IAM & Admin** > **Service Accounts**.
+2. Click **Create Service Account**.
+3. Enter a name (e.g., "Integration Service Account") and an optional description.
+4. Click **Create and Continue**.
+5. Grant the following roles:
+   - **BigQuery Data Viewer** — allows reading table data and metadata.
+   - **BigQuery Job User** — allows running queries in the project.
+6. Click **Done**.
+
+<Note>If you only want to grant access to a specific dataset rather than the entire project, you can assign the **BigQuery Data Viewer** role at the dataset level instead. Navigate to the dataset in the BigQuery console, click **Sharing** > **Permissions**, and add the service account there.</Note>
+
+### 3. Create and download a key
+
+1. From the **Service Accounts** page, click on the service account you just created.
+2. Go to the **Keys** tab.
+3. Click **Add Key** > **Create new key**.
+4. Select **JSON** as the key type and click **Create**.
+5. A JSON file will be downloaded. Store it securely. This file contains credentials that grant access to your BigQuery data.
+
+You will need to base64-encode the contents of this file before providing it during installation. Use the command that matches your environment:
+
+**macOS (Terminal)**
+
+```bash
+base64 -i service-account-key.json
+```
+
+**Linux, Git Bash, or WSL**
+
+```bash
+base64 -w 0 service-account-key.json
+```
+
+**Windows (PowerShell)**
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes((Resolve-Path 'service-account-key.json')))
+```
+
+Copy the encoded string (a long single line). You will paste it when installing the integration.
+
+### 4. Gather your connection details
+
+You will need the following information when installing the integration:
+
+| Input | Where to find it |
+|---|---|
+| **Service Account Key** | The base64-encoded contents of the JSON key file from step 3. |
+| **GCP Project ID** | Your project's ID (not the project number). Find it at the top of the Google Cloud Console or under **IAM & Admin** > **Settings**. It looks like `my-project-id`, not a number. |
+| **Dataset Name** | The name of the BigQuery dataset you want to connect. Find it in the BigQuery console under your project in the left sidebar. |
+| **Timestamp Column** | The name of a `TIMESTAMP` or `DATETIME` column in your tables that tracks when rows were last modified (e.g., `updated_at`, `modified_date`). This is used for incremental syncing. |
+
+## Installing the integration
+
+When you are installing the integration, you will be prompted for the inputs listed above. After providing them, the integration will begin syncing data from your BigQuery dataset.
+
+## Troubleshooting
+
+### Access blocked despite valid credentials
+
+If your GCP project is protected by [VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/overview), all external API requests are denied by default, including the BigQuery Storage Read API used by this integration. Ask your GCP administrator to create an ingress rule that allows the service account to access `bigquery.googleapis.com` from outside the perimeter.
+
+### Missing or filtered data
+
+If columns in your tables use [column-level security](https://cloud.google.com/bigquery/docs/column-level-security-intro) (Data Catalog policy tags), the service account also needs the `Fine-Grained Reader` role on those policy tags. If your tables use [row-level security](https://cloud.google.com/bigquery/docs/row-level-security-intro), rows may be silently filtered. Please ensure the service account is included in the relevant row access policies.

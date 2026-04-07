@@ -313,6 +313,7 @@ const baseConfig = {
             "provider-guides/aweber",
             "provider-guides/aws",
             "provider-guides/bentley",
+            "provider-guides/bigquery",
             "provider-guides/bird",
             "provider-guides/bitbucket",
             "provider-guides/blackbaud",
@@ -481,6 +482,7 @@ const baseConfig = {
           group: "Customer guides",
           pages: [
             "customer-guides/overview",
+            "customer-guides/bigquery",
             "customer-guides/salesforce",
             "customer-guides/loxo",
             "customer-guides/hubspot",

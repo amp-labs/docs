@@ -1,0 +1,64 @@
+---
+title: "BigQuery"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Proxy Actions](/proxy-actions), using the base URL `https://bigquery.googleapis.com`.
+
+### Supported objects
+
+The BigQuery connector can read from any table in the specified dataset. Tables are referenced by name in the `objectName` field of your manifest (e.g., `my_table`).
+
+For each table, the connector supports:
+- All columns, subject to the [field limit](#limits) per read operation.
+- Standard BigQuery types: STRING, INT64, FLOAT64, BOOL, TIMESTAMP, DATE, BYTES, NUMERIC, RECORD, and more.
+
+### Limits
+
+- **Maximum fields per read**: 7. BigQuery is a columnar store, so reading additional columns is significantly more expensive.
+- **Default page size**: 50,000 rows per page.
+- **Timestamp column required**: Every table you read must have a `TIMESTAMP` or `DATETIME` column for incremental reads and backfill windowing.
+
+### Example integration
+
+To define an integration for BigQuery, create a manifest file that looks like this:
+
+```yaml
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: bigquery-integration
+    displayName: My BigQuery Integration
+    provider: bigquery
+    read:
+      objects:
+        - objectName: my_table
+          fields:
+            - id
+            - name
+            - email
+            - updated_at
+          destination: myWebhook
+```
+
+## Using the connector
+
+This connector uses a service account key for authentication, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with BigQuery:
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their service account key, GCP project ID, dataset name, and timestamp column.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls. Please note that this connector's base URL is `https://bigquery.googleapis.com`.
+
+## Customer guide
+
+The [BigQuery customer guide](/customer-guides/bigquery) is a guide that can be shared with your customers to help them set up a service account and provide the required credentials.
