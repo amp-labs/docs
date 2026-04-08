@@ -1,73 +1,34 @@
 ---
-title: "Use with Cursor or Windsurf"
+title: "Use with coding agent"
 ---
 
-Build production-grade product integrations faster with AI x Ampersand.
+The official Ampersand docs MCP server provides access to the full Ampersand documentation context, directly within your favorite Coding Agent or IDE. You can use it to help you build integrations quickly with Ampersand.
 
-The official Ampersand docs MCP (Model Context Protocol) server helps you map your business context to the integration you need to build. It provides access to the full Ampersand documentation context, directly within your favorite AI-powered IDE like [Cursor](https://www.cursor.com), [Windsurf](https://windsurf.com), or non-IDE clients that support MCP, such as [Claude Desktop](https://claude.ai/download).
+Ampersand's docs MCP server is hosted at `https://docs.withampersand.com/mcp`.
 
-Simply describe your integration use case to your IDE, and it will guide you through building it using Ampersand's powerful platform.  
+If you are using Claude Code, you can run this command:
 
-## How it works 
-
-Once you've added the MCP server, you can ask how-to questions or request your AI IDE to build an integration for you. Be as creative and descriptive as you'd like - your IDE will handle the rest.
-
-### Sample prompts 
-
-"How can I read from HubSpot every 45 minutes using Ampersand?" 
-
-<video 
-  controls
-  width="100%"
-  src="https://res.cloudinary.com/dycvts6vp/video/upload/v1744114462/media/vxb4a78xorq1ymjhphtp.mp4"
->
-  <p>Here is a <a href="https://res.cloudinary.com/dycvts6vp/video/upload/v1744114462/media/vxb4a78xorq1ymjhphtp.mp4">link to the video</a> instead.</p>
-</video>
-
-"My use case is to listen to changes on the Salesforce Contact Object. When these changes happen I would like to update a database table with the changed field names. How can I build this with Ampersand?"
-
-<video 
-    controls
-    width="100%"
-    src="https://res.cloudinary.com/dycvts6vp/video/upload/v1744115357/media/tp4dx1ualzlrzpsl75sf.mp4"
->
-    <p>Here is a <a href="https://res.cloudinary.com/dycvts6vp/video/upload/v1744115357/media/tp4dx1ualzlrzpsl75sf.mp4">link to the video</a> instead.</p>
-</video>
-
-### Tips for better prompts
-
-- Mention Ampersand in your prompt. For example, "How do I do X with Ampersand?"
-
-- Ask your IDE or chat client to verify field names against the provider's documentation. For example, "Verify that the field names are real field names for the Account object, according to Salesforce documentation."
-
-
-## Connect to Ampersand's MCP server
-
-You have two options for connecting to the MCP server:
-- Use the hosted server.
-- Run the server locally.
-
-### Use the hosted server
-
-Add the following to your MCP configuration file. Its location depends on the client you are using. See [Client-specific configuration](#client-specific-configuration).
-
-```JSON
-{
-  "mcpServers": {
-    "@amp-labs/mcp-docs-server": {
-      "url": "https://mcp-docs.withampersand.com/sse" 
-    }
-  }
-}
+```shell
+claude mcp add ampersand-docs --transport http "https://docs.withampersand.com/mcp"
 ```
 
+## Client specific configuration
 
-### Client-specific configuration
-
-You can use Ampersand's MCP server with any AI application that support [MCP](https://modelcontextprotocol.io/clients). Below are some of the most popular ones:
+You can use Ampersand's MCP server with any AI application that support [MCP](https://modelcontextprotocol.io/clients). You need to add `https://docs.withampersand.com/mcp` to the appropriate configuration file or setting. Below are some of the most popular coding agents, and where to configure MCP servers for them:
 
 | Client | Configuration File Location | Documentation |
-|--------|----------------------------|---------------|
-| Cursor | `~/cursor/MCP.json` | [link](https://docs.cursor.com/context/model-context-protocol#configuring-mcp-servers) |
-| Windsurf | `~/.codeium/windsurf/mcp_config.json` | [link](https://docs.windsurf.com/windsurf/mcp#configuring-mcp) |
-| Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` | [link](https://modelcontextprotocol.io/quickstart/user) |
+|--------|------------------------------|---------------|
+| Claude Code | `.mcp.json` (project scope) or `~/.claude.json` (user/local scope); or `claude mcp add` | [link](https://code.claude.com/docs/en/mcp) |
+| Cursor | `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) | [link](https://cursor.com/docs/mcp) |
+| JetBrains IDEs (Junie) | `~/.junie/mcp/mcp.json` (user) or `.junie/mcp/mcp.json` (project); or **Settings → Tools → Junie → MCP Settings** | [link](https://junie.jetbrains.com/docs/junie-plugin-mcp-settings.html) |
+| Visual Studio Code | `.vscode/mcp.json` (workspace) or user `mcp.json` (**MCP: Open User Configuration**) | [link](https://code.visualstudio.com/docs/copilot/customization/mcp-servers) |
+| Windsurf | `~/.codeium/windsurf/mcp_config.json` | [link](https://docs.windsurf.com/windsurf/cascade/mcp) |
+| Zed | `context_servers` in `settings.json` (macOS/Linux: `~/.config/zed/settings.json`; Windows: `%AppData%\Zed\settings.json`) | [link](https://zed.dev/docs/ai/mcp) |
+
+## Tips for better prompts
+
+- Mention Ampersand in your prompt. For example, "How do I build X with Ampersand?"
+
+- Ask your agent to verify field names against the provider's documentation. For example, "Verify that the field names are real field names for the Account object, according to Salesforce documentation."
+
+- Ask your agent to refer to Ampersand's OpenAPI spec at https://github.com/amp-labs/openapi.
