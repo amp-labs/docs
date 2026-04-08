@@ -139,6 +139,79 @@ The API returns:
 - **createTime** — When the backfill started
 - **updateTime** — When progress was last updated
 
+## Filtering records
+
+You can filter which records are returned by a read action by setting `fieldFilters` in the [installation config](/reference/installation/create-an-installation). Filters are applied server-side by the SaaS provider, so only matching records are read and delivered to your destination.
+
+Each filter specifies a field name, an operator, and a value. Currently, only the `eq` (equals) operator is supported. Multiple filters are joined with AND logic, and each field can only have one condition.
+
+### Filter all reads
+
+To filter both incremental reads and backfill, set `fieldFilters` on the object in the installation config:
+
+```json
+{
+  "read": {
+    "objects": {
+      "contacts": {
+        "objectName": "contacts",
+        "selectedFields": { "email": true, "firstname": true, "lastname": true },
+        "backfill": {
+          "defaultPeriod": { "fullHistory": true }
+        },
+        "fieldFilters": [
+          { "fieldName": "firstname", "operator": "eq", "value": "Brian" }
+        ]
+      }
+    }
+  }
+}
+```
+
+In this example, only contacts whose `firstname` equals "Brian" will be returned during both scheduled reads and backfill.
+
+### Filter backfill only
+
+If you want different filter behavior for backfill vs. incremental reads, you can set `fieldFilters` inside the `backfill` object. When set, this overrides the object-level `fieldFilters` during backfill.
+
+```json
+{
+  "read": {
+    "objects": {
+      "contacts": {
+        "objectName": "contacts",
+        "selectedFields": { "email": true, "firstname": true, "lastname": true },
+        "fieldFilters": [
+          { "fieldName": "status", "operator": "eq", "value": "active" }
+        ],
+        "backfill": {
+          "defaultPeriod": { "fullHistory": true },
+          "fieldFilters": [
+            { "fieldName": "firstname", "operator": "eq", "value": "Brian" }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+In this example, the backfill will only return contacts whose `firstname` equals "Brian", while subsequent incremental reads will only return contacts whose `status` equals "active".
+
+### Filter values
+
+The `value` field accepts strings, booleans, and numbers:
+
+```json
+{ "fieldName": "name", "operator": "eq", "value": "Acme" }
+{ "fieldName": "isActive", "operator": "eq", "value": true }
+{ "fieldName": "employeeCount", "operator": "eq", "value": 50 }
+```
+
+### Supported providers
+
+Filters are currently supported for **HubSpot** and **Salesforce** read actions.
+
 ## Trigger a read
 
 You can call the [trigger read API](/reference/read/trigger-a-read) when you want Ampersand to read data for a particular customer. The data will be sent asynchronously to your destination. You can either use this API alongside a scheduled read (defined by the `schedule` field in the `amp.yaml`), or you can exclusively use the trigger read API without defining a schedule.
