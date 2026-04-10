@@ -155,12 +155,48 @@ Use this path only if you already have a Connected App created before Spring '26
   </Tab>
 </Tabs>
 
-### 5. Pick an integration user
+### 5. Pick a Profile for the integration user
 
-The JWT Bearer flow runs as a specific Salesforce user. Every API call made by the integration is attributed to this user, and its permissions determine what data the integration can read and write. You can either reuse an existing user or create a dedicated one. We strongly recommend creating a dedicated integration user — it's safer, clearer in audit logs, and won't break if a teammate leaves the company.
+In Salesforce, a **Profile** determines what a user can access and — importantly for JWT Bearer — which apps they can be pre-authorized for. In step 7 you will add a Profile to the app's **Selected Profiles** list, which pre-authorizes every user on that Profile to act as the JWT `sub` for the app. For that reason, you want the Profile you pick here to be as **narrow as possible** — ideally, one that is used only by the integration user.
 
 <Tabs>
-  <Tab title="Create a new user">
+  <Tab title="Create a dedicated integration Profile (recommended)">
+
+Creating a custom Profile scoped to integrations is the cleanest and most secure option. It means only users on this specific Profile can be impersonated by the integration, and you can revoke access instantly by removing the Profile from the app.
+
+1. In **Setup**, search for **Profiles** in the Quick Find box and select **Profiles**.
+2. Find a base profile to clone. A good starting point is **Standard User** (or **Minimum Access - Salesforce** for a narrower starting point). Click **Clone** next to it.
+3. Give the clone a clear name, e.g. `Ampersand Integration Profile`, and click **Save**.
+4. Open the new profile and click **Edit**.
+5. Under **Administrative Permissions** (or **System Permissions**), ensure **API Enabled** is checked.
+6. Under **Standard Object Permissions** and **Custom Object Permissions**, grant Read / Create / Edit / Delete (as appropriate) for every object the integration reads or writes. Be sure to also grant access to every **field** the integration needs under the corresponding Object Manager field-level security.
+7. Click **Save**.
+
+<Note>Missing field-level access is the most common cause of silent read failures. It is worth double-checking the object-by-object field list against what your integration actually uses.</Note>
+
+  </Tab>
+  <Tab title="Use an existing standard profile (simpler but broader)">
+
+You can use an existing profile like **System Administrator** or **Standard User**. This is faster to set up, but it means **every user on that profile** will be pre-authorized for the integration's app in step 7 — not just the integration user.
+
+1. In **Setup**, search for **Profiles** and select **Profiles**.
+2. Open the profile you plan to use.
+3. Verify the profile has the **API Enabled** system permission.
+4. Verify the profile grants Read / Create / Edit / Delete access (as appropriate) to every object the integration needs, and the required field-level security for those fields. `System Administrator` grants all of these by default; other profiles may need adjustments.
+
+<Note>If you use a shared profile like `System Administrator`, understand the security tradeoff: every admin in your org becomes eligible to be the `sub` of a JWT Bearer exchange for this app. For production deployments, we recommend creating a dedicated integration profile instead.</Note>
+
+  </Tab>
+</Tabs>
+
+### 6. Assign the Profile to an integration user
+
+The JWT Bearer flow runs as a specific Salesforce user. Every API call made by the integration is attributed to this user, and its Profile determines what data the integration can read and write, and whether it's allowed to authenticate to the app.
+
+<Tabs>
+  <Tab title="Create a new integration user (recommended)">
+
+Creating a dedicated integration user is safer and clearer in audit logs, and it won't break if a teammate leaves the company.
 
 1. In **Setup**, search for **Users** in the Quick Find box and select **Users**.
 2. Click **New User**.
@@ -168,11 +204,12 @@ The JWT Bearer flow runs as a specific Salesforce user. Every API call made by t
    - **First Name** / **Last Name**: e.g. `Ampersand` / `Integration`
    - **Email**: use a real mailbox you control. Salesforce will send the welcome email here.
    - **Username**: must be unique across all Salesforce orgs globally, and must look like an email address (e.g. `ampersand-integration@your-company.com`). It does not need to match any real inbox.
-   - **User License** and **Profile**: pick any combination that includes the **API Enabled** system permission. A common choice is the **Salesforce** license with the **Standard User** profile. `System Administrator` is overkill and not recommended.
+   - **User License**: pick a license that includes API access. **Salesforce** is the most common choice.
+   - **Profile**: select the Profile from step 5.
 4. Click **Save**.
 5. Complete the welcome email flow to set an initial password for the user. JWT Bearer will not use the password, but Salesforce requires the account to be fully activated first.
 
-<Note>Don't worry about granting object access here — that comes next via a Permission Set in step 6.</Note>
+<Note>The username you enter here is exactly the value you'll paste into the **Salesforce Username** field when installing the integration. Copy it somewhere you can find it later.</Note>
 
   </Tab>
   <Tab title="Use an existing user">
@@ -181,7 +218,7 @@ If you're reusing an existing Salesforce user, confirm the following before cont
 
 1. In **Setup**, open **Users** and find the user.
 2. Verify the user is **Active**.
-3. Verify the user's profile has the **API Enabled** system permission. If you're not sure, you can grant it via a Permission Set in step 6.
+3. Verify the user's **Profile** matches what you picked in step 5. If it doesn't, either switch the user to that Profile, or go back to step 5 and pick the user's actual Profile instead (keeping in mind the security tradeoff of using a shared profile).
 4. Note the user's **Username** exactly as shown (including any sandbox suffix like `.sandboxname`) — you will need it later.
 
 <Note>We still strongly recommend a dedicated integration user over a real human's account. If you're using a human user and they later leave the company, the integration will stop working the moment their user is deactivated.</Note>
@@ -189,47 +226,9 @@ If you're reusing an existing Salesforce user, confirm the following before cont
   </Tab>
 </Tabs>
 
-### 6. Assign a Permission Set to the integration user
+### 7. Associate the Profile with the app
 
-A Permission Set is how you give the integration user access to the specific objects and fields the integration needs. You can either reuse an existing permission set (if you already have one that grants the right access) or create a new one dedicated to the integration. We recommend a dedicated permission set because it makes the integration's access explicit, auditable, and easy to revoke.
-
-<Tabs>
-  <Tab title="Create a new permission set">
-
-1. In **Setup**, search for **Permission Sets** and select **Permission Sets**.
-2. Click **New**.
-3. Fill in the details:
-   - **Label**: e.g. `Ampersand Integration Access`
-   - **License**: leave as `--None--` unless you have a specific reason to tie the permission set to a particular license. A licenseless permission set can be assigned to users on any license.
-4. Click **Save**.
-5. Open the newly created permission set and configure:
-   - **Object Settings**: for every object the integration reads or writes (e.g. `Accounts`, `Contacts`, `Leads`, `Opportunities`, plus any custom objects), grant the appropriate Read / Create / Edit / Delete permissions. Be sure to also grant access to every **field** the integration needs under **Field Permissions** — missing field access is the most common cause of silent read failures.
-   - **System Permissions**: ensure **API Enabled** is checked.
-6. Click **Manage Assignments** at the top of the permission set.
-7. Click **Add Assignment** and assign the permission set to the integration user you picked in step 5.
-8. Click **Assign**, then **Done**.
-
-<Note>If you miss an object or field in the permission set, the integration will return empty results or permission errors at runtime — not at setup time. It's worth double-checking the list against the objects your integration actually uses.</Note>
-
-  </Tab>
-  <Tab title="Use an existing permission set">
-
-If you already have a permission set that grants the right object and field access, you can reuse it. Before continuing, verify the permission set meets these requirements:
-
-1. In **Setup**, search for **Permission Sets** and open the permission set you plan to reuse.
-2. Check **Object Settings** to confirm the permission set grants Read / Create / Edit / Delete (as appropriate) on every object the integration needs, plus the required fields under **Field Permissions**.
-3. Check **System Permissions** to confirm **API Enabled** is checked.
-4. Click **Manage Assignments** at the top of the permission set.
-5. If the integration user from step 5 is not already in the assignment list, click **Add Assignment**, select the user, and click **Assign**, then **Done**.
-
-<Note>Reusing a permission set that also applies to human users means the integration inherits any future permission changes made to that set. If you want the integration's access to be independent of human users' access, create a dedicated permission set instead.</Note>
-
-  </Tab>
-</Tabs>
-
-### 7. Associate the permission set with the app
-
-The final setup step is associating the permission set with the app you created in step 2. This is what satisfies the **Admin approved users are pre-authorized** OAuth policy from step 4 — it tells Salesforce "any user who has this permission set is allowed to use this app headlessly."
+The final setup step is adding the Profile from step 5 to the app's pre-authorized Profiles list. This is what satisfies the **Admin approved users are pre-authorized** OAuth policy from step 4 — it tells Salesforce "any user on this Profile is allowed to use this app headlessly."
 
 <Tabs>
   <Tab title="External Client App">
@@ -237,25 +236,25 @@ The final setup step is associating the permission set with the app you created 
 1. In **Setup**, open **External Client App Manager** and select your External Client App.
 2. Go to the **Policies** tab.
 3. Expand **App Policies**.
-4. Under **Select Permission Sets**, move the permission set from step 6 from **Available Permission Sets** to **Selected Permission Sets** using the arrow button (`>`).
+4. Under **Select Profiles**, move the Profile from step 5 from **Available Profiles** to **Selected Profiles** using the arrow button (`>`).
 5. Click **Save**.
 
-<Note>The **Select Permission Sets** picker only appears after you set **Permitted Users** to **Admin approved users are pre-authorized** in step 4. If you don't see it, revisit that step first.</Note>
+<Note>The **Select Profiles** picker only appears after you set **Permitted Users** to **Admin approved users are pre-authorized** in step 4. If you don't see it, revisit that step first.</Note>
 
   </Tab>
   <Tab title="Connected App (legacy)">
 
-On a Connected App, the association is done from the permission set side rather than the app side.
+On a Connected App, the association is done from the profile side rather than the app side.
 
-1. In **Setup**, open **Permission Sets** and select the permission set from step 6.
-2. Scroll down to the **Assigned Connected Apps** related list and click **Edit**.
-3. Move your Connected App from **Available Connected Apps** to **Enabled Connected Apps**.
+1. In **Setup**, open **Profiles** and select the Profile from step 5.
+2. Scroll down to the **Connected App Access** related list and click **Edit**.
+3. Check the box next to your Connected App.
 4. Click **Save**.
 
   </Tab>
 </Tabs>
 
-<Note>This is the step that actually pre-authorizes the integration user for JWT Bearer. Without it — even if everything else is configured correctly — Salesforce rejects the JWT assertion with `user hasn't approved this consumer`.</Note>
+<Note>This is the step that actually pre-authorizes the integration user for JWT Bearer. Without it — even if everything else is configured correctly — Salesforce rejects the JWT assertion with `invalid_app_access: user is not admin approved to access this app`.</Note>
 
 ### 8. Confirm your Salesforce subdomain
 
@@ -276,7 +275,7 @@ Here is where to find each value:
 | Input | Where to find it |
 |---|---|
 | **Consumer Key** | From step 3. |
-| **Salesforce Username** | The username of the integration user from step 5. |
+| **Salesforce Username** | The username of the integration user from step 6. |
 | **Private Key** | Base64-encoded contents of `private-key.pem` (from step 1). |
 | **Subdomain** | Your My Domain subdomain (from step 8). |
 | **Environment** | *(Optional)* `production` or `sandbox`. Leave blank to let Ampersand auto-detect from your subdomain. Set explicitly only if auto-detection chooses the wrong environment for your org. |
@@ -287,9 +286,10 @@ Here is where to find each value:
 
 If the integration reports authentication errors after setup, work through this checklist:
 
-- **`user hasn't approved this consumer`**: Either the integration user's permission set is not associated with your app (revisit step 7), or the **Refresh Token Policy** on the app is not set to **Refresh token is valid until revoked** (revisit step 4). Both are required.
-- **Worked for weeks or months, then started failing with `invalid_grant`**: Almost always the Refresh Token Policy silently aging out the approval. Set **Refresh Token Policy** to **Refresh token is valid until revoked** and re-assign the permission set if needed.
+- **`invalid_app_access: user is not admin approved to access this app`**: The integration user's Profile is not in the app's **Selected Profiles** list. Revisit step 7 and confirm the Profile from step 5 is in **Selected Profiles** (not just **Available Profiles**). Note: Salesforce's documentation suggests that associating a Permission Set instead of a Profile also works, but in practice on locally-created External Client Apps, only Profile association is reliable — which is why this guide uses Profiles throughout. If you want to confirm the error independently, you can reproduce it with the Salesforce CLI using `sf org login jwt --client-id <key> --jwt-key-file private-key.pem --username <user> --instance-url https://<workspace>.my.salesforce.com`.
+- **`user hasn't approved this consumer`**: Either the integration user's Profile is not associated with your app (revisit step 7), or the **Refresh Token Policy** on the app is not set to **Refresh token is valid until revoked** (revisit step 4). Both are required.
+- **Worked for weeks or months, then started failing with `invalid_grant`**: Almost always the Refresh Token Policy silently aging out the approval. Set **Refresh Token Policy** to **Refresh token is valid until revoked** and re-associate the Profile if needed.
 - **`invalid_grant: audience is invalid`**: The environment (production vs sandbox) was detected incorrectly. Set the **Environment** input explicitly to `production` or `sandbox`.
 - **`invalid_grant: invalid assertion`**: The private key or certificate is mismatched. Regenerate the pair in step 1 and re-upload the certificate in step 2.
-- **`not authorized`**: Check **IP Relaxation** is set to **Relax IP restrictions** (step 4), and that the integration user is active and has `API Enabled`.
+- **`not authorized`**: Check **IP Relaxation** is set to **Relax IP restrictions** (step 4), and that the integration user is active and has **API Enabled** on its Profile.
 - **Works immediately after setup, then fails**: Wait 2 to 10 minutes after creating or modifying the app for Salesforce to propagate the changes.
