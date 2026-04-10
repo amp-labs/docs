@@ -189,9 +189,12 @@ If you're reusing an existing Salesforce user, confirm the following before cont
   </Tab>
 </Tabs>
 
-### 6. Create a Permission Set and grant object access
+### 6. Assign a Permission Set to the integration user
 
-A Permission Set is how you give the integration user access to the specific objects and fields the integration needs. Using a Permission Set (rather than editing the profile directly) keeps the integration user's access explicit, auditable, and easy to revoke.
+A Permission Set is how you give the integration user access to the specific objects and fields the integration needs. You can either reuse an existing permission set (if you already have one that grants the right access) or create a new one dedicated to the integration. We recommend a dedicated permission set because it makes the integration's access explicit, auditable, and easy to revoke.
+
+<Tabs>
+  <Tab title="Create a new permission set">
 
 1. In **Setup**, search for **Permission Sets** and select **Permission Sets**.
 2. Click **New**.
@@ -203,10 +206,26 @@ A Permission Set is how you give the integration user access to the specific obj
    - **Object Settings**: for every object the integration reads or writes (e.g. `Accounts`, `Contacts`, `Leads`, `Opportunities`, plus any custom objects), grant the appropriate Read / Create / Edit / Delete permissions. Be sure to also grant access to every **field** the integration needs under **Field Permissions** — missing field access is the most common cause of silent read failures.
    - **System Permissions**: ensure **API Enabled** is checked.
 6. Click **Manage Assignments** at the top of the permission set.
-7. Click **Add Assignment** and assign the permission set to the integration user you created in step 5.
+7. Click **Add Assignment** and assign the permission set to the integration user you picked in step 5.
 8. Click **Assign**, then **Done**.
 
 <Note>If you miss an object or field in the permission set, the integration will return empty results or permission errors at runtime — not at setup time. It's worth double-checking the list against the objects your integration actually uses.</Note>
+
+  </Tab>
+  <Tab title="Use an existing permission set">
+
+If you already have a permission set that grants the right object and field access, you can reuse it. Before continuing, verify the permission set meets these requirements:
+
+1. In **Setup**, search for **Permission Sets** and open the permission set you plan to reuse.
+2. Check **Object Settings** to confirm the permission set grants Read / Create / Edit / Delete (as appropriate) on every object the integration needs, plus the required fields under **Field Permissions**.
+3. Check **System Permissions** to confirm **API Enabled** is checked.
+4. Click **Manage Assignments** at the top of the permission set.
+5. If the integration user from step 5 is not already in the assignment list, click **Add Assignment**, select the user, and click **Assign**, then **Done**.
+
+<Note>Reusing a permission set that also applies to human users means the integration inherits any future permission changes made to that set. If you want the integration's access to be independent of human users' access, create a dedicated permission set instead.</Note>
+
+  </Tab>
+</Tabs>
 
 ### 7. Associate the permission set with the app
 
@@ -218,7 +237,7 @@ The final setup step is associating the permission set with the app you created 
 1. In **Setup**, open **External Client App Manager** and select your External Client App.
 2. Go to the **Policies** tab.
 3. Expand **App Policies**.
-4. Under **Select Permission Sets**, move your `Ampersand Integration Access` permission set from **Available Permission Sets** to **Selected Permission Sets** using the arrow button (`>`).
+4. Under **Select Permission Sets**, move the permission set from step 6 from **Available Permission Sets** to **Selected Permission Sets** using the arrow button (`>`).
 5. Click **Save**.
 
 <Note>The **Select Permission Sets** picker only appears after you set **Permitted Users** to **Admin approved users are pre-authorized** in step 4. If you don't see it, revisit that step first.</Note>
@@ -228,7 +247,7 @@ The final setup step is associating the permission set with the app you created 
 
 On a Connected App, the association is done from the permission set side rather than the app side.
 
-1. In **Setup**, open **Permission Sets** and select the `Ampersand Integration Access` permission set.
+1. In **Setup**, open **Permission Sets** and select the permission set from step 6.
 2. Scroll down to the **Assigned Connected Apps** related list and click **Edit**.
 3. Move your Connected App from **Available Connected Apps** to **Enabled Connected Apps**.
 4. Click **Save**.
