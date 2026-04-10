@@ -141,7 +141,7 @@ The API returns:
 
 ## Filter by field values
 
-You can filter which records are returned by a read action by setting `fieldFilters` in the [installation config](/reference/installation/create-a-new-installation). Then only matching records are read and delivered to your destination.
+You can filter which records are returned by a read action by setting `fieldFilters` in the installation config when you are creating the installation using the [REST API](/reference/installation/create-a-new-installation) or Headless UI's [createInstallation method](/headless#create-update-and-delete-installations). Then only matching records are read and delivered to your destination.
 
 Each filter specifies a field name, an operator, and a value. Currently, only the `eq` (equals) operator is supported. Multiple filters are joined with AND logic, and each field can only have one condition.
 
@@ -151,7 +151,7 @@ Each filter specifies a field name, an operator, and a value. Currently, only th
 
 ### Filter all records
 
-To filter both incremental reads and backfill, set `fieldFilters` on the object in the installation config:
+To filter both incremental reads and backfill, set `fieldFilters` on the object in the installation config when you are creating the installation using the [REST API](/reference/installation/create-a-new-installation) or Headless UI's [createInstallation method](/headless#create-update-and-delete-installations):
 
 ```json
 {
