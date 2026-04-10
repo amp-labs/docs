@@ -4,7 +4,7 @@ title: "Read actions"
 
 A read action reads data from your customer's SaaS and send them to Destinations that you define.
 
-## Defining reads
+## Define reads
 
 To read an object, you need to specify:
 
@@ -139,13 +139,17 @@ The API returns:
 - **createTime** — When the backfill started
 - **updateTime** — When progress was last updated
 
-## Filtering records
+## Filter by field values
 
-You can filter which records are returned by a read action by setting `fieldFilters` in the [installation config](/reference/installation/create-a-new-installation). Filters are applied server-side by the SaaS provider, so only matching records are read and delivered to your destination.
+You can filter which records are returned by a read action by setting `fieldFilters` in the [installation config](/reference/installation/create-a-new-installation). Then only matching records are read and delivered to your destination.
 
 Each filter specifies a field name, an operator, and a value. Currently, only the `eq` (equals) operator is supported. Multiple filters are joined with AND logic, and each field can only have one condition.
 
-### Filter all reads
+<Note>
+  Filtered reads are currently only supported for **Salesforce** (CRM Module) and **HubSpot**.
+</Note>
+
+### Filter all records
 
 To filter both incremental reads and backfill, set `fieldFilters` on the object in the installation config:
 
@@ -170,9 +174,9 @@ To filter both incremental reads and backfill, set `fieldFilters` on the object 
 
 In this example, only contacts whose `firstname` equals "Brian" will be returned during both scheduled reads and backfill.
 
-### Filter backfill only
+### Backfill-specific filters
 
-If you want different filter behavior for backfill vs. incremental reads, you can set `fieldFilters` inside the `backfill` object. When set, this overrides the object-level `fieldFilters` during backfill.
+If you want different filter behavior for backfill vs. incremental reads, you can set `fieldFilters` inside the `backfill` object. When set, this overrides the object-level `fieldFilters` during backfill. Please note that [triggered reads](#trigger-a-read) will still use the object-level `fieldFilters`, if it is defined.
 
 ```json
 {
@@ -198,19 +202,15 @@ If you want different filter behavior for backfill vs. incremental reads, you ca
 
 In this example, the backfill will only return contacts whose `firstname` equals "Brian", while subsequent incremental reads will only return contacts whose `status` equals "active".
 
-### Filter values
+### Valid filter values
 
-The `value` field accepts strings, booleans, and numbers:
+The `value` field of the filter accepts strings, booleans, and numbers:
 
 ```json
 { "fieldName": "name", "operator": "eq", "value": "Acme" }
 { "fieldName": "isActive", "operator": "eq", "value": true }
 { "fieldName": "employeeCount", "operator": "eq", "value": 50 }
 ```
-
-### Supported providers
-
-Filters are currently supported for **HubSpot** and **Salesforce** read actions.
 
 ## Trigger a read
 
