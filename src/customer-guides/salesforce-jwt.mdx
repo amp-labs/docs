@@ -278,7 +278,6 @@ Here is where to find each value:
 | **Salesforce Username** | The username of the integration user from step 6. |
 | **Private Key** | Base64-encoded contents of `private-key.pem` (from step 1). |
 | **Subdomain** | Your My Domain subdomain (from step 8). |
-| **Environment** | *(Optional)* `production` or `sandbox`. Leave blank to let Ampersand auto-detect from your subdomain. Set explicitly only if auto-detection chooses the wrong environment for your org. |
 
 <Note>**Sandbox refresh**: After refreshing a sandbox, the integration user's username may be re-suffixed with the sandbox name (e.g. `integration@acme.com` becomes `integration@acme.com.dev`). If this happens, update the **Salesforce Username** field on your Ampersand connection to match the new username.</Note>
 
@@ -289,7 +288,7 @@ If the integration reports authentication errors after setup, work through this 
 - **`invalid_app_access: user is not admin approved to access this app`**: The integration user's Profile is not in the app's **Selected Profiles** list. Revisit step 7 and confirm the Profile from step 5 is in **Selected Profiles** (not just **Available Profiles**). Note: Salesforce's documentation suggests that associating a Permission Set instead of a Profile also works, but in practice on locally-created External Client Apps, only Profile association is reliable — which is why this guide uses Profiles throughout. If you want to confirm the error independently, you can reproduce it with the Salesforce CLI using `sf org login jwt --client-id <key> --jwt-key-file private-key.pem --username <user> --instance-url https://<workspace>.my.salesforce.com`.
 - **`user hasn't approved this consumer`**: Either the integration user's Profile is not associated with your app (revisit step 7), or the **Refresh Token Policy** on the app is not set to **Refresh token is valid until revoked** (revisit step 4). Both are required.
 - **Worked for weeks or months, then started failing with `invalid_grant`**: Almost always the Refresh Token Policy silently aging out the approval. Set **Refresh Token Policy** to **Refresh token is valid until revoked** and re-associate the Profile if needed.
-- **`invalid_grant: audience is invalid`**: The environment (production vs sandbox) was detected incorrectly. Set the **Environment** input explicitly to `production` or `sandbox`.
+- **`invalid_grant: audience is invalid`**: The production vs sandbox environment was auto-detected incorrectly from your subdomain. Double-check that your subdomain string matches the format shown in step 8 — sandboxes should include a `--` or `.sandbox` segment.
 - **`invalid_grant: invalid assertion`**: The private key or certificate is mismatched. Regenerate the pair in step 1 and re-upload the certificate in step 2.
 - **`not authorized`**: Check **IP Relaxation** is set to **Relax IP restrictions** (step 4), and that the integration user is active and has **API Enabled** on its Profile.
 - **Works immediately after setup, then fails**: Wait 2 to 10 minutes after creating or modifying the app for Salesforce to propagate the changes.
