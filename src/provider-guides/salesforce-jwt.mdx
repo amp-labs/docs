@@ -1,0 +1,70 @@
+---
+title: "Salesforce (JWT)"
+slug: "salesforce-jwt"
+excerpt: ""
+hidden: false
+---
+
+The Salesforce (JWT) connector authenticates using the [OAuth 2.0 JWT Bearer Flow](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_jwt_flow.htm&language=en_US&type=5) instead of the standard Authorization Code flow. This is a headless, server-to-server flow that is well suited for long-running, unattended integrations where an interactive OAuth login is impractical.
+
+If you are looking to build an interactive, customer-facing Salesforce integration, use the standard [Salesforce connector](/provider-guides/salesforce) instead.
+
+## What's Supported
+
+### Supported Actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions), including Bulk Write and Delete.
+- [Subscribe Actions](/subscribe-actions).
+- [Search Actions](/search-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.my.salesforce.com`.
+
+### Supported Modules & Objects
+
+The Salesforce (JWT) connector currently supports the **CRM** module (referred to as `crm` in `amp.yaml`). The same standard and custom objects supported by the standard Salesforce connector are available — see the [Supported CRM objects](/provider-guides/salesforce#supported-crm-objects) section of the Salesforce provider guide for the full list.
+
+The Account Engagement (Pardot) module is not currently supported under JWT Bearer authentication.
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforce-jwt-integration
+    provider: salesforceJWT
+    ...
+```
+
+## Before You Get Started
+
+This connector uses OAuth 2.0 JWT Bearer authentication with an RSA key pair. There is no interactive login — your customer's Salesforce administrator will pre-authorize a designated integration user on a Connected App, and Ampersand will sign JWT assertions on their behalf to obtain access tokens.
+
+To integrate Salesforce (JWT) with Ampersand, your customer's Salesforce administrator will need to complete the setup steps in the [customer guide](/customer-guides/salesforce-jwt) and provide you with the following credentials:
+
+- Consumer Key (from the Connected App)
+- Salesforce Username (the integration user)
+- RSA Private Key (base64-encoded PEM)
+- Salesforce My Domain subdomain (workspace)
+
+### Creating the Salesforce app for JWT Bearer
+
+Your customer's Salesforce administrator creates an **External Client App** (or configures an existing **Connected App**) with JWT Bearer flow enabled, uploads an X.509 certificate, and assigns a permission set that pre-authorizes the integration user. The full steps are documented in the [customer guide](/customer-guides/salesforce-jwt).
+
+<Note>Since Spring '26, Salesforce no longer allows creating new **Connected Apps** — the customer guide covers both the new **External Client App** flow and the legacy Connected App flow for customers who already have one. See [Salesforce's announcement](https://help.salesforce.com/s/articleView?id=005228017&language=en_US&type=1) for details.</Note>
+
+<Note>Salesforce requires an RSA key (2048-bit minimum). ECDSA keys are not supported for the JWT Bearer flow.</Note>
+
+## Using the connector
+
+To start integrating with Salesforce (JWT):
+- Create a manifest file like the [Salesforce example](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml), using `salesforceJWT` as the provider.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
+- Collect your customer's credentials (Consumer Key, Username, Private Key, Subdomain) and create a connection.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Customer guide
+
+The [Salesforce (JWT) customer guide](/customer-guides/salesforce-jwt) is a guide that can be shared with your customers to help them be successful in using your integration.
