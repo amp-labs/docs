@@ -140,15 +140,15 @@ Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the follo
 
 ![](/images/1f151f2-Example_for_docs_1.png) 
 
-### Wizard mode (Beta)
-
-<Warning>The wizard mode is currently in beta preview. The `variant="wizard"` prop is hidden and does not appear in the public TypeScript declarations as of `@amp-labs/react` v2.13.1. Please see [supported features](#supported-features) for details on what is currently available.</Warning>
+#### Wizard mode (Beta)
 
 The wizard mode replaces the standard configuration view with a guided, multi-step installation flow during initial set up. It walks your end users through connecting, selecting objects, configuring fields/mappings, and reviewing before creating an installation.
 
-#### How to activate
+<Warning>The wizard mode is currently in beta preview. The `variant="wizard"` prop is hidden and does not appear in the public TypeScript declarations as of `@amp-labs/react` v2.13.1. Please see [supported features](#supported-features) for details on what is currently available.</Warning>
 
-Pass `variant="wizard"` to the `InstallIntegration` component:
+![](/images/install-wizard-demo.gif)
+
+To activate wizard mode, pass `variant="wizard"` to the `InstallIntegration` component:
 
 ```JSX
 <InstallIntegration
@@ -162,57 +162,18 @@ Pass `variant="wizard"` to the `InstallIntegration` component:
 />
 ```
 
-
-#### Behavior
-
-- **New installations**: When no installation exists, the wizard renders.
-- **Existing installations**: The standard configuration UI is shown instead.
-
-#### The 5-step flow
-
-**Step 1: Connect**
-
-The user authenticates with the integration provider via OAuth.
-
-![](/images/wizard-step-1-connect.png)
-
-**Step 2: Select Objects**
-
-The user picks which objects to sync from the provider. A "Write Enabled" toggle appears when the object is selected and supported via the deployed `amp.yaml`.
-
-![](/images/wizard-step-2-select-objects.png)
-
-**Step 3: Configure Objects**
-
-Per-object configuration with a tabbed multi-object interface.
-
-For each selected object, the user walks through sub-pages. Users can click back to a previously configured object.
-
-![](/images/wizard-step-3-configure-objects.png)
-
-**Step 4: Review & Create**
-
-A summary screen showing all configured objects:
-The user clicks "Create Installation" to submit. Error messages are shown inline if submission fails.
-
-![](/images/wizard-step-4-review.png)
-
-**Step 5: Success**
-
-A confirmation screen.
-
-#### Supported features
+When no installation exists, the wizard renders. If an installation already exists, the standard configuration UI is shown instead.
 
 | Feature | Supported |
 |---|---|
-| Read objects | Yes |
-| Write objects | Yes |
-| Required fields | Yes |
-| Optional fields | Yes |
-| Field mappings | Yes |
-| Object mappings | Yes |
-| Value mappings | No |
-| Field mapping default | No |
+| [Read objects](/read-actions) | Yes |
+| [Write objects](/write-actions) | Yes |
+| [Required fields](/read-actions#required-fields-and-optional-fields) | Yes |
+| [Optional fields](/read-actions#required-fields-and-optional-fields) | Yes |
+| [Field mappings](/object-and-field-mapping#field-mapping) | Yes |
+| [Object mappings](/object-and-field-mapping#object-mapping) | Yes |
+| [Value mappings](/object-and-field-mapping#mapping-values) | No |
+| [Field mapping default](/object-and-field-mapping#field-mapping-1) | No |
 | Dynamic field mappings (`fieldMapping` prop) | No |
 
 ### Connect provider
