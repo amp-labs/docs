@@ -141,6 +141,42 @@ Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the follo
 
 ![](/images/1f151f2-Example_for_docs_1.png) 
 
+#### Wizard mode (Beta)
+
+The wizard mode replaces the standard configuration view with a guided, multi-step installation flow during initial set up. It walks your end users through connecting, selecting objects, configuring fields/mappings, and reviewing before creating an installation.
+
+<Warning>The wizard mode is currently in beta preview. The `variant="wizard"` prop is hidden and does not appear in the public TypeScript declarations as of `@amp-labs/react` v2.13.1. Please see [supported features](#supported-features) for details on what is currently available.</Warning>
+
+![](/images/install-wizard-demo.gif)
+
+To activate wizard mode, pass `variant="wizard"` to the `InstallIntegration` component:
+
+```JSX
+<InstallIntegration
+  integration={myIntegrationName}
+  consumerRef={userId}
+  consumerName={userFullName}
+  groupRef={teamId}
+  groupName={teamName}
+  // @ts-expect-error -- needed since hidden as an internal prop
+  variant="wizard"
+/>
+```
+
+When no installation exists, the wizard renders. If an installation already exists, the standard configuration UI is shown instead.
+
+| Feature | Supported |
+|---|---|
+| [Read objects](/read-actions) | Yes |
+| [Write objects](/write-actions) | Yes |
+| [Required fields](/read-actions#required-fields-and-optional-fields) | Yes |
+| [Optional fields](/read-actions#required-fields-and-optional-fields) | Yes |
+| [Field mappings](/object-and-field-mapping#field-mapping) | Yes |
+| [Object mappings](/object-and-field-mapping#object-mapping) | Yes |
+| [Value mappings](/object-and-field-mapping#mapping-values) | No |
+| [Field mapping `default`](/object-and-field-mapping#field-mapping-2) | No |
+| [Dynamic field mappings](/object-and-field-mapping#dynamic-field-mappings) (`fieldMapping` prop) | No |
+
 ### Connect provider
 
 The ConnectProvider component allows your customer to put in their SaaS credential, but does not lead them through the installation flow. After their SaaS credential is persisted by Ampersand, you can then make an API request to the [CreateInstallation](/reference/installation/create-a-new-installation) endpoint.
