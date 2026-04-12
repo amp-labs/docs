@@ -133,8 +133,9 @@ Your Salesforce My Domain subdomain is the unique part of your Salesforce URL. Y
 - **Production**: if your login URL is `https://acme.my.salesforce.com`, your subdomain is `acme`.
 - **Sandbox (Enhanced Domains)**: if your login URL is `https://acme--dev.sandbox.my.salesforce.com`, your subdomain is `acme--dev.sandbox`.
 - **Sandbox (legacy)**: if your login URL is `https://acme--dev.my.salesforce.com`, your subdomain is `acme--dev`.
+- **Developer accounts**: if your login URL is `https://acme-dev-ed.develop.my.salesforce.com`, your subdomain is `acme-dev-ed.develop`.
 
-You can find this in **Setup** > **My Domain**.
+You can also find your subdomain in **Setup** > **My Domain**.
 
 ## Installing the integration
 
@@ -153,7 +154,7 @@ Here is where to find each value:
 
 ## Troubleshooting
 
-If the integration reports authentication errors after setup, work through this checklist:
+If the integration experiences authentication errors after setup, here are some common causes.
 
 - **`invalid_app_access: user is not admin approved to access this app`**: The integration user's Profile is not in the app's **Selected Profiles** list. Revisit step 6 and confirm **Minimum Access - API Only Integrations** is in **Selected Profiles** (not just **Available Profiles**). To reproduce the error independently, use the Salesforce CLI: `sf org login jwt --client-id <key> --jwt-key-file private-key.pem --username <user> --instance-url https://<workspace>.my.salesforce.com`.
 - **`user hasn't approved this consumer`**: Either the integration user's Profile is not associated with your app (revisit step 6), or the **Refresh Token Policy** on the app is not set to **Refresh token is valid until revoked** (revisit step 4). Both are required.
