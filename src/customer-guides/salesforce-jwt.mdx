@@ -1,0 +1,175 @@
+---
+title: "Salesforce (JWT authentication)"
+---
+
+import SalesforceIntegrationUser from '/snippets/salesforce-integration-user.mdx';
+
+This guide walks you through connecting your Salesforce org to an integration that uses the [OAuth 2.0 JWT Bearer Flow](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_jwt_flow.htm&language=en_US&type=5). This is a headless, server-to-server authentication method — there is no interactive login, and the integration runs on behalf of a designated user using credentials you configure up front.
+
+If your integration uses the standard Salesforce OAuth flow instead, please refer to the [Salesforce customer guide](/customer-guides/salesforce). If you are unsure which guide is applicable to you, please ask the integration developer.
+
+## Before installing a Salesforce (JWT) integration
+
+You will need **Administrator access** to your Salesforce org.
+
+### 1. Generate a certificate and RSA private key
+
+The JWT Bearer flow requires an RSA key pair. You'll upload the public certificate to your Salesforce External Client App and share the private key (base64-encoded) with the integration.
+
+Open a terminal in the folder where you want to create the files. You need **OpenSSL** available in that environment (macOS and most Linux distributions include it by default). On **Windows**, use **Git Bash** (bundled with [Git for Windows](https://gitforwindows.org/), which includes OpenSSL), **WSL**, or install OpenSSL and ensure it is on your `PATH`.
+
+Run the following command to generate a 2048-bit RSA private key and a matching self-signed X.509 certificate in a single step:
+
+```bash
+openssl req -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 \
+  -keyout private-key.pem -out cert.pem \
+  -subj "/CN=salesforce-jwt-integration"
+```
+
+This produces two files:
+- `private-key.pem` — Your RSA private key. You will base64-encode this and share it when installing the integration.
+- `cert.pem` — Your public certificate. You will upload this to Salesforce in a later step.
+
+<Note>Salesforce requires an RSA key. ECDSA (`ecparam`) keys are not accepted for the JWT Bearer flow. Use a key length of at least 2048 bits.</Note>
+
+You will then need to base64-encode your private key before sharing it during the installation process. Use the command that matches your environment:
+
+**macOS (Terminal)**
+
+```bash
+base64 -i private-key.pem
+```
+
+**Linux, Git Bash, or WSL**
+
+```bash
+base64 -w 0 private-key.pem
+```
+
+**Windows (PowerShell)**
+
+From the directory that contains `private-key.pem`:
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes((Resolve-Path 'private-key.pem')))
+```
+
+Copy the encoded string (a long single line, e.g. starting with `LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tL...`). It will be required during the installation process.
+
+### 2. Create the External Client App
+
+The External Client App identifies the integration to Salesforce and holds the certificate used to verify JWT signatures.
+
+1. Log in to *Salesforce* as an Administrator.
+2. Navigate to the gear icon in the top right corner and select **Setup**.
+
+   ![Alt text](/images/provider-guides/e8dc5f2-setup.gif)
+
+3. Search for **External Client App Manager**.
+
+4. Click **New External Client App**.
+
+![New ECA](/images/provider-guides/salesforce/new-app.png)
+
+5. Fill in the basic information:
+   - **External Client App Name**: e.g. `My Integration`
+   - **API Name**: auto-filled from the name
+   - **Contact Email**: your administrator email
+   - **Distribution State**: **Local**
+6. Under **API (Enable OAuth Settings)**:
+   - Check **Enable OAuth**.
+   - For **Callback URL**, enter `https://api.withampersand.com/callbacks/v1/oauth`. The JWT Bearer flow does not use the callback, but Salesforce requires a value.
+   - Under **Selected OAuth Scopes**, add:
+     - **Manage user data via APIs (`api`)**
+     - **Perform requests at any time (`refresh_token`, `offline_access`)** — this is required for Salesforce to accept JWT Bearer exchanges even though no refresh token is issued.
+7. Under **Flow Enablement**, check **Enable JWT Bearer Flow** and upload the `cert.pem` file you generated in the previous step.
+8. Under **Security**, ensure **Require Proof Key for Code Exchange (PKCE) extension for Supported Authorization Flows** is unchecked. (It's unchecked by default, but worth verifying.)
+
+<Note>Leave **Issue JSON Web Token (JWT)-based access tokens for named users** unchecked. Despite the similar name, this is a different feature that changes the format of access tokens Salesforce returns — and those JWT-format tokens only work with the REST API, not with the Bulk API or Metadata API that this integration also uses. Enabling it will break bulk writes and subscribe-action registration.</Note>
+9. Click **Create**. After saving, it may take 2 to 10 minutes for Salesforce to propagate the new External Client App. If you hit errors when testing the integration immediately after creation, wait a few minutes and try again.
+
+### 3. Copy the Consumer Key
+
+1. In **Setup**, open **External Client App Manager** again.
+2. Select your External Client App from the list.
+3. Go to the **Settings** tab and expand **OAuth Settings**.
+4. Under **App Settings**, click **Consumer Key and Secret**. This opens a new page — you may be prompted to verify your identity before the values are shown.
+5. Copy the **Consumer Key**. Store it securely — you will need it during the installation step. (The Consumer Secret is not needed for JWT Bearer flow.)
+
+### 4. Configure OAuth policies
+
+1. In **Setup**, open **External Client App Manager** and select your External Client App.
+2. Go to the **Policies** tab, click **Edit**.
+3. Expand **OAuth Policies**.
+4. Scroll down to **App Authorization** section:
+   - Set **Refresh Token Policy** to **Refresh token is valid until revoked**.
+   - Set **IP Relaxation** to **Relax IP restrictions**.
+6. Click **Save**.
+
+<img src="/images/customer-guides/salesforce-jwt/RefreshTokenValid.png" />
+
+<Note>Setting **Refresh Token Policy** to **Refresh token is valid until revoked** is also required, even though the JWT Bearer flow never actually issues a refresh token. Salesforce internally checks for a non-expired approval record for the user before issuing an access token, and any other setting causes that approval to age out — which silently breaks the integration later. The other options (`Immediately expire`, `Expire after specific time`, etc.) will cause `invalid_grant` errors.</Note>
+
+### 5. Create an integration user
+
+The JWT Bearer flow runs as a specific Salesforce user. Every API call made by the integration is attributed to this user, and its Profile and permission sets determine what data the integration can read and write.
+
+<SalesforceIntegrationUser />
+
+<Note>The username you chose when creating the user is exactly the value you'll paste into the **Salesforce Username** field when installing the integration. Copy it somewhere you can find it later.</Note>
+
+### 6. Associate the Permission Set with the app
+
+You need to add the permission set you created in step 5 to the app's pre-authorized Permission Sets list. This is what satisfies the **Admin approved users are pre-authorized** OAuth policy from step 4 — it tells Salesforce "any user who has this permission set is allowed to use this app."
+
+1. In **Setup**, open **External Client App Manager** and select your External Client App.
+2. Go to the **Policies** tab, click **Edit**.
+3. Expand **OAuth Policies**, under **Plugin Policies**, set **Permitted Users** to **Admin approved users are pre-authorized**. Click on **OK** in the dialog that pops up.
+
+<img src="/images/customer-guides/salesforce-jwt/PreAuthorizeUsers.png" />
+
+4. Expand **App Policies**, under **Select Permission Sets**, move the permission set that you created in step 5 from **Available Permission Sets** to **Selected Permission Sets** using the arrow button (`>`).
+5. Click **Save**.
+
+<img src="/images/customer-guides/salesforce-jwt/SelectPermissionSet.png" />
+
+
+<Note>This is the step that actually pre-authorizes the integration user for JWT Bearer. Without it — even if everything else is configured correctly — Salesforce rejects the JWT assertion with `invalid_app_access: user is not admin approved to access this app`.</Note>
+
+### 7. Confirm your Salesforce subdomain
+
+Your Salesforce My Domain subdomain is the unique part of your Salesforce URL. You will need it to install the integration.
+
+- **Production**: if your login URL is `https://acme.my.salesforce.com`, your subdomain is `acme`.
+- **Sandbox (Enhanced Domains)**: if your login URL is `https://acme--dev.sandbox.my.salesforce.com`, your subdomain is `acme--dev.sandbox`.
+- **Sandbox (legacy)**: if your login URL is `https://acme--dev.my.salesforce.com`, your subdomain is `acme--dev`.
+- **Developer accounts**: if your login URL is `https://acme-dev-ed.develop.my.salesforce.com`, your subdomain is `acme-dev-ed.develop`.
+
+You can also find your subdomain in **Setup** > **My Domain**.
+
+## Installing the integration
+
+When you are installing the integration, you will be prompted for a number of inputs.
+
+Here is where to find each value:
+
+| Input | Where to find it |
+|---|---|
+| **Consumer Key** | From step 3. |
+| **Salesforce Username** | The username of the integration user from step 5. |
+| **Private Key** | Base64-encoded contents of `private-key.pem` (from step 1). |
+| **Subdomain** | Your My Domain subdomain (from step 7). |
+
+<Note>**Sandbox refresh**: After refreshing a sandbox, the integration user's username may be re-suffixed with the sandbox name (e.g. `integration@acme.com` becomes `integration@acme.com.dev`). If this happens, update the **Salesforce Username** field on your Ampersand connection to match the new username.</Note>
+
+## Troubleshooting
+
+If the integration experiences authentication errors after setup, here are some common causes.
+
+- **`invalid_app_access: user is not admin approved to access this app`**: The integration user's permission set is not in the app's **Selected Permission Sets** list. Revisit step 6 and confirm the permission set from step 5 is in **Selected Permission Sets** (not just **Available Permission Sets**), and that the permission set is actually assigned to the integration user. To reproduce the error independently, use the Salesforce CLI: `sf org login jwt --client-id <key> --jwt-key-file private-key.pem --username <user> --instance-url https://<workspace>.my.salesforce.com`.
+- **`user hasn't approved this consumer`**: Either the integration user's permission set is not associated with your app (revisit step 6), or the **Refresh Token Policy** on the app is not set to **Refresh token is valid until revoked** (revisit step 4). Both are required.
+- **Worked for weeks or months, then started failing with `invalid_grant`**: Almost always the Refresh Token Policy silently aging out the approval. Set **Refresh Token Policy** to **Refresh token is valid until revoked** and re-associate the permission set if needed.
+- **`invalid_grant: audience is invalid`**: The production vs sandbox environment was auto-detected incorrectly from your subdomain. Double-check that your subdomain string matches the format shown in step 7 — sandboxes should include a `--` or `.sandbox` segment.
+- **`invalid_grant: invalid assertion`**: The private key or certificate is mismatched. Regenerate the pair in step 1 and re-upload the certificate in step 2.
+- **`not authorized`**: Check **IP Relaxation** is set to **Relax IP restrictions** (step 4), and that the integration user's permission set has **API Enabled** under **System Permissions**.
+- **Works immediately after setup, then fails**: Wait 2 to 10 minutes after creating or modifying the app for Salesforce to propagate the changes.
