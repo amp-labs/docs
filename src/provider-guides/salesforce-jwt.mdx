@@ -7,7 +7,7 @@ hidden: false
 
 The Salesforce (JWT) connector authenticates using the [OAuth 2.0 JWT Bearer Flow](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_jwt_flow.htm&language=en_US&type=5) instead of the standard Authorization Code flow. This is a headless, server-to-server flow that is well suited for long-running, unattended integrations where an interactive OAuth login is impractical.
 
-If you are looking to build an interactive, customer-facing Salesforce integration, use the standard [Salesforce connector](/provider-guides/salesforce) instead.
+Please note that the standard [Salesforce connector](/provider-guides/salesforce) is a more convenient experience for your customers, it uses a standard OAuth 2.0 authentication scheme, and prompts your users for their Salesforce user name and password. We recommend it for most use cases.
 
 ## What's Supported
 
@@ -56,7 +56,7 @@ Your customer's Salesforce administrator creates an **External Client App** (or 
 ## Using the connector
 
 To start integrating with Salesforce (JWT):
-- Create a manifest file like the [Salesforce example](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml), using `salesforceJWT` as the provider.
+- Create a manifest file like the [Salesforce example](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml), using `salesforceJWT` as the provider instead of `salesforce`.
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
 - Collect your customer's credentials (Consumer Key, Username, Private Key, Subdomain) and create a connection.

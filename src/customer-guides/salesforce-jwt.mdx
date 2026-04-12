@@ -1,10 +1,10 @@
 ---
-title: "Salesforce (JWT)"
+title: "Salesforce (JWT authentication)"
 ---
 
 This guide walks you through connecting your Salesforce org to an integration that uses the OAuth 2.0 JWT Bearer Flow. This is a headless, server-to-server authentication method — there is no interactive login, and the integration runs on behalf of a designated user using credentials you configure up front.
 
-If your integration uses the standard Salesforce OAuth flow instead, please refer to the [Salesforce customer guide](/customer-guides/salesforce).
+If your integration uses the standard Salesforce OAuth flow instead, please refer to the [Salesforce customer guide](/customer-guides/salesforce). If you are unsure which guide is applicable to you, please ask the integration developer.
 
 ## Before installing a Salesforce (JWT) integration
 
@@ -12,7 +12,7 @@ You will need **Administrator access** to your Salesforce org.
 
 ### 1. Generate a certificate and RSA private key
 
-The JWT Bearer flow requires an RSA key pair. You'll upload the public certificate to your Salesforce Connected App and share the private key (base64-encoded) with the integration.
+The JWT Bearer flow requires an RSA key pair. You'll upload the public certificate to your Salesforce External Client App and share the private key (base64-encoded) with the integration.
 
 Open a terminal in the folder where you want to create the files. You need **OpenSSL** available in that environment (macOS and most Linux distributions include it by default). On **Windows**, use **Git Bash** (bundled with [Git for Windows](https://gitforwindows.org/), which includes OpenSSL), **WSL**, or install OpenSSL and ensure it is on your `PATH`.
 
@@ -166,7 +166,7 @@ Creating a custom Profile scoped to integrations is the cleanest and most secure
 
 1. In **Setup**, search for **Profiles** in the Quick Find box and select **Profiles**.
 2. Find a base profile to clone. A good starting point is **Standard User** (or **Minimum Access - Salesforce** for a narrower starting point). Click **Clone** next to it.
-3. Give the clone a clear name, e.g. `Ampersand Integration Profile`, and click **Save**.
+3. Give the clone a clear name, e.g. `Integration Profile`, and click **Save**.
 4. Open the new profile and click **Edit**.
 5. Under **Administrative Permissions** (or **System Permissions**), ensure **API Enabled** is checked.
 6. Under **Standard Object Permissions** and **Custom Object Permissions**, grant Read / Create / Edit / Delete (as appropriate) for every object the integration reads or writes. Be sure to also grant access to every **field** the integration needs under the corresponding Object Manager field-level security.
@@ -201,15 +201,15 @@ Creating a dedicated integration user is safer and clearer in audit logs, and it
 1. In **Setup**, search for **Users** in the Quick Find box and select **Users**.
 2. Click **New User**.
 3. Fill in the user details:
-   - **First Name** / **Last Name**: e.g. `Ampersand` / `Integration`
+   - **First Name** / **Last Name**: e.g. `Integration` / `User`
    - **Email**: use a real mailbox you control. Salesforce will send the welcome email here.
-   - **Username**: must be unique across all Salesforce orgs globally, and must look like an email address (e.g. `ampersand-integration@your-company.com`). It does not need to match any real inbox.
-   - **User License**: pick a license that includes API access. **Salesforce** is the most common choice.
+   - **Username**: must be unique across all Salesforce orgs globally, and must look like an email address (e.g. `integration@your-company.com`). It does not need to match any real inbox.
+   - **User License**: pick a license that includes API access, such as **Salesforce** or **Salesforce Integration**. Please note that **Salesforce Platform** is insufficient.
    - **Profile**: select the Profile from step 5.
 4. Click **Save**.
 5. Complete the welcome email flow to set an initial password for the user. JWT Bearer will not use the password, but Salesforce requires the account to be fully activated first.
 
-<Note>The username you enter here is exactly the value you'll paste into the **Salesforce Username** field when installing the integration. Copy it somewhere you can find it later.</Note>
+<Note>The username you enter here is exactly the value you'll paste into the **Salesforce Username** field when installing the integration. Copy it somewhere that you can find it later.</Note>
 
   </Tab>
   <Tab title="Use an existing user">
@@ -221,14 +221,14 @@ If you're reusing an existing Salesforce user, confirm the following before cont
 3. Verify the user's **Profile** matches what you picked in step 5. If it doesn't, either switch the user to that Profile, or go back to step 5 and pick the user's actual Profile instead (keeping in mind the security tradeoff of using a shared profile).
 4. Note the user's **Username** exactly as shown (including any sandbox suffix like `.sandboxname`) — you will need it later.
 
-<Note>We still strongly recommend a dedicated integration user over a real human's account. If you're using a human user and they later leave the company, the integration will stop working the moment their user is deactivated.</Note>
+<Note>We recommend a dedicated integration user over a real human's account. If you're using a human user and they later leave the company, the integration will stop working the moment their user is deactivated.</Note>
 
   </Tab>
 </Tabs>
 
 ### 7. Associate the Profile with the app
 
-The final setup step is adding the Profile from step 5 to the app's pre-authorized Profiles list. This is what satisfies the **Admin approved users are pre-authorized** OAuth policy from step 4 — it tells Salesforce "any user on this Profile is allowed to use this app headlessly."
+The final setup step is adding the Profile from step 5 to the app's pre-authorized Profiles list. This is what satisfies the **Admin approved users are pre-authorized** OAuth policy from step 4 — it tells Salesforce "any user on this Profile is allowed to use this app."
 
 <Tabs>
   <Tab title="External Client App">
