@@ -1,5 +1,5 @@
 ---
-title: "Salesforce (JWT)"
+title: "Salesforce (JWT authentication)"
 slug: "salesforce-jwt"
 excerpt: ""
 hidden: false
@@ -7,7 +7,7 @@ hidden: false
 
 The Salesforce (JWT) connector authenticates using the [OAuth 2.0 JWT Bearer Flow](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_jwt_flow.htm&language=en_US&type=5) instead of the standard Authorization Code flow. This is a headless, server-to-server flow that is well suited for long-running, unattended integrations where an interactive OAuth login is impractical.
 
-Please note that the standard [Salesforce connector](/provider-guides/salesforce) is a more convenient experience for your customers, it uses a standard OAuth 2.0 authentication scheme, and prompts your users for their Salesforce user name and password. We recommend it for most use cases.
+Please note that the standard [Salesforce connector](/provider-guides/salesforce) is a more convenient experience for your customers; it uses a standard OAuth 2.0 authentication scheme, and prompts your users for their Salesforce username and password. We recommend it for most use cases.
 
 ## What's Supported
 
@@ -36,20 +36,18 @@ integrations:
 
 ## Before You Get Started
 
-This connector uses OAuth 2.0 JWT Bearer authentication with an RSA key pair. There is no interactive login — your customer's Salesforce administrator will pre-authorize a designated integration user on a Connected App, and Ampersand will sign JWT assertions on their behalf to obtain access tokens.
+This connector uses OAuth 2.0 JWT Bearer authentication with an RSA key pair. There is no interactive login — your customer's Salesforce administrator will pre-authorize a designated integration user on an External Client App, and Ampersand will sign JWT assertions on their behalf to obtain access tokens.
 
 To integrate Salesforce (JWT) with Ampersand, your customer's Salesforce administrator will need to complete the setup steps in the [customer guide](/customer-guides/salesforce-jwt) and provide you with the following credentials:
 
-- Consumer Key (from the Connected App)
+- Consumer Key (from the External Client App)
 - Salesforce Username (the integration user)
 - RSA Private Key (base64-encoded PEM)
 - Salesforce My Domain subdomain (workspace)
 
 ### Creating the Salesforce app for JWT Bearer
 
-Your customer's Salesforce administrator creates an **External Client App** (or configures an existing **Connected App**) with JWT Bearer flow enabled, uploads an X.509 certificate, and assigns a permission set that pre-authorizes the integration user. The full steps are documented in the [customer guide](/customer-guides/salesforce-jwt).
-
-<Note>Since Spring '26, Salesforce no longer allows creating new **Connected Apps** — the customer guide covers both the new **External Client App** flow and the legacy Connected App flow for customers who already have one. See [Salesforce's announcement](https://help.salesforce.com/s/articleView?id=005228017&language=en_US&type=1) for details.</Note>
+Your customer's Salesforce administrator creates an **External Client App** with JWT Bearer flow enabled, uploads an X.509 certificate, and associates a Permission Set that pre-authorizes the integration user. The full steps are documented in the [customer guide](/customer-guides/salesforce-jwt).
 
 <Note>Salesforce requires an RSA key (2048-bit minimum). ECDSA keys are not supported for the JWT Bearer flow.</Note>
 
