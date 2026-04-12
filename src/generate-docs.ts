@@ -485,7 +485,7 @@ const baseConfig = {
             "customer-guides/overview",
             "customer-guides/bigquery",
             "customer-guides/salesforce",
-            "provider-guides/salesforce-jwt",
+            "customer-guides/salesforce-jwt",
             "customer-guides/loxo",
             "customer-guides/hubspot",
             "customer-guides/marketo",
