@@ -13,13 +13,34 @@ updatedAt: "Mon Jul 15 2024 15:56:36 GMT+0000 (Coordinated Universal Time)"
 
 This connector supports:
 
-- [Read Actions](/read-actions) including full historic backfill. Please note that incremental read is not supported, a full read of the Pipedrive instance will be done for each scheduled read.
+- [Read Actions](/read-actions) including full historic backfill. Incremental read is supported for select objects using the v2 API (see [v2 API Objects](#v2-api-objects) below). For all other objects, a full read of the Pipedrive instance will be done for each scheduled read.
 - [Write Actions](/write-actions)
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.pipedrive.com`.
 
 ### Supported Objects
 
-The Pipedrive connector support reading from the following objects:
+#### v2 API Objects
+
+The Pipedrive connector supports reading and writing to the following objects.
+
+| Object | Incremental Read |
+|--------|:----------------:|
+| [Activities](https://developers.pipedrive.com/docs/api/v1/Activities) | Yes |
+| [Deals](https://developers.pipedrive.com/docs/api/v1/Deals) | Yes |
+| [Organizations](https://developers.pipedrive.com/docs/api/v1/Organizations) | Yes |
+| [Persons](https://developers.pipedrive.com/docs/api/v1/Persons) | Yes |
+| [Pipelines](https://developers.pipedrive.com/docs/api/v1/Pipelines) | No |
+| [Products](https://developers.pipedrive.com/docs/api/v1/Products) | No |
+| [Stages](https://developers.pipedrive.com/docs/api/v1/Stages) | No |
+
+
+### Example Integration
+
+For an example manifest file of a Pipedrive v2 integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/pipedrive/v2/amp.yaml).
+
+#### v1 API Objects
+
+The Pipedrive connector supports reading from the following objects using the v1 API:
 
 - [Activities](https://developers.pipedrive.com/docs/api/v1/Activities#getActivities)
 - [Activity Fields](https://developers.pipedrive.com/docs/api/v1/ActivityFields#getActivityFields)
@@ -56,7 +77,7 @@ The Pipedrive connector support reading from the following objects:
 - [User Settings](https://developers.pipedrive.com/docs/api/v1/UserSettings#getUserSettings)
 - [Webhooks](https://developers.pipedrive.com/docs/api/v1/Webhooks#getWebhooks)
 
-The Pipedrive connector support writing to the following objects:
+The Pipedrive connector supports writing to the following objects:
 
 - [Activities](https://developers.pipedrive.com/docs/api/v1/Activities#addActivity)
 - [Activity Types](https://developers.pipedrive.com/docs/api/v1/ActivityTypes#addActivityType)
@@ -88,7 +109,7 @@ The Pipedrive connector support writing to the following objects:
 
 ### Example Integration
 
-For an example manifest file of a Pipedrive integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/pipedrive/amp.yaml).
+For an example manifest file of a Pipedrive v1 integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/pipedrive/v1/amp.yaml).
 
 ## Before You Get Started
 
