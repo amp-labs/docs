@@ -17,9 +17,17 @@ This connector supports:
 - [Write Actions](/write-actions)
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.pipedrive.com`.
 
-### Supported Objects
+Pipedrive has a v1 and v2 API, if you would like to opt into the v2 API, then add `module: crm` to your amp.yaml file. Otherwise, v1 API is used. You can learn more about the difference between v1 and v2 API in [Pipedrive documentation](https://pipedrive.readme.io/docs/pipedrive-api-v2-migration-guide).
 
-#### v2 API Objects
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: read-write-pipedrive
+    provider: pipedrive
+    module: "crm" # The CRM module uses v2 APIs
+```
+
+### Supported Objects for V2 API
 
 The Pipedrive connector supports reading and writing to the following objects.
 
@@ -33,12 +41,32 @@ The Pipedrive connector supports reading and writing to the following objects.
 | [Products](https://developers.pipedrive.com/docs/api/v1/Products) | No |
 | [Stages](https://developers.pipedrive.com/docs/api/v1/Stages) | No |
 
+#### Reading Deal Products
 
-### Example Integration
+If you would like to read Products associated with Deals, add `products` as a field in `deals`.
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: read-write-pipedrive
+    provider: pipedrive
+    # The CRM module uses v2 APIs, which is required for to read deal products
+    module: "crm"
+    read:
+      objects:
+        - objectName: deals
+          destination: pipedrive-webhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: products # Add products as a field
+```
+
+#### Example Integration
 
 For an example manifest file of a Pipedrive v2 integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/pipedrive/v2/amp.yaml).
 
-#### v1 API Objects
+### Supported Objects for V1 API
 
 The Pipedrive connector supports reading from the following objects using the v1 API:
 
@@ -107,7 +135,7 @@ The Pipedrive connector supports writing to the following objects:
 - [Users](https://developers.pipedrive.com/docs/api/v1/Users#addUser)
 - [Webhooks](https://developers.pipedrive.com/docs/api/v1/Webhooks#addWebhook)
 
-### Example Integration
+#### Example Integration
 
 For an example manifest file of a Pipedrive v1 integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/pipedrive/v1/amp.yaml).
 
