@@ -291,7 +291,11 @@ The `useManifest` hook provides the data that you need to build input forms for 
 - Access integrations as defined in the [manifest](/terminology#manifest) (`amp.yaml`).
 - Retrieve object and field metadata from the connected provider (e.g., Salesforce, Hubspot). This allows your application to know about the exact objects and fields that exist in your customer's SaaS instance, including custom objects and fields. With this information, you can build dropdowns, checkboxes, etc.
 
-> For now, you can only access your manifest's Read Actions. Please note that you still create an Installation with Subscribe and Write Actions using [`useCreateInstallation`](headless#creating%2C-updating%2C-and-deleting-installations). For write actions, you can also use `useConfig` to construct the config object, see [Manage write config](#manage-write-config).
+<Note>
+`useManifest` always returns the integration's latest published [revision](/terminology#revision) of `amp.yaml` — it is not tied to any specific installation. If an installation was created against an older revision, `useManifest` will still reflect the current `amp.yaml` and may differ from the installation's saved config. See [How `useManifest` and `useLocalConfig` relate](#how-usemanifest-and-uselocalconfig-relate).
+</Note>
+
+> For now, you can only access your manifest's Read Actions. Please note that you still create an Installation with Subscribe and Write Actions using [`useCreateInstallation`](headless#creating%2C-updating%2C-and-deleting-installations). For write actions, you can also use `useLocalConfig` to construct the config object, see [Manage write config](#manage-write-config).
 
 ```TypeScript
 import { useManifest } from "@amp-labs/react";
@@ -362,6 +366,10 @@ The `useLocalConfig` hook simplifies local state management of the config object
 **Deprecated:** `useConfig` has been deprecated in v2.9.0. It has been renamed to `useLocalConfig()` without any other changes.
 
 For fetching an existing config from an installation, use [`useInstallation`](#get-current-installation) which provides access to the current installation's configuration.
+</Note>
+
+<Note>
+**Prefer the helper functions** (`readObject`, `writeObject`, `proxy`, `setDraft`, `removeObject`, `reset`, `get`) over accessing `draft` directly. The helpers encapsulate how the draft is initialized, synced with the installation, and merged with manifest defaults. Reading `draft` directly is a low-level escape hatch — it is mutable local state that may be empty, partially hydrated, or contain unsaved edits depending on timing. For authoritative installation state, use [`useInstallation`](#get-current-installation). For the integration's latest template, use [`useManifest`](#get-manifest-and-field-metadata). See [How `useManifest` and `useLocalConfig` relate](#how-usemanifest-and-uselocalconfig-relate).
 </Note>
 
 It returns these fields:
@@ -663,6 +671,62 @@ function WriteObjectConfig() {
   };
 }
 ```
+
+## How `useManifest` and `useLocalConfig` relate
+
+`useManifest` and `useLocalConfig` are frequently mistaken for the same thing. They're not — they pull from different sources by design, and knowing the difference is important when building configuration UI or debugging mismatches.
+
+| | `useManifest()` | `useLocalConfig()` |
+|---|---|---|
+| **Represents** | The integration's [`amp.yaml`](/manifest-reference) template | The in-progress draft of this [installation's](/terminology#installation) config |
+| **Revision source** | The integration's latest published [revision](/terminology#revision) | Whatever revision the installation was saved against |
+| **Scope** | Everything the integration *could* support | Only what this installation *selected*, plus local edits |
+| **Mutable?** | No — read-only query result | Yes — via helper functions |
+| **Tied to an installation?** | No | Yes |
+
+### Use the right hook for the job
+
+- **"What does this integration currently support?"** → `useManifest()`. Use this when building configuration UI — pickers, field checkboxes, mapping dropdowns — that should follow the current `amp.yaml`.
+- **"What did this installation actually deploy?"** → `useInstallation().installation.config.content`. This is the authoritative saved state, pinned to the revision the installation was created against. See the [installation response schema](/reference/installation/get-an-installation) for its shape. Do not use `useLocalConfig` for this — the draft is mutable and may include unsaved edits.
+- **"Let the user edit the installation's config."** → `useLocalConfig()`, via its helper functions. See below.
+
+### Read and write through helper functions, not `draft`
+
+Interact with `useLocalConfig` through its helpers rather than reading or mutating `draft` directly:
+
+```typescript
+const config = useLocalConfig();
+
+// Per-object read handlers encapsulate initialization, default-seeding, and selection.
+const contact = config.readObject("contact");
+const isEmailSelected = contact.getSelectedField("email");
+contact.setSelectedField({ fieldName: "email", selected: true });
+contact.setFieldMapping({ fieldName: "email", mapToName: "email_address" });
+
+// Per-object write handlers do the same for write config.
+const contactWrite = config.writeObject("contact");
+contactWrite.setEnableWrite();
+
+// Snapshot for save. Revert to the installation's saved state.
+const configToSave = config.get();
+config.reset();
+```
+
+The helpers guarantee correct behavior across installation load timing, default-seeding from the manifest, and the `disabled` flag semantics. Accessing `draft` directly skips those guarantees — its shape depends on whether the installation has loaded yet, which revision it was saved against, and any unsaved edits in flight. Prefer helpers; treat `draft` as a low-level escape hatch.
+
+### When `useManifest` and the installation's saved config can diverge
+
+The two hooks read from independent sources, so they can legitimately disagree:
+
+1. The customer installs against `amp.yaml` **revision A**. `installation.config.content` captures the shape of A and the fields the customer selected.
+2. A developer later ships a new `amp.yaml` → **revision B**. The integration's latest revision advances to B.
+3. In the customer's browser:
+   - `useManifest()` now returns revision B's objects, fields, and mappings.
+   - `useInstallation().installation.config.content` still reflects the config that was saved against revision A.
+
+If B added new objects or fields, `useManifest` will show them and the saved config won't. If B renamed or removed something, the opposite. This is expected behavior — nothing has gone wrong. Treat `useManifest` as "what is possible now" and the installation's config as "what was saved then."
+
+Under the hood, `useManifest` calls the [hydrated revision endpoint](/reference/revision/get-a-hydrated-revision) with the integration's latest revision ID, which is why it is never pinned to any one installation.
 
 ## Examples
 
