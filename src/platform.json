@@ -2532,6 +2532,40 @@
                           ]
                         }
                       },
+                      "metadata": {
+                        "title": "Provider App Metadata",
+                        "type": "object",
+                        "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                        "properties": {
+                          "authQueryParams": {
+                            "type": "object",
+                            "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                            "additionalProperties": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "example": {
+                              "optional_scope": [
+                                "automation.sequences.read"
+                              ]
+                            }
+                          },
+                          "providerParams": {
+                            "type": "object",
+                            "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "example": {
+                              "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                              "gcpProjectId": "my-gcp-project",
+                              "gcpPubSubTopicName": "my-topic"
+                            }
+                          }
+                        }
+                      },
                       "createTime": {
                         "type": "string",
                         "description": "The time the provider app was created.",
@@ -3068,6 +3102,40 @@
                         "write"
                       ]
                     }
+                  },
+                  "metadata": {
+                    "title": "Provider App Metadata",
+                    "type": "object",
+                    "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                    "properties": {
+                      "authQueryParams": {
+                        "type": "object",
+                        "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                        "additionalProperties": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "example": {
+                          "optional_scope": [
+                            "automation.sequences.read"
+                          ]
+                        }
+                      },
+                      "providerParams": {
+                        "type": "object",
+                        "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                        "additionalProperties": {
+                          "type": "string"
+                        },
+                        "example": {
+                          "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                          "gcpProjectId": "my-gcp-project",
+                          "gcpPubSubTopicName": "my-topic"
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -3126,6 +3194,40 @@
                           "offline",
                           "crm.read"
                         ]
+                      }
+                    },
+                    "metadata": {
+                      "title": "Provider App Metadata",
+                      "type": "object",
+                      "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                      "properties": {
+                        "authQueryParams": {
+                          "type": "object",
+                          "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "example": {
+                            "optional_scope": [
+                              "automation.sequences.read"
+                            ]
+                          }
+                        },
+                        "providerParams": {
+                          "type": "object",
+                          "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "example": {
+                            "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                            "gcpProjectId": "my-gcp-project",
+                            "gcpPubSubTopicName": "my-topic"
+                          }
+                        }
                       }
                     },
                     "createTime": {
@@ -4467,7 +4569,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- externalRef\n- clientId\n- clientSecret\n- provider\n- scopes\n",
+                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- externalRef\n- clientId\n- clientSecret\n- provider\n- scopes\n- metadata\n",
                     "example": [
                       "externalRef",
                       "clientId"
@@ -4505,6 +4607,40 @@
                             "read",
                             "write"
                           ]
+                        }
+                      },
+                      "metadata": {
+                        "title": "Provider App Metadata",
+                        "type": "object",
+                        "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                        "properties": {
+                          "authQueryParams": {
+                            "type": "object",
+                            "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                            "additionalProperties": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "example": {
+                              "optional_scope": [
+                                "automation.sequences.read"
+                              ]
+                            }
+                          },
+                          "providerParams": {
+                            "type": "object",
+                            "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "example": {
+                              "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                              "gcpProjectId": "my-gcp-project",
+                              "gcpPubSubTopicName": "my-topic"
+                            }
+                          }
                         }
                       }
                     },
@@ -4567,6 +4703,40 @@
                           "offline",
                           "crm.read"
                         ]
+                      }
+                    },
+                    "metadata": {
+                      "title": "Provider App Metadata",
+                      "type": "object",
+                      "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                      "properties": {
+                        "authQueryParams": {
+                          "type": "object",
+                          "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "example": {
+                            "optional_scope": [
+                              "automation.sequences.read"
+                            ]
+                          }
+                        },
+                        "providerParams": {
+                          "type": "object",
+                          "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "example": {
+                            "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                            "gcpProjectId": "my-gcp-project",
+                            "gcpPubSubTopicName": "my-topic"
+                          }
+                        }
                       }
                     },
                     "createTime": {
@@ -12150,6 +12320,40 @@
                                   ]
                                 }
                               },
+                              "metadata": {
+                                "title": "Provider App Metadata",
+                                "type": "object",
+                                "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                                "properties": {
+                                  "authQueryParams": {
+                                    "type": "object",
+                                    "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                                    "additionalProperties": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "example": {
+                                      "optional_scope": [
+                                        "automation.sequences.read"
+                                      ]
+                                    }
+                                  },
+                                  "providerParams": {
+                                    "type": "object",
+                                    "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                                    "additionalProperties": {
+                                      "type": "string"
+                                    },
+                                    "example": {
+                                      "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                      "gcpProjectId": "my-gcp-project",
+                                      "gcpPubSubTopicName": "my-topic"
+                                    }
+                                  }
+                                }
+                              },
                               "createTime": {
                                 "type": "string",
                                 "description": "The time the provider app was created.",
@@ -16414,6 +16618,40 @@
                                 ]
                               }
                             },
+                            "metadata": {
+                              "title": "Provider App Metadata",
+                              "type": "object",
+                              "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                              "properties": {
+                                "authQueryParams": {
+                                  "type": "object",
+                                  "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                                  "additionalProperties": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "example": {
+                                    "optional_scope": [
+                                      "automation.sequences.read"
+                                    ]
+                                  }
+                                },
+                                "providerParams": {
+                                  "type": "object",
+                                  "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                                  "additionalProperties": {
+                                    "type": "string"
+                                  },
+                                  "example": {
+                                    "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                    "gcpProjectId": "my-gcp-project",
+                                    "gcpPubSubTopicName": "my-topic"
+                                  }
+                                }
+                              }
+                            },
                             "createTime": {
                               "type": "string",
                               "description": "The time the provider app was created.",
@@ -19268,6 +19506,40 @@
                                   "offline",
                                   "crm.read"
                                 ]
+                              }
+                            },
+                            "metadata": {
+                              "title": "Provider App Metadata",
+                              "type": "object",
+                              "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                              "properties": {
+                                "authQueryParams": {
+                                  "type": "object",
+                                  "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                                  "additionalProperties": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "example": {
+                                    "optional_scope": [
+                                      "automation.sequences.read"
+                                    ]
+                                  }
+                                },
+                                "providerParams": {
+                                  "type": "object",
+                                  "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                                  "additionalProperties": {
+                                    "type": "string"
+                                  },
+                                  "example": {
+                                    "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                    "gcpProjectId": "my-gcp-project",
+                                    "gcpPubSubTopicName": "my-topic"
+                                  }
+                                }
                               }
                             },
                             "createTime": {
@@ -22682,6 +22954,40 @@
                                 ]
                               }
                             },
+                            "metadata": {
+                              "title": "Provider App Metadata",
+                              "type": "object",
+                              "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                              "properties": {
+                                "authQueryParams": {
+                                  "type": "object",
+                                  "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                                  "additionalProperties": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "example": {
+                                    "optional_scope": [
+                                      "automation.sequences.read"
+                                    ]
+                                  }
+                                },
+                                "providerParams": {
+                                  "type": "object",
+                                  "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                                  "additionalProperties": {
+                                    "type": "string"
+                                  },
+                                  "example": {
+                                    "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                    "gcpProjectId": "my-gcp-project",
+                                    "gcpPubSubTopicName": "my-topic"
+                                  }
+                                }
+                              }
+                            },
                             "createTime": {
                               "type": "string",
                               "description": "The time the provider app was created.",
@@ -25378,6 +25684,40 @@
                                   "offline",
                                   "crm.read"
                                 ]
+                              }
+                            },
+                            "metadata": {
+                              "title": "Provider App Metadata",
+                              "type": "object",
+                              "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                              "properties": {
+                                "authQueryParams": {
+                                  "type": "object",
+                                  "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                                  "additionalProperties": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "example": {
+                                    "optional_scope": [
+                                      "automation.sequences.read"
+                                    ]
+                                  }
+                                },
+                                "providerParams": {
+                                  "type": "object",
+                                  "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                                  "additionalProperties": {
+                                    "type": "string"
+                                  },
+                                  "example": {
+                                    "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                    "gcpProjectId": "my-gcp-project",
+                                    "gcpPubSubTopicName": "my-topic"
+                                  }
+                                }
                               }
                             },
                             "createTime": {
@@ -28597,6 +28937,40 @@
                                     "offline",
                                     "crm.read"
                                   ]
+                                }
+                              },
+                              "metadata": {
+                                "title": "Provider App Metadata",
+                                "type": "object",
+                                "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                                "properties": {
+                                  "authQueryParams": {
+                                    "type": "object",
+                                    "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                                    "additionalProperties": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "example": {
+                                      "optional_scope": [
+                                        "automation.sequences.read"
+                                      ]
+                                    }
+                                  },
+                                  "providerParams": {
+                                    "type": "object",
+                                    "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                                    "additionalProperties": {
+                                      "type": "string"
+                                    },
+                                    "example": {
+                                      "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                      "gcpProjectId": "my-gcp-project",
+                                      "gcpPubSubTopicName": "my-topic"
+                                    }
+                                  }
                                 }
                               },
                               "createTime": {
@@ -37221,6 +37595,115 @@
                             "x-go-type-skip-optional-pointer": true
                           }
                         }
+                      },
+                      "providerAppMetadata": {
+                        "title": "Provider App Metadata",
+                        "type": "object",
+                        "description": "Describes the provider-app-level fields that the Ampersand dashboard should collect from the builder when creating a ProviderApp for this provider. These descriptors tell the dashboard which form fields to render; the submitted values are stored in ProviderApp.metadata.",
+                        "properties": {
+                          "authQueryParams": {
+                            "type": "array",
+                            "description": "Descriptors for fields stored in ProviderApp.metadata.authQueryParams (e.g., optional_scope for HubSpot).",
+                            "items": {
+                              "title": "Metadata Item (as input)",
+                              "type": "object",
+                              "required": [
+                                "name"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "description": "The internal identifier for the metadata field",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "displayName": {
+                                  "type": "string",
+                                  "description": "The human-readable name for the field",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "prompt": {
+                                  "type": "string",
+                                  "description": "Human-readable description that can contain instructions on how to collect metadata",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "defaultValue": {
+                                  "type": "string",
+                                  "description": "Default value for this metadata item",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "docsURL": {
+                                  "type": "string",
+                                  "description": "URL with more information about how to locate this value",
+                                  "example": "https://example.com/how-to-find-subdomain",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "moduleDependencies": {
+                                  "description": "Which modules require this metadata item (see ModuleDependencies for naming clarification).",
+                                  "title": "Module Dependencies",
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "title": "Module Dependency",
+                                    "type": "object",
+                                    "description": "Dependency for a single module.",
+                                    "properties": {}
+                                  }
+                                }
+                              }
+                            },
+                            "x-go-type-skip-optional-pointer": true
+                          },
+                          "providerParams": {
+                            "type": "array",
+                            "description": "Descriptors for fields stored in ProviderApp.metadata.providerParams (e.g., packageInstallURL for Salesforce, gcpProjectId for Gmail).",
+                            "items": {
+                              "title": "Metadata Item (as input)",
+                              "type": "object",
+                              "required": [
+                                "name"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "description": "The internal identifier for the metadata field",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "displayName": {
+                                  "type": "string",
+                                  "description": "The human-readable name for the field",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "prompt": {
+                                  "type": "string",
+                                  "description": "Human-readable description that can contain instructions on how to collect metadata",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "defaultValue": {
+                                  "type": "string",
+                                  "description": "Default value for this metadata item",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "docsURL": {
+                                  "type": "string",
+                                  "description": "URL with more information about how to locate this value",
+                                  "example": "https://example.com/how-to-find-subdomain",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "moduleDependencies": {
+                                  "description": "Which modules require this metadata item (see ModuleDependencies for naming clarification).",
+                                  "title": "Module Dependencies",
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "title": "Module Dependency",
+                                    "type": "object",
+                                    "description": "Dependency for a single module.",
+                                    "properties": {}
+                                  }
+                                }
+                              }
+                            },
+                            "x-go-type-skip-optional-pointer": true
+                          }
+                        }
                       }
                     }
                   }
@@ -38519,6 +39002,115 @@
                               "name": {
                                 "type": "string",
                                 "description": "The internal identifier for the metadata field",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "moduleDependencies": {
+                                "description": "Which modules require this metadata item (see ModuleDependencies for naming clarification).",
+                                "title": "Module Dependencies",
+                                "type": "object",
+                                "additionalProperties": {
+                                  "title": "Module Dependency",
+                                  "type": "object",
+                                  "description": "Dependency for a single module.",
+                                  "properties": {}
+                                }
+                              }
+                            }
+                          },
+                          "x-go-type-skip-optional-pointer": true
+                        }
+                      }
+                    },
+                    "providerAppMetadata": {
+                      "title": "Provider App Metadata",
+                      "type": "object",
+                      "description": "Describes the provider-app-level fields that the Ampersand dashboard should collect from the builder when creating a ProviderApp for this provider. These descriptors tell the dashboard which form fields to render; the submitted values are stored in ProviderApp.metadata.",
+                      "properties": {
+                        "authQueryParams": {
+                          "type": "array",
+                          "description": "Descriptors for fields stored in ProviderApp.metadata.authQueryParams (e.g., optional_scope for HubSpot).",
+                          "items": {
+                            "title": "Metadata Item (as input)",
+                            "type": "object",
+                            "required": [
+                              "name"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "The internal identifier for the metadata field",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "displayName": {
+                                "type": "string",
+                                "description": "The human-readable name for the field",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "prompt": {
+                                "type": "string",
+                                "description": "Human-readable description that can contain instructions on how to collect metadata",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "defaultValue": {
+                                "type": "string",
+                                "description": "Default value for this metadata item",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "docsURL": {
+                                "type": "string",
+                                "description": "URL with more information about how to locate this value",
+                                "example": "https://example.com/how-to-find-subdomain",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "moduleDependencies": {
+                                "description": "Which modules require this metadata item (see ModuleDependencies for naming clarification).",
+                                "title": "Module Dependencies",
+                                "type": "object",
+                                "additionalProperties": {
+                                  "title": "Module Dependency",
+                                  "type": "object",
+                                  "description": "Dependency for a single module.",
+                                  "properties": {}
+                                }
+                              }
+                            }
+                          },
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "providerParams": {
+                          "type": "array",
+                          "description": "Descriptors for fields stored in ProviderApp.metadata.providerParams (e.g., packageInstallURL for Salesforce, gcpProjectId for Gmail).",
+                          "items": {
+                            "title": "Metadata Item (as input)",
+                            "type": "object",
+                            "required": [
+                              "name"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "The internal identifier for the metadata field",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "displayName": {
+                                "type": "string",
+                                "description": "The human-readable name for the field",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "prompt": {
+                                "type": "string",
+                                "description": "Human-readable description that can contain instructions on how to collect metadata",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "defaultValue": {
+                                "type": "string",
+                                "description": "Default value for this metadata item",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "docsURL": {
+                                "type": "string",
+                                "description": "URL with more information about how to locate this value",
+                                "example": "https://example.com/how-to-find-subdomain",
                                 "x-go-type-skip-optional-pointer": true
                               },
                               "moduleDependencies": {
@@ -42065,6 +42657,40 @@
                               ]
                             }
                           },
+                          "metadata": {
+                            "title": "Provider App Metadata",
+                            "type": "object",
+                            "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                            "properties": {
+                              "authQueryParams": {
+                                "type": "object",
+                                "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                                "additionalProperties": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "example": {
+                                  "optional_scope": [
+                                    "automation.sequences.read"
+                                  ]
+                                }
+                              },
+                              "providerParams": {
+                                "type": "object",
+                                "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                                "additionalProperties": {
+                                  "type": "string"
+                                },
+                                "example": {
+                                  "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                  "gcpProjectId": "my-gcp-project",
+                                  "gcpPubSubTopicName": "my-topic"
+                                }
+                              }
+                            }
+                          },
                           "createTime": {
                             "type": "string",
                             "description": "The time the provider app was created.",
@@ -43093,6 +43719,40 @@
                               "offline",
                               "crm.read"
                             ]
+                          }
+                        },
+                        "metadata": {
+                          "title": "Provider App Metadata",
+                          "type": "object",
+                          "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                          "properties": {
+                            "authQueryParams": {
+                              "type": "object",
+                              "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                              "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "example": {
+                                "optional_scope": [
+                                  "automation.sequences.read"
+                                ]
+                              }
+                            },
+                            "providerParams": {
+                              "type": "object",
+                              "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                              "additionalProperties": {
+                                "type": "string"
+                              },
+                              "example": {
+                                "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                "gcpProjectId": "my-gcp-project",
+                                "gcpPubSubTopicName": "my-topic"
+                              }
+                            }
                           }
                         },
                         "createTime": {
@@ -44256,6 +44916,40 @@
                             ]
                           }
                         },
+                        "metadata": {
+                          "title": "Provider App Metadata",
+                          "type": "object",
+                          "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                          "properties": {
+                            "authQueryParams": {
+                              "type": "object",
+                              "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                              "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "example": {
+                                "optional_scope": [
+                                  "automation.sequences.read"
+                                ]
+                              }
+                            },
+                            "providerParams": {
+                              "type": "object",
+                              "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                              "additionalProperties": {
+                                "type": "string"
+                              },
+                              "example": {
+                                "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                "gcpProjectId": "my-gcp-project",
+                                "gcpPubSubTopicName": "my-topic"
+                              }
+                            }
+                          }
+                        },
                         "createTime": {
                           "type": "string",
                           "description": "The time the provider app was created.",
@@ -45346,6 +46040,40 @@
                               "offline",
                               "crm.read"
                             ]
+                          }
+                        },
+                        "metadata": {
+                          "title": "Provider App Metadata",
+                          "type": "object",
+                          "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                          "properties": {
+                            "authQueryParams": {
+                              "type": "object",
+                              "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                              "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "example": {
+                                "optional_scope": [
+                                  "automation.sequences.read"
+                                ]
+                              }
+                            },
+                            "providerParams": {
+                              "type": "object",
+                              "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                              "additionalProperties": {
+                                "type": "string"
+                              },
+                              "example": {
+                                "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                "gcpProjectId": "my-gcp-project",
+                                "gcpPubSubTopicName": "my-topic"
+                              }
+                            }
                           }
                         },
                         "createTime": {
@@ -65433,6 +66161,40 @@
               ]
             }
           },
+          "metadata": {
+            "title": "Provider App Metadata",
+            "type": "object",
+            "description": "Provider-specific configuration that extends the standard OAuth flow.",
+            "properties": {
+              "authQueryParams": {
+                "type": "object",
+                "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "optional_scope": [
+                    "automation.sequences.read"
+                  ]
+                }
+              },
+              "providerParams": {
+                "type": "object",
+                "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "example": {
+                  "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                  "gcpProjectId": "my-gcp-project",
+                  "gcpPubSubTopicName": "my-topic"
+                }
+              }
+            }
+          },
           "createTime": {
             "type": "string",
             "description": "The time the provider app was created.",
@@ -65442,6 +66204,40 @@
             "type": "string",
             "description": "The time the provider app was updated.",
             "format": "date-time"
+          }
+        }
+      },
+      "ProviderAppMetadata": {
+        "title": "Provider App Metadata",
+        "type": "object",
+        "description": "Provider-specific configuration that extends the standard OAuth flow.",
+        "properties": {
+          "authQueryParams": {
+            "type": "object",
+            "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": {
+              "optional_scope": [
+                "automation.sequences.read"
+              ]
+            }
+          },
+          "providerParams": {
+            "type": "object",
+            "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "example": {
+              "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+              "gcpProjectId": "my-gcp-project",
+              "gcpPubSubTopicName": "my-topic"
+            }
           }
         }
       },
@@ -67179,6 +67975,40 @@
                         "offline",
                         "crm.read"
                       ]
+                    }
+                  },
+                  "metadata": {
+                    "title": "Provider App Metadata",
+                    "type": "object",
+                    "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                    "properties": {
+                      "authQueryParams": {
+                        "type": "object",
+                        "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                        "additionalProperties": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "example": {
+                          "optional_scope": [
+                            "automation.sequences.read"
+                          ]
+                        }
+                      },
+                      "providerParams": {
+                        "type": "object",
+                        "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                        "additionalProperties": {
+                          "type": "string"
+                        },
+                        "example": {
+                          "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                          "gcpProjectId": "my-gcp-project",
+                          "gcpPubSubTopicName": "my-topic"
+                        }
+                      }
                     }
                   },
                   "createTime": {
@@ -70753,6 +71583,40 @@
                     "offline",
                     "crm.read"
                   ]
+                }
+              },
+              "metadata": {
+                "title": "Provider App Metadata",
+                "type": "object",
+                "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                "properties": {
+                  "authQueryParams": {
+                    "type": "object",
+                    "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                    "additionalProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "example": {
+                      "optional_scope": [
+                        "automation.sequences.read"
+                      ]
+                    }
+                  },
+                  "providerParams": {
+                    "type": "object",
+                    "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "example": {
+                      "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                      "gcpProjectId": "my-gcp-project",
+                      "gcpPubSubTopicName": "my-topic"
+                    }
+                  }
                 }
               },
               "createTime": {

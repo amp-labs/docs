@@ -1,0 +1,139 @@
+---
+title: "Google (Workspace Delegation)"
+---
+
+This guide walks you through connecting your Google Workspace domain to an integration that uses a GCP service account with [domain-wide delegation](https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority). This is a headless, server-to-server authentication method — there is no interactive login, and the integration accesses Gmail, Calendar, and Contacts data on behalf of users in your domain.
+
+If your integration uses the standard Google OAuth flow instead, please refer to your integration developer for the correct setup.
+
+## Before installing a Google (Workspace Delegation) integration
+
+You will need:
+- **Google Cloud Platform (GCP)** access with permission to create service accounts (typically **Owner** or **Editor** on a GCP project).
+- **Google Workspace super-admin** access to your domain (required to authorize domain-wide delegation).
+
+### 1. Enable the required APIs
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Select (or create) a GCP project that will own the service account.
+3. Navigate to **APIs & Services** > **Library**.
+4. Enable the APIs your integration needs:
+   - **Gmail API** — for Gmail integrations.
+   - **Google Calendar API** — for Calendar integrations.
+   - **People API** — for Contacts integrations.
+5. Repeat for every API your integration requires.
+
+### 2. Create a service account
+
+1. In the Google Cloud Console, navigate to **IAM & Admin** > **Service Accounts**.
+2. Click **Create Service Account**.
+3. Enter a name (e.g., "Workspace Integration Service Account") and an optional description.
+4. Click **Create and Continue**, then **Done**. You do not need to grant any project-level IAM roles for domain-wide delegation — the authorization happens in the Workspace Admin console in step 4.
+
+### 3. Create and download a key
+
+1. From the **Service Accounts** page, click on the service account you just created.
+2. Note the **Unique ID** (a numeric client ID, e.g. `123456789012345678901`). You will need this in the next step.
+3. Go to the **Keys** tab.
+4. Click **Add Key** > **Create new key**.
+5. Select **JSON** as the key type and click **Create**.
+6. A JSON file will be downloaded. Store it securely — this file contains credentials that can impersonate any user in your Workspace domain once delegation is authorized.
+
+You will need to base64-encode the contents of this file before providing it during installation. Use the command that matches your environment:
+
+**macOS (Terminal)**
+
+```bash
+base64 -i service-account-key.json
+```
+
+**Linux, Git Bash, or WSL**
+
+```bash
+base64 -w 0 service-account-key.json
+```
+
+**Windows (PowerShell)**
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes((Resolve-Path 'service-account-key.json')))
+```
+
+Copy the encoded string (a long single line). You will paste it when installing the integration.
+
+### 4. Authorize domain-wide delegation
+
+This step grants the service account permission to impersonate users in your Workspace domain. It must be performed by a **super-admin** of the Google Workspace domain.
+
+1. Go to the [Google Admin console](https://admin.google.com/).
+2. Navigate to **Security** > **Access and data control** > **API controls**.
+3. Click **Manage Domain Wide Delegation**.
+4. Click **Add new**.
+5. In **Client ID**, paste the numeric **Unique ID** of the service account from step 3.
+6. In **OAuth scopes**, enter a comma-separated list of the scopes your integration needs. For example:
+   - Gmail (read/write): `https://mail.google.com/`
+   - Gmail (read-only): `https://www.googleapis.com/auth/gmail.readonly`
+   - Calendar (read/write): `https://www.googleapis.com/auth/calendar`
+   - Calendar (read-only): `https://www.googleapis.com/auth/calendar.readonly`
+   - Contacts (read/write): `https://www.googleapis.com/auth/contacts`
+   - Contacts (read-only): `https://www.googleapis.com/auth/contacts.readonly`
+
+   Ask your integration developer which scopes their integration requires.
+7. Click **Authorize**.
+
+<Note>Scopes in the Admin console are **comma-separated**, but scopes in API requests are **space-separated**. Do not mix these up — the Admin console will silently accept the wrong format.</Note>
+
+<Note>Changes to domain-wide delegation can take up to 24 hours to propagate, though most take only a few minutes. If the integration returns `unauthorized_client` errors immediately after setup, wait and retry.</Note>
+
+### 5. Gather your connection details
+
+You will need the following information when installing the integration:
+
+| Input | Where to find it |
+|---|---|
+| **Service Account Key** | The base64-encoded contents of the JSON key file from step 3. |
+| **User Email** | The email address of a Workspace user the integration should access (e.g. `user@company.com`). One connection is created per user. |
+| **Scopes** | The exact list of OAuth scopes you authorized in step 4 (or a subset). Scopes are sent as an array alongside the service account key when creating the connection. They must match what was authorized in the Admin console — requesting any scope that was not authorized there causes Google to reject the token exchange. |
+
+An example `customAuth` payload when creating the connection looks like:
+
+```json
+{
+  "customAuth": {
+    "serviceAccountKey": "<base64-encoded JSON key>",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar",
+      "https://mail.google.com/"
+    ]
+  }
+}
+```
+
+## Installing the integration
+
+When you are installing the integration, you will be prompted for the inputs listed above. After providing them, the integration will begin syncing data for the specified user.
+
+To connect multiple users, you (or the integration developer) repeat the installation once per user, using the same service account key and a different user email each time. Builders often do this programmatically via the [Generate Connection API](/api/connection/generate-a-new-connection).
+
+## Troubleshooting
+
+### `unauthorized_client: Client is unauthorized to retrieve access tokens using this method`
+
+Either:
+- The service account's numeric Client ID was not added to **Manage Domain Wide Delegation** in the Admin console (revisit step 4), or
+- The scopes requested by the integration are not a subset of the scopes authorized in step 4 — ask the integration developer which scopes are needed and add any missing ones.
+
+### `invalid_grant: Invalid email or User ID`
+
+The **User Email** you provided is not a valid, active user in the Workspace domain. Suspended or deleted users cannot be impersonated. Confirm the user exists in **Admin console** > **Directory** > **Users**.
+
+### It worked yesterday but suddenly stopped
+
+Check whether:
+- The user was suspended or deleted.
+- A super-admin removed or modified the domain-wide delegation entry.
+- An admin disabled the API in the GCP project — enabled APIs can be turned off from **APIs & Services** > **Enabled APIs & Services**.
+
+### Access is broader than expected
+
+Domain-wide delegation authorizes the service account to impersonate **any** user in the domain for the scopes you granted — including super-admins. There is no way to restrict impersonation to a subset of users; the only restriction is on scopes. If this is a concern, review the scopes list in step 4 and remove any that are not strictly needed.

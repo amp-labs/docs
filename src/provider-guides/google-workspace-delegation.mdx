@@ -1,0 +1,87 @@
+---
+title: "Google (Workspace Delegation)"
+slug: "google-workspace-delegation"
+excerpt: ""
+hidden: false
+---
+
+The Google (Workspace Delegation) connector authenticates using a Google Workspace service account with [domain-wide delegation](https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority) instead of the standard Authorization Code flow. A Workspace admin authorizes the service account once, and Ampersand can then access any user's Gmail, Calendar, or Contacts data in that domain without requiring each user to go through an individual OAuth flow.
+
+Please note that the standard [Google connector](/provider-guides/google) is a more convenient experience for individual consumers; it uses a standard OAuth 2.0 authentication scheme where each user logs in and approves the app. We recommend it for most use cases. This connector is intended for builders who need bulk programmatic access across many users in a Workspace domain (for example, syncing calendars for every member of an organization).
+
+## What's Supported
+
+### Supported Actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://www.googleapis.com`.
+
+The **Calendar** module supports:
+- [Read Actions](/read-actions), including historical backfill. Incremental read is only supported for the Calendar `Events` object; otherwise, a full read of the Google instance will be performed for each scheduled run.
+- [Write Actions](/write-actions).
+
+> **Important Note on Events Backfill**: The `events` object has a 28-day cap for historic backfill and does not support full history, due to limitations in the Google API. When syncing events data, ensure your backfill period does not exceed 28 days.
+
+The **Gmail** module supports:
+- [Read Actions](/read-actions), including historical backfill. Incremental read and pagination are only supported for `Drafts`, `Messages`, and `Threads` objects; otherwise, a full read of the Gmail instance will be performed for each scheduled run.
+- [Write Actions](/write-actions).
+
+### Supported modules & objects
+
+The supported modules and objects are the same as the standard [Google connector](/provider-guides/google#supported-calendar-objects). See that guide for the full list of Calendar and Gmail objects.
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: google-workspace-delegation-integration
+    provider: googleWorkspaceDelegation
+    ...
+```
+
+## Before You Get Started
+
+This connector uses a GCP service account with domain-wide delegation. There is no interactive login — your customer's Google Workspace administrator will pre-authorize your service account's client ID with the required API scopes, and Ampersand will sign JWT assertions impersonating each user to obtain access tokens.
+
+To integrate Google (Workspace Delegation) with Ampersand, your customer's Google Workspace administrator will need to complete the setup steps in the [customer guide](/customer-guides/google-workspace-delegation) and provide you with:
+
+- A base64-encoded GCP service account JSON key file
+- The email address of each Workspace user the integration should access
+- The list of OAuth scopes authorized for the service account in the Workspace Admin console
+
+<Note>The scopes you send when creating a connection must be a subset of what the Workspace admin authorized in the Admin console (Security > API controls > Domain-wide delegation). Google's JWT bearer flow requires scopes to be declared in every token request and will reject the exchange if any requested scope is not authorized.</Note>
+
+Scopes are sent alongside the service account key inside the `customAuth` payload when creating the connection:
+
+```json
+{
+  "customAuth": {
+    "serviceAccountKey": "<base64-encoded JSON key>",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar",
+      "https://mail.google.com/"
+    ]
+  }
+}
+```
+
+<Note>Unlike OAuth-based Google connections, this connector does not use a [Provider App](/define-integrations#create-a-provider-app). The service account JSON key contains all the credentials needed, so Client ID and Client Secret are not required.</Note>
+
+### Creating a connection per user
+
+Each connection on Ampersand represents one user's access. Because domain-wide delegation can impersonate any user in the domain, you create one connection per Workspace user you want to sync — each connection shares the same service account key but carries a different user email. Builders typically create these programmatically via the [Generate Connection API](/api/connection/generate-a-new-connection) in bulk.
+
+## Using the connector
+
+To start integrating with Google (Workspace Delegation):
+- Create a manifest file like the [Google Calendar example](https://github.com/amp-labs/samples/blob/main/google-calendar/amp.yaml), using `googleWorkspaceDelegation` as the provider instead of `google`.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Collect your customer's service account key, then create one connection per Workspace user (service account key + user email).
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Customer guide
+
+The [Google (Workspace Delegation) customer guide](/customer-guides/google-workspace-delegation) is a guide that can be shared with your customers to help them set up a service account and authorize domain-wide delegation.
