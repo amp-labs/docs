@@ -295,7 +295,7 @@ The `useManifest` hook provides the data that you need to build input forms for 
 `useManifest` always returns the integration's latest published [revision](/terminology#revision) of `amp.yaml` — it is not tied to any specific installation. If an installation was created against an older revision, `useManifest` will still reflect the current `amp.yaml` and may differ from the installation's saved config. See [How `useManifest` and `useLocalConfig` relate](#how-usemanifest-and-uselocalconfig-relate).
 </Note>
 
-> For now, you can only access your manifest's Read Actions. Please note that you still create an Installation with Subscribe and Write Actions using [`useCreateInstallation`](headless#creating%2C-updating%2C-and-deleting-installations). For write actions, you can also use `useLocalConfig` to construct the config object, see [Manage write config](#manage-write-config).
+> `useManifest` exposes typed helpers for read and write objects (`getReadObject`, `getReadObjects`, `getWriteObject`). For proxy and subscribe, read the full response from `data.content`. To create or update installations with any action type, use [`useCreateInstallation`](headless#creating%2C-updating%2C-and-deleting-installations); to construct the write config, see [Manage write config](#manage-write-config).
 
 ```TypeScript
 import { useManifest } from "@amp-labs/react";
@@ -369,7 +369,7 @@ For fetching an existing config from an installation, use [`useInstallation`](#g
 </Note>
 
 <Note>
-**Prefer the helper functions** (`readObject`, `writeObject`, `proxy`, `setDraft`, `removeObject`, `reset`, `get`) over accessing `draft` directly. The helpers encapsulate how the draft is initialized, synced with the installation, and merged with manifest defaults. Reading `draft` directly is a low-level escape hatch — it is mutable local state that may be empty, partially hydrated, or contain unsaved edits depending on timing. For authoritative installation state, use [`useInstallation`](#get-current-installation). For the integration's latest template, use [`useManifest`](#get-manifest-and-field-metadata). See [How `useManifest` and `useLocalConfig` relate](#how-usemanifest-and-uselocalconfig-relate).
+**Prefer the helper functions** (`readObject`, `writeObject`, `proxy`, `setDraft`, `removeObject`, `reset`, `get`) over accessing `draft` directly. The helpers encapsulate how the draft is initialized, synced with the installation, and merged with manifest defaults. For authoritative installation state, use [`useInstallation`](#get-current-installation). For the integration's latest manifest (from your `amp.yaml` file), use [`useManifest`](#get-manifest-and-field-metadata). See [How `useManifest` and `useLocalConfig` relate](#how-usemanifest-and-uselocalconfig-relate).
 </Note>
 
 It returns these fields:
@@ -674,11 +674,9 @@ function WriteObjectConfig() {
 
 ## How `useManifest` and `useLocalConfig` relate
 
-`useManifest` and `useLocalConfig` are frequently mistaken for the same thing. They're not — they pull from different sources by design, and knowing the difference is important when building configuration UI or debugging mismatches.
-
 | | `useManifest()` | `useLocalConfig()` |
 |---|---|---|
-| **Represents** | The integration's [`amp.yaml`](/manifest-reference) template | The in-progress draft of this [installation's](/terminology#installation) config |
+| **Represents** | The integration's [`amp.yaml`](/manifest-reference) manifest | The in-progress draft of this [installation's](/terminology#installation) config |
 | **Revision source** | The integration's latest published [revision](/terminology#revision) | Whatever revision the installation was saved against |
 | **Scope** | Everything the integration *could* support | Only what this installation *selected*, plus local edits |
 | **Mutable?** | No — read-only query result | Yes — via helper functions |
