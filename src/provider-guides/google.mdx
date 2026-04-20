@@ -219,7 +219,7 @@ gcloud pubsub topics create TOPIC_NAME
 
 ### 4. Grant Gmail permission to publish to the topic
 
-Gmail publishes push notifications using a Google-managed service account. Grant it the `Pub/Sub Publisher` role on your topic — **without this grant Gmail will reject the `watch` call with a permission error**.
+Gmail publishes push notifications using a Google-managed service account. Grant it the `Pub/Sub Publisher` role on your topic. **Without this grant Gmail will reject the `watch` call with a permission error.**
 
 ```bash
 gcloud pubsub topics add-iam-policy-binding TOPIC_NAME \
@@ -234,12 +234,30 @@ Create a push subscription that forwards every notification to Ampersand's recei
 ```bash
 gcloud pubsub subscriptions create SUBSCRIPTION_NAME \
   --topic=TOPIC_NAME \
-  --push-endpoint=https://subscribe-receiver.withampersand.com/zt1secx7jknlhb \
+  --push-endpoint=https://subscribe-receiver.withampersand.com/zt1secx7jknlhb/v1 \
   --ack-deadline=60 \
   --message-retention-duration=7d
 ```
 
-### 6. Update your Google provider app in Ampersand
+### 6. Pre-authorize Ampersand's service account
+
+Grant Ampersand's Gmail Subscribe service account two resource-scoped roles on your topic:
+
+```bash
+gcloud pubsub topics add-iam-policy-binding TOPIC_NAME \
+  --member=serviceAccount:gmail-subscribe@ampersand-prod.iam.gserviceaccount.com \
+  --role=roles/pubsub.subscriber
+```
+
+```bash
+gcloud pubsub topics add-iam-policy-binding TOPIC_NAME \
+  --member=serviceAccount:gmail-subscribe@ampersand-prod.iam.gserviceaccount.com \
+  --role=roles/pubsub.viewer
+```
+
+Both bindings are scoped to this single topic, and grant no access elsewhere in your project.
+
+### 7. Update your Google provider app in Ampersand
 
 Ampersand needs to know which topic to wire new installations to. Go back to your [Ampersand Dashboard](https://dashboard.withampersand.com), open **Provider apps** → **Google** (the same provider app where you entered your Client ID and Client Secret in [Add Your Google App info to Ampersand](#add-your-google-app-info-to-ampersand)), and set the following fields:
 
