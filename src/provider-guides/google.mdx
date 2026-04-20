@@ -77,9 +77,9 @@ export const Cross = () => <span>🚫</span>
 </table>
 </div>
 
-_[1] `drafts` with embedded fields, ex: `"$['message']['payload']['body']"`._
+_[1] `drafts` supports nested fields, e.g. `"$['message']['payload']['body']"`._
 
-_[2] `messages` with embedded fields, ex: `"$['payload']['body']"`._
+_[2] `messages` supports nested fields, e.g. `"$['payload']['body']"`._
 
 ### Example integration
 
@@ -175,7 +175,7 @@ Follow the steps below to create a Google App:
 
 ## Set up Gmail push notifications for Subscribe Actions
 
-To receive real-time Subscribe events from Gmail, you need to own a Google Cloud Pub/Sub topic that Gmail can publish to, and a push subscription that forwards those messages to Ampersand. This section walks through the setup with copy-pasteable `gcloud` commands.
+To receive real-time Subscribe events from Gmail, you need to own a Google Cloud Pub/Sub topic that Gmail can publish to, and a push subscription that forwards those messages to Ampersand.
 
 <Note>
   Gmail requires the Pub/Sub topic to live in the **same Google Cloud project** as the OAuth app you created in [Creating a Google App](#creating-a-google-app).
@@ -184,7 +184,7 @@ To receive real-time Subscribe events from Gmail, you need to own a Google Cloud
 ### Prerequisites
 
 - A Google Cloud project with billing enabled (the same project that owns your Google OAuth app).
-- The [`gcloud` CLI](https://cloud.google.com/sdk/docs/install) installed and authenticated (`gcloud auth login`).
+- The [`gcloud` CLI](https://cloud.google.com/sdk/docs/install) installed.
 - Your user account needs the following IAM roles on the project (or equivalent permissions via a custom role):
   - `roles/pubsub.admin` — required to create the topic, create the push subscription, and add the IAM binding that grants Gmail publish access (the `add-iam-policy-binding` step requires `pubsub.topics.setIamPolicy`, which `roles/pubsub.editor` alone does not cover).
   - `roles/serviceusage.serviceUsageAdmin` — required to enable the Pub/Sub API if it is not already enabled. You can skip this role if the API is already on.
@@ -194,47 +194,52 @@ To receive real-time Subscribe events from Gmail, you need to own a Google Cloud
   Org-level access does not automatically grant resource-creation permission on individual projects. If you have access to the organization but not the project, you'll see `User not authorized to perform this action` when running the commands below.
 </Note>
 
-### 1. Enable the Pub/Sub API
+### 1. Log into gcloud CLI
 
 Replace `PROJECT_ID` with your Google Cloud project ID.
 
 ```bash
-gcloud services enable pubsub.googleapis.com --project=PROJECT_ID
+gcloud auth login
+gcloud config set project PROJECT_ID
 ```
 
-### 2. Create a Pub/Sub topic
+### 2. Enable the Pub/Sub API
+
+```bash
+gcloud services enable pubsub.googleapis.com
+```
+
+### 3. Create a Pub/Sub topic
 
 Replace `TOPIC_NAME` with a name of your choice (e.g. `gmail-push`).
 
 ```bash
-gcloud pubsub topics create TOPIC_NAME --project=PROJECT_ID
+gcloud pubsub topics create TOPIC_NAME
 ```
 
-### 3. Grant Gmail permission to publish to the topic
+### 4. Grant Gmail permission to publish to the topic
 
 Gmail publishes push notifications using a Google-managed service account. Grant it the `Pub/Sub Publisher` role on your topic — **without this grant Gmail will reject the `watch` call with a permission error**.
 
 ```bash
 gcloud pubsub topics add-iam-policy-binding TOPIC_NAME \
-  --project=PROJECT_ID \
   --member=serviceAccount:gmail-api-push@system.gserviceaccount.com \
   --role=roles/pubsub.publisher
 ```
 
-### 4. Create a push subscription to Ampersand
+### 5. Create a push subscription to Ampersand
 
 Create a push subscription that forwards every notification to Ampersand's receiver endpoint. Replace `SUBSCRIPTION_NAME` with a name of your choice (e.g. `gmail-push-to-ampersand`).
 
 ```bash
 gcloud pubsub subscriptions create SUBSCRIPTION_NAME \
-  --project=PROJECT_ID \
   --topic=TOPIC_NAME \
   --push-endpoint=https://subscribe-receiver.withampersand.com/zt1secx7jknlhb \
   --ack-deadline=60 \
   --message-retention-duration=7d
 ```
 
-### 5. Update your Google provider app in Ampersand
+### 6. Update your Google provider app in Ampersand
 
 Ampersand needs to know which topic to wire new installations to. Go back to your [Ampersand Dashboard](https://dashboard.withampersand.com), open **Provider apps** → **Google** (the same provider app where you entered your Client ID and Client Secret in [Add Your Google App info to Ampersand](#add-your-google-app-info-to-ampersand)), and set the following fields:
 
@@ -253,13 +258,12 @@ Gmail mailbox → Your Pub/Sub topic → Your push subscription → Ampersand �
 
 ### Caveats
 
-- **7-day history horizon.** Gmail only retains mailbox history for about 7 days. If a mailbox is inactive longer than that, Ampersand will miss events from before the gap and resume from the next incoming notification.
+- **7-day history horizon.** Gmail only retains mailbox history for about 7 days. If a mailbox has not received or sent emails for 7 days, Ampersand will miss events from before the gap and resume from the next incoming notification.
 - **Delete events carry only `messageId`.** When a message is deleted, Gmail's history API does not return the message body — only its ID. Your destination will receive a `delete` subscribe event without `fields` or `mappedFields` populated.
 - **`messages` is the only supported object.** Changes to Gmail labels, drafts, filters, threads, and other objects are not delivered as Subscribe events.
-- **INBOX-only by default.** Ampersand currently watches the `INBOX` label only, so you'll only receive events for messages entering, leaving, or being relabeled within the inbox. If you need notifications for other labels (e.g. `SENT`, `TRASH`, or custom labels), contact [support@withampersand.com](mailto:support@withampersand.com) and we can configure additional labels on our end.
+- **Inbox only by default.** Ampersand currently watches the `INBOX` label only, so you'll only receive events for messages entering, leaving, or being relabeled within the inbox. If you need notifications for other labels (e.g. `SENT`, `TRASH`, or custom labels), contact [support@withampersand.com](mailto:support@withampersand.com) and we can configure additional labels on our end.
 - **No historical backfill via Subscribe.** Subscribe events start from the moment the `watch` is created. To sync existing mailbox contents, combine your Subscribe action with a [Read action](/read-actions) that has `backfill` configured.
-- **Watch expiry is managed automatically.** Gmail `watch` requests expire after 7 days; Ampersand renews them for you. If renewal fails (for example, because the topic was deleted or its IAM binding was removed), events will stop until the issue is resolved.
-- **One installation per mailbox per project.** Connecting the same Gmail account to multiple installations in the same Ampersand project is not supported for Subscribe. When a second OAuth connection is created for a mailbox that already has one, Google can invalidate the earlier connection's refresh token, which breaks token refresh on the older installation and stops its events from flowing. If you need the same mailbox to power multiple integrations, reuse a single installation.
+- **One installation per mailbox per project.** Connecting the same Gmail account to multiple installations in the same Ampersand project is not supported for Subscribe. When a second OAuth connection is created for a mailbox that already has one, Google can invalidate the earlier connection's refresh token, which breaks token refresh on the older installation and stops its events from flowing.
 
 ## Ship your integration to production
 
