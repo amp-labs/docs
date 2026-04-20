@@ -2,25 +2,22 @@
 title: QuickBooks
 ---
 
-## What's Supported
-
-### Supported actions
-- [Read Actions](/read-actions), including full historic backfill and incremental reads.
-- [Write Actions](/write-actions).
-- [Proxy Actions](/proxy-actions), using the base URL `https://quickbooks.api.intuit.com` for production apps, or `https://sandbox-quickbooks.api.intuit.com` for development apps (see Sandbox below).
-
-## Sandbox
-
-For development and testing, QuickBooks provides a sandbox environment. To use Proxy Actions against the sandbox, specify `quickbooksSandbox` as the provider (instead of `quickbooks`) in your integration. Read Actions and Write Actions are coming soon.
-
-```yaml
-specVersion: 1.0.0
-integrations:
-  - name: quickbooksSandboxProxy
-    provider: quickbooksSandbox
-    proxy:
-     enabled: true
-```
+  ## What's Supported                                                                                                                                     
+                                                            
+  QuickBooks is available as two connectors:
+                                                                                                                                                          
+  | Environment | Provider name | Base URL |
+  |---|---|---|                                                                                                                                           
+  | Production | `quickbooks` | `https://quickbooks.api.intuit.com` |
+  | Sandbox | `quickbooksSandbox` | `https://sandbox-quickbooks.api.intuit.com` |
+                                                                                                                                                          
+  Both connectors share the same supported actions, objects, and OAuth2 configuration — the only difference is the base URL used for API calls. 
+  Use the **sandbox connector** during development and testing with your [QuickBooks sandbox company](https://developer.intuit.com/app/developer/qbo/docs/develop/sandboxes), and switch to the **production connector** when going live.            
+                                                                                                                                                          
+  ### Supported actions                                     
+  - [Read Actions](/read-actions), including full historic backfill and incremental reads.
+  - [Write Actions](/write-actions).                                                      
+  - [Proxy Actions](/proxy-actions), using the base URL `https://quickbooks.api.intuit.com` (production) or `https://sandbox-quickbooks.api.intuit.com`  (sandbox).    
 
 ### Supported Objects
 
