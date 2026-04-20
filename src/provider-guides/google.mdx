@@ -241,21 +241,15 @@ gcloud pubsub subscriptions create SUBSCRIPTION_NAME \
 
 ### 6. Pre-authorize Ampersand's service account
 
-Grant Ampersand's Gmail Subscribe service account two resource-scoped roles on your topic:
+Grant Ampersand's Gmail Subscribe service account a resource-scoped role on your topic:
 
 ```bash
 gcloud pubsub topics add-iam-policy-binding TOPIC_NAME \
   --member=serviceAccount:gmail-subscribe@ampersand-prod.iam.gserviceaccount.com \
-  --role=roles/pubsub.subscriber
+  --role=roles/pubsub.editor
 ```
 
-```bash
-gcloud pubsub topics add-iam-policy-binding TOPIC_NAME \
-  --member=serviceAccount:gmail-subscribe@ampersand-prod.iam.gserviceaccount.com \
-  --role=roles/pubsub.viewer
-```
-
-Both bindings are scoped to this single topic, and grant no access elsewhere in your project.
+This role is scoped to this single topic, and grants no access elsewhere in your project.
 
 ### 7. Update your Google provider app in Ampersand
 
@@ -270,9 +264,12 @@ Click **Save changes**.
 
 Once saved, every new installation with a Gmail Subscribe action in its `amp.yaml` will automatically register a Gmail `watch` for that mailbox, pointing at your topic. Events then flow:
 
-```
-Gmail mailbox → Your Pub/Sub topic → Your push subscription → Ampersand → Your destination
-```
+1. A new message arrives in the **Gmail mailbox**.
+2. Gmail publishes a notification to **your Pub/Sub topic**.
+3. **Your push subscription** forwards the notification to Ampersand.
+4. **Ampersand** hydrates the message and processes the event.
+5. The event is delivered to **your destination**.
+
 
 ### Caveats
 
