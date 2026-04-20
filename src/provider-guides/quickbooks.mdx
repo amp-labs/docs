@@ -7,7 +7,11 @@ title: QuickBooks
 ### Supported actions
 - [Read Actions](/read-actions), including full historic backfill and incremental reads.
 - [Write Actions](/write-actions).
-- [Proxy Actions](/proxy-actions), using the base URL `https://quickbooks.api.intuit.com`.
+- [Proxy Actions](/proxy-actions), using the base URL `https://quickbooks.api.intuit.com` for production apps, or `https://sandbox-quickbooks.api.intuit.com` for development apps (see Sandbox below).
+
+## Sandbox
+
+For development and testing, QuickBooks provides a sandbox environment. To use Proxy Actions against the sandbox, specify `quickbooksSandbox` as the provider (instead of `quickbooks`) in your integration.
 
 ### Supported Objects
 
@@ -77,9 +81,9 @@ You'll need a QuickBooks account and will need to create a QuickBooks app to obt
    - **Description**: Brief description of your integration
 6. Click **Create app**
 7. Once created, navigate to the **Keys & OAuth** tab
-8. Note down your:
-   - **Client ID** 
-   - **Client Secret**
+8. Note down your credentials for both environments:
+   - **Development (Sandbox)**: Client ID and Client Secret listed under the **Development** section — use these with the `quickbooksSandbox` provider.
+   - **Production**: Client ID and Client Secret listed under the **Production** section — use these with the `quickbooks` provider.
 9. Under **Redirect URIs**, add: `https://api.withampersand.com/callbacks/v1/oauth`
 
 Common scopes include:
