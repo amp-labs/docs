@@ -685,7 +685,7 @@ function WriteObjectConfig() {
 ### Use the right hook for the job
 
 - **"What does this integration currently support?"** → `useManifest()`. Use this when building configuration UI — pickers, field checkboxes, mapping dropdowns — that should follow the current `amp.yaml`.
-- **"What did this installation actually deploy?"** → `useInstallation().installation.config.content`. This is the authoritative saved state, pinned to the revision the installation was created against. See the [installation response schema](/reference/installation/get-an-installation) for its shape. Do not use `useLocalConfig` for this — the draft is mutable and may include unsaved edits.
+- **"What did this installation actually deploy?"** → `useInstallation().installation.config.content`. This is the authoritative saved state. See the [installation response schema](/reference/installation/get-an-installation) for its shape. Do not use `useLocalConfig` for this — the draft is mutable and may include unsaved edits.
 - **"Let the user edit the installation's config."** → `useLocalConfig()`, via its helper functions. See below.
 
 ### Read and write through helper functions, not `draft`
