@@ -292,7 +292,7 @@ The `useManifest` hook provides the data that you need to build input forms for 
 - Retrieve object and field metadata from the connected provider (e.g., Salesforce, Hubspot). This allows your application to know about the exact objects and fields that exist in your customer's SaaS instance, including custom objects and fields. With this information, you can build dropdowns, checkboxes, etc.
 
 <Note>
-`useManifest` always returns the integration's latest published [revision](/terminology#revision) of `amp.yaml` — it is not tied to any specific installation. If an installation was created against an older revision, `useManifest` will still reflect the current `amp.yaml` and may differ from the installation's saved config. See [How `useManifest` and `useLocalConfig` relate](#how-usemanifest-and-uselocalconfig-relate).
+`useManifest` always returns the integration's latest published [revision](/terminology#revision) of `amp.yaml` — it is not tied to any specific installation. If an installation was created against an older revision, `useManifest` will still reflect the current `amp.yaml` and may differ from the installation's saved config. See [`useManifest` vs `useLocalConfig`](#usemanifest-vs-uselocalconfig).
 </Note>
 
 > `useManifest` exposes typed helpers for read and write objects (`getReadObject`, `getReadObjects`, `getWriteObject`).
@@ -369,7 +369,7 @@ For fetching an existing config from an installation, use [`useInstallation`](#g
 </Note>
 
 <Note>
-**Prefer the helper functions** (`readObject`, `writeObject`, `proxy`, `setDraft`, `removeObject`, `reset`, `get`) over accessing `draft` directly. The helpers encapsulate how the draft is initialized, synced with the installation, and merged with manifest defaults. For authoritative installation state, use [`useInstallation`](#get-current-installation). For the integration's latest manifest (from your `amp.yaml` file), use [`useManifest`](#get-manifest-and-field-metadata). See [How `useManifest` and `useLocalConfig` relate](#how-usemanifest-and-uselocalconfig-relate).
+**Prefer the helper functions** (`readObject`, `writeObject`, `proxy`, `setDraft`, `removeObject`, `reset`, `get`) over accessing `draft` directly. The helpers encapsulate how the draft is initialized, synced with the installation, and merged with manifest defaults. For authoritative installation state, use [`useInstallation`](#get-current-installation). For the integration's latest manifest (from your `amp.yaml` file), use [`useManifest`](#get-manifest-and-field-metadata). See [`useManifest` vs `useLocalConfig`](#usemanifest-vs-uselocalconfig).
 </Note>
 
 It returns these fields:
@@ -672,7 +672,7 @@ function WriteObjectConfig() {
 }
 ```
 
-## How `useManifest` and `useLocalConfig` relate
+## `useManifest` vs `useLocalConfig`
 
 | | `useManifest()` | `useLocalConfig()` |
 |---|---|---|
@@ -709,21 +709,6 @@ contactWrite.setEnableWrite();
 const configToSave = config.get();
 config.reset();
 ```
-
-
-### When `useManifest` and the installation's saved config can diverge
-
-The two hooks read from independent sources, so they can legitimately disagree:
-
-1. The customer installs against `amp.yaml` **revision A**. `installation.config.content` captures the shape of A and the fields the customer selected.
-2. A developer later ships a new `amp.yaml` → **revision B**. The integration's latest revision advances to B.
-3. In the customer's browser:
-   - `useManifest()` now returns revision B's objects, fields, and mappings.
-   - `useInstallation().installation.config.content` still reflects the config that was saved against revision A.
-
-If B added new objects or fields, `useManifest` will show them and the saved config won't. If B renamed or removed something, the opposite. This is expected behavior — nothing has gone wrong. Treat `useManifest` as "what is possible now" and the installation's config as "what was saved then."
-
-Under the hood, `useManifest` calls the [hydrated revision endpoint](/reference/revision/get-a-hydrated-revision) with the integration's latest revision ID, which is why it is never pinned to any one installation.
 
 ## Examples
 
