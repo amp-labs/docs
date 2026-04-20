@@ -710,7 +710,6 @@ const configToSave = config.get();
 config.reset();
 ```
 
-The helpers guarantee correct behavior across installation load timing, default-seeding from the manifest, and the `disabled` flag semantics. Accessing `draft` directly skips those guarantees — its shape depends on whether the installation has loaded yet, which revision it was saved against, and any unsaved edits in flight. Prefer helpers; treat `draft` as a low-level escape hatch.
 
 ### When `useManifest` and the installation's saved config can diverge
 
