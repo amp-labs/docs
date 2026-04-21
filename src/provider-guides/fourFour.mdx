@@ -7,23 +7,38 @@ title: Four/Four
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental reading is only supported for `Insights`, `Topics`, `TopicModels`, `Chats`, `ChatMessages`, `Accounts`, `Contacts`, `Cases`, `Calls`, `Owners`, `Opportunities`, `Leads`, `Objects`, `TrackerProjects`, `TrackerIssues`, and `TrackerComments`. For all other objects, a full read of the Four/Four instance will be done per scheduled read.
 - [Proxy Actions](/proxy-actions), using the base URL `https://fourfour.ai`.
+
+### Supported objects
+
+The Four/Four connector supports reading from the following objects:
+- [Accounts](https://fourfour.ai/developers/api#tag/Accounts/paths/~1Accounts/get) (supports incremental read)
+- [CalendarEvents](https://fourfour.ai/developers/api#tag/CalendarEvents/paths/~1CalendarEvents/get)
+- [Cases](https://fourfour.ai/developers/api#tag/Cases/paths/~1Cases/get) (supports incremental read)
+- [Calls](https://fourfour.ai/developers/api#tag/Calls/paths/~1Calls/get) (supports incremental read)
+- [ChatMessages](https://fourfour.ai/developers/api#tag/ChatMessages/paths/~1ChatMessages/get) (supports incremental read)
+- [Chats](https://fourfour.ai/developers/api#tag/Chats/paths/~1Chats/get) (supports incremental read)
+- [Contacts](https://fourfour.ai/developers/api#tag/Contacts/paths/~1Contacts/get) (supports incremental read)
+- [Conversations](https://fourfour.ai/developers/api#tag/Conversations/paths/~1Conversations/get)
+- [Fragments](https://fourfour.ai/developers/api#tag/Fragments/paths/~1Fragments/get)
+- [Insights](https://fourfour.ai/developers/api#tag/Insights/paths/~1Insights/get) (supports incremental read)
+- [Labels](https://fourfour.ai/developers/api#tag/Labels/paths/~1Labels/get)
+- [Leads](https://fourfour.ai/developers/api#tag/Leads/paths/~1Leads/get) (supports incremental read)
+- [Objects](https://fourfour.ai/developers/api#tag/Objects/paths/~1Objects/get) (supports incremental read)
+- [Opportunities](https://fourfour.ai/developers/api#tag/Opportunities/paths/~1Opportunities/get) (supports incremental read)
+- [Owners](https://fourfour.ai/developers/api#tag/Owners/paths/~1Owners/get) (supports incremental read)
+- [Participants](https://fourfour.ai/developers/api#tag/Participants/paths/~1Participants/get)
+- [TopicModels](https://fourfour.ai/developers/api#tag/TopicModels/paths/~1TopicModels/get) (supports incremental read)
+- [Topics](https://fourfour.ai/developers/api#tag/Topics/paths/~1Topics/get) (supports incremental read)
+- [TrackerComments](https://fourfour.ai/developers/api#tag/TrackerComments/paths/~1TrackerComments/get) (supports incremental read)
+- [TrackerIssues](https://fourfour.ai/developers/api#tag/TrackerIssues/paths/~1TrackerIssues/get) (supports incremental read)
+- [TrackerProjects](https://fourfour.ai/developers/api#tag/TrackerProjects/paths/~1TrackerProjects/get) (supports incremental read)
 
 
 ### Example integration
 
-To define an integration for Four/Four, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: fourfour-integration
-    displayName: My Four/Four Integration
-    provider: fourFour
-    proxy:
-      enabled: true
-```
+For an example manifest file of a Four/Four integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/fourfour/amp.yaml).
 
 
 ## Before you get started
@@ -66,9 +81,10 @@ Once your account is ready, you'll need to create a Four/Four OAuth2 app and obt
 ## Using the connector
 
 To start integrating with Four/Four:
-- Create a manifest file like the [example above](#example-integration).
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/fourfour/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
-- Start using the connector!
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component prompts the customer for OAuth authorization.
+- Start using the connector.
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
