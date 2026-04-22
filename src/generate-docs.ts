@@ -420,6 +420,7 @@ const baseConfig = {
             "provider-guides/monday",
             "provider-guides/mural",
             "provider-guides/netsuite",
+            "provider-guides/netsuite-m2m",
             "provider-guides/notion",
             "provider-guides/nutshell",
             "provider-guides/odoo",
