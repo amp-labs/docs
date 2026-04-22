@@ -228,29 +228,7 @@ In order to connect with your customer's Salesforce instances, you'll need to cr
 
 <img src="/images/provider-guides/salesforce_eca_oauth.png" width="200"/>
 
-Use these keys in the next step.
-
-### 5. Create Provider App in Ampersand
-
-1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
-
-2. Select the project where you want to create a Salesforce integration.
-
-   ![Alt text](/images/provider-guides/dd47b7a-Ampersand.png)
-
-3. Select **Provider apps**.
-
-4. Select _Salesforce_ from the **Provider** list.
-
-5. Enter the previously obtained _Consumer Key_ in the **Client ID** field and the _Consumer Secret_ in the **Client Secret** field.
-
-   <br />
-
-   ![Alt text](/images/provider-guides/eb0711b-clientid.gif)
-
-<br />
-
-### 6. Package the External Client App
+### 5. Package the External Client App
 
 In order for your External Client App to be able to make API calls to your customers' Salesforce instances, Salesforce requires that you create a package version, and have your customers install your package in their Salesforce org.
 
@@ -340,7 +318,9 @@ sf package version promote --package SUBSCRIBER_PACKAGE_VERSION_ID --no-prompt
 
 Replace `SUBSCRIBER_PACKAGE_VERSION_ID` with the ID from the previous step.
 
-9. **Get the package install URL.** Use the Subscriber Package Version ID to build the install URL for your package.
+### 6. Build the Package Install URL
+
+1. **Build the package install URL.** Use the Subscriber Package Version ID from Step 7 above to build the install URL for your package.
 
 For production orgs:
 
@@ -354,13 +334,42 @@ For sandbox orgs:
 https://test.salesforce.com/packaging/installPackage.apexp?p0=SUBSCRIBER_PACKAGE_VERSION_ID
 ```
 
-10. Ask your customers to install the package. Instruct your customers to go to the package install URL and click "Install for All Users". They must complete this step **before** connecting their Salesforce account using Ampersand's prebuilt UI components. Otherwise OAuth will fail.
+2. **Ensure customers install the package**
+
+*If you are using `@amp-labs/react` **v2.14.0** or above*:
+
+Once you create the Provider App with the package install URL (in the next step), the UI library will automatically prompt your user to install the package on their Salesforce instance.
+
+<img src="/images/provider-guides/salesforce/UI library install URL.png" width="500"/>
+
+Clicking on **Install Salesforce Package** will open up a new tab that has the Salesforce UI for them to install the package. Instruct your customers to go to the package install URL and click "Install for All Users".
 
 <img src="/images/provider-guides/salesforce/InstallURL1.png" width="500"/>
 
 They should see a screen like this after they are successful.
 
 <img src="/images/provider-guides/salesforce/InstallURL2.png" width="500"/>
+
+*If you are using `@amp-labs/react` versions below **2.14.0**:*
+
+The UI library will not prompt your users to install the package, you must independently share the Package Install URL with them, and they must complete the installation process **before** they connect their Salesforce using the Ampersand UI components.
+
+### 7. Create Provider App in Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Salesforce integration.
+
+   ![Alt text](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Select **Provider apps**.
+
+4. Select _Salesforce_ from the **Provider** list.
+
+5. Enter the following information:
+    - *Client ID*: enter the Consumer Key for the External Client App, obtained from [Step 4. Create External Client App](#4-create-external-client-app).
+    - *Client Secret*: enter the Consumer Secret for the External Client App, obtained from [Step 4. Create External Client App](#4-create-external-client-app)
+    - *Package Install URL*: enter the Package Install URL, obtained from [Step 6. Build the Package Install URL](#6-build-the-package-install-url)
 
 ## Migrating Connected App to External Client App
 
@@ -406,7 +415,7 @@ Whenever you would like to, you can follow these steps to migrate a Connected Ap
 
 10. Create a new Developer Edition Salesforce org and [register a namespace](#2-register-a-namespace), then [link the namespace](#3-link-namespace-to-dev-hub-org) to the Dev Hub Org.
 
-11. Package the External Client App by [following these instructions](#6-package-the-external-client-app).
+11. Package the External Client App by [following these instructions](#5-package-the-external-client-app).
 
 ## Using the connector
 
