@@ -1,0 +1,51 @@
+---
+title: Odoo
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}`.
+
+### Example integration
+
+To define an integration for Odoo, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: odooIntegration
+    displayName: Odoo Integration
+    provider: odoo
+    proxy:
+      enabled: true
+```
+
+## Before You Get Started
+
+To use the Odoo connector, you'll need an API Key from your Odoo account. Here's how to get it:
+
+1. Sign in to your Odoo instance, then open Preferences.
+2. Open the Account security tab.
+3. In the API Keys section, click New API Key.
+4. Enter a description and set a duration.
+5. Click Generate Key, then copy the API Key.
+
+![Odoo API Key](/images/provider-guides/odoo.gif)
+
+For more details, see the [Odoo Authentication documentation](https://www.odoo.com/documentation/19.0/developer/reference/external_api.html#configuration).
+
+## Using the connector
+
+This connector uses API Key authentication, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To integrate with Odoo:
+
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API Key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API Key supplied by the customer.
