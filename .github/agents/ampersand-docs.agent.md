@@ -1,7 +1,7 @@
 ---
 description: 'Generate or update an Ampersand provider (connector) guide given provider metadata'
-tools: ['codebase', 'problems', 'fetch', 'searchResults', 'githubRepo', 'editFiles', 'search']
-model: Claude Sonnet 4
+tools: ['search/codebase', 'read/problems', 'web/fetch', 'search/searchResults', 'web/githubRepo', 'edit/editFiles', 'search']
+model: Auto (copilot)
 ---
 
 # Role & Mission

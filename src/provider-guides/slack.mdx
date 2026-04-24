@@ -1,26 +1,52 @@
-## What's Supported
+---
+title: "Slack"
+---
 
-### Supported Actions
+## What's supported
+
+### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental reading is only supported for `conversations`, `files`, `usergroups`, `users.conversations`, and `users`. For all other objects, a full read of the Slack instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://slack.com/api`.
+
+### Supported objects
+
+The Slack connector supports reading from the following objects:
+
+- [auth.teams](https://docs.slack.dev/reference/methods/auth.teams.list)
+- [conversations](https://docs.slack.dev/reference/methods/conversations.list) (supports incremental read)
+- [conversations.listConnectInvites](https://docs.slack.dev/reference/methods/conversations.listConnectInvites)
+- [conversations.requestSharedInvite](https://docs.slack.dev/reference/methods/conversations.requestSharedInvite.list)
+- [files](https://docs.slack.dev/reference/methods/files.list) (supports incremental read)
+- [files.remote](https://docs.slack.dev/reference/methods/files.remote.list)
+- [reactions](https://docs.slack.dev/reference/methods/reactions.list)
+- [team.externalTeams](https://docs.slack.dev/reference/methods/team.externalTeams.list)
+- [usergroups](https://docs.slack.dev/reference/methods/usergroups.list) (supports incremental read)
+- [users.conversations](https://docs.slack.dev/reference/methods/users.conversations) (supports incremental read)
+- [users](https://docs.slack.dev/reference/methods/users.list) (supports incremental read)
+
+The Slack connector supports writing to the following objects:
+
+- [bookmarks](https://docs.slack.dev/reference/methods/bookmarks.add) 
+- [calls](https://docs.slack.dev/reference/methods/calls.add)   
+- [canvases](https://docs.slack.dev/reference/methods/canvases.create)
+- [conversations](https://docs.slack.dev/reference/methods/conversations.create) 
+- [conversations.canvases](https://docs.slack.dev/reference/methods/conversations.canvases.create) 
+- [files.remote](https://docs.slack.dev/reference/methods/files.remote.add)
+- [slackLists](https://docs.slack.dev/reference/methods/slackLists.create)
+- [slackLists.items](https://docs.slack.dev/reference/methods/slackLists.items.create)
+- [usergroups](https://docs.slack.dev/reference/methods/usergroups.create) 
+
 
 ### Example integration
 
-To define an integration for Slack, create a manifest file that looks like this:
+For an example manifest file of a Slack integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/slack/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: slack-integration
-    displayName: My Slack Integration
-    provider: slack
-    proxy:
-      enabled: true
-```
 
-## Before You Get Started
+
+## Before you get started
 
 To connect Slack with Ampersand, you will need [a Slack Developer Account](https://api.slack.com/developer-program/join).
 
@@ -28,7 +54,7 @@ Once your account is created, you'll need to create an app in Slack, configure t
 
 - Client ID
 - Client Secret
-- Scopes
+- Bot scopes (user scopes are currently not supported)
 
 You will then use these credentials to connect your application to Ampersand.
 
@@ -57,7 +83,7 @@ Follow the steps below to create a Slack app and add the Ampersand redirect URL.
 
 7. Click **Add** and then **Save URLs**.
 
-8. In the **Scopes** section, add the necessary OAuth scopes for your app by clicking on **Add an OAuth Scope** and selecting the required scopes.
+8. In the **Scopes** section, add the necessary **Bot Token Scopes** for your app by clicking on **Add an OAuth Scope** and selecting the required scopes. **User Token Scopes are currently not supported.**
 
    ![Slack App Creation](/images/provider-guides/23f128f-slack1.gif)
 
@@ -77,7 +103,7 @@ Follow the steps below to create a Slack app and add the Ampersand redirect URL.
 
 5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
 
-6. Enter the scopes set for your application in _Slack_.
+6. Enter the **bot scopes** set for your application in _Slack_.
 
    ![Ampersand Integration](/images/provider-guides/88f33d5-slack2.gif)
 
@@ -86,7 +112,11 @@ Follow the steps below to create a Slack app and add the Ampersand redirect URL.
 ## Using the connector
 
 To start integrating with Slack:
-- Create a manifest file like the example above.
+- Create a manifest file like the [example above](https://github.com/amp-labs/samples/blob/main/slack/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://slack.com/api`.
+- If you are using [Read Actions](/read-actions), create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their Slack authorization.
+- Start using the connector.
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
