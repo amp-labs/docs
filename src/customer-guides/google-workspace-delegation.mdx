@@ -80,27 +80,26 @@ This step grants the service account permission to impersonate users in your Wor
 
 ### 5. Gather your connection details
 
-You will need the following information when installing the integration:
+You will need to share the following information with the integration builder:
 
 | Input | Where to find it |
 |---|---|
 | **Service Account Key** | The base64-encoded contents of the JSON key file from step 3. |
-| **User Email** | The email address of a Workspace user the integration should access (e.g. `user@company.com`). |
+| **User Emails** | A full list of email addresses of all the users whose data the integration should access (e.g. `user1@company.com, user2@company.com`). |
 | **Scopes** | The exact list of OAuth scopes you authorized in step 4 (or a subset). |
-
-## Installing the integration
-
-When you are installing the integration, you will be prompted for the inputs listed above. After providing them, the integration will begin syncing data for the specified user.
 
 ## Troubleshooting
 
-### `unauthorized_client: Client is unauthorized to retrieve access tokens using this method`
+### unauthorized_client error
 
-Either:
+Sample error message: `unauthorized_client: Client is unauthorized to retrieve access tokens using this method`
+
+This means that either:
 - The service account's numeric Client ID was not added to **Manage Domain Wide Delegation** in the Admin console (revisit step 4), or
-- The scopes requested by the integration are not a subset of the scopes authorized in step 4.
+- One or more scopes provided to the integration were not a part of the scopes authorized in step 4.
 
-### `invalid_grant: Invalid email or User ID`
+### invalid_grant error
 
-The **User Email** you provided is not a valid, active user in the Workspace domain. Suspended or deleted users cannot be impersonated. Confirm the user exists in **Admin console** > **Directory** > **Users**.
+Sample error message: `invalid_grant: Invalid email or User ID`
 
+This means that a **user email** you provided is not a valid active user in the Workspace domain. Workspace delegation does not work for suspended or deleted users. Confirm that the user's address exists in **Admin console** > **Directory** > **Users**.

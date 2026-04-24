@@ -38,23 +38,32 @@ integrations:
     ...
 ```
 
-## Before You Get Started
+## Before you get started
 
 This connector uses a GCP service account with domain-wide delegation. There is no interactive login - your customer's Google Workspace administrator will pre-authorize your service account's client ID with the required API scopes, and Ampersand will sign JWT assertions impersonating each user to obtain access tokens.
 
-To integrate Google (Workspace Delegation) with Ampersand, your customer's Google Workspace administrator will need to complete the setup steps in the [customer guide](/customer-guides/google-workspace-delegation) and provide you with:
+### Creating an installation per user
 
-- A base64-encoded GCP service account JSON key file
-- The email address of each Workspace user the integration needs to access / impersonate
-- The list of OAuth scopes authorized for the service account in the Workspace Admin console
+Each connection on Ampersand represents one user's access. Because domain-wide delegation can impersonate any user in the domain, you create one connection per Workspace user you want to sync — each connection shares the same service account key but carries a different user email.
 
-<Note>The scopes you send when creating a connection must be a subset of what the Workspace admin authorized in the Admin console (Security > API controls > Domain-wide delegation). Google's JWT bearer flow requires scopes to be declared in every token request and will reject the exchange if any requested scope is not authorized. The same also applies to the user's email - it is required when impersonating a user.</Note>
+#### 1. Collect information from your customer
 
-### Creating a connection per user
+Share the [Google Workspace Delegation customer guide](/customer-guides/google-workspace-delegation) with your customer's Google Workspace Admin. Then collect the following information from them either manually or via a UI in your application:
+- Base64 encoded service account key
+- List of email addresses of users whose data this integration should have access to
+- Scopes that they authorized
 
-Each connection on Ampersand represents one user's access. Because domain-wide delegation can impersonate any user in the domain, you create one connection per Workspace user you want to sync — each connection shares the same service account key but carries a different user email. Builders typically create these programmatically via the [Generate Connection API](/reference/connection/generate-a-new-connection) in bulk.
+<Note>The scopes must be a subset of what the Google Workspace admin authorized in the Admin console (Security > API controls > Domain-wide delegation). Google's JWT bearer flow requires scopes to be declared in every token request and will reject the exchange if any requested scope is not authorized. The same also applies to the user's email - it is required when impersonating a user.</Note>
 
-Here's an example API request body for creating the connection for a user with email `user@example.com`:
+#### 2. Bulk create connections and integrations
+
+For each user whose data this integration needs to access, call the [Generate Connection endpoint](/reference/connection/generate-a-new-connection) and [Create Installation endpoint](/reference/installation/create-a-new-installation).
+
+When using these endpoints, use the following values:
+- `groupRef`: this should be the same for all the users within a Google Workspace, this can be an org ID or team ID used by your application.
+- `consumerRef`: this should be different for each user, this can be a user ID from your application or any other unique ID. 
+
+Here's an example API request body for creating the connection using [Generate Connection API](/reference/connection/generate-a-new-connection) for a user with email `user@example.com`:
 
 ```json
 {
@@ -77,6 +86,33 @@ Here's an example API request body for creating the connection for a user with e
 }
 ```
 
+The API response includes an `id` field — that value is the Connection ID.
+
+```json
+{
+  "id": "acde070d-8c4c-4f0d-9d8a-162843c10333"
+}
+```
+
+Use the Connection ID when calling the [Create Installation endpoint](/reference/installation/create-a-new-installation), here is a sample request:
+
+```json
+{
+  "groupRef": "g0-ref",
+  "connectionId": "FROM_STEP_ABOVE",
+  "config": {
+    "content": {
+      "provider": "googleWorkspaceDelegation",
+      "proxy": {
+        "enabled": true
+      }
+    }
+  }
+}
+```
+
+Repeat the above steps for each user in the Google Workspace whose data this integration needs to access.
+
 ## Using the connector
 
 To start integrating with Google (Workspace Delegation):
@@ -91,4 +127,4 @@ To start integrating with Google (Workspace Delegation):
 
 ## Customer guide
 
-The [Google (Workspace Delegation) customer guide](/customer-guides/google-workspace-delegation) is a guide that can be shared with your customers to help them set up a service account and authorize domain-wide delegation.
+The [Google workspace delegation customer guide](/customer-guides/google-workspace-delegation) is a guide that can be shared with your customers to help them set up a service account and authorize domain-wide delegation.
