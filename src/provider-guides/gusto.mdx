@@ -1,0 +1,80 @@
+---
+title: Gusto
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.gusto.com`.
+
+
+### Example integration
+
+To define an integration for Gusto, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: gusto-integration
+    displayName: My Gusto Integration
+    provider: gusto
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To connect Gusto with Ampersand, you will need a [Gusto Developer Account](https://dev.gusto.com/).
+
+Once your account is created, you'll need to register an application in the Gusto Developer Portal and obtain the following credentials:
+
+- Client ID
+- Client Secret
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Creating a Gusto app
+
+1. Log in to the [Gusto Developer Portal](https://dev.gusto.com/).
+
+2. Navigate to the **Applications** tab and click **Create Application**.
+
+3. Enter the following details for your application:
+   - **Application Name**: The name of your app.
+   - **Purpose**: A description of your integration.
+
+4. Under **Redirect URIs**, add: `https://api.withampersand.com/callbacks/v1/oauth`
+
+5. Click **Create**. Note the **Client ID** and **Client Secret**. You will need these to connect your app to Ampersand.
+
+For more details, see the [Gusto Authentication documentation](https://docs.gusto.com/app-integrations/docs/authentication).
+
+### Add your Gusto app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Gusto integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.
+
+4. Select **Gusto** from the **Provider** list.
+
+5. Enter the **Client ID** and **Client Secret** obtained from your Gusto app.
+
+6. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Gusto:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start using the connector!
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
