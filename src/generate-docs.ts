@@ -376,6 +376,7 @@ const baseConfig = {
             "provider-guides/goTo",
             "provider-guides/gong",
             "provider-guides/google",
+            "provider-guides/google-workspace-delegation",
             "provider-guides/gorgias",
             "provider-guides/granola",
             // "provider-guides/greenhouseJobBoard",
@@ -486,6 +487,7 @@ const baseConfig = {
           pages: [
             "customer-guides/overview",
             "customer-guides/bigquery",
+            "customer-guides/google-workspace-delegation",
             "customer-guides/salesforce",
             "customer-guides/salesforce-jwt",
             "customer-guides/loxo",

@@ -1,0 +1,130 @@
+---
+title: "Google (workspace delegation)"
+slug: "google-workspace-delegation"
+excerpt: ""
+hidden: false
+---
+
+The Google (Workspace Delegation) connector authenticates using a Google Workspace service account with [domain-wide delegation](https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority) instead of the standard Authorization Code flow. A Workspace admin authorizes the service account once, and Ampersand can then access any user's Gmail, Calendar, or Contacts data in that domain without requiring each user to go through an individual OAuth flow.
+
+Please note that the standard [Google connector](/provider-guides/google) is a more convenient experience for individual consumers; it uses a standard OAuth 2.0 authentication scheme where each user logs in and approves the app. This connector is intended for builders who need bulk programmatic access across many users in a Workspace domain (for example, syncing calendars for every member of an organization).
+
+## What's Supported
+
+### Supported Actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://www.googleapis.com`.
+
+The **Calendar** module supports:
+- [Read Actions](/read-actions), including historical backfill. Incremental read is only supported for the Calendar `Events` object; otherwise, a full read of the Google instance will be performed for each scheduled run.
+- [Write Actions](/write-actions).
+
+> **Important Note on Events Backfill**: The `events` object has a 28-day cap for historic backfill and does not support full history, due to limitations in the Google API. When syncing events data, ensure your backfill period does not exceed 28 days.
+
+The **Gmail** module supports:
+- [Read Actions](/read-actions), including historical backfill. Incremental read and pagination are only supported for `Drafts`, `Messages`, and `Threads` objects; otherwise, a full read of the Gmail instance will be performed for each scheduled run.
+- [Write Actions](/write-actions).
+
+### Supported modules & objects
+
+The supported modules and objects are the same as the standard [Google connector](/provider-guides/google#supported-calendar-objects). See that guide for the full list of Calendar and Gmail objects.
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: google-workspace-delegation-integration
+    provider: googleWorkspaceDelegation
+    ...
+```
+
+## Before you get started
+
+This connector uses a GCP service account with domain-wide delegation. There is no interactive login - your customer's Google Workspace administrator will pre-authorize your service account's client ID with the required API scopes, and Ampersand will sign JWT assertions impersonating each user to obtain access tokens.
+
+### Creating an installation per user
+
+Each connection on Ampersand represents one user's access. Because domain-wide delegation can impersonate any user in the domain, you create one connection per Workspace user you want to sync — each connection shares the same service account key but carries a different user email.
+
+#### 1. Collect information from your customer
+
+Share the [Google Workspace Delegation customer guide](/customer-guides/google-workspace-delegation) with your customer's Google Workspace Admin. Then collect the following information from them either manually or via a UI in your application:
+- Base64 encoded service account key
+- List of email addresses of users whose data this integration should have access to
+- Scopes that they authorized
+
+<Note>The scopes must be a subset of what the Google Workspace admin authorized in the Admin console (Security > API controls > Domain-wide delegation). Google's JWT bearer flow requires scopes to be declared in every token request and will reject the exchange if any requested scope is not authorized. The same also applies to the user's email - it is required when impersonating a user.</Note>
+
+#### 2. Bulk create connections and integrations
+
+For each user whose data this integration needs to access, call the [Generate Connection endpoint](/reference/connection/generate-a-new-connection) and [Create Installation endpoint](/reference/installation/create-a-new-installation).
+
+When using these endpoints, use the following values:
+- `groupRef`: this should be the same for all the users within a Google Workspace, this can be an org ID or team ID used by your application.
+- `consumerRef`: this should be different for each user, this can be a user ID from your application or any other unique ID. 
+
+Here's an example API request body for creating the connection using [Generate Connection API](/reference/connection/generate-a-new-connection) for a user with email `user@example.com`:
+
+```json
+{
+  "provider": "googleWorkspaceDelegation",
+  "groupRef": "g0-ref",
+  "groupName": "g0-name",
+  "consumerRef": "c0-ref",
+  "consumerName": "c0-name",
+  "providerMetadata": {
+    "userEmail": {
+        "value": "user@example.com"
+    }
+  },
+  "customAuth": {
+    "serviceAccountKey": "<base64-encoded JSON key>",
+    "scopes": [
+        "https://www.googleapis.com/auth/contacts"
+    ]
+  }
+}
+```
+
+The API response includes an `id` field — that value is the Connection ID.
+
+```json
+{
+  "id": "acde070d-8c4c-4f0d-9d8a-162843c10333"
+}
+```
+
+Use the Connection ID when calling the [Create Installation endpoint](/reference/installation/create-a-new-installation), here is a sample request:
+
+```json
+{
+  "groupRef": "g0-ref",
+  "connectionId": "FROM_STEP_ABOVE",
+  "config": {
+    "content": {
+      "provider": "googleWorkspaceDelegation",
+      "proxy": {
+        "enabled": true
+      }
+    }
+  }
+}
+```
+
+Repeat the above steps for each user in the Google Workspace whose data this integration needs to access.
+
+## Using the connector
+
+To start integrating with Google (Workspace Delegation):
+- Create a manifest file like the [Google Calendar example](https://github.com/amp-labs/samples/blob/main/google-calendar/amp.yaml), using `googleWorkspaceDelegation` as the provider instead of `google`.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Collect your customer's service account key, then create one connection per Workspace user (service account key + user email + scopes).
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Customer guide
+
+The [Google workspace delegation customer guide](/customer-guides/google-workspace-delegation) is a guide that can be shared with your customers to help them set up a service account and authorize domain-wide delegation.
