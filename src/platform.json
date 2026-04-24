@@ -37249,6 +37249,25 @@
                           "type": "string"
                         }
                       },
+                      "subscribeRequirements": {
+                        "title": "Subscribe Support Config",
+                        "type": "object",
+                        "description": "Declares which auxiliary steps a provider requires to support subscriptions, beyond the per-object subscribe call itself.",
+                        "properties": {
+                          "registration": {
+                            "type": "boolean",
+                            "description": "Whether the provider requires a one-time registration step that is shared across all subscribed objects. The subscribe method is object-scoped, so if a separate API call is needed beyond per-object configuration (e.g., registering a single webhook/endpoint that all object subscriptions hang off of), registration is required."
+                          },
+                          "maintenance": {
+                            "type": "boolean",
+                            "description": "Whether the subscription requires periodic maintenance. Some providers expire subscriptions/watches after a fixed TTL, so the subscription must be renewed on a schedule to remain active."
+                          },
+                          "postProcess": {
+                            "type": "boolean",
+                            "description": "Whether subscribing requires a third-party setup step that the connector instance itself cannot perform. Examples: Salesforce requires AWS EventBridge configuration; Gmail requires a Google Pub/Sub topic to be configured. Any configuration that must happen outside the connector falls into post-process."
+                          }
+                        }
+                      },
                       "modules": {
                         "title": "Modules that this provider supports",
                         "type": "object",
@@ -38628,6 +38647,25 @@
                       "type": "object",
                       "additionalProperties": {
                         "type": "string"
+                      }
+                    },
+                    "subscribeRequirements": {
+                      "title": "Subscribe Support Config",
+                      "type": "object",
+                      "description": "Declares which auxiliary steps a provider requires to support subscriptions, beyond the per-object subscribe call itself.",
+                      "properties": {
+                        "registration": {
+                          "type": "boolean",
+                          "description": "Whether the provider requires a one-time registration step that is shared across all subscribed objects. The subscribe method is object-scoped, so if a separate API call is needed beyond per-object configuration (e.g., registering a single webhook/endpoint that all object subscriptions hang off of), registration is required."
+                        },
+                        "maintenance": {
+                          "type": "boolean",
+                          "description": "Whether the subscription requires periodic maintenance. Some providers expire subscriptions/watches after a fixed TTL, so the subscription must be renewed on a schedule to remain active."
+                        },
+                        "postProcess": {
+                          "type": "boolean",
+                          "description": "Whether subscribing requires a third-party setup step that the connector instance itself cannot perform. Examples: Salesforce requires AWS EventBridge configuration; Gmail requires a Google Pub/Sub topic to be configured. Any configuration that must happen outside the connector falls into post-process."
+                        }
                       }
                     },
                     "modules": {
