@@ -13,7 +13,7 @@ This connector supports:
 - [Subscribe Actions](/subscribe-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.housecallpro.com`.
 
-If your integration includes [Subscribe Actions](/subscribe-actions), customers need enable webhooks in Housecall Pro and paste the webhook URL you provide. Share the [Housecall Pro customer guide](/customer-guides/housecallPro#2-enable-and-configure-webhooks) for those steps.
+If your integration includes [Subscribe Actions](/subscribe-actions), customers need to enable webhooks in Housecall Pro and paste the webhook URL you provide. Share the [Housecall Pro customer guide](/customer-guides/housecallPro#2-enable-and-configure-webhooks) for those steps.
 
 ### Supported Objects
 
@@ -43,6 +43,22 @@ The Housecall Pro connector supports the following objects.
 - [routes](https://docs.housecallpro.com/docs/housecall-public-api/8d0d12e41a38b-get-routes) (read)
 - [tags](https://docs.housecallpro.com/docs/housecall-public-api/e8fa7b29f8a8b-get-tags) (read, write)
 - [invoices](https://docs.housecallpro.com/docs/housecall-public-api/65ce9f430d605-get-invoices) (read, subscribe)
+- [job.appointments](https://docs.housecallpro.com/docs/housecall-public-api/46e9e1be07621-webhooks#job-appointment-webhook-events) (subscribe only via [`otherEvents`](/subscribe-actions#other-events))
+  - **Example** `subscribe` fragment (for `job.appointments` only):
+
+    ```yaml
+    - objectName: job.appointments
+      destination: housecallProWebhook
+      inheritFieldsAndMapping: true
+      otherEvents:
+        - job.appointment.scheduled
+        - job.appointment.rescheduled
+        - job.appointment.appointment_discarded
+        - job.appointment.appointment_pros_assigned
+        - job.appointment.appointment_pros_unassigned
+    ```
+
+    List Housecall Pro’s event strings exactly as they appear in webhooks. Standard events are not supported for this object. See [Other events](/subscribe-actions#other-events).
 
 ### Example integration
 
