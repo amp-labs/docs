@@ -9,7 +9,7 @@ title: "HubSpot"
 The Hubspot connector supports:
 
 - [Read Actions](/read-actions), including full historic backfill, incremental reads, and filters.
-- [Subscribe Actions](/subscribe-actions). Please note that [special set up](/subscribe-actions#special-set-up-for-hubspot) is needed for HubSpot.
+- [Subscribe Actions](/subscribe-actions). Please note that [special set up](#set-up-subscribe-actions) is needed for HubSpot.
 - [Write Actions](/write-actions), including Bulk Write and Delete.
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.hubapi.com`.
 
@@ -240,6 +240,114 @@ To start integrating with HubSpot:
 - If using Read or Subscribe Actions, create a [destination](/destinations)
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component
 - Start using the connector!
+
+## Set up Subscribe Actions
+
+<Note>
+  HubSpot subscribe actions cannot notify you of changes to custom fields. There is a workaround that requires additional set up, please contact support@withampersand.com for details.
+</Note>
+
+To enable HubSpot subscribe actions, you will need to:
+- Define the subscribe action in your `amp.yaml` file and then deploy it. See the [Subscribe Actions documentation](/subscribe-actions) for details.
+- Make modifications to the HubSpot app (see below).
+
+
+### New project apps
+
+If you are using a new project app (that was created with the HubSpot CLI), then follow the instructions below. If you don't have any apps yet, follow the instructions in [Method 1: New Project Apps](#method-1-new-project-apps) above to create one.
+
+#### Create webhooks-hsmeta.json file
+
+Go to the directory that contains your HubSpot app, and add a file called `your-project-name/src/app/webhooks/webhooks-hsmeta.json`. So your directory should end up like this:
+
+```
+/your-project-name
+  /src/app
+    /webhooks
+      webhooks-hsmeta.json
+    app-hsmeta.json
+  hsproject.json
+```
+
+Replace `targetUrl` in the example `webhooks-hsmeta.json` file below with the one that is for your integration. It should follow the format: 
+
+```
+"https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID"
+```
+  - Replace `PROJECT_ID` with your Ampersand project ID, which can be found in the Dashboard's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
+  - Replace `INTEGRATION_ID` with your integration's ID, which can be found in the Dashboard's [Home page](https://dashboard.withampersand.com/projects/_).
+
+You can also edit the file with the desired objects and events you want to subscribe to. You can refer to [HubSpot documentation](https://developers.hubspot.com/docs/apps/developer-platform/add-features/configure-webhooks#webhook-configuration) for the syntax of this file.
+
+Example `webhooks-hsmeta.json`:
+```
+{
+  "uid": "ampersand_subscribe_actions",
+  "type": "webhooks",
+  "config": {
+    "settings": {
+      "targetUrl": "SEE_INSTRUCTIONS_ABOVE",
+      "maxConcurrentRequests": 50
+    },
+    "subscriptions": {
+      "crmObjects": [
+        {
+          "subscriptionType": "object.creation",
+          "objectType": "contact",
+          "active": true
+        },
+        {
+          "subscriptionType": "object.propertyChange",
+          "objectType": "contact",
+          "propertyName": "firstname",
+          "active": true
+        },
+        {
+          "subscriptionType": "object.propertyChange",
+          "objectType": "contact",
+          "propertyName": "lastname",
+          "active": true
+        },
+        {
+          "subscriptionType": "object.deletion",
+          "objectType": "contact",
+          "active": true
+        }
+      ]
+    }
+  }
+}
+```
+
+#### Deploy changes to HubSpot
+
+Once you are done editing `webhooks-hsmeta.json`, deploy it using the following command:
+
+```
+hs project upload
+```
+
+### Legacy apps
+
+If you have a legacy app (that was created in the HubSpot UI), follow the instructions below.
+
+1.  Login to your HubSpot account. 
+2.  Go to the **Apps** section.
+3.  Select your connected app.
+5.  Click on **Webhooks**.
+6.  Enter the Target URL:
+  ```
+    https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID
+  ```
+  - Replace `PROJECT_ID` with your Ampersand project ID, which can be found in the Dashboard's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
+  - Replace `INTEGRATION_ID` with your integration's ID, which can be found in the Dashboard's [Home page](https://dashboard.withampersand.com/projects/_).
+
+7.  Click **Create Subscription**.
+8.  Select object types, event types, and properties.
+9.  Select the required checkboxes for all objects.
+10. Click **Activate**.
+
+![Subscribe actions HubSpot](/images/subscribeactions-hubspot.gif)
 
 ## Customer guide
 
