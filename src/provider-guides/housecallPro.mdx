@@ -21,11 +21,19 @@ The Housecall Pro connector supports the following objects.
 
 - [customers](https://docs.housecallpro.com/docs/housecall-public-api/042bd3bf861ae-get-customers) (read, subscribe, write; incremental read supported)
 - [employees](https://docs.housecallpro.com/docs/housecall-public-api/303ee235f23fa-get-employees) (read, subscribe)
+  <Note>
+    In Housecall Pro’s webhook UI, this event appears as pro.created, but the
+    actual payload uses employee.created.
+  </Note>
 - [estimates](https://docs.housecallpro.com/docs/housecall-public-api/e430ba3d520a0-get-estimates) (read, subscribe, write; incremental read supported)
 - [events](https://docs.housecallpro.com/docs/housecall-public-api/5f8b2b787f4ba-get-events) (read; incremental read supported)
 - [jobs](https://docs.housecallpro.com/docs/housecall-public-api/6c97704da8bf3-get-jobs) (read, subscribe, write; incremental read supported)
 - [job_fields/job_types](https://docs.housecallpro.com/docs/housecall-public-api/0c6fb36d5730d-get-job-types) (read, write)
 - [leads](https://docs.housecallpro.com/docs/housecall-public-api/278974bc87e32-get-leads) (read, subscribe, write)
+  <Note>
+    Delete events for lead are not reliable due to HouseCall Pro's platform
+    limitations.
+  </Note>
 - [lead_sources](https://docs.housecallpro.com/docs/housecall-public-api/7444a4f65ed77-get-lead-sources) (read, write)
 - [price_book/materials](https://docs.housecallpro.com/docs/housecall-public-api/e404d4b30ea0d-create-material) (write)
 - [price_book/material_categories](https://docs.housecallpro.com/docs/housecall-public-api/77aaf46f5b3db-get-material-categories) (read, write; incremental read supported)
