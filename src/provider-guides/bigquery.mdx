@@ -38,11 +38,14 @@ integrations:
     read:
       objects:
         - objectName: my_table
-          fields:
-            - id
-            - name
-            - email
-            - updated_at
+          requiredFields:
+            - fieldName: name
+            - fieldName: billingcity
+              mapToName: city
+              mapToDisplayName: City
+            - mapToName: country
+              mapToDisplayName: Country
+              prompt: Which field is the country for the account?
           destination: myWebhook
 ```
 
