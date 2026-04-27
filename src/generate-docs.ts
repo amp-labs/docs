@@ -492,6 +492,7 @@ const baseConfig = {
             "customer-guides/salesforce-jwt",
             "customer-guides/loxo",
             "customer-guides/hubspot",
+            "customer-guides/housecallPro",
             "customer-guides/marketo",
             "customer-guides/snowflake",
             "customer-guides/netsuite",

@@ -10,19 +10,30 @@ This connector supports:
 
 - [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported for all objects.
 - [Write Actions](/write-actions).
+- [Subscribe Actions](/subscribe-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.housecallpro.com`.
+
+If your integration includes [Subscribe Actions](/subscribe-actions), customers need to enable webhooks in Housecall Pro and paste the webhook URL you provide. Share the [Housecall Pro customer guide](/customer-guides/housecallPro#2-enable-and-configure-webhooks) for those steps.
 
 ### Supported Objects
 
 The Housecall Pro connector supports the following objects.
 
-- [customers](https://docs.housecallpro.com/docs/housecall-public-api/042bd3bf861ae-get-customers) (read, write; incremental read supported)
-- [employees](https://docs.housecallpro.com/docs/housecall-public-api/303ee235f23fa-get-employees) (read)
-- [estimates](https://docs.housecallpro.com/docs/housecall-public-api/e430ba3d520a0-get-estimates) (read, write; incremental read supported)
+- [customers](https://docs.housecallpro.com/docs/housecall-public-api/042bd3bf861ae-get-customers) (read, subscribe, write; incremental read supported)
+- [employees](https://docs.housecallpro.com/docs/housecall-public-api/303ee235f23fa-get-employees) (read, subscribe)
+  <Note>
+    In Housecall Pro’s webhook UI, this event appears as pro.created, but the
+    actual payload uses employee.created.
+  </Note>
+- [estimates](https://docs.housecallpro.com/docs/housecall-public-api/e430ba3d520a0-get-estimates) (read, subscribe, write; incremental read supported)
 - [events](https://docs.housecallpro.com/docs/housecall-public-api/5f8b2b787f4ba-get-events) (read; incremental read supported)
-- [jobs](https://docs.housecallpro.com/docs/housecall-public-api/6c97704da8bf3-get-jobs) (read, write; incremental read supported)
+- [jobs](https://docs.housecallpro.com/docs/housecall-public-api/6c97704da8bf3-get-jobs) (read, subscribe, write; incremental read supported)
 - [job_fields/job_types](https://docs.housecallpro.com/docs/housecall-public-api/0c6fb36d5730d-get-job-types) (read, write)
-- [leads](https://docs.housecallpro.com/docs/housecall-public-api/278974bc87e32-get-leads) (read, write)
+- [leads](https://docs.housecallpro.com/docs/housecall-public-api/278974bc87e32-get-leads) (read, subscribe, write)
+  <Note>
+    Delete events for lead are not reliable due to HouseCall Pro's platform
+    limitations.
+  </Note>
 - [lead_sources](https://docs.housecallpro.com/docs/housecall-public-api/7444a4f65ed77-get-lead-sources) (read, write)
 - [price_book/materials](https://docs.housecallpro.com/docs/housecall-public-api/e404d4b30ea0d-create-material) (write)
 - [price_book/material_categories](https://docs.housecallpro.com/docs/housecall-public-api/77aaf46f5b3db-get-material-categories) (read, write; incremental read supported)
@@ -31,7 +42,22 @@ The Housecall Pro connector supports the following objects.
 - [service_zones](https://docs.housecallpro.com/docs/housecall-public-api/38b31504822e9-get-service-zones) (read)
 - [routes](https://docs.housecallpro.com/docs/housecall-public-api/8d0d12e41a38b-get-routes) (read)
 - [tags](https://docs.housecallpro.com/docs/housecall-public-api/e8fa7b29f8a8b-get-tags) (read, write)
-- [invoices](https://docs.housecallpro.com/docs/housecall-public-api/65ce9f430d605-get-invoices) (read)
+- [invoices](https://docs.housecallpro.com/docs/housecall-public-api/65ce9f430d605-get-invoices) (read, subscribe)
+- [job.appointments](https://docs.housecallpro.com/docs/housecall-public-api/46e9e1be07621-webhooks#job-appointment-webhook-events) (subscribe only via [`otherEvents`](/subscribe-actions#other-events))
+  - **Example** `subscribe` fragment (for `job.appointments` only):
+
+    ```yaml
+    - objectName: job.appointments
+      destination: housecallProWebhook
+      otherEvents:
+        - job.appointment.scheduled
+        - job.appointment.rescheduled
+        - job.appointment.appointment_discarded
+        - job.appointment.appointment_pros_assigned
+        - job.appointment.appointment_pros_unassigned
+    ```
+
+    List Housecall Pro’s event strings exactly as they appear in webhooks. Standard events are not supported for this object. See [Other events](/subscribe-actions#other-events).
 
 ### Example integration
 
@@ -59,9 +85,9 @@ To integrate with Housecall Pro:
 
 - Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/housecallPro/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
-- If you are using Read Actions, create a [destination](/destinations).
+- If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
 - Start using the connector!
-  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
