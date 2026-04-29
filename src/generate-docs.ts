@@ -437,6 +437,7 @@ const baseConfig = {
             "provider-guides/pipeliner",
             "provider-guides/podium",
             "provider-guides/productBoard",
+            "provider-guides/procore",
             "provider-guides/pylon",
             "provider-guides/quickbooks",
             "provider-guides/ramp",
