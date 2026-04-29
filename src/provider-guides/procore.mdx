@@ -12,6 +12,7 @@ This connector supports:
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.procore.com`.
 
 ### Notes
+- During installation, you must provide your Procore company ID. You can find your company ID in the Procore URL after login. For example, in `https://procore.com/4283186/company/home/thumbnail`, the company ID is `4283186`.
 - Use the Procore Sandbox connector when you want to test against `https://sandbox.procore.com`.
 
 ### Supported objects
@@ -262,7 +263,7 @@ To start integrating with Procore:
 - Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/procore/amp.yml).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using [Read Actions](/read-actions) or [Write Actions](/write-actions), create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component prompts the customer for their Procore authorization and company ID.
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component prompts the customer for their Procore authorization and company ID (the numeric segment in their Procore URL, for example `4283186` in `https://procore.com/4283186/company/home/thumbnail`).
 - Start using the connector.
   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
