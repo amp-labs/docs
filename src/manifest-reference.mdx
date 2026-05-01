@@ -117,7 +117,7 @@ subscribe:
 Subscribe considerations
 
 - Check the specific [provider guide](/provider-guides/overview) to see which providers support subscribe actions. If subscribe actions isn't supported for a particular provider, you can still use read actions to get updated data every 10 minutes.
-- You must also have a read action specified for the object you wish to subscribe to.
+- A `read` block must always be defined alongside a `subscribe` block. Each subscribed object that uses `createEvent`, `updateEvent`, or `deleteEvent` must also have a matching object entry in the `read` block (with the same `objectName`) and set `inheritFieldsAndMapping: true`. Objects that only use `otherEvents` do not need their own entry in the `read` block.
 - Only one of `requiredWatchFields` or `watchFieldsAuto` should be provided for update events.
 - See [Subscribe Actions documentation](/subscribe-actions) for detailed implementation guidance.
 </Note>
@@ -232,7 +232,7 @@ Each object in the `objects` array defines a specific object type to subscribe t
 |-------|------|----------|-------------|
 | `objectName` | String | Yes | The [name of the object](#object-name) to subscribe to. Must match an object type supported by the provider. Case-sensitive. |
 | `destination` | String | Yes | The [webhook destination](#destination) for the event data. This determines where the event data will be sent. Must match a webhook configured in your Ampersand account. See [Destinations](/destinations) for setup. |
-| `inheritFieldsAndMapping` | Boolean | Yes | Whether to inherit field mappings from read configuration. For Salesforce, this must be set to `true`. |
+| `inheritFieldsAndMapping` | Boolean | Conditional | Whether to inherit field mappings from read configuration. Required and must be set to `true` when the object uses `createEvent`, `updateEvent`, or `deleteEvent`. Not required for objects that only use `otherEvents`. |
 | `createEvent` | Object | No | Configuration for create events. See [Event Configuration](#subscribe-action-events) below. |
 | `updateEvent` | Object | No | Configuration for update events. See [Event Configuration](#subscribe-action-events) below. |
 | `deleteEvent` | Object | No | Configuration for delete events. See [Event Configuration](#subscribe-action-events) below. |

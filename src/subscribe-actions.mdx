@@ -6,18 +6,18 @@ With subscribe actions, you'll receive near-instant webhooks as events occur in 
 
 <Note>
   Please note that:
-  - Subscribe actions are currently only supported for some providers such as Salesforce, HubSpot, Salesloft, Gmail and Zoho. Please check the [provider guides](/provider-guides/overview) to see which providers support Subscribe Actions. HubSpot requires [special set up](#special-set-up-for-hubspot) and Gmail requires [special set up](/provider-guides/google#set-up-gmail-push-notifications-for-subscribe-actions).
-  - They do not produce Operations or Logs that can be viewed in the Ampersand dashboard.
+  - Subscribe actions are supported for a subset of providers. See the [provider guides](/provider-guides/overview) to check whether your provider supports subscribe actions and whether any additional setup is required.
+  - Subscribe actions do not produce Operations or Logs that can be viewed in the Ampersand dashboard.
   - It takes 1-2 minutes, and occasionally up to 10 minutes, for the first events to arrive after the initial installation.
 </Note>
 
 ## Defining subscriptions
 
-To subscribe to an object, you currently need to also have a read action specified for the object. In addition, you need to specify:
+To subscribe to an object, you need to specify:
 
 - **objectName:** to indicate which object you'd like to subscribe to. This should match the name of the object in the official documentation for the SaaS API.
 - **destination:** the name of the [destination](/destinations) that you've defined
-- **inheritFieldsAndMapping:** for now, you must always set this to `true` to inherit the mapped and unmapped fields from the Read Action. Learn more in [Fields and mapping](#fields-and-mapping).
+- **inheritFieldsAndMapping:** required when using `createEvent`, `updateEvent`, `deleteEvent`, or `associationChangeEvent`. Set this to `true` so the subscribe action inherits the mapped and unmapped fields from the matching Read Action. `true` is currently the only supported value. Learn more in [Fields and mapping](#fields-and-mapping).
 
 You then need to specify the particular events you want to subscribe to. We support the following events:
 
@@ -130,7 +130,7 @@ integrations:
 
 ### Other events
 
-Beyond the standard events that Amperand supports, you have the ability to subscribe to any other event that that underlying platform supports.
+Beyond the standard events that Ampersand supports, you have the ability to subscribe to any other event that that underlying platform supports. The event names listed in `otherEvents` must match the provider's raw event names exactly.
 
 For Salesforce this includes [events like](https://developer.salesforce.com/docs/atlas.en-us.change_data_capture.meta/change_data_capture/cdc_event_fields_header.htm):
 - `UNDELETE`
@@ -139,7 +139,50 @@ For HubSpot, this includes [events like](https://developers.hubspot.com/docs/api
 - `{OBJECT_NAME}.restore` (e.g. `contact.restore`)
 - `{OBJECT_NAME}.merge` (e.g. `contact.merge`)
 
-To listen to these other events, add `otherEvents` to your amp.yaml file:
+To listen to these other events, add an `otherEvents` array to the subscribed object in your `amp.yaml`. If an object is subscribing only to `otherEvents` (no `createEvent`, `updateEvent`, or `deleteEvent`), it does not need its own matching entry in the `read` block, and `inheritFieldsAndMapping` is not required for that object. The `read` block itself must still exist on the integration.
+
+In the example below, the `customers` object uses create/update/delete events and therefore must have a matching read object with `inheritFieldsAndMapping: true`. The `job.appointments` object subscribes only to `otherEvents` and has no matching read entry:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: subscribeToHousecallPro
+    provider: housecallPro
+    read:
+      objects:
+        - objectName: customers
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+    subscribe:
+      objects:
+        - objectName: customers
+          destination: housecallProWebhook
+          inheritFieldsAndMapping: true
+          createEvent:
+            enabled: always
+          updateEvent:
+            enabled: always
+            watchFieldsAuto: all
+          deleteEvent:
+            enabled: always
+
+        - objectName: job.appointments # Only otherEvents — no matching read entry needed
+          destination: housecallProWebhook
+          otherEvents: # Must match the provider's raw event names exactly
+            - job.appointment.scheduled
+            - job.appointment.rescheduled
+            - job.appointment.appointment_discarded
+            - job.appointment.appointment_pros_assigned
+            - job.appointment.appointment_pros_unassigned
+```
+
+You can also combine `otherEvents` with standard events on the same object. In this Salesforce example, the `account` object subscribes to both `createEvent` and the non-standard `UNDELETE` event. Because it uses `createEvent`, it requires a matching read entry and `inheritFieldsAndMapping: true`:
 
 ```yaml
 specVersion: 1.0.0
@@ -155,11 +198,13 @@ integrations:
             enabled: always
           otherEvents:
             - UNDELETE
-    read: # Read action is required
+    read: # Required because `account` uses createEvent
       objects:
         - objectName: account
           destination: accountWebhook
-          ...
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
 ```
 
 ### Specify backfill behavior
@@ -238,114 +283,6 @@ integrations:
               prompt: Which field is the country for the account?
          # Omit schedule and backfill
 ```
-
-## Special set up for HubSpot
-
-<Note>
-  HubSpot subscribe actions cannot notify you of changes to custom fields. There is a workaround that requires additional set up, please contact support@withampersand.com for details.
-</Note>
-
-To enable HubSpot subscribe actions, you will need to:
-- Define the subscribe action in your `amp.yaml` file and then deploy it, please refer to the previous section.
-- Make modifications to the HubSpot app.
-
-
-### New project apps
-
-If you are using a new project app (that was created with the HubSpot CLI), then follow the instructions below. If you don't have any apps yet, the then follow the instructions in the [HubSpot provider guide](/provider-guides/hubspot#method-1%3A-new-project-apps) to create one.
-
-#### Create webhooks-hsmeta.json file
-
-Go to the directory that contains your HubSpot app, and add a file called `your-project-name/src/app/webhooks/webhooks-hsmeta.json`. So your directory should end up like this:
-
-```
-/your-project-name
-  /src/app
-    /webhooks
-      webhooks-hsmeta.json
-    app-hsmeta.json
-  hsproject.json
-```
-
-Replace `targetUrl` in the example `webhooks-hsmeta.json` file below with the one that is for your integration. It should follow the format: 
-
-```
-"https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID"
-```
-  - Replace `PROJECT_ID` with your Ampersand project ID, which can be found in the Dashboard's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
-  - Replace `INTEGRATION_ID` with your integration's ID, which can be found in the Dashboard's [Home page](https://dashboard.withampersand.com/projects/_).
-
-You can also edit the file with the desired objects and events you want to subscribe to. You can refer to [HubSpot documentation](https://developers.hubspot.com/docs/apps/developer-platform/add-features/configure-webhooks#webhook-configuration) for the syntax of this file.
-
-Example `webhooks-hsmeta.json`:
-```
-{
-  "uid": "ampersand_subscribe_actions",
-  "type": "webhooks",
-  "config": {
-    "settings": {
-      "targetUrl": "SEE_INSTRUCTIONS_ABOVE",
-      "maxConcurrentRequests": 50
-    },
-    "subscriptions": {
-      "crmObjects": [
-        {
-          "subscriptionType": "object.creation",
-          "objectType": "contact",
-          "active": true
-        },
-        {
-          "subscriptionType": "object.propertyChange",
-          "objectType": "contact",
-          "propertyName": "firstname",
-          "active": true
-        },
-        {
-          "subscriptionType": "object.propertyChange",
-          "objectType": "contact",
-          "propertyName": "lastname",
-          "active": true
-        },
-        {
-          "subscriptionType": "object.deletion",
-          "objectType": "contact",
-          "active": true
-        }
-      ]
-    }
-  }
-}
-```
-
-#### Deploy changes to HubSpot
-
-Once you are done editing `webhooks-hsmeta.json`, deploy it using the following command:
-
-```
-hs project upload
-```
-
-### Legacy apps
-
-If you have a legacy app (that was created in the HubSpot UI), follow the instructions below.
-
-1.  Login to your HubSpot account. 
-2.  Go to the **Apps** section.
-3.  Select your connected app.
-5.  Click on **Webhooks**.
-6.  Enter the Target URL:
-  ```
-    subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID
-  ```
-  - Replace `PROJECT_ID` with your Ampersand project ID, which can be found in the Dashboard's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
-  - Replace `INTEGRATION_ID` with your integration's ID, which can be found in the Dashboard's [Home page](https://dashboard.withampersand.com/projects/_).
-
-7.  Click **Create Subscription**.
-8.  Select object types, event types, and properties.
-9.  Select the required checkboxes for all objects.
-10. Click **Activate**.
-
-![Subscribe actions HubSpot](/images/subscribeactions-hubspot.gif)
 
 ## Fields and mapping
 
