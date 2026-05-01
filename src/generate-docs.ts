@@ -499,6 +499,12 @@ const baseConfig = {
             "customer-guides/update-connection"
           ]
         },
+        {
+          group: "Troubleshooting guides",
+          pages: [
+            "troubleshooting-guides/salesforce"
+          ]
+        },
         "dev-and-prod-environments",
         "terminology",
         "unified-api",
