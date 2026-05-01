@@ -13,19 +13,25 @@ updatedAt: "Fri Jul 19 2024 21:54:48 GMT+0000 (Coordinated Universal Time)"
 This connector supports:
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.gong.io`.
 - [Read Actions](/read-actions)
+- [Subscribe Actions](/subscribe-actions). Please note that [special set up](#set-up-subscribe-actions) is needed for Gong.
 
 ### Supported Objects
 
-The Gong connector supports **reading** from the following objects:
-- Users (full read only)
-- Workspaces (full read only)
-- Flows (full read only)
-- Calls and Transcripts (incremental read in private preview, contact support@withampersand.com).
+| Object      | Read                                 | Write | Subscribe                |
+| ----------- | ------------------------------------ | ----- | ------------------------ |
+| Users       | ✓ (full read only)                   |       |                          |
+| Workspaces  | ✓ (full read only)                   |       |                          |
+| Flows       | ✓ (full read only)                   |       |                          |
+| Calls       | ✓ (incremental in private preview¹)  | ✓     | ✓ (`call.created` only)  |
+| Transcripts | ✓ (incremental in private preview¹)  |       |                          |
 
-The Gong connector supports **writing** to the following objects:
-- Calls
+¹ Contact support@withampersand.com to enable incremental read for Calls and Transcripts.
 
-> **Note:** Due to Gong's processing time. `Calls` may not be available through Read Actions until up to an hour after a call ends, and `Transcripts` may not be available until up to 24 hours after a call ends.
+<Note>
+  **Gong processing latency.** Gong takes time to process recordings before they become available, which delays both Read Actions and Subscribe webhooks:
+  - **Calls** are available through through Read and Subscribe Actions after they have finished processing in Gong, which may take up to **1 hour** after a call ends.
+  - **Transcripts** may not be available for up to **24 hours** after a call ends.
+</Note>
 
 ### Example Integration
 
@@ -71,3 +77,35 @@ Learn more about the Gong Partnership process [here](https://help.gong.io/docs/h
 
 
 8. Click **Save Changes**.
+
+## Set up Subscribe Actions
+
+1. **Define the subscribe action** in your `amp.yaml` and deploy it with the [amp CLI](/cli/overview). Gong only supports the `call.created` event, so the `calls` object should subscribe to `createEvent` only.
+
+   ```yaml
+   specVersion: 1.0.0
+   integrations:
+     - name: subscribeToGong
+       provider: gong
+       subscribe:
+         objects:
+           - objectName: calls
+             destination: gongWebhook
+             inheritFieldsAndMapping: true
+             createEvent:
+               enabled: always
+       read: 
+         objects:
+           - objectName: calls
+             destination: gongWebhook
+             requiredFields:
+               ...
+   ```
+
+2. **Construct a webhook URL for your customer** in this format:
+
+   ```
+   https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
+   ```
+
+3. **Share the [Gong customer guide](/customer-guides/gong)** with your customer along with the webhook URL from Step 2. Your customer will create an automation rule in Gong that fires a webhook when a new call is created.
