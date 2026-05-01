@@ -1,0 +1,66 @@
+---
+title: "Salesforce"
+description: "Diagnose and resolve common errors when running Salesforce integrations."
+---
+
+## Read Action: `No such column` error
+
+A read fails with an error similar to:
+
+```text
+bad request:
+field_one__c,field_two__c,example_field__c,field_three__c,field_four__c
+                          ^
+ERROR at Row:1:Column:26
+No such column 'example_field__c' on entity 'Opportunity'. If you are attempting to use a custom field,
+be sure to append the '__c' after the custom field name. Please reference your WSDL or the describe call
+for the appropriate names.
+```
+
+<Tip>
+**Which case is this?**
+- Reads work for other customers but fail for this one → almost always a [field-level visibility issue](#resolve-a-field-level-visibility-issue). Even System Administrators do **not** automatically receive visibility for every field.
+- Reads fail for *every* customer → the [field name itself](#verify-the-field-name) is more likely the problem.
+</Tip>
+
+### Resolve a field-level visibility issue
+
+Share the [field visibility instructions in the Salesforce customer guide](/customer-guides/salesforce#ensure-sufficient-permissions) with your customer. That user must be granted **Visible** field-level visibility for the field, either through their profile or via a permission set.
+
+Ampersand pauses reads automatically after repeated failures to avoid overloading Salesforce APIs, so once the field is visible you'll need to explicitly resume. Call the [Unpause Reads endpoint](/reference/read/unpause-reads-for-an-installation), or reach out to Ampersand support and we can unpause it for you.
+
+### Verify the field name
+
+1. Look up the field in the [Salesforce Object Reference](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_concepts.htm). If it's listed, the field is standard and this is a [field-level visibility issue](#resolve-a-field-level-visibility-issue).
+2. If it's not listed, it's a custom field. Custom field API names must end with `__c` — if your read object configuration is missing the suffix, fix it.
+3. If the suffix is already correct, this is a [field-level visibility issue](#resolve-a-field-level-visibility-issue).
+
+## Write Action: `No such column` error
+
+A write fails with an error similar to:
+
+```json
+{
+  "operationId": "00000000-0000-0000-0000-000000000000",
+  "errors": [
+    {
+      "message": "error writing account: bad request: No such column 'Testing__c' on sobject of type Account"
+    }
+  ]
+}
+```
+
+<Tip>
+**Which case is this?** 
+Call [Get object metadata via installation](/reference/objects-&-fields/get-object-metadata-via-installation) for the object you're writing to.
+- The field isn't in the response → it [doesn't exist in the customer's org](#field-doesnt-exist-in-the-customers-org). Custom fields vary by org.
+- The field is in the response → the [connected user can't see it](#connected-user-lacks-field-level-visibility).
+</Tip>
+
+### Field doesn't exist in the customer's org
+
+Remove the field from your write payload for this customer — for example, by checking object metadata before writing, or by falling back to a default. Longer-term, update your application to handle per-customer schema differences.
+
+### Connected user lacks field-level visibility
+
+If the field exists in the org but isn't visible to the connected user's profile, Salesforce returns the same `No such column` error. Follow the steps in [Resolve a field-level visibility issue](#resolve-a-field-level-visibility-issue).
