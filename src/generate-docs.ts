@@ -382,6 +382,7 @@ const baseConfig = {
             // "provider-guides/greenhouseJobBoard",
             "provider-guides/groove",
             "provider-guides/guru",
+            "provider-guides/gusto",
             "provider-guides/happyfox",
             "provider-guides/helpScoutMailbox",
             "provider-guides/heyreach",
