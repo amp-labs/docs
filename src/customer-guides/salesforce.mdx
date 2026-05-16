@@ -313,10 +313,15 @@ To ensure that you have the necessary system permission, please follow these ins
 
 If the integration contains Subscribe Actions, a number of special permissions are required. Here's an explanation of why each permission is necessary:
 
+These permissions need to be explicitly enabled:
+
+- `Modify Metadata Through Metadata API Functions`: Required to configure event channels and event channel memberships through Metadata API.
+- `Customize Application`: Required to configure artifacts like Named Credentials, which allows Ampersand to securely connect to the event channels.
+
+Salesforce auto-enables these when you enable the above permissions, because they dependent permissions:
 - `View Setup and Configuration`: Enables the integration to access Salesforce setup configuration in order to create webhook subscription settings.
 - `View Roles and Role Hierarchy`: Ensures the integration has the correct visibility context so Salesforce can successfully send events; without this, events may be generated but not delivered.
 - `Manage Custom Permissions`: Allows the integration to create and manage dedicated event channels and channel memberships used specifically for the installation's subscription events.
-- `Customize Application`: Required to configure artifacts like Named Credentials, which allows subscription to happen in a secure way.
 
 To ensure that you have the necessary permission to use Subscribe Actions, please follow these instructions:
 - [For a Profile](#1-configure-system-permissions)
