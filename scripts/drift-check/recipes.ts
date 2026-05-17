@@ -34,6 +34,11 @@ export const recipes: Recipes = {
     },
     { provider: 'adyenTest', reason: 'Internal test variant.', until: '2027-01-01' },
     { provider: 'gladlyQA', reason: 'QA-only variant.', until: '2027-01-01' },
+    {
+      provider: 'docusignDeveloper',
+      reason: 'Developer-environment variant; setup covered by docusign.mdx.',
+      until: '2026-09-01',
+    },
     { provider: 'deelSandbox', reason: 'Sandbox variant.', until: '2027-01-01' },
     { provider: 'gustoDemo', reason: 'Demo variant.', until: '2027-01-01' },
     { provider: 'paddleSandbox', reason: 'Sandbox variant.', until: '2027-01-01' },
