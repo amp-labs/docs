@@ -1,8 +1,4 @@
-/**
- * Resolve a github.com/...blob/... URL to its raw equivalent, since blob URLs
- * return a 200 HTML page even for missing files. The raw URL returns 404 on
- * missing files, which is what we want for existence checking.
- */
+// blob URLs return a 200 HTML page for missing files; raw URLs return 404.
 function toRawUrl(blobUrl: string): string {
   return blobUrl
     .replace('github.com/', 'raw.githubusercontent.com/')
@@ -15,12 +11,7 @@ export interface SampleCheckResult {
   status?: number;
 }
 
-/**
- * Trusts a 404 immediately (definitive missing). Retries once on network
- * errors or non-404 non-2xx responses, since GitHub raw can produce
- * transient 5xx / connection blips that would otherwise become false
- * positives in CI.
- */
+// Trusts 404 immediately; retries once on transient errors (5xx, network blips).
 export async function checkSampleLink(blobUrl: string): Promise<SampleCheckResult> {
   const rawUrl = toRawUrl(blobUrl);
   const MAX_ATTEMPTS = 2;

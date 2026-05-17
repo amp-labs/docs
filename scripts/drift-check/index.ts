@@ -1,24 +1,4 @@
 #!/usr/bin/env tsx
-/**
- * Drift check v1.
- *
- * Static comparison of provider guides against the connectors catalog.
- * Three checks:
- *   - undocumented-provider: catalog has a provider with no guide and no
- *     allowance in recipes.ts
- *   - doc-overclaims-<capability>: guide claims an action the catalog
- *     (module-aware) does not support
- *   - broken-sample-link: guide links to a sample manifest that 404s
- *
- * Modes:
- *   --mode full          scan every provider guide (default)
- *   --mode per-pr        scan only .mdx files passed via --changed
- *   --mode provider      scan a single provider via --provider <key>
- *
- * Output:
- *   --out <dir>          write drift-report.json and drift-report.md
- *                        (default ./drift-report)
- */
 import { parseArgs } from 'node:util';
 import path from 'node:path';
 import {
@@ -29,14 +9,13 @@ import {
   type Capability,
   type CatalogProvider,
 } from './catalog';
-import { scanGuides, resolveProviderKey, type GuideDoc } from './docs';
+import { scanGuides, resolveProviderKey } from './docs';
 import { checkSampleLink } from './samples';
 import { recipes } from './recipes';
 import { writeReport, type Finding, type Report } from './report';
 
 async function main() {
-  // Accept both `drift-check --out X` and `pnpm run drift-check -- --out X`
-  // by stripping a leading `--` separator if present.
+  // Accept both `drift-check --out X` and `pnpm run drift-check -- --out X`.
   const args = process.argv.slice(2);
   if (args[0] === '--') args.shift();
   const { values } = parseArgs({
@@ -71,14 +50,13 @@ async function main() {
 
   const findings: Finding[] = [];
 
-  // Check: undocumented providers. Full mode only; otherwise the per-PR slice
-  // can't tell what's missing.
+  // The undocumented-provider check requires a global view, so it only runs in full mode.
   if (mode === 'full') {
     const documentedKeys = new Set(
-      (await scanGuides()).map((g) => resolveProviderKey(g, recipes.slugOverrides, catalogKeys)),
+      guides.map((g) => resolveProviderKey(g, recipes.slugOverrides, catalogKeys)),
     );
     const today = new Date();
-    for (const catalogKey of Object.keys(catalog.data)) {
+    for (const catalogKey of catalogKeys) {
       if (documentedKeys.has(catalogKey)) continue;
       const allow = recipes.undocumentedAllowed.find((a) => a.provider === catalogKey);
       if (allow) {
@@ -101,12 +79,11 @@ async function main() {
     }
   }
 
-  // Check: doc-overclaims-<capability> + collect sample-link checks.
   const sampleChecks: Promise<void>[] = [];
   for (const guide of guides) {
     const providerKey = resolveProviderKey(guide, recipes.slugOverrides, catalogKeys);
-    const cp = catalog.data[providerKey];
-    if (!cp) {
+    const provider = catalog.data[providerKey];
+    if (!provider) {
       findings.push({
         provider: providerKey,
         severity: 'error',
@@ -117,17 +94,17 @@ async function main() {
       continue;
     }
     for (const cap of guide.claimedActions) {
-      if (!supports(cp, cap as Capability)) {
+      if (!supports(provider, cap as Capability)) {
         findings.push(
-          withModule(cp, {
+          withModule(provider, {
             provider: providerKey,
             severity: 'error',
             kind: `doc-overclaims-${cap}`,
             docPath: guide.docPath,
             docClaim: `Guide includes "[${capitalize(cap)} Actions](/${cap}-actions)".`,
             catalogTruth: {
-              providerLevel: capabilityValueAt(cp, cap as Capability, 'provider'),
-              modulesSupporting: modulesSupporting(cp, cap as Capability),
+              providerLevel: providerLevelSupport(provider, cap as Capability),
+              modulesSupporting: modulesSupporting(provider, cap as Capability),
             },
             suggestedFix: `Remove the ${cap} action claim, or update the connector if support was added but not flagged.`,
           }),
@@ -139,7 +116,7 @@ async function main() {
         checkSampleLink(sampleLink).then((r) => {
           if (!r.exists) {
             findings.push(
-              withModule(cp, {
+              withModule(provider, {
                 provider: providerKey,
                 severity: 'error',
                 kind: 'broken-sample-link',
@@ -179,29 +156,16 @@ function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-/**
- * Enforce the module-aware schema: if the provider has modules and the
- * finding does not specify one, default to "all". Single-module providers
- * leave module unset.
- */
-function withModule(
-  provider: CatalogProvider | undefined,
-  finding: Finding,
-): Finding {
+// Default module to "all" on findings for multi-module providers; v1 does not attribute claims to a specific module.
+function withModule(provider: CatalogProvider, finding: Finding): Finding {
   if (finding.module !== undefined) return finding;
-  if (provider && hasModules(provider)) {
-    return { ...finding, module: 'all' };
-  }
+  if (hasModules(provider)) return { ...finding, module: 'all' };
   return finding;
 }
 
-function capabilityValueAt(
-  cp: CatalogProvider,
-  cap: Capability,
-  _level: 'provider',
-): unknown {
-  if (cap === 'search') return cp.support?.search ?? false;
-  return cp.support?.[cap] ?? false;
+function providerLevelSupport(provider: CatalogProvider, cap: Capability): unknown {
+  if (cap === 'search') return provider.support?.search ?? false;
+  return provider.support?.[cap] ?? false;
 }
 
 main().catch((err) => {

@@ -10,15 +10,14 @@ const NON_GUIDE_FILES = new Set(['overview.mdx', 'AGENTS.md', 'CLAUDE.md']);
 export type Capability = 'read' | 'write' | 'proxy' | 'subscribe' | 'search';
 
 export interface GuideDoc {
-  docPath: string;            // path relative to repo root
-  slug: string;               // filename without .mdx
+  docPath: string;
+  slug: string;
   providerKeyFromFrontmatter?: string;
   guideType?: string;
   claimedActions: Set<Capability>;
-  sampleLinks: string[];      // all distinct samples links found
+  sampleLinks: string[];
 }
 
-/** Fixed link patterns used in provider guides. */
 const ACTION_PATTERNS: Array<{ cap: Capability; re: RegExp }> = [
   { cap: 'read', re: /\[Read Actions\]\(\/read-actions\)/ },
   { cap: 'write', re: /\[Write Actions\]\(\/write-actions\)/ },
@@ -27,8 +26,7 @@ const ACTION_PATTERNS: Array<{ cap: Capability; re: RegExp }> = [
   { cap: 'search', re: /\[Search Actions\]\(\/search-actions\)/ },
 ];
 
-// Match every distinct samples link, allowing both amp.yaml and amp.yml.
-const SAMPLE_LINK_RE_G =
+const SAMPLE_LINK_RE =
   /https:\/\/github\.com\/amp-labs\/samples\/blob\/[^/]+\/[^/]+\/amp\.ya?ml/g;
 
 export async function scanGuides(): Promise<GuideDoc[]> {
@@ -46,7 +44,7 @@ export async function scanGuides(): Promise<GuideDoc[]> {
       if (re.test(parsed.content)) claimedActions.add(cap);
     }
     const sampleLinks = Array.from(
-      new Set(parsed.content.match(SAMPLE_LINK_RE_G) ?? []),
+      new Set(parsed.content.match(SAMPLE_LINK_RE) ?? []),
     );
     guides.push({
       docPath: path.relative(process.cwd(), full),
@@ -62,18 +60,8 @@ export async function scanGuides(): Promise<GuideDoc[]> {
   return guides;
 }
 
-/**
- * Resolve the catalog provider key a guide documents.
- *
- * Priority:
- *   1. frontmatter `provider` field (case preserved)
- *   2. slugOverrides recipe
- *   3. case-insensitive match against catalog keys (handles the systemic
- *      "doc files lowercase, catalog mixed-case" convention split, e.g.
- *      aweber.mdx -> aWeber)
- *   4. filename slug verbatim (will surface as guide-without-catalog-entry
- *      if not in catalog)
- */
+// Resolution priority: frontmatter `provider` > slugOverrides > case-insensitive
+// match against catalog keys > filename slug verbatim.
 export function resolveProviderKey(
   guide: GuideDoc,
   slugOverrides: Record<string, string>,

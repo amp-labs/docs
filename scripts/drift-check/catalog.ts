@@ -50,24 +50,18 @@ export async function fetchCatalog(): Promise<Catalog> {
   };
 }
 
-/**
- * Module-aware capability check.
- *
- * Returns true if either the provider-level flag is true, or any module-level
- * flag is true. This is permissive: a guide that claims support without
- * specifying a module is considered correct as long as some part of the
- * provider supports it. Tightening to require module-specific claims is a
- * PR 3 concern.
- */
+// Module-aware: returns true if the provider-level flag is true, or any
+// module-level flag is true. Catches cases like Google, where the provider
+// has subscribe=false but modules.gmail has subscribe=true.
 export function supports(
   provider: CatalogProvider | undefined,
   capability: Capability,
 ): boolean {
   if (!provider) return false;
   if (capability === 'search') {
-    if (hasAnySearchOperator(provider.support?.search)) return true;
+    if (supportsSearch(provider.support?.search)) return true;
     for (const mod of Object.values(provider.modules ?? {})) {
-      if (hasAnySearchOperator(mod.support?.search)) return true;
+      if (supportsSearch(mod.support?.search)) return true;
     }
     return false;
   }
@@ -78,17 +72,15 @@ export function supports(
   return false;
 }
 
-function hasAnySearchOperator(s: SearchSupport | undefined): boolean {
+function supportsSearch(s: SearchSupport | undefined): boolean {
   if (!s?.operators) return false;
   return Object.values(s.operators).some(Boolean);
 }
 
-/** True if the provider has any module entries. */
 export function hasModules(provider: CatalogProvider | undefined): boolean {
   return !!provider?.modules && Object.keys(provider.modules).length > 0;
 }
 
-/** Lists modules that support the given capability. Useful for advisory output. */
 export function modulesSupporting(
   provider: CatalogProvider | undefined,
   capability: Capability,
@@ -96,7 +88,7 @@ export function modulesSupporting(
   if (!provider?.modules) return [];
   if (capability === 'search') {
     return Object.entries(provider.modules)
-      .filter(([, mod]) => hasAnySearchOperator(mod.support?.search))
+      .filter(([, mod]) => supportsSearch(mod.support?.search))
       .map(([name]) => name);
   }
   return Object.entries(provider.modules)
