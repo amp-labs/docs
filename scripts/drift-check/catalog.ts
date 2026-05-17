@@ -1,13 +1,18 @@
 const CATALOG_URL =
   'https://raw.githubusercontent.com/amp-labs/connectors/main/internal/generated/catalog.json';
 
-export type Capability = 'read' | 'write' | 'proxy' | 'subscribe';
+export type Capability = 'read' | 'write' | 'proxy' | 'subscribe' | 'search';
+
+interface SearchSupport {
+  operators?: Record<string, boolean>;
+}
 
 interface SupportFlags {
   read?: boolean;
   write?: boolean;
   proxy?: boolean;
   subscribe?: boolean;
+  search?: SearchSupport;
 }
 
 interface ModuleEntry {
@@ -59,11 +64,23 @@ export function supports(
   capability: Capability,
 ): boolean {
   if (!provider) return false;
+  if (capability === 'search') {
+    if (hasAnySearchOperator(provider.support?.search)) return true;
+    for (const mod of Object.values(provider.modules ?? {})) {
+      if (hasAnySearchOperator(mod.support?.search)) return true;
+    }
+    return false;
+  }
   if (provider.support?.[capability]) return true;
   for (const mod of Object.values(provider.modules ?? {})) {
     if (mod.support?.[capability]) return true;
   }
   return false;
+}
+
+function hasAnySearchOperator(s: SearchSupport | undefined): boolean {
+  if (!s?.operators) return false;
+  return Object.values(s.operators).some(Boolean);
 }
 
 /** True if the provider has any module entries. */
@@ -77,6 +94,11 @@ export function modulesSupporting(
   capability: Capability,
 ): string[] {
   if (!provider?.modules) return [];
+  if (capability === 'search') {
+    return Object.entries(provider.modules)
+      .filter(([, mod]) => hasAnySearchOperator(mod.support?.search))
+      .map(([name]) => name);
+  }
   return Object.entries(provider.modules)
     .filter(([, mod]) => mod.support?.[capability])
     .map(([name]) => name);

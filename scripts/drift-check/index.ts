@@ -23,9 +23,11 @@ import { parseArgs } from 'node:util';
 import path from 'node:path';
 import {
   fetchCatalog,
+  hasModules,
   supports,
   modulesSupporting,
   type Capability,
+  type CatalogProvider,
 } from './catalog';
 import { scanGuides, resolveProviderKey, type GuideDoc } from './docs';
 import { checkSampleLink } from './samples';
@@ -33,7 +35,12 @@ import { recipes } from './recipes';
 import { writeReport, type Finding, type Report } from './report';
 
 async function main() {
+  // Accept both `drift-check --out X` and `pnpm run drift-check -- --out X`
+  // by stripping a leading `--` separator if present.
+  const args = process.argv.slice(2);
+  if (args[0] === '--') args.shift();
   const { values } = parseArgs({
+    args,
     options: {
       mode: { type: 'string', default: 'full' },
       provider: { type: 'string' },
@@ -111,33 +118,37 @@ async function main() {
     }
     for (const cap of guide.claimedActions) {
       if (!supports(cp, cap as Capability)) {
-        findings.push({
-          provider: providerKey,
-          severity: 'error',
-          kind: `doc-overclaims-${cap}`,
-          docPath: guide.docPath,
-          docClaim: `Guide includes "[${capitalize(cap)} Actions](/${cap}-actions)".`,
-          catalogTruth: {
-            providerLevel: cp.support?.[cap as Capability] ?? false,
-            modulesSupporting: modulesSupporting(cp, cap as Capability),
-          },
-          suggestedFix: `Remove the ${cap} action claim, or update the connector if support was added but not flagged.`,
-        });
+        findings.push(
+          withModule(cp, {
+            provider: providerKey,
+            severity: 'error',
+            kind: `doc-overclaims-${cap}`,
+            docPath: guide.docPath,
+            docClaim: `Guide includes "[${capitalize(cap)} Actions](/${cap}-actions)".`,
+            catalogTruth: {
+              providerLevel: capabilityValueAt(cp, cap as Capability, 'provider'),
+              modulesSupporting: modulesSupporting(cp, cap as Capability),
+            },
+            suggestedFix: `Remove the ${cap} action claim, or update the connector if support was added but not flagged.`,
+          }),
+        );
       }
     }
-    if (guide.sampleLink) {
+    for (const sampleLink of guide.sampleLinks) {
       sampleChecks.push(
-        checkSampleLink(guide.sampleLink).then((r) => {
+        checkSampleLink(sampleLink).then((r) => {
           if (!r.exists) {
-            findings.push({
-              provider: providerKey,
-              severity: 'error',
-              kind: 'broken-sample-link',
-              docPath: guide.docPath,
-              docClaim: r.url,
-              catalogTruth: { httpStatus: r.status ?? 'fetch failed' },
-              suggestedFix: `Update or remove the sample link. The referenced file does not exist at ${r.url}.`,
-            });
+            findings.push(
+              withModule(cp, {
+                provider: providerKey,
+                severity: 'error',
+                kind: 'broken-sample-link',
+                docPath: guide.docPath,
+                docClaim: r.url,
+                catalogTruth: { httpStatus: r.status ?? 'fetch failed' },
+                suggestedFix: `Update or remove the sample link. The referenced file does not exist at ${r.url}.`,
+              }),
+            );
           }
         }),
       );
@@ -166,6 +177,31 @@ async function main() {
 
 function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/**
+ * Enforce the module-aware schema: if the provider has modules and the
+ * finding does not specify one, default to "all". Single-module providers
+ * leave module unset.
+ */
+function withModule(
+  provider: CatalogProvider | undefined,
+  finding: Finding,
+): Finding {
+  if (finding.module !== undefined) return finding;
+  if (provider && hasModules(provider)) {
+    return { ...finding, module: 'all' };
+  }
+  return finding;
+}
+
+function capabilityValueAt(
+  cp: CatalogProvider,
+  cap: Capability,
+  _level: 'provider',
+): unknown {
+  if (cap === 'search') return cp.support?.search ?? false;
+  return cp.support?.[cap] ?? false;
 }
 
 main().catch((err) => {

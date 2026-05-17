@@ -69,7 +69,7 @@ export const recipes: Recipes = {
       until: '2027-01-01',
     },
     {
-      provider: 'paypalSandbox',
+      provider: 'payPalSandBox',
       reason: 'Sandbox variant.',
       until: '2027-01-01',
     },

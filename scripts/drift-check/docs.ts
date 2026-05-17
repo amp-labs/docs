@@ -7,7 +7,7 @@ const PROVIDER_GUIDES_DIR = path.join(process.cwd(), 'src', 'provider-guides');
 // Files in src/provider-guides/ that are not provider guides.
 const NON_GUIDE_FILES = new Set(['overview.mdx', 'AGENTS.md', 'CLAUDE.md']);
 
-export type Capability = 'read' | 'write' | 'proxy' | 'subscribe';
+export type Capability = 'read' | 'write' | 'proxy' | 'subscribe' | 'search';
 
 export interface GuideDoc {
   docPath: string;            // path relative to repo root
@@ -15,7 +15,7 @@ export interface GuideDoc {
   providerKeyFromFrontmatter?: string;
   guideType?: string;
   claimedActions: Set<Capability>;
-  sampleLink?: string;        // first samples link found, if any
+  sampleLinks: string[];      // all distinct samples links found
 }
 
 /** Fixed link patterns used in provider guides. */
@@ -24,10 +24,12 @@ const ACTION_PATTERNS: Array<{ cap: Capability; re: RegExp }> = [
   { cap: 'write', re: /\[Write Actions\]\(\/write-actions\)/ },
   { cap: 'subscribe', re: /\[Subscribe Actions\]\(\/subscribe-actions\)/ },
   { cap: 'proxy', re: /\[Proxy Actions\]\(\/proxy-actions\)/ },
+  { cap: 'search', re: /\[Search Actions\]\(\/search-actions\)/ },
 ];
 
-const SAMPLE_LINK_RE =
-  /https:\/\/github\.com\/amp-labs\/samples\/blob\/[^/]+\/([^/]+)\/amp\.yaml/;
+// Match every distinct samples link, allowing both amp.yaml and amp.yml.
+const SAMPLE_LINK_RE_G =
+  /https:\/\/github\.com\/amp-labs\/samples\/blob\/[^/]+\/[^/]+\/amp\.ya?ml/g;
 
 export async function scanGuides(): Promise<GuideDoc[]> {
   const entries = await fs.readdir(PROVIDER_GUIDES_DIR);
@@ -43,7 +45,9 @@ export async function scanGuides(): Promise<GuideDoc[]> {
     for (const { cap, re } of ACTION_PATTERNS) {
       if (re.test(parsed.content)) claimedActions.add(cap);
     }
-    const sampleMatch = parsed.content.match(SAMPLE_LINK_RE);
+    const sampleLinks = Array.from(
+      new Set(parsed.content.match(SAMPLE_LINK_RE_G) ?? []),
+    );
     guides.push({
       docPath: path.relative(process.cwd(), full),
       slug,
@@ -52,7 +56,7 @@ export async function scanGuides(): Promise<GuideDoc[]> {
       guideType:
         typeof parsed.data.guide_type === 'string' ? parsed.data.guide_type : undefined,
       claimedActions,
-      sampleLink: sampleMatch ? sampleMatch[0] : undefined,
+      sampleLinks,
     });
   }
   return guides;
