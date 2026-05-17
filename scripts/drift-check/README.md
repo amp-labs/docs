@@ -81,7 +81,9 @@ When `until` passes, the entry becomes a warning (`undocumented-provider-allowan
 
 ## What this check does not prove
 
-This check validates docs against the connector catalog. It does **not** prove that read/write/proxy/subscribe calls succeed at runtime, and it does not validate the deployed Ampersand API against its declared shape.
+This check uses the generated connectors catalog from `main`; it does not compare against the deployed `/v1/providers` API or prove runtime API behavior.
+
+It does **not** prove that read/write/proxy/subscribe calls succeed at runtime, and it does not validate the deployed Ampersand API against its declared shape.
 
 Concretely, the drift surfaces this check ignores:
 
