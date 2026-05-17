@@ -79,14 +79,20 @@ undocumentedAllowed: [
 
 When `until` passes, the entry becomes a warning (`undocumented-provider-allowance-expired`) until renewed or removed.
 
-## What v1 deliberately does not check
+## What this check does not prove
 
-These are out of scope for v1. PR 3 or later may add them.
+This check validates docs against the connector catalog. It does **not** prove that read/write/proxy/subscribe calls succeed at runtime, and it does not validate the deployed Ampersand API against its declared shape.
 
-- **Object-name drift between guides and connector source.** The connector source under `providers/<slug>/` enumerates supported objects; v1 does not parse Go.
-- **Provider public-doc drift.** Comparing each guide's setup steps against the provider's own developer documentation requires per-provider HTML parsing.
-- **Provider product-UI drift.** Validating screenshots and GIFs against the actual provider dashboards requires real accounts, MFA, and is explicitly out of scope.
-- **Runtime smoke tests.** Actually exercising read/write/proxy against a live provider requires sandbox accounts and is a separate program.
+Concretely, the drift surfaces this check ignores:
+
+| Surface | Out of scope because |
+|---|---|
+| **Connector Go source vs generated `catalog.json`** | The connectors repo generates the catalog from source. Regeneration lag is the connectors team's problem, not the docs' problem. |
+| **Generated `catalog.json` vs live `/v1/providers`** | Deployment lag. Catalog-vs-live is a separate cheap check (no credentials needed); track it under a follow-up PR. |
+| **Live API declared shape vs actual runtime behavior** | Whether `read` actually works requires sandbox accounts, installations, and real provider credentials. That is a separate program, not a docs-repo check. |
+| **Object-name drift between guides and connector source** | Requires parsing Go. Deferred to a later PR that adds `connectors.ts`. |
+| **Provider public-doc drift** | Comparing guide steps against the provider's own developer documentation requires per-provider HTML parsing. |
+| **Provider product-UI drift** | Validating screenshots and GIFs against live provider dashboards requires real accounts and MFA. Manual surface. |
 
 ## Severity → CI behavior
 
