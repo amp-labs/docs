@@ -8,8 +8,8 @@ title: "FastSpring"
 
 This connector supports:
 
-- [Read Actions](/read-actions), including list reads with pagination and optional time windows for event objects.
-- [Write Actions](/write-actions) (create, update, and delete where the FastSpring API allows—there is no separate Delete action in the catalog; destructive operations such as product delete or subscription cancel are part of Write).
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions) (create/update).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.fastspring.com`.
 - Subscribe Actions are not currently supported.
 
@@ -41,8 +41,9 @@ export const Cross = () => <span>🚫</span>
 
 ### Notes and limitations
 
-- **Write support** `accounts` supports create and update. `products` supports create, update, and delete. `orders` and `subscriptions` support **update**; subscription delete maps to cancel in FastSpring. Single-record operations only (no bulk write).
-- **Read behavior**: List endpoints may return object arrays or ID-only lists; the connector normalizes rows into a consistent shape. Event lists (`events-processed`, `events-unprocessed`) support optional date ranges via read parameters where the API allows.
+- **Read behavior**: [Read Actions](/read-actions) list supported object collections (accounts, orders, products, subscriptions, and event lists). Responses may be full records or ID-only lists; the connector normalizes rows into a consistent shape. Incremental read is supported for `events-processed` and `events-unprocessed` where the API allows date filters on read parameters.
+- **Write support**: `accounts` and `products` support **create** and **update**. `orders` and `subscriptions` support **update** only. Single-record operations only (no bulk write).
+- **Commands**: FastSpring also exposes **command**-style operations (for example subscription cancel or product deactivation) that are not the same as creating or updating a record in a collection. They are not documented here as Write or Delete actions. See the [FastSpring API reference](https://developer.fastspring.com/reference/getting-started-with-your-api) for command endpoints, or use [Proxy Actions](/proxy-actions) to call them directly.
 
 ### Example integration
 
@@ -96,7 +97,7 @@ To start integrating with FastSpring:
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. Your customers enter their FastSpring API username and password when they connect their account.
 - Start using the connector:
   - If your integration has [Read Actions](/read-actions), scheduled reads will sync data according to your configuration.
-  - If your integration has [Write Actions](/write-actions), you can call the Write API for supported objects (including deletes such as product removal or subscription cancel, where supported).
+  - If your integration has [Write Actions](/write-actions), you can call the Write API to create or update supported records.
   - If your integration has [Proxy Actions](/proxy-actions) enabled, you can make Proxy API calls to `https://api.fastspring.com`.
 
 ## Upstream API documentation
