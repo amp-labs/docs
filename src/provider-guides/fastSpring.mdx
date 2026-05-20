@@ -41,32 +41,17 @@ export const Cross = () => <span>🚫</span>
 
 ### Notes and limitations
 
-- **Read behavior**: [Read Actions](/read-actions) list supported object collections (accounts, orders, products, subscriptions, and event lists). Responses may be full records or ID-only lists; the connector normalizes rows into a consistent shape. Incremental read is supported for `events-processed` and `events-unprocessed` where the API allows date filters on read parameters.
-- **Write support**: `accounts` and `products` support **create** and **update**. `orders` and `subscriptions` support **update** only. Single-record operations only (no bulk write).
-- **Commands**: FastSpring also exposes **command**-style operations (for example subscription cancel or product deactivation) that are not the same as creating or updating a record in a collection. They are not documented here as Write or Delete actions. See the [FastSpring API reference](https://developer.fastspring.com/reference/getting-started-with-your-api) for command endpoints, or use [Proxy Actions](/proxy-actions) to call them directly.
+- **Read behavior**: [Read Actions](/read-actions) list supported object collections. The connector normalizes full-record and ID-only list responses into a consistent shape. Incremental read uses connector-side filtering on reads for all objects except those whose list responses do not expose fields the connector can rely on as a watermark—in those cases each scheduled read is a full read.
+- **Write support**: `orders` and `subscriptions` support **update** only. All other writable objects (`accounts`, `products`) support create and update. Single-record operations only (no bulk write).
+- **Commands**: FastSpring also exposes **command**-style operations (for example subscription cancel or product deactivation) that are not the same as creating or updating a record in a collection. They are not documented here as Write actions. See the [FastSpring API reference](https://developer.fastspring.com/reference/getting-started-with-your-api) for command endpoints, or use [Proxy Actions](/proxy-actions) to call them directly.
 
 ### Example integration
 
-To define an integration for FastSpring, create a manifest file (`amp.yaml`). For a complete example, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/fastSpring/amp.yaml).
-
-```yaml
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: fastSpringIntegration
-    displayName: My FastSpring Integration
-    provider: fastSpring
-    proxy:
-      enabled: true
-```
-
-Enable **read** and/or **write** in your manifest when those actions are configured for your integration.
+To define an integration for FastSpring, use a manifest file (`amp.yaml`). For a complete example, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/fastSpring/amp.yaml).
 
 ## Before you get started
 
 To integrate **FastSpring** with **Ampersand**, you need a [FastSpring](https://fastspring.com/) account and **API credentials** (API username and password) from FastSpring.
-
-**Provider App is not required.** FastSpring is a Basic Auth provider—you do not create or configure a Provider App in Ampersand (those are used for OAuth 2.0 Authorization Code and similar flows). You only need the API username and password from FastSpring.
 
 FastSpring documents API access in [Getting started with your API](https://developer.fastspring.com/reference/getting-started-with-your-api), including the base URL, Basic authentication, required headers, and credential generation.
 
@@ -87,7 +72,7 @@ Per FastSpring’s documentation:
 
 ## Using the connector
 
-This connector uses **Basic Auth** (username and password), the same credential shape as other Basic providers in the catalog. **A Provider App is not required**—Provider Apps are only needed for providers that use OAuth 2.0 Authorization Code (or similar) flows, not for Basic Auth.
+This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with FastSpring:
 
