@@ -41,7 +41,6 @@ export const Cross = () => <span>🚫</span>
 
 ### Notes and limitations
 
-- **Read behavior**: [Read Actions](/read-actions) list supported object collections. The connector normalizes full-record and ID-only list responses into a consistent shape. Incremental read uses connector-side filtering on reads for all objects except those whose list responses do not expose fields the connector can rely on as a watermark—in those cases each scheduled read is a full read.
 - **Write support**: `orders` and `subscriptions` support **update** only. All other writable objects (`accounts`, `products`) support create and update. Single-record operations only (no bulk write).
 - **Commands**: FastSpring also exposes **command**-style operations (for example subscription cancel or product deactivation) that are not the same as creating or updating a record in a collection. They are not documented here as Write actions. See the [FastSpring API reference](https://developer.fastspring.com/reference/getting-started-with-your-api) for command endpoints, or use [Proxy Actions](/proxy-actions) to call them directly.
 
