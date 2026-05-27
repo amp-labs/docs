@@ -297,6 +297,7 @@ const baseConfig = {
           group: "Provider guides",
           pages: [
             "provider-guides/overview",
+            "provider-guides/accuLynx",
             "provider-guides/acuityScheduling",
             "provider-guides/aha",
             "provider-guides/aircall",

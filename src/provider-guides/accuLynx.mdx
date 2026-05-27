@@ -1,0 +1,49 @@
+---
+title: AccuLynx
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.acculynx.com`.
+
+### Example integration
+
+To define an integration for AccuLynx, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: accuLynx-integration
+    displayName: My AccuLynx Integration
+    provider: accuLynx
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To use the AccuLynx connector, you'll need an API key from your AccuLynx account. Here's how to get it:
+
+1. Sign in to your AccuLynx account as a Location or Company Administrator.
+2. From your AccuLynx Account Settings, open your [API page](https://my.acculynx.com/market/addons/app-connections).
+3. Generate a new API key with a descriptive name. Each integration within an AccuLynx account location should have its own dedicated API key.
+
+API keys are scoped to a single AccuLynx account location, so each Ampersand connection corresponds to one AccuLynx location.
+
+For more details, see the [AccuLynx Authentication documentation](https://apidocs.acculynx.com/docs/authentication).
+
+## Using the connector
+
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To integrate with AccuLynx:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for their API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer.
