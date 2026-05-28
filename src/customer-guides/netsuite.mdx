@@ -67,9 +67,21 @@ The integration record identifies the external application that will connect to 
 
 ### 5. Generate a certificate key pair
 
-Open a terminal in the folder where you want to create the files. You need **OpenSSL** available in that environment (macOS and most Linux distributions include it by default). On **Windows**, use **Git Bash** (bundled with [Git for Windows](https://gitforwindows.org/), which includes OpenSSL), **WSL**, or install OpenSSL and ensure it is on your `PATH`.
+In this step you'll use your computer's terminal to create two files: a private key and a self-signed certificate. This is a one-time operation — if anything goes wrong, you can delete the files and start over.
 
-Run the following commands to generate an EC private key and a self-signed certificate:
+Before you begin, you need **OpenSSL** available in your terminal. macOS and most Linux distributions include it by default. On **Windows**, use **Git Bash** (bundled with [Git for Windows](https://gitforwindows.org/), which includes OpenSSL), **WSL**, or install OpenSSL and ensure it is on your `PATH`.
+
+#### a. Create a folder and open a terminal in it
+
+Create a new folder anywhere you'll remember — your Desktop works fine. For example, create one called `netsuite-keys`. Then open a terminal _inside that folder_ so the files you generate end up there:
+
+- **macOS**: In **Finder**, right-click the folder and choose **New Terminal at Folder**. (If you don't see this option, enable it under **System Settings** > **Keyboard** > **Keyboard Shortcuts** > **Services** > **Files and Folders** > **New Terminal at Folder**.)
+- **Windows**: In **File Explorer**, right-click inside the folder and choose **Open in Terminal** or **Open Git Bash here**.
+- **Any OS (fallback)**: Open your terminal app, type `cd ` (with a trailing space), drag the folder from your file browser onto the terminal window, and press **Enter**.
+
+#### b. Run the OpenSSL commands
+
+Copy each command below, paste it into the terminal right after the prompt (`%` on macOS, `$` on Linux/Git Bash, `PS>` on PowerShell), and press **Enter**. Run them one at a time.
 
 ```bash
 openssl ecparam -name prime256v1 -genkey -noout -out private-key.pem
@@ -79,13 +91,22 @@ openssl ecparam -name prime256v1 -genkey -noout -out private-key.pem
 openssl req -new -x509 -key private-key.pem -out cert.pem -days 730
 ```
 
-You will be prompted for certificate details (country, organization, etc.). You can press Enter to accept defaults for all fields.
+The second command will prompt you for certificate details (country, organization name, email, etc.). **Press Enter at every prompt to accept the defaults** — these values are not used by the integration, so it doesn't matter what they are.
 
-This produces two files:
-- `private-key.pem` — Your private key. You will base64-encode this and share it when installing the integration.
-- `cert.pem` — Your public certificate. You will upload this to NetSuite in the next step.
+#### c. Confirm the two files were created
 
-You will then need to base64-encode your private key before sharing it during the installation process. Use the command that matches your environment:
+If the commands succeeded, your folder now contains two files:
+
+- `private-key.pem` — your private key. You'll base64-encode it in the next sub-step.
+- `cert.pem` — your public certificate. You'll upload it to NetSuite in step 7.
+
+Open the folder in **Finder** (macOS) or **File Explorer** (Windows) to confirm both files are there. If you can't see them, search your computer for `cert.pem` — the files were created in whichever folder your terminal was open in.
+
+<Note>If anything looks wrong — missing files, error messages, accidentally hit Enter too many times — just delete the files and run the commands again. The keys aren't registered anywhere until you upload `cert.pem` to NetSuite in step 7, so there's no risk in starting over.</Note>
+
+#### d. Base64-encode the private key
+
+Run the command below to print a base64-encoded version of your private key directly in the terminal. Use the version that matches your environment:
 
 **macOS (Terminal)**
 
@@ -101,13 +122,11 @@ base64 -w 0 private-key.pem
 
 **Windows (PowerShell)**
 
-From the directory that contains `private-key.pem`:
-
 ```powershell
 [Convert]::ToBase64String([IO.File]::ReadAllBytes((Resolve-Path 'private-key.pem')))
 ```
 
-Copy the encoded string (a long single line, e.g. starting with `LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0t...`). It will be required during the installation process.
+After running the command, you should see a long single-line string printed in the terminal, starting with `LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0t...`. Select and copy the entire string — you'll paste it during the installation process.
 
 ### 6. Assign the integration role to a user or create a new user
 
