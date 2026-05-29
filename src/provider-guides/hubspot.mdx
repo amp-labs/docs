@@ -57,6 +57,17 @@ The connector supports reading from:
 The connector supports reading from:
 - [meeting-links](https://developers.hubspot.com/docs/api-reference/latest/scheduler/meetings/get-meeting-links)
 
+#### Event Occurrences
+The connector reads HubSpot event occurrences (the [Events API](https://developers.hubspot.com/docs/api-reference/latest/events/retrieve-events/get-events)).
+Connector exposes occurrences as separate *custom objects* whose names are constructed by combining a fixed *prefix* with the *event type* name.
+* Naming rule: `AMPERSAND-event-occurrences-<EVENT_TYPE>`:
+  * AMPERSAND-event-occurrences-e_call_ended
+  * AMPERSAND-event-occurrences-e_form_submission
+  * AMPERSAND-event-occurrences-e_mta_bounced_email_v2
+  * AMPERSAND-event-occurrences-e_visited_page
+
+Where to get the event type name: event type identifiers are returned by the Events API's [event types endpoint](https://developers.hubspot.com/docs/api-reference/latest/events/retrieve-events/get-event-types).
+
 #### Reading users and owners
 
 To read users from your customer's HubSpot workspace, enable the `crm.objects.users.read` scope and add `users` as an object in `amp.yaml`:
