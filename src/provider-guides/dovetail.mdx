@@ -1,0 +1,34 @@
+---
+title: "Dovetail"
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://dovetail.com/api`.
+
+### Supported objects
+
+Dovetail is supported through Proxy Actions only. Use the proxy to call any [Dovetail Public API](https://developers.dovetail.com/reference) endpoint, for example `GET /v1/projects`.
+
+## Before you get started
+
+This connector uses API Key authentication. You do not need to create a provider app in the Ampersand Dashboard.
+
+### Create a Dovetail API token
+
+1. Go to your [Dovetail account settings](https://dovetail.com/settings/user/account).
+2. Enter a label for the key and create it.
+3. Copy the token and store it securely. Dovetail shows it only once.
+
+Dovetail API tokens are prefixed with `api.` and expire 30 days after creation, so you will need to regenerate the token periodically. For details, see Dovetail's [authorization documentation](https://developers.dovetail.com/docs/authorization).
+
+## Using the connector
+
+To start integrating with Dovetail:
+
+- Create a manifest file using the [proxy-only example](https://github.com/amp-labs/samples/blob/main/dovetail/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their Dovetail API token.
+- Start making [Proxy Actions](/proxy-actions) API calls against `https://dovetail.com/api`.
