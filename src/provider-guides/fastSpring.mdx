@@ -1,0 +1,89 @@
+---
+title: "FastSpring"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions) (create/update).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.fastspring.com`.
+- Subscribe Actions are not currently supported.
+
+### Supported objects
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
+<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
+  <thead style={{ display: 'table-header-group', width: '100%' }}>
+    <tr style={{ display: 'table-row', width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
+      <th style={{ width: '14%' }}>Read</th>
+      <th style={{ width: '14%' }}>Write</th>
+      <th style={{ width: '14%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody style={{ display: 'table-row-group', width: '100%' }}>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.fastspring.com/reference/list-all-accounts">accounts</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.fastspring.com/reference/list-all-orders">orders</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.fastspring.com/reference/list-all-product-paths">products</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.fastspring.com/reference/list-all-subscriptions">subscriptions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.fastspring.com/reference/list-all-processed-events">events-processed</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.fastspring.com/reference/list-all-unprocessed-events">events-unprocessed</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
+
+### Notes and limitations
+
+- **Write support**: `orders` and `subscriptions` support **update** only. All other writable objects (`accounts`, `products`) support create and update. Single-record operations only (no bulk write).
+- **Commands**: FastSpring also exposes **command**-style operations (for example subscription cancel or product deactivation). These endpoints don't map cleanly to the Read/Write model. [Write Actions](/write-actions) can still invoke those commands; for an explicit call to a command endpoint, see the [FastSpring API reference](https://developer.fastspring.com/reference/getting-started-with-your-api) and use [Proxy Actions](/proxy-actions).
+
+### Example integration
+
+To define an integration for FastSpring, use a manifest file (`amp.yaml`). For a complete example, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/fastSpring/amp.yaml).
+
+## Before you get started
+
+To integrate **FastSpring** with **Ampersand**, you need a [FastSpring](https://fastspring.com/) account and **API credentials** (API username and password) from FastSpring.
+
+FastSpring documents API access in [Getting started with your API](https://developer.fastspring.com/reference/getting-started-with-your-api), including the base URL, Basic authentication, required headers, and credential generation.
+
+### Creating FastSpring API credentials
+
+Per FastSpring’s documentation:
+
+1. In the FastSpring application, open **Developer Tools**.
+
+   ![FastSpring Developer Tools](/images/provider-guides/fastSpring/fastSpring-developer-tools.png)
+
+2. Go to **APIs** → **API Credentials**.
+
+   ![FastSpring APIs and API Credentials](/images/provider-guides/fastSpring/fastSpring-api-tab.png)
+   ![FastSpring APIs and API Credentials](/images/provider-guides/fastSpring/fastSpring-api-credentials.png)
+
+3. Use **Create** to generate credentials for the first time. FastSpring shows the username and password; the password is available only at creation time—store it securely.
+
+## Using the connector
+
+This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with FastSpring:
+
+- Create a manifest file; see [Example integration](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. Your customers enter their FastSpring API username and password when they connect their account.
+- Start using the connector:
+  - If your integration has [Read Actions](/read-actions), scheduled reads will sync data according to your configuration.
+  - If your integration has [Write Actions](/write-actions), you can call the Write API to create or update supported records.
+  - If your integration has [Proxy Actions](/proxy-actions) enabled, you can make Proxy API calls to `https://api.fastspring.com`.
+
+## Upstream API documentation
+
+- [FastSpring — Getting started with your API](https://developer.fastspring.com/reference/getting-started-with-your-api)
