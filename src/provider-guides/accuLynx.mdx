@@ -8,19 +8,100 @@ title: AccuLynx
 
 This connector supports:
 
+- [Read Actions](/read-actions), including full historic backfill. **Please note that incremental read is only supported for `jobs`, `jobs/history`, `jobs/custom-fields`, `contacts/custom-fields`, `estimates/sections`, and `company-settings/custom-fields`.**
+- [Write Actions](/write-actions).
+- [Subscribe Actions](/subscribe-actions). Ampersand creates and updates the AccuLynx webhook subscription on your behalf when the customer installs your integration — no manual webhook setup is required in the AccuLynx UI.
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.acculynx.com`.
+
+### Supported objects
+
+The AccuLynx connector supports the following objects:
+
+- [acculynx/countries](https://apidocs.acculynx.com/reference) (read only)
+- [acculynx/units-of-measure](https://apidocs.acculynx.com/reference) (read only)
+- [calendars](https://apidocs.acculynx.com/reference/getcalendars) (read only)
+- [calendars/appointments](https://apidocs.acculynx.com/reference/getcalendars) (read only)
+- [company-settings/custom-fields](https://apidocs.acculynx.com/reference/getcompanysettingscustomfields) (read only)
+- [company-settings/job-file-settings/document-folders](https://apidocs.acculynx.com/reference) (read only)
+- [company-settings/job-file-settings/insurance-companies](https://apidocs.acculynx.com/reference) (read only)
+- [company-settings/job-file-settings/job-categories](https://apidocs.acculynx.com/reference) (read only)
+- [company-settings/job-file-settings/photo-video-tags](https://apidocs.acculynx.com/reference) (read only)
+- [company-settings/job-file-settings/trade-types](https://apidocs.acculynx.com/reference) (read only)
+- [company-settings/job-file-settings/work-types](https://apidocs.acculynx.com/reference) (read only)
+- [company-settings/job-file-settings/workflow-milestones](https://apidocs.acculynx.com/reference) (read only)
+- [company-settings/leads/lead-sources](https://apidocs.acculynx.com/reference) (read only)
+- [company-settings/location-settings/account-types](https://apidocs.acculynx.com/reference) (read only)
+- [contacts](https://apidocs.acculynx.com/reference/contacts) (read, write, and subscribe)
+- [contacts/contact-types](https://apidocs.acculynx.com/reference/contacts) (read only)
+- [contacts/custom-fields](https://apidocs.acculynx.com/reference/getcontactcustomfields) (read, write, and subscribe)
+- [contacts/email-addresses](https://apidocs.acculynx.com/reference/getcontactemailaddresses) (read only)
+- [contacts/logs](https://apidocs.acculynx.com/reference/postcontactlog) (write only)
+- [contacts/phone-numbers](https://apidocs.acculynx.com/reference/contacts) (read and write)
+- [estimates](https://apidocs.acculynx.com/reference/estimates) (read only)
+- [estimates/sections](https://apidocs.acculynx.com/reference/estimates) (read only)
+- [jobs](https://apidocs.acculynx.com/reference/jobs) (read, write, and subscribe)
+- [jobs/contacts](https://apidocs.acculynx.com/reference/getjobcontacts) (read and subscribe)
+- [jobs/custom-fields](https://apidocs.acculynx.com/reference/getjobcustomfields) (read, write, and subscribe)
+- [jobs/estimates](https://apidocs.acculynx.com/reference/jobs) (read only)
+- [jobs/external-references](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [jobs/history](https://apidocs.acculynx.com/reference/jobs) (read only)
+- [jobs/initial-appointment](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [jobs/insurance/insurance-company](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [jobs/invoices](https://apidocs.acculynx.com/reference/jobs) (read and subscribe)
+- [jobs/messages](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [jobs/messages/replies](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [jobs/milestone-history](https://apidocs.acculynx.com/reference/jobs) (read and subscribe)
+- [jobs/payments/expense](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [jobs/payments/paid](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [jobs/payments/received](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [jobs/representatives](https://apidocs.acculynx.com/reference/jobs) (read and subscribe)
+- [jobs/representatives/ar-owner](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [jobs/representatives/company](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [jobs/representatives/sales-owner](https://apidocs.acculynx.com/reference/jobs) (write only)
+- [supplements](https://apidocs.acculynx.com/reference/supplements) (read only)
+- [supplements/items](https://apidocs.acculynx.com/reference/supplements) (read only)
+- [supplements/notations](https://apidocs.acculynx.com/reference/supplements) (read only)
+- [users](https://apidocs.acculynx.com/reference/users) (read only)
+
+<Note>
+Writes to top-level `jobs` and `contacts` (and all nested `jobs/*` and `contacts/*` write endpoints except custom-fields) are **create-only** — AccuLynx does not expose update endpoints for these records. Writes to `contacts/custom-fields` and `jobs/custom-fields` are **update-only**; AccuLynx does not expose an API to create, update, or delete custom field definitions themselves. Deletes are supported only on `jobs/representatives/ar-owner` and `jobs/representatives/sales-owner` (clearing the rep slot on a job).
+</Note>
+
+Custom fields defined in AccuLynx are automatically discovered and surfaced on `contacts` and `jobs` records. First-class subscribe events (create and update) are available on `contacts` and `jobs`; webhook coverage for the other 6 subscribe-tagged sub-objects is declared with [`otherEvents`](/subscribe-actions#other-events) under the parent `contacts` or `jobs` object in your `amp.yaml`.
 
 ### Example integration
 
 To define an integration for AccuLynx, create a manifest file that looks like this:
 
-```YAML
+```yaml
 # amp.yaml
 specVersion: 1.0.0
 integrations:
   - name: accuLynx-integration
     displayName: My AccuLynx Integration
     provider: accuLynx
+    read:
+      objects:
+        - objectName: jobs
+          destination: myWebhook
+          schedule: "0 */6 * * *"
+        - objectName: contacts
+          destination: myWebhook
+          schedule: "0 */6 * * *"
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: jobs
+    subscribe:
+      objects:
+        - objectName: jobs
+          destination: myWebhook
+          inheritFieldsAndMapping: true
+          createEvent:
+            enabled: always
+          updateEvent:
+            enabled: always
+            watchFieldsAuto: all
     proxy:
       enabled: true
 ```
@@ -30,12 +111,16 @@ integrations:
 To use the AccuLynx connector, you'll need an API key from your AccuLynx account. Here's how to get it:
 
 1. Sign in to your AccuLynx account as a Location or Company Administrator.
-2. From your AccuLynx Account Settings, open your [API page](https://my.acculynx.com/market/addons/app-connections).
-3. Generate a new API key with a descriptive name. Each integration within an AccuLynx account location should have its own dedicated API key.
+2. Click your name in the upper-right corner and select **Account Settings**.
+3. In the left sidebar, expand **Add-On Features and Integrations** and click **API Keys** (or go directly to the [API Keys page](https://my.acculynx.com/apikeys)).
+4. Click **Create Key**, enter a descriptive name, and select a Lead Source.
+5. Click **Create Key** in the modal, then **Copy Key** to copy the token.
 
-API keys are scoped to a single AccuLynx account location, so each Ampersand connection corresponds to one AccuLynx location.
+![AccuLynx API Key](/images/provider-guides/acculynx.gif)
 
-For more details, see the [AccuLynx Authentication documentation](https://apidocs.acculynx.com/docs/authentication).
+API keys are scoped to a single AccuLynx account location, so each Ampersand connection corresponds to one AccuLynx location. Each integration within an AccuLynx account location should have its own dedicated API key.
+
+For more details, see the [AccuLynx Authentication documentation](https://apidocs.acculynx.com/reference/authentication).
 
 ## Using the connector
 
@@ -45,5 +130,11 @@ To integrate with AccuLynx:
 
 - Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for their API key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+
