@@ -1,0 +1,97 @@
+const CATALOG_URL =
+  'https://raw.githubusercontent.com/amp-labs/connectors/main/internal/generated/catalog.json';
+
+export type Capability = 'read' | 'write' | 'proxy' | 'subscribe' | 'search';
+
+interface SearchSupport {
+  operators?: Record<string, boolean>;
+}
+
+interface SupportFlags {
+  read?: boolean;
+  write?: boolean;
+  proxy?: boolean;
+  subscribe?: boolean;
+  search?: SearchSupport;
+}
+
+interface ModuleEntry {
+  baseURL?: string;
+  displayName?: string;
+  support?: SupportFlags;
+}
+
+export interface CatalogProvider {
+  name?: string;
+  displayName?: string;
+  authType?: string;
+  baseURL?: string;
+  defaultModule?: string;
+  support?: SupportFlags;
+  modules?: Record<string, ModuleEntry>;
+}
+
+export interface Catalog {
+  data: Record<string, CatalogProvider>;
+  sourceUrl: string;
+  fetchedAt: string;
+}
+
+export async function fetchCatalog(): Promise<Catalog> {
+  const res = await fetch(CATALOG_URL);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch catalog: ${res.status} ${res.statusText}`);
+  }
+  const json = (await res.json()) as { catalog: Record<string, CatalogProvider> };
+  return {
+    data: json.catalog,
+    sourceUrl: CATALOG_URL,
+    fetchedAt: new Date().toISOString(),
+  };
+}
+
+// Module-aware: returns true if the provider-level flag is true, or any
+// module-level flag is true. Catches cases like Google, where the provider
+// has subscribe=false but modules.gmail has subscribe=true.
+export function supports(
+  provider: CatalogProvider | undefined,
+  capability: Capability,
+): boolean {
+  if (!provider) return false;
+  if (capability === 'search') {
+    if (supportsSearch(provider.support?.search)) return true;
+    for (const mod of Object.values(provider.modules ?? {})) {
+      if (supportsSearch(mod.support?.search)) return true;
+    }
+    return false;
+  }
+  if (provider.support?.[capability]) return true;
+  for (const mod of Object.values(provider.modules ?? {})) {
+    if (mod.support?.[capability]) return true;
+  }
+  return false;
+}
+
+function supportsSearch(s: SearchSupport | undefined): boolean {
+  if (!s?.operators) return false;
+  return Object.values(s.operators).some(Boolean);
+}
+
+export function hasModules(provider: CatalogProvider | undefined): boolean {
+  return !!provider?.modules && Object.keys(provider.modules).length > 0;
+}
+
+export function modulesSupporting(
+  provider: CatalogProvider | undefined,
+  capability: Capability,
+): string[] {
+  if (!provider?.modules) return [];
+  if (capability === 'search') {
+    return Object.entries(provider.modules)
+      .filter(([, mod]) => supportsSearch(mod.support?.search))
+      .map(([name]) => name);
+  }
+  return Object.entries(provider.modules)
+    .filter(([, mod]) => mod.support?.[capability])
+    .map(([name]) => name);
+}
