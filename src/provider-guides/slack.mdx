@@ -15,16 +15,16 @@ This connector supports:
 
 The Slack connector supports reading from the following objects:
 
-- [auth.teams](https://docs.slack.dev/reference/methods/auth.teams.list)
-- [conversations](https://docs.slack.dev/reference/methods/conversations.list) (supports incremental read)
-- [conversations.listConnectInvites](https://docs.slack.dev/reference/methods/conversations.listConnectInvites)
-- [conversations.requestSharedInvite](https://docs.slack.dev/reference/methods/conversations.requestSharedInvite.list)
+- [auth.teams](https://docs.slack.dev/reference/methods/auth.teams.list) (full read each time)
+- [conversations](https://docs.slack.dev/reference/methods/conversations.list) (supports incremental read, use this object to read all the channels in the workspace)
+- [conversations.listConnectInvites](https://docs.slack.dev/reference/methods/conversations.listConnectInvites) (full read each time)
+- [conversations.requestSharedInvite](https://docs.slack.dev/reference/methods/conversations.requestSharedInvite.list) (full read each time)
 - [files](https://docs.slack.dev/reference/methods/files.list) (supports incremental read)
-- [files.remote](https://docs.slack.dev/reference/methods/files.remote.list)
-- [reactions](https://docs.slack.dev/reference/methods/reactions.list)
-- [team.externalTeams](https://docs.slack.dev/reference/methods/team.externalTeams.list)
+- [files.remote](https://docs.slack.dev/reference/methods/files.remote.list) (full read each time)
+- [reactions](https://docs.slack.dev/reference/methods/reactions.list) (full read each time)
+- [team.externalTeams](https://docs.slack.dev/reference/methods/team.externalTeams.list) (full read each time)
 - [usergroups](https://docs.slack.dev/reference/methods/usergroups.list) (supports incremental read)
-- [users.conversations](https://docs.slack.dev/reference/methods/users.conversations) (supports incremental read)
+- [users.conversations](https://docs.slack.dev/reference/methods/users.conversations) (full read each time, use this object to only read channels that the user has access to)
 - [users](https://docs.slack.dev/reference/methods/users.list) (supports incremental read)
 
 The Slack connector supports writing to the following objects:
