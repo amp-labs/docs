@@ -57,11 +57,20 @@ The Gusto connector supports writing to the following objects:
 - [payrolls](https://docs.gusto.com/app-integrations/reference)
 - [work_addresses](https://docs.gusto.com/app-integrations/reference)
 
-
-
 ### Example integration
 
-For an example manifest file of a Gusto integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/gusto/amp.yaml).
+To define a minimal Gusto integration with Proxy Actions, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: gusto-integration
+    displayName: My Gusto Integration
+    provider: gusto
+    proxy:
+      enabled: true
+```
 
 ## Before you get started
 
@@ -110,7 +119,7 @@ For more details, see the [Gusto Authentication documentation](https://docs.gust
 
 To start integrating with Gusto:
 
-- Create a manifest file like the [example above](#example-integration).
+- Create a manifest file like the example above, then add Read or Write objects if your integration uses those actions.
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
