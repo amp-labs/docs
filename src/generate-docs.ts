@@ -25,6 +25,9 @@ export interface DocsConfig {
     dark?: string;
   };
   favicon?: string;
+  contextual?: {
+    options: Array<string>;
+  };
   navigation: {
     tabs: Array<{
       tab: string;
@@ -109,6 +112,9 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     name: mintConfig.name,
     colors: mintConfig.colors,
     favicon: mintConfig.favicon,
+    contextual: {
+      options: ['copy', 'view']
+    },
     navigation: {
       tabs: [
         {
