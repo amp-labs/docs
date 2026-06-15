@@ -5,7 +5,7 @@ title: Notification payloads
 The payload structure depends on your destination type:
 
 - **Webhook destinations**: Payloads include `notificationType` and `data` fields.
-- **Kinesis destinations**: Payloads contain the `data` object. The `notificationType` is included in the event metadata.
+- **Kinesis and Amazon S3 destinations**: Payloads contain the `data` object. The `notificationType` is included in the event metadata (for S3, this is the object's metadata).
 
 You can find the OpenAPI spec for notification payloads [on GitHub](https://github.com/amp-labs/openapi/blob/main/notifications/notifications.yaml), or refer to the examples below:
 
@@ -99,7 +99,7 @@ If the configuration object is too large to include inline, we will generate a s
 }
 ```
 
-**Kinesis destination payload:**
+**Kinesis and S3 destination payload:**
 ```json
 {
   "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
@@ -151,7 +151,7 @@ Note: `config` contains the complete installation configuration object including
 }
 ```
 
-**Kinesis destination payload:**
+**Kinesis and S3 destination payload:**
 ```json
 {
   "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
@@ -202,7 +202,7 @@ Note: `config` contains the complete installation configuration object including
 }
 ```
 
-**Kinesis destination payload:**
+**Kinesis and S3 destination payload:**
 ```json
 {
   "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
@@ -257,7 +257,7 @@ Note: `config` contains the complete installation configuration object including
 }
 ```
 
-**Kinesis destination payload:**
+**Kinesis and S3 destination payload:**
 ```json
 {
   "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
@@ -303,7 +303,7 @@ Note: `fromTimestamp` and `untilTimestamp` indicate the time range of the trigge
 }
 ```
 
-**Kinesis destination payload:**
+**Kinesis and S3 destination payload:**
 ```json
 {
   "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
@@ -350,7 +350,7 @@ Note: `error` describes what went wrong during the triggered read.
 }
 ```
 
-**Kinesis destination payload:**
+**Kinesis and S3 destination payload:**
 ```json
 {
   "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
@@ -431,7 +431,7 @@ Note: For partial failures, `success` is `false` with both `successfulRecordIds`
 }
 ```
 
-**Kinesis destination payload:**
+**Kinesis and S3 destination payload:**
 ```json
 {
   "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
@@ -465,7 +465,7 @@ Note: For partial failures, `success` is `false` with both `successfulRecordIds`
 }
 ```
 
-**Kinesis destination payload:**
+**Kinesis and S3 destination payload:**
 ```json
 {
   "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
@@ -495,7 +495,7 @@ Note: For partial failures, `success` is `false` with both `successfulRecordIds`
 }
 ```
 
-**Kinesis destination payload:**
+**Kinesis and S3 destination payload:**
 ```json
 {
   "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",

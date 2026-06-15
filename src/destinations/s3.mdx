@@ -1,0 +1,303 @@
+---
+title: Amazon S3 destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can write the payload as objects to your Amazon S3 bucket.
+
+## Prerequisites
+
+Before setting up an S3 destination, ensure that you have:
+- An AWS account with access to S3
+- An S3 bucket (or permissions to create one)
+- AWS credentials with the following permission:
+  - `s3:PutObject`
+
+## Create an S3 destination
+
+### Step 1: Set up your S3 bucket
+
+If you don't already have an S3 bucket, create one in the AWS Console or using the AWS CLI:
+
+```bash
+aws s3api create-bucket \
+  --bucket ampersand-integration-bucket \
+  --region us-west-2 \
+  --create-bucket-configuration LocationConstraint=us-west-2
+```
+
+### Step 2: Create AWS credentials
+
+Create an IAM user or role with permissions to write to your S3 bucket. You need:
+
+- **AWS Access Key ID**
+- **AWS Secret Access Key**
+- **AWS Session Token** (optional, for temporary credentials)
+
+**Example IAM policy:**
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::ampersand-integration-bucket/*"
+    }
+  ]
+}
+```
+
+### Step 3: Add the destination to Ampersand
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new S3 destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
+| **Bucket** | string | Yes | Name of your S3 bucket |
+| **Region** | string | Yes | AWS region where your bucket is located (e.g., `us-west-2`) |
+| **AWS Access Key ID** | string | Yes | AWS access key with S3 permissions |
+| **AWS Secret Access Key** | string | Yes | AWS secret access key |
+| **AWS Session Token** | string | No | Session token for temporary credentials |
+| **Object key template** | string | No | [JMESPath](https://jmespath.org) template for object key naming |
+| **Storage class** | string | No | S3 storage class for written objects (defaults to `STANDARD`) |
+
+<Info>
+Ampersand encrypts and stores your AWS credentials securely.
+</Info>
+
+## Refer to the destination in your integration
+
+After creating your S3 destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToS3
+    displayName: Salesforce to S3
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandS3Bucket
+        - objectName: contact
+          destination: ampersandS3Bucket
+```
+
+## Message format
+
+Ampersand writes each message as a JSON object to your S3 bucket. All data is wrapped in a top-level `data` object.
+
+In addition to the object body, each S3 object carries event metadata as [S3 object metadata](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingMetadata.html) (`x-amz-meta-*` headers), including `projectId`, `installationId`, `connectionId`, `destinationId`, `operationId`, `objectName`, `event-id`, `timestamp`, and `topic`.
+
+### Read action messages
+
+```json
+{
+  "data": {
+    "action": "read",
+    "projectId": "9482e676-4874-43a4-beea-fa8081d13a07",
+    "provider": "hubspot",
+    "groupRef": "group-id-1",
+    "groupName": "group-name-1",
+    "consumerRef": "user-id",
+    "consumerName": "user-name",
+    "installationId": "085353b1-07f1-4209-b471-7e028c0a68c8",
+    "installationUpdateTime": "2025-10-14T02:58:55.595861Z",
+    "objectName": "contacts",
+    "operationId": "0199e0a8-149d-7ee9-9f50-0514403517f9",
+    "operationTime": "2025-10-14T02:58:59.323405308Z",
+    "result": [
+      {
+        "fields": {
+          "id": "438",
+          "firstname": "Maria",
+          "lastname": "Johnson",
+          "email": "maria@example.com",
+          "city": "Brisbane"
+        },
+        "raw": {
+          "archived": false,
+          "createdAt": "2023-10-26T17:55:48.301Z",
+          "id": "438",
+          "properties": {
+            "firstname": "Maria",
+            "lastname": "Johnson",
+            "email": "maria@example.com",
+            "city": "Brisbane",
+            "createdate": "2023-10-26T17:55:48.301Z"
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+**Key fields:**
+
+- `action`: The action type (`read` or `subscribe`)
+- `projectId`: Your Ampersand project identifier
+- `provider`: The SaaS provider name (e.g., `hubspot`, `salesforce`)
+- `groupRef` / `groupName`: Customer group identifier and name
+- `consumerRef` / `consumerName`: End user identifier and name
+- `installationId`: The installation instance ID
+- `installationUpdateTime`: When the installation was last updated
+- `objectName`: The object being synced
+- `operationId`: Unique identifier for this sync operation
+- `operationTime`: When the operation completed
+- `result`: Array of records synced
+  - `fields`: Normalized field data
+  - `raw`: Original API response from the provider
+
+### Subscribe action messages
+
+Subscribe action messages follow the same structure as read actions, but include additional event-related fields within each result entry:
+
+```json
+{
+  "data": {
+    "action": "subscribe",
+    "projectId": "9482e676-4874-43a4-beea-fa8081d13a07",
+    "provider": "salesforce",
+    "groupRef": "webhook-demo-group-id",
+    "groupName": "webhook-demo-group-name",
+    "consumerRef": "user-id",
+    "consumerName": "user-name",
+    "installationId": "0c9230e1c-8fbe-4b28-bf10-2beee8fbf4ce",
+    "installationUpdateTime": "2025-04-10T23:00:52.618406Z",
+    "objectName": "company",
+    "operationTime": "2025-04-10T23:22:25.000Z",
+    "result": [
+      {
+        "fields": {
+          "id": "001Dp00000ZDgmxIAD",
+          "annualrevenue": null,
+          "website": null
+        },
+        "subscribeEventType": "update",
+        "providerEventType": "UPDATE",
+        "raw": {
+          "Id": "001Dp00000ZDgmxIAD",
+          "AnnualRevenue": null,
+          "Description": "Notes about the account",
+          "Name": "Acme Corp",
+          "Website": null,
+          "attributes": {
+            "type": "Account",
+            "url": "/services/data/v59.0/sobjects/Account/001Dp00000ZDgmxIAD"
+          }
+        },
+        "rawEvent": {
+          "ChangeEventHeader": {
+            "changeOrigin": "com/salesforce/api/soap/63.0;client=SfdcInternalAPI/",
+            "changeType": "UPDATE",
+            "changedFields": ["Description", "LastModifiedDate"],
+            "commitNumber": 12041091891110,
+            "commitTimestamp": 1744327345000,
+            "commitUser": "005Dp000003Cd1SIAS",
+            "entityName": "Account",
+            "recordId": "001Dp00000ZDgmxIAD",
+            "sequenceNumber": 1,
+            "transactionKey": "00051705-2e99-d1e5-7e7a-48e3af682d07"
+          },
+          "Description": "Notes about the account",
+          "LastModifiedDate": "2025-04-10T23:22:25.000Z"
+        }
+      }
+    ]
+  }
+}
+```
+
+**Additional fields in subscribe actions:**
+
+- `subscribeEventType`: Normalized event type (`create`, `update`, `delete`, `associationUpdate`)
+- `providerEventType`: Raw event type from the provider API
+- `rawEvent`: Original webhook event from the provider (when available)
+
+## Object key configuration
+
+Each message is written as a separate object in your bucket. You can customize the object key (the object's path within the bucket) using a JMESPath template. JMESPath is a query language for JSON. See [jmespath.org](https://jmespath.org) for the full specification.
+
+You can specify an object key template when creating an S3 destination in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/destinations). If you don't specify one, the default key is the message timestamp followed by the message ID:
+
+```
+2025-10-14T02:58:59.323405308Z_0199e0a8-149d-7ee9-9f50-0514403517f9.json
+```
+
+### Template context
+
+Your template can reference three namespaces:
+
+| Namespace | Fields |
+|-----------|--------|
+| `metadata` | `projectId`, `installationId`, `connectionId`, `destinationId`, `operationId`, `objectName`, `event-id`, `timestamp`, `topic` |
+| `time` | `year`, `month`, `day`, `hour`, `minute`, `second`, `date`, `datetime`, `unix`, `rfc3339`, `rfc3339_nano` |
+| `data` | The message payload (e.g., `data.installationId` — see [Message format](#message-format) above) |
+
+<Info>
+JMESPath is case-sensitive: `metadata.operationId` works, `metadata.operationid` does not. Fields containing a hyphen must be quoted, e.g. `metadata."event-id"`. Templates are validated when you create or update the destination.
+</Info>
+
+### Custom object key examples
+
+**Group objects by synced object name:**
+```
+join('/', [metadata.objectName, metadata.operationId])
+```
+
+**Partition by date:**
+```
+join('/', [metadata.objectName, time.date, metadata."event-id"])
+```
+
+**Add a file extension:**
+```
+join('', [time.rfc3339_nano, '_', metadata."event-id", '.json'])
+```
+
+**Use a field from the payload:**
+```
+join('/', [data.installationId, metadata.operationId])
+```
+
+<Info>
+Make sure your template produces a unique key for every message — include `metadata."event-id"` or `metadata.operationId`. If two messages evaluate to the same key, the later object overwrites the earlier one.
+</Info>
+
+## Storage class
+
+By default, objects are written with the `STANDARD` storage class. You can choose a different class when creating the destination, such as `STANDARD_IA`, `ONEZONE_IA`, `INTELLIGENT_TIERING`, `GLACIER`, `GLACIER_IR`, or `DEEP_ARCHIVE`. See [the AWS docs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html) for a comparison.
+
+## Troubleshooting
+
+### Objects not appearing in S3
+
+**Check destination configuration:**
+
+1. Verify that the bucket name and region are correct in the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/destinations).
+2. Test your AWS credentials:
+   ```bash
+   echo '{}' > test.json
+   aws s3api put-object \
+     --bucket your-bucket-name \
+     --key ampersand-test.json \
+     --body test.json
+   ```
+3. Check that IAM permissions for the credential include `s3:PutObject` on the bucket.
+
+## Limitations
+
+- **Message size**: Unlike Kinesis, S3 destinations have no practical message size limit — large payloads are written directly to your bucket.
+- **One object per message**: Each message becomes a separate S3 object. High-volume syncs produce many small objects, which affects S3 request costs.
+- **Ordering**: S3 objects are independent; there are no ordering guarantees. Use the `timestamp` object metadata or a time-based key template to order messages.
+
+<Info>
+If you have questions about scaling, contact `support@withampersand.com`.
+</Info>
