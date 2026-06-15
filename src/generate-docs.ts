@@ -290,6 +290,7 @@ const baseConfig = {
             "destinations/overview",
             "destinations/webhooks",
             "destinations/kinesis",
+            "destinations/s3",
           ]
         },
         {
