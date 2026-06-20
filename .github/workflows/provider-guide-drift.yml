@@ -33,29 +33,9 @@ jobs:
       - name: Run drift check for changed provider guides
         shell: bash
         run: |
-          changed_guides="$(
-            git diff --name-only --diff-filter=ACMRT \
-              "${{ github.event.pull_request.base.sha }}" \
-              "${{ github.sha }}" |
-            grep '^src/provider-guides/.*\.mdx$' || true
-          )"
-
-          if [ -z "$changed_guides" ]; then
-            echo "No changed provider guides to check."
-            exit 0
-          fi
-
-          args=(
-            --mode per-pr
-            --out /tmp/ampersand-provider-guide-drift
+          pnpm run drift-check -- \
+            --mode per-pr \
+            --changed-from "${{ github.event.pull_request.base.sha }}" \
+            --changed-to "${{ github.sha }}" \
+            --out /tmp/ampersand-provider-guide-drift \
             --fail-on-error
-          )
-
-          while IFS= read -r guide; do
-            if [ -z "$guide" ]; then
-              continue
-            fi
-            args+=(--changed "$guide")
-          done <<< "$changed_guides"
-
-          pnpm run drift-check -- "${args[@]}"

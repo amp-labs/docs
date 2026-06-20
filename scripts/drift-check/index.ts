@@ -1,5 +1,6 @@
 #!/usr/bin/env tsx
 import { parseArgs } from 'node:util';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import {
   fetchCatalog,
@@ -14,6 +15,50 @@ import { checkSampleLink } from './samples';
 import { recipes } from './recipes';
 import { writeReport, type Finding, type Report } from './report';
 
+// per-pr mode takes the changed set either as explicit --changed paths or as a
+// commit range (--changed-from/--changed-to) that we resolve with git here.
+function resolveChangedPaths(values: {
+  changed?: string[];
+  'changed-from'?: string;
+  'changed-to'?: string;
+}): string[] {
+  if (values.changed && values.changed.length > 0) {
+    return values.changed;
+  }
+  const from = values['changed-from'];
+  const to = values['changed-to'];
+  if (from && to) {
+    return gitChangedFiles(from, to);
+  }
+  throw new Error(
+    'per-pr mode requires either --changed <path>... or both --changed-from <sha> and --changed-to <sha>',
+  );
+}
+
+// Fail closed: a diff that cannot be computed (e.g. a shallow checkout missing a
+// commit) must not be read as "nothing changed", which would let the gate pass
+// on everything.
+function gitChangedFiles(from: string, to: string): string[] {
+  let out: string;
+  try {
+    out = execFileSync(
+      'git',
+      ['diff', '--name-only', '--diff-filter=ACMRT', from, to],
+      { encoding: 'utf8' },
+    );
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    throw new Error(
+      `Could not compute changed files from "git diff ${from} ${to}": ${message}. ` +
+        'Ensure the checkout has full history for both commits (actions/checkout fetch-depth: 0).',
+    );
+  }
+  return out
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
 async function main() {
   // Accept both `drift-check --out X` and `pnpm run drift-check -- --out X`.
   const args = process.argv.slice(2);
@@ -24,6 +69,8 @@ async function main() {
       mode: { type: 'string', default: 'full' },
       provider: { type: 'string' },
       changed: { type: 'string', multiple: true },
+      'changed-from': { type: 'string' },
+      'changed-to': { type: 'string' },
       out: { type: 'string', default: './drift-report' },
       'fail-on-error': { type: 'boolean', default: false },
     },
@@ -36,8 +83,13 @@ async function main() {
   let guides = await scanGuides();
 
   if (mode === 'per-pr') {
-    const changedSet = new Set((values.changed ?? []).map((p) => path.normalize(p)));
+    const changedSet = new Set(
+      resolveChangedPaths(values).map((p) => path.normalize(p)),
+    );
     guides = guides.filter((g) => changedSet.has(path.normalize(g.docPath)));
+    if (guides.length === 0) {
+      console.log('No changed provider guides to check.');
+    }
   } else if (mode === 'provider') {
     if (!values.provider) {
       throw new Error('--provider <key> required with --mode provider');
