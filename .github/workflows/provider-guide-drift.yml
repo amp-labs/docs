@@ -1,0 +1,61 @@
+name: Provider guide drift check
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "src/provider-guides/**/*.mdx"
+      - "scripts/drift-check/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/provider-guide-drift.yml"
+
+jobs:
+  provider-guide-drift:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+        shell: bash
+
+      - name: Run drift check for changed provider guides
+        shell: bash
+        run: |
+          changed_guides="$(
+            git diff --name-only --diff-filter=ACMRT \
+              "${{ github.event.pull_request.base.sha }}" \
+              "${{ github.sha }}" |
+            grep '^src/provider-guides/.*\.mdx$' || true
+          )"
+
+          if [ -z "$changed_guides" ]; then
+            echo "No changed provider guides to check."
+            exit 0
+          fi
+
+          args=(
+            --mode per-pr
+            --out /tmp/ampersand-provider-guide-drift
+            --fail-on-error
+          )
+
+          while IFS= read -r guide; do
+            if [ -z "$guide" ]; then
+              continue
+            fi
+            args+=(--changed "$guide")
+          done <<< "$changed_guides"
+
+          pnpm run drift-check -- "${args[@]}"
