@@ -42,7 +42,7 @@ export const recipes: Recipes = {
     { provider: 'deelSandbox', reason: 'Sandbox variant.', until: '2027-01-01' },
     {
       provider: 'greenhouseJobBoard',
-      reason: 'Connector is intentionally gated pending a product decision.',
+      reason: 'Connector is intentionally gated pending public launch decision. See ENG-4072.',
       until: '2026-09-01',
     },
     { provider: 'gustoDemo', reason: 'Demo variant.', until: '2027-01-01' },
