@@ -57,6 +57,32 @@ The connector supports reading from:
 The connector supports reading from:
 - [meeting-links](https://developers.hubspot.com/docs/api-reference/latest/scheduler/meetings/get-meeting-links)
 
+#### Event Occurrences
+
+Event occurrences represent specific actions captured at a point in time, such as form submissions, email delivery,
+sequence activity, and other **behavioral changes**. They are useful to understand when an event
+happened and how that event may relate to automation or downstream workflows.
+
+To find the event type you are interested in, use the HubSpot Events API's
+[list event types endpoint](https://developers.hubspot.com/docs/api-reference/latest/events/retrieve-events/get-event-types)
+and [list custom event definitions](https://developers.hubspot.com/docs/api-reference/latest/events/define-events/create-event-definition).
+Standard event type names begin with `e_`, while customer-specific custom event definitions use the `fullyQualifiedName` property with a `pe{HubId}_` prefix.
+Standard events are safe to use across all customers,
+while custom event definitions apply only to the specific customer account where they are defined.
+
+The HubSpot connector exposes event types as individual objects
+that follow the convention `AMPERSAND-event-occurrences-<EVENT_TYPE>`.
+<Note>
+  Note that **occurrences** is spelled with two c's and two r's.
+</Note>
+
+Here are a few examples of the objects you would read for different event types -
+* `AMPERSAND-event-occurrences-e_call_ended`
+* `AMPERSAND-event-occurrences-e_form_submission`
+* `AMPERSAND-event-occurrences-e_mta_bounced_email_v2`
+* `AMPERSAND-event-occurrences-e_visited_page`
+* `AMPERSAND-event-occurrences-pe148543157_this_is_my_event`
+
 #### Reading users and owners
 
 To read users from your customer's HubSpot workspace, enable the `crm.objects.users.read` scope and add `users` as an object in `amp.yaml`:
