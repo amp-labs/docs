@@ -71,40 +71,7 @@ Custom fields defined in AccuLynx are automatically discovered and surfaced on `
 
 ### Example integration
 
-To define an integration for AccuLynx, create a manifest file that looks like this:
-
-```yaml
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: accuLynx-integration
-    displayName: My AccuLynx Integration
-    provider: accuLynx
-    read:
-      objects:
-        - objectName: jobs
-          destination: myWebhook
-          schedule: "0 */6 * * *"
-        - objectName: contacts
-          destination: myWebhook
-          schedule: "0 */6 * * *"
-    write:
-      objects:
-        - objectName: contacts
-        - objectName: jobs
-    subscribe:
-      objects:
-        - objectName: jobs
-          destination: myWebhook
-          inheritFieldsAndMapping: true
-          createEvent:
-            enabled: always
-          updateEvent:
-            enabled: always
-            watchFieldsAuto: all
-    proxy:
-      enabled: true
-```
+For an example manifest file of an AccuLynx integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/accuLynx/amp.yaml).
 
 ## Before you get started
 
