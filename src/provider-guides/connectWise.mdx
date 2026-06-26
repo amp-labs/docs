@@ -7,63 +7,80 @@ title: ConnectWise
 
 This connector supports:
 - [Read Actions](/read-actions), including full historic backfill and incremental read. Please note that incremental read is unreliable due to ConnectWise API limitations. You may get more data than what is within the time range.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://{{.region}}.myconnectwise.net`.
 
-The ConnectWise connector supports reading from all standard objects, including the following objects:
-- activities
-- agreements
-- attachments
-- companies
-- configurations
-- contacts
-- countries
-- currencies
-- customFieldInfos
-- customReports
-- emailTemplates
-- entityTypes
-- expense/entries
-- finance/agreements/types
-- finance/billingCycles/info
-- finance/billingTerms/info
-- glAccounts
-- groups
-- invoices
-- knowledgeBaseArticles
-- knowledgeBaseCategories
-- kpis
-- management
-- noteTypes
-- sales/opportunities
-- orders
-- priorities
-- products
-- project/projectTemplates
+The ConnectWise connector supports reading from all standard objects and writing to most standard objects, including the following:
 
-- projects
-- purchaseorders
-- quotas
-- ratings
-- reports
-- rmaActions
-- rmaStatuses
-- schedule/entries
-- securityRoles
-- service/boards
-- service/slas/info
-- service/tickets
-- sources
-- states
-- system/departments
-- system/documents
-- system/locations
-- system/members
-- system/securityroles/info
-- system/workflows/events/actions
-- ticketLinks
-- time/entries
-- warehouses
-- workflows
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
+<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
+  <thead style={{ display: 'table-header-group', width: '100%' }}>
+    <tr style={{ display: 'table-row', width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '40%' }}>Object</th>
+      <th style={{ width: '30%' }}>Read</th>
+      <th style={{ width: '30%' }}>Write</th>
+    </tr>
+  </thead>
+  <tbody style={{ display: 'table-row-group', width: '100%' }}>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>activities</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>agreements</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>attachments</td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>companies</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>configurations</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>contacts</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>countries</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>currencies</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>customFieldInfos</td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>customReports</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>emailTemplates</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>entityTypes</td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>expense/entries</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>finance/agreements/types</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>finance/billingCycles/info</td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>finance/billingTerms/info</td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>glAccounts</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>groups</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>invoices</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>knowledgeBaseArticles</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>knowledgeBaseCategories</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>kpis</td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>management</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>noteTypes</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>sales/opportunities</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>orders</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>priorities</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>products</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>project/projectTemplates</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>projects</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>purchaseorders</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>quotas</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>ratings</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>reports</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>rmaActions</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>rmaStatuses</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>schedule/entries</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>securityRoles</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>service/boards</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>service/slas/info</td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>service/tickets</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>sources</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>states</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>system/departments</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>system/documents</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>system/locations</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>system/members</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>system/securityroles/info</td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>system/workflows/events/actions</td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>ticketLinks</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>time/entries</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>warehouses</td><td><Check /></td><td><Check /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}>workflows</td><td><Check /></td><td><Check /></td></tr>
+  </tbody>
+</table>
+</div>
 
 
 See the official [OpenAPI](https://developer.connectwise.com/Products/ConnectWise_PSA/REST) file for the complete list. (Requires ConnectWise Developer Network account)
