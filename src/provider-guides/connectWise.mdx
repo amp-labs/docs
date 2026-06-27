@@ -15,22 +15,25 @@ The ConnectWise connector supports reading from all standard objects and writing
 
 export const rows = [
   {
-    label: "activities", read: true, write: true, subscribe: false,
+    label: "activities", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Activities"
   }, {
-    label: "agreements", read: true, write: true, subscribe: false,
-    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Agreements",
+    label: "activities", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Activities"
   }, {
     label: "attachments", read: true, write: false, subscribe: false,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/WorkflowAttachments",
   }, {
-    label: "companies", read: true, write: true, subscribe: false,
+    label: "companies", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Companies",
   }, {
-    label: "configurations", read: true, write: true, subscribe: false,
+    label: "catalog", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/CatalogsItem",
+  }, {
+    label: "configurations", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Configurations",
   }, {
-    label: "contacts", read: true, write: true, subscribe: false,
+    label: "contacts", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Contacts",
   }, {
     label: "countries", read: true, write: true, subscribe: false,
@@ -51,7 +54,7 @@ export const rows = [
     label: "entityTypes", read: true, write: false, subscribe: false,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/EntityTypes",
   }, {
-    label: "expense/entries", read: true, write: true, subscribe: false,
+    label: "expense/entries", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ExpenseEntries",
   }, {
     label: "finance/agreements/types", read: true, write: true, subscribe: false,
@@ -69,7 +72,7 @@ export const rows = [
     label: "groups", read: true, write: true, subscribe: false,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Groups",
   }, {
-    label: "invoices", read: true, write: true, subscribe: false,
+    label: "invoices", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Invoices",
   }, {
     label: "knowledgeBaseArticles", read: true, write: true, subscribe: false,
@@ -87,7 +90,7 @@ export const rows = [
     label: "noteTypes", read: true, write: true, subscribe: false,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/CompanyNoteTypes",
   }, {
-    label: "sales/opportunities", read: true, write: true, subscribe: false,
+    label: "sales/opportunities", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Opportunities",
   }, {
     label: "orders", read: true, write: true, subscribe: false,
@@ -102,10 +105,13 @@ export const rows = [
     label: "project/projectTemplates", read: true, write: true, subscribe: false,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ProjectTemplates",
   }, {
-    label: "projects", read: true, write: true, subscribe: false,
+    label: "project/tickets", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ProjectTickets",
+  }, {
+    label: "projects", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Projects",
   }, {
-    label: "purchaseorders", read: true, write: true, subscribe: false,
+    label: "purchaseorders", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/PurchaseOrders",
   }, {
     label: "quotas", read: true, write: true, subscribe: false,
@@ -123,7 +129,7 @@ export const rows = [
     label: "rmaStatuses", read: true, write: true, subscribe: false,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/RmaStatuses",
   }, {
-    label: "schedule/entries", read: true, write: true, subscribe: false,
+    label: "schedule/entries", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ScheduleEntries",
   }, {
     label: "securityRoles", read: true, write: true, subscribe: false,
@@ -135,7 +141,8 @@ export const rows = [
     label: "service/slas/info", read: true, write: false, subscribe: false,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/SLAInfos",
   }, {
-    label: "service/tickets", read: true, write: true, subscribe: false,
+    label: "service/tickets", read: true, write: true,
+    subscribe: <a href={"#row/project/tickets"}>Use project/tickets</a>,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Tickets",
   }, {
     label: "sources", read: true, write: true, subscribe: false,
@@ -153,7 +160,7 @@ export const rows = [
     label: "system/locations", read: true, write: true, subscribe: false,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Locations",
   }, {
-    label: "system/members", read: true, write: true, subscribe: false,
+    label: "system/members", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Members",
   }, {
     label: "system/securityroles/info", read: true, write: false, subscribe: false,
@@ -165,7 +172,7 @@ export const rows = [
     label: "ticketLinks", read: true, write: true, subscribe: false,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ServiceTicketLinks",
   }, {
-    label: "time/entries", read: true, write: true, subscribe: false,
+    label: "time/entries", read: true, write: true, subscribe: true,
     href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/TimeEntries",
   }, {
     label: "warehouses", read: true, write: true, subscribe: false,
@@ -178,6 +185,18 @@ export const rows = [
 
 export const Check = () => <span>✅</span>
 export const Cross = () => <span>🚫</span>
+
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  if (typeof value === "string" && value.startsWith("<")) {
+    return <span dangerouslySetInnerHTML={{__html: value}}/>;
+  }
+
+  return value;
+}
 
 <div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
   <table style={{
@@ -200,13 +219,13 @@ export const Cross = () => <span>🚫</span>
     {[...rows]
       .sort((a, b) => a.label.localeCompare(b.label))
       .map((row) => (
-        <tr key={row.label}>
+        <tr id={"row/" + row.label} key={row.label}>
           <td style={{textAlign: "left"}}>
             <a href={row.href}>{row.label}</a>
           </td>
-          <td>{row.read ? <Check/> : <Cross/>}</td>
-          <td>{row.write ? <Check/> : <Cross/>}</td>
-          <td>{row.subscribe ? <Check/> : <Cross/>}</td>
+          <td>{renderCellValue(row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+          <td>{renderCellValue(row.subscribe)}</td>
         </tr>
       ))}
     </tbody>
