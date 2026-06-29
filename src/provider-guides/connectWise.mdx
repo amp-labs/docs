@@ -232,8 +232,24 @@ export function renderCellValue(value) {
   </table>
 </div>
 
-
 See the official [OpenAPI](https://developer.connectwise.com/Products/ConnectWise_PSA/REST) file for the complete list. (Requires ConnectWise Developer Network account)
+
+Connector supports write operations using a [JSON Patch document](https://datatracker.ietf.org/doc/html/rfc6902#section-3) passed in `record.patch`.
+When performing an update, `record.id` must also be provided so the connector can resolve which record to patch.
+
+Write payload example for the `contacts` object:
+```json
+{
+  "groupRef": "{{connectWiseGroupID}}",
+  "type": "update",
+  "record": {
+    "id": "58016",
+    "patch": [
+      {"op": "replace", "path": "/firstName", "value": "John"}
+    ]
+  }
+}
+```
 
 ### Example integration
 
