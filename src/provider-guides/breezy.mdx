@@ -7,7 +7,7 @@ title: "Breezy"
 ### Supported actions
 
 This connector supports:
-- [Read Actions](/read-actions), including full historic backfill and incremental read for `positions`. All other supported objects use a full read on each schedule.
+- [Read Actions](/read-actions), including full historic backfill. Incremental read is supported for `positions` only. For all other objects, a full read will be done on each scheduled read.
 - [Write Actions](/write-actions) (create/update) for `positions` only.
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.breezy.hr`.
 - Subscribe Actions are not currently supported.
@@ -91,7 +91,7 @@ For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/r
 - **Write support**: Only `positions` supports create and update. Single-record operations only (no bulk write).
 - **Delete support (`positions` only)**: The connector exposes a Delete operation for `positions`, but Breezy does not provide an HTTP `DELETE` method for job postings. Delete is implemented as a **soft delete (archive)** — the position is moved to `archived` state via `PUT …/position/{id}/state` and no longer appears in the default published positions list. The record is not permanently removed from Breezy.
 - **Create state**: New positions are created in **`draft`** state. The default positions Read list returns **`published`** positions only. After creating a position via Write, publish it in Breezy (or via the state API) if you need it to appear in the default Read results.
-- **Incremental read**: Connector-side incremental read is supported for `positions` using `updated_date`. `companies`, `pipelines`, `categories`, `departments`, `questionnaires`, and `templates` are small lookup lists and use a full read on each schedule.
+- **Incremental read**: Incremental read is supported for `positions` only. `companies`, `pipelines`, `categories`, `departments`, `questionnaires`, and `templates` are read in full on each scheduled read.
 - **Pipelines**: The connector returns the default hiring pipeline from Breezy’s pipelines map response.
 
 ### Example integration
