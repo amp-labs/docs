@@ -14,29 +14,74 @@ This connector supports:
 
 ### Supported objects
 
+export const rows = [
+  {
+    label: "categories", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-pipelines-1-1",
+  }, {
+    label: "companies", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/companies",
+  }, {
+    label: "departments", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-pipelines-1",
+  }, {
+    label: "pipelines", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-pipelines",
+  }, {
+    label: "positions", read: true, write: true, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-positions",
+  }, {
+    label: "questionnaires", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-questionnaires",
+  }, {
+    label: "templates", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-templates",
+  },
+]
+
 export const Check = () => <span>✅</span>
 export const Cross = () => <span>🚫</span>
 
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  return value;
+}
+
 <div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
-<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
-  <thead style={{ display: 'table-header-group', width: '100%' }}>
-    <tr style={{ display: 'table-row', width: '100%' }}>
-      <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
-      <th style={{ width: '14%' }}>Read</th>
-      <th style={{ width: '14%' }}>Write</th>
-      <th style={{ width: '14%' }}>Subscribe</th>
-    </tr>
-  </thead>
-  <tbody style={{ display: 'table-row-group', width: '100%' }}>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.breezy.hr/reference/companies">companies</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.breezy.hr/reference/company-positions">positions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.breezy.hr/reference/company-pipelines">pipelines</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.breezy.hr/reference/company-pipelines-1-1">categories</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.breezy.hr/reference/company-pipelines-1">departments</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.breezy.hr/reference/company-questionnaires">questionnaires</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developer.breezy.hr/reference/company-templates">templates</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
-  </tbody>
-</table>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table',
+  }}>
+    <thead style={{ display: 'table-header-group', width: '100%' }}>
+      <tr style={{ display: 'table-row', width: '100%' }}>
+        <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
+        <th style={{ width: '14%' }}>Read</th>
+        <th style={{ width: '14%' }}>Write</th>
+        <th style={{ width: '14%' }}>Subscribe</th>
+      </tr>
+    </thead>
+    <tbody style={{ display: 'table-row-group', width: '100%' }}>
+      {[...rows]
+        .sort((a, b) => a.label.localeCompare(b.label))
+        .map((row) => (
+          <tr key={row.label}>
+            <td style={{ textAlign: 'left' }}>
+              <a href={row.href}>{row.label}</a>
+            </td>
+            <td>{renderCellValue(row.read)}</td>
+            <td>{renderCellValue(row.write)}</td>
+            <td>{renderCellValue(row.subscribe)}</td>
+          </tr>
+        ))}
+    </tbody>
+  </table>
 </div>
 
 For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/reference/objects-&-fields/get-object-metadata-via-connection) to inspect what’s available for a specific connection.
