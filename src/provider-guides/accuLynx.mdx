@@ -67,7 +67,7 @@ The AccuLynx connector supports the following objects:
 Writes to top-level `jobs` and `contacts` (and all nested `jobs/*` and `contacts/*` write endpoints except custom-fields) are **create-only** — AccuLynx does not expose update endpoints for these records. Writes to `contacts/custom-fields` and `jobs/custom-fields` are **update-only**; AccuLynx does not expose an API to create, update, or delete custom field definitions themselves. Deletes are supported only on `jobs/representatives/ar-owner` and `jobs/representatives/sales-owner` (clearing the rep slot on a job).
 </Note>
 
-Custom fields defined in AccuLynx are automatically discovered and surfaced on `contacts` and `jobs` records. First-class subscribe events (create and update) are available on `contacts` and `jobs`; webhook coverage for the other 6 subscribe-tagged sub-objects is declared with [`otherEvents`](/subscribe-actions#other-events) under the parent `contacts` or `jobs` object in your `amp.yaml`.
+Custom fields defined in AccuLynx are automatically discovered and surfaced on `contacts` and `jobs` records. First-class subscribe events (create and update) are available on `contacts` and `jobs`; webhook coverage for the other 6 subscribe-tagged sub-objects is declared with [`otherEvents`](/subscribe-actions#other-events) under the parent `contacts` or `jobs` object in your `amp.yaml`. AccuLynx also publishes additional `jobs` change topics — such as financial, appointment, category, and trade/work-type changes — that can be subscribed to via `otherEvents`; see AccuLynx's [webhook topics reference](https://apidocs.acculynx.com/reference/gettopics) for the complete list.
 
 ### Example integration
 
