@@ -93,7 +93,6 @@ For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/r
 - **Create state**: New positions are created in **`draft`** state. The default positions Read list returns **`published`** positions only. After creating a position via Write, publish it in Breezy (or via the state API) if you need it to appear in the default Read results.
 - **Incremental read**: Connector-side incremental read is supported for `positions` using `updated_date`. `companies`, `pipelines`, `categories`, `departments`, `questionnaires`, and `templates` are small lookup lists and use a full read on each schedule.
 - **Pipelines**: The connector returns the default hiring pipeline from Breezy’s pipelines map response.
-- **Company scoping**: Objects other than `companies` require a **Company ID** (see [Before you get started](#before-you-get-started)).
 - **Custom fields**: Breezy positions may include `custom_attributes` in API responses. This connector does not schema-map custom fields separately; Write passes through JSON fields accepted by [Breezy’s position APIs](https://developer.breezy.hr/reference/company-positions-add).
 
 ### Example integration
@@ -104,12 +103,9 @@ To define an integration for Breezy, use a manifest file (`amp.yaml`). For a com
 
 To connect _Breezy_ with _Ampersand_, you will need [a Breezy account](https://breezy.hr/).
 
-Once your account is created, you'll need to obtain the following:
+Once your account is created, you'll need to obtain an **API Key** — a Breezy access token used as the `Authorization` header on API requests. Obtain it via the [`/v3/signin`](https://developer.breezy.hr/reference/signin) endpoint.
 
-- **API Key** — Breezy access token used as the `Authorization` header on API requests. Obtain it via the [`/v3/signin`](https://developer.breezy.hr/reference/signin) endpoint.
-- **Company ID** — The `_id` of the company to scope company-level objects (`positions`, `pipelines`, `categories`, `departments`, `questionnaires`, `templates`). Required as metadata when using the connector.
-
-Your customers enter these when they install the integration via the InstallIntegration UI.
+Your customers enter this when they install the integration via the InstallIntegration UI.
 
 ### Create a Breezy account
 
@@ -119,7 +115,7 @@ Here's how you can sign up for a Breezy account:
 
 ### Obtain API credentials
 
-Follow the steps below to obtain your access token and Company ID from Breezy:
+Follow the steps below to obtain your access token from Breezy:
 
 1. Obtain an access token by calling Breezy’s sign-in endpoint with a user that has API access. See [Authorization](https://developer.breezy.hr/reference/authorization) and [`/v3/signin`](https://developer.breezy.hr/reference/signin).
 
@@ -132,19 +128,6 @@ Follow the steps below to obtain your access token and Company ID from Breezy:
 
    Use the `access_token` value from the response as the API key.
 
-2. **Company ID**: List companies accessible to the token:
-
-   ```bash
-   curl -H "Authorization: YOUR_ACCESS_TOKEN" \
-     https://api.breezy.hr/v3/companies
-   ```
-
-   Copy the `_id` field for the company you want to connect. Use this value as **Company ID** in Ampersand — not `friendly_id`.
-
-<Note>
-Company-scoped API calls (positions, pipelines, categories, departments, questionnaires, templates) require the correct `_id` from `GET /v3/companies`. A token that cannot access the supplied Company ID will return authorization errors on write operations.
-</Note>
-
 ## Using the connector
 
 This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
@@ -155,7 +138,7 @@ To start integrating with Breezy:
 - Create a manifest file; see [Example integration](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key and Company ID.
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key.
 - Start using the connector!
   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
