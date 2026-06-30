@@ -89,7 +89,6 @@ For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/r
 ### Notes and limitations
 
 - **Write support**: Only `positions` supports create and update. Single-record operations only (no bulk write).
-- **Delete support (`positions` only)**: The connector exposes a Delete operation for `positions`, but Breezy does not provide an HTTP `DELETE` method for job postings. Delete is implemented as a **soft delete (archive)** — the position is moved to `archived` state via `PUT …/position/{id}/state` and no longer appears in the default published positions list. The record is not permanently removed from Breezy.
 - **Create state**: New positions are created in **`draft`** state. The default positions Read list returns **`published`** positions only. After creating a position via Write, publish it in Breezy (or via the state API) if you need it to appear in the default Read results.
 - **Incremental read**: Incremental read is supported for `positions` only. `companies`, `pipelines`, `categories`, `departments`, `questionnaires`, and `templates` are read in full on each scheduled read.
 - **Pipelines**: The connector returns the default hiring pipeline from Breezy’s pipelines map response.
