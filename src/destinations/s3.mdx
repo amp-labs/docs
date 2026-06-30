@@ -91,7 +91,7 @@ integrations:
 
 ## Message format
 
-Ampersand writes each message as a JSON object to your S3 bucket. All data is wrapped in a top-level `data` object.
+Ampersand writes each message as a JSON object to your S3 bucket. The object body is the message payload itself — there is no wrapper envelope.
 
 In addition to the object body, each S3 object carries event metadata as [S3 object metadata](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingMetadata.html) (`x-amz-meta-*` headers), including `projectId`, `installationId`, `connectionId`, `destinationId`, `operationId`, `objectName`, `event-id`, `timestamp`, and `topic`.
 
@@ -99,43 +99,41 @@ In addition to the object body, each S3 object carries event metadata as [S3 obj
 
 ```json
 {
-  "data": {
-    "action": "read",
-    "projectId": "9482e676-4874-43a4-beea-fa8081d13a07",
-    "provider": "hubspot",
-    "groupRef": "group-id-1",
-    "groupName": "group-name-1",
-    "consumerRef": "user-id",
-    "consumerName": "user-name",
-    "installationId": "085353b1-07f1-4209-b471-7e028c0a68c8",
-    "installationUpdateTime": "2025-10-14T02:58:55.595861Z",
-    "objectName": "contacts",
-    "operationId": "0199e0a8-149d-7ee9-9f50-0514403517f9",
-    "operationTime": "2025-10-14T02:58:59.323405308Z",
-    "result": [
-      {
-        "fields": {
-          "id": "438",
+  "action": "read",
+  "projectId": "9482e676-4874-43a4-beea-fa8081d13a07",
+  "provider": "hubspot",
+  "groupRef": "group-id-1",
+  "groupName": "group-name-1",
+  "consumerRef": "user-id",
+  "consumerName": "user-name",
+  "installationId": "085353b1-07f1-4209-b471-7e028c0a68c8",
+  "installationUpdateTime": "2025-10-14T02:58:55.595861Z",
+  "objectName": "contacts",
+  "operationId": "0199e0a8-149d-7ee9-9f50-0514403517f9",
+  "operationTime": "2025-10-14T02:58:59.323405308Z",
+  "result": [
+    {
+      "fields": {
+        "id": "438",
+        "firstname": "Maria",
+        "lastname": "Johnson",
+        "email": "maria@example.com",
+        "city": "Brisbane"
+      },
+      "raw": {
+        "archived": false,
+        "createdAt": "2023-10-26T17:55:48.301Z",
+        "id": "438",
+        "properties": {
           "firstname": "Maria",
           "lastname": "Johnson",
           "email": "maria@example.com",
-          "city": "Brisbane"
-        },
-        "raw": {
-          "archived": false,
-          "createdAt": "2023-10-26T17:55:48.301Z",
-          "id": "438",
-          "properties": {
-            "firstname": "Maria",
-            "lastname": "Johnson",
-            "email": "maria@example.com",
-            "city": "Brisbane",
-            "createdate": "2023-10-26T17:55:48.301Z"
-          }
+          "city": "Brisbane",
+          "createdate": "2023-10-26T17:55:48.301Z"
         }
       }
-    ]
-  }
+    }
+  ]
 }
 ```
 
@@ -161,57 +159,55 @@ Subscribe action messages follow the same structure as read actions, but include
 
 ```json
 {
-  "data": {
-    "action": "subscribe",
-    "projectId": "9482e676-4874-43a4-beea-fa8081d13a07",
-    "provider": "salesforce",
-    "groupRef": "webhook-demo-group-id",
-    "groupName": "webhook-demo-group-name",
-    "consumerRef": "user-id",
-    "consumerName": "user-name",
-    "installationId": "0c9230e1-8fbe-4b28-bf10-2beee8fbf4ce",
-    "installationUpdateTime": "2025-04-10T23:00:52.618406Z",
-    "objectName": "company",
-    "operationTime": "2025-04-10T23:22:25.000Z",
-    "result": [
-      {
-        "fields": {
-          "id": "001Dp00000ZDgmxIAD",
-          "annualrevenue": null,
-          "website": null
-        },
-        "subscribeEventType": "update",
-        "providerEventType": "UPDATE",
-        "raw": {
-          "Id": "001Dp00000ZDgmxIAD",
-          "AnnualRevenue": null,
-          "Description": "Notes about the account",
-          "Name": "Acme Corp",
-          "Website": null,
-          "attributes": {
-            "type": "Account",
-            "url": "/services/data/v59.0/sobjects/Account/001Dp00000ZDgmxIAD"
-          }
-        },
-        "rawEvent": {
-          "ChangeEventHeader": {
-            "changeOrigin": "com/salesforce/api/soap/63.0;client=SfdcInternalAPI/",
-            "changeType": "UPDATE",
-            "changedFields": ["Description", "LastModifiedDate"],
-            "commitNumber": 12041091891110,
-            "commitTimestamp": 1744327345000,
-            "commitUser": "005Dp000003Cd1SIAS",
-            "entityName": "Account",
-            "recordId": "001Dp00000ZDgmxIAD",
-            "sequenceNumber": 1,
-            "transactionKey": "00051705-2e99-d1e5-7e7a-48e3af682d07"
-          },
-          "Description": "Notes about the account",
-          "LastModifiedDate": "2025-04-10T23:22:25.000Z"
+  "action": "subscribe",
+  "projectId": "9482e676-4874-43a4-beea-fa8081d13a07",
+  "provider": "salesforce",
+  "groupRef": "webhook-demo-group-id",
+  "groupName": "webhook-demo-group-name",
+  "consumerRef": "user-id",
+  "consumerName": "user-name",
+  "installationId": "0c9230e1-8fbe-4b28-bf10-2beee8fbf4ce",
+  "installationUpdateTime": "2025-04-10T23:00:52.618406Z",
+  "objectName": "company",
+  "operationTime": "2025-04-10T23:22:25.000Z",
+  "result": [
+    {
+      "fields": {
+        "id": "001Dp00000ZDgmxIAD",
+        "annualrevenue": null,
+        "website": null
+      },
+      "subscribeEventType": "update",
+      "providerEventType": "UPDATE",
+      "raw": {
+        "Id": "001Dp00000ZDgmxIAD",
+        "AnnualRevenue": null,
+        "Description": "Notes about the account",
+        "Name": "Acme Corp",
+        "Website": null,
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v59.0/sobjects/Account/001Dp00000ZDgmxIAD"
         }
+      },
+      "rawEvent": {
+        "ChangeEventHeader": {
+          "changeOrigin": "com/salesforce/api/soap/63.0;client=SfdcInternalAPI/",
+          "changeType": "UPDATE",
+          "changedFields": ["Description", "LastModifiedDate"],
+          "commitNumber": 12041091891110,
+          "commitTimestamp": 1744327345000,
+          "commitUser": "005Dp000003Cd1SIAS",
+          "entityName": "Account",
+          "recordId": "001Dp00000ZDgmxIAD",
+          "sequenceNumber": 1,
+          "transactionKey": "00051705-2e99-d1e5-7e7a-48e3af682d07"
+        },
+        "Description": "Notes about the account",
+        "LastModifiedDate": "2025-04-10T23:22:25.000Z"
       }
-    ]
-  }
+    }
+  ]
 }
 ```
 
