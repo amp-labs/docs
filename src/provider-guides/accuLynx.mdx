@@ -64,7 +64,16 @@ The AccuLynx connector supports the following objects:
 - [users](https://apidocs.acculynx.com/reference/users) (read only)
 
 <Note>
-Writes to top-level `jobs` and `contacts` (and all nested `jobs/*` and `contacts/*` write endpoints except custom-fields) are **create-only** — AccuLynx does not expose update endpoints for these records. Writes to `contacts/custom-fields` and `jobs/custom-fields` are **update-only**; AccuLynx does not expose an API to create, update, or delete custom field definitions themselves. Deletes are supported only on `jobs/representatives/ar-owner` and `jobs/representatives/sales-owner` (clearing the rep slot on a job).
+<Note>
+**Writes are limited by AccuLynx's API:**
+
+- **Create-only:** `jobs`, `contacts`, and their nested write endpoints (except custom-fields) — AccuLynx has no update endpoints for these records.
+- **Update-only:** `contacts/custom-fields` and `jobs/custom-fields` — you can change a custom field's value, but cannot create, update, or delete the field definitions themselves.
+</Note>
+
+**Custom fields** defined in AccuLynx are automatically discovered and surfaced on `contacts` and `jobs` records.
+
+**Subscribe events** for create and update are first-class on `contacts` and `jobs`. The other 6 subscribe-tagged objects above — plus extra `jobs` change topics (financial, appointment, category, trade/work-type, and more) — are subscribed via [`otherEvents`](/subscribe-actions#other-events) under the parent `contacts` or `jobs` object in your `amp.yaml`. See AccuLynx's [webhook topics reference](https://apidocs.acculynx.com/reference/gettopics) for the full list.
 </Note>
 
 Custom fields defined in AccuLynx are automatically discovered and surfaced on `contacts` and `jobs` records. First-class subscribe events (create and update) are available on `contacts` and `jobs`; webhook coverage for the other 6 subscribe-tagged sub-objects is declared with [`otherEvents`](/subscribe-actions#other-events) under the parent `contacts` or `jobs` object in your `amp.yaml`. AccuLynx also publishes additional `jobs` change topics — such as financial, appointment, category, and trade/work-type changes — that can be subscribed to via `otherEvents`; see AccuLynx's [webhook topics reference](https://apidocs.acculynx.com/reference/gettopics) for the complete list.
