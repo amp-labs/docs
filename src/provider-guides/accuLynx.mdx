@@ -17,63 +17,108 @@ This connector supports:
 
 The AccuLynx connector supports the following objects:
 
-- [acculynx/countries](https://apidocs.acculynx.com/reference) (read only)
-- [acculynx/units-of-measure](https://apidocs.acculynx.com/reference) (read only)
-- [calendars](https://apidocs.acculynx.com/reference/getcalendars) (read only)
-- [calendars/appointments](https://apidocs.acculynx.com/reference/getcalendars) (read only)
-- [company-settings/custom-fields](https://apidocs.acculynx.com/reference/getcompanysettingscustomfields) (read only)
-- [company-settings/job-file-settings/document-folders](https://apidocs.acculynx.com/reference) (read only)
-- [company-settings/job-file-settings/insurance-companies](https://apidocs.acculynx.com/reference) (read only)
-- [company-settings/job-file-settings/job-categories](https://apidocs.acculynx.com/reference) (read only)
-- [company-settings/job-file-settings/photo-video-tags](https://apidocs.acculynx.com/reference) (read only)
-- [company-settings/job-file-settings/trade-types](https://apidocs.acculynx.com/reference) (read only)
-- [company-settings/job-file-settings/work-types](https://apidocs.acculynx.com/reference) (read only)
-- [company-settings/job-file-settings/workflow-milestones](https://apidocs.acculynx.com/reference) (read only)
-- [company-settings/leads/lead-sources](https://apidocs.acculynx.com/reference) (read only)
-- [company-settings/location-settings/account-types](https://apidocs.acculynx.com/reference) (read only)
-- [contacts](https://apidocs.acculynx.com/reference/contacts) (read, write, and subscribe)
-- [contacts/contact-types](https://apidocs.acculynx.com/reference/contacts) (read only)
-- [contacts/custom-fields](https://apidocs.acculynx.com/reference/getcontactcustomfields) (read, write, and subscribe)
-- [contacts/email-addresses](https://apidocs.acculynx.com/reference/getcontactemailaddresses) (read only)
-- [contacts/logs](https://apidocs.acculynx.com/reference/postcontactlog) (write only)
-- [contacts/phone-numbers](https://apidocs.acculynx.com/reference/contacts) (read and write)
-- [estimates](https://apidocs.acculynx.com/reference/estimates) (read only)
-- [estimates/sections](https://apidocs.acculynx.com/reference/estimates) (read only)
-- [jobs](https://apidocs.acculynx.com/reference/jobs) (read, write, and subscribe)
-- [jobs/contacts](https://apidocs.acculynx.com/reference/getjobcontacts) (read and subscribe)
-- [jobs/custom-fields](https://apidocs.acculynx.com/reference/getjobcustomfields) (read, write, and subscribe)
-- [jobs/estimates](https://apidocs.acculynx.com/reference/jobs) (read only)
-- [jobs/external-references](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [jobs/history](https://apidocs.acculynx.com/reference/jobs) (read only)
-- [jobs/initial-appointment](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [jobs/insurance/insurance-company](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [jobs/invoices](https://apidocs.acculynx.com/reference/jobs) (read and subscribe)
-- [jobs/messages](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [jobs/messages/replies](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [jobs/milestone-history](https://apidocs.acculynx.com/reference/jobs) (read and subscribe)
-- [jobs/payments/expense](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [jobs/payments/paid](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [jobs/payments/received](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [jobs/representatives](https://apidocs.acculynx.com/reference/jobs) (read and subscribe)
-- [jobs/representatives/ar-owner](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [jobs/representatives/company](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [jobs/representatives/sales-owner](https://apidocs.acculynx.com/reference/jobs) (write only)
-- [supplements](https://apidocs.acculynx.com/reference/supplements) (read only)
-- [supplements/items](https://apidocs.acculynx.com/reference/supplements) (read only)
-- [supplements/notations](https://apidocs.acculynx.com/reference/supplements) (read only)
-- [users](https://apidocs.acculynx.com/reference/users) (read only)
+export const rows = [
+  { label: "acculynx/countries", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getacculynxcountries" },
+  { label: "acculynx/units-of-measure", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getacculynxunitsofmeasure" },
+  { label: "calendars", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getcalendars" },
+  { label: "calendars/appointments", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getcalendars" },
+  { label: "company-settings/custom-fields", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getcompanysettingscustomfields" },
+  { label: "company-settings/job-file-settings/document-folders", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getcompanydocumentfolders" },
+  { label: "company-settings/job-file-settings/insurance-companies", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getinsurancecompanies" },
+  { label: "company-settings/job-file-settings/job-categories", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getcompanysettingsjobsettingsjobcategories" },
+  { label: "company-settings/job-file-settings/photo-video-tags", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getphotovideotags" },
+  { label: "company-settings/job-file-settings/trade-types", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getcompanysettingsjobsettingstradetypes" },
+  { label: "company-settings/job-file-settings/work-types", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getcompanysettingsjobsettingsworktypes" },
+  { label: "company-settings/job-file-settings/workflow-milestones", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getmilestones" },
+  { label: "company-settings/leads/lead-sources", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getactiveleadsources" },
+  { label: "company-settings/location-settings/account-types", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getactiveaccounttypes" },
+  { label: "contacts", read: true, write: true, subscribe: true, href: "https://apidocs.acculynx.com/reference/contacts" },
+  { label: "contacts/contact-types", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/contacts" },
+  { label: "contacts/custom-fields", read: true, write: true, subscribe: true, href: "https://apidocs.acculynx.com/reference/getcontactcustomfields" },
+  { label: "contacts/email-addresses", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/getcontactemailaddresses" },
+  { label: "contacts/logs", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/postcontactlog" },
+  { label: "contacts/phone-numbers", read: true, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/contacts" },
+  { label: "estimates", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/estimates" },
+  { label: "estimates/sections", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/estimates" },
+  { label: "jobs", read: true, write: true, subscribe: true, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/contacts", read: true, write: false, subscribe: true, href: "https://apidocs.acculynx.com/reference/getjobcontacts" },
+  { label: "jobs/custom-fields", read: true, write: true, subscribe: true, href: "https://apidocs.acculynx.com/reference/getjobcustomfields" },
+  { label: "jobs/estimates", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/external-references", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/history", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/initial-appointment", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/insurance/insurance-company", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/invoices", read: true, write: false, subscribe: true, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/messages", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/messages/replies", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/milestone-history", read: true, write: false, subscribe: true, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/payments/expense", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/payments/paid", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/payments/received", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/representatives", read: true, write: false, subscribe: true, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/representatives/ar-owner", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/representatives/company", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "jobs/representatives/sales-owner", read: false, write: true, subscribe: false, href: "https://apidocs.acculynx.com/reference/jobs" },
+  { label: "supplements", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/supplements" },
+  { label: "supplements/items", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/supplements" },
+  { label: "supplements/notations", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/supplements" },
+  { label: "users", read: true, write: false, subscribe: false, href: "https://apidocs.acculynx.com/reference/users" },
+]
 
-<Note>
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  if (typeof value === "string" && value.startsWith("<")) {
+    return <span dangerouslySetInnerHTML={{__html: value}}/>;
+  }
+
+  return value;
+}
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+      <th style={{width: '20%'}}>Read</th>
+      <th style={{width: '20%'}}>Write</th>
+      <th style={{width: '20%'}}>Subscribe</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td style={{textAlign: "left"}}>
+            <a href={row.href}>{row.label}</a>
+          </td>
+          <td>{renderCellValue(row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+          <td>{renderCellValue(row.subscribe)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
 <Note>
 **Writes are limited by AccuLynx's API:**
 
 - **Create-only:** `jobs`, `contacts`, and their nested write endpoints (except custom-fields) — AccuLynx has no update endpoints for these records.
 - **Update-only:** `contacts/custom-fields` and `jobs/custom-fields` — you can change a custom field's value, but cannot create, update, or delete the field definitions themselves.
-</Note>
-
-**Custom fields** defined in AccuLynx are automatically discovered and surfaced on `contacts` and `jobs` records.
-
-**Subscribe events** for create and update are first-class on `contacts` and `jobs`. The other 6 subscribe-tagged objects above — plus extra `jobs` change topics (financial, appointment, category, trade/work-type, and more) — are subscribed via [`otherEvents`](/subscribe-actions#other-events) under the parent `contacts` or `jobs` object in your `amp.yaml`. See AccuLynx's [webhook topics reference](https://apidocs.acculynx.com/reference/gettopics) for the full list.
 </Note>
 
 Custom fields defined in AccuLynx are automatically discovered and surfaced on `contacts` and `jobs` records. First-class subscribe events (create and update) are available on `contacts` and `jobs`; webhook coverage for the other 6 subscribe-tagged sub-objects is declared with [`otherEvents`](/subscribe-actions#other-events) under the parent `contacts` or `jobs` object in your `amp.yaml`. AccuLynx also publishes additional `jobs` change topics — such as financial, appointment, category, and trade/work-type changes — that can be subscribed to via `otherEvents`; see AccuLynx's [webhook topics reference](https://apidocs.acculynx.com/reference/gettopics) for the complete list.
