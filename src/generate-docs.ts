@@ -482,6 +482,7 @@ const baseConfig = {
             "provider-guides/timely",
             "provider-guides/tipalti",
             "provider-guides/vtiger",
+            "provider-guides/wealthbox",
             "provider-guides/webex",
             "provider-guides/webflow",
             "provider-guides/whereby",
