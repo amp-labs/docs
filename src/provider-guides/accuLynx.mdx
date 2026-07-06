@@ -121,7 +121,9 @@ export function renderCellValue(value) {
 - **Update-only:** `contacts/custom-fields` and `jobs/custom-fields` — you can change a custom field's value, but cannot create, update, or delete the field definitions themselves.
 </Note>
 
-Custom fields defined in AccuLynx are automatically discovered and surfaced on `contacts` and `jobs` records. First-class subscribe events (create and update) are available on `contacts` and `jobs`; webhook coverage for the other 6 subscribe-tagged sub-objects is declared with [`otherEvents`](/subscribe-actions#other-events) under the parent `contacts` or `jobs` object in your `amp.yaml`. AccuLynx also publishes additional `jobs` change topics — such as financial, appointment, category, and trade/work-type changes — that can be subscribed to via `otherEvents`; see AccuLynx's [webhook topics reference](https://apidocs.acculynx.com/reference/gettopics) for the complete list.
+**Custom fields** defined in AccuLynx are automatically discovered and surfaced on `contacts` and `jobs` records.
+
+**Subscribe events:** create and update are supported directly on `contacts` and `jobs`. The other 6 subscribe-enabled objects in the table above are subscribed via [`otherEvents`](/subscribe-actions#other-events) under their parent `contacts` or `jobs` object in your `amp.yaml`. AccuLynx emits additional `jobs` change topics too — financial, appointment, category, trade/work-type, and more — which you subscribe to the same way. See AccuLynx's [webhook topics reference](https://apidocs.acculynx.com/reference/gettopics) for the full list.
 
 ### Example integration
 
