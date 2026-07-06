@@ -1,0 +1,77 @@
+---
+title: "Square"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://connect.squareup.com`.
+
+### Example integration
+
+To define an integration for Square, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: squareIntegration
+    displayName: My Square Integration
+    provider: square
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To integrate Square with Ampersand, you will need a [Square account](https://squareup.com/signup).
+
+Once your account is created, you'll need to create a Square app and obtain the following credentials from it:
+
+- Client ID
+- Client Secret
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Creating a Square app
+
+1. Log in to the [Square developer portal](https://developer.squareup.com/apps).
+2. Click **+** to create a new application and give it a name.
+3. Open the application and select the **OAuth** tab.
+4. Set the redirect/callback URL to: `https://api.withampersand.com/callbacks/v1/oauth`
+5. Copy the **Application ID** (Client ID) and **Application Secret** (Client Secret) from the **OAuth** page.
+6. Note the [OAuth permissions (scopes)](https://developer.squareup.com/docs/oauth-api/square-permissions) your integration requires.
+
+   ![Square OAuth](/images/customer-guides/square_oauth.gif)
+
+### Add your Square app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Square integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Select **Provider Apps**.
+
+4. Select **Square** from the **Provider** list.
+
+5. Enter the **Client ID** and **Client Secret** obtained from your Square app.
+
+6. Enter the scopes your integration requires.
+
+7. Click **Save Changes**.
+
+  ![Ampersand Project Selection](/images/provider-guides/square_amp.png)
+
+## Using the connector
+
+To start integrating with Square:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically handle the authentication with Square.
