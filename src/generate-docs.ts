@@ -473,6 +473,7 @@ const baseConfig = {
             "provider-guides/snapchatAds",
             "provider-guides/snowflake",
             "provider-guides/solarwindsServiceDesk",
+            "provider-guides/square",
             "provider-guides/stripe",
             "provider-guides/superSend",
             "provider-guides/surveyMonkey",
