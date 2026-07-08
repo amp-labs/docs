@@ -331,6 +331,7 @@ const baseConfig = {
             "provider-guides/braintree",
             "provider-guides/braze",
             "provider-guides/breakcold",
+            "provider-guides/breezy",
             "provider-guides/brevo",
             "provider-guides/bynder",
             "provider-guides/calendly",
