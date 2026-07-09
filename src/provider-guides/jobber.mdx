@@ -8,51 +8,122 @@ title: "Jobber"
 This connector supports:
 - [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Jobber instance will be done for each scheduled read.
 - [Write Actions](/write-actions).
+- [Subscribe Actions](/subscribe-actions). Ampersand creates and manages the Jobber webhook subscriptions on your behalf when the customer installs your integration — no manual webhook setup is required in the Jobber UI.
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.getjobber.com/api/graphql`.
 
 ### Supported Objects
-The Jobber connector supports reading from the following objects:
-- appAlerts
-- apps
-- capitalLoans
-- clientEmails
-- clientPhones
-- clients
-- expenses
-- invoices
-- jobs
-- paymentsRecords
-- payoutRecords
-- products
-- properties
-- quotes
-- requestSettingsCollection
-- requests
-- scheduledItems
-- similarClients
-- tasks
-- taxRates
-- timeSheetEntries
-- users
-- vehicles
-- visits
 
-The Jobber connector supports writing to the following objects:
-- clients
-- events
-- expenses
-- jobs
-- productsAndServices
-- quotes
-- requests
-- taxes
-- taxGroups
-- vehicles
+The Jobber connector supports the following objects:
+
+export const rows = [
+  { label: "appAlerts", read: true, write: false, subscribe: false },
+  { label: "apps", read: true, write: false, subscribe: false },
+  { label: "capitalLoans", read: true, write: false, subscribe: false },
+  { label: "clientEmails", read: true, write: false, subscribe: false },
+  { label: "clientPhones", read: true, write: false, subscribe: false },
+  { label: "clients", read: true, write: true, subscribe: true },
+  { label: "events", read: false, write: true, subscribe: false },
+  { label: "expenses", read: true, write: true, subscribe: true },
+  { label: "invoices", read: true, write: false, subscribe: true },
+  { label: "jobs", read: true, write: true, subscribe: true },
+  { label: "paymentsRecords", read: true, write: false, subscribe: false },
+  { label: "payoutRecords", read: true, write: false, subscribe: true },
+  { label: "products", read: true, write: false, subscribe: true },
+  { label: "productsAndServices", read: false, write: true, subscribe: false },
+  { label: "properties", read: true, write: false, subscribe: true },
+  { label: "quotes", read: true, write: true, subscribe: true },
+  { label: "requestSettingsCollection", read: true, write: false, subscribe: false },
+  { label: "requests", read: true, write: true, subscribe: true },
+  { label: "scheduledItems", read: true, write: false, subscribe: false },
+  { label: "similarClients", read: true, write: false, subscribe: false },
+  { label: "tasks", read: true, write: false, subscribe: false },
+  { label: "taxGroups", read: false, write: true, subscribe: false },
+  { label: "taxRates", read: true, write: false, subscribe: false },
+  { label: "taxes", read: false, write: true, subscribe: false },
+  { label: "timeSheetEntries", read: true, write: false, subscribe: true },
+  { label: "users", read: true, write: false, subscribe: true },
+  { label: "vehicles", read: true, write: true, subscribe: false },
+  { label: "visits", read: true, write: false, subscribe: true },
+]
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+      <th style={{width: '20%'}}>Read</th>
+      <th style={{width: '20%'}}>Write</th>
+      <th style={{width: '20%'}}>Subscribe</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td style={{textAlign: "left"}}>{row.label}</td>
+          <td>{row.read ? <Check/> : <Cross/>}</td>
+          <td>{row.write ? <Check/> : <Cross/>}</td>
+          <td>{row.subscribe ? <Check/> : <Cross/>}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
 
 <Note>
 For detailed information about available objects, refer to the [Jobber Developer Documentation](https://developer.getjobber.com/docs/).
 The full list of read and write objects can be retrieved after logging in. To explore them, go to "Manage Apps", click "Actions" from the respective app, and then click "Test in GraphiQL".
 </Note>
+
+### Subscribe events
+
+All 12 subscribe-enabled objects in the table above support **create**, **update**, and **delete** events, with one exception: `users` has no delete event, because Jobber's API does not expose a `USER_DESTROY` webhook topic.
+
+Please note that:
+
+- **Watched fields are not supported.** Jobber webhook payloads do not include changed-field data, so field-level update filtering (`requiredWatchFields`) is not available. Use `watchFieldsAuto: all` for update events — they will fire on any change to the record.
+- **Scopes gate event delivery.** Jobber only delivers events for an object if your Jobber app holds the matching read scope (e.g. `read_clients` for client events). Make sure the scopes selected when [creating your Jobber app](#creating-a-jobber-app) cover every object you subscribe to.
+
+In addition to create, update, and delete, Jobber emits a few non-CRUD lifecycle topics. You can subscribe to these on the owning object via [`otherEvents`](/subscribe-actions#other-events):
+
+| Object | Pass-through events |
+| ------ | ------------------- |
+| quotes | `QUOTE_SENT`, `QUOTE_APPROVED` |
+| jobs   | `JOB_CLOSED` |
+| visits | `VISIT_COMPLETE` |
+
+For example:
+
+```yaml
+subscribe:
+  objects:
+    - objectName: quotes
+      destination: jobberWebhook
+      inheritFieldsAndMapping: true
+      createEvent:
+        enabled: always
+      updateEvent:
+        enabled: always
+        watchFieldsAuto: all
+      deleteEvent:
+        enabled: always
+      otherEvents:
+        - QUOTE_SENT
+        - QUOTE_APPROVED
+```
+
+Jobber also emits a handful of account-level topics that don't map to a subscribable object: `PAYMENT_CREATE`, `PAYMENT_UPDATE`, `PAYMENT_DESTROY`, `APP_CONNECT`, `APP_DISCONNECT`, `ON_MY_WAY_TRACKING_LINK_REQUEST`, and `MARKETING_ITEM_UPDATE`. These can be added to the `otherEvents` list of any subscribed object.
 
 ### Example integration
 
@@ -112,9 +183,9 @@ Upon creation, the app will display the necessary credentials: **Client ID** and
 To start integrating with Jobber:
 - Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/jobber/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
-- If you are using Read Actions, create a [destination](/destinations).
+- If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
 - Start using the connector!
-   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
    - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
