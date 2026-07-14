@@ -637,6 +637,983 @@
         "x-codegen-request-body-name": "connectOAuthParams"
       }
     },
+    "/custom-auth/connect": {
+      "post": {
+        "operationId": "customAuthConnect",
+        "summary": "Start or continue a multi-step custom auth flow",
+        "description": "Drives a multi-step custom auth flow (browser redirects and/or server-side credential-exchange calls). Call it once with the flow inputs to start; if the response contains a redirect, open it, then call again with the returned sessionId and the provider's callback params to continue. Repeat until the response contains a connection. Used by the prebuilt UI components; only providers whose ProviderInfo has customOpts.multiStep present can use this endpoint.\n",
+        "tags": [
+          "Connection"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Custom Auth Connect Request",
+                "type": "object",
+                "description": "Request body for the /custom-auth/connect endpoint. The first call supplies the flow inputs; subsequent calls supply sessionId and callbackParams to resume after a redirect.",
+                "required": [
+                  "projectIdOrName"
+                ],
+                "properties": {
+                  "projectIdOrName": {
+                    "type": "string",
+                    "description": "The Ampersand project ID or project name. Required on the first call.",
+                    "example": "my-project"
+                  },
+                  "provider": {
+                    "type": "string",
+                    "description": "The provider that this app connects to. Required on the first call (when sessionId is not present); ignored on resume calls. Conditional requirement is enforced at the application layer.",
+                    "example": "bill"
+                  },
+                  "groupRef": {
+                    "type": "string",
+                    "description": "Your application's identifier for the organization or workspace that this connection belongs to. Supplied on the first call; ignored on resume calls (the parked flow's identity is used).",
+                    "example": "group-123"
+                  },
+                  "groupName": {
+                    "type": "string",
+                    "description": "The display name for the group. Defaults to groupRef if not provided. Supplied on the first call; ignored on resume calls.",
+                    "example": "Organization Name"
+                  },
+                  "consumerRef": {
+                    "type": "string",
+                    "description": "The ID that your app uses to identify the user whose SaaS credential will be used. Supplied on the first call; ignored on resume calls (the parked flow's identity is used).",
+                    "example": "user_123456"
+                  },
+                  "consumerName": {
+                    "type": "string",
+                    "description": "The display name for the consumer. Defaults to consumerRef if not provided. Supplied on the first call; ignored on resume calls.",
+                    "example": "John Doe"
+                  },
+                  "providerMetadata": {
+                    "description": "Additional provider-specific metadata collected from the user.",
+                    "title": "Provider Metadata",
+                    "type": "object",
+                    "additionalProperties": {
+                      "title": "Provider Metadata Info",
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "source"
+                      ],
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "description": "The value of the metadata field",
+                          "example": "1234567890"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source of the metadata field",
+                          "enum": [
+                            "input",
+                            "token",
+                            "provider"
+                          ],
+                          "example": "input"
+                        },
+                        "displayName": {
+                          "type": "string",
+                          "description": "The human-readable name for the field",
+                          "example": "Account ID"
+                        }
+                      }
+                    }
+                  },
+                  "providerAppId": {
+                    "type": "string",
+                    "description": "ID of the provider app. If omitted, the default provider app set up on the Dashboard is assumed.",
+                    "example": "32356abe-d2fd-49c7-9030-abdcbc6456d4"
+                  },
+                  "customAuth": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "description": "The consumer-supplied custom auth inputs (keyed by CustomAuthInput.name). Supplied on the first call (when sessionId is not present).",
+                    "example": {
+                      "userName": "admin@acme.com",
+                      "password": "hunter2"
+                    }
+                  },
+                  "sessionId": {
+                    "type": "string",
+                    "description": "Identifies an in-progress flow to resume after a redirect. Returned in a prior redirect response. When present, provider and customAuth are not required.",
+                    "example": "7f3c1e2a-9b0d-4a1f-8c2e-1d2f3a4b5c6d"
+                  },
+                  "callbackParams": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "description": "The query/body params the provider sent to the callback, forwarded to resume the flow.",
+                    "example": {
+                      "tenant": "9e1477fd-54ef-41fe-b747-bc9e6a11a925"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Custom Auth Connect Response",
+                  "type": "object",
+                  "description": "Response from /custom-auth/connect. Exactly one of redirect or connection is set. A redirect means the client should open the URL and call again with sessionId + callbackParams; a connection means the flow is complete.",
+                  "oneOf": [
+                    {
+                      "required": [
+                        "redirect"
+                      ],
+                      "properties": {
+                        "redirect": {
+                          "title": "Redirect Response",
+                          "type": "object",
+                          "description": "Instructs the client to open a URL (e.g. in a popup) to continue a custom auth flow, then resume by calling /custom-auth/connect with the sessionId.",
+                          "required": [
+                            "url",
+                            "sessionId"
+                          ],
+                          "properties": {
+                            "url": {
+                              "type": "string",
+                              "description": "The URL the client should open to continue the flow.",
+                              "example": "https://login.microsoftonline.com/common/adminconsent?client_id=xxx"
+                            },
+                            "sessionId": {
+                              "type": "string",
+                              "description": "The flow identifier to pass back to /custom-auth/connect once the provider redirects to the callback.",
+                              "example": "7f3c1e2a-9b0d-4a1f-8c2e-1d2f3a4b5c6d"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "required": [
+                        "connection"
+                      ],
+                      "properties": {
+                        "connection": {
+                          "title": "Connection",
+                          "required": [
+                            "id",
+                            "createTime",
+                            "group",
+                            "consumer",
+                            "projectId",
+                            "provider",
+                            "authScheme",
+                            "status"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "The connection ID.",
+                              "example": "connection-123"
+                            },
+                            "projectId": {
+                              "type": "string",
+                              "description": "The Ampersand project ID.",
+                              "example": "project-456"
+                            },
+                            "provider": {
+                              "type": "string",
+                              "description": "The SaaS provider that this Connection is for.",
+                              "example": "salesforce"
+                            },
+                            "providerApp": {
+                              "title": "Provider App",
+                              "required": [
+                                "clientId",
+                                "createTime",
+                                "id",
+                                "projectId",
+                                "provider"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "The provider app ID.",
+                                  "example": "provider-app-123"
+                                },
+                                "projectId": {
+                                  "type": "string",
+                                  "description": "The Ampersand project ID.",
+                                  "example": "project-456"
+                                },
+                                "externalRef": {
+                                  "type": "string",
+                                  "description": "The ID used by the provider to identify the app (optional).",
+                                  "example": "external-id-123"
+                                },
+                                "provider": {
+                                  "type": "string",
+                                  "description": "The SaaS provider that this app connects to.",
+                                  "example": "salesforce"
+                                },
+                                "clientId": {
+                                  "type": "string",
+                                  "description": "The OAuth client ID for this app.",
+                                  "example": "client-id-123"
+                                },
+                                "scopes": {
+                                  "type": "array",
+                                  "description": "The OAuth scopes for this app.",
+                                  "items": {
+                                    "type": "string",
+                                    "example": [
+                                      "oauth",
+                                      "offline",
+                                      "crm.read"
+                                    ]
+                                  }
+                                },
+                                "metadata": {
+                                  "title": "Provider App Metadata",
+                                  "type": "object",
+                                  "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                                  "properties": {
+                                    "authQueryParams": {
+                                      "type": "object",
+                                      "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                                      "additionalProperties": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "example": {
+                                        "optional_scope": [
+                                          "automation.sequences.read"
+                                        ]
+                                      }
+                                    },
+                                    "providerParams": {
+                                      "type": "object",
+                                      "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                                      "additionalProperties": {
+                                        "type": "string"
+                                      },
+                                      "example": {
+                                        "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                                        "gcpProjectId": "my-gcp-project",
+                                        "gcpPubSubTopicName": "my-topic"
+                                      }
+                                    }
+                                  }
+                                },
+                                "createTime": {
+                                  "type": "string",
+                                  "description": "The time the provider app was created.",
+                                  "format": "date-time"
+                                },
+                                "updateTime": {
+                                  "type": "string",
+                                  "description": "The time the provider app was updated.",
+                                  "format": "date-time"
+                                }
+                              }
+                            },
+                            "group": {
+                              "title": "Group",
+                              "required": [
+                                "createTime",
+                                "groupName",
+                                "groupRef",
+                                "projectId"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "groupRef": {
+                                  "type": "string",
+                                  "description": "The ID of the user group that has access to this installation.",
+                                  "example": "group-123"
+                                },
+                                "groupName": {
+                                  "type": "string",
+                                  "description": "The name of the user group that has access to this installation.",
+                                  "example": "Super Customer"
+                                },
+                                "projectId": {
+                                  "type": "string",
+                                  "description": "The Ampersand project ID.",
+                                  "example": "project-456"
+                                },
+                                "createTime": {
+                                  "type": "string",
+                                  "description": "The time the group was created.",
+                                  "format": "date-time",
+                                  "example": "2023-07-13T21:34:44.816354Z"
+                                },
+                                "updateTime": {
+                                  "type": "string",
+                                  "description": "The time the group was last updated.",
+                                  "format": "date-time",
+                                  "example": "2023-07-13T21:34:44.816354Z"
+                                }
+                              }
+                            },
+                            "consumer": {
+                              "title": "Consumer",
+                              "required": [
+                                "consumerName",
+                                "consumerRef",
+                                "createTime",
+                                "projectId"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "consumerRef": {
+                                  "type": "string",
+                                  "description": "The consumer reference.",
+                                  "example": "consumer-123"
+                                },
+                                "consumerName": {
+                                  "type": "string",
+                                  "description": "The name of the consumer.",
+                                  "example": "Super Customer"
+                                },
+                                "projectId": {
+                                  "type": "string",
+                                  "description": "The Ampersand project ID.",
+                                  "example": "project-456"
+                                },
+                                "createTime": {
+                                  "type": "string",
+                                  "description": "The time the consumer was created.",
+                                  "format": "date-time",
+                                  "example": "2023-07-13T21:34:44.816354Z"
+                                },
+                                "updateTime": {
+                                  "type": "string",
+                                  "description": "The time the consumer was last updated.",
+                                  "format": "date-time",
+                                  "example": "2023-07-13T21:34:44.816354Z"
+                                }
+                              }
+                            },
+                            "providerWorkspaceRef": {
+                              "type": "string",
+                              "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
+                              "example": "provider-workspace-123"
+                            },
+                            "providerConsumerRef": {
+                              "type": "string",
+                              "description": "If available, the ID that Salesforce/Hubspot uses to identify this user (e.g. Salesforce has IDs in the form of https://login.salesforce.com/id/00D4x0000019CQTEA2/0054x000000orJ4AA)",
+                              "example": "provider-consumer-123"
+                            },
+                            "createTime": {
+                              "type": "string",
+                              "description": "The time the connection was created.",
+                              "format": "date-time",
+                              "example": "2023-07-13T21:34:44.816354Z"
+                            },
+                            "updateTime": {
+                              "type": "string",
+                              "description": "The time the connection was last updated.",
+                              "format": "date-time",
+                              "example": "2023-07-13T21:34:44.816354Z"
+                            },
+                            "authScheme": {
+                              "type": "string",
+                              "description": "The authentication scheme used for this connection.",
+                              "example": "oauth2/authorizationCode",
+                              "enum": [
+                                "none",
+                                "apiKey",
+                                "basic",
+                                "oauth2/authorizationCode",
+                                "oauth2/authorizationCodePKCE",
+                                "oauth2/clientCredentials",
+                                "oauth2/password"
+                              ]
+                            },
+                            "status": {
+                              "type": "string",
+                              "description": "The status of the connection.\n- `created`: The connection has just been created or the access token was just refreshed.\n- `working`: The connection has successfully been used to make a request.\n- `bad_credentials`: The connection encountered credential-related issues when making a request, or when attempting to refresh the access token.\n",
+                              "example": "working",
+                              "enum": [
+                                "created",
+                                "working",
+                                "bad_credentials"
+                              ]
+                            },
+                            "oauth2AuthorizationCode": {
+                              "title": "OAuth2 AuthorizationCode Token",
+                              "type": "object",
+                              "properties": {
+                                "accessToken": {
+                                  "type": "object",
+                                  "required": [
+                                    "token"
+                                  ],
+                                  "description": "The access token for the connection.",
+                                  "properties": {
+                                    "token": {
+                                      "type": "string"
+                                    },
+                                    "issuedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "example": "2024-04-22T18:55:28.456076Z"
+                                    },
+                                    "expiresAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "example": "2024-10-22T18:55:28.456076Z"
+                                    }
+                                  }
+                                },
+                                "refreshToken": {
+                                  "type": "object",
+                                  "required": [
+                                    "token"
+                                  ],
+                                  "description": "The refresh token to use for the connection.",
+                                  "properties": {
+                                    "token": {
+                                      "type": "string"
+                                    },
+                                    "issuedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "example": "2024-04-22T18:55:28.456076Z"
+                                    },
+                                    "expiresAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "example": "2024-10-22T18:55:28.456076Z"
+                                    }
+                                  }
+                                },
+                                "scopes": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "The scopes for the tokens."
+                                }
+                              }
+                            },
+                            "apiKey": {
+                              "type": "string",
+                              "description": "The API key used while making the connection.",
+                              "example": "api-key-123"
+                            },
+                            "providerMetadata": {
+                              "title": "Provider Metadata",
+                              "type": "object",
+                              "additionalProperties": {
+                                "title": "Provider Metadata Info",
+                                "type": "object",
+                                "required": [
+                                  "value",
+                                  "source"
+                                ],
+                                "properties": {
+                                  "value": {
+                                    "type": "string",
+                                    "description": "The value of the metadata field",
+                                    "example": "1234567890"
+                                  },
+                                  "source": {
+                                    "type": "string",
+                                    "description": "The source of the metadata field",
+                                    "enum": [
+                                      "input",
+                                      "token",
+                                      "provider"
+                                    ],
+                                    "example": "input"
+                                  },
+                                  "displayName": {
+                                    "type": "string",
+                                    "description": "The human-readable name for the field",
+                                    "example": "Account ID"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "Input Validation Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "API Problem",
+                      "type": "object",
+                      "allOf": [
+                        {
+                          "title": "Problem",
+                          "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that identifies the problem type",
+                              "default": "about:blank"
+                            },
+                            "href": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                            },
+                            "title": {
+                              "type": "string",
+                              "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                              "example": "Service Unavailable"
+                            },
+                            "status": {
+                              "type": "integer",
+                              "format": "int32",
+                              "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                              "minimum": 400,
+                              "maximum": 600,
+                              "exclusiveMaximum": true,
+                              "example": 503
+                            },
+                            "detail": {
+                              "type": "string",
+                              "description": "A human-readable explanation specific to this occurrence of the problem"
+                            },
+                            "instance": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                            }
+                          },
+                          "example": {
+                            "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                            "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                            "title": "Description of the type of problem that occurred",
+                            "status": 400,
+                            "detail": "Description of specific occurrence of the problem",
+                            "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                          }
+                        }
+                      ],
+                      "properties": {
+                        "subsystem": {
+                          "type": "string",
+                          "description": "The subsystem that generated the problem",
+                          "example": "api"
+                        },
+                        "time": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "The time the problem occurred, formatted as RFC-3339",
+                          "example": "2024-04-22T18:55:28.456076Z"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "A unique identifier for the request, useful for debugging",
+                          "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                        },
+                        "causes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "description": "A brief description of something which caused the problem",
+                            "example": "database connection failed"
+                          },
+                          "example": [
+                            "database connection failed",
+                            "database query failed",
+                            "unable to fetch user"
+                          ],
+                          "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                        },
+                        "remedy": {
+                          "type": "string",
+                          "description": "A brief description of how to resolve the problem",
+                          "example": "Shorten your input to be under 100 characters"
+                        },
+                        "supportEmail": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "An email address to contact for support",
+                          "example": "support@withampersand.com"
+                        },
+                        "supportPhone": {
+                          "type": "string",
+                          "description": "A phone number to contact for support",
+                          "example": "+1-555-555-5555"
+                        },
+                        "supportUrl": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "A URL to contact for support",
+                          "example": "https://withampersand.com/support"
+                        },
+                        "retryable": {
+                          "type": "boolean",
+                          "description": "Whether the request can be retried",
+                          "example": false
+                        },
+                        "retryAfter": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                          "example": "2024-04-22T18:55:28.456076Z"
+                        },
+                        "context": {
+                          "type": "object",
+                          "description": "Additional context for the problem",
+                          "additionalProperties": true,
+                          "example": {
+                            "name": "Rick Sanchez"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "issues": {
+                      "type": "array",
+                      "items": {
+                        "title": "Input Validation Issue",
+                        "type": "object",
+                        "description": "An issue detected during input validation.\n",
+                        "allOf": [
+                          {
+                            "title": "API Problem",
+                            "type": "object",
+                            "allOf": [
+                              {
+                                "title": "Problem",
+                                "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that identifies the problem type",
+                                    "default": "about:blank"
+                                  },
+                                  "href": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                                    "example": "Service Unavailable"
+                                  },
+                                  "status": {
+                                    "type": "integer",
+                                    "format": "int32",
+                                    "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                                    "minimum": 400,
+                                    "maximum": 600,
+                                    "exclusiveMaximum": true,
+                                    "example": 503
+                                  },
+                                  "detail": {
+                                    "type": "string",
+                                    "description": "A human-readable explanation specific to this occurrence of the problem"
+                                  },
+                                  "instance": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                                  }
+                                },
+                                "example": {
+                                  "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                                  "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                                  "title": "Description of the type of problem that occurred",
+                                  "status": 400,
+                                  "detail": "Description of specific occurrence of the problem",
+                                  "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "subsystem": {
+                                "type": "string",
+                                "description": "The subsystem that generated the problem",
+                                "example": "api"
+                              },
+                              "time": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "The time the problem occurred, formatted as RFC-3339",
+                                "example": "2024-04-22T18:55:28.456076Z"
+                              },
+                              "requestId": {
+                                "type": "string",
+                                "description": "A unique identifier for the request, useful for debugging",
+                                "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                              },
+                              "causes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "description": "A brief description of something which caused the problem",
+                                  "example": "database connection failed"
+                                },
+                                "example": [
+                                  "database connection failed",
+                                  "database query failed",
+                                  "unable to fetch user"
+                                ],
+                                "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                              },
+                              "remedy": {
+                                "type": "string",
+                                "description": "A brief description of how to resolve the problem",
+                                "example": "Shorten your input to be under 100 characters"
+                              },
+                              "supportEmail": {
+                                "type": "string",
+                                "format": "email",
+                                "description": "An email address to contact for support",
+                                "example": "support@withampersand.com"
+                              },
+                              "supportPhone": {
+                                "type": "string",
+                                "description": "A phone number to contact for support",
+                                "example": "+1-555-555-5555"
+                              },
+                              "supportUrl": {
+                                "type": "string",
+                                "format": "uri",
+                                "description": "A URL to contact for support",
+                                "example": "https://withampersand.com/support"
+                              },
+                              "retryable": {
+                                "type": "boolean",
+                                "description": "Whether the request can be retried",
+                                "example": false
+                              },
+                              "retryAfter": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                                "example": "2024-04-22T18:55:28.456076Z"
+                              },
+                              "context": {
+                                "type": "object",
+                                "description": "Additional context for the problem",
+                                "additionalProperties": true,
+                                "example": {
+                                  "name": "Rick Sanchez"
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "properties": {
+                          "in": {
+                            "type": "string",
+                            "description": "The location of the invalid input",
+                            "enum": [
+                              "body",
+                              "header",
+                              "path",
+                              "query"
+                            ]
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the invalid input"
+                          },
+                          "value": {
+                            "description": "The value of the erroneous input"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "type": "about:blank",
+                    "title": "Bad Request",
+                    "status": 400,
+                    "detail": "The input message is incorrect",
+                    "instance": "123456-1234-1235-4567489798",
+                    "issues": [
+                      {
+                        "type": "about:blank",
+                        "detail": "exampleNumericProperty should be numeric",
+                        "in": "path",
+                        "name": "exampleNumericProperty",
+                        "value": "abc"
+                      },
+                      {
+                        "type": "about:blank",
+                        "title": "Input isn't valid with respect to schema",
+                        "detail": "examplePropertyWithPattern a2345678901 doesn't match pattern '^\\d{11}$'",
+                        "in": "body",
+                        "name": "items[0].examplePropertyWithPattern",
+                        "value": "a2345678901"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "title": "API Problem",
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "title": "Problem",
+                      "description": "A Problem Details object (RFC 9457).\n\nAdditional properties specific to the problem type may be present.\n",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the problem type",
+                          "default": "about:blank"
+                        },
+                        "href": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that, when dereferenced, provides human-readable documentation for the problem type (e.g. using HTML)."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).",
+                          "example": "Service Unavailable"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "format": "int32",
+                          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+                          "minimum": 400,
+                          "maximum": 600,
+                          "exclusiveMaximum": true,
+                          "example": 503
+                        },
+                        "detail": {
+                          "type": "string",
+                          "description": "A human-readable explanation specific to this occurrence of the problem"
+                        },
+                        "instance": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced."
+                        }
+                      },
+                      "example": {
+                        "type": "urn:problem-type:exampleOrganization:exampleProblem",
+                        "href": "https://www.belgif.be/specification/rest/api-guide/#standardized-problem-types",
+                        "title": "Description of the type of problem that occurred",
+                        "status": 400,
+                        "detail": "Description of specific occurrence of the problem",
+                        "instance": "urn:uuid:123e4567-e89b-12d3-a456-426614174000"
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "subsystem": {
+                      "type": "string",
+                      "description": "The subsystem that generated the problem",
+                      "example": "api"
+                    },
+                    "time": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time the problem occurred, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "description": "A unique identifier for the request, useful for debugging",
+                      "example": "89eb1ffb-2a54-4105-aaae-7bf990f1aa69#87715"
+                    },
+                    "causes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "A brief description of something which caused the problem",
+                        "example": "database connection failed"
+                      },
+                      "example": [
+                        "database connection failed",
+                        "database query failed",
+                        "unable to fetch user"
+                      ],
+                      "description": "A list of problems that caused this problem. This can be used to represent multiple\nroot causes. There is no guaranteed ordering of the causes.\n"
+                    },
+                    "remedy": {
+                      "type": "string",
+                      "description": "A brief description of how to resolve the problem",
+                      "example": "Shorten your input to be under 100 characters"
+                    },
+                    "supportEmail": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "An email address to contact for support",
+                      "example": "support@withampersand.com"
+                    },
+                    "supportPhone": {
+                      "type": "string",
+                      "description": "A phone number to contact for support",
+                      "example": "+1-555-555-5555"
+                    },
+                    "supportUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A URL to contact for support",
+                      "example": "https://withampersand.com/support"
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "description": "Whether the request can be retried",
+                      "example": false
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "A timestamp after which the request can be retried, formatted as RFC-3339",
+                      "example": "2024-04-22T18:55:28.456076Z"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context for the problem",
+                      "additionalProperties": true,
+                      "example": {
+                        "name": "Rick Sanchez"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "customAuthConnectParams"
+      }
+    },
     "/projects/{projectIdOrName}/connections/{connectionId}:oauth-update": {
       "patch": {
         "operationId": "oauthUpdate",
@@ -12273,13 +13250,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -12454,13 +13431,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -12493,13 +13470,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -12517,13 +13494,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -14871,7 +15848,6 @@
                         "default": "api:create-installation"
                       },
                       "content": {
-                        "description": "The content of the config.",
                         "title": "Config Content",
                         "allOf": [
                           {
@@ -16444,7 +17420,8 @@
                               }
                             }
                           }
-                        ]
+                        ],
+                        "description": "The content of the config."
                       }
                     },
                     "description": "The config of the installation."
@@ -16581,13 +17558,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -16762,13 +17739,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -16801,13 +17778,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -16825,13 +17802,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -19471,13 +20448,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -19652,13 +20629,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -19691,13 +20668,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -19715,13 +20692,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -22927,13 +23904,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -23108,13 +24085,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -23147,13 +24124,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -23171,13 +24148,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -25983,13 +26960,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -26164,13 +27141,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -26203,13 +27180,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -26227,13 +27204,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -29236,13 +30213,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -29417,13 +30394,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -29456,13 +30433,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -29480,13 +30457,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -34105,7 +35082,7 @@
                             "type": "string",
                             "description": "The time the operation was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       }
@@ -35786,7 +36763,7 @@
                       "type": "string",
                       "description": "The time the operation was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     }
                   }
                 },
@@ -36058,7 +37035,7 @@
                       "timestamp": {
                         "type": "string",
                         "description": "The time the log was created.",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "message": {
                         "type": "object",
@@ -37352,10 +38329,128 @@
                                   "example": "https://docs.example.com/custom-auth-input",
                                   "description": "URL with details about this authentication mechanism and how to use it. Might be specific to this field, or a general URL for the provider. Optional.",
                                   "x-go-type-skip-optional-pointer": true
+                                },
+                                "fieldType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "fieldTypeText",
+                                    "fieldTypePassword",
+                                    "fieldTypeSelect"
+                                  ],
+                                  "example": "fieldTypePassword",
+                                  "description": "How the frontend should render this input. \"fieldTypeText\" is an unmasked field (not sensitive), \"fieldTypePassword\" is a masked field (sensitive), and \"fieldTypeSelect\" is a dropdown populated from options. Defaults to \"fieldTypePassword\" when omitted.",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "options": {
+                                  "type": "array",
+                                  "items": {
+                                    "title": "Custom Auth Input Option",
+                                    "type": "object",
+                                    "description": "A selectable option for a custom auth input whose fieldType is \"select\".",
+                                    "required": [
+                                      "value",
+                                      "label"
+                                    ],
+                                    "properties": {
+                                      "value": {
+                                        "type": "string",
+                                        "example": "prod",
+                                        "description": "The value stored when this option is selected."
+                                      },
+                                      "label": {
+                                        "type": "string",
+                                        "example": "Production",
+                                        "description": "The human-readable label shown for this option."
+                                      }
+                                    }
+                                  },
+                                  "description": "The dropdown options, used only when fieldType is \"select\".",
+                                  "x-go-type-skip-optional-pointer": true
                                 }
                               }
                             },
                             "description": "A list of custom input fields for authentication. The frontend will render these input fields and the backend will receive the values of these fields before making a request.",
+                            "x-go-type-skip-optional-pointer": true
+                          },
+                          "providerInputs": {
+                            "type": "array",
+                            "items": {
+                              "title": "Custom Auth Input",
+                              "type": "object",
+                              "description": "A custom input field for authentication. This is used by the frontend to dynamically render input fields for custom auth. The backend will not interpret this. It will however receive the value of this field before making a request (in the connection secrets).",
+                              "required": [
+                                "name",
+                                "displayName"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "custom_auth_input",
+                                  "description": "The internal identifier for the custom auth input field."
+                                },
+                                "displayName": {
+                                  "type": "string",
+                                  "example": "Custom Auth Input",
+                                  "description": "The human-readable name for the custom auth input field."
+                                },
+                                "prompt": {
+                                  "type": "string",
+                                  "example": "See Authorization section of provider docs to obtain this value",
+                                  "description": "Some helpful text or context to be displayed to the user when asking for this input.",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "docsURL": {
+                                  "type": "string",
+                                  "example": "https://docs.example.com/custom-auth-input",
+                                  "description": "URL with details about this authentication mechanism and how to use it. Might be specific to this field, or a general URL for the provider. Optional.",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "fieldType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "fieldTypeText",
+                                    "fieldTypePassword",
+                                    "fieldTypeSelect"
+                                  ],
+                                  "example": "fieldTypePassword",
+                                  "description": "How the frontend should render this input. \"fieldTypeText\" is an unmasked field (not sensitive), \"fieldTypePassword\" is a masked field (sensitive), and \"fieldTypeSelect\" is a dropdown populated from options. Defaults to \"fieldTypePassword\" when omitted.",
+                                  "x-go-type-skip-optional-pointer": true
+                                },
+                                "options": {
+                                  "type": "array",
+                                  "items": {
+                                    "title": "Custom Auth Input Option",
+                                    "type": "object",
+                                    "description": "A selectable option for a custom auth input whose fieldType is \"select\".",
+                                    "required": [
+                                      "value",
+                                      "label"
+                                    ],
+                                    "properties": {
+                                      "value": {
+                                        "type": "string",
+                                        "example": "prod",
+                                        "description": "The value stored when this option is selected."
+                                      },
+                                      "label": {
+                                        "type": "string",
+                                        "example": "Production",
+                                        "description": "The human-readable label shown for this option."
+                                      }
+                                    }
+                                  },
+                                  "description": "The dropdown options, used only when fieldType is \"select\".",
+                                  "x-go-type-skip-optional-pointer": true
+                                }
+                              }
+                            },
+                            "description": "Input fields the builder configures on their provider app (e.g. client secrets, subscription keys) rather than the consumer. Routed to storage by fieldType. Optional.",
+                            "x-go-type-skip-optional-pointer": true
+                          },
+                          "multiStep": {
+                            "type": "boolean",
+                            "example": true,
+                            "description": "Whether this provider uses a multi-step custom auth flow (browser redirects and/or server-side credential-exchange calls) driven by the /custom-auth/connect endpoint, rather than static header/query-param injection. The step definitions and handlers live in the connectors library, not the catalog; this flag is the signal that lets clients tell \"multi-step custom\" apart from plain \"custom\" at a glance.",
                             "x-go-type-skip-optional-pointer": true
                           }
                         }
@@ -38785,10 +39880,128 @@
                                 "example": "https://docs.example.com/custom-auth-input",
                                 "description": "URL with details about this authentication mechanism and how to use it. Might be specific to this field, or a general URL for the provider. Optional.",
                                 "x-go-type-skip-optional-pointer": true
+                              },
+                              "fieldType": {
+                                "type": "string",
+                                "enum": [
+                                  "fieldTypeText",
+                                  "fieldTypePassword",
+                                  "fieldTypeSelect"
+                                ],
+                                "example": "fieldTypePassword",
+                                "description": "How the frontend should render this input. \"fieldTypeText\" is an unmasked field (not sensitive), \"fieldTypePassword\" is a masked field (sensitive), and \"fieldTypeSelect\" is a dropdown populated from options. Defaults to \"fieldTypePassword\" when omitted.",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "options": {
+                                "type": "array",
+                                "items": {
+                                  "title": "Custom Auth Input Option",
+                                  "type": "object",
+                                  "description": "A selectable option for a custom auth input whose fieldType is \"select\".",
+                                  "required": [
+                                    "value",
+                                    "label"
+                                  ],
+                                  "properties": {
+                                    "value": {
+                                      "type": "string",
+                                      "example": "prod",
+                                      "description": "The value stored when this option is selected."
+                                    },
+                                    "label": {
+                                      "type": "string",
+                                      "example": "Production",
+                                      "description": "The human-readable label shown for this option."
+                                    }
+                                  }
+                                },
+                                "description": "The dropdown options, used only when fieldType is \"select\".",
+                                "x-go-type-skip-optional-pointer": true
                               }
                             }
                           },
                           "description": "A list of custom input fields for authentication. The frontend will render these input fields and the backend will receive the values of these fields before making a request.",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "providerInputs": {
+                          "type": "array",
+                          "items": {
+                            "title": "Custom Auth Input",
+                            "type": "object",
+                            "description": "A custom input field for authentication. This is used by the frontend to dynamically render input fields for custom auth. The backend will not interpret this. It will however receive the value of this field before making a request (in the connection secrets).",
+                            "required": [
+                              "name",
+                              "displayName"
+                            ],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "custom_auth_input",
+                                "description": "The internal identifier for the custom auth input field."
+                              },
+                              "displayName": {
+                                "type": "string",
+                                "example": "Custom Auth Input",
+                                "description": "The human-readable name for the custom auth input field."
+                              },
+                              "prompt": {
+                                "type": "string",
+                                "example": "See Authorization section of provider docs to obtain this value",
+                                "description": "Some helpful text or context to be displayed to the user when asking for this input.",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "docsURL": {
+                                "type": "string",
+                                "example": "https://docs.example.com/custom-auth-input",
+                                "description": "URL with details about this authentication mechanism and how to use it. Might be specific to this field, or a general URL for the provider. Optional.",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "fieldType": {
+                                "type": "string",
+                                "enum": [
+                                  "fieldTypeText",
+                                  "fieldTypePassword",
+                                  "fieldTypeSelect"
+                                ],
+                                "example": "fieldTypePassword",
+                                "description": "How the frontend should render this input. \"fieldTypeText\" is an unmasked field (not sensitive), \"fieldTypePassword\" is a masked field (sensitive), and \"fieldTypeSelect\" is a dropdown populated from options. Defaults to \"fieldTypePassword\" when omitted.",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "options": {
+                                "type": "array",
+                                "items": {
+                                  "title": "Custom Auth Input Option",
+                                  "type": "object",
+                                  "description": "A selectable option for a custom auth input whose fieldType is \"select\".",
+                                  "required": [
+                                    "value",
+                                    "label"
+                                  ],
+                                  "properties": {
+                                    "value": {
+                                      "type": "string",
+                                      "example": "prod",
+                                      "description": "The value stored when this option is selected."
+                                    },
+                                    "label": {
+                                      "type": "string",
+                                      "example": "Production",
+                                      "description": "The human-readable label shown for this option."
+                                    }
+                                  }
+                                },
+                                "description": "The dropdown options, used only when fieldType is \"select\".",
+                                "x-go-type-skip-optional-pointer": true
+                              }
+                            }
+                          },
+                          "description": "Input fields the builder configures on their provider app (e.g. client secrets, subscription keys) rather than the consumer. Routed to storage by fieldType. Optional.",
+                          "x-go-type-skip-optional-pointer": true
+                        },
+                        "multiStep": {
+                          "type": "boolean",
+                          "example": true,
+                          "description": "Whether this provider uses a multi-step custom auth flow (browser redirects and/or server-side credential-exchange calls) driven by the /custom-auth/connect endpoint, rather than static header/query-param injection. The step definitions and handlers live in the connectors library, not the catalog; this flag is the signal that lets clients tell \"multi-step custom\" apart from plain \"custom\" at a glance.",
                           "x-go-type-skip-optional-pointer": true
                         }
                       }
@@ -43151,13 +44364,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -43190,13 +44403,13 @@
                             "type": "string",
                             "description": "The time the consumer was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the consumer was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -43214,13 +44427,13 @@
                         "type": "string",
                         "description": "The time the connection was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the connection was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "authScheme": {
                         "type": "string",
@@ -44215,13 +45428,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -44254,13 +45467,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -44278,13 +45491,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -45410,13 +46623,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -45449,13 +46662,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -45473,13 +46686,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -46536,13 +47749,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -46575,13 +47788,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -46599,13 +47812,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -66404,6 +67617,518 @@
   },
   "components": {
     "schemas": {
+      "CustomAuthConnectRequest": {
+        "title": "Custom Auth Connect Request",
+        "type": "object",
+        "description": "Request body for the /custom-auth/connect endpoint. The first call supplies the flow inputs; subsequent calls supply sessionId and callbackParams to resume after a redirect.",
+        "required": [
+          "projectIdOrName"
+        ],
+        "properties": {
+          "projectIdOrName": {
+            "type": "string",
+            "description": "The Ampersand project ID or project name. Required on the first call.",
+            "example": "my-project"
+          },
+          "provider": {
+            "type": "string",
+            "description": "The provider that this app connects to. Required on the first call (when sessionId is not present); ignored on resume calls. Conditional requirement is enforced at the application layer.",
+            "example": "bill"
+          },
+          "groupRef": {
+            "type": "string",
+            "description": "Your application's identifier for the organization or workspace that this connection belongs to. Supplied on the first call; ignored on resume calls (the parked flow's identity is used).",
+            "example": "group-123"
+          },
+          "groupName": {
+            "type": "string",
+            "description": "The display name for the group. Defaults to groupRef if not provided. Supplied on the first call; ignored on resume calls.",
+            "example": "Organization Name"
+          },
+          "consumerRef": {
+            "type": "string",
+            "description": "The ID that your app uses to identify the user whose SaaS credential will be used. Supplied on the first call; ignored on resume calls (the parked flow's identity is used).",
+            "example": "user_123456"
+          },
+          "consumerName": {
+            "type": "string",
+            "description": "The display name for the consumer. Defaults to consumerRef if not provided. Supplied on the first call; ignored on resume calls.",
+            "example": "John Doe"
+          },
+          "providerMetadata": {
+            "description": "Additional provider-specific metadata collected from the user.",
+            "title": "Provider Metadata",
+            "type": "object",
+            "additionalProperties": {
+              "title": "Provider Metadata Info",
+              "type": "object",
+              "required": [
+                "value",
+                "source"
+              ],
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "The value of the metadata field",
+                  "example": "1234567890"
+                },
+                "source": {
+                  "type": "string",
+                  "description": "The source of the metadata field",
+                  "enum": [
+                    "input",
+                    "token",
+                    "provider"
+                  ],
+                  "example": "input"
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "The human-readable name for the field",
+                  "example": "Account ID"
+                }
+              }
+            }
+          },
+          "providerAppId": {
+            "type": "string",
+            "description": "ID of the provider app. If omitted, the default provider app set up on the Dashboard is assumed.",
+            "example": "32356abe-d2fd-49c7-9030-abdcbc6456d4"
+          },
+          "customAuth": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "The consumer-supplied custom auth inputs (keyed by CustomAuthInput.name). Supplied on the first call (when sessionId is not present).",
+            "example": {
+              "userName": "admin@acme.com",
+              "password": "hunter2"
+            }
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Identifies an in-progress flow to resume after a redirect. Returned in a prior redirect response. When present, provider and customAuth are not required.",
+            "example": "7f3c1e2a-9b0d-4a1f-8c2e-1d2f3a4b5c6d"
+          },
+          "callbackParams": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "The query/body params the provider sent to the callback, forwarded to resume the flow.",
+            "example": {
+              "tenant": "9e1477fd-54ef-41fe-b747-bc9e6a11a925"
+            }
+          }
+        }
+      },
+      "CustomAuthConnectResponse": {
+        "title": "Custom Auth Connect Response",
+        "type": "object",
+        "description": "Response from /custom-auth/connect. Exactly one of redirect or connection is set. A redirect means the client should open the URL and call again with sessionId + callbackParams; a connection means the flow is complete.",
+        "oneOf": [
+          {
+            "required": [
+              "redirect"
+            ],
+            "properties": {
+              "redirect": {
+                "title": "Redirect Response",
+                "type": "object",
+                "description": "Instructs the client to open a URL (e.g. in a popup) to continue a custom auth flow, then resume by calling /custom-auth/connect with the sessionId.",
+                "required": [
+                  "url",
+                  "sessionId"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "The URL the client should open to continue the flow.",
+                    "example": "https://login.microsoftonline.com/common/adminconsent?client_id=xxx"
+                  },
+                  "sessionId": {
+                    "type": "string",
+                    "description": "The flow identifier to pass back to /custom-auth/connect once the provider redirects to the callback.",
+                    "example": "7f3c1e2a-9b0d-4a1f-8c2e-1d2f3a4b5c6d"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "required": [
+              "connection"
+            ],
+            "properties": {
+              "connection": {
+                "title": "Connection",
+                "required": [
+                  "id",
+                  "createTime",
+                  "group",
+                  "consumer",
+                  "projectId",
+                  "provider",
+                  "authScheme",
+                  "status"
+                ],
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "The connection ID.",
+                    "example": "connection-123"
+                  },
+                  "projectId": {
+                    "type": "string",
+                    "description": "The Ampersand project ID.",
+                    "example": "project-456"
+                  },
+                  "provider": {
+                    "type": "string",
+                    "description": "The SaaS provider that this Connection is for.",
+                    "example": "salesforce"
+                  },
+                  "providerApp": {
+                    "title": "Provider App",
+                    "required": [
+                      "clientId",
+                      "createTime",
+                      "id",
+                      "projectId",
+                      "provider"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The provider app ID.",
+                        "example": "provider-app-123"
+                      },
+                      "projectId": {
+                        "type": "string",
+                        "description": "The Ampersand project ID.",
+                        "example": "project-456"
+                      },
+                      "externalRef": {
+                        "type": "string",
+                        "description": "The ID used by the provider to identify the app (optional).",
+                        "example": "external-id-123"
+                      },
+                      "provider": {
+                        "type": "string",
+                        "description": "The SaaS provider that this app connects to.",
+                        "example": "salesforce"
+                      },
+                      "clientId": {
+                        "type": "string",
+                        "description": "The OAuth client ID for this app.",
+                        "example": "client-id-123"
+                      },
+                      "scopes": {
+                        "type": "array",
+                        "description": "The OAuth scopes for this app.",
+                        "items": {
+                          "type": "string",
+                          "example": [
+                            "oauth",
+                            "offline",
+                            "crm.read"
+                          ]
+                        }
+                      },
+                      "metadata": {
+                        "title": "Provider App Metadata",
+                        "type": "object",
+                        "description": "Provider-specific configuration that extends the standard OAuth flow.",
+                        "properties": {
+                          "authQueryParams": {
+                            "type": "object",
+                            "description": "Additional query parameters to include in the OAuth authorization URL (e.g., optional_scope for HubSpot).",
+                            "additionalProperties": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "example": {
+                              "optional_scope": [
+                                "automation.sequences.read"
+                              ]
+                            }
+                          },
+                          "providerParams": {
+                            "type": "object",
+                            "description": "Provider-specific string values keyed by names (e.g., packageInstallURL for Salesforce, gcpProjectId and gcpPubSubTopicName for Gmail).",
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "example": {
+                              "packageInstallURL": "https://login.salesforce.com/packaging/installPackage.apexp?p0=04t123456789",
+                              "gcpProjectId": "my-gcp-project",
+                              "gcpPubSubTopicName": "my-topic"
+                            }
+                          }
+                        }
+                      },
+                      "createTime": {
+                        "type": "string",
+                        "description": "The time the provider app was created.",
+                        "format": "date-time"
+                      },
+                      "updateTime": {
+                        "type": "string",
+                        "description": "The time the provider app was updated.",
+                        "format": "date-time"
+                      }
+                    }
+                  },
+                  "group": {
+                    "title": "Group",
+                    "required": [
+                      "createTime",
+                      "groupName",
+                      "groupRef",
+                      "projectId"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "groupRef": {
+                        "type": "string",
+                        "description": "The ID of the user group that has access to this installation.",
+                        "example": "group-123"
+                      },
+                      "groupName": {
+                        "type": "string",
+                        "description": "The name of the user group that has access to this installation.",
+                        "example": "Super Customer"
+                      },
+                      "projectId": {
+                        "type": "string",
+                        "description": "The Ampersand project ID.",
+                        "example": "project-456"
+                      },
+                      "createTime": {
+                        "type": "string",
+                        "description": "The time the group was created.",
+                        "format": "date-time",
+                        "example": "2023-07-13T21:34:44.816354Z"
+                      },
+                      "updateTime": {
+                        "type": "string",
+                        "description": "The time the group was last updated.",
+                        "format": "date-time",
+                        "example": "2023-07-13T21:34:44.816354Z"
+                      }
+                    }
+                  },
+                  "consumer": {
+                    "title": "Consumer",
+                    "required": [
+                      "consumerName",
+                      "consumerRef",
+                      "createTime",
+                      "projectId"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "consumerRef": {
+                        "type": "string",
+                        "description": "The consumer reference.",
+                        "example": "consumer-123"
+                      },
+                      "consumerName": {
+                        "type": "string",
+                        "description": "The name of the consumer.",
+                        "example": "Super Customer"
+                      },
+                      "projectId": {
+                        "type": "string",
+                        "description": "The Ampersand project ID.",
+                        "example": "project-456"
+                      },
+                      "createTime": {
+                        "type": "string",
+                        "description": "The time the consumer was created.",
+                        "format": "date-time",
+                        "example": "2023-07-13T21:34:44.816354Z"
+                      },
+                      "updateTime": {
+                        "type": "string",
+                        "description": "The time the consumer was last updated.",
+                        "format": "date-time",
+                        "example": "2023-07-13T21:34:44.816354Z"
+                      }
+                    }
+                  },
+                  "providerWorkspaceRef": {
+                    "type": "string",
+                    "description": "If available, the identifier for the provider workspace (e.g. the Salesforce subdomain)",
+                    "example": "provider-workspace-123"
+                  },
+                  "providerConsumerRef": {
+                    "type": "string",
+                    "description": "If available, the ID that Salesforce/Hubspot uses to identify this user (e.g. Salesforce has IDs in the form of https://login.salesforce.com/id/00D4x0000019CQTEA2/0054x000000orJ4AA)",
+                    "example": "provider-consumer-123"
+                  },
+                  "createTime": {
+                    "type": "string",
+                    "description": "The time the connection was created.",
+                    "format": "date-time",
+                    "example": "2023-07-13T21:34:44.816354Z"
+                  },
+                  "updateTime": {
+                    "type": "string",
+                    "description": "The time the connection was last updated.",
+                    "format": "date-time",
+                    "example": "2023-07-13T21:34:44.816354Z"
+                  },
+                  "authScheme": {
+                    "type": "string",
+                    "description": "The authentication scheme used for this connection.",
+                    "example": "oauth2/authorizationCode",
+                    "enum": [
+                      "none",
+                      "apiKey",
+                      "basic",
+                      "oauth2/authorizationCode",
+                      "oauth2/authorizationCodePKCE",
+                      "oauth2/clientCredentials",
+                      "oauth2/password"
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "The status of the connection.\n- `created`: The connection has just been created or the access token was just refreshed.\n- `working`: The connection has successfully been used to make a request.\n- `bad_credentials`: The connection encountered credential-related issues when making a request, or when attempting to refresh the access token.\n",
+                    "example": "working",
+                    "enum": [
+                      "created",
+                      "working",
+                      "bad_credentials"
+                    ]
+                  },
+                  "oauth2AuthorizationCode": {
+                    "title": "OAuth2 AuthorizationCode Token",
+                    "type": "object",
+                    "properties": {
+                      "accessToken": {
+                        "type": "object",
+                        "required": [
+                          "token"
+                        ],
+                        "description": "The access token for the connection.",
+                        "properties": {
+                          "token": {
+                            "type": "string"
+                          },
+                          "issuedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-04-22T18:55:28.456076Z"
+                          },
+                          "expiresAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-10-22T18:55:28.456076Z"
+                          }
+                        }
+                      },
+                      "refreshToken": {
+                        "type": "object",
+                        "required": [
+                          "token"
+                        ],
+                        "description": "The refresh token to use for the connection.",
+                        "properties": {
+                          "token": {
+                            "type": "string"
+                          },
+                          "issuedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-04-22T18:55:28.456076Z"
+                          },
+                          "expiresAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-10-22T18:55:28.456076Z"
+                          }
+                        }
+                      },
+                      "scopes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "The scopes for the tokens."
+                      }
+                    }
+                  },
+                  "apiKey": {
+                    "type": "string",
+                    "description": "The API key used while making the connection.",
+                    "example": "api-key-123"
+                  },
+                  "providerMetadata": {
+                    "title": "Provider Metadata",
+                    "type": "object",
+                    "additionalProperties": {
+                      "title": "Provider Metadata Info",
+                      "type": "object",
+                      "required": [
+                        "value",
+                        "source"
+                      ],
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "description": "The value of the metadata field",
+                          "example": "1234567890"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source of the metadata field",
+                          "enum": [
+                            "input",
+                            "token",
+                            "provider"
+                          ],
+                          "example": "input"
+                        },
+                        "displayName": {
+                          "type": "string",
+                          "description": "The human-readable name for the field",
+                          "example": "Account ID"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RedirectResponse": {
+        "title": "Redirect Response",
+        "type": "object",
+        "description": "Instructs the client to open a URL (e.g. in a popup) to continue a custom auth flow, then resume by calling /custom-auth/connect with the sessionId.",
+        "required": [
+          "url",
+          "sessionId"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The URL the client should open to continue the flow.",
+            "example": "https://login.microsoftonline.com/common/adminconsent?client_id=xxx"
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "The flow identifier to pass back to /custom-auth/connect once the provider redirects to the callback.",
+            "example": "7f3c1e2a-9b0d-4a1f-8c2e-1d2f3a4b5c6d"
+          }
+        }
+      },
       "Org": {
         "title": "Organization",
         "required": [
@@ -68466,13 +70191,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               }
             }
           },
@@ -68647,13 +70372,13 @@
                     "type": "string",
                     "description": "The time the group was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the group was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   }
                 }
               },
@@ -68686,13 +70411,13 @@
                     "type": "string",
                     "description": "The time the consumer was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the consumer was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   }
                 }
               },
@@ -68710,13 +70435,13 @@
                 "type": "string",
                 "description": "The time the connection was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the connection was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "authScheme": {
                 "type": "string",
@@ -72255,13 +73980,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               }
             }
           },
@@ -72294,13 +74019,13 @@
                 "type": "string",
                 "description": "The time the consumer was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the consumer was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               }
             }
           },
@@ -72318,13 +74043,13 @@
             "type": "string",
             "description": "The time the connection was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the connection was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "authScheme": {
             "type": "string",
@@ -73256,13 +74981,13 @@
             "type": "string",
             "description": "The time the group was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the group was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           }
         }
       },
@@ -73295,13 +75020,13 @@
             "type": "string",
             "description": "The time the consumer was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the consumer was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           }
         }
       },
@@ -73428,7 +75153,7 @@
             "type": "string",
             "description": "The time the operation was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           }
         }
       },
@@ -73488,7 +75213,7 @@
           "timestamp": {
             "type": "string",
             "description": "The time the log was created.",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "message": {
             "type": "object",
