@@ -251,20 +251,97 @@ Write payload example for the `contacts` object:
 }
 ```
 
+### Custom Fields
+
+The ConnectWise connector **supports reading and writing custom fields** on supported objects.
+For reads, custom fields are available through scheduled reads, historical backfills, and subscriptions.
+Each ConnectWise custom field is exposed as `customField<ID>` -- for example,
+a field with ID `59` might represent a marketing email preference and be selected as `customField59`, while
+a field with ID `83` might represent a hobby and be selected as `customField83`.
+You can then map those fields to more readable names in your connector configuration, such as `marketingEmailOn` or `hobby`.
+```YAML
+read:
+  objects:
+    - objectName: contacts
+      destination: connectWiseWebhook
+      requiredFields:
+        - fieldName: customField59
+          mapToName: marketingEmailOn
+        - fieldName: customField83
+          mapToName: hobby
+```
+This produces output that is easier to work with:
+```JSON
+[
+  {
+    "mappedFields":{
+      "hobby": "Traveling",
+      "marketingEmailOn": true,
+      "firstName": "Estella"
+    }
+  }
+]
+```
+
+**For writes**, custom fields can be provided as if it was a native standard field.
+The connector translates these values into the ConnectWise API format automatically.
+
+To create a record with custom fields:
+```JSON
+{
+  "groupRef": "{{connectWiseGroupID}}",
+  "type": "create",
+  "record": {
+    "firstName": "Estella",
+    "customField59": true,
+    "customField83": "Traveling"
+  }
+}
+```
+To update a record with custom fields using `PUT`:
+```JSON
+{
+  "groupRef": "{{connectWiseGroupID}}",
+  "type": "update",
+  "record": {
+    "id": "58117",
+    "firstName": "Estella (UPDATED)",
+    "customField59": false,
+    "customField83": "Swimming"
+  }
+}
+```
+To update a record with custom fields using `PATCH`:
+```JSON
+{
+  "groupRef": "{{connectWiseGroupID}}",
+  "type": "update",
+  "record": {
+    "id": "58117",
+    "patch": [
+      {"op": "replace", "path": "/firstName", "value": "Jeniffer"},
+      {"op": "replace", "path": "/customField59", "value": true},
+      {"op": "replace", "path": "/customField83", "value": "Skiing"}
+    ]
+  }
+}
+```
+
+When updating records, you only need to provide the custom fields you want to set or change.
+You **do not** need to list **every** custom field exhaustively.
+However, if you want to clear a field, then set its value to `null`, for example:
+```JSON
+{
+  "customField83": null
+}
+```
+
+When you are unsure of a **custom field ID**, check a **read response** for that object.
+Custom fields are returned with their ConnectWise IDs in the `customFields` array.
+
 ### Example integration
 
-To define an integration for ConnectWise, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: connectWise-integration
-    displayName: My ConnectWise Integration
-    provider: connectWise
-    proxy:
-      enabled: true
-```
+For an example manifest file of a ConnectWise integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/connectwise/amp.yaml).
 
 ## Using the connector
 
