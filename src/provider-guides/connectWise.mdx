@@ -343,6 +343,385 @@ Custom fields are returned with their ConnectWise IDs in the `customFields` arra
 
 For an example manifest file of a ConnectWise integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/connectwise/amp.yaml).
 
+### Contact Communication Items
+
+The `contacts` object contains communication details in a nested `communicationItems` array.
+Each item represents a communication type, such as a particular email, phone number, or fax number.
+
+For example, a contact may contain several email addresses:
+
+```JSON
+{
+  "communicationItems": [
+    {
+      "type": { "id": "14" },
+      "value": "old@example.com",
+      "defaultFlag": false,
+      "communicationType": "Email"
+    },
+    {
+      "type": { "id": "15" },
+      "value": "john@example.com",
+      "defaultFlag": true,
+      "communicationType": "Email"
+    }
+  ]
+}
+```
+
+To make the default communication details easier to read and write, the connector exposes virtual fields on the `contacts` object.
+These fields are not native ConnectWise fields. They are a connector-level abstraction over the `communicationItems` array.
+
+| Virtual field              | Description                                           |
+|----------------------------|-------------------------------------------------------|
+| `AMPERSAND-defaultEmail`   | The value of the default **email** communication item |
+| `AMPERSAND-defaultEmailId` | The communication **type ID** of the default email    |
+| `AMPERSAND-defaultPhone`   | The value of the default **phone** communication item |
+| `AMPERSAND-defaultPhoneId` | The communication **type ID** of the default phone    |
+| `AMPERSAND-defaultFax`     | The value of the default **fax** communication item   |
+| `AMPERSAND-defaultFaxId`   | The communication **type ID** of the default fax      |
+
+Only the default item for each communication category is exposed through these virtual fields.
+The remaining communication items continue to exist in the underlying `communicationItems` array.
+
+### Reading default communication fields
+
+`Contacts.Read` supports these virtual fields.
+When a contact is read, the connector examines its `communicationItems` array and exposes the item whose `defaultFlag` is `true` for each communication category.
+For example, the following communication items:
+
+```JSON
+[
+  {
+    "type": { "id": "14" },
+    "value": "old@example.com",
+    "defaultFlag": false,
+    "communicationType": "Email"
+  },
+  {
+    "type": { "id": "15" },
+    "value": "john@example.com",
+    "defaultFlag": true,
+    "communicationType": "Email"
+  }
+]
+```
+
+are exposed as:
+
+```JSON
+{
+  "AMPERSAND-defaultEmail": "john@example.com",
+  "AMPERSAND-defaultEmailId": "15"
+}
+```
+
+The `AMPERSAND-defaultEmailId` field identifies which communication type the default email refers to.
+This is important when a contact has multiple communication items in the same category.
+
+The same behavior applies to phone and fax communication items:
+
+```JSON
+{
+  "AMPERSAND-defaultEmail": "john@example.com",
+  "AMPERSAND-defaultEmailId": "15",
+  "AMPERSAND-defaultPhone": "+1-555-0100",
+  "AMPERSAND-defaultPhoneId": "21",
+  "AMPERSAND-defaultFax": "+1-555-0199",
+  "AMPERSAND-defaultFaxId": "32"
+}
+```
+
+These fields can be selected in a read operation just like other contact fields.
+
+```yaml
+read:
+  objects:
+    - objectName: contacts
+      requiredFields:
+        - fieldName: AMPERSAND-defaultEmail
+```
+
+#### Writing communication fields
+
+The virtual fields can also be used when creating or updating contacts.
+
+The general pattern is:
+
+* `AMPERSAND-default<Email|Phone|Fax>` contains the value.
+* `AMPERSAND-default<Email|Phone|Fax>Id` identifies the communication type to which the value belongs.
+* If the value is provided without an ID, the connector looks up the default communication type for that category.
+* If the ID is provided, the connector uses that exact communication type.
+
+For example:
+
+```JSON
+{
+  "firstName": "John",
+  "AMPERSAND-defaultEmail": "john@example.com",
+  "AMPERSAND-defaultEmailId": "15"
+}
+```
+
+means:
+
+> Set the communication item with type ID `15` to `john@example.com` and make it the default email.
+
+The same record can set the default email, phone, and fax:
+
+```JSON
+{
+  "firstName": "John",
+  "AMPERSAND-defaultEmail": "john@example.com",
+  "AMPERSAND-defaultEmailId": "15",
+  "AMPERSAND-defaultPhone": "+1-555-0100",
+  "AMPERSAND-defaultPhoneId": "21",
+  "AMPERSAND-defaultFax": "+1-555-0199",
+  "AMPERSAND-defaultFaxId": "32"
+}
+```
+
+#### Create
+
+When creating a contact, provide the virtual fields in the record:
+
+```JSON
+{
+  "groupRef": "{{connectWiseGroupID}}",
+  "type": "create",
+  "record": {
+    "firstName": "John",
+    "lastName": "Smith",
+    "AMPERSAND-defaultEmail": "john@example.com",
+    "AMPERSAND-defaultEmailId": "15",
+    "AMPERSAND-defaultPhone": "+1-555-0100",
+    "AMPERSAND-defaultPhoneId": "21"
+  }
+}
+```
+
+The connector translates these virtual fields into ConnectWise `communicationItems` automatically.
+This explicitly targets communication type `15` for an email,
+regardless of which communication type is currently configured as the company's default.
+
+#### Update with `PUT`
+
+A regular update payload uses `PUT` and represents a full replacement of the record.
+
+For example:
+
+```JSON
+{
+  "groupRef": "{{connectWiseGroupID}}",
+  "type": "update",
+  "record": {
+    "id": "58117",
+    "firstName": "John",
+    "AMPERSAND-defaultEmail": "john@example.com",
+    "AMPERSAND-defaultEmailId": "15",
+    "AMPERSAND-defaultPhone": "+1-555-0100",
+    "AMPERSAND-defaultPhoneId": "21"
+  }
+}
+```
+
+The connector translates the virtual fields into a new `communicationItems` array.
+
+Because this is a full replacement, the existing communication items are cleared before the replacement is applied.
+The new array contains the communication items represented by the virtual fields in the update payload.
+
+As a result, a `PUT` update should be treated as a replacement of the contact's communication items, not as a partial modification.
+
+> **Important:** Because the existing communication items are cleared before the replacement is applied, a failure between these operations could theoretically leave the contact without its previous communication items. This is an unlikely failure scenario, but it is a consequence of the ConnectWise API behavior required to perform this update.
+
+### Update with `PATCH`
+
+For partial updates, use a JSON Patch document.
+
+The virtual communication fields can be used in patch operations just like ordinary fields:
+
+```JSON
+{
+  "groupRef": "{{connectWiseGroupID}}",
+  "type": "update",
+  "record": {
+    "id": "58117",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/AMPERSAND-defaultEmail",
+        "value": "john@example.com"
+      }
+    ]
+  }
+}
+```
+
+The connector translates this operation into the appropriate update to the underlying `communicationItems` array.
+
+#### Changing the default value
+
+To change the value of the current default email, replace the value field:
+
+```JSON
+{
+  "op": "replace",
+  "path": "/AMPERSAND-defaultEmail",
+  "value": "john@example.com"
+}
+```
+
+This updates the value of the current default email communication item.
+
+#### Changing both the value and communication type
+
+You can also provide the communication type ID in the same patch:
+
+```JSON
+{
+  "groupRef": "{{connectWiseGroupID}}",
+  "type": "update",
+  "record": {
+    "id": "58117",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/AMPERSAND-defaultEmail",
+        "value": "john@example.com"
+      },
+      {
+        "op": "replace",
+        "path": "/AMPERSAND-defaultEmailId",
+        "value": "15"
+      }
+    ]
+  }
+}
+```
+
+This means:
+
+> Make communication type `15` the default email and set its value to `john@example.com`.
+
+If communication type `15` already exists, its existing value is updated and it becomes the default email. The previous default email is not necessarily deleted; it simply stops being the default.
+
+Conceptually, each communication type ID identifies one possible item within the corresponding category:
+
+```text
+Email
+├── Type ID 14 → old@example.com
+└── Type ID 15 → john@example.com  ← default
+
+AMPERSAND-defaultEmail    → john@example.com
+AMPERSAND-defaultEmailId  → 15
+```
+
+The virtual fields let you manipulate this single representative default item without having to address the underlying array directly.
+
+#### Setting a different existing item as the default
+
+Suppose a contact currently has:
+
+```JSON
+[
+  {
+    "type": { "id": "14" },
+    "value": "old@example.com",
+    "defaultFlag": true,
+    "communicationType": "Email"
+  },
+  {
+    "type": { "id": "15" },
+    "value": "john@example.com",
+    "defaultFlag": false,
+    "communicationType": "Email"
+  }
+]
+```
+
+The following patch:
+
+```JSON
+[
+  {
+    "op": "replace",
+    "path": "/AMPERSAND-defaultEmailId",
+    "value": "15"
+  },
+  {
+    "op": "replace",
+    "path": "/AMPERSAND-defaultEmail",
+    "value": "new@example.com"
+  }
+]
+```
+
+makes type `15` the default email and changes its value:
+
+```JSON
+[
+  {
+    "type": { "id": "14" },
+    "value": "old@example.com",
+    "defaultFlag": false,
+    "communicationType": "Email"
+  },
+  {
+    "type": { "id": "15" },
+    "value": "new@example.com",
+    "defaultFlag": true,
+    "communicationType": "Email"
+  }
+]
+```
+
+The old communication item remains in the category, but is no longer the default.
+
+#### Removing a default communication item
+
+You can remove a default communication item with a `remove` operation:
+
+```JSON
+{
+  "op": "remove",
+  "path": "/AMPERSAND-defaultEmail"
+}
+```
+
+This removes the underlying communication item that is currently the default email.
+
+If another communication item exists in the same category, ConnectWise may automatically assign `defaultFlag=true` to another item. That item then becomes the new default email.
+
+For example:
+
+```text
+Before:
+Email
+├── Type ID 14 → old@example.com  ← default
+└── Type ID 15 → backup@example.com
+
+After removing the default:
+Email
+└── Type ID 15 → backup@example.com  ← may become default
+```
+
+If no other communication item exists in the category, the category becomes empty.
+
+### Choosing between `PUT` and `PATCH`
+
+Use `PUT` when you want to provide a full replacement record, including the communication items represented by the virtual fields.
+
+Use `PATCH` when you want to make a targeted change, such as:
+
+* Change the current default email value.
+* Change the current default phone value.
+* Change the current default fax value.
+* Make a specific existing communication type the default.
+* Remove the current default communication item.
+
+In most cases, `PATCH` is the safer choice for modifying one communication item because it changes only the requested communication item rather than replacing the entire `communicationItems` collection.
+
+
 ## Using the connector
 
 This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
