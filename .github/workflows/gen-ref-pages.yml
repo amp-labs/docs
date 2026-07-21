@@ -52,7 +52,7 @@ jobs:
           git config --global user.email "devops@withampersand.com"
           git config --global user.name "Ampersand Ops"
           git add src/
-          git commit -m "[ampersand-ops] auto: update documentation with latest api reference"
+          git diff --cached --quiet || git commit -m "[ampersand-ops] auto: update documentation with latest api reference"
           git remote set-url origin https://x-access-token:${{ secrets.AMPERSAND_OPS_PAT }}@github.com/${{ github.repository }}
           git push origin HEAD:main
         env:
