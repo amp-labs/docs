@@ -253,91 +253,38 @@ Write payload example for the `contacts` object:
 
 ### Custom Fields
 
-The ConnectWise connector **supports reading and writing custom fields** on supported objects.
-For reads, custom fields are available through scheduled reads, historical backfills, and subscriptions.
-Each ConnectWise custom field is exposed as `customField<ID>` -- for example,
-a field with ID `59` might represent a marketing email preference and be selected as `customField59`, while
-a field with ID `83` might represent a hobby and be selected as `customField83`.
-You can then map those fields to more readable names in your connector configuration, such as `marketingEmailOn` or `hobby`.
-```YAML
+The connector supports reading and writing custom fields on supported objects, and they behave like native fields.
+For reads, they're available through scheduled reads, historical backfills, and subscriptions.
+
+Each custom field is exposed as `customField<ID>`. Map it to a more readable name in your configuration with `mapToName`.
+
+> Example: a field with ID `59` representing a marketing preference is selected as `customField59` and can be mapped to `marketingEmailOn`.
+
+```yaml
 read:
   objects:
     - objectName: contacts
-      destination: connectWiseWebhook
       requiredFields:
         - fieldName: customField59
           mapToName: marketingEmailOn
         - fieldName: customField83
           mapToName: hobby
 ```
-This produces output that is easier to work with:
-```JSON
-[
-  {
-    "mappedFields":{
-      "hobby": "Traveling",
-      "marketingEmailOn": true,
-      "firstName": "Estella"
-    }
-  }
-]
-```
 
-**For writes**, custom fields can be provided as if it was a native standard field.
-The connector translates these values into the ConnectWise API format automatically.
+For writes, provide custom fields as if they were native fields; the connector converts them to the ConnectWise format automatically:
 
-To create a record with custom fields:
-```JSON
+```json
 {
-  "groupRef": "{{connectWiseGroupID}}",
-  "type": "create",
-  "record": {
-    "firstName": "Estella",
-    "customField59": true,
-    "customField83": "Traveling"
-  }
-}
-```
-To update a record with custom fields using `PUT`:
-```JSON
-{
-  "groupRef": "{{connectWiseGroupID}}",
-  "type": "update",
-  "record": {
-    "id": "58117",
-    "firstName": "Estella (UPDATED)",
-    "customField59": false,
-    "customField83": "Swimming"
-  }
-}
-```
-To update a record with custom fields using `PATCH`:
-```JSON
-{
-  "groupRef": "{{connectWiseGroupID}}",
-  "type": "update",
-  "record": {
-    "id": "58117",
-    "patch": [
-      {"op": "replace", "path": "/firstName", "value": "Jeniffer"},
-      {"op": "replace", "path": "/customField59", "value": true},
-      {"op": "replace", "path": "/customField83", "value": "Skiing"}
-    ]
-  }
+  "firstName": "Estella",
+  "customField59": true,
+  "customField83": "Traveling"
 }
 ```
 
-When updating records, you only need to provide the custom fields you want to set or change.
-You **do not** need to list **every** custom field exhaustively.
-However, if you want to clear a field, then set its value to `null`, for example:
-```JSON
-{
-  "customField83": null
-}
-```
+You only need to include the custom fields you want to set or change. To clear a field, set its value to `null`.
 
-When you are unsure of a **custom field ID**, check a **read response** for that object.
-Custom fields are returned with their ConnectWise IDs in the `customFields` array.
+To find a custom field's ID, check a read response, custom fields are returned with their IDs in the `customFields` array.
+
 
 ### Example integration
 
@@ -345,94 +292,24 @@ For an example manifest file of a ConnectWise integration, visit our [samples re
 
 ### Contact Communication Items
 
-The `contacts` object contains communication details in a nested `communicationItems` array.
-Each item represents a communication type, such as a particular email, phone number, or fax number.
+ConnectWise stores a contact's email, phone, and fax numbers inside a nested `communicationItems` array, which isn't directly mappable.
+To make these easy to read and write, the connector exposes the **default** email, phone, and fax of a contact
+as flat fields, which you can map like any other contact field.
 
-For example, a contact may contain several email addresses:
+| Field                      | Description                              |
+|----------------------------|------------------------------------------|
+| `AMPERSAND-defaultEmail`   | The contact's default email address      |
+| `AMPERSAND-defaultEmailId` | The communication type of that email     |
+| `AMPERSAND-defaultPhone`   | The contact's default phone number       |
+| `AMPERSAND-defaultPhoneId` | The communication type of that phone     |
+| `AMPERSAND-defaultFax`     | The contact's default fax number         |
+| `AMPERSAND-defaultFaxId`   | The communication type of that fax       |
 
-```JSON
-{
-  "communicationItems": [
-    {
-      "type": { "id": "14" },
-      "value": "old@example.com",
-      "defaultFlag": false,
-      "communicationType": "Email"
-    },
-    {
-      "type": { "id": "15" },
-      "value": "john@example.com",
-      "defaultFlag": true,
-      "communicationType": "Email"
-    }
-  ]
-}
-```
+Only the **default** item of each category is exposed. If a contact has several emails, only the one marked as default appears in `AMPERSAND-defaultEmail`.
 
-To make the default communication details easier to read and write, the connector exposes virtual fields on the `contacts` object.
-These fields are not native ConnectWise fields. They are a connector-level abstraction over the `communicationItems` array.
+#### Reading
 
-| Virtual field              | Description                                           |
-|----------------------------|-------------------------------------------------------|
-| `AMPERSAND-defaultEmail`   | The value of the default **email** communication item |
-| `AMPERSAND-defaultEmailId` | The communication **type ID** of the default email    |
-| `AMPERSAND-defaultPhone`   | The value of the default **phone** communication item |
-| `AMPERSAND-defaultPhoneId` | The communication **type ID** of the default phone    |
-| `AMPERSAND-defaultFax`     | The value of the default **fax** communication item   |
-| `AMPERSAND-defaultFaxId`   | The communication **type ID** of the default fax      |
-
-Only the default item for each communication category is exposed through these virtual fields.
-The remaining communication items continue to exist in the underlying `communicationItems` array.
-
-#### Reading default communication fields
-
-`Contacts.Read` supports these virtual fields.
-When a contact is read, the connector examines its `communicationItems` array and exposes the item whose `defaultFlag` is `true` for each communication category.
-For example, the following communication items:
-
-```JSON
-[
-  {
-    "type": { "id": "14" },
-    "value": "old@example.com",
-    "defaultFlag": false,
-    "communicationType": "Email"
-  },
-  {
-    "type": { "id": "15" },
-    "value": "john@example.com",
-    "defaultFlag": true,
-    "communicationType": "Email"
-  }
-]
-```
-
-are exposed as:
-
-```JSON
-{
-  "AMPERSAND-defaultEmail": "john@example.com",
-  "AMPERSAND-defaultEmailId": "15"
-}
-```
-
-The `AMPERSAND-defaultEmailId` field identifies which communication type the default email refers to.
-This is important when a contact has multiple communication items in the same category.
-
-The same behavior applies to phone and fax communication items:
-
-```JSON
-{
-  "AMPERSAND-defaultEmail": "john@example.com",
-  "AMPERSAND-defaultEmailId": "15",
-  "AMPERSAND-defaultPhone": "+1-555-0100",
-  "AMPERSAND-defaultPhoneId": "21",
-  "AMPERSAND-defaultFax": "+1-555-0199",
-  "AMPERSAND-defaultFaxId": "32"
-}
-```
-
-These fields can be selected in a read operation just like other contact fields.
+Map these fields in a read action just like standard contact fields:
 
 ```yaml
 read:
@@ -442,228 +319,63 @@ read:
         - fieldName: AMPERSAND-defaultEmail
 ```
 
-#### Writing communication fields
+A contact whose default email is `john@example.com` reads back as:
 
-The virtual fields can also be used when creating or updating contacts.
-
-The general pattern is:
-
-* `AMPERSAND-default<Email|Phone|Fax>` contains the value.
-* `AMPERSAND-default<Email|Phone|Fax>Id` identifies the communication type to which the value belongs.
-* If the value is provided without an ID, the connector looks up the default communication type for that category.
-* If the ID is provided, the connector uses that exact communication type.
-
-#### Create
-
-When creating a contact, provide the virtual fields in the record:
-
-```JSON
+```json
 {
-  "groupRef": "{{connectWiseGroupID}}",
-  "type": "create",
-  "record": {
-    "firstName": "John",
-    "lastName": "Smith",
-    "AMPERSAND-defaultEmail": "john@example.com",
-    "AMPERSAND-defaultEmailId": "15"
-  }
+  "AMPERSAND-defaultEmail": "john@example.com",
+  "AMPERSAND-defaultEmailId": "15"
 }
 ```
 
-means:
+The `...Id` field identifies which communication type the default value belongs to. This matters when a contact has more than one item in the same category.
 
-> Set the email communication item with type ID `15` to `john@example.com` and make it the default email.
+#### Writing
 
-The connector translates these virtual fields into ConnectWise `communicationItems` automatically.
-This explicitly targets communication type `15` for an email,
-regardless of which communication type is currently configured as the company's default.
+Map a value to `AMPERSAND-defaultEmail` (or phone/fax) to set it when creating or updating a contact:
 
-#### Update with `PUT`
+- Set just the value, and the connector uses the customer's default type for that category.
+- Set the matching `...Id` field too if you want to target a specific type (for example, a Work email vs a Home email).
+The value is applied to that type and marked as the default.
 
-A regular update payload uses `PUT` and represents a full replacement of the record.
-The connector translates the virtual fields into a new `communicationItems` array.
-`PUT` update should be treated as a replacement of the contact's communication items, not as a partial modification.
+An update changes only the fields you send. Anything you don't send is left untouched, so setting the email does not affect the phone, fax, or other contact fields.
 
-> **Important:** Because the existing communication items are cleared before the replacement is applied,
-a failure between these operations could theoretically leave the contact without its previous communication items.
-This is an unlikely failure scenario, but it is a consequence of the ConnectWise API behavior required to perform this update.
+For example, to set a contact's email on create:
 
-#### Update with `PATCH`
-
-For partial updates, use a JSON Patch document.
-
-The virtual communication fields can be used in patch operations just like ordinary fields:
-
-```JSON
+```json
 {
-  "groupRef": "{{connectWiseGroupID}}",
+  "firstName": "John",
+  "lastName": "Smith",
+  "AMPERSAND-defaultEmail": "john@example.com"
+}
+```
+
+<Note>
+The `...Id` fields refer to ConnectWise "communication types" configured in the customer's ConnectWise account.
+  You only need them when a contact has more than one email, phone, or fax and you want to target a specific one.
+</Note>
+
+#### Advanced: partial updates with JSON Patch
+
+If you call the write API directly, you can send a JSON Patch to change a single field, including these virtual fields:
+
+```json
+{
   "type": "update",
   "record": {
     "id": "58117",
     "patch": [
-      {
-        "op": "replace",
-        "path": "/AMPERSAND-defaultEmail",
-        "value": "john@example.com"
-      }
+      { "op": "replace", "path": "/AMPERSAND-defaultEmail", "value": "john@example.com" }
     ]
   }
 }
 ```
 
-The connector translates this operation into the appropriate update to the underlying `communicationItems` array.
+- `replace` on a value updates the current default item.
+- `replace` on an `...Id` field switches which communication type is the default, used alongside `AMPERSAND-defaultEmail`, etc.
+- `remove` deletes the current default item for that category.
 
-#### Changing the default value
-
-To change the value of the current default email, replace the value field:
-
-```JSON
-{
-  "op": "replace",
-  "path": "/AMPERSAND-defaultEmail",
-  "value": "john@example.com"
-}
-```
-
-This updates the value of the current default email communication item.
-
-#### Changing both the value and communication type
-
-You can also provide the communication type ID in the same patch:
-
-```JSON
-{
-  "groupRef": "{{connectWiseGroupID}}",
-  "type": "update",
-  "record": {
-    "id": "58117",
-    "patch": [
-      {
-        "op": "replace",
-        "path": "/AMPERSAND-defaultEmail",
-        "value": "john@example.com"
-      },
-      {
-        "op": "replace",
-        "path": "/AMPERSAND-defaultEmailId",
-        "value": "15"
-      }
-    ]
-  }
-}
-```
-
-This means:
-
-> Make communication type `15` the default email and set its value to `john@example.com`.
-
-If communication type `15` already exists, its value is updated, and it is marked as the default email.
-If the previous default email has a different type ID, that communication item is not deleted;
-it simply stops being the default.
-
-Conceptually, each communication type ID identifies a specific item within the corresponding communication category:
-
-
-```text
-Email
-├── Type ID 14 -> old@example.com
-└── Type ID 15 -> john@example.com  <- default
-
-AMPERSAND-defaultEmail    -> john@example.com
-AMPERSAND-defaultEmailId  -> 15
-```
-
-The virtual fields **let you manipulate this single representative default item** without having to address the underlying array directly.
-
-#### Setting a different existing item as the default
-
-Suppose a contact currently has:
-
-```JSON
-[
-  {
-    "type": { "id": "14" },
-    "value": "old@example.com",
-    "defaultFlag": true,
-    "communicationType": "Email"
-  },
-  {
-    "type": { "id": "15" },
-    "value": "john@example.com",
-    "defaultFlag": false,
-    "communicationType": "Email"
-  }
-]
-```
-
-The following patch:
-
-```JSON
-[
-  {
-    "op": "replace",
-    "path": "/AMPERSAND-defaultEmailId",
-    "value": "15"
-  },
-  {
-    "op": "replace",
-    "path": "/AMPERSAND-defaultEmail",
-    "value": "new@example.com"
-  }
-]
-```
-
-makes type `15` the default email instead of `14` and changes its value:
-
-```JSON
-[
-  {
-    "type": { "id": "14" },
-    "value": "old@example.com",
-    "defaultFlag": false,
-    "communicationType": "Email"
-  },
-  {
-    "type": { "id": "15" },
-    "value": "new@example.com",
-    "defaultFlag": true,
-    "communicationType": "Email"
-  }
-]
-```
-
-The old communication item remains in the category, **but is no longer the default**.
-
-#### Removing a default communication item
-
-You can remove a default communication item with a `remove` operation:
-
-```JSON
-{
-  "op": "remove",
-  "path": "/AMPERSAND-defaultEmail"
-}
-```
-
-This removes the underlying communication item that is currently the default email.
-
-If another communication item exists in the same category, ConnectWise will automatically assign `defaultFlag=true`
-to another item. That item then becomes the new default email.
-
-For example:
-
-```text
-Before:
-Email
-├── Type ID 14 -> old@example.com  <- default
-└── Type ID 15 -> backup@example.com
-
-After removing the default:
-Email
-└── Type ID 15 -> backup@example.com  <- will become new default
-```
-
-If no other communication item exists in the category, the category becomes empty and `null` values will be returned.
+The connector translates these into the correct changes on the underlying `communicationItems` array.
 
 ## Using the connector
 
