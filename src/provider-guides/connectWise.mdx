@@ -338,9 +338,10 @@ Map a value to `AMPERSAND-defaultEmail` (or phone/fax) to set it when creating o
 - Set the matching `...Id` field too if you want to target a specific type (for example, a Work email vs a Home email).
 The value is applied to that type and marked as the default.
 
-An update changes only the fields you send. Anything you don't send is left untouched, so setting the email does not affect the phone, fax, or other contact fields.
+Updates replace the fields you send. Any fields you omit will be cleared.
+For partial updates, see the [JSON Patch section below](#advanced-partial-updates-with-json-patch).
 
-For example, to set a contact's email on create:
+Example -- replace a contact:
 
 ```json
 {
@@ -372,7 +373,8 @@ If you call the write API directly, you can send a JSON Patch to change a single
 ```
 
 - `replace` on a value updates the current default item.
-- `replace` on an `...Id` field switches which communication type is the default, used alongside `AMPERSAND-defaultEmail`, etc.
+- `replace` on an `...Id` field switches which communication type is the default,
+(used together with `AMPERSAND-defaultEmail`, etc.)
 - `remove` deletes the current default item for that category.
 
 The connector translates these into the correct changes on the underlying `communicationItems` array.
