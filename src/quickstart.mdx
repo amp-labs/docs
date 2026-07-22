@@ -2,6 +2,7 @@
 title: "Quickstart"
 ---
 
+
 export const Where = ({ at }) => (
   <span style={{ display: "inline-flex", flexWrap: "wrap", gap: "6px", margin: "0 0 12px" }}>
     {at.split(",").map((k) => {
@@ -11,6 +12,7 @@ export const Where = ({ at }) => (
         cli: { label: "Ampersand CLI", bg: "#EDEDEF", fg: "#4A4A52" },
         mailmonkey: { label: "MailMonkey", bg: "#F7ECE4", fg: "#9A6238" },
       }[k.trim()];
+      if (!t) return null;
       return (
         <span
           key={k}
@@ -33,6 +35,7 @@ export const Where = ({ at }) => (
     })}
   </span>
 );
+
 
 In this Quickstart tutorial, you'll build a real integration for a fictional app called **MailMonkey**, an AI-powered email campaign manager, so it can sync data with its customers' Salesforce. By the end, you'll have a working integration that your customers can install from your own app's UI.
 
