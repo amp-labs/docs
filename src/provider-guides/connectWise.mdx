@@ -251,20 +251,133 @@ Write payload example for the `contacts` object:
 }
 ```
 
+### Custom Fields
+
+The connector supports reading and writing custom fields on supported objects, and they behave like native fields.
+For reads, they're available through scheduled reads, historical backfills, and subscriptions.
+
+Each custom field is exposed as `customField<ID>`. Map it to a more readable name in your configuration with `mapToName`.
+
+> Example: a field with ID `59` representing a marketing preference is selected as `customField59` and can be mapped to `marketingEmailOn`.
+
+```yaml
+read:
+  objects:
+    - objectName: contacts
+      requiredFields:
+        - fieldName: customField59
+          mapToName: marketingEmailOn
+        - fieldName: customField83
+          mapToName: hobby
+```
+
+For writes, provide custom fields as if they were native fields; the connector converts them to the ConnectWise format automatically:
+
+```json
+{
+  "firstName": "Estella",
+  "customField59": true,
+  "customField83": "Traveling"
+}
+```
+
+You only need to include the custom fields you want to set or change. To clear a field, set its value to `null`.
+
+To find a custom field's ID, check a read response, custom fields are returned with their IDs in the `customFields` array.
+
+
 ### Example integration
 
-To define an integration for ConnectWise, create a manifest file that looks like this:
+For an example manifest file of a ConnectWise integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/connectwise/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: connectWise-integration
-    displayName: My ConnectWise Integration
-    provider: connectWise
-    proxy:
-      enabled: true
+### Contact Communication Items
+
+ConnectWise stores a contact's email, phone, and fax numbers inside a nested `communicationItems` array, which isn't directly mappable.
+To make these easy to read and write, the connector exposes the **default** email, phone, and fax of a contact
+as flat fields, which you can map like any other contact field.
+
+| Field                      | Description                              |
+|----------------------------|------------------------------------------|
+| `AMPERSAND-defaultEmail`   | The contact's default email address      |
+| `AMPERSAND-defaultEmailId` | The communication type of that email     |
+| `AMPERSAND-defaultPhone`   | The contact's default phone number       |
+| `AMPERSAND-defaultPhoneId` | The communication type of that phone     |
+| `AMPERSAND-defaultFax`     | The contact's default fax number         |
+| `AMPERSAND-defaultFaxId`   | The communication type of that fax       |
+
+Only the **default** item of each category is exposed. If a contact has several emails, only the one marked as default appears in `AMPERSAND-defaultEmail`.
+
+#### Reading
+
+Map these fields in a read action just like standard contact fields:
+
+```yaml
+read:
+  objects:
+    - objectName: contacts
+      requiredFields:
+        - fieldName: AMPERSAND-defaultEmail
 ```
+
+A contact whose default email is `john@example.com` reads back as:
+
+```json
+{
+  "AMPERSAND-defaultEmail": "john@example.com",
+  "AMPERSAND-defaultEmailId": "15"
+}
+```
+
+The `...Id` field identifies which communication type the default value belongs to. This matters when a contact has more than one item in the same category.
+
+#### Writing
+
+Map a value to `AMPERSAND-defaultEmail` (or phone/fax) to set it when creating or updating a contact:
+
+- Set just the value, and the connector uses the customer's default type for that category.
+- Set the matching `...Id` field too if you want to target a specific type (for example, a Work email vs a Home email).
+The value is applied to that type and marked as the default.
+
+Updates replace the fields you send. Any fields you omit will be cleared.
+For partial updates, see the [JSON Patch section below](#advanced-partial-updates-with-json-patch).
+
+Example -- replace a contact:
+
+```json
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "AMPERSAND-defaultEmail": "john@example.com"
+}
+```
+
+<Note>
+The `...Id` fields refer to ConnectWise "communication types" configured in the customer's ConnectWise account.
+  You only need them when a contact has more than one email, phone, or fax and you want to target a specific one.
+</Note>
+
+#### Advanced: partial updates with JSON Patch
+
+If you call the write API directly, you can send a JSON Patch to change a single field, including these virtual fields:
+
+```json
+{
+  "type": "update",
+  "record": {
+    "id": "58117",
+    "patch": [
+      { "op": "replace", "path": "/AMPERSAND-defaultEmail", "value": "john@example.com" }
+    ]
+  }
+}
+```
+
+- `replace` on a value updates the current default item.
+- `replace` on an `...Id` field switches which communication type is the default,
+(used together with `AMPERSAND-defaultEmail`, etc.)
+- `remove` deletes the current default item for that category.
+
+The connector translates these into the correct changes on the underlying `communicationItems` array.
 
 ## Using the connector
 
