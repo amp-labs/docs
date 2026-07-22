@@ -2,6 +2,37 @@
 title: "Quickstart"
 ---
 
+export const Where = ({ at }) => (
+  <span style={{ display: "inline-flex", flexWrap: "wrap", gap: "6px", margin: "0 0 12px" }}>
+    {at.split(",").map((k) => {
+      const t = {
+        dashboard: { label: "Ampersand Dashboard", bg: "#4F1EB8" },
+        salesforce: { label: "Salesforce", bg: "#00A1E0" },
+        cli: { label: "Ampersand CLI", bg: "#2B2A33" },
+        mailmonkey: { label: "MailMonkey", bg: "#E8590C" },
+      }[k.trim()];
+      return (
+        <span
+          key={k}
+          style={{
+            display: "inline-block",
+            padding: "2px 10px",
+            borderRadius: "9999px",
+            fontSize: "0.72rem",
+            fontWeight: 600,
+            letterSpacing: "0.02em",
+            color: "#ffffff",
+            background: t.bg,
+            lineHeight: 1.6,
+          }}
+        >
+          {t.label}
+        </span>
+      );
+    })}
+  </span>
+);
+
 In this Quickstart, you'll build a real integration for a fictional app called **MailMonkey**, an AI-powered email campaign manager, so it can sync data with its customers' Salesforce. By the end, you'll have a working integration that your customers can install from your own app's UI.
 
 <img width="300" src="/images/28feb09-Group_2987.png" />
@@ -36,7 +67,13 @@ Before you start, make sure you have:
 
 A deployed integration and an embedded install wizard in your React app. When one of your customers clicks through it, they'll connect their Salesforce, choose which fields to sync, and their Contacts and Leads will start arriving at your webhook.
 
+Each step below is tagged with where you'll be working:
+
+<Where at="dashboard,salesforce,cli,mailmonkey" />
+
 ## Step 1: Create an Ampersand org and project
+
+<Where at="dashboard" />
 
 Sign in to your [Ampersand account](https://dashboard.withampersand.com), then follow the on-screen steps to create an **org** and a **project**. Each org can have multiple projects, which is helpful for separating development and production environments.
 
@@ -47,6 +84,8 @@ Note your project's ID or name, since you'll need it when you deploy in Step 5.
 **Checkpoint:** You're in the dashboard with a project selected.
 
 ## Step 2: Create a Salesforce provider app
+
+<Where at="salesforce,dashboard" />
 
 A provider app holds the OAuth credentials Ampersand uses to connect to your customers' Salesforce. For Salesforce, this is an **External Client App** created in your own Salesforce org.
 
@@ -75,6 +114,8 @@ A provider app holds the OAuth credentials Ampersand uses to connect to your cus
 
 ## Step 3: Create a destination
 
+<Where at="dashboard" />
+
 A destination is where Ampersand delivers the data it reads from Salesforce. For this tutorial we'll use webhooks.
 
 1. Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the dashboard and add a new destination.
@@ -90,6 +131,8 @@ Create **two** destinations so they match the manifest in the next step:
 **Checkpoint:** Both `contactWebhook` and `leadsWebhook` are listed on the Destinations page.
 
 ## Step 4: Define the integration
+
+<Where at="mailmonkey" />
 
 Create a folder called `source` with a file inside called `amp.yaml`. This is where you define the integration.
 
@@ -142,6 +185,8 @@ Once a customer installs the integration, MailMonkey's backend calls Ampersand t
 
 ## Step 5: Deploy the manifest
 
+<Where at="cli" />
+
 Deploy the integration with the [`amp` CLI](/cli/overview):
 
 ```bash bash
@@ -153,6 +198,8 @@ amp deploy source --project=my-project-id-or-name
 **Checkpoint:** In the dashboard, open your project's **Integrations**. You should see **MailMonkey Salesforce Integration** listed.
 
 ## Step 6: Embed the UI component
+
+<Where at="dashboard,mailmonkey" />
 
 Now embed Ampersand's React library so your customers can install the integration themselves. The `InstallIntegration` component handles the auth flow and configuration steps for you. See [Prebuilt UI components](/embeddable-ui-components) for the full component set.
 
