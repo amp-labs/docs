@@ -2,39 +2,100 @@
 title: "Quickstart"
 ---
 
-For this Quickstart, we are going to build integrations for a cool new app called MailMonkey - an AI-powered email campaign manager that integrates with Salesforce. You can see the final `amp.yaml` file on [Github](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml).
+In this Quickstart, you'll build a real integration for a fictional app called **MailMonkey** — an AI-powered email campaign manager — so it can sync data with its customers' Salesforce. By the end, you'll have a working integration that your customers can install from your own app's UI.
 
 <img width="300" src="/images/28feb09-Group_2987.png" />
 
-## Create an Ampersand org and project
+## What you'll build
 
-Sign up for an [Ampersand account](https://dashboard.withampersand.com/sign-up), and then follow the steps on the screen to create an org and then a project. Each org can have multiple projects, this is helpful for separating development and production environments.
+You'll create a single Ampersand integration between MailMonkey and Salesforce that:
 
-### Claim your domain
-Claim your domain to let teammates auto-join your organization when they sign up. You can do this as an org owner in the dashboard under org settings. Once enabled, anyone with a `@yourcompany.com` email will automatically be added to your org.
+1. **Reads Contacts and Leads** — pulls all Contacts and Leads from a customer's Salesforce into MailMonkey.
+2. **Creates Leads** — inserts a new Lead in Salesforce whenever someone replies to a MailMonkey email campaign.
 
-## Create a provider app
+You can see the final `amp.yaml` file that this tutorial builds toward on [GitHub](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml).
 
-We'll first set up a Salesforce Connected App and put the Client ID and Client Secret inside of Ampersand Dashboard. See the [Salesforce guide](/provider-guides/salesforce) for more information.
+## Prerequisites
 
-## Create a destination
+Before you start, make sure you have:
 
-Next, we create a webhook destination for Ampersand to send data that it reads from Salesforce. See [Destinations](destinations) for more details.
+- **An Ampersand account.** Sign up at [dashboard.withampersand.com](https://dashboard.withampersand.com/sign-up).
+- **The `amp` CLI installed.** On macOS, install it with [Homebrew](https://brew.sh):
 
-## Define the integrations
+  ```bash bash
+  brew tap amp-labs/cli
+  brew update
+  brew install amp-labs/cli/cli
+  ```
 
-To make MailMonkey interoperate seamlessly with our customers' Salesforce, we will create an integration which will:
+  On Windows or other systems, download the binary from the [releases page](https://github.com/amp-labs/cli/releases) and add it to your `PATH`. See the [CLI overview](/cli/overview) for details. Verify the install by running `amp` — you should see a list of available commands.
+- **A Salesforce org** (a free [Developer Edition](https://developer.salesforce.com/signup) org works) that you can configure.
+- **A React frontend** to embed the install UI into. If you don't have one, clone our [Starter Project](https://github.com/amp-labs/starter-project/tree/main).
 
-1. **Read Contacts and Leads**: pull all Contacts and Leads from a customer's Salesforce into MailMonkey.
-2. **Create Leads**: create a new Lead in Salesforce whenever somebody replies to a MailMonkey email campaign.
+## What you'll have at the end
 
-Let's create a folder called `source`, with a file inside called `amp.yaml`, this is where we will define our integration. Later on, you can refer to the [Manifest Reference](/manifest-reference) for a comprehensive guide to this file.
+A deployed integration and an embedded install wizard in your React app. When one of your customers clicks through it, they'll connect their Salesforce, choose which fields to sync, and their Contacts and Leads will start arriving at your webhook.
 
-### Read Contacts and Leads
+## Step 1: Create an Ampersand org and project
 
-Our integration will have a [Read Actions](/read-actions). We'll read 2 objects from Salesforce: contacts and leads.
+Sign in to your [Ampersand account](https://dashboard.withampersand.com), then follow the on-screen steps to create an **org** and a **project**. Each org can have multiple projects, which is helpful for separating development and production environments.
 
-```YAML YAML
+Note your project's ID or name — you'll need it when you deploy in Step 5.
+
+> **Optional — claim your domain.** As an org owner, go to **org settings** and claim your domain so teammates auto-join when they sign up. Once enabled, anyone with a `@yourcompany.com` email is automatically added to your org.
+
+**Checkpoint:** You're in the dashboard with a project selected.
+
+## Step 2: Create a Salesforce provider app
+
+A provider app holds the OAuth credentials Ampersand uses to connect to your customers' Salesforce. For Salesforce, this is an **External Client App** created in your own Salesforce org.
+
+1. In Salesforce, go to **Setup**, search for **Dev Hub** in the Quick Find box, and select **Enable Dev Hub**.
+2. In **Setup**, search for **External Client App Manager** and click **New External Client App**. Give it a name, enable **OAuth settings**, and set the callback URL to:
+
+   ```text text
+   https://api.withampersand.com/callbacks/v1/oauth
+   ```
+
+   ![Create an External Client App](/images/provider-guides/salesforce/new-app.png)
+
+   ![Configure the External Client App](/images/provider-guides/salesforce_eca_creation.gif)
+
+3. Open the app's **Settings → OAuth Settings → Consumer Key and Secret** and copy the **Consumer Key** and **Consumer Secret**.
+
+   <img src="/images/provider-guides/salesforce_eca_oauth.png" width="200"/>
+
+4. In the Ampersand [Dashboard](https://dashboard.withampersand.com), select your project, go to **Provider apps**, and choose **Salesforce**. Paste the **Consumer Key** as the **Client ID** and the **Consumer Secret** as the **Client Secret**, then save.
+
+   ![Add the Salesforce provider app in the Ampersand dashboard](/images/provider-guides/dd47b7a-Ampersand.png)
+
+> **Going to production?** Salesforce also requires you to register a namespace and package the External Client App so customers can install it. Those steps are covered in the full [Salesforce provider guide](/provider-guides/salesforce).
+
+**Checkpoint:** Salesforce now appears under **Provider apps** in your project.
+
+## Step 3: Create a destination
+
+A destination is where Ampersand delivers the data it reads from Salesforce. For this tutorial we'll use webhooks.
+
+1. Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the dashboard and add a new destination.
+2. Provide a **name** (this is the alias you'll reference in `amp.yaml`) and a **URL** that starts with `https`.
+
+Create **two** destinations so they match the manifest in the next step:
+
+- `contactWebhook`
+- `leadsWebhook`
+
+> Don't have a real endpoint yet? Create a temporary one with the [Hookdeck Console](https://console.hookdeck.com?provider=ampersand) and paste its URL. For the payload format and signature verification, see [Webhooks](/destinations/webhooks) and the [Destinations overview](/destinations/overview).
+
+**Checkpoint:** Both `contactWebhook` and `leadsWebhook` are listed on the Destinations page.
+
+## Step 4: Define the integration
+
+Create a folder called `source` with a file inside called `amp.yaml`. This is where you define the integration.
+
+The manifest below is the minimum needed to learn the flow — a [Read action](/read-actions) for two objects (`contact` and `lead`) and a [Write action](/write-actions) for `lead`:
+
+```YAML source/amp.yaml
 specVersion: 1.0.0
 integrations:
   - name: mailmonkey-salesforce
@@ -42,23 +103,21 @@ integrations:
     provider: salesforce
     read:
       objects:
+        # Read contacts into MailMonkey.
         - objectName: contact
           destination: contactWebhook
           schedule: "*/30 * * * *" # every 30 minutes
           backfill:
             defaultPeriod:
               fullHistory: true
-          # Always read these fields
           requiredFields:
             - fieldName: firstname
             - fieldName: lastname
             - fieldName: email
-          # Customer can decide if they want us to read these fields.
-          optionalFields:
-            - fieldName: salutation
+        # Read leads, and let the customer map their own priority field.
         - objectName: lead
           destination: leadsWebhook
-          schedule: "*/30 * * * *" # every 30 minutes
+          schedule: "*/30 * * * *"
           backfill:
             defaultPeriod:
               fullHistory: true
@@ -66,64 +125,57 @@ integrations:
             - fieldName: firstname
             - fieldName: lastname
             - fieldName: email
-            - fieldName: isconverted
-            # Allow the customer to pick a field to map to priority score
             - mapToName: priority
               mapToDisplayName: Priority Score
               prompt: Which field do you use to track the priority of a lead?
-          # All other fields in a Lead are optional,
-          # Customers can pick from all of them.
-          optionalFieldsAuto: all
-```
-
-### Create Leads
-
-Next we will add a [Write Action](/write-actions). We want to insert new leads into our customer's Salesforce.
-
-
-```YAML YAML
-...
-    # Append to the integration definition from above.
     write:
       objects:
-        # Create a new lead in Salesforce whenever we make an API request.
+        # Create a new lead in Salesforce whenever MailMonkey makes an API request.
         - objectName: lead
 ```
 
-Once a customer installs our integration, MailMonkey's application backend will make an API call to Ampersand to create the new lead whenever there's an email reply that we detect.
+Once a customer installs the integration, MailMonkey's backend calls Ampersand to create a new Lead whenever it detects an email reply.
 
-### Deploy the completed manifest
+> This is a trimmed manifest to keep the tutorial focused. For the complete set of options (optional fields, field mappings, custom schedules, and more), see the [Manifest schema reference](/manifest-reference) and the [full sample on GitHub](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml).
 
-You can see the final `amp.yaml` file on [Github](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml).
+**Checkpoint:** You have a `source/amp.yaml` file with a `read` and a `write` block.
 
-Once we are happy with the definition of our integrations, we can deploy them with the [amp CLI](/cli/overview):
+## Step 5: Deploy the manifest
 
-```
+Deploy the integration with the [`amp` CLI](/cli/overview):
+
+```bash bash
 amp login
-# Our amp.yaml file is located in a folder called source.
+# Our amp.yaml file is in a folder called source.
 amp deploy source --project=my-project-id-or-name
 ```
 
-## Embed UI components
+**Checkpoint:** In the dashboard, open your project's **Integrations** — you should see **MailMonkey Salesforce Integration** listed.
 
-Next, we will use Ampersand's react library to embed ready-made UI components into our app, so that our customers can start using our shiny new integrations! We'll use the `InstallIntegration` component for the auth flow and configuration steps. Check out [Embed UI components](/embeddable-ui-components) for more details on this component and other components to help your users set up and manage their integrations. If you don't already have a frontend codebase, you can use our [Starter Project](https://github.com/amp-labs/starter-project/tree/main).
+## Step 6: Embed the UI component
 
-Here's a simplified version of what our frontend code would look like:
+Now embed Ampersand's React library so your customers can install the integration themselves. The `InstallIntegration` component handles the auth flow and configuration steps for you. See [Prebuilt UI components](/embeddable-ui-components) for the full component set.
+
+First, create an API key in the dashboard under your project settings:
+
+![Create an API key](/images/create-api-key.png)
+
+Then add the component to your app. Note that the `integration` prop must match the `name` from your `amp.yaml` (`mailmonkey-salesforce`):
 
 ```TypeScript TypeScript
 import { AmpersandProvider, InstallIntegration } from '@amp-labs/react';
 
 const options = {
   project: 'my-project', // Your Ampersand project name or ID.
-  apiKey: 'API_KEY',// Your Ampersand API key, created in the Dashboard.
+  apiKey: 'API_KEY',     // The API key you created in the Dashboard.
 };
 
 function App() {
   return (
     <AmpersandProvider options={options}>
-      <InstallIntegration 
-        // The name of the integration from amp.yaml
-        integration = "readContactsAndLeads"
+      <InstallIntegration
+        // The name of the integration from amp.yaml.
+        integration = "mailmonkey-salesforce"
         // The ID that your app uses to identify this end user.
         consumerRef = {userId}
         // The display name that your app uses for this end user.
@@ -137,3 +189,16 @@ function App() {
   )
 }
 ```
+
+When you render this component, your customer sees the install wizard:
+
+![The InstallIntegration wizard](/images/install-integration-v2.13.7.png)
+
+**Checkpoint:** The install wizard renders in your app. After a customer connects their Salesforce and picks their fields, Contacts and Leads start arriving at your `contactWebhook` and `leadsWebhook` destinations — and your integration is live. 🎉
+
+## What's next
+
+- [Prebuilt UI components](/embeddable-ui-components) — customize the install experience and manage installed integrations.
+- [Manifest schema reference](/manifest-reference) — the complete set of `amp.yaml` options.
+- [Destinations overview](/destinations/overview) — deliver data to webhooks, S3, or Kinesis.
+- [Salesforce provider guide](/provider-guides/salesforce) — package your app for production.
