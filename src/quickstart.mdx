@@ -6,10 +6,10 @@ export const Where = ({ at }) => (
   <span style={{ display: "inline-flex", flexWrap: "wrap", gap: "6px", margin: "0 0 12px" }}>
     {at.split(",").map((k) => {
       const t = {
-        dashboard: { label: "Ampersand Dashboard", bg: "#4F1EB8" },
-        salesforce: { label: "Salesforce", bg: "#00A1E0" },
-        cli: { label: "Ampersand CLI", bg: "#2B2A33" },
-        mailmonkey: { label: "MailMonkey", bg: "#E8590C" },
+        dashboard: { label: "Ampersand Dashboard", bg: "#EEEAFA", fg: "#5B47A0" },
+        salesforce: { label: "Salesforce", bg: "#E7F1F8", fg: "#3B6E8C" },
+        cli: { label: "Ampersand CLI", bg: "#EDEDEF", fg: "#4A4A52" },
+        mailmonkey: { label: "MailMonkey", bg: "#F7ECE4", fg: "#9A6238" },
       }[k.trim()];
       return (
         <span
@@ -21,8 +21,9 @@ export const Where = ({ at }) => (
             fontSize: "0.72rem",
             fontWeight: 600,
             letterSpacing: "0.02em",
-            color: "#ffffff",
+            color: t.fg,
             background: t.bg,
+            border: `1px solid ${t.fg}22`,
             lineHeight: 1.6,
           }}
         >
