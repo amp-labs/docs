@@ -2,7 +2,7 @@
 title: "Quickstart"
 ---
 
-In this Quickstart, you'll build a real integration for a fictional app called **MailMonkey** — an AI-powered email campaign manager — so it can sync data with its customers' Salesforce. By the end, you'll have a working integration that your customers can install from your own app's UI.
+In this Quickstart, you'll build a real integration for a fictional app called **MailMonkey**, an AI-powered email campaign manager, so it can sync data with its customers' Salesforce. By the end, you'll have a working integration that your customers can install from your own app's UI.
 
 <img width="300" src="/images/28feb09-Group_2987.png" />
 
@@ -10,8 +10,8 @@ In this Quickstart, you'll build a real integration for a fictional app called *
 
 You'll create a single Ampersand integration between MailMonkey and Salesforce that:
 
-1. **Reads Contacts and Leads** — pulls all Contacts and Leads from a customer's Salesforce into MailMonkey.
-2. **Creates Leads** — inserts a new Lead in Salesforce whenever someone replies to a MailMonkey email campaign.
+1. **Reads Contacts and Leads**: pulls all Contacts and Leads from a customer's Salesforce into MailMonkey.
+2. **Creates Leads**: inserts a new Lead in Salesforce whenever someone replies to a MailMonkey email campaign.
 
 You can see the final `amp.yaml` file that this tutorial builds toward on [GitHub](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml).
 
@@ -28,7 +28,7 @@ Before you start, make sure you have:
   brew install amp-labs/cli/cli
   ```
 
-  On Windows or other systems, download the binary from the [releases page](https://github.com/amp-labs/cli/releases) and add it to your `PATH`. See the [CLI overview](/cli/overview) for details. Verify the install by running `amp` — you should see a list of available commands.
+  On Windows or other systems, download the binary from the [releases page](https://github.com/amp-labs/cli/releases) and add it to your `PATH`. See the [CLI overview](/cli/overview) for details. Verify the install by running `amp`. You should see a list of available commands.
 - **A Salesforce org** (a free [Developer Edition](https://developer.salesforce.com/signup) org works) that you can configure.
 - **A React frontend** to embed the install UI into. If you don't have one, clone our [Starter Project](https://github.com/amp-labs/starter-project/tree/main).
 
@@ -40,9 +40,9 @@ A deployed integration and an embedded install wizard in your React app. When on
 
 Sign in to your [Ampersand account](https://dashboard.withampersand.com), then follow the on-screen steps to create an **org** and a **project**. Each org can have multiple projects, which is helpful for separating development and production environments.
 
-Note your project's ID or name — you'll need it when you deploy in Step 5.
+Note your project's ID or name, since you'll need it when you deploy in Step 5.
 
-> **Optional — claim your domain.** As an org owner, go to **org settings** and claim your domain so teammates auto-join when they sign up. Once enabled, anyone with a `@yourcompany.com` email is automatically added to your org.
+> **Optional: claim your domain.** As an org owner, go to **org settings** and claim your domain so teammates auto-join when they sign up. Once enabled, anyone with a `@yourcompany.com` email is automatically added to your org.
 
 **Checkpoint:** You're in the dashboard with a project selected.
 
@@ -93,7 +93,7 @@ Create **two** destinations so they match the manifest in the next step:
 
 Create a folder called `source` with a file inside called `amp.yaml`. This is where you define the integration.
 
-The manifest below is the minimum needed to learn the flow — a [Read action](/read-actions) for two objects (`contact` and `lead`) and a [Write action](/write-actions) for `lead`:
+The manifest below is the minimum needed to learn the flow: a [Read action](/read-actions) for two objects (`contact` and `lead`) and a [Write action](/write-actions) for `lead`.
 
 ```YAML source/amp.yaml
 specVersion: 1.0.0
@@ -150,7 +150,7 @@ amp login
 amp deploy source --project=my-project-id-or-name
 ```
 
-**Checkpoint:** In the dashboard, open your project's **Integrations** — you should see **MailMonkey Salesforce Integration** listed.
+**Checkpoint:** In the dashboard, open your project's **Integrations**. You should see **MailMonkey Salesforce Integration** listed.
 
 ## Step 6: Embed the UI component
 
@@ -194,11 +194,11 @@ When you render this component, your customer sees the install wizard:
 
 ![The InstallIntegration wizard](/images/install-integration-v2.13.7.png)
 
-**Checkpoint:** The install wizard renders in your app. After a customer connects their Salesforce and picks their fields, Contacts and Leads start arriving at your `contactWebhook` and `leadsWebhook` destinations — and your integration is live. 🎉
+**Checkpoint:** The install wizard renders in your app. After a customer connects their Salesforce and picks their fields, Contacts and Leads start arriving at your `contactWebhook` and `leadsWebhook` destinations, and your integration is live. 🎉
 
 ## What's next
 
-- [Prebuilt UI components](/embeddable-ui-components) — customize the install experience and manage installed integrations.
-- [Manifest schema reference](/manifest-reference) — the complete set of `amp.yaml` options.
-- [Destinations overview](/destinations/overview) — deliver data to webhooks, S3, or Kinesis.
-- [Salesforce provider guide](/provider-guides/salesforce) — package your app for production.
+- [Prebuilt UI components](/embeddable-ui-components): customize the install experience and manage installed integrations.
+- [Manifest schema reference](/manifest-reference): the complete set of `amp.yaml` options.
+- [Destinations overview](/destinations/overview): deliver data to webhooks, S3, or Kinesis.
+- [Salesforce provider guide](/provider-guides/salesforce): package your app for production.
