@@ -66,10 +66,11 @@ export const Cross = () => <span>🚫</span>
 Attio uses two subscription patterns depending on the object:
 
 - **Standard and custom objects** (People, Companies, Users, Deals, Workspaces, and any custom object) are subscribed through Attio's generic record events (`record.created`, `record.updated`, `record.deleted`), scoped to the specific object. They support **create**, **update**, and **delete** events.
-- **Core objects** are subscribed through object-specific events: **Notes**, **Tasks**, and **Lists** support **create**, **update**, and **delete**; **WorkspaceMembers** supports **create** only.
+- **Core objects** are subscribed through object-specific events: **Notes**, **Tasks**, and **Lists** support **create**, **update**, and **delete**; **WorkspaceMembers** supports **create** only. Note that **Lists** events fire on the list object itself (a list being created, updated, or deleted) — not on records being added to or removed from a list.
 
 Please note that:
 
+- **Standard objects must be activated.** Attio delivers `record.*` events only for objects that are active in the workspace. People, Companies, and Deals are active by default; Users and Workspaces are optional standard objects that must be enabled under **Workspace settings → Objects** before they can be subscribed to.
 - **Watched fields are not supported.** Attio webhook payloads do not include changed-field data, so field-level update filtering (`requiredWatchFields`) is not available. Use `watchFieldsAuto: all` for update events — they fire on any change to the record, and Ampersand fetches the full updated record for you.
 - **Scopes gate webhook creation and delivery.** Your Attio app must be granted **read-write access to the Webhooks scope** (to create the subscription) and **read access to record objects** (so Ampersand can fetch the changed record). Grant these under **Workspace settings → Developers → [your app] → Scopes**; without them, subscription creation fails with a `403`.
 
