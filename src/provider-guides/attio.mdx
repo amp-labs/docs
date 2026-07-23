@@ -22,7 +22,7 @@ export const rows = [
   { label: "Deals", href: "https://docs.attio.com/rest-api/endpoint-reference/standard-objects/deals/assert-a-deal-record", read: true, write: true, subscribe: true },
   { label: "Workspaces", href: "https://docs.attio.com/rest-api/endpoint-reference/standard-objects/workspaces/assert-a-workspace-record", read: true, write: true, subscribe: true },
   { label: "Lists", href: "https://docs.attio.com/rest-api/endpoint-reference/lists/list-all-lists", read: true, write: true, subscribe: true },
-  { label: "WorkspaceMembers", href: "https://docs.attio.com/rest-api/endpoint-reference/workspace-members/list-workspace-members", read: true, write: true, subscribe: true },
+  { label: "WorkspaceMembers", href: "https://docs.attio.com/rest-api/endpoint-reference/workspace-members/list-workspace-members", read: true, write: true, subscribe: "create only" },
   { label: "Notes", href: "https://docs.attio.com/rest-api/endpoint-reference/notes/list-notes", read: true, write: true, subscribe: true },
   { label: "Tasks", href: "https://docs.attio.com/rest-api/endpoint-reference/tasks/list-tasks", read: true, write: true, subscribe: true },
   { label: "Custom objects", href: "https://docs.attio.com/rest-api/endpoint-reference/records/list-records", read: true, write: true, subscribe: true },
@@ -30,6 +30,7 @@ export const rows = [
 
 export const Check = () => <span>✅</span>
 export const Cross = () => <span>🚫</span>
+export const Partial = ({ label }) => <span title={label}>✅*</span>
 
 <div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
   <table style={{
@@ -50,16 +51,18 @@ export const Cross = () => <span>🚫</span>
     </thead>
     <tbody style={{display: 'table-row-group', width: '100%'}}>
     {rows.map((row) => (
-      <tr id={"row/" + row.label} key={row.label}>
+      <tr id={("row/" + row.label).replace(/\s+/g, '-').toLowerCase()} key={row.label}>
         <td style={{textAlign: "left"}}><a href={row.href}>{row.label}</a></td>
         <td>{row.read ? <Check/> : <Cross/>}</td>
         <td>{row.write ? <Check/> : <Cross/>}</td>
-        <td>{row.subscribe ? <Check/> : <Cross/>}</td>
+        <td>{row.subscribe === true ? <Check/> : row.subscribe ? <Partial label={row.subscribe}/> : <Cross/>}</td>
       </tr>
     ))}
     </tbody>
   </table>
 </div>
+
+\* WorkspaceMembers only supports **create** events for subscriptions.
 
 ### Subscribe events
 
