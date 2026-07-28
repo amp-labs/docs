@@ -426,6 +426,7 @@ const baseConfig = {
             "provider-guides/marketo",
             "provider-guides/meta",
             "provider-guides/microsoft",
+            "provider-guides/microsoftAdminConsent",
             "provider-guides/miro",
             "provider-guides/mixmax",
             "provider-guides/mixpanel",
