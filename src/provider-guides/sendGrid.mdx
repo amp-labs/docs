@@ -1,38 +1,107 @@
 ---
-title: SendGrid
+title: "SendGrid"
 ---
+
 ## What's supported
 
 ### Supported actions
 
 This connector supports:
+- [Read Actions](/read-actions), including full historic backfill for all supported objects below. Incremental read is not currently supported.
+- [Write Actions](/write-actions) (create/update) for `lists`, `templates`, and `asm_groups`.
+- [Delete Actions](/delete-actions) for `lists`, `templates`, and `asm_groups`.
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.sendgrid.com`.
+- Subscribe Actions are not currently supported.
+
+### Supported objects
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
+<table style={{ width: '100%', minWidth: '1000px', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
+  <thead style={{ display: 'table-header-group', width: '100%' }}>
+    <tr style={{ display: 'table-row', width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '36%' }}>Object</th>
+      <th style={{ width: '10%' }}>Metadata</th>
+      <th style={{ width: '10%' }}>Read</th>
+      <th style={{ width: '10%' }}>Write</th>
+      <th style={{ width: '10%' }}>Delete</th>
+      <th style={{ width: '10%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody style={{ display: 'table-row-group', width: '100%' }}>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/contacts/get-sample-contacts">contacts</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/lists/get-all-lists">lists</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/segmenting-contacts/get-list-of-segments">segments</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/single-sends/get-all-single-sends">singlesends</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/templates-api/retrieve-all-templates">templates</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/custom-fields/get-all-field-definitions">field_definitions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/sender-verification/get-all-verified-senders">verified_senders</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/sender-identities-api/get-all-senders">senders</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/bounces-api/retrieve-all-bounces">bounces</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/blocks-api/retrieve-all-blocks">blocks</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/spam-reports-api/retrieve-all-spam-reports">spam_reports</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/suppressions-global-suppressions/retrieve-all-global-suppressions">unsubscribes</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/invalid-emails-api/retrieve-all-invalid-emails">invalid_emails</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/suppressions-unsubscribe-groups/retrieve-all-suppression-groups">asm_groups</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/categories/retrieve-all-categories">categories</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/subusers-api/list-all-subusers">subusers</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
+
+For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/reference/objects-&-fields/get-object-metadata-via-connection) to inspect what’s available for a specific connection.
+
+### Notes and limitations
+
+- **Write support**: `lists`, `templates`, and `asm_groups` support create (POST) and update (PATCH). Record IDs are passed via `RecordId` and are stripped from the request body before the API call.
+- **Delete support**: `lists`, `templates`, and `asm_groups`.
+- **Incremental read**: Not supported. Scheduled reads perform a full backfill each run.
+- **Pagination**:
+  - `lists`, `singlesends`, and `templates` use SendGrid’s `page_size` / `page_token` pagination (`_metadata.next`).
+  - Suppression and stats objects (`bounces`, `blocks`, `spam_reports`, `unsubscribes`, `invalid_emails`, `categories`, `subusers`) use `limit` / `offset` pagination.
+- **Templates read**: The connector requests both `legacy` and `dynamic` template generations so dynamic templates are included in read results.
+- **Response format**: Some SendGrid endpoints return JSON with `Content-Type: text/plain` (notably ASM group writes). The connector normalizes valid JSON responses so parsing succeeds.
+- **Webhook settings**: Event and parse webhook configuration endpoints are not included as connector objects; use [Proxy Actions](/proxy-actions) if you need to manage those APIs directly.
 
 ### Example integration
 
-To define an integration for SendGrid, create a manifest file that looks like this:
+To define an integration for SendGrid, create a manifest file (`amp.yaml`). For a complete example, [visit our samples repo on Github](https://github.com/amp-labs/samples/blob/main/sendGrid/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: sendGrid-integration
-    displayName: My SendGrid Integration
-    provider: sendGrid
-    proxy:
-      enabled: true
-```
+## Before you get started
+
+To connect SendGrid with Ampersand, you will need a [SendGrid account](https://signup.sendgrid.com/).
+
+This connector uses **API key** authentication. You do **not** need to create a Provider App in Ampersand before getting started (Provider apps are only required for OAuth2 Authorization Code providers).
+
+Each customer supplies their own SendGrid API key during installation via the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+
+### Create a SendGrid API key
+
+Follow SendGrid’s documentation to create an API key with the scopes your integration needs:
+
+1. Log in to your [SendGrid account](https://app.sendgrid.com/).
+2. Go to **Settings → API Keys**.
+3. Click **Create API Key**.
+4. Choose **Restricted Access** and grant the minimum scopes required for your integration (for example, Marketing Campaigns for `lists`, Template Engine for `templates`, and Suppressions for `asm_groups` and suppression reads).
+5. Copy the API key — SendGrid shows the full key only once.
+
+SendGrid documentation: [Create and manage API keys](https://www.twilio.com/docs/sendgrid/ui/account-and-settings/api-keys).
+
+<Note>
+Ampersand sends the API key as a Bearer token in the `Authorization` header (`Authorization: Bearer <api_key>`).
+</Note>
 
 ## Using the connector
 
-This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
-
 To start integrating with SendGrid:
-- Create a manifest file like the example above.
+
+- Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.sendgrid.com`.
-
-## Creating an API key for SendGrid
-
-[Click here](https://www.twilio.com/docs/sendgrid) for more information about generating an API key for SendGrid. The UI components will display this link, so that your users can successfully create API keys.
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their SendGrid API key.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions) or [Delete Actions](/delete-actions), you can start making API calls to our Write and Delete APIs.
+  - If your integration has [Proxy Actions](/proxy-actions), start making Proxy API calls at `https://proxy.withampersand.com/v3/...`. Ampersand will automatically attach the customer's API key.
