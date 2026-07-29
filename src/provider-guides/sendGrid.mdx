@@ -8,8 +8,7 @@ title: "SendGrid"
 
 This connector supports:
 - [Read Actions](/read-actions), including full historic backfill for all supported objects below. Incremental read is not currently supported.
-- [Write Actions](/write-actions) (create/update) for `lists`, `templates`, and `asm_groups`.
-- [Delete Actions](/delete-actions) for `lists`, `templates`, and `asm_groups`.
+- [Write Actions](/write-actions) (create/update/delete) for `lists`, `templates`, and `asm_groups`.
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.sendgrid.com`.
 - Subscribe Actions are not currently supported.
 
@@ -26,27 +25,26 @@ export const Cross = () => <span>🚫</span>
       <th style={{ width: '10%' }}>Metadata</th>
       <th style={{ width: '10%' }}>Read</th>
       <th style={{ width: '10%' }}>Write</th>
-      <th style={{ width: '10%' }}>Delete</th>
       <th style={{ width: '10%' }}>Subscribe</th>
     </tr>
   </thead>
   <tbody style={{ display: 'table-row-group', width: '100%' }}>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/contacts/get-sample-contacts">contacts</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/lists/get-all-lists">lists</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/segmenting-contacts/get-list-of-segments">segments</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/single-sends/get-all-single-sends">singlesends</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/templates-api/retrieve-all-templates">templates</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/custom-fields/get-all-field-definitions">field_definitions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/sender-verification/get-all-verified-senders">verified_senders</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/sender-identities-api/get-all-senders">senders</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/bounces-api/retrieve-all-bounces">bounces</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/blocks-api/retrieve-all-blocks">blocks</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/spam-reports-api/retrieve-all-spam-reports">spam_reports</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/suppressions-global-suppressions/retrieve-all-global-suppressions">unsubscribes</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/invalid-emails-api/retrieve-all-invalid-emails">invalid_emails</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/suppressions-unsubscribe-groups/retrieve-all-suppression-groups">asm_groups</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/categories/retrieve-all-categories">categories</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/subusers-api/list-all-subusers">subusers</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/contacts/get-sample-contacts">contacts</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/lists/get-all-lists">lists</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/segmenting-contacts/get-list-of-segments">segments</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/single-sends/get-all-single-sends">singlesends</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/templates-api/retrieve-all-templates">templates</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/custom-fields/get-all-field-definitions">field_definitions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/sender-verification/get-all-verified-senders">verified_senders</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/sender-identities-api/get-all-senders">senders</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/bounces-api/retrieve-all-bounces">bounces</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/blocks-api/retrieve-all-blocks">blocks</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/spam-reports-api/retrieve-all-spam-reports">spam_reports</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/suppressions-global-suppressions/retrieve-all-global-suppressions">unsubscribes</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/invalid-emails-api/retrieve-all-invalid-emails">invalid_emails</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/suppressions-unsubscribe-groups/retrieve-all-suppression-groups">asm_groups</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/categories/retrieve-all-categories">categories</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://www.twilio.com/docs/sendgrid/api-reference/subusers-api/list-all-subusers">subusers</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
   </tbody>
 </table>
 </div>
@@ -55,8 +53,7 @@ For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/r
 
 ### Notes and limitations
 
-- **Write support**: `lists`, `templates`, and `asm_groups` support create (POST) and update (PATCH). Record IDs are passed via `RecordId` and are stripped from the request body before the API call.
-- **Delete support**: `lists`, `templates`, and `asm_groups`.
+- **Write support**: `lists`, `templates`, and `asm_groups` support create, update, and delete. Record IDs are passed via `RecordId` and are stripped from the request body before the API call.
 - **Incremental read**: Not supported. Scheduled reads perform a full backfill each run.
 - **Pagination**:
   - `lists`, `singlesends`, and `templates` use SendGrid’s `page_size` / `page_token` pagination (`_metadata.next`).
@@ -103,5 +100,5 @@ To start integrating with SendGrid:
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their SendGrid API key.
 - Start using the connector!
   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
-  - If your integration has [Write Actions](/write-actions) or [Delete Actions](/delete-actions), you can start making API calls to our Write and Delete APIs.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
   - If your integration has [Proxy Actions](/proxy-actions), start making Proxy API calls at `https://proxy.withampersand.com/v3/...`. Ampersand will automatically attach the customer's API key.
