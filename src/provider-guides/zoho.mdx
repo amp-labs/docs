@@ -6,6 +6,7 @@ The Zoho connector supports the following Zoho products:
 
 - Zoho CRM (default)
 - Zoho Desk
+- Zoho Mail
 
 ## Zoho CRM
 
@@ -116,12 +117,63 @@ The Zoho connector allows you to read from and write to these objects:
 For an example manifest file of a Zoho Desk integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/zoho/desk/amp.yaml).
 
 
+## Zoho Mail
+
+### Supported Actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Zoho Mail instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
+
+### Supported Objects
+
+<div style={{ width: '100%', overflowX: 'auto' }}>
+<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse' }}>
+  <thead>
+    <tr style={{ width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '40%' }}>Object</th>
+      <th style={{ width: '30%' }}>Read</th>
+      <th style={{ width: '30%' }}>Write</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-users-accounts.html"><code>accounts</code></a></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-folder-details.html"><code>accounts/folders</code></a></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-label-details.html"><code>accounts/labels</code></a></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-collections.html"><code>collections</code></a></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-custom-status-of-task.html"><code>customStatus</code></a></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-group-collections-api.html"><code>groups/collections</code></a></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-bookmarks.html"><code>links</code></a></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-favorite-bookmarks-api.html"><code>links/favorites</code></a></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-link-groups.html"><code>links/groups</code></a></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-bookmarks.html"><code>links/me</code></a></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-bookmarks-in-trash-api.html"><code>links/trash</code></a></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-emails-list.html"><code>messages</code></a></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-notes.html"><code>notes</code></a></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-books.html"><code>notes/books</code></a></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-favourite-notes.html"><code>notes/favorites</code></a></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-groups.html"><code>notes/groups</code></a></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-shared-notes.html"><code>notes/sharedtome</code></a></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-user-signature.html"><code>signature</code></a></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-group-or-personal-tasks.html"><code>tasks</code></a></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-group-details.html"><code>tasks/groups</code></a></td><td><Check /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
+
+### Example Integration
+
+For an example manifest file of a Zoho Mail integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/zoho/mail/amp.yaml).
+
+
 ## Before You Get Started
 
 To connect Zoho with Ampersand, you will need an account in an appropriate Zoho product:
 
 - [Zoho CRM Account](https://www.zoho.com/crm/)
 - [Zoho Desk Account](https://www.zoho.com/desk/)
+- [Zoho Mail Account](https://www.zoho.com/mail/)
 
 Once your account is created, you'll need to configure an app in Zoho and obtain the following credentials from your app:
 
@@ -137,6 +189,7 @@ Go to the particular Zoho product sign-up page and create an account:
 
 - [Zoho CRM Sign Up page](https://www.zoho.com/crm/signup.html)
 - [Zoho Desk Sign Up page](https://www.zoho.com/desk/signup.html)
+- [Zoho Mail Sign Up page](https://www.zoho.com/mail/signup.html)
 
 ### Creating a Zoho App
 
@@ -180,6 +233,17 @@ ZohoCRM.notifications.ALL
 ```
 Desk.basic.READ 
 Desk.settings.ALL 
+```
+
+**Zoho Mail:**
+```
+ZohoMail.accounts.ALL
+ZohoMail.folders.ALL
+ZohoMail.tags.ALL
+ZohoMail.messages.ALL
+ZohoMail.tasks.ALL
+ZohoMail.notes.ALL
+ZohoMail.links.ALL
 ```
 
 In case you are using **Subscribe** action, additional scope is required
