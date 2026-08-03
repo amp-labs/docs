@@ -1,0 +1,35 @@
+---
+title: Slack destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+A Slack destination delivers messages to a Slack channel using a [Slack incoming webhook](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks). It's a great fit for [Notifications](/notifications) — for example, posting a message to your team's channel whenever a customer connects an integration or a sync runs into an error.
+
+## Setting up a Slack destination
+
+1. In Slack, [create a Slack app](https://api.slack.com/apps?new_app=1) (or use an existing one), enable **Incoming Webhooks**, and add a webhook to the channel you want Ampersand to post to. Slack gives you a URL that looks like `https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXX`.
+2. In the [Ampersand Dashboard](https://dashboard.withampersand.com/projects/_/destinations), add a new destination of type **Slack** and paste in that URL. (The URL must be a `hooks.slack.com` URL.)
+
+<Note>
+The Slack channel is fixed when you create the incoming webhook — Ampersand posts to that channel and cannot override it.
+</Note>
+
+## What Ampersand posts to Slack
+
+Ampersand reshapes each message into Slack's format before sending it.
+
+### Notifications
+
+Notifications are rendered as a short, human-friendly sentence, followed by the raw notification payload for full detail. For example, a `connection.error` notification appears as:
+
+> ⚠️ Salesforce connection for Acme (ID `conn_123`) encountered an error: The refresh token is invalid or expired
+> ```
+> {"notificationType":"connection.error","data":{ ... }}
+> ```
+
+Route notification events to a Slack destination the same way as any other destination — see the [Notifications overview](/notifications) for setup.
+
+### Read & subscribe data
+
+Data synced via [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions) is delivered as the JSON payload nested directly into the Slack message text. Because Slack renders message text as markdown, Slack destinations are best suited to notifications and low-volume data; for high-volume data delivery, use a [webhook](/destinations/webhooks), [Kinesis](/destinations/kinesis), or [S3](/destinations/s3) destination.
