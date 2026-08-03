@@ -12,126 +12,446 @@ The Stripe connector supports:
 
 ### Supported Objects
 
-The Stripe connector supports reading from and writing to the following objects:
-* [accounts](https://docs.stripe.com/api/accounts/object) (incremental read supported)
-* apple_pay/domains (Apple Pay Domains)
-* [billing/alerts](https://docs.stripe.com/api/billing/alert/object)
-* [billing/credit_grants](https://docs.stripe.com/api/billing/credit-grant/object)
-* [billing/meters](https://docs.stripe.com/api/billing/meter/object)
-* [billing_portal/configurations](https://docs.stripe.com/api/customer_portal/configurations/object)
-* [charges](https://docs.stripe.com/api/charges/object) (incremental read supported)
-* [checkout/sessions](https://docs.stripe.com/api/checkout/sessions/object) (incremental read supported)
-* [climate/orders](https://docs.stripe.com/api/climate/order/object)
-* [coupons](https://docs.stripe.com/api/coupons/object) (incremental read supported)
-* [credit_notes](https://docs.stripe.com/api/credit_notes/object) (incremental read supported)
-* [customers](https://docs.stripe.com/api/customers/object) (incremental read supported)
-* [disputes](https://docs.stripe.com/api/disputes/object) (incremental read supported)
-* [entitlements/features](https://docs.stripe.com/api/entitlements/feature/object)
-* [file_links](https://docs.stripe.com/api/file_links/object) (incremental read supported)
-* [files](https://docs.stripe.com/api/files/object) (incremental read supported)
-* [forwarding/requests](https://docs.stripe.com/api/forwarding/request/object) (incremental read supported)
-* [identity/verification_sessions](https://docs.stripe.com/api/identity/verification_sessions/object) (incremental read supported)
-* [invoiceitems](https://docs.stripe.com/api/invoiceitems/object) (incremental read supported)
-* [invoices](https://docs.stripe.com/api/invoices/object) (incremental read supported)
-* [issuing/authorizations](https://docs.stripe.com/api/issuing/authorizations/object) (incremental read supported)
-* [issuing/cardholders](https://docs.stripe.com/api/issuing/cardholders/object) (incremental read supported)
-* [issuing/cards](https://docs.stripe.com/api/issuing/cards/object) (incremental read supported)
-* [issuing/disputes](https://docs.stripe.com/api/issuing/disputes/object) (incremental read supported)
-* [issuing/personalization_designs](https://docs.stripe.com/api/issuing/personalization_designs/object)
-* [issuing/transactions](https://docs.stripe.com/api/issuing/transactions/object) (incremental read supported)
-* [payment_intents](https://docs.stripe.com/api/payment_intents/object) (incremental read supported)
-* [payment_links](https://docs.stripe.com/api/payment-link/object)
-* [payment_method_configurations](https://docs.stripe.com/api/payment_method_configurations/object)
-* [payment_method_domains](https://docs.stripe.com/api/payment_method_domains/object)
-* [payment_methods](https://docs.stripe.com/api/payment_methods/object)
-* [payouts](https://docs.stripe.com/api/payouts/object) (incremental read supported)
-* [plans](https://docs.stripe.com/api/plans/object) (incremental read supported)
-* [prices](https://docs.stripe.com/api/prices/object) (incremental read supported)
-* [products](https://docs.stripe.com/api/product-feature/object) (incremental read supported)
-* [promotion_codes](https://docs.stripe.com/api/promotion_codes/object) (incremental read supported)
-* [quotes](https://docs.stripe.com/api/quotes/object)
-* [radar/value_lists](https://docs.stripe.com/api/radar/value_lists/object) (incremental read supported)
-* [refunds](https://docs.stripe.com/api/refunds/object) (incremental read supported)
-* [reporting/report_runs](https://docs.stripe.com/api/reporting/report_run/object) (incremental read supported)
-* [setup_intents](https://docs.stripe.com/api/setup_intents/object) (incremental read supported)
-* [shipping_rates](https://docs.stripe.com/api/shipping_rates/object) (incremental read supported)
-* [subscription_schedules](https://docs.stripe.com/api/subscription_schedules/object) (incremental read supported)
-* [subscriptions](https://docs.stripe.com/api/subscriptions/object) (incremental read supported)
-* [tax/registrations](https://docs.stripe.com/api/tax/registrations/object)
-* [tax_ids](https://docs.stripe.com/api/tax_ids/object)
-* [tax_rates](https://docs.stripe.com/api/tax_rates/object) (incremental read supported)
-* [terminal/configurations](https://docs.stripe.com/api/terminal/configuration/object)
-* [terminal/locations](https://docs.stripe.com/api/terminal/locations/object)
-* [terminal/readers](https://docs.stripe.com/api/terminal/readers/object)
-* [test_helpers/test_clocks](https://docs.stripe.com/api/test_clocks/object)
-* [topups](https://docs.stripe.com/api/topups/object) (incremental read supported)
-* [transfers](https://docs.stripe.com/api/transfers/object) (incremental read supported)
-* [treasury/financial_accounts](https://docs.stripe.com/api/treasury/financial_accounts/object) (incremental read supported)
-* [webhook_endpoints](https://docs.stripe.com/api/webhook_endpoints/object)
+export const rows = [
+  // Read(incr) + Write
+  {
+    label: "accounts", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/accounts/object"
+  }, {
+    label: "charges", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/charges/object"
+  }, {
+    label: "checkout/sessions", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/checkout/sessions/object"
+  }, {
+    label: "coupons", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/coupons/object"
+  }, {
+    label: "credit_notes", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/credit_notes/object"
+  }, {
+    label: "customers", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/customers/object"
+  }, {
+    label: "disputes", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/disputes/object"
+  }, {
+    label: "file_links", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/file_links/object"
+  }, {
+    label: "files", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/files/object"
+  }, {
+    label: "forwarding/requests", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/forwarding/request/object"
+  }, {
+    label: "identity/verification_sessions", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/identity/verification_sessions/object"
+  }, {
+    label: "invoiceitems", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/invoiceitems/object"
+  }, {
+    label: "invoices", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/invoices/object"
+  }, {
+    label: "issuing/authorizations", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/issuing/authorizations/object"
+  }, {
+    label: "issuing/cardholders", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/issuing/cardholders/object"
+  }, {
+    label: "issuing/cards", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/issuing/cards/object"
+  }, {
+    label: "issuing/disputes", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/issuing/disputes/object"
+  }, {
+    label: "issuing/transactions", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/issuing/transactions/object"
+  }, {
+    label: "payment_intents", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/payment_intents/object"
+  }, {
+    label: "payouts", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/payouts/object"
+  }, {
+    label: "plans", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/plans/object"
+  }, {
+    label: "prices", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/prices/object"
+  }, {
+    label: "products", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/product-feature/object"
+  }, {
+    label: "promotion_codes", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/promotion_codes/object"
+  }, {
+    label: "radar/value_lists", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/radar/value_lists/object"
+  }, {
+    label: "refunds", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/refunds/object"
+  }, {
+    label: "reporting/report_runs", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/reporting/report_run/object"
+  }, {
+    label: "setup_intents", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/setup_intents/object"
+  }, {
+    label: "shipping_rates", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/shipping_rates/object"
+  }, {
+    label: "subscription_schedules", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/subscription_schedules/object"
+  }, {
+    label: "subscriptions", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/subscriptions/object"
+  }, {
+    label: "tax_rates", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/tax_rates/object"
+  }, {
+    label: "topups", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/topups/object"
+  }, {
+    label: "transfers", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/transfers/object"
+  },
+  // Read(without incr) + Write.
+  {
+    label: "billing/alerts", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/billing/alert/object"
+  }, {
+    label: "billing/credit_grants", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/billing/credit-grant/object"
+  }, {
+    label: "billing/meters", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/billing/meter/object"
+  }, {
+    label: "billing_portal/configurations", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/customer_portal/configurations/object"
+  }, {
+    label: "climate/orders", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/climate/order/object"
+  }, {
+    label: "entitlements/features", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/entitlements/feature/object"
+  }, {
+    label: "issuing/personalization_designs", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/issuing/personalization_designs/object"
+  }, {
+    label: "payment_links", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/payment-link/object"
+  }, {
+    label: "payment_method_configurations", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/payment_method_configurations/object"
+  }, {
+    label: "payment_method_domains", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/payment_method_domains/object"
+  }, {
+    label: "payment_methods", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/payment_methods/object"
+  }, {
+    label: "quotes", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/quotes/object"
+  }, {
+    label: "tax/registrations", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/tax/registrations/object"
+  }, {
+    label: "tax_ids", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/tax_ids/object"
+  }, {
+    label: "terminal/configurations", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/terminal/configuration/object"
+  }, {
+    label: "terminal/locations", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/terminal/locations/object"
+  }, {
+    label: "terminal/readers", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/terminal/readers/object"
+  }, {
+    label: "test_helpers/test_clocks", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/test_clocks/object"
+  }, {
+    label: "webhook_endpoints", read: true, write: true, incr: false,
+    href: "https://docs.stripe.com/api/webhook_endpoints/object"
+  }, {
+    label: "apple_pay/domains", read: true, write: true, incr: false,
+    display: "Apple Pay Domains"
+  },
+  // Read only (with incr).
+  {
+    label: "application_fees", read: true, write: false, incr: true,
+    href: "https://docs.stripe.com/api/application_fees/object"
+  }, {
+    label: "balance_transactions", read: true, write: false, incr: true,
+    href: "https://docs.stripe.com/api/balance_transactions/object"
+  }, {
+    label: "events", read: true, write: false, incr: true,
+    href: "https://docs.stripe.com/api/events/object"
+  }, {
+    label: "identity/verification_reports", read: true, write: false, incr: true,
+    href: "https://docs.stripe.com/api/identity/verification_reports/object"
+  }, {
+    label: "radar/early_fraud_warnings", read: true, write: false, incr: true,
+    href: "https://docs.stripe.com/api/radar/early_fraud_warnings/object"
+  }, {
+    label: "reviews", read: true, write: false, incr: true,
+    href: "https://docs.stripe.com/api/radar/reviews/object"
+  }, {
+    label: "balance/history", read: true, write: false, incr: true,
+    display: "Transaction history for balance changes"
+  },
+  // Read only (no incr).
+  {
+    label: "climate/products", read: true, write: false, incr: false,
+    href: "https://docs.stripe.com/api/climate/product/object"
+  }, {
+    label: "climate/suppliers", read: true, write: false, incr: false,
+    href: "https://docs.stripe.com/api/climate/supplier/object"
+  }, {
+    label: "country_specs", read: true, write: false, incr: false,
+    href: "https://docs.stripe.com/api/country_specs/object"
+  }, {
+    label: "financial_connections/accounts", read: true, write: false, incr: false,
+    href: "https://docs.stripe.com/api/financial_connections/accounts/object"
+  }, {
+    label: "invoice_rendering_templates", read: true, write: false, incr: false,
+    href: "https://docs.stripe.com/api/invoice-rendering-template/object"
+  }, {
+    label: "issuing/physical_bundles", read: true, write: false, incr: false,
+    href: "https://docs.stripe.com/api/issuing/physical_bundles/object"
+  }, {
+    label: "reporting/report_types", read: true, write: false, incr: false,
+    href: "https://docs.stripe.com/api/reporting/report_type/object"
+  }, {
+    label: "sigma/scheduled_query_runs", read: true, write: false, incr: false,
+    href: "https://docs.stripe.com/api/sigma/scheduled_queries/object"
+  }, {
+    label: "tax_codes", read: true, write: false, incr: false,
+    href: "https://docs.stripe.com/api/tax_codes/object"
+  },
+  // Write only
+  {
+    label: "account_links", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/account_links/object"
+  }, {
+    label: "account_sessions", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/account_sessions/object"
+  }, {
+    label: "apps/secrets", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/apps/secret_store/secret_resource"
+  }, {
+    label: "billing/meter_event_adjustments", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/billing/meter-event-adjustment/object"
+  }, {
+    label: "billing/meter_events", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/billing/meter-event/object"
+  }, {
+    label: "billing_portal/sessions", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/customer_portal/sessions/object"
+  }, {
+    label: "customer_sessions", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/customer_sessions/object"
+  }, {
+    label: "financial_connections/sessions", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/financial_connections/sessions/object"
+  }, {
+    label: "invoices/create_preview", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/invoices/create_preview"
+  }, {
+    label: "issuing/tokens", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/issuing/tokens/object"
+  }, {
+    label: "issuing/tokens", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/issuing/tokens/object"
+  }, {
+    label: "radar/value_list_items", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/radar/value_list_items/object"
+  }, {
+    label: "sources", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/sources/object"
+  }, {
+    label: "subscription_items", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/subscription_items/object"
+  }, {
+    label: "tax/calculations", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/tax/calculations/object"
+  }, {
+    label: "tax/settings", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/tax/settings/object"
+  }, {
+    label: "terminal/connection_tokens", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/terminal/connection_tokens/object"
+  }, {
+    label: "test_helpers/confirmation_tokens", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/confirmation_tokens/object"
+  }, {
+    label: "test_helpers/issuing/authorizations", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/issuing/authorizations/test_mode_create"
+  }, {
+    label: "issuing/settlements", read: false, write: true, incr: false,
+    display: "Updates the specified Issuing Settlement object"
+  }, {
+    label: "test_helpers/issuing/settlements", read: false, write: true, incr: false,
+    display: "Create an Issuing settlement"
+  }, {
+    label: "ephemeral_keys", read: false, write: true, incr: false,
+    display: "Creates a short-lived API key for a given resource"
+  }
+]
 
-The Stripe connector supports only read actions on the following objects:
-* [application_fees](https://docs.stripe.com/api/application_fees/object) (incremental read supported)
-* [balance_transactions](https://docs.stripe.com/api/balance_transactions/object) (incremental read supported)
-* [climate/products](https://docs.stripe.com/api/climate/product/object)
-* [climate/suppliers](https://docs.stripe.com/api/climate/supplier/object)
-* [country_specs](https://docs.stripe.com/api/country_specs/object)
-* [events](https://docs.stripe.com/api/events/object) (incremental read supported)
-* [financial_connections/accounts](https://docs.stripe.com/api/financial_connections/accounts/object)
-* balance/history (Transaction history for balance changes) (incremental read supported)
-* [identity/verification_reports](https://docs.stripe.com/api/identity/verification_reports/object) (incremental read supported)
-* [invoice_rendering_templates](https://docs.stripe.com/api/invoice-rendering-template/object)
-* [issuing/physical_bundles](https://docs.stripe.com/api/issuing/physical_bundles/object)
-* [radar/early_fraud_warnings](https://docs.stripe.com/api/radar/early_fraud_warnings/object) (incremental read supported)
-* [reporting/report_types](https://docs.stripe.com/api/reporting/report_type/object)
-* [reviews](https://docs.stripe.com/api/radar/reviews/object) (incremental read supported)
-* [sigma/scheduled_query_runs](https://docs.stripe.com/api/sigma/scheduled_queries/object)
-* [tax_codes](https://docs.stripe.com/api/tax_codes/object)
+export const NA = () => <span style={{fontSize: "0.9em", color: "#666"}}>N/A</span>
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+export const Incremental = () => (
+  <span style={{display: "inline-flex", alignItems: "center", gap: 6}}>
+    <span>✅</span>
+    <span style={{fontSize: "0.9em", color: "#666"}}>incremental</span>
+  </span>
+);
+export function objectCell(row) {
+  return (
+    <div style={{textAlign: "left"}}>
+      {row.href ? (
+        <a href={row.href}>{row.label}</a>
+      ) : (
+        <span>{row.label}</span>
+      )}
+      {row.display ? (
+        <div style={{fontSize: "0.9em", color: "#666", marginTop: 4}}>
+          {row.display}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+export function renderCellValue(value) {
+  if (value === null) {
+    return <NA/>
+  }
 
-The Stripe connector supports only write actions on the following objects:
-* [account_links](https://docs.stripe.com/api/account_links/object)
-* [account_sessions](https://docs.stripe.com/api/account_sessions/object)
-* [apps/secrets](https://docs.stripe.com/api/apps/secret_store/secret_resource)
-* [billing/meter_event_adjustments](https://docs.stripe.com/api/billing/meter-event-adjustment/object)
-* [billing/meter_events](https://docs.stripe.com/api/billing/meter-event/object)
-* [billing_portal/sessions](https://docs.stripe.com/api/customer_portal/sessions/object)
-* [customer_sessions](https://docs.stripe.com/api/customer_sessions/object)
-* ephemeral_keys (Creates a short-lived API key for a given resource)
-* [financial_connections/sessions](https://docs.stripe.com/api/financial_connections/sessions/object)
-* [invoices/create_preview](https://docs.stripe.com/api/invoices/create_preview)
-* issuing/settlements (Updates the specified Issuing Settlement object)
-* [issuing/tokens](https://docs.stripe.com/api/issuing/tokens/object)
-* [issuing/tokens](https://docs.stripe.com/api/issuing/tokens/object)
-* [radar/value_list_items](https://docs.stripe.com/api/radar/value_list_items/object)
-* [sources](https://docs.stripe.com/api/sources/object)
-* [subscription_items](https://docs.stripe.com/api/subscription_items/object)
-* [tax/calculations](https://docs.stripe.com/api/tax/calculations/object)
-* [tax/settings](https://docs.stripe.com/api/tax/settings/object)
-* [terminal/connection_tokens](https://docs.stripe.com/api/terminal/connection_tokens/object)
-* [test_helpers/confirmation_tokens](https://docs.stripe.com/api/confirmation_tokens/object)
-* [test_helpers/issuing/authorizations](https://docs.stripe.com/api/issuing/authorizations/test_mode_create)
-* test_helpers/issuing/settlements (Create an Issuing settlement)
-* [test_helpers/treasury/outbound_payments](https://docs.stripe.com/api/treasury/outbound_payments/test_mode_update)
-* [test_helpers/treasury/outbound_transfers](https://docs.stripe.com/api/treasury/outbound_transfers/test_mode_update)
-* [test_helpers/treasury/received_credits](https://docs.stripe.com/api/treasury/received_credits/object)
-* [test_helpers/treasury/received_debits](https://docs.stripe.com/api/treasury/received_debits/object)
-* [treasury/credit_reversals](https://docs.stripe.com/api/treasury/credit_reversals/object)
-* [treasury/debit_reversals](https://docs.stripe.com/api/treasury/debit_reversals/object)
-* [treasury/inbound_transfers](https://docs.stripe.com/api/treasury/inbound_transfers/object)
-* [treasury/outbound_payments](https://docs.stripe.com/api/treasury/outbound_payments/object)
-* [treasury/outbound_transfers](https://docs.stripe.com/api/treasury/outbound_transfers/object)
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
 
-#### Treasury Objects
+  if (typeof value === "function") {
+    return value();
+  }
 
-The Stripe connector supports reading from the following Treasury objects:
-* [treasury/credit_reversals](https://docs.stripe.com/api/treasury/credit_reversals/object) (incremental read supported)
-* [treasury/debit_reversals](https://docs.stripe.com/api/treasury/debit_reversals/object) (incremental read supported)
-* [treasury/inbound_transfers](https://docs.stripe.com/api/treasury/inbound_transfers/object) (incremental read supported)
-* [treasury/outbound_payments](https://docs.stripe.com/api/treasury/outbound_payments/object) (incremental read supported)
-* [treasury/outbound_transfers](https://docs.stripe.com/api/treasury/outbound_transfers/object) (incremental read supported)
-* [treasury/received_credits](https://docs.stripe.com/api/treasury/received_credits/object) (incremental read supported)
-* [treasury/received_debits](https://docs.stripe.com/api/treasury/received_debits/object) (incremental read supported)
-* [treasury/transaction_entries](https://docs.stripe.com/api/treasury/transaction_entries/object) (incremental read supported)
-* [treasury/transactions](https://docs.stripe.com/api/treasury/transactions/object) (incremental read supported)
+  return <span>{value}</span>;
+}
+
+The Stripe connector supports reading and writing to and from the following objects:
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+      <th style={{width: '30%'}}>Read</th>
+      <th style={{width: '30%'}}>Write</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td>{objectCell(row)}</td>
+          <td>{renderCellValue(row.incr ? Incremental : row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+export const treasuryApiRows = [
+  {
+    label: "treasury/financial_accounts", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/treasury/financial_accounts/object"
+  }, {
+    label: "treasury/credit_reversals", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/treasury/credit_reversals/object"
+  }, {
+    label: "treasury/debit_reversals", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/treasury/debit_reversals/object"
+  }, {
+    label: "treasury/inbound_transfers", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/treasury/inbound_transfers/object"
+  }, {
+    label: "treasury/outbound_payments", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/treasury/outbound_payments/object"
+  }, {
+    label: "treasury/outbound_transfers", read: true, write: true, incr: true,
+    href: "https://docs.stripe.com/api/treasury/outbound_transfers/object"
+  }, {
+    label: "treasury/received_credits", read: true, write: null, incr: true,
+    href: "https://docs.stripe.com/api/treasury/received_credits/object"
+  }, {
+    label: "treasury/received_debits", read: true, write: null, incr: true,
+    href: "https://docs.stripe.com/api/treasury/received_debits/object"
+  }, {
+    label: "treasury/transaction_entries", read: true, write: null, incr: true,
+    href: "https://docs.stripe.com/api/treasury/transaction_entries/object"
+  }, {
+    label: "treasury/transactions", read: true, write: null, incr: true,
+    href: "https://docs.stripe.com/api/treasury/transactions/object"
+  }, {
+    label: "test_helpers/treasury/outbound_payments", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/treasury/outbound_payments/test_mode_update"
+  }, {
+    label: "test_helpers/treasury/outbound_transfers", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/treasury/outbound_transfers/test_mode_update"
+  }, {
+    label: "test_helpers/treasury/received_credits", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/treasury/received_credits/object"
+  }, {
+    label: "test_helpers/treasury/received_debits", read: false, write: true, incr: false,
+    href: "https://docs.stripe.com/api/treasury/received_debits/object"
+  },
+]
+
+#### Treasury API
+The Stripe connector supports reading and writing to and from the following Treasury API objects:
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+      <th style={{width: '30%'}}>Read</th>
+      <th style={{width: '30%'}}>Write</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...treasuryApiRows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td>{objectCell(row)}</td>
+          <td>{renderCellValue(row.incr ? Incremental : row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
 
 ### Example integration
 
