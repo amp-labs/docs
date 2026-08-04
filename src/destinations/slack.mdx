@@ -31,5 +31,5 @@ You can route notification events to a Slack destination the same way as any oth
 Data read via [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions) is delivered as the JSON payload nested directly into the Slack message text.
 
 <Warning>
-Slack accepts roughly **16 KB** per message. Larger payloads are rejected by Slack, so be careful using Slack destinations for data delivery — a single record or batch that exceeds this limit will not be delivered. For anything beyond small payloads, use a [webhook](/destinations/webhooks), [Kinesis](/destinations/kinesis), or [S3](/destinations/s3) destination instead.
+Slack renders roughly **16 KB** per message and **silently truncates** anything larger — the request still succeeds, so oversized content is dropped without an error. Be careful using Slack destinations for data delivery: a large record or batch will be cut off. For anything beyond small payloads, use a [webhook](/destinations/webhooks), [Kinesis](/destinations/kinesis), or [S3](/destinations/s3) destination instead.
 </Warning>
