@@ -52,14 +52,9 @@ For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/r
 
 ### Notes and limitations
 
-- **Write support**: `lists`, `templates`, and `asm_groups` support create, update, and delete. Record IDs are passed via `RecordId` and are stripped from the request body before the API call.
+- **Write support**: `lists`, `templates`, and `asm_groups` support create, update, and delete.
 - **Incremental read**: Not supported. Scheduled reads perform a full backfill each run.
-- **Pagination**:
-  - `lists`, `singlesends`, and `templates` use SendGrid’s `page_size` / `page_token` pagination (`_metadata.next`).
-  - Suppression and stats objects (`bounces`, `blocks`, `spam_reports`, `unsubscribes`, `invalid_emails`, `categories`, `subusers`) use `limit` / `offset` pagination.
-- **Templates read**: The connector requests both `legacy` and `dynamic` template generations so dynamic templates are included in read results.
-- **Response format**: Some SendGrid endpoints return JSON with `Content-Type: text/plain` (notably ASM group writes). The connector normalizes valid JSON responses so parsing succeeds.
-- **Webhook settings**: Event and parse webhook configuration endpoints are not included as connector objects; use [Proxy Actions](/proxy-actions) if you need to manage those APIs directly.
+- **Templates**: Reading `templates` includes both legacy and dynamic templates.
 
 ### Example integration
 
