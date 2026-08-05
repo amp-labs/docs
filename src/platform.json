@@ -951,13 +951,13 @@
                                   "type": "string",
                                   "description": "The time the group was created.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816354Z"
+                                  "example": "2023-07-13T21:34:44.816Z"
                                 },
                                 "updateTime": {
                                   "type": "string",
                                   "description": "The time the group was last updated.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816354Z"
+                                  "example": "2023-07-13T21:34:44.816Z"
                                 }
                               }
                             },
@@ -990,13 +990,13 @@
                                   "type": "string",
                                   "description": "The time the consumer was created.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816354Z"
+                                  "example": "2023-07-13T21:34:44.816Z"
                                 },
                                 "updateTime": {
                                   "type": "string",
                                   "description": "The time the consumer was last updated.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816354Z"
+                                  "example": "2023-07-13T21:34:44.816Z"
                                 }
                               }
                             },
@@ -1014,13 +1014,13 @@
                               "type": "string",
                               "description": "The time the connection was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the connection was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "authScheme": {
                               "type": "string",
@@ -13250,13 +13250,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -13431,13 +13431,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -13470,13 +13470,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -13494,13 +13494,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -15089,18 +15089,25 @@
                                                     ]
                                                   }
                                                 },
-                                                "salesforceQuotaOptimization": {
-                                                  "title": "Salesforce Quota Optimization Config",
-                                                  "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                                "providerOptions": {
+                                                  "title": "Subscribe Provider Options",
+                                                  "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                   "type": "object",
-                                                  "required": [
-                                                    "enabled"
-                                                  ],
                                                   "properties": {
-                                                    "enabled": {
-                                                      "type": "boolean",
-                                                      "description": "Whether quota optimization is enabled for this object.",
-                                                      "example": true
+                                                    "quotaOptimization": {
+                                                      "title": "Quota Optimization Config",
+                                                      "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "enabled"
+                                                      ],
+                                                      "properties": {
+                                                        "enabled": {
+                                                          "type": "boolean",
+                                                          "description": "Whether quota optimization is enabled for this object.",
+                                                          "example": true
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
@@ -15239,18 +15246,25 @@
                                                         ]
                                                       }
                                                     },
-                                                    "salesforceQuotaOptimization": {
-                                                      "title": "Salesforce Quota Optimization Config",
-                                                      "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                                    "providerOptions": {
+                                                      "title": "Subscribe Provider Options",
+                                                      "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                       "type": "object",
-                                                      "required": [
-                                                        "enabled"
-                                                      ],
                                                       "properties": {
-                                                        "enabled": {
-                                                          "type": "boolean",
-                                                          "description": "Whether quota optimization is enabled for this object.",
-                                                          "example": true
+                                                        "quotaOptimization": {
+                                                          "title": "Quota Optimization Config",
+                                                          "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "enabled"
+                                                          ],
+                                                          "properties": {
+                                                            "enabled": {
+                                                              "type": "boolean",
+                                                              "description": "Whether quota optimization is enabled for this object.",
+                                                              "example": true
+                                                            }
+                                                          }
                                                         }
                                                       }
                                                     }
@@ -15878,6 +15892,7 @@
                         "default": "api:create-installation"
                       },
                       "content": {
+                        "description": "The content of the config.",
                         "title": "Config Content",
                         "allOf": [
                           {
@@ -17296,18 +17311,25 @@
                                                 ]
                                               }
                                             },
-                                            "salesforceQuotaOptimization": {
-                                              "title": "Salesforce Quota Optimization Config",
-                                              "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                            "providerOptions": {
+                                              "title": "Subscribe Provider Options",
+                                              "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                               "type": "object",
-                                              "required": [
-                                                "enabled"
-                                              ],
                                               "properties": {
-                                                "enabled": {
-                                                  "type": "boolean",
-                                                  "description": "Whether quota optimization is enabled for this object.",
-                                                  "example": true
+                                                "quotaOptimization": {
+                                                  "title": "Quota Optimization Config",
+                                                  "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "enabled"
+                                                  ],
+                                                  "properties": {
+                                                    "enabled": {
+                                                      "type": "boolean",
+                                                      "description": "Whether quota optimization is enabled for this object.",
+                                                      "example": true
+                                                    }
+                                                  }
                                                 }
                                               }
                                             }
@@ -17446,18 +17468,25 @@
                                                     ]
                                                   }
                                                 },
-                                                "salesforceQuotaOptimization": {
-                                                  "title": "Salesforce Quota Optimization Config",
-                                                  "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                                "providerOptions": {
+                                                  "title": "Subscribe Provider Options",
+                                                  "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                   "type": "object",
-                                                  "required": [
-                                                    "enabled"
-                                                  ],
                                                   "properties": {
-                                                    "enabled": {
-                                                      "type": "boolean",
-                                                      "description": "Whether quota optimization is enabled for this object.",
-                                                      "example": true
+                                                    "quotaOptimization": {
+                                                      "title": "Quota Optimization Config",
+                                                      "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "enabled"
+                                                      ],
+                                                      "properties": {
+                                                        "enabled": {
+                                                          "type": "boolean",
+                                                          "description": "Whether quota optimization is enabled for this object.",
+                                                          "example": true
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
@@ -17480,8 +17509,7 @@
                               }
                             }
                           }
-                        ],
-                        "description": "The content of the config."
+                        ]
                       }
                     },
                     "description": "The config of the installation."
@@ -17618,13 +17646,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -17799,13 +17827,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -17838,13 +17866,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -17862,13 +17890,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -19457,18 +19485,25 @@
                                                   ]
                                                 }
                                               },
-                                              "salesforceQuotaOptimization": {
-                                                "title": "Salesforce Quota Optimization Config",
-                                                "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                              "providerOptions": {
+                                                "title": "Subscribe Provider Options",
+                                                "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                 "type": "object",
-                                                "required": [
-                                                  "enabled"
-                                                ],
                                                 "properties": {
-                                                  "enabled": {
-                                                    "type": "boolean",
-                                                    "description": "Whether quota optimization is enabled for this object.",
-                                                    "example": true
+                                                  "quotaOptimization": {
+                                                    "title": "Quota Optimization Config",
+                                                    "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether quota optimization is enabled for this object.",
+                                                        "example": true
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               }
@@ -19607,18 +19642,25 @@
                                                       ]
                                                     }
                                                   },
-                                                  "salesforceQuotaOptimization": {
-                                                    "title": "Salesforce Quota Optimization Config",
-                                                    "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                                  "providerOptions": {
+                                                    "title": "Subscribe Provider Options",
+                                                    "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                     "type": "object",
-                                                    "required": [
-                                                      "enabled"
-                                                    ],
                                                     "properties": {
-                                                      "enabled": {
-                                                        "type": "boolean",
-                                                        "description": "Whether quota optimization is enabled for this object.",
-                                                        "example": true
+                                                      "quotaOptimization": {
+                                                        "title": "Quota Optimization Config",
+                                                        "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "enabled"
+                                                        ],
+                                                        "properties": {
+                                                          "enabled": {
+                                                            "type": "boolean",
+                                                            "description": "Whether quota optimization is enabled for this object.",
+                                                            "example": true
+                                                          }
+                                                        }
                                                       }
                                                     }
                                                   }
@@ -20538,13 +20580,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -20719,13 +20761,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -20758,13 +20800,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -20782,13 +20824,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -22377,18 +22419,25 @@
                                                   ]
                                                 }
                                               },
-                                              "salesforceQuotaOptimization": {
-                                                "title": "Salesforce Quota Optimization Config",
-                                                "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                              "providerOptions": {
+                                                "title": "Subscribe Provider Options",
+                                                "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                 "type": "object",
-                                                "required": [
-                                                  "enabled"
-                                                ],
                                                 "properties": {
-                                                  "enabled": {
-                                                    "type": "boolean",
-                                                    "description": "Whether quota optimization is enabled for this object.",
-                                                    "example": true
+                                                  "quotaOptimization": {
+                                                    "title": "Quota Optimization Config",
+                                                    "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether quota optimization is enabled for this object.",
+                                                        "example": true
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               }
@@ -22527,18 +22576,25 @@
                                                       ]
                                                     }
                                                   },
-                                                  "salesforceQuotaOptimization": {
-                                                    "title": "Salesforce Quota Optimization Config",
-                                                    "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                                  "providerOptions": {
+                                                    "title": "Subscribe Provider Options",
+                                                    "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                     "type": "object",
-                                                    "required": [
-                                                      "enabled"
-                                                    ],
                                                     "properties": {
-                                                      "enabled": {
-                                                        "type": "boolean",
-                                                        "description": "Whether quota optimization is enabled for this object.",
-                                                        "example": true
+                                                      "quotaOptimization": {
+                                                        "title": "Quota Optimization Config",
+                                                        "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "enabled"
+                                                        ],
+                                                        "properties": {
+                                                          "enabled": {
+                                                            "type": "boolean",
+                                                            "description": "Whether quota optimization is enabled for this object.",
+                                                            "example": true
+                                                          }
+                                                        }
                                                       }
                                                     }
                                                   }
@@ -23918,18 +23974,25 @@
                                                 ]
                                               }
                                             },
-                                            "salesforceQuotaOptimization": {
-                                              "title": "Salesforce Quota Optimization Config",
-                                              "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                            "providerOptions": {
+                                              "title": "Subscribe Provider Options",
+                                              "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                               "type": "object",
-                                              "required": [
-                                                "enabled"
-                                              ],
                                               "properties": {
-                                                "enabled": {
-                                                  "type": "boolean",
-                                                  "description": "Whether quota optimization is enabled for this object.",
-                                                  "example": true
+                                                "quotaOptimization": {
+                                                  "title": "Quota Optimization Config",
+                                                  "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "enabled"
+                                                  ],
+                                                  "properties": {
+                                                    "enabled": {
+                                                      "type": "boolean",
+                                                      "description": "Whether quota optimization is enabled for this object.",
+                                                      "example": true
+                                                    }
+                                                  }
                                                 }
                                               }
                                             }
@@ -24039,13 +24102,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -24220,13 +24283,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -24259,13 +24322,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -24283,13 +24346,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -25878,18 +25941,25 @@
                                                   ]
                                                 }
                                               },
-                                              "salesforceQuotaOptimization": {
-                                                "title": "Salesforce Quota Optimization Config",
-                                                "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                              "providerOptions": {
+                                                "title": "Subscribe Provider Options",
+                                                "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                 "type": "object",
-                                                "required": [
-                                                  "enabled"
-                                                ],
                                                 "properties": {
-                                                  "enabled": {
-                                                    "type": "boolean",
-                                                    "description": "Whether quota optimization is enabled for this object.",
-                                                    "example": true
+                                                  "quotaOptimization": {
+                                                    "title": "Quota Optimization Config",
+                                                    "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether quota optimization is enabled for this object.",
+                                                        "example": true
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               }
@@ -26028,18 +26098,25 @@
                                                       ]
                                                     }
                                                   },
-                                                  "salesforceQuotaOptimization": {
-                                                    "title": "Salesforce Quota Optimization Config",
-                                                    "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                                  "providerOptions": {
+                                                    "title": "Subscribe Provider Options",
+                                                    "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                     "type": "object",
-                                                    "required": [
-                                                      "enabled"
-                                                    ],
                                                     "properties": {
-                                                      "enabled": {
-                                                        "type": "boolean",
-                                                        "description": "Whether quota optimization is enabled for this object.",
-                                                        "example": true
+                                                      "quotaOptimization": {
+                                                        "title": "Quota Optimization Config",
+                                                        "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "enabled"
+                                                        ],
+                                                        "properties": {
+                                                          "enabled": {
+                                                            "type": "boolean",
+                                                            "description": "Whether quota optimization is enabled for this object.",
+                                                            "example": true
+                                                          }
+                                                        }
                                                       }
                                                     }
                                                   }
@@ -27125,13 +27202,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -27306,13 +27383,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -27345,13 +27422,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -27369,13 +27446,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -28964,18 +29041,25 @@
                                                   ]
                                                 }
                                               },
-                                              "salesforceQuotaOptimization": {
-                                                "title": "Salesforce Quota Optimization Config",
-                                                "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                              "providerOptions": {
+                                                "title": "Subscribe Provider Options",
+                                                "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                 "type": "object",
-                                                "required": [
-                                                  "enabled"
-                                                ],
                                                 "properties": {
-                                                  "enabled": {
-                                                    "type": "boolean",
-                                                    "description": "Whether quota optimization is enabled for this object.",
-                                                    "example": true
+                                                  "quotaOptimization": {
+                                                    "title": "Quota Optimization Config",
+                                                    "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether quota optimization is enabled for this object.",
+                                                        "example": true
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               }
@@ -29114,18 +29198,25 @@
                                                       ]
                                                     }
                                                   },
-                                                  "salesforceQuotaOptimization": {
-                                                    "title": "Salesforce Quota Optimization Config",
-                                                    "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                                  "providerOptions": {
+                                                    "title": "Subscribe Provider Options",
+                                                    "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                     "type": "object",
-                                                    "required": [
-                                                      "enabled"
-                                                    ],
                                                     "properties": {
-                                                      "enabled": {
-                                                        "type": "boolean",
-                                                        "description": "Whether quota optimization is enabled for this object.",
-                                                        "example": true
+                                                      "quotaOptimization": {
+                                                        "title": "Quota Optimization Config",
+                                                        "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "enabled"
+                                                        ],
+                                                        "properties": {
+                                                          "enabled": {
+                                                            "type": "boolean",
+                                                            "description": "Whether quota optimization is enabled for this object.",
+                                                            "example": true
+                                                          }
+                                                        }
                                                       }
                                                     }
                                                   }
@@ -30408,13 +30499,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -30589,13 +30680,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -30628,13 +30719,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -30652,13 +30743,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -32247,18 +32338,25 @@
                                                     ]
                                                   }
                                                 },
-                                                "salesforceQuotaOptimization": {
-                                                  "title": "Salesforce Quota Optimization Config",
-                                                  "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                                "providerOptions": {
+                                                  "title": "Subscribe Provider Options",
+                                                  "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                   "type": "object",
-                                                  "required": [
-                                                    "enabled"
-                                                  ],
                                                   "properties": {
-                                                    "enabled": {
-                                                      "type": "boolean",
-                                                      "description": "Whether quota optimization is enabled for this object.",
-                                                      "example": true
+                                                    "quotaOptimization": {
+                                                      "title": "Quota Optimization Config",
+                                                      "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "enabled"
+                                                      ],
+                                                      "properties": {
+                                                        "enabled": {
+                                                          "type": "boolean",
+                                                          "description": "Whether quota optimization is enabled for this object.",
+                                                          "example": true
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
@@ -32397,18 +32495,25 @@
                                                         ]
                                                       }
                                                     },
-                                                    "salesforceQuotaOptimization": {
-                                                      "title": "Salesforce Quota Optimization Config",
-                                                      "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                                    "providerOptions": {
+                                                      "title": "Subscribe Provider Options",
+                                                      "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                                       "type": "object",
-                                                      "required": [
-                                                        "enabled"
-                                                      ],
                                                       "properties": {
-                                                        "enabled": {
-                                                          "type": "boolean",
-                                                          "description": "Whether quota optimization is enabled for this object.",
-                                                          "example": true
+                                                        "quotaOptimization": {
+                                                          "title": "Quota Optimization Config",
+                                                          "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "enabled"
+                                                          ],
+                                                          "properties": {
+                                                            "enabled": {
+                                                              "type": "boolean",
+                                                              "description": "Whether quota optimization is enabled for this object.",
+                                                              "example": true
+                                                            }
+                                                          }
                                                         }
                                                       }
                                                     }
@@ -35307,7 +35412,7 @@
                             "type": "string",
                             "description": "The time the operation was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       }
@@ -36988,7 +37093,7 @@
                       "type": "string",
                       "description": "The time the operation was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     }
                   }
                 },
@@ -37260,7 +37365,7 @@
                       "timestamp": {
                         "type": "string",
                         "description": "The time the log was created.",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "message": {
                         "type": "object",
@@ -44589,13 +44694,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -44628,13 +44733,13 @@
                             "type": "string",
                             "description": "The time the consumer was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the consumer was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -44652,13 +44757,13 @@
                         "type": "string",
                         "description": "The time the connection was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the connection was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "authScheme": {
                         "type": "string",
@@ -45653,13 +45758,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -45692,13 +45797,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -45716,13 +45821,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -46848,13 +46953,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -46887,13 +46992,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -46911,13 +47016,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -47974,13 +48079,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -48013,13 +48118,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -48037,13 +48142,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -68182,13 +68287,13 @@
                         "type": "string",
                         "description": "The time the group was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the group was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       }
                     }
                   },
@@ -68221,13 +68326,13 @@
                         "type": "string",
                         "description": "The time the consumer was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the consumer was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       }
                     }
                   },
@@ -68245,13 +68350,13 @@
                     "type": "string",
                     "description": "The time the connection was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the connection was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "authScheme": {
                     "type": "string",
@@ -70462,13 +70567,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -70643,13 +70748,13 @@
                     "type": "string",
                     "description": "The time the group was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the group was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   }
                 }
               },
@@ -70682,13 +70787,13 @@
                     "type": "string",
                     "description": "The time the consumer was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the consumer was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   }
                 }
               },
@@ -70706,13 +70811,13 @@
                 "type": "string",
                 "description": "The time the connection was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the connection was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "authScheme": {
                 "type": "string",
@@ -72301,18 +72406,25 @@
                                         ]
                                       }
                                     },
-                                    "salesforceQuotaOptimization": {
-                                      "title": "Salesforce Quota Optimization Config",
-                                      "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                    "providerOptions": {
+                                      "title": "Subscribe Provider Options",
+                                      "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                       "type": "object",
-                                      "required": [
-                                        "enabled"
-                                      ],
                                       "properties": {
-                                        "enabled": {
-                                          "type": "boolean",
-                                          "description": "Whether quota optimization is enabled for this object.",
-                                          "example": true
+                                        "quotaOptimization": {
+                                          "title": "Quota Optimization Config",
+                                          "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                          "type": "object",
+                                          "required": [
+                                            "enabled"
+                                          ],
+                                          "properties": {
+                                            "enabled": {
+                                              "type": "boolean",
+                                              "description": "Whether quota optimization is enabled for this object.",
+                                              "example": true
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -72451,18 +72563,25 @@
                                             ]
                                           }
                                         },
-                                        "salesforceQuotaOptimization": {
-                                          "title": "Salesforce Quota Optimization Config",
-                                          "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                        "providerOptions": {
+                                          "title": "Subscribe Provider Options",
+                                          "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                           "type": "object",
-                                          "required": [
-                                            "enabled"
-                                          ],
                                           "properties": {
-                                            "enabled": {
-                                              "type": "boolean",
-                                              "description": "Whether quota optimization is enabled for this object.",
-                                              "example": true
+                                            "quotaOptimization": {
+                                              "title": "Quota Optimization Config",
+                                              "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                              "type": "object",
+                                              "required": [
+                                                "enabled"
+                                              ],
+                                              "properties": {
+                                                "enabled": {
+                                                  "type": "boolean",
+                                                  "description": "Whether quota optimization is enabled for this object.",
+                                                  "example": true
+                                                }
+                                              }
                                             }
                                           }
                                         }
@@ -73971,18 +74090,25 @@
                                     ]
                                   }
                                 },
-                                "salesforceQuotaOptimization": {
-                                  "title": "Salesforce Quota Optimization Config",
-                                  "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                "providerOptions": {
+                                  "title": "Subscribe Provider Options",
+                                  "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                   "type": "object",
-                                  "required": [
-                                    "enabled"
-                                  ],
                                   "properties": {
-                                    "enabled": {
-                                      "type": "boolean",
-                                      "description": "Whether quota optimization is enabled for this object.",
-                                      "example": true
+                                    "quotaOptimization": {
+                                      "title": "Quota Optimization Config",
+                                      "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                      "type": "object",
+                                      "required": [
+                                        "enabled"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "boolean",
+                                          "description": "Whether quota optimization is enabled for this object.",
+                                          "example": true
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -74121,18 +74247,25 @@
                                         ]
                                       }
                                     },
-                                    "salesforceQuotaOptimization": {
-                                      "title": "Salesforce Quota Optimization Config",
-                                      "description": "Salesforce only. Reduces Salesforce API quota consumption for update events by filtering irrelevant change events at the source: Ampersand creates a checkbox field on the object and an Apex trigger that sets it when a watched field changes, then only delivers update events where the checkbox is set. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`.\n",
+                                    "providerOptions": {
+                                      "title": "Subscribe Provider Options",
+                                      "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
                                       "type": "object",
-                                      "required": [
-                                        "enabled"
-                                      ],
                                       "properties": {
-                                        "enabled": {
-                                          "type": "boolean",
-                                          "description": "Whether quota optimization is enabled for this object.",
-                                          "example": true
+                                        "quotaOptimization": {
+                                          "title": "Quota Optimization Config",
+                                          "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                          "type": "object",
+                                          "required": [
+                                            "enabled"
+                                          ],
+                                          "properties": {
+                                            "enabled": {
+                                              "type": "boolean",
+                                              "description": "Whether quota optimization is enabled for this object.",
+                                              "example": true
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -74311,13 +74444,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -74350,13 +74483,13 @@
                 "type": "string",
                 "description": "The time the consumer was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the consumer was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -74374,13 +74507,13 @@
             "type": "string",
             "description": "The time the connection was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the connection was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "authScheme": {
             "type": "string",
@@ -75312,13 +75445,13 @@
             "type": "string",
             "description": "The time the group was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the group was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -75351,13 +75484,13 @@
             "type": "string",
             "description": "The time the consumer was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the consumer was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -75484,7 +75617,7 @@
             "type": "string",
             "description": "The time the operation was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -75544,7 +75677,7 @@
           "timestamp": {
             "type": "string",
             "description": "The time the log was created.",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "message": {
             "type": "object",
