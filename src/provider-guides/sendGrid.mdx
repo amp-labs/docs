@@ -8,7 +8,7 @@ title: "SendGrid"
 
 This connector supports:
 - [Read Actions](/read-actions), including full historic backfill for all supported objects below. Incremental read is not currently supported.
-- [Write Actions](/write-actions) (create/update/delete) for `lists`, `templates`, and `asm_groups`.
+- [Write Actions](/write-actions) (create/update/delete).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.sendgrid.com`.
 - Subscribe Actions are not currently supported.
 
@@ -48,17 +48,15 @@ export const Cross = () => <span>🚫</span>
 </table>
 </div>
 
-For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/reference/objects-&-fields/get-object-metadata-via-connection) to inspect what’s available for a specific connection.
-
 ### Notes and limitations
 
 - **Write support**: `lists`, `templates`, and `asm_groups` support create, update, and delete.
-- **Incremental read**: Not supported. Scheduled reads perform a full backfill each run.
-- **Templates**: Reading `templates` includes both legacy and dynamic templates.
+- **Read-only objects**: `contacts`, `segments`, `singlesends`, `field_definitions`, `verified_senders`, `senders`, `bounces`, `blocks`, `spam_reports`, `unsubscribes`, `invalid_emails`, `categories`, and `subusers`
+- **Incremental read**: Not supported.
 
 ### Example integration
 
-To define an integration for SendGrid, create a manifest file (`amp.yaml`). For a complete example, [visit our samples repo on Github](https://github.com/amp-labs/samples/blob/main/sendGrid/amp.yaml).
+For an example manifest file of a SendGrid integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/sendGrid/amp.yaml).
 
 ## Before you get started
 
@@ -80,19 +78,15 @@ Follow SendGrid’s documentation to create an API key with the scopes your inte
 
 SendGrid documentation: [Create and manage API keys](https://www.twilio.com/docs/sendgrid/ui/account-and-settings/api-keys).
 
-<Note>
-Ampersand sends the API key as a Bearer token in the `Authorization` header (`Authorization: Bearer <api_key>`).
-</Note>
-
 ## Using the connector
 
 To start integrating with SendGrid:
 
-- Create a manifest file like the [example above](#example-integration).
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/sendGrid/amp.yaml).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their SendGrid API key.
 - Start using the connector!
   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
-  - If your integration has [Proxy Actions](/proxy-actions), start making Proxy API calls at `https://proxy.withampersand.com/v3/...`. Ampersand will automatically attach the customer's API key.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls. Ampersand will automatically attach the customer's API key.
