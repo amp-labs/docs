@@ -951,13 +951,13 @@
                                   "type": "string",
                                   "description": "The time the group was created.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816354Z"
+                                  "example": "2023-07-13T21:34:44.816Z"
                                 },
                                 "updateTime": {
                                   "type": "string",
                                   "description": "The time the group was last updated.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816354Z"
+                                  "example": "2023-07-13T21:34:44.816Z"
                                 }
                               }
                             },
@@ -990,13 +990,13 @@
                                   "type": "string",
                                   "description": "The time the consumer was created.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816354Z"
+                                  "example": "2023-07-13T21:34:44.816Z"
                                 },
                                 "updateTime": {
                                   "type": "string",
                                   "description": "The time the consumer was last updated.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816354Z"
+                                  "example": "2023-07-13T21:34:44.816Z"
                                 }
                               }
                             },
@@ -1014,13 +1014,13 @@
                               "type": "string",
                               "description": "The time the connection was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the connection was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "authScheme": {
                               "type": "string",
@@ -13250,13 +13250,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -13431,13 +13431,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -13470,13 +13470,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -13494,13 +13494,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -15088,6 +15088,28 @@
                                                       "object.restored"
                                                     ]
                                                   }
+                                                },
+                                                "providerOptions": {
+                                                  "title": "Subscribe Provider Options",
+                                                  "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "quotaOptimization": {
+                                                      "title": "Quota Optimization Config",
+                                                      "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "enabled"
+                                                      ],
+                                                      "properties": {
+                                                        "enabled": {
+                                                          "type": "boolean",
+                                                          "description": "Whether quota optimization is enabled for this object.",
+                                                          "example": true
+                                                        }
+                                                      }
+                                                    }
+                                                  }
                                                 }
                                               }
                                             }
@@ -15222,6 +15244,28 @@
                                                           "object.merged",
                                                           "object.restored"
                                                         ]
+                                                      }
+                                                    },
+                                                    "providerOptions": {
+                                                      "title": "Subscribe Provider Options",
+                                                      "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "quotaOptimization": {
+                                                          "title": "Quota Optimization Config",
+                                                          "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "enabled"
+                                                          ],
+                                                          "properties": {
+                                                            "enabled": {
+                                                              "type": "boolean",
+                                                              "description": "Whether quota optimization is enabled for this object.",
+                                                              "example": true
+                                                            }
+                                                          }
+                                                        }
                                                       }
                                                     }
                                                   }
@@ -15848,6 +15892,7 @@
                         "default": "api:create-installation"
                       },
                       "content": {
+                        "description": "The content of the config.",
                         "title": "Config Content",
                         "allOf": [
                           {
@@ -17265,6 +17310,28 @@
                                                   "object.restored"
                                                 ]
                                               }
+                                            },
+                                            "providerOptions": {
+                                              "title": "Subscribe Provider Options",
+                                              "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                              "type": "object",
+                                              "properties": {
+                                                "quotaOptimization": {
+                                                  "title": "Quota Optimization Config",
+                                                  "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "enabled"
+                                                  ],
+                                                  "properties": {
+                                                    "enabled": {
+                                                      "type": "boolean",
+                                                      "description": "Whether quota optimization is enabled for this object.",
+                                                      "example": true
+                                                    }
+                                                  }
+                                                }
+                                              }
                                             }
                                           }
                                         }
@@ -17400,6 +17467,28 @@
                                                       "object.restored"
                                                     ]
                                                   }
+                                                },
+                                                "providerOptions": {
+                                                  "title": "Subscribe Provider Options",
+                                                  "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "quotaOptimization": {
+                                                      "title": "Quota Optimization Config",
+                                                      "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "enabled"
+                                                      ],
+                                                      "properties": {
+                                                        "enabled": {
+                                                          "type": "boolean",
+                                                          "description": "Whether quota optimization is enabled for this object.",
+                                                          "example": true
+                                                        }
+                                                      }
+                                                    }
+                                                  }
                                                 }
                                               }
                                             },
@@ -17420,8 +17509,7 @@
                               }
                             }
                           }
-                        ],
-                        "description": "The content of the config."
+                        ]
                       }
                     },
                     "description": "The config of the installation."
@@ -17558,13 +17646,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -17739,13 +17827,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -17778,13 +17866,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -17802,13 +17890,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -19396,6 +19484,28 @@
                                                     "object.restored"
                                                   ]
                                                 }
+                                              },
+                                              "providerOptions": {
+                                                "title": "Subscribe Provider Options",
+                                                "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                "type": "object",
+                                                "properties": {
+                                                  "quotaOptimization": {
+                                                    "title": "Quota Optimization Config",
+                                                    "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether quota optimization is enabled for this object.",
+                                                        "example": true
+                                                      }
+                                                    }
+                                                  }
+                                                }
                                               }
                                             }
                                           }
@@ -19530,6 +19640,28 @@
                                                         "object.merged",
                                                         "object.restored"
                                                       ]
+                                                    }
+                                                  },
+                                                  "providerOptions": {
+                                                    "title": "Subscribe Provider Options",
+                                                    "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "quotaOptimization": {
+                                                        "title": "Quota Optimization Config",
+                                                        "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "enabled"
+                                                        ],
+                                                        "properties": {
+                                                          "enabled": {
+                                                            "type": "boolean",
+                                                            "description": "Whether quota optimization is enabled for this object.",
+                                                            "example": true
+                                                          }
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
@@ -20448,13 +20580,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -20629,13 +20761,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -20668,13 +20800,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -20692,13 +20824,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -22286,6 +22418,28 @@
                                                     "object.restored"
                                                   ]
                                                 }
+                                              },
+                                              "providerOptions": {
+                                                "title": "Subscribe Provider Options",
+                                                "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                "type": "object",
+                                                "properties": {
+                                                  "quotaOptimization": {
+                                                    "title": "Quota Optimization Config",
+                                                    "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether quota optimization is enabled for this object.",
+                                                        "example": true
+                                                      }
+                                                    }
+                                                  }
+                                                }
                                               }
                                             }
                                           }
@@ -22420,6 +22574,28 @@
                                                         "object.merged",
                                                         "object.restored"
                                                       ]
+                                                    }
+                                                  },
+                                                  "providerOptions": {
+                                                    "title": "Subscribe Provider Options",
+                                                    "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "quotaOptimization": {
+                                                        "title": "Quota Optimization Config",
+                                                        "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "enabled"
+                                                        ],
+                                                        "properties": {
+                                                          "enabled": {
+                                                            "type": "boolean",
+                                                            "description": "Whether quota optimization is enabled for this object.",
+                                                            "example": true
+                                                          }
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
@@ -23797,6 +23973,28 @@
                                                   "object.restored"
                                                 ]
                                               }
+                                            },
+                                            "providerOptions": {
+                                              "title": "Subscribe Provider Options",
+                                              "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                              "type": "object",
+                                              "properties": {
+                                                "quotaOptimization": {
+                                                  "title": "Quota Optimization Config",
+                                                  "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                  "type": "object",
+                                                  "required": [
+                                                    "enabled"
+                                                  ],
+                                                  "properties": {
+                                                    "enabled": {
+                                                      "type": "boolean",
+                                                      "description": "Whether quota optimization is enabled for this object.",
+                                                      "example": true
+                                                    }
+                                                  }
+                                                }
+                                              }
                                             }
                                           }
                                         }
@@ -23904,13 +24102,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -24085,13 +24283,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -24124,13 +24322,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -24148,13 +24346,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -25742,6 +25940,28 @@
                                                     "object.restored"
                                                   ]
                                                 }
+                                              },
+                                              "providerOptions": {
+                                                "title": "Subscribe Provider Options",
+                                                "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                "type": "object",
+                                                "properties": {
+                                                  "quotaOptimization": {
+                                                    "title": "Quota Optimization Config",
+                                                    "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether quota optimization is enabled for this object.",
+                                                        "example": true
+                                                      }
+                                                    }
+                                                  }
+                                                }
                                               }
                                             }
                                           }
@@ -25876,6 +26096,28 @@
                                                         "object.merged",
                                                         "object.restored"
                                                       ]
+                                                    }
+                                                  },
+                                                  "providerOptions": {
+                                                    "title": "Subscribe Provider Options",
+                                                    "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "quotaOptimization": {
+                                                        "title": "Quota Optimization Config",
+                                                        "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "enabled"
+                                                        ],
+                                                        "properties": {
+                                                          "enabled": {
+                                                            "type": "boolean",
+                                                            "description": "Whether quota optimization is enabled for this object.",
+                                                            "example": true
+                                                          }
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
@@ -26960,13 +27202,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -27141,13 +27383,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -27180,13 +27422,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816354Z"
+                              "example": "2023-07-13T21:34:44.816Z"
                             }
                           }
                         },
@@ -27204,13 +27446,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -28798,6 +29040,28 @@
                                                     "object.restored"
                                                   ]
                                                 }
+                                              },
+                                              "providerOptions": {
+                                                "title": "Subscribe Provider Options",
+                                                "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                "type": "object",
+                                                "properties": {
+                                                  "quotaOptimization": {
+                                                    "title": "Quota Optimization Config",
+                                                    "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                    "type": "object",
+                                                    "required": [
+                                                      "enabled"
+                                                    ],
+                                                    "properties": {
+                                                      "enabled": {
+                                                        "type": "boolean",
+                                                        "description": "Whether quota optimization is enabled for this object.",
+                                                        "example": true
+                                                      }
+                                                    }
+                                                  }
+                                                }
                                               }
                                             }
                                           }
@@ -28932,6 +29196,28 @@
                                                         "object.merged",
                                                         "object.restored"
                                                       ]
+                                                    }
+                                                  },
+                                                  "providerOptions": {
+                                                    "title": "Subscribe Provider Options",
+                                                    "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "quotaOptimization": {
+                                                        "title": "Quota Optimization Config",
+                                                        "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                        "type": "object",
+                                                        "required": [
+                                                          "enabled"
+                                                        ],
+                                                        "properties": {
+                                                          "enabled": {
+                                                            "type": "boolean",
+                                                            "description": "Whether quota optimization is enabled for this object.",
+                                                            "example": true
+                                                          }
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
@@ -30213,13 +30499,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -30394,13 +30680,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -30433,13 +30719,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816354Z"
+                                "example": "2023-07-13T21:34:44.816Z"
                               }
                             }
                           },
@@ -30457,13 +30743,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -32051,6 +32337,28 @@
                                                       "object.restored"
                                                     ]
                                                   }
+                                                },
+                                                "providerOptions": {
+                                                  "title": "Subscribe Provider Options",
+                                                  "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "quotaOptimization": {
+                                                      "title": "Quota Optimization Config",
+                                                      "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                      "type": "object",
+                                                      "required": [
+                                                        "enabled"
+                                                      ],
+                                                      "properties": {
+                                                        "enabled": {
+                                                          "type": "boolean",
+                                                          "description": "Whether quota optimization is enabled for this object.",
+                                                          "example": true
+                                                        }
+                                                      }
+                                                    }
+                                                  }
                                                 }
                                               }
                                             }
@@ -32185,6 +32493,28 @@
                                                           "object.merged",
                                                           "object.restored"
                                                         ]
+                                                      }
+                                                    },
+                                                    "providerOptions": {
+                                                      "title": "Subscribe Provider Options",
+                                                      "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "quotaOptimization": {
+                                                          "title": "Quota Optimization Config",
+                                                          "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                                          "type": "object",
+                                                          "required": [
+                                                            "enabled"
+                                                          ],
+                                                          "properties": {
+                                                            "enabled": {
+                                                              "type": "boolean",
+                                                              "description": "Whether quota optimization is enabled for this object.",
+                                                              "example": true
+                                                            }
+                                                          }
+                                                        }
                                                       }
                                                     }
                                                   }
@@ -35082,7 +35412,7 @@
                             "type": "string",
                             "description": "The time the operation was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       }
@@ -36763,7 +37093,7 @@
                       "type": "string",
                       "description": "The time the operation was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     }
                   }
                 },
@@ -37035,7 +37365,7 @@
                       "timestamp": {
                         "type": "string",
                         "description": "The time the log was created.",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "message": {
                         "type": "object",
@@ -44364,13 +44694,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -44403,13 +44733,13 @@
                             "type": "string",
                             "description": "The time the consumer was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the consumer was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816354Z"
+                            "example": "2023-07-13T21:34:44.816Z"
                           }
                         }
                       },
@@ -44427,13 +44757,13 @@
                         "type": "string",
                         "description": "The time the connection was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the connection was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "authScheme": {
                         "type": "string",
@@ -45428,13 +45758,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -45467,13 +45797,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -45491,13 +45821,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -46623,13 +46953,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -46662,13 +46992,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -46686,13 +47016,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -47749,13 +48079,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -47788,13 +48118,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816354Z"
+                          "example": "2023-07-13T21:34:44.816Z"
                         }
                       }
                     },
@@ -47812,13 +48142,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816354Z"
+                      "example": "2023-07-13T21:34:44.816Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -48641,12 +48971,13 @@
                   },
                   "type": {
                     "type": "string",
-                    "description": "The type of the destination.",
+                    "description": "The type of the destination. For `slack`, set `metadata.url` to a Slack incoming webhook URL.",
                     "example": "webhook",
                     "enum": [
                       "webhook",
                       "kinesis",
-                      "s3"
+                      "s3",
+                      "slack"
                     ]
                   },
                   "secrets": {
@@ -48678,7 +49009,7 @@
                     "properties": {
                       "url": {
                         "type": "string",
-                        "description": "Webhook URL, must start with \"https://\".",
+                        "description": "Webhook URL, must start with \"https://\". For `slack` destinations, this is the Slack incoming webhook URL.",
                         "example": "https://webhooks.mailmonkey.com/salesforce-lead-converted"
                       },
                       "headers": {
@@ -52744,6 +53075,11 @@
         "tags": [
           "Org"
         ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "orgId",
@@ -53267,6 +53603,11 @@
         "operationId": "updateOrg",
         "tags": [
           "Org"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ],
         "parameters": [
           {
@@ -53830,6 +54171,11 @@
         "tags": [
           "Org"
         ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "orgId",
@@ -54041,6 +54387,11 @@
         "operationId": "createOrgInvite",
         "tags": [
           "Org"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ],
         "parameters": [
           {
@@ -54603,6 +54954,11 @@
         "tags": [
           "Org"
         ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "orgId",
@@ -54824,6 +55180,11 @@
         "operationId": "getOrgInvite",
         "tags": [
           "Org"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ],
         "parameters": [
           {
@@ -55049,6 +55410,11 @@
         "operationId": "deleteOrgInvite",
         "tags": [
           "Org"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ],
         "parameters": [
           {
@@ -57117,6 +57483,11 @@
         "operationId": "getOrgBillingAccount",
         "tags": [
           "Billing Account"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ],
         "parameters": [
           {
@@ -67287,6 +67658,11 @@
         "tags": [
           "Org"
         ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "orgId",
@@ -67911,13 +68287,13 @@
                         "type": "string",
                         "description": "The time the group was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the group was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       }
                     }
                   },
@@ -67950,13 +68326,13 @@
                         "type": "string",
                         "description": "The time the consumer was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the consumer was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816354Z"
+                        "example": "2023-07-13T21:34:44.816Z"
                       }
                     }
                   },
@@ -67974,13 +68350,13 @@
                     "type": "string",
                     "description": "The time the connection was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the connection was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "authScheme": {
                     "type": "string",
@@ -70191,13 +70567,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -70372,13 +70748,13 @@
                     "type": "string",
                     "description": "The time the group was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the group was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   }
                 }
               },
@@ -70411,13 +70787,13 @@
                     "type": "string",
                     "description": "The time the consumer was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the consumer was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816354Z"
+                    "example": "2023-07-13T21:34:44.816Z"
                   }
                 }
               },
@@ -70435,13 +70811,13 @@
                 "type": "string",
                 "description": "The time the connection was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the connection was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "authScheme": {
                 "type": "string",
@@ -72029,6 +72405,28 @@
                                           "object.restored"
                                         ]
                                       }
+                                    },
+                                    "providerOptions": {
+                                      "title": "Subscribe Provider Options",
+                                      "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                      "type": "object",
+                                      "properties": {
+                                        "quotaOptimization": {
+                                          "title": "Quota Optimization Config",
+                                          "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                          "type": "object",
+                                          "required": [
+                                            "enabled"
+                                          ],
+                                          "properties": {
+                                            "enabled": {
+                                              "type": "boolean",
+                                              "description": "Whether quota optimization is enabled for this object.",
+                                              "example": true
+                                            }
+                                          }
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -72163,6 +72561,28 @@
                                               "object.merged",
                                               "object.restored"
                                             ]
+                                          }
+                                        },
+                                        "providerOptions": {
+                                          "title": "Subscribe Provider Options",
+                                          "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                          "type": "object",
+                                          "properties": {
+                                            "quotaOptimization": {
+                                              "title": "Quota Optimization Config",
+                                              "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                              "type": "object",
+                                              "required": [
+                                                "enabled"
+                                              ],
+                                              "properties": {
+                                                "enabled": {
+                                                  "type": "boolean",
+                                                  "description": "Whether quota optimization is enabled for this object.",
+                                                  "example": true
+                                                }
+                                              }
+                                            }
                                           }
                                         }
                                       }
@@ -73669,6 +74089,28 @@
                                       "object.restored"
                                     ]
                                   }
+                                },
+                                "providerOptions": {
+                                  "title": "Subscribe Provider Options",
+                                  "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                  "type": "object",
+                                  "properties": {
+                                    "quotaOptimization": {
+                                      "title": "Quota Optimization Config",
+                                      "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                      "type": "object",
+                                      "required": [
+                                        "enabled"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "boolean",
+                                          "description": "Whether quota optimization is enabled for this object.",
+                                          "example": true
+                                        }
+                                      }
+                                    }
+                                  }
                                 }
                               }
                             }
@@ -73803,6 +74245,28 @@
                                           "object.merged",
                                           "object.restored"
                                         ]
+                                      }
+                                    },
+                                    "providerOptions": {
+                                      "title": "Subscribe Provider Options",
+                                      "description": "Subscribe options that only apply to certain providers. Each option documents which providers support it; setting one for a provider that does not support it is rejected.\n",
+                                      "type": "object",
+                                      "properties": {
+                                        "quotaOptimization": {
+                                          "title": "Quota Optimization Config",
+                                          "description": "Reduces API quota consumption for update events by filtering irrelevant change events at the source, so only updates that affect watched fields are delivered. Requires `updateEvent.requiredWatchFields` to be non-empty; it cannot be used with `updateEvent.watchFieldsAuto: all`. Currently supported for Salesforce.\n",
+                                          "type": "object",
+                                          "required": [
+                                            "enabled"
+                                          ],
+                                          "properties": {
+                                            "enabled": {
+                                              "type": "boolean",
+                                              "description": "Whether quota optimization is enabled for this object.",
+                                              "example": true
+                                            }
+                                          }
+                                        }
                                       }
                                     }
                                   }
@@ -73980,13 +74444,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -74019,13 +74483,13 @@
                 "type": "string",
                 "description": "The time the consumer was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the consumer was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816354Z"
+                "example": "2023-07-13T21:34:44.816Z"
               }
             }
           },
@@ -74043,13 +74507,13 @@
             "type": "string",
             "description": "The time the connection was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the connection was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "authScheme": {
             "type": "string",
@@ -74981,13 +75445,13 @@
             "type": "string",
             "description": "The time the group was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the group was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -75020,13 +75484,13 @@
             "type": "string",
             "description": "The time the consumer was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the consumer was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -75153,7 +75617,7 @@
             "type": "string",
             "description": "The time the operation was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           }
         }
       },
@@ -75213,7 +75677,7 @@
           "timestamp": {
             "type": "string",
             "description": "The time the log was created.",
-            "example": "2023-07-13T21:34:44.816354Z"
+            "example": "2023-07-13T21:34:44.816Z"
           },
           "message": {
             "type": "object",
