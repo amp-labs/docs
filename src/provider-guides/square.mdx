@@ -8,26 +8,83 @@ title: "Square"
 
 This connector supports:
 
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `gift_cards/activities`, `payments`, `payouts` and `refunds` currently. For all other objects, a full read of the Square instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://connect.squareup.com`.
 
 ### Notes
 
 For testing against Square's [sandbox environment](https://developer.squareup.com/docs/devtools/sandbox/overview), set `provider: squareSandbox` in your manifest file. This is identical to `square` except that it uses the base URL `https://connect.squareupsandbox.com`.
 
+### Supported objects
+
+The Square connector supports reading from and writing to the following objects:
+
+#### Read objects
+
+- [bank_accounts](https://developer.squareup.com/reference/square/bank-accounts-api)
+- [bookings](https://developer.squareup.com/reference/square/bookings-api)
+- [bookings/custom_attribute_definitions](https://developer.squareup.com/reference/square/booking-custom-attributes-api)
+- [bookings/location_booking_profiles](https://developer.squareup.com/reference/square/bookings-api)
+- [bookings/team_member_booking_profiles](https://developer.squareup.com/reference/square/bookings-api)
+- [cards](https://developer.squareup.com/reference/square/cards-api)
+- [catalog](https://developer.squareup.com/reference/square/catalog-api)
+- [channels](https://developer.squareup.com/reference/square/channels-api)
+- [customers](https://developer.squareup.com/reference/square/customers-api)
+- [customers/custom_attribute_definitions](https://developer.squareup.com/reference/square/customer-custom-attributes-api)
+- [customers/groups](https://developer.squareup.com/reference/square/customer-groups-api)
+- [customers/segments](https://developer.squareup.com/reference/square/customer-segments-api)
+- [devices](https://developer.squareup.com/reference/square/devices-api)
+- [devices/codes](https://developer.squareup.com/reference/square/devices-api)
+- [disputes](https://developer.squareup.com/reference/square/disputes-api)
+- [events/types](https://developer.squareup.com/reference/square/events-api)
+- [gift_cards](https://developer.squareup.com/reference/square/gift-cards-api)
+- [gift_cards/activities](https://developer.squareup.com/reference/square/gift-card-activities-api)
+- [labor/break_types](https://developer.squareup.com/reference/square/labor-api)
+- [labor/team_member_wages](https://developer.squareup.com/reference/square/labor-api)
+- [labor/workweek_configs](https://developer.squareup.com/reference/square/labor-api)
+- [locations](https://developer.squareup.com/reference/square/locations-api)
+- [locations/custom_attribute_definitions](https://developer.squareup.com/reference/square/location-custom-attributes-api)
+- [loyalty/programs](https://developer.squareup.com/reference/square/loyalty-api)
+- [merchants](https://developer.squareup.com/reference/square/merchants-api)
+- [merchants/custom_attribute_definitions](https://developer.squareup.com/reference/square/merchant-custom-attributes-api)
+- [online_checkout/payment_links](https://developer.squareup.com/reference/square/checkout-api)
+- [orders/custom_attribute_definitions](https://developer.squareup.com/reference/square/order-custom-attributes-api)
+- [payments](https://developer.squareup.com/reference/square/payments-api)
+- [payouts](https://developer.squareup.com/reference/square/payouts-api)
+- [refunds](https://developer.squareup.com/reference/square/refunds-api)
+- [sites](https://developer.squareup.com/reference/square/sites-api)
+- [team_members/jobs](https://developer.squareup.com/reference/square/team-api)
+- [webhooks/event_types](https://developer.squareup.com/reference/square/webhook-subscriptions-api)
+- [webhooks/subscriptions](https://developer.squareup.com/reference/square/webhook-subscriptions-api)
+
+#### Write objects
+
+- [bookings](https://developer.squareup.com/reference/square/bookings-api)
+- [bookings/custom_attribute_definitions](https://developer.squareup.com/reference/square/booking-custom-attributes-api)
+- [cards](https://developer.squareup.com/reference/square/cards-api)
+- [catalog](https://developer.squareup.com/reference/square/catalog-api)
+- [customers](https://developer.squareup.com/reference/square/customers-api)
+- [customers/custom_attribute_definitions](https://developer.squareup.com/reference/square/customer-custom-attributes-api)
+- [customers/groups](https://developer.squareup.com/reference/square/customer-groups-api)
+- [devices/codes](https://developer.squareup.com/reference/square/devices-api)
+- [gift_cards](https://developer.squareup.com/reference/square/gift-cards-api)
+- [gift_cards/activities](https://developer.squareup.com/reference/square/gift-card-activities-api)
+- [labor/break_types](https://developer.squareup.com/reference/square/labor-api)
+- [labor/workweek_configs](https://developer.squareup.com/reference/square/labor-api)
+- [locations](https://developer.squareup.com/reference/square/locations-api)
+- [locations/custom_attribute_definitions](https://developer.squareup.com/reference/square/location-custom-attributes-api)
+- [merchants/custom_attribute_definitions](https://developer.squareup.com/reference/square/merchant-custom-attributes-api)
+- [online_checkout/payment_links](https://developer.squareup.com/reference/square/checkout-api)
+- [orders/custom_attribute_definitions](https://developer.squareup.com/reference/square/order-custom-attributes-api)
+- [payments](https://developer.squareup.com/reference/square/payments-api)
+- [refunds](https://developer.squareup.com/reference/square/refunds-api)
+- [team_members/jobs](https://developer.squareup.com/reference/square/team-api)
+- [webhooks/subscriptions](https://developer.squareup.com/reference/square/webhook-subscriptions-api)
+
 ### Example integration
 
-To define an integration for Square, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: squareIntegration
-    displayName: My Square Integration
-    provider: square
-    proxy:
-      enabled: true
-```
+For an example manifest file of a Square integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/square/amp.yaml).
 
 ## Before you get started
 
@@ -77,5 +134,9 @@ To start integrating with Square:
 
 - Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically handle the authentication with Square.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
