@@ -201,7 +201,7 @@ Each object in the `objects` array defines a specific data type to read from the
 | `objectName` | String | Yes | The [name of the object](#object-name) to read (e.g., `contact`, `lead`, `account`). This must match an object type supported by the provider's API (see note below). Case-sensitive. |
 | `destination` | String | Yes | The [webhook destination](#destination) for the read data. This determines where the data will be sent after it's read. Must match a webhook configured in your Ampersand account. See [Destinations](/destinations) for setup. |
 | `schedule` | String | Yes | A [cron schedule](#schedule) for reading the data. Defines how frequently the data should be read. Uses standard cron syntax. Examples: `*/10 * * * *` (every 10 minutes), `0 0 * * *` (daily at midnight). |
-| `enabled` | String | No | If set to `always`, the integration automatically installs upon user connection and skips the user field selection step. |
+| `enabled` | String | No | If set to `always`, Ampersand reads this object for every installation even if the customer never selects it (or it isn't present) in the installation config. |
 | `backfill` | Object | No | [Configuration for backfilling](#backfill) historical data. Defines how historical data should be loaded. See [backfill behavior](/read-actions#backfill-behavior) for details. |
 | `requiredFields` | Array | No | Fields that are always read for every customer. These fields will always be included in the data that's read. See [Field Configuration](#field) for more details. |
 | `optionalFields` | Array | No | Optional fields that can be included. Customers can choose which of these fields to include. See [Field Configuration](#field) for more details. |
