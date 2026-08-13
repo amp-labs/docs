@@ -495,6 +495,7 @@ const baseConfig = {
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
             "provider-guides/zoom",
+            "provider-guides/zoominfo",
           ]
         },
         {
