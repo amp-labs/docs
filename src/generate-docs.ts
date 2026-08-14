@@ -504,15 +504,16 @@ const baseConfig = {
             "customer-guides/overview",
             "customer-guides/bigquery",
             "customer-guides/google-workspace-delegation",
+            "customer-guides/housecallPro",
+            "customer-guides/hubspot",
+            "customer-guides/loxo",
+            "customer-guides/marketo",
+            "customer-guides/netsuite",
             "customer-guides/salesforce",
             "customer-guides/salesforce-jwt",
-            "customer-guides/loxo",
-            "customer-guides/hubspot",
-            "customer-guides/housecallPro",
-            "customer-guides/marketo",
             "customer-guides/snowflake",
-            "customer-guides/netsuite",
-            "customer-guides/update-connection"
+            "customer-guides/update-connection",
+            "customer-guides/zoho"
           ]
         },
         {
