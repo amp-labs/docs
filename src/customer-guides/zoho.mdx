@@ -34,3 +34,38 @@ In Zoho CRM, there are two main types of users:
 - Team users
 
 You should use an **organization user** account when connecting to the integration.
+
+## Zoho Mail: set up webhooks for real-time updates (Subscribe Actions)
+
+If your integration uses Zoho Mail Subscribe Actions, you need to create an **outgoing webhook** in the Zoho Mail console. Zoho Mail has no API for this, so it must be configured by hand.
+
+### Checklist before you start
+
+- You have a Zoho Mail account with access to the **Developer Space** section of **Settings**.
+- Your developer has provided you with a **webhook URL** in this format:
+
+  ```
+  https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
+  ```
+
+### Create the outgoing webhook
+
+1. Sign in to [Zoho Mail](https://mail.zoho.com) and open **Settings**.
+2. Scroll to the **Developer Space** section in the left sidebar and select **Webhooks**.
+3. Select the **Outgoing Webhooks** tab and click **Create new configuration**.
+
+   <Warning>
+   Make sure you are on the **Outgoing Webhooks** tab — that is what sends events from Zoho Mail to your developer's application.
+   </Warning>
+
+   ![Outgoing Webhooks in Zoho Mail settings](/images/customer-guides/zoho-mail-outgoing-webhooks.png)
+
+4. Select the entity you want to send events for:
+   - **Mail** — fires a webhook each time a new email is received. You can optionally narrow it down with conditions (e.g. sender or subject filters) or tags.
+   - **Tasks** — fires a webhook on task activity in groups you own or moderate (you can select up to 3 groups).
+5. Give the webhook a name and paste the webhook URL your developer gave you into the **Webhook URL** field.
+6. Save the webhook.
+
+If your integration subscribes to both new emails and task activity, create a webhook for each entity, pointing at the same URL.
+
+For official setup details, see the [Zoho Mail outgoing webhook documentation](https://www.zoho.com/mail/help/dev-platform/webhook.html).
