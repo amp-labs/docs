@@ -1,0 +1,58 @@
+---
+title: Amazon SNS destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can publish the payload as messages to your Amazon SNS topic.
+
+## Prerequisites
+
+Before setting up an SNS destination, ensure that you have:
+- An AWS account with an SNS topic
+- AWS credentials with `sns:Publish` permission on that topic
+
+## Create an SNS destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new SNS destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
+| **Topic ARN** | string | Yes | ARN of your SNS topic |
+| **Region** | string | Yes | AWS region where your topic is located (e.g. `us-west-2`) |
+| **AWS Access Key ID** | string | Yes | AWS access key with `sns:Publish` permission |
+| **AWS Secret Access Key** | string | Yes | AWS secret access key |
+| **Endpoint URL** | string | No | Custom SNS endpoint if applicable (e.g. when using [LocalStack](https://www.localstack.cloud)) |
+
+<Info>
+Ampersand encrypts and stores your AWS credentials securely.
+</Info>
+
+## Refer to the destination in your integration
+
+After creating your SNS destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToSNS
+    displayName: Salesforce to SNS
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandSNS
+        - objectName: contact
+          destination: ampersandSNS
+```
+
+## Message format
+
+Ampersand delivers the standard read and subscribe action payloads to your SNS topic. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
+
+<Info>
+If you have questions about scaling, contact `support@withampersand.com`.
+</Info>

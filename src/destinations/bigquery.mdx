@@ -1,0 +1,58 @@
+---
+title: BigQuery destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can insert the payload as rows into your Google BigQuery table.
+
+## Prerequisites
+
+Before setting up a BigQuery destination, ensure that you have:
+- A Google Cloud project with BigQuery enabled
+- A dataset and table to insert into
+- A service account with the `BigQuery Data Editor` role (or `bigquery.tables.updateData` permission) on that dataset, and a JSON key for it
+
+## Create a BigQuery destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new BigQuery destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
+| **Project ID** | string | Yes | Google Cloud project ID |
+| **Dataset ID** | string | Yes | BigQuery dataset ID |
+| **Table ID** | string | Yes | BigQuery table ID |
+| **Service account credentials** | string | Yes | Service account key JSON with write access to the table |
+
+<Info>
+Ampersand encrypts and stores your service account credentials securely.
+</Info>
+
+## Refer to the destination in your integration
+
+After creating your BigQuery destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToBigQuery
+    displayName: Salesforce to BigQuery
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandBigQuery
+        - objectName: contact
+          destination: ampersandBigQuery
+```
+
+## Message format
+
+Ampersand delivers the standard read and subscribe action payloads to your BigQuery table. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
+
+<Info>
+If you have questions about mapping payloads to your table schema, contact `support@withampersand.com`.
+</Info>

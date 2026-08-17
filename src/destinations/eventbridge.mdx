@@ -1,0 +1,58 @@
+---
+title: Amazon EventBridge destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can publish the payload as events to your Amazon EventBridge event bus.
+
+## Prerequisites
+
+Before setting up an EventBridge destination, ensure that you have:
+- An AWS account with an EventBridge event bus
+- AWS credentials with `events:PutEvents` permission on that event bus
+
+## Create an EventBridge destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new EventBridge destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
+| **Event bus name** | string | Yes | Name of your EventBridge event bus (e.g. `default`) |
+| **Region** | string | Yes | AWS region where your event bus is located (e.g. `us-west-2`) |
+| **AWS Access Key ID** | string | Yes | AWS access key with `events:PutEvents` permission |
+| **AWS Secret Access Key** | string | Yes | AWS secret access key |
+| **Detail type** | string | No | Value to set as the EventBridge `detail-type` on published events |
+
+<Info>
+Ampersand encrypts and stores your AWS credentials securely.
+</Info>
+
+## Refer to the destination in your integration
+
+After creating your EventBridge destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToEventBridge
+    displayName: Salesforce to EventBridge
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandEventBridge
+        - objectName: contact
+          destination: ampersandEventBridge
+```
+
+## Message format
+
+Ampersand delivers the standard read and subscribe action payloads to your EventBridge event bus. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
+
+<Info>
+If you have questions about scaling, contact `support@withampersand.com`.
+</Info>

@@ -1,0 +1,63 @@
+---
+title: Amazon Redshift destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can insert the payload as rows into your Amazon Redshift table. Both Redshift Serverless (via a workgroup) and provisioned clusters (via a cluster identifier) are supported.
+
+## Prerequisites
+
+Before setting up a Redshift destination, ensure that you have:
+- An Amazon Redshift Serverless workgroup or a provisioned cluster
+- A target database, and optionally a schema and table
+- AWS credentials with permission to run the Redshift Data API and insert into the target table
+
+## Create a Redshift destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Redshift destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
+| **Region** | string | Yes | AWS region where your Redshift resource lives (e.g. `us-west-2`) |
+| **AWS Access Key ID** | string | Yes | AWS access key with Redshift Data API permissions |
+| **AWS Secret Access Key** | string | Yes | AWS secret access key |
+| **Database** | string | No | Target database name |
+| **Schema** | string | No | Target schema |
+| **Table name** | string | No | Target table |
+| **Workgroup name** | string | No | Redshift Serverless workgroup name |
+| **Cluster identifier** | string | No | Provisioned cluster identifier |
+| **DB user** | string | No | Database user (for provisioned clusters) |
+
+<Info>
+Provide a **workgroup name** for Redshift Serverless, or a **cluster identifier** (and **DB user**) for a provisioned cluster. Ampersand encrypts and stores your AWS credentials securely.
+</Info>
+
+## Refer to the destination in your integration
+
+After creating your Redshift destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToRedshift
+    displayName: Salesforce to Redshift
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandRedshift
+        - objectName: contact
+          destination: ampersandRedshift
+```
+
+## Message format
+
+Ampersand delivers the standard read and subscribe action payloads to your Redshift table. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
+
+<Info>
+If you have questions about mapping payloads to your table schema, contact `support@withampersand.com`.
+</Info>

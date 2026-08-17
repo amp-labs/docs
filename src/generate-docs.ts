@@ -291,6 +291,17 @@ const baseConfig = {
             "destinations/webhooks",
             "destinations/kinesis",
             "destinations/s3",
+            "destinations/clickhouse",
+            "destinations/snowflake",
+            "destinations/bigquery",
+            "destinations/redshift",
+            "destinations/azure-blob",
+            "destinations/gcs",
+            "destinations/sqs",
+            "destinations/sns",
+            "destinations/eventbridge",
+            "destinations/pubsub",
+            "destinations/rabbitmq",
           ]
         },
         {

@@ -1,0 +1,59 @@
+---
+title: ClickHouse destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can insert the payload as rows into your ClickHouse table.
+
+## Prerequisites
+
+Before setting up a ClickHouse destination, ensure that you have:
+- A ClickHouse instance reachable over HTTPS (ClickHouse Cloud or self-hosted)
+- A target table to insert into
+- A username and password with `INSERT` privileges on that table
+
+## Create a ClickHouse destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new ClickHouse destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
+| **URL** | string | Yes | HTTPS URL of your ClickHouse instance (e.g. `https://abc.clickhouse.cloud:8443`) |
+| **Username** | string | Yes | ClickHouse username |
+| **Password** | string | Yes | ClickHouse password |
+| **Table name** | string | Yes | Table to insert rows into |
+| **Database** | string | No | Database containing the table (defaults to the connection's database) |
+
+<Info>
+Ampersand encrypts and stores your password securely.
+</Info>
+
+## Refer to the destination in your integration
+
+After creating your ClickHouse destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToClickHouse
+    displayName: Salesforce to ClickHouse
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandClickHouse
+        - objectName: contact
+          destination: ampersandClickHouse
+```
+
+## Message format
+
+Ampersand delivers the standard read and subscribe action payloads to your ClickHouse table. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
+
+<Info>
+If you have questions about mapping payloads to your table schema, contact `support@withampersand.com`.
+</Info>

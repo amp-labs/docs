@@ -1,0 +1,56 @@
+---
+title: Google Cloud Pub/Sub destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can publish the payload as messages to your Google Cloud Pub/Sub topic.
+
+## Prerequisites
+
+Before setting up a Pub/Sub destination, ensure that you have:
+- A Google Cloud project with a Pub/Sub topic
+- A service account with the `Pub/Sub Publisher` role (or `pubsub.topics.publish` permission) on that topic, and a JSON key for it
+
+## Create a Pub/Sub destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Pub/Sub destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
+| **Project ID** | string | Yes | Google Cloud project ID |
+| **Topic ID** | string | Yes | Pub/Sub topic ID |
+| **Service account credentials** | string | Yes | Service account key JSON with publish access to the topic |
+
+<Info>
+Ampersand encrypts and stores your service account credentials securely.
+</Info>
+
+## Refer to the destination in your integration
+
+After creating your Pub/Sub destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToPubSub
+    displayName: Salesforce to Pub/Sub
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandPubSub
+        - objectName: contact
+          destination: ampersandPubSub
+```
+
+## Message format
+
+Ampersand delivers the standard read and subscribe action payloads to your Pub/Sub topic. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
+
+<Info>
+If you have questions about scaling, contact `support@withampersand.com`.
+</Info>
