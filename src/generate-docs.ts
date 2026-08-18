@@ -309,12 +309,14 @@ const baseConfig = {
               ]
             },
             "destinations/webhooks",
+            "destinations/slack",
+            "destinations/kinesis",
             {
               group: "Blob storage",
               pages: [
                 "destinations/s3",
               ]
-            },
+            }
           ]
         },
         {
@@ -499,6 +501,7 @@ const baseConfig = {
             "provider-guides/snapchatAds",
             "provider-guides/snowflake",
             "provider-guides/solarwindsServiceDesk",
+            "provider-guides/square",
             "provider-guides/stripe",
             "provider-guides/superSend",
             "provider-guides/surveyMonkey",
@@ -519,6 +522,7 @@ const baseConfig = {
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
             "provider-guides/zoom",
+            "provider-guides/zoominfo",
           ]
         },
         {
@@ -527,15 +531,16 @@ const baseConfig = {
             "customer-guides/overview",
             "customer-guides/bigquery",
             "customer-guides/google-workspace-delegation",
+            "customer-guides/housecallPro",
+            "customer-guides/hubspot",
+            "customer-guides/loxo",
+            "customer-guides/marketo",
+            "customer-guides/netsuite",
             "customer-guides/salesforce",
             "customer-guides/salesforce-jwt",
-            "customer-guides/loxo",
-            "customer-guides/hubspot",
-            "customer-guides/housecallPro",
-            "customer-guides/marketo",
             "customer-guides/snowflake",
-            "customer-guides/netsuite",
-            "customer-guides/update-connection"
+            "customer-guides/update-connection",
+            "customer-guides/zoho"
           ]
         },
         {
