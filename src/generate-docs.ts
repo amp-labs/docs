@@ -288,20 +288,35 @@ const baseConfig = {
           group: "Destinations",
           pages: [
             "destinations/overview",
-            "destinations/eventbridge",
-            "destinations/redshift",
-            "destinations/s3",
-            "destinations/sns",
-            "destinations/sqs",
-            "destinations/azure-blob",
-            "destinations/bigquery",
-            "destinations/clickhouse",
-            "destinations/pubsub",
-            "destinations/gcs",
-            "destinations/kinesis",
-            "destinations/rabbitmq",
-            "destinations/snowflake",
+            {
+              group: "Queues",
+              pages: [
+                "destinations/eventbridge",
+                "destinations/kinesis",
+                "destinations/pubsub",
+                "destinations/rabbitmq",
+                "destinations/sns",
+                "destinations/sqs",
+              ]
+            },
+            {
+              group: "Databases and warehouses",
+              pages: [
+                "destinations/bigquery",
+                "destinations/clickhouse",
+                "destinations/redshift",
+                "destinations/snowflake",
+              ]
+            },
             "destinations/webhooks",
+            {
+              group: "Blob storage",
+              pages: [
+                "destinations/azure-blob",
+                "destinations/gcs",
+                "destinations/s3",
+              ]
+            },
           ]
         },
         {
