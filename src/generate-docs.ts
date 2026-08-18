@@ -312,8 +312,6 @@ const baseConfig = {
             {
               group: "Blob storage",
               pages: [
-                "destinations/azure-blob",
-                "destinations/gcs",
                 "destinations/s3",
               ]
             },
