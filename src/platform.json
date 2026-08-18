@@ -49245,6 +49245,18 @@
                         "description": "The routing key for the `rabbitmq` destination.",
                         "example": "ampersand.events",
                         "x-go-type-skip-optional-pointer": true
+                      },
+                      "batchSize": {
+                        "type": "integer",
+                        "description": "For warehouse destinations (`clickhouse`, `snowflake`, `bigquery`, `redshift`), the number of rows to buffer before flushing a batch. Defaults to 1000.",
+                        "example": 1000,
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "maxWaitSecs": {
+                        "type": "integer",
+                        "description": "For warehouse destinations, the maximum number of seconds to wait before flushing a batch (whichever comes first with `batchSize`). Defaults to 30.",
+                        "example": 30,
+                        "x-go-type-skip-optional-pointer": true
                       }
                     }
                   }
@@ -49438,6 +49450,16 @@
                           "type": "string",
                           "description": "The routing key for the rabbitmq destination",
                           "example": "ampersand.events"
+                        },
+                        "batchSize": {
+                          "type": "integer",
+                          "description": "For warehouse destinations, rows to buffer before flushing a batch (default 1000)",
+                          "example": 1000
+                        },
+                        "maxWaitSecs": {
+                          "type": "integer",
+                          "description": "For warehouse destinations, max seconds before flushing a batch (default 30)",
+                          "example": 30
                         }
                       }
                     },
@@ -50447,6 +50469,16 @@
                             "type": "string",
                             "description": "The routing key for the rabbitmq destination",
                             "example": "ampersand.events"
+                          },
+                          "batchSize": {
+                            "type": "integer",
+                            "description": "For warehouse destinations, rows to buffer before flushing a batch (default 1000)",
+                            "example": 1000
+                          },
+                          "maxWaitSecs": {
+                            "type": "integer",
+                            "description": "For warehouse destinations, max seconds before flushing a batch (default 30)",
+                            "example": 30
                           }
                         }
                       },
@@ -50839,6 +50871,16 @@
                           "type": "string",
                           "description": "The routing key for the rabbitmq destination",
                           "example": "ampersand.events"
+                        },
+                        "batchSize": {
+                          "type": "integer",
+                          "description": "For warehouse destinations, rows to buffer before flushing a batch (default 1000)",
+                          "example": 1000
+                        },
+                        "maxWaitSecs": {
+                          "type": "integer",
+                          "description": "For warehouse destinations, max seconds before flushing a batch (default 30)",
+                          "example": 30
                         }
                       }
                     },
@@ -51371,7 +51413,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- name\n- metadata.url\n- metadata.headers\n- metadata.region\n- metadata.streamName\n- metadata.endpointUrl\n- metadata.partitionKeyTemplate\n- metadata.bucket\n- metadata.keyTemplate\n- metadata.storageClass\n- metadata.username\n- metadata.tableName\n- metadata.database\n- metadata.accountIdentifier\n- metadata.userId\n- metadata.dbName\n- metadata.schemaName\n- metadata.projectId\n- metadata.datasetId\n- metadata.tableId\n- metadata.workgroupName\n- metadata.clusterIdentifier\n- metadata.dbUser\n- metadata.account\n- metadata.container\n- metadata.queueUrl\n- metadata.topicArn\n- metadata.eventBusName\n- metadata.detailType\n- metadata.topicId\n- metadata.routingKey\n- secrets.awsKeyId\n- secrets.awsSecretKey\n- secrets.awsSessionToken\n- secrets.password\n- secrets.privateKey\n- secrets.credentials\n- secrets.accessKeyId\n- secrets.secretAccessKey\n- secrets.accessKey\n- secrets.uri\n",
+                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- name\n- metadata.url\n- metadata.headers\n- metadata.region\n- metadata.streamName\n- metadata.endpointUrl\n- metadata.partitionKeyTemplate\n- metadata.bucket\n- metadata.keyTemplate\n- metadata.storageClass\n- metadata.username\n- metadata.tableName\n- metadata.database\n- metadata.accountIdentifier\n- metadata.userId\n- metadata.dbName\n- metadata.schemaName\n- metadata.projectId\n- metadata.datasetId\n- metadata.tableId\n- metadata.workgroupName\n- metadata.clusterIdentifier\n- metadata.dbUser\n- metadata.account\n- metadata.container\n- metadata.queueUrl\n- metadata.topicArn\n- metadata.eventBusName\n- metadata.detailType\n- metadata.topicId\n- metadata.routingKey\n- metadata.batchSize\n- metadata.maxWaitSecs\n- secrets.awsKeyId\n- secrets.awsSecretKey\n- secrets.awsSessionToken\n- secrets.password\n- secrets.privateKey\n- secrets.credentials\n- secrets.accessKeyId\n- secrets.secretAccessKey\n- secrets.accessKey\n- secrets.uri\n",
                     "example": [
                       "name",
                       "metadata.url",
@@ -51547,6 +51589,16 @@
                             "type": "string",
                             "description": "The routing key for the `rabbitmq` destination.",
                             "example": "ampersand.events"
+                          },
+                          "batchSize": {
+                            "type": "integer",
+                            "description": "For warehouse destinations, rows to buffer before flushing a batch (default 1000).",
+                            "example": 1000
+                          },
+                          "maxWaitSecs": {
+                            "type": "integer",
+                            "description": "For warehouse destinations, max seconds before flushing a batch (default 30).",
+                            "example": 30
                           }
                         }
                       },
@@ -51798,6 +51850,16 @@
                           "type": "string",
                           "description": "The routing key for the rabbitmq destination",
                           "example": "ampersand.events"
+                        },
+                        "batchSize": {
+                          "type": "integer",
+                          "description": "For warehouse destinations, rows to buffer before flushing a batch (default 1000)",
+                          "example": 1000
+                        },
+                        "maxWaitSecs": {
+                          "type": "integer",
+                          "description": "For warehouse destinations, max seconds before flushing a batch (default 30)",
+                          "example": 30
                         }
                       }
                     },
@@ -69460,6 +69522,16 @@
                 "type": "string",
                 "description": "The routing key for the rabbitmq destination",
                 "example": "ampersand.events"
+              },
+              "batchSize": {
+                "type": "integer",
+                "description": "For warehouse destinations, rows to buffer before flushing a batch (default 1000)",
+                "example": 1000
+              },
+              "maxWaitSecs": {
+                "type": "integer",
+                "description": "For warehouse destinations, max seconds before flushing a batch (default 30)",
+                "example": 30
               }
             }
           },
@@ -69656,6 +69728,16 @@
                 "type": "string",
                 "description": "The routing key for the rabbitmq destination",
                 "example": "ampersand.events"
+              },
+              "batchSize": {
+                "type": "integer",
+                "description": "For warehouse destinations, rows to buffer before flushing a batch (default 1000)",
+                "example": 1000
+              },
+              "maxWaitSecs": {
+                "type": "integer",
+                "description": "For warehouse destinations, max seconds before flushing a batch (default 30)",
+                "example": 30
               }
             }
           },
