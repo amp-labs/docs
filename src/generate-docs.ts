@@ -289,6 +289,7 @@ const baseConfig = {
           pages: [
             "destinations/overview",
             "destinations/webhooks",
+            "destinations/slack",
             "destinations/kinesis",
             "destinations/s3",
           ]
