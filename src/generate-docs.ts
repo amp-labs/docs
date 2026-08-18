@@ -288,14 +288,12 @@ const baseConfig = {
           group: "Destinations",
           pages: [
             "destinations/overview",
+            "destinations/webhooks",
+            "destinations/slack",
             {
-              group: "Queues",
+              group: "Blob storage",
               pages: [
-                "destinations/eventbridge",
-                "destinations/pubsub",
-                "destinations/rabbitmq",
-                "destinations/sns",
-                "destinations/sqs",
+                "destinations/s3",
               ]
             },
             {
@@ -307,13 +305,15 @@ const baseConfig = {
                 "destinations/snowflake",
               ]
             },
-            "destinations/webhooks",
-            "destinations/slack",
-            "destinations/kinesis",
             {
-              group: "Blob storage",
+              group: "Queues",
               pages: [
-                "destinations/s3",
+                "destinations/eventbridge",
+                "destinations/kinesis",
+                "destinations/pubsub",
+                "destinations/rabbitmq",
+                "destinations/sns",
+                "destinations/sqs",
               ]
             }
           ]
