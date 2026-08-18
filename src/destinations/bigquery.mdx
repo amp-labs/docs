@@ -4,20 +4,20 @@ title: BigQuery destinations
 
 For more information on destinations, see the [Destinations](/destinations) page.
 
-When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can insert the payload as rows into your Google BigQuery table.
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand inserts the payload as rows into your Google BigQuery table.
 
 ## Prerequisites
 
 Before setting up a BigQuery destination, ensure that you have:
 - A Google Cloud project with BigQuery enabled
-- A dataset and table to insert into
+- A dataset and table to insert into (see [Data format and table setup](#data-format-and-table-setup))
 - A service account with the `BigQuery Data Editor` role (or `bigquery.tables.updateData` permission) on that dataset, and a JSON key for it
 
-## Set up your table
+## Data format and table setup
 
-The table must exist before you create the destination. The BigQuery sink writes each
-message into two columns: `id` (a generated identifier) and `payload` (the message JSON as a
-string). Create the table with exactly these columns:
+Ampersand delivers each read or subscribe message as a JSON object. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
+The BigQuery destination writes each message into two columns: `id` (a generated identifier) and `payload` (the full message JSON as a string). Create the table with exactly these columns, then read individual fields from `payload` with BigQuery's [JSON functions](https://cloud.google.com/bigquery/docs/reference/standard-sql/json_functions).
 
 ```sql
 CREATE TABLE `my-project.my_dataset.my_table` (
@@ -26,28 +26,21 @@ CREATE TABLE `my-project.my_dataset.my_table` (
 );
 ```
 
-To split the payload into typed columns instead, use a
-[Svix transformation](https://docs.svix.com/stream/sinks/bigquery).
-
 ## Create a BigQuery destination
 
 Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new BigQuery destination.
 
 You'll need to provide:
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
-| **Project ID** | string | Yes | Google Cloud project ID |
-| **Dataset ID** | string | Yes | BigQuery dataset ID |
-| **Table ID** | string | Yes | BigQuery table ID |
-| **Service account credentials** | string | Yes | Service account key JSON with write access to the table |
-| **Batch size** | integer | No | Rows to buffer before flushing a batch (defaults to 1000) |
-| **Max wait (seconds)** | integer | No | Max seconds to wait before flushing a batch (defaults to 30) |
-
-<Info>
-Ampersand encrypts and stores your service account credentials securely.
-</Info>
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandBigQuery` | Alias to reference in your `amp.yaml` file |
+| **Project ID** | string | Yes | `my-gcp-project` | Google Cloud project ID |
+| **Dataset ID** | string | Yes | `analytics` | BigQuery dataset ID |
+| **Table ID** | string | Yes | `ampersand_events` | BigQuery table ID |
+| **Service account credentials** | string | Yes | | Service account key JSON with write access to the table |
+| **Batch size** | integer | No | `1000` | Rows to buffer before flushing a batch (defaults to 1000) |
+| **Max wait (seconds)** | integer | No | `30` | Max seconds to wait before flushing a batch (defaults to 30) |
 
 ## Refer to the destination in your integration
 
@@ -66,15 +59,3 @@ integrations:
         - objectName: contact
           destination: ampersandBigQuery
 ```
-
-## Batching
-
-Warehouse destinations buffer rows and flush a batch when it reaches **Batch size** rows or after **Max wait (seconds)**, whichever comes first (defaults: 1000 rows / 30 seconds). Lower the max wait for lower-latency delivery when volume is low.
-
-## Message format
-
-Ampersand delivers the standard read and subscribe action payloads to your BigQuery table. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
-
-<Info>
-If you have questions about mapping payloads to your table schema, contact `support@withampersand.com`.
-</Info>

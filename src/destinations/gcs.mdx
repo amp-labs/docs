@@ -4,7 +4,7 @@ title: Google Cloud Storage destinations
 
 For more information on destinations, see the [Destinations](/destinations) page.
 
-When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can write the payload as objects to your Google Cloud Storage bucket.
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand writes the payload as objects to your Google Cloud Storage bucket.
 
 ## Prerequisites
 
@@ -12,21 +12,21 @@ Before setting up a Google Cloud Storage destination, ensure that you have:
 - A Google Cloud project with a Cloud Storage bucket
 - A service account with the `Storage Object Creator` role (or `storage.objects.create` permission) on that bucket, and a JSON key for it
 
+## Data format
+
+Ampersand writes each read or subscribe message as a JSON object to your bucket. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
 ## Create a Google Cloud Storage destination
 
 Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Google Cloud Storage destination.
 
 You'll need to provide:
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
-| **Bucket** | string | Yes | Name of your Cloud Storage bucket |
-| **Service account credentials** | string | Yes | Service account key JSON with write access to the bucket |
-
-<Info>
-Ampersand encrypts and stores your service account credentials securely.
-</Info>
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandGCS` | Alias to reference in your `amp.yaml` file |
+| **Bucket** | string | Yes | `ampersand-integration-bucket` | Name of your Cloud Storage bucket |
+| **Service account credentials** | string | Yes | | Service account key JSON with write access to the bucket |
 
 ## Refer to the destination in your integration
 
@@ -45,11 +45,3 @@ integrations:
         - objectName: contact
           destination: ampersandGCS
 ```
-
-## Message format
-
-Ampersand delivers the standard read and subscribe action payloads to your Google Cloud Storage bucket. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
-
-<Info>
-If you have questions about scaling, contact `support@withampersand.com`.
-</Info>

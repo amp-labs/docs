@@ -4,7 +4,7 @@ title: Azure Blob Storage destinations
 
 For more information on destinations, see the [Destinations](/destinations) page.
 
-When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can write the payload as blobs to your Azure Blob Storage container.
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand writes the payload as objects to your Azure Blob Storage container.
 
 ## Prerequisites
 
@@ -13,22 +13,22 @@ Before setting up an Azure Blob Storage destination, ensure that you have:
 - A blob container to write to
 - The storage account's access key
 
+## Data format
+
+Ampersand writes each read or subscribe message as a JSON object to your container. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
 ## Create an Azure Blob Storage destination
 
 Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Azure Blob Storage destination.
 
 You'll need to provide:
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
-| **Account** | string | Yes | Azure Storage account name |
-| **Container** | string | Yes | Blob container to write objects to |
-| **Access key** | string | Yes | Storage account access key |
-
-<Info>
-Ampersand encrypts and stores your access key securely.
-</Info>
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandAzureBlob` | Alias to reference in your `amp.yaml` file |
+| **Account** | string | Yes | `mystorageaccount` | Azure Storage account name |
+| **Container** | string | Yes | `ampersand-data` | Blob container to write objects to |
+| **Access key** | string | Yes | | Storage account access key |
 
 ## Refer to the destination in your integration
 
@@ -47,11 +47,3 @@ integrations:
         - objectName: contact
           destination: ampersandAzureBlob
 ```
-
-## Message format
-
-Ampersand delivers the standard read and subscribe action payloads to your Azure Blob Storage container. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
-
-<Info>
-If you have questions about scaling, contact `support@withampersand.com`.
-</Info>

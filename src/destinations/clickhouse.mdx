@@ -4,41 +4,34 @@ title: ClickHouse destinations
 
 For more information on destinations, see the [Destinations](/destinations) page.
 
-When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can insert the payload as rows into your ClickHouse table.
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand inserts the payload as rows into your ClickHouse table.
 
 ## Prerequisites
 
 Before setting up a ClickHouse destination, ensure that you have:
 - A ClickHouse instance reachable over HTTPS (ClickHouse Cloud or self-hosted)
-- A target table to insert into
+- A table to insert into (see [Data format and table setup](#data-format-and-table-setup))
 - A username and password with `INSERT` privileges on that table
 
-## Set up your table
+## Data format and table setup
 
-The table must exist before you create the destination. Unlike the other warehouse
-destinations, the ClickHouse sink maps the **top-level fields of each message to table
-columns by name** — it does not add its own `id`/`payload` columns. Create a table whose
-columns match the delivered fields (fields without a matching column are ignored):
+Ampersand delivers each read or subscribe message as a JSON object. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
+ClickHouse matches the payload's top-level keys to your table's columns by name. Create a column for each top-level key you want to store. Keys with no matching column are ignored. `result` is the array of synced records; store it as a JSON string.
 
 ```sql
 CREATE TABLE ampersand_events (
   action         String,
-  provider       String,
   objectName     String,
-  projectId      String,
-  installationId String,
   operationId    String,
+  installationId String,
   operationTime  String,
-  result         String
+  result         String,
+  ...
 )
 ENGINE = MergeTree()
 ORDER BY tuple();
 ```
-
-`result` holds the array of synced records as a JSON string; the other columns are the
-message envelope (see [Message format](#message-format)). If you'd rather shape the data
-differently (for example, one row per record), use a
-[Svix transformation](https://docs.svix.com/stream/sinks/clickhouse).
 
 ## Create a ClickHouse destination
 
@@ -46,20 +39,16 @@ Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/des
 
 You'll need to provide:
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
-| **URL** | string | Yes | HTTPS URL of your ClickHouse instance (e.g. `https://abc.clickhouse.cloud:8443`) |
-| **Username** | string | Yes | ClickHouse username |
-| **Password** | string | Yes | ClickHouse password |
-| **Table name** | string | Yes | Table to insert rows into |
-| **Database** | string | No | Database containing the table (defaults to the connection's database) |
-| **Batch size** | integer | No | Rows to buffer before flushing a batch (defaults to 1000) |
-| **Max wait (seconds)** | integer | No | Max seconds to wait before flushing a batch (defaults to 30) |
-
-<Info>
-Ampersand encrypts and stores your password securely.
-</Info>
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandClickHouse` | Alias to reference in your `amp.yaml` file |
+| **URL** | string | Yes | `https://abc.clickhouse.cloud:8443` | HTTPS URL of your ClickHouse instance |
+| **Username** | string | Yes | `default` | ClickHouse username |
+| **Password** | string | Yes | | ClickHouse password |
+| **Table name** | string | Yes | `ampersand_events` | Table to insert rows into |
+| **Database** | string | No | `default` | Database containing the table |
+| **Batch size** | integer | No | `1000` | Rows to buffer before flushing a batch (defaults to 1000) |
+| **Max wait (seconds)** | integer | No | `30` | Max seconds to wait before flushing a batch (defaults to 30) |
 
 ## Refer to the destination in your integration
 
@@ -78,15 +67,3 @@ integrations:
         - objectName: contact
           destination: ampersandClickHouse
 ```
-
-## Batching
-
-Warehouse destinations buffer rows and flush a batch when it reaches **Batch size** rows or after **Max wait (seconds)**, whichever comes first (defaults: 1000 rows / 30 seconds). Lower the max wait for lower-latency delivery when volume is low.
-
-## Message format
-
-Ampersand delivers the standard read and subscribe action payloads to your ClickHouse table. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
-
-<Info>
-If you have questions about mapping payloads to your table schema, contact `support@withampersand.com`.
-</Info>

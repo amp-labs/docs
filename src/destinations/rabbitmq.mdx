@@ -4,14 +4,18 @@ title: RabbitMQ destinations
 
 For more information on destinations, see the [Destinations](/destinations) page.
 
-When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand can publish the payload as messages to your RabbitMQ exchange.
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand publishes the payload as messages to your RabbitMQ instance.
 
 ## Prerequisites
 
 Before setting up a RabbitMQ destination, ensure that you have:
 - A RabbitMQ instance reachable from the internet
 - A connection URI with permission to publish
-- A routing key for your exchange
+- A routing key that reaches a queue you can consume from
+
+## Data format
+
+Ampersand publishes each read or subscribe message to your RabbitMQ instance as JSON, using the routing key you configure. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
 
 ## Create a RabbitMQ destination
 
@@ -19,15 +23,11 @@ Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/des
 
 You'll need to provide:
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| **Destination name** | string | Yes | Alias to reference in your `amp.yaml` file |
-| **Connection URI** | string | Yes | AMQP connection URI, e.g. `amqp://user:pass@host:5672` (it embeds your credentials) |
-| **Routing key** | string | Yes | Routing key to publish messages with |
-
-<Info>
-The connection URI embeds your username and password. Ampersand encrypts and stores it securely.
-</Info>
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandRabbitMQ` | Alias to reference in your `amp.yaml` file |
+| **Connection URI** | string | Yes | `amqp://user:pass@host:5672` | AMQP connection URI (it embeds your credentials) |
+| **Routing key** | string | Yes | `ampersand-events` | Routing key to publish messages with |
 
 ## Refer to the destination in your integration
 
@@ -46,11 +46,3 @@ integrations:
         - objectName: contact
           destination: ampersandRabbitMQ
 ```
-
-## Message format
-
-Ampersand delivers the standard read and subscribe action payloads to your RabbitMQ exchange. See [Message format](/destinations/s3#message-format) for the full schema and examples of read and subscribe messages.
-
-<Info>
-If you have questions about scaling, contact `support@withampersand.com`.
-</Info>
