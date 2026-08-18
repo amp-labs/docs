@@ -17,7 +17,7 @@ Before setting up a Redshift destination, ensure that you have:
 
 Ampersand delivers each read or subscribe message as a JSON object. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
 
-The Redshift destination writes each message into two columns: `created_at` (the insert time) and `payload` (the full message JSON). The payload is written as a string, so `payload` must be a character column large enough to hold it. Create the table like this, then read individual fields from `payload` with Redshift's [JSON functions](https://docs.aws.amazon.com/redshift/latest/dg/json-functions.html):
+The Redshift destination writes each message into two columns: `created_at` (the insert time) and `payload` (the full message JSON). The payload is written as a string, so `payload` must be a character column large enough to hold it. Create the table like this:
 
 ```sql
 CREATE TABLE events (

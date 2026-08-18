@@ -17,7 +17,7 @@ Before setting up a BigQuery destination, ensure that you have:
 
 Ampersand delivers each read or subscribe message as a JSON object. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
 
-The BigQuery destination writes each message into two columns: `id` (a generated identifier) and `payload` (the full message JSON as a string). Create the table with exactly these columns, then read individual fields from `payload` with BigQuery's [JSON functions](https://cloud.google.com/bigquery/docs/reference/standard-sql/json_functions).
+The BigQuery destination writes each message into two columns: `id` (a generated identifier) and `payload` (the full message JSON, written as a string). Create the table with exactly these columns:
 
 ```sql
 CREATE TABLE `my-project.my_dataset.my_table` (
