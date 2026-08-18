@@ -58,6 +58,15 @@ Destinations can also be used to receive [notifications](/notifications) about i
 * [Google Cloud Pub/Sub destinations](/destinations/pubsub)
 * [RabbitMQ destinations](/destinations/rabbitmq)
 
+## Considerations for warehouse, storage, and queue destinations
+
+These destinations (everything except webhooks) are delivered through managed sink infrastructure. A few things to know when setting them up:
+
+* **Warehouse destinations need a pre-created table.** ClickHouse, Snowflake, BigQuery, and Redshift each require a table that already exists and whose schema matches how the sink inserts rows — see the destination's page for the exact `CREATE TABLE`. Object-storage and message-queue destinations need no schema; each message is written/published as-is.
+* **Warehouse delivery is batched.** Rows are buffered and flushed when a batch fills or a max-wait interval elapses (defaults: 1000 rows / 30 seconds), both configurable per destination. Object-storage and queue destinations deliver per message.
+* **Per-project limit.** A project can have up to **10** of these destinations in total (webhook destinations are separate and not counted). Contact `support@withampersand.com` if you need more.
+* **Object naming.** Objects written to Google Cloud Storage and Azure Blob Storage are named `object-generated-by-svix<timestamp>` and the name is not currently customizable.
+
 ## Other Destinations
 
 We have more destination types on the roadmap, including:

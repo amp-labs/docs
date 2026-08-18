@@ -13,6 +13,33 @@ Before setting up a ClickHouse destination, ensure that you have:
 - A target table to insert into
 - A username and password with `INSERT` privileges on that table
 
+## Set up your table
+
+The table must exist before you create the destination. Unlike the other warehouse
+destinations, the ClickHouse sink maps the **top-level fields of each message to table
+columns by name** — it does not add its own `id`/`payload` columns. Create a table whose
+columns match the delivered fields (fields without a matching column are ignored):
+
+```sql
+CREATE TABLE ampersand_events (
+  action         String,
+  provider       String,
+  objectName     String,
+  projectId      String,
+  installationId String,
+  operationId    String,
+  operationTime  String,
+  result         String
+)
+ENGINE = MergeTree()
+ORDER BY tuple();
+```
+
+`result` holds the array of synced records as a JSON string; the other columns are the
+message envelope (see [Message format](#message-format)). If you'd rather shape the data
+differently (for example, one row per record), use a
+[Svix transformation](https://docs.svix.com/stream/sinks/clickhouse).
+
 ## Create a ClickHouse destination
 
 Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new ClickHouse destination.
@@ -27,6 +54,8 @@ You'll need to provide:
 | **Password** | string | Yes | ClickHouse password |
 | **Table name** | string | Yes | Table to insert rows into |
 | **Database** | string | No | Database containing the table (defaults to the connection's database) |
+| **Batch size** | integer | No | Rows to buffer before flushing a batch (defaults to 1000) |
+| **Max wait (seconds)** | integer | No | Max seconds to wait before flushing a batch (defaults to 30) |
 
 <Info>
 Ampersand encrypts and stores your password securely.
@@ -49,6 +78,10 @@ integrations:
         - objectName: contact
           destination: ampersandClickHouse
 ```
+
+## Batching
+
+Warehouse destinations buffer rows and flush a batch when it reaches **Batch size** rows or after **Max wait (seconds)**, whichever comes first (defaults: 1000 rows / 30 seconds). Lower the max wait for lower-latency delivery when volume is low.
 
 ## Message format
 

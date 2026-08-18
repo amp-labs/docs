@@ -13,6 +13,22 @@ Before setting up a Snowflake destination, ensure that you have:
 - A user configured for [key-pair authentication](https://docs.snowflake.com/en/user-guide/key-pair-auth) (Ampersand authenticates with an RSA private key, not a password)
 - A target database, schema, and table, with `INSERT` privileges granted to that user
 
+## Set up your table
+
+The table must exist before you create the destination. The Snowflake sink writes each
+message into three columns: `id`, `created_at`, and `payload` (the message JSON as text):
+
+```sql
+CREATE TABLE my_db.my_schema.my_table (
+  id         TEXT,
+  created_at TIMESTAMP,
+  payload    TEXT
+);
+```
+
+To split the payload into typed columns instead, use a
+[Svix transformation](https://docs.svix.com/stream/sinks/snowflake).
+
 ## Create a Snowflake destination
 
 Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Snowflake destination.
@@ -28,6 +44,8 @@ You'll need to provide:
 | **Database** | string | No | Target database |
 | **Schema** | string | No | Target schema |
 | **Table name** | string | No | Target table |
+| **Batch size** | integer | No | Rows to buffer before flushing a batch (defaults to 1000) |
+| **Max wait (seconds)** | integer | No | Max seconds to wait before flushing a batch (defaults to 30) |
 
 <Info>
 Ampersand encrypts and stores your private key securely.
@@ -50,6 +68,10 @@ integrations:
         - objectName: contact
           destination: ampersandSnowflake
 ```
+
+## Batching
+
+Warehouse destinations buffer rows and flush a batch when it reaches **Batch size** rows or after **Max wait (seconds)**, whichever comes first (defaults: 1000 rows / 30 seconds). Lower the max wait for lower-latency delivery when volume is low.
 
 ## Message format
 

@@ -13,6 +13,22 @@ Before setting up a Redshift destination, ensure that you have:
 - A target database, and optionally a schema and table
 - AWS credentials with permission to run the Redshift Data API and insert into the target table
 
+## Set up your table
+
+The table must exist before you create the destination. The Redshift sink writes each message
+into two columns: `created_at` and `payload` (the message JSON as a string):
+
+```sql
+CREATE TABLE events (
+  created_at TIMESTAMP,
+  payload    VARCHAR(65535)
+);
+```
+
+`VARCHAR(65535)` is Redshift's maximum column size; a message larger than that will disable the
+sink. To split the payload into typed columns instead, use a
+[Svix transformation](https://docs.svix.com/stream/sinks/redshift).
+
 ## Create a Redshift destination
 
 Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Redshift destination.
@@ -31,9 +47,11 @@ You'll need to provide:
 | **Workgroup name** | string | No | Redshift Serverless workgroup name |
 | **Cluster identifier** | string | No | Provisioned cluster identifier |
 | **DB user** | string | No | Database user (for provisioned clusters) |
+| **Batch size** | integer | No | Rows to buffer before flushing a batch (defaults to 1000) |
+| **Max wait (seconds)** | integer | No | Max seconds to wait before flushing a batch (defaults to 30) |
 
 <Info>
-Provide a **workgroup name** for Redshift Serverless, or a **cluster identifier** (and **DB user**) for a provisioned cluster. Ampersand encrypts and stores your AWS credentials securely.
+Provide a **workgroup name** for Redshift Serverless, or a **cluster identifier** (and **DB user**) for a provisioned cluster — one of the two is required. Ampersand encrypts and stores your AWS credentials securely.
 </Info>
 
 ## Refer to the destination in your integration
@@ -53,6 +71,10 @@ integrations:
         - objectName: contact
           destination: ampersandRedshift
 ```
+
+## Batching
+
+Warehouse destinations buffer rows and flush a batch when it reaches **Batch size** rows or after **Max wait (seconds)**, whichever comes first (defaults: 1000 rows / 30 seconds). Lower the max wait for lower-latency delivery when volume is low.
 
 ## Message format
 

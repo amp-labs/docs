@@ -13,6 +13,22 @@ Before setting up a BigQuery destination, ensure that you have:
 - A dataset and table to insert into
 - A service account with the `BigQuery Data Editor` role (or `bigquery.tables.updateData` permission) on that dataset, and a JSON key for it
 
+## Set up your table
+
+The table must exist before you create the destination. The BigQuery sink writes each
+message into two columns: `id` (a generated identifier) and `payload` (the message JSON as a
+string). Create the table with exactly these columns:
+
+```sql
+CREATE TABLE `my-project.my_dataset.my_table` (
+  id STRING,
+  payload STRING
+);
+```
+
+To split the payload into typed columns instead, use a
+[Svix transformation](https://docs.svix.com/stream/sinks/bigquery).
+
 ## Create a BigQuery destination
 
 Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new BigQuery destination.
@@ -26,6 +42,8 @@ You'll need to provide:
 | **Dataset ID** | string | Yes | BigQuery dataset ID |
 | **Table ID** | string | Yes | BigQuery table ID |
 | **Service account credentials** | string | Yes | Service account key JSON with write access to the table |
+| **Batch size** | integer | No | Rows to buffer before flushing a batch (defaults to 1000) |
+| **Max wait (seconds)** | integer | No | Max seconds to wait before flushing a batch (defaults to 30) |
 
 <Info>
 Ampersand encrypts and stores your service account credentials securely.
@@ -48,6 +66,10 @@ integrations:
         - objectName: contact
           destination: ampersandBigQuery
 ```
+
+## Batching
+
+Warehouse destinations buffer rows and flush a batch when it reaches **Batch size** rows or after **Max wait (seconds)**, whichever comes first (defaults: 1000 rows / 30 seconds). Lower the max wait for lower-latency delivery when volume is low.
 
 ## Message format
 
