@@ -1,0 +1,64 @@
+---
+title: Snowflake destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand inserts the payload as rows into your Snowflake table.
+
+## Prerequisites
+
+Before setting up a Snowflake destination, ensure that you have:
+- A Snowflake account
+- A user configured for [key-pair authentication](https://docs.snowflake.com/en/user-guide/key-pair-auth) (Ampersand authenticates with an RSA private key, not a password)
+- A target database, schema, and table (see [Data format and table setup](#data-format-and-table-setup)), with `INSERT` privileges granted to that user
+
+## Data format and table setup
+
+Ampersand delivers each read or subscribe message as a JSON object. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
+The Snowflake destination writes each message into three columns: `id` (a generated identifier), `created_at` (the insert time), and `payload` (the full message JSON, written as text). Create the table with exactly these columns:
+
+```sql
+CREATE TABLE my_db.my_schema.my_table (
+  id         TEXT,
+  created_at TIMESTAMP,
+  payload    TEXT
+);
+```
+
+## Create a Snowflake destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Snowflake destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandSnowflake` | Alias to reference in your `amp.yaml` file |
+| **Account identifier** | string | Yes | `myorg-myaccount` | Your Snowflake account identifier |
+| **User ID** | string | Yes | `SVC_AMPERSAND` | Snowflake user configured for key-pair auth |
+| **Private key** | string | Yes | | PEM-encoded RSA private key for that user |
+| **Database** | string | No | `ANALYTICS` | Target database |
+| **Schema** | string | No | `PUBLIC` | Target schema |
+| **Table name** | string | No | `ampersand_events` | Target table |
+| **Batch size** | integer | No | `1000` | Rows to buffer before flushing a batch (defaults to 1000) |
+| **Max wait (seconds)** | integer | No | `30` | Max seconds to wait before flushing a batch (defaults to 30) |
+
+## Refer to the destination in your integration
+
+After creating your Snowflake destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToSnowflake
+    displayName: Salesforce to Snowflake
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandSnowflake
+        - objectName: contact
+          destination: ampersandSnowflake
+```
