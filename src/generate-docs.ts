@@ -308,12 +308,7 @@ const baseConfig = {
             {
               group: "Queues",
               pages: [
-                "destinations/eventbridge",
                 "destinations/kinesis",
-                "destinations/pubsub",
-                "destinations/rabbitmq",
-                "destinations/sns",
-                "destinations/sqs",
               ]
             }
           ]
