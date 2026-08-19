@@ -28,6 +28,15 @@ export interface DocsConfig {
   contextual?: {
     options: Array<string>;
   };
+  seo?: {
+    metatags?: Record<string, string>;
+    indexing?: string;
+    organization?: {
+      name?: string;
+      url?: string;
+      logo?: string;
+    };
+  };
   navigation: {
     tabs: Array<{
       tab: string;
@@ -114,6 +123,16 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     favicon: mintConfig.favicon,
     contextual: {
       options: ['copy', 'view']
+    },
+    seo: {
+      metatags: {
+        'og:site_name': 'Ampersand Docs'
+      },
+      indexing: 'navigable',
+      organization: {
+        name: 'Ampersand',
+        url: 'https://withampersand.com'
+      }
     },
     navigation: {
       tabs: [
