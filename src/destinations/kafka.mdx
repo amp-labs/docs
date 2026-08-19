@@ -1,0 +1,53 @@
+---
+title: Apache Kafka destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand publishes the payload as messages to your Apache Kafka topic.
+
+## Prerequisites
+
+Before setting up a Kafka destination, ensure that you have:
+- A Kafka cluster reachable from the internet
+- A topic to publish to
+- A SASL username and password with permission to publish to that topic
+
+## Data format
+
+Ampersand publishes each read or subscribe message to your Kafka topic as JSON. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
+## Create a Kafka destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Kafka destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandKafka` | Alias to reference in your `amp.yaml` file |
+| **Brokers** | string | Yes | `broker1.example.com:9092,broker2.example.com:9092` | Comma-separated list of `host:port` brokers |
+| **Topic** | string | Yes | `ampersand-events` | Topic to publish messages to |
+| **SASL mechanism** | string | Yes | `scram-sha-256` | One of `plain`, `scram-sha-256`, `scram-sha-512` |
+| **TLS** | boolean | No | `true` | Whether to connect over TLS |
+| **Partition key template** | string | No | `data.installationId` | [JMESPath](https://jmespath.org) template for the partition key |
+| **SASL username** | string | Yes | `ampersand` | SASL username with permission to publish |
+| **SASL password** | string | Yes | | SASL password for the username |
+
+## Refer to the destination in your integration
+
+After creating your Kafka destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToKafka
+    displayName: Salesforce to Kafka
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandKafka
+        - objectName: contact
+          destination: ampersandKafka
+```

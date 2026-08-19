@@ -1,0 +1,51 @@
+---
+title: RabbitMQ destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand publishes the payload as messages to your RabbitMQ instance.
+
+## Prerequisites
+
+Before setting up a RabbitMQ destination, ensure that you have:
+- A RabbitMQ instance reachable from the internet
+- An exchange that already exists on that instance
+- A username and password with permission to publish to that exchange
+
+## Data format
+
+Ampersand publishes each read or subscribe message to your RabbitMQ exchange as JSON. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
+## Create a RabbitMQ destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new RabbitMQ destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandRabbitMQ` | Alias to reference in your `amp.yaml` file |
+| **Server URL** | string | Yes | `rabbitmq.example.com:5672` | Host and port of your RabbitMQ instance |
+| **Exchange** | string | Yes | `ampersand-events` | Name of an exchange that already exists |
+| **TLS** | boolean | No | `true` | Whether to connect over TLS |
+| **Username** | string | Yes | `ampersand` | Username with permission to publish |
+| **Password** | string | Yes | | Password for the username |
+
+## Refer to the destination in your integration
+
+After creating your RabbitMQ destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToRabbitMQ
+    displayName: Salesforce to RabbitMQ
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandRabbitMQ
+        - objectName: contact
+          destination: ampersandRabbitMQ
+```
