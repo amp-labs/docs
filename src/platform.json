@@ -48971,7 +48971,7 @@
                   },
                   "type": {
                     "type": "string",
-                    "description": "The type of the destination. For `slack`, set `metadata.url` to a Slack incoming webhook URL. The warehouse and message-queue types (`clickhouse`, `snowflake`, `bigquery`, `redshift`, `sqs`, `pubsub`, `rabbitmq`, `azureservicebus`, `kafka`) are configured via the `metadata` and `secrets` fields documented below.",
+                    "description": "The type of the destination. For `slack`, set `metadata.url` to a Slack incoming webhook URL. The warehouse and message-queue types (`clickhouse`, `snowflake`, `bigquery`, `redshift`, `sqs`, `pubsub`, `rabbitmq`, `azureservicebus`) are configured via the `metadata` and `secrets` fields documented below.",
                     "example": "webhook",
                     "enum": [
                       "webhook",
@@ -48985,8 +48985,7 @@
                       "sqs",
                       "pubsub",
                       "rabbitmq",
-                      "azureservicebus",
-                      "kafka"
+                      "azureservicebus"
                     ]
                   },
                   "secrets": {
@@ -49013,7 +49012,7 @@
                       },
                       "password": {
                         "type": "string",
-                        "description": "The password for the `clickhouse`, `rabbitmq`, and `kafka` destinations. Required for `rabbitmq` and `kafka`.",
+                        "description": "The password for the `clickhouse` and `rabbitmq` destinations. Required for `rabbitmq`.",
                         "example": "my-clickhouse-password",
                         "x-go-type-skip-optional-pointer": true
                       },
@@ -49049,7 +49048,7 @@
                       },
                       "username": {
                         "type": "string",
-                        "description": "The username for the `rabbitmq` and `kafka` destinations. Required for both.",
+                        "description": "The username for the `rabbitmq` destination. Required for `rabbitmq`.",
                         "example": "ampersand",
                         "x-go-type-skip-optional-pointer": true
                       },
@@ -49102,7 +49101,7 @@
                       },
                       "partitionKeyTemplate": {
                         "type": "string",
-                        "description": "The template for the partition key (a JMESPath template). Used by `kinesis`, and optionally by `kafka`.",
+                        "description": "The template for the partition key (a JMESPath template). Used by `kinesis`.",
                         "example": "data.user_id",
                         "x-go-type-skip-optional-pointer": true
                       },
@@ -49240,7 +49239,7 @@
                       },
                       "tls": {
                         "type": "boolean",
-                        "description": "Whether to connect over TLS. Optional for the `rabbitmq` and `kafka` destinations.",
+                        "description": "Whether to connect over TLS. Optional for the `rabbitmq` destination.",
                         "example": true,
                         "x-go-type-skip-optional-pointer": true
                       },
@@ -49248,29 +49247,6 @@
                         "type": "string",
                         "description": "The queue or topic name for the `azureservicebus` destination. Required for `azureservicebus`.",
                         "example": "ampersand-events",
-                        "x-go-type-skip-optional-pointer": true
-                      },
-                      "brokers": {
-                        "type": "string",
-                        "description": "The comma-separated list of Kafka broker addresses for the `kafka` destination. Required for `kafka`.",
-                        "example": "broker1.example.com:9092,broker2.example.com:9092",
-                        "x-go-type-skip-optional-pointer": true
-                      },
-                      "topic": {
-                        "type": "string",
-                        "description": "The Kafka topic to publish to for the `kafka` destination. Required for `kafka`.",
-                        "example": "ampersand-events",
-                        "x-go-type-skip-optional-pointer": true
-                      },
-                      "saslMechanism": {
-                        "type": "string",
-                        "description": "The SASL mechanism used to authenticate to Kafka for the `kafka` destination. Required for `kafka`.",
-                        "enum": [
-                          "plain",
-                          "scram-sha-256",
-                          "scram-sha-512"
-                        ],
-                        "example": "scram-sha-256",
                         "x-go-type-skip-optional-pointer": true
                       },
                       "batchSize": {
@@ -49470,33 +49446,13 @@
                         },
                         "tls": {
                           "type": "boolean",
-                          "description": "Whether to connect over TLS (rabbitmq, kafka)",
+                          "description": "Whether to connect over TLS (rabbitmq)",
                           "example": true
                         },
                         "name": {
                           "type": "string",
                           "description": "The queue or topic name for the azureservicebus destination",
                           "example": "ampersand-events"
-                        },
-                        "brokers": {
-                          "type": "string",
-                          "description": "The comma-separated list of Kafka broker addresses for the kafka destination",
-                          "example": "broker1.example.com:9092,broker2.example.com:9092"
-                        },
-                        "topic": {
-                          "type": "string",
-                          "description": "The Kafka topic to publish to for the kafka destination",
-                          "example": "ampersand-events"
-                        },
-                        "saslMechanism": {
-                          "type": "string",
-                          "description": "The SASL mechanism used to authenticate to Kafka for the kafka destination",
-                          "enum": [
-                            "plain",
-                            "scram-sha-256",
-                            "scram-sha-512"
-                          ],
-                          "example": "scram-sha-256"
                         },
                         "batchSize": {
                           "type": "integer",
@@ -50509,33 +50465,13 @@
                           },
                           "tls": {
                             "type": "boolean",
-                            "description": "Whether to connect over TLS (rabbitmq, kafka)",
+                            "description": "Whether to connect over TLS (rabbitmq)",
                             "example": true
                           },
                           "name": {
                             "type": "string",
                             "description": "The queue or topic name for the azureservicebus destination",
                             "example": "ampersand-events"
-                          },
-                          "brokers": {
-                            "type": "string",
-                            "description": "The comma-separated list of Kafka broker addresses for the kafka destination",
-                            "example": "broker1.example.com:9092,broker2.example.com:9092"
-                          },
-                          "topic": {
-                            "type": "string",
-                            "description": "The Kafka topic to publish to for the kafka destination",
-                            "example": "ampersand-events"
-                          },
-                          "saslMechanism": {
-                            "type": "string",
-                            "description": "The SASL mechanism used to authenticate to Kafka for the kafka destination",
-                            "enum": [
-                              "plain",
-                              "scram-sha-256",
-                              "scram-sha-512"
-                            ],
-                            "example": "scram-sha-256"
                           },
                           "batchSize": {
                             "type": "integer",
@@ -50931,33 +50867,13 @@
                         },
                         "tls": {
                           "type": "boolean",
-                          "description": "Whether to connect over TLS (rabbitmq, kafka)",
+                          "description": "Whether to connect over TLS (rabbitmq)",
                           "example": true
                         },
                         "name": {
                           "type": "string",
                           "description": "The queue or topic name for the azureservicebus destination",
                           "example": "ampersand-events"
-                        },
-                        "brokers": {
-                          "type": "string",
-                          "description": "The comma-separated list of Kafka broker addresses for the kafka destination",
-                          "example": "broker1.example.com:9092,broker2.example.com:9092"
-                        },
-                        "topic": {
-                          "type": "string",
-                          "description": "The Kafka topic to publish to for the kafka destination",
-                          "example": "ampersand-events"
-                        },
-                        "saslMechanism": {
-                          "type": "string",
-                          "description": "The SASL mechanism used to authenticate to Kafka for the kafka destination",
-                          "enum": [
-                            "plain",
-                            "scram-sha-256",
-                            "scram-sha-512"
-                          ],
-                          "example": "scram-sha-256"
                         },
                         "batchSize": {
                           "type": "integer",
@@ -51500,7 +51416,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- name\n- metadata.url\n- metadata.headers\n- metadata.region\n- metadata.streamName\n- metadata.endpointUrl\n- metadata.partitionKeyTemplate\n- metadata.bucket\n- metadata.keyTemplate\n- metadata.storageClass\n- metadata.username\n- metadata.tableName\n- metadata.database\n- metadata.accountIdentifier\n- metadata.userId\n- metadata.dbName\n- metadata.schemaName\n- metadata.projectId\n- metadata.datasetId\n- metadata.tableId\n- metadata.workgroupName\n- metadata.clusterIdentifier\n- metadata.dbUser\n- metadata.account\n- metadata.container\n- metadata.queueUrl\n- metadata.topicId\n- metadata.serverUrl\n- metadata.exchange\n- metadata.tls\n- metadata.name\n- metadata.brokers\n- metadata.topic\n- metadata.saslMechanism\n- metadata.batchSize\n- metadata.maxWaitSecs\n- secrets.awsKeyId\n- secrets.awsSecretKey\n- secrets.awsSessionToken\n- secrets.password\n- secrets.privateKey\n- secrets.credentials\n- secrets.accessKeyId\n- secrets.secretAccessKey\n- secrets.accessKey\n- secrets.username\n- secrets.connectionString\n",
+                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- name\n- metadata.url\n- metadata.headers\n- metadata.region\n- metadata.streamName\n- metadata.endpointUrl\n- metadata.partitionKeyTemplate\n- metadata.bucket\n- metadata.keyTemplate\n- metadata.storageClass\n- metadata.username\n- metadata.tableName\n- metadata.database\n- metadata.accountIdentifier\n- metadata.userId\n- metadata.dbName\n- metadata.schemaName\n- metadata.projectId\n- metadata.datasetId\n- metadata.tableId\n- metadata.workgroupName\n- metadata.clusterIdentifier\n- metadata.dbUser\n- metadata.account\n- metadata.container\n- metadata.queueUrl\n- metadata.topicId\n- metadata.serverUrl\n- metadata.exchange\n- metadata.tls\n- metadata.name\n- metadata.batchSize\n- metadata.maxWaitSecs\n- secrets.awsKeyId\n- secrets.awsSecretKey\n- secrets.awsSessionToken\n- secrets.password\n- secrets.privateKey\n- secrets.credentials\n- secrets.accessKeyId\n- secrets.secretAccessKey\n- secrets.accessKey\n- secrets.username\n- secrets.connectionString\n",
                     "example": [
                       "name",
                       "metadata.url",
@@ -51554,7 +51470,7 @@
                           },
                           "partitionKeyTemplate": {
                             "type": "string",
-                            "description": "The template for the partition key (a JMESPath template). Used by `kinesis`, and optionally by `kafka`.",
+                            "description": "The template for the partition key (a JMESPath template). Used by `kinesis`.",
                             "example": "data.user_id"
                           },
                           "bucket": {
@@ -51669,33 +51585,13 @@
                           },
                           "tls": {
                             "type": "boolean",
-                            "description": "Whether to connect over TLS. Optional for the `rabbitmq` and `kafka` destinations.",
+                            "description": "Whether to connect over TLS. Optional for the `rabbitmq` destination.",
                             "example": true
                           },
                           "name": {
                             "type": "string",
                             "description": "The queue or topic name for the `azureservicebus` destination. Required for `azureservicebus`.",
                             "example": "ampersand-events"
-                          },
-                          "brokers": {
-                            "type": "string",
-                            "description": "The comma-separated list of Kafka broker addresses for the `kafka` destination. Required for `kafka`.",
-                            "example": "broker1.example.com:9092,broker2.example.com:9092"
-                          },
-                          "topic": {
-                            "type": "string",
-                            "description": "The Kafka topic to publish to for the `kafka` destination. Required for `kafka`.",
-                            "example": "ampersand-events"
-                          },
-                          "saslMechanism": {
-                            "type": "string",
-                            "description": "The SASL mechanism used to authenticate to Kafka for the `kafka` destination. Required for `kafka`.",
-                            "enum": [
-                              "plain",
-                              "scram-sha-256",
-                              "scram-sha-512"
-                            ],
-                            "example": "scram-sha-256"
                           },
                           "batchSize": {
                             "type": "integer",
@@ -51730,7 +51626,7 @@
                           },
                           "password": {
                             "type": "string",
-                            "description": "The password for the `clickhouse`, `rabbitmq`, and `kafka` destinations. Required for `rabbitmq` and `kafka`.",
+                            "description": "The password for the `clickhouse` and `rabbitmq` destinations. Required for `rabbitmq`.",
                             "example": "my-clickhouse-password"
                           },
                           "privateKey": {
@@ -51760,7 +51656,7 @@
                           },
                           "username": {
                             "type": "string",
-                            "description": "The username for the `rabbitmq` and `kafka` destinations. Required for both.",
+                            "description": "The username for the `rabbitmq` destination. Required for `rabbitmq`.",
                             "example": "ampersand"
                           },
                           "connectionString": {
@@ -51955,33 +51851,13 @@
                         },
                         "tls": {
                           "type": "boolean",
-                          "description": "Whether to connect over TLS (rabbitmq, kafka)",
+                          "description": "Whether to connect over TLS (rabbitmq)",
                           "example": true
                         },
                         "name": {
                           "type": "string",
                           "description": "The queue or topic name for the azureservicebus destination",
                           "example": "ampersand-events"
-                        },
-                        "brokers": {
-                          "type": "string",
-                          "description": "The comma-separated list of Kafka broker addresses for the kafka destination",
-                          "example": "broker1.example.com:9092,broker2.example.com:9092"
-                        },
-                        "topic": {
-                          "type": "string",
-                          "description": "The Kafka topic to publish to for the kafka destination",
-                          "example": "ampersand-events"
-                        },
-                        "saslMechanism": {
-                          "type": "string",
-                          "description": "The SASL mechanism used to authenticate to Kafka for the kafka destination",
-                          "enum": [
-                            "plain",
-                            "scram-sha-256",
-                            "scram-sha-512"
-                          ],
-                          "example": "scram-sha-256"
                         },
                         "batchSize": {
                           "type": "integer",
@@ -69647,33 +69523,13 @@
               },
               "tls": {
                 "type": "boolean",
-                "description": "Whether to connect over TLS (rabbitmq, kafka)",
+                "description": "Whether to connect over TLS (rabbitmq)",
                 "example": true
               },
               "name": {
                 "type": "string",
                 "description": "The queue or topic name for the azureservicebus destination",
                 "example": "ampersand-events"
-              },
-              "brokers": {
-                "type": "string",
-                "description": "The comma-separated list of Kafka broker addresses for the kafka destination",
-                "example": "broker1.example.com:9092,broker2.example.com:9092"
-              },
-              "topic": {
-                "type": "string",
-                "description": "The Kafka topic to publish to for the kafka destination",
-                "example": "ampersand-events"
-              },
-              "saslMechanism": {
-                "type": "string",
-                "description": "The SASL mechanism used to authenticate to Kafka for the kafka destination",
-                "enum": [
-                  "plain",
-                  "scram-sha-256",
-                  "scram-sha-512"
-                ],
-                "example": "scram-sha-256"
               },
               "batchSize": {
                 "type": "integer",
@@ -69873,33 +69729,13 @@
               },
               "tls": {
                 "type": "boolean",
-                "description": "Whether to connect over TLS (rabbitmq, kafka)",
+                "description": "Whether to connect over TLS (rabbitmq)",
                 "example": true
               },
               "name": {
                 "type": "string",
                 "description": "The queue or topic name for the azureservicebus destination",
                 "example": "ampersand-events"
-              },
-              "brokers": {
-                "type": "string",
-                "description": "The comma-separated list of Kafka broker addresses for the kafka destination",
-                "example": "broker1.example.com:9092,broker2.example.com:9092"
-              },
-              "topic": {
-                "type": "string",
-                "description": "The Kafka topic to publish to for the kafka destination",
-                "example": "ampersand-events"
-              },
-              "saslMechanism": {
-                "type": "string",
-                "description": "The SASL mechanism used to authenticate to Kafka for the kafka destination",
-                "enum": [
-                  "plain",
-                  "scram-sha-256",
-                  "scram-sha-512"
-                ],
-                "example": "scram-sha-256"
               },
               "batchSize": {
                 "type": "integer",
