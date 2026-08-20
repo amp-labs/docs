@@ -38,7 +38,7 @@ You'll need to provide:
 | **Destination name** | string | Yes | `ampersandSnowflake` | Alias to reference in your `amp.yaml` file |
 | **Account identifier** | string | Yes | `myorg-myaccount` | Your Snowflake account identifier |
 | **User ID** | string | Yes | `SVC_AMPERSAND` | Snowflake user configured for key-pair auth |
-| **Private key** | string | Yes | | PEM-encoded RSA private key for that user |
+| **Private key** | string | Yes | | Unencrypted **PKCS#8** PEM-encoded RSA private key for that user (headers `-----BEGIN PRIVATE KEY-----`). Convert a PKCS#1 key with `openssl pkcs8 -topk8 -nocrypt` |
 | **Database** | string | Yes | `ANALYTICS` | Target database |
 | **Schema** | string | Yes | `PUBLIC` | Target schema |
 | **Table name** | string | Yes | `ampersand_events` | Target table |

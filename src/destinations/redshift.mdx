@@ -4,12 +4,12 @@ title: Amazon Redshift destinations
 
 For more information on destinations, see the [Destinations](/destinations) page.
 
-When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand inserts the payload as rows into your Amazon Redshift table. Both Redshift Serverless (via a workgroup) and provisioned clusters (via a cluster identifier) are supported.
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand inserts the payload as rows into your Amazon Redshift table, delivered to a Redshift Serverless workgroup.
 
 ## Prerequisites
 
 Before setting up a Redshift destination, ensure that you have:
-- An Amazon Redshift Serverless workgroup or a provisioned cluster
+- An Amazon Redshift Serverless workgroup
 - A target database, and a table to insert into (see [Data format and table setup](#data-format-and-table-setup))
 - AWS credentials with permission to run the Redshift Data API and insert into the target table
 
@@ -39,17 +39,11 @@ You'll need to provide:
 | **AWS Access Key ID** | string | Yes | `AKIAIOSFODNN7EXAMPLE` | AWS access key with Redshift Data API permissions |
 | **AWS Secret Access Key** | string | Yes | | AWS secret access key |
 | **Database** | string | Yes | `dev` | Target database name |
-| **Schema** | string | No | `public` | Target schema |
+| **Schema** | string | Yes | `public` | Target schema |
 | **Table name** | string | Yes | `events` | Target table |
-| **Workgroup name** | string | No* | `my-workgroup` | Redshift Serverless workgroup name |
-| **Cluster identifier** | string | No* | `my-cluster` | Provisioned cluster identifier |
-| **DB user** | string | No | `ampersand` | Database user (for provisioned clusters) |
+| **Workgroup name** | string | Yes | `my-workgroup` | Redshift Serverless workgroup name |
 | **Batch size** | integer | No | `1000` | Rows to buffer before flushing a batch (defaults to 1000) |
 | **Max wait (seconds)** | integer | No | `30` | Max seconds to wait before flushing a batch (defaults to 30) |
-
-<Note>
-*Either **Workgroup name** or **Cluster identifier** is required. Provide a **workgroup name** for Redshift Serverless, or a **cluster identifier** (and **DB user**) for a provisioned cluster.
-</Note>
 
 ## Refer to the destination in your integration
 
