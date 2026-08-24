@@ -1,0 +1,48 @@
+---
+title: Amazon SQS destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand publishes the payload as messages to your Amazon SQS queue.
+
+## Prerequisites
+
+Before setting up an SQS destination, ensure that you have:
+- An AWS account with an SQS queue
+- AWS credentials with `sqs:SendMessage` permission on that queue
+
+## Data format
+
+Ampersand publishes each read or subscribe message to your queue as JSON. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
+## Create an SQS destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new SQS destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandSQS` | Alias to reference in your `amp.yaml` file |
+| **Queue URL** | string | Yes | `https://sqs.us-east-1.amazonaws.com/123456789012/my-queue` | URL of your SQS queue |
+| **AWS Access Key ID** | string | Yes | `AKIAIOSFODNN7EXAMPLE` | AWS access key with `sqs:SendMessage` permission |
+| **AWS Secret Access Key** | string | Yes | | AWS secret access key |
+
+## Refer to the destination in your integration
+
+After creating your SQS destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToSQS
+    displayName: Salesforce to SQS
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandSQS
+        - objectName: contact
+          destination: ampersandSQS
+```

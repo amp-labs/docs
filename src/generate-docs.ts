@@ -306,9 +306,13 @@ const baseConfig = {
               ]
             },
             {
-              group: "Queues",
+              group: "Streams and queues",
               pages: [
+                "destinations/azureservicebus",
                 "destinations/kinesis",
+                "destinations/pubsub",
+                "destinations/rabbitmq",
+                "destinations/sqs",
               ]
             }
           ]
