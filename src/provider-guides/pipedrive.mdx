@@ -17,7 +17,7 @@ This connector supports:
 - [Write Actions](/write-actions)
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.pipedrive.com`.
 
-Pipedrive has a v1 and v2 API, if you would like to opt into the v2 API, then add `module: crm` to your amp.yaml file. Otherwise, v1 API is used. You can learn more about the difference between v1 and v2 API in [Pipedrive documentation](https://pipedrive.readme.io/docs/pipedrive-api-v2-migration-guide).
+Pipedrive has a v1 and v2 API, if you would like to opt into the v2 API, then add `module: crm` to your amp.yaml file. If you would like to use v1 API, add `module: legacy` to your amp.yaml file. If you do not specify a module, v1 API is used. You can learn more about the difference between v1 and v2 API in [Pipedrive documentation](https://pipedrive.readme.io/docs/pipedrive-api-v2-migration-guide).
 
 ```yaml
 specVersion: 1.0.0
@@ -83,7 +83,7 @@ The Pipedrive connector supports reading from the following objects using the v1
 - [Lead Labels](https://developers.pipedrive.com/docs/api/v1/LeadLabels#getLeadLabels)
 - [Lead Sources](https://developers.pipedrive.com/docs/api/v1/LeadSources#getLeadSources)
 - [LegacyTeams](https://developers.pipedrive.com/docs/api/v1/LegacyTeams#getTeams)
-- [mailThreads](https://developers.pipedrive.com/docs/api/v1/Mailbox#getMailThreads)
+- [Mail Threads](https://developers.pipedrive.com/docs/api/v1/Mailbox#getMailThreads) (use `mailThreads` in amp.yaml, no incremental read)
 - [Notes](https://developers.pipedrive.com/docs/api/v1/Notes#getNotes)
 - [Note Fields](https://developers.pipedrive.com/docs/api/v1/NoteFields#getNoteFields)
 - [Organizations](https://developers.pipedrive.com/docs/api/v1/Organizations#getOrganizations)
