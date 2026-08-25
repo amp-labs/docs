@@ -8,22 +8,39 @@ title: ZoomInfo
 
 This connector supports:
 
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `contacts`, `news` and `scoops` currently. For all other objects, a full read of the ZoomInfo instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.zoominfo.com`.
+
+### Supported objects
+
+The ZoomInfo connector supports reading from and writing to the following objects:
+
+#### Read objects
+
+- [agent-teams](https://docs.zoominfo.com/reference/agent-teams)
+- [audience-folders](https://docs.zoominfo.com/reference/folders_listfolders)
+- [audiences](https://docs.zoominfo.com/reference/audiences_listaudiences)
+- [companies](https://docs.zoominfo.com/reference/searchinterface_searchcompany)
+- [contacts](https://docs.zoominfo.com/reference/searchinterface_searchcontact)
+- [customer-buyer-personas](https://docs.zoominfo.com/reference/customerbuyerpersonainterface_listcustomerbuyerpersonas)
+- [customer-competitors](https://docs.zoominfo.com/reference/customercompetitorsinterface_listcustomercompetitors)
+- [news](https://docs.zoominfo.com/reference/searchinterface_searchnews)
+- [products](https://docs.zoominfo.com/reference/organizationofferingsinterface_listorganizationofferings)
+- [pulses](https://docs.zoominfo.com/reference/pulsescontroller_listpulses)
+- [scoops](https://docs.zoominfo.com/reference/searchinterface_searchscoop)
+
+#### Write objects
+
+- [audience-folders](https://docs.zoominfo.com/reference/folders_createfolder)
+- [audiences](https://docs.zoominfo.com/reference/audiences_createaudience)
+- [customer-buyer-personas](https://docs.zoominfo.com/reference/customerbuyerpersonainterface_upsertcustomerbuyerpersona)
+- [customer-competitors](https://docs.zoominfo.com/reference/customercompetitorsinterface_upsertcustomercompetitor)
+- [products](https://docs.zoominfo.com/reference/organizationofferingsinterface_upsertorganizationoffering)
 
 ### Example integration
 
-To define an integration for ZoomInfo, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: zoominfo-integration
-    displayName: My ZoomInfo Integration
-    provider: zoominfo
-    proxy:
-      enabled: true
-```
+For an example manifest file of a ZoomInfo integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/zoominfo/amp.yaml).
 
 ## Before you get started
 
@@ -72,5 +89,9 @@ To start integrating with ZoomInfo:
 
 - Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the access token to your requests.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
