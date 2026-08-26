@@ -1,45 +1,101 @@
 ---
-title: ChargeOver
+title: "ChargeOver"
 ---
+
 ## What's supported
 
 ### Supported actions
 
 This connector supports:
-- [Proxy Actions](/proxy-actions), using the base URL `https://{{.domain}}.chargeover.com`.
+
+- [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects listed below. For all other objects, a full read of the ChargeOver instance will be done per scheduled read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.chargeover.com`.
+
+### Notes
+
+- Object names follow the ChargeOver REST API resource names, which are singular (e.g. `customer`, `invoice`). Subscriptions are addressed as `package` and contacts as `user`.
+
+### Supported objects
+
+The ChargeOver connector supports reading from the following objects:
+
+- [_chargeoverjs](https://developer.chargeover.com/docs/api/chargeoverjs)
+- [_customfield](https://developer.chargeover.com/docs/api/customfields)
+- [_integration_map](https://developer.chargeover.com/docs/api/integrations)
+- [_log_system](https://developer.chargeover.com/docs/api/systemlog)
+- [_report](https://developer.chargeover.com/docs/api/reporting)
+- [_resthook](https://developer.chargeover.com/docs/api/resthooks)
+- [ach](https://developer.chargeover.com/docs/api/ach)
+- [admin](https://developer.chargeover.com/docs/api/admins)
+- [brand](https://developer.chargeover.com/docs/api/brands)
+- [campaign](https://developer.chargeover.com/docs/api/campaigns)
+- [class](https://developer.chargeover.com/docs/api/classes)
+- [country](https://developer.chargeover.com/docs/api/countries)
+- [coupon](https://developer.chargeover.com/docs/api/coupons)
+- [creditcard](https://developer.chargeover.com/docs/api/creditcards)
+- [currency](https://developer.chargeover.com/docs/api/currencies)
+- [customer](https://developer.chargeover.com/docs/api/customers) (supports incremental read)
+- [invoice](https://developer.chargeover.com/docs/api/invoices) (supports incremental read)
+- [item](https://developer.chargeover.com/docs/api/items)
+- [item_category](https://developer.chargeover.com/docs/api/categories)
+- [language](https://developer.chargeover.com/docs/api/languages)
+- [note](https://developer.chargeover.com/docs/api/notes)
+- [package](https://developer.chargeover.com/docs/api/subscriptions) (supports incremental read)
+- [quote](https://developer.chargeover.com/docs/api/quotes) (supports incremental read)
+- [terms](https://developer.chargeover.com/docs/api/terms)
+- [tokenized](https://developer.chargeover.com/docs/api/tokenized)
+- [transaction](https://developer.chargeover.com/docs/api/transactions) (supports incremental read)
+- [usage](https://developer.chargeover.com/docs/api/usage) (supports incremental read)
+- [user](https://developer.chargeover.com/docs/api/users)
+
+The ChargeOver connector supports writing to the following objects:
+
+- [_resthook](https://developer.chargeover.com/docs/api/resthooks)
+- [ach](https://developer.chargeover.com/docs/api/ach)
+- [creditcard](https://developer.chargeover.com/docs/api/creditcards)
+- [customer](https://developer.chargeover.com/docs/api/customers)
+- [invoice](https://developer.chargeover.com/docs/api/invoices)
+- [item](https://developer.chargeover.com/docs/api/items)
+- [note](https://developer.chargeover.com/docs/api/notes)
+- [package](https://developer.chargeover.com/docs/api/subscriptions)
+- [quote](https://developer.chargeover.com/docs/api/quotes)
+- [sms](https://developer.chargeover.com/docs/api/sms)
+- [tokenized](https://developer.chargeover.com/docs/api/tokenized)
+- [usage](https://developer.chargeover.com/docs/api/usage)
 
 ### Example integration
 
-To define an integration for ChargeOver, create a manifest file that looks like this:
+For an example manifest file of a ChargeOver integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/chargeover/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: chargeOver-integration
-    displayName: My ChargeOver Integration
-    provider: chargeOver
-    proxy:
-      enabled: true
-```
+## Before you get started
+
+To connect ChargeOver with Ampersand, you will need a [ChargeOver account](https://chargeover.com).
+
+### Creating ChargeOver credentials
+
+To begin using the API in your ChargeOver account, you need to enable REST API support:
+
+1. Navigate to **Settings**.
+2. Click on **Developers** > **More Dev Tools**.
+3. Click the **Get Started** button under **REST API**.
+4. Enable the REST API. Once enabled, your username and password for Basic Authentication will be displayed.
+
+![ChargeOver Credentials](/images/provider-guides/chargeover-creds.png)
+
+Note your domain name - this is the subdomain in your ChargeOver URL (e.g., if your URL is `https://mycompany.chargeover.com`, your domain name is `mycompany`). See the [ChargeOver getting started guide](https://developer.chargeover.com/docs/api-information/getting-started/) for details.
 
 ## Using the connector
 
 This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with ChargeOver:
-- Create a manifest file like the example above.
+
+- Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their domain, username and password.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://{{.domain}}.chargeover.com`.
-
-## Creating Basic Auth credentials
-
-To begin using the API in your ChargeOver account, you need to enable REST API support:
-
-- Navigate to Settings.
-- Click on Developers > More Dev Tools.
-- Click the Get Started button under REST API.
-- Enable the REST API. Once enabled, your username and password for Basic Authentication will be displayed.
-
-![ChargeOver Credentials](/images/provider-guides/chargeover-creds.png)
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their domain name, username and password.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
