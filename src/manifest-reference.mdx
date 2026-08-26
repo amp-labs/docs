@@ -44,7 +44,7 @@ integrations:
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `specVersion` | String | Yes | The version of the manifest specification. Format: `MAJOR.MINOR.PATCH`. Currently only `1.0.0` is supported. |
-| `integrations` | Array | Yes | An array of [integration configurations](#integration-configuration). Each element defines a complete integration with a specific provider. |
+| `integrations` | Array | Yes | An array of [integration configurations](#integration-definition). Each element defines a complete integration with a specific provider. |
 
 <Note>
 Notes
@@ -317,7 +317,7 @@ Backfill Considerations
 
 ### Field
 
-In [Read Actions](#read-actions), fields can be configured in two main ways - either using a simple `fieldName` reference or using a mapped field approach (`mapToName`, `mapToDisplayName`, `prompt`, `default`). This flexibility allows for both direct field references and more sophisticated field mapping options.
+In [Read Actions](#read-definition), fields can be configured in two main ways - either using a simple `fieldName` reference or using a mapped field approach (`mapToName`, `mapToDisplayName`, `prompt`, `default`). This flexibility allows for both direct field references and more sophisticated field mapping options.
 > Learn more about [Object and Field Mapping](/object-and-field-mapping) and [Dynamic Field Mappings](/object-and-field-mapping#dynamic-field-mappings).
 
 **Simple Field Reference**
@@ -338,7 +338,7 @@ This approach is best when:
 **Field Mapping**
 
 For more complex scenarios, you can use field mapping to standardize field names or prompt users for configuration.
-> Learn more about [field mapping strategies](/object-and-field-mapping#field-mapping-strategies).
+> Learn more about [field mapping strategies](/object-and-field-mapping).
 
 ```yaml
 # Predefined mapping (no user input required)
