@@ -290,8 +290,31 @@ const baseConfig = {
             "destinations/overview",
             "destinations/webhooks",
             "destinations/slack",
-            "destinations/kinesis",
-            "destinations/s3",
+            {
+              group: "Blob storage",
+              pages: [
+                "destinations/s3",
+              ]
+            },
+            {
+              group: "Databases and warehouses",
+              pages: [
+                "destinations/bigquery",
+                "destinations/clickhouse",
+                "destinations/redshift",
+                "destinations/snowflake",
+              ]
+            },
+            {
+              group: "Streams and queues",
+              pages: [
+                "destinations/azureservicebus",
+                "destinations/kinesis",
+                "destinations/pubsub",
+                "destinations/rabbitmq",
+                "destinations/sqs",
+              ]
+            }
           ]
         },
         {

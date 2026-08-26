@@ -48971,7 +48971,7 @@
                   },
                   "type": {
                     "type": "string",
-                    "description": "The type of the destination. For `slack`, set `metadata.url` to a Slack incoming webhook URL. The warehouse and message-queue types (`clickhouse`, `snowflake`, `bigquery`, `redshift`, `sqs`, `sns`, `eventbridge`, `pubsub`, `rabbitmq`) are configured via the `metadata` and `secrets` fields documented below.",
+                    "description": "The type of the destination. For `slack`, set `metadata.url` to a Slack incoming webhook URL. The warehouse and message-queue types (`clickhouse`, `snowflake`, `bigquery`, `redshift`, `sqs`, `pubsub`, `rabbitmq`, `azureservicebus`) are configured via the `metadata` and `secrets` fields documented below.",
                     "example": "webhook",
                     "enum": [
                       "webhook",
@@ -48983,10 +48983,9 @@
                       "bigquery",
                       "redshift",
                       "sqs",
-                      "sns",
-                      "eventbridge",
                       "pubsub",
-                      "rabbitmq"
+                      "rabbitmq",
+                      "azureservicebus"
                     ]
                   },
                   "secrets": {
@@ -48995,25 +48994,25 @@
                     "properties": {
                       "awsKeyId": {
                         "type": "string",
-                        "description": "The AWS access key ID for the Kinesis or S3 destination.",
+                        "description": "The AWS access key ID for the `kinesis`, `s3`, and `sqs` destinations. Required for `sqs`.",
                         "example": "AKIAIOSFODNN7EXAMPLE",
                         "x-go-type-skip-optional-pointer": true
                       },
                       "awsSecretKey": {
                         "type": "string",
-                        "description": "The AWS secret access key for the Kinesis or S3 destination.",
+                        "description": "The AWS secret access key for the `kinesis`, `s3`, and `sqs` destinations. Required for `sqs`.",
                         "example": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
                         "x-go-type-skip-optional-pointer": true
                       },
                       "awsSessionToken": {
                         "type": "string",
-                        "description": "The AWS session token for the Kinesis or S3 destination.",
+                        "description": "The optional AWS session token for the `kinesis`, `s3`, and `sqs` destinations.",
                         "example": "AQoEXAMPLEH4aoAH0gNCAPy...",
                         "x-go-type-skip-optional-pointer": true
                       },
                       "password": {
                         "type": "string",
-                        "description": "The password for the `clickhouse` destination.",
+                        "description": "The password for the `clickhouse` and `rabbitmq` destinations. Required for `rabbitmq`.",
                         "example": "my-clickhouse-password",
                         "x-go-type-skip-optional-pointer": true
                       },
@@ -49025,19 +49024,19 @@
                       },
                       "credentials": {
                         "type": "string",
-                        "description": "The service-account credentials JSON for the `bigquery`, `gcs`, and `pubsub` destinations.",
+                        "description": "The service-account credentials JSON for the `bigquery`, `gcs`, and `pubsub` destinations. Required for `pubsub`.",
                         "example": "{\"type\":\"service_account\", ...}",
                         "x-go-type-skip-optional-pointer": true
                       },
                       "accessKeyId": {
                         "type": "string",
-                        "description": "The AWS access key ID for the `redshift`, `sqs`, `sns`, and `eventbridge` destinations.",
+                        "description": "The AWS access key ID for the `redshift` destination.",
                         "example": "AKIAIOSFODNN7EXAMPLE",
                         "x-go-type-skip-optional-pointer": true
                       },
                       "secretAccessKey": {
                         "type": "string",
-                        "description": "The AWS secret access key for the `redshift`, `sqs`, `sns`, and `eventbridge` destinations.",
+                        "description": "The AWS secret access key for the `redshift` destination.",
                         "example": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
                         "x-go-type-skip-optional-pointer": true
                       },
@@ -49047,10 +49046,16 @@
                         "example": "my-azure-access-key",
                         "x-go-type-skip-optional-pointer": true
                       },
-                      "uri": {
+                      "username": {
                         "type": "string",
-                        "description": "The connection URI (embeds credentials) for the `rabbitmq` destination.",
-                        "example": "amqp://user:pass@rabbit.example.com:5672",
+                        "description": "The username for the `rabbitmq` destination. Required for `rabbitmq`.",
+                        "example": "ampersand",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "connectionString": {
+                        "type": "string",
+                        "description": "The connection string for the `azureservicebus` destination. Required for `azureservicebus`.",
+                        "example": "Endpoint=sb://my-namespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=...",
                         "x-go-type-skip-optional-pointer": true
                       }
                     }
@@ -49090,13 +49095,13 @@
                       },
                       "endpointUrl": {
                         "type": "string",
-                        "description": "The endpoint URL for the Kinesis stream.",
+                        "description": "The endpoint URL for the `kinesis` stream, or the optional custom endpoint URL for the `sqs` destination.",
                         "example": "https://kinesis.us-east-1.amazonaws.com",
                         "x-go-type-skip-optional-pointer": true
                       },
                       "partitionKeyTemplate": {
                         "type": "string",
-                        "description": "The template for the partition key to use when sending events to Kinesis (a JMESPath template)",
+                        "description": "The template for the partition key (a JMESPath template). Used by `kinesis`.",
                         "example": "data.user_id",
                         "x-go-type-skip-optional-pointer": true
                       },
@@ -49162,7 +49167,7 @@
                       },
                       "projectId": {
                         "type": "string",
-                        "description": "The Google Cloud project ID (`bigquery`, `pubsub`).",
+                        "description": "The Google Cloud project ID (`bigquery`, `pubsub`). Required for `pubsub`.",
                         "example": "my-gcp-project",
                         "x-go-type-skip-optional-pointer": true
                       },
@@ -49210,38 +49215,38 @@
                       },
                       "queueUrl": {
                         "type": "string",
-                        "description": "The SQS queue URL for the `sqs` destination.",
+                        "description": "The SQS queue URL for the `sqs` destination. Required for `sqs`.",
                         "example": "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue",
-                        "x-go-type-skip-optional-pointer": true
-                      },
-                      "topicArn": {
-                        "type": "string",
-                        "description": "The SNS topic ARN for the `sns` destination.",
-                        "example": "arn:aws:sns:us-east-1:123456789012:my-topic",
-                        "x-go-type-skip-optional-pointer": true
-                      },
-                      "eventBusName": {
-                        "type": "string",
-                        "description": "The EventBridge event bus name for the `eventbridge` destination.",
-                        "example": "default",
-                        "x-go-type-skip-optional-pointer": true
-                      },
-                      "detailType": {
-                        "type": "string",
-                        "description": "The EventBridge detail-type for published events (`eventbridge`).",
-                        "example": "ampersand.record",
                         "x-go-type-skip-optional-pointer": true
                       },
                       "topicId": {
                         "type": "string",
-                        "description": "The Pub/Sub topic ID for the `pubsub` destination.",
+                        "description": "The Pub/Sub topic ID for the `pubsub` destination. Required for `pubsub`.",
                         "example": "ampersand-events",
                         "x-go-type-skip-optional-pointer": true
                       },
-                      "routingKey": {
+                      "serverUrl": {
                         "type": "string",
-                        "description": "The routing key for the `rabbitmq` destination.",
+                        "description": "The AMQP server URL for the `rabbitmq` destination. Required for `rabbitmq`.",
+                        "example": "amqp://rabbit.example.com:5672",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "exchange": {
+                        "type": "string",
+                        "description": "The exchange to publish to for the `rabbitmq` destination. Required for `rabbitmq`.",
                         "example": "ampersand.events",
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "tls": {
+                        "type": "boolean",
+                        "description": "Whether to connect over TLS. Optional for the `rabbitmq` destination.",
+                        "example": true,
+                        "x-go-type-skip-optional-pointer": true
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The queue or topic name for the `azureservicebus` destination. Required for `azureservicebus`.",
+                        "example": "ampersand-events",
                         "x-go-type-skip-optional-pointer": true
                       },
                       "batchSize": {
@@ -49424,30 +49429,30 @@
                           "description": "The SQS queue URL for the sqs destination",
                           "example": "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue"
                         },
-                        "topicArn": {
-                          "type": "string",
-                          "description": "The SNS topic ARN for the sns destination",
-                          "example": "arn:aws:sns:us-east-1:123456789012:my-topic"
-                        },
-                        "eventBusName": {
-                          "type": "string",
-                          "description": "The EventBridge event bus name for the eventbridge destination",
-                          "example": "default"
-                        },
-                        "detailType": {
-                          "type": "string",
-                          "description": "The EventBridge detail-type for published events (eventbridge)",
-                          "example": "ampersand.record"
-                        },
                         "topicId": {
                           "type": "string",
                           "description": "The Pub/Sub topic ID for the pubsub destination",
                           "example": "ampersand-events"
                         },
-                        "routingKey": {
+                        "serverUrl": {
                           "type": "string",
-                          "description": "The routing key for the rabbitmq destination",
+                          "description": "The AMQP server URL for the rabbitmq destination",
+                          "example": "amqp://rabbit.example.com:5672"
+                        },
+                        "exchange": {
+                          "type": "string",
+                          "description": "The exchange to publish to for the rabbitmq destination",
                           "example": "ampersand.events"
+                        },
+                        "tls": {
+                          "type": "boolean",
+                          "description": "Whether to connect over TLS (rabbitmq)",
+                          "example": true
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "The queue or topic name for the azureservicebus destination",
+                          "example": "ampersand-events"
                         },
                         "batchSize": {
                           "type": "integer",
@@ -50443,30 +50448,30 @@
                             "description": "The SQS queue URL for the sqs destination",
                             "example": "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue"
                           },
-                          "topicArn": {
-                            "type": "string",
-                            "description": "The SNS topic ARN for the sns destination",
-                            "example": "arn:aws:sns:us-east-1:123456789012:my-topic"
-                          },
-                          "eventBusName": {
-                            "type": "string",
-                            "description": "The EventBridge event bus name for the eventbridge destination",
-                            "example": "default"
-                          },
-                          "detailType": {
-                            "type": "string",
-                            "description": "The EventBridge detail-type for published events (eventbridge)",
-                            "example": "ampersand.record"
-                          },
                           "topicId": {
                             "type": "string",
                             "description": "The Pub/Sub topic ID for the pubsub destination",
                             "example": "ampersand-events"
                           },
-                          "routingKey": {
+                          "serverUrl": {
                             "type": "string",
-                            "description": "The routing key for the rabbitmq destination",
+                            "description": "The AMQP server URL for the rabbitmq destination",
+                            "example": "amqp://rabbit.example.com:5672"
+                          },
+                          "exchange": {
+                            "type": "string",
+                            "description": "The exchange to publish to for the rabbitmq destination",
                             "example": "ampersand.events"
+                          },
+                          "tls": {
+                            "type": "boolean",
+                            "description": "Whether to connect over TLS (rabbitmq)",
+                            "example": true
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The queue or topic name for the azureservicebus destination",
+                            "example": "ampersand-events"
                           },
                           "batchSize": {
                             "type": "integer",
@@ -50845,30 +50850,30 @@
                           "description": "The SQS queue URL for the sqs destination",
                           "example": "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue"
                         },
-                        "topicArn": {
-                          "type": "string",
-                          "description": "The SNS topic ARN for the sns destination",
-                          "example": "arn:aws:sns:us-east-1:123456789012:my-topic"
-                        },
-                        "eventBusName": {
-                          "type": "string",
-                          "description": "The EventBridge event bus name for the eventbridge destination",
-                          "example": "default"
-                        },
-                        "detailType": {
-                          "type": "string",
-                          "description": "The EventBridge detail-type for published events (eventbridge)",
-                          "example": "ampersand.record"
-                        },
                         "topicId": {
                           "type": "string",
                           "description": "The Pub/Sub topic ID for the pubsub destination",
                           "example": "ampersand-events"
                         },
-                        "routingKey": {
+                        "serverUrl": {
                           "type": "string",
-                          "description": "The routing key for the rabbitmq destination",
+                          "description": "The AMQP server URL for the rabbitmq destination",
+                          "example": "amqp://rabbit.example.com:5672"
+                        },
+                        "exchange": {
+                          "type": "string",
+                          "description": "The exchange to publish to for the rabbitmq destination",
                           "example": "ampersand.events"
+                        },
+                        "tls": {
+                          "type": "boolean",
+                          "description": "Whether to connect over TLS (rabbitmq)",
+                          "example": true
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "The queue or topic name for the azureservicebus destination",
+                          "example": "ampersand-events"
                         },
                         "batchSize": {
                           "type": "integer",
@@ -51411,7 +51416,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- name\n- metadata.url\n- metadata.headers\n- metadata.region\n- metadata.streamName\n- metadata.endpointUrl\n- metadata.partitionKeyTemplate\n- metadata.bucket\n- metadata.keyTemplate\n- metadata.storageClass\n- metadata.username\n- metadata.tableName\n- metadata.database\n- metadata.accountIdentifier\n- metadata.userId\n- metadata.dbName\n- metadata.schemaName\n- metadata.projectId\n- metadata.datasetId\n- metadata.tableId\n- metadata.workgroupName\n- metadata.clusterIdentifier\n- metadata.dbUser\n- metadata.account\n- metadata.container\n- metadata.queueUrl\n- metadata.topicArn\n- metadata.eventBusName\n- metadata.detailType\n- metadata.topicId\n- metadata.routingKey\n- metadata.batchSize\n- metadata.maxWaitSecs\n- secrets.awsKeyId\n- secrets.awsSecretKey\n- secrets.awsSessionToken\n- secrets.password\n- secrets.privateKey\n- secrets.credentials\n- secrets.accessKeyId\n- secrets.secretAccessKey\n- secrets.accessKey\n- secrets.uri\n",
+                    "description": "Array of field paths specifying which fields to update. Allowed values include:\n- name\n- metadata.url\n- metadata.headers\n- metadata.region\n- metadata.streamName\n- metadata.endpointUrl\n- metadata.partitionKeyTemplate\n- metadata.bucket\n- metadata.keyTemplate\n- metadata.storageClass\n- metadata.username\n- metadata.tableName\n- metadata.database\n- metadata.accountIdentifier\n- metadata.userId\n- metadata.dbName\n- metadata.schemaName\n- metadata.projectId\n- metadata.datasetId\n- metadata.tableId\n- metadata.workgroupName\n- metadata.clusterIdentifier\n- metadata.dbUser\n- metadata.account\n- metadata.container\n- metadata.queueUrl\n- metadata.topicId\n- metadata.serverUrl\n- metadata.exchange\n- metadata.tls\n- metadata.name\n- metadata.batchSize\n- metadata.maxWaitSecs\n- secrets.awsKeyId\n- secrets.awsSecretKey\n- secrets.awsSessionToken\n- secrets.password\n- secrets.privateKey\n- secrets.credentials\n- secrets.accessKeyId\n- secrets.secretAccessKey\n- secrets.accessKey\n- secrets.username\n- secrets.connectionString\n",
                     "example": [
                       "name",
                       "metadata.url",
@@ -51460,12 +51465,12 @@
                           },
                           "endpointUrl": {
                             "type": "string",
-                            "description": "The endpoint URL for the Kinesis stream.",
+                            "description": "The endpoint URL for the `kinesis` stream, or the optional custom endpoint URL for the `sqs` destination.",
                             "example": "https://kinesis.us-east-1.amazonaws.com"
                           },
                           "partitionKeyTemplate": {
                             "type": "string",
-                            "description": "The template for the partition key to use when sending events to Kinesis (a JMESPath template)",
+                            "description": "The template for the partition key (a JMESPath template). Used by `kinesis`.",
                             "example": "data.user_id"
                           },
                           "bucket": {
@@ -51520,7 +51525,7 @@
                           },
                           "projectId": {
                             "type": "string",
-                            "description": "The Google Cloud project ID (`bigquery`, `pubsub`).",
+                            "description": "The Google Cloud project ID (`bigquery`, `pubsub`). Required for `pubsub`.",
                             "example": "my-gcp-project"
                           },
                           "datasetId": {
@@ -51560,33 +51565,33 @@
                           },
                           "queueUrl": {
                             "type": "string",
-                            "description": "The SQS queue URL for the `sqs` destination.",
+                            "description": "The SQS queue URL for the `sqs` destination. Required for `sqs`.",
                             "example": "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue"
-                          },
-                          "topicArn": {
-                            "type": "string",
-                            "description": "The SNS topic ARN for the `sns` destination.",
-                            "example": "arn:aws:sns:us-east-1:123456789012:my-topic"
-                          },
-                          "eventBusName": {
-                            "type": "string",
-                            "description": "The EventBridge event bus name for the `eventbridge` destination.",
-                            "example": "default"
-                          },
-                          "detailType": {
-                            "type": "string",
-                            "description": "The EventBridge detail-type for published events (`eventbridge`).",
-                            "example": "ampersand.record"
                           },
                           "topicId": {
                             "type": "string",
-                            "description": "The Pub/Sub topic ID for the `pubsub` destination.",
+                            "description": "The Pub/Sub topic ID for the `pubsub` destination. Required for `pubsub`.",
                             "example": "ampersand-events"
                           },
-                          "routingKey": {
+                          "serverUrl": {
                             "type": "string",
-                            "description": "The routing key for the `rabbitmq` destination.",
+                            "description": "The AMQP server URL for the `rabbitmq` destination. Required for `rabbitmq`.",
+                            "example": "amqp://rabbit.example.com:5672"
+                          },
+                          "exchange": {
+                            "type": "string",
+                            "description": "The exchange to publish to for the `rabbitmq` destination. Required for `rabbitmq`.",
                             "example": "ampersand.events"
+                          },
+                          "tls": {
+                            "type": "boolean",
+                            "description": "Whether to connect over TLS. Optional for the `rabbitmq` destination.",
+                            "example": true
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The queue or topic name for the `azureservicebus` destination. Required for `azureservicebus`.",
+                            "example": "ampersand-events"
                           },
                           "batchSize": {
                             "type": "integer",
@@ -51606,22 +51611,22 @@
                         "properties": {
                           "awsKeyId": {
                             "type": "string",
-                            "description": "The AWS access key ID for the Kinesis or S3 destination.",
+                            "description": "The AWS access key ID for the `kinesis`, `s3`, and `sqs` destinations. Required for `sqs`.",
                             "example": "AKIAIOSFODNN7EXAMPLE"
                           },
                           "awsSecretKey": {
                             "type": "string",
-                            "description": "The AWS secret access key for the Kinesis or S3 destination.",
+                            "description": "The AWS secret access key for the `kinesis`, `s3`, and `sqs` destinations. Required for `sqs`.",
                             "example": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
                           },
                           "awsSessionToken": {
                             "type": "string",
-                            "description": "The AWS session token for the Kinesis or S3 destination.",
+                            "description": "The optional AWS session token for the `kinesis`, `s3`, and `sqs` destinations.",
                             "example": "AQoEXAMPLEH4aoAH0gNCAPy..."
                           },
                           "password": {
                             "type": "string",
-                            "description": "The password for the `clickhouse` destination.",
+                            "description": "The password for the `clickhouse` and `rabbitmq` destinations. Required for `rabbitmq`.",
                             "example": "my-clickhouse-password"
                           },
                           "privateKey": {
@@ -51631,17 +51636,17 @@
                           },
                           "credentials": {
                             "type": "string",
-                            "description": "The service-account credentials JSON for the `bigquery`, `gcs`, and `pubsub` destinations.",
+                            "description": "The service-account credentials JSON for the `bigquery`, `gcs`, and `pubsub` destinations. Required for `pubsub`.",
                             "example": "{\"type\":\"service_account\", ...}"
                           },
                           "accessKeyId": {
                             "type": "string",
-                            "description": "The AWS access key ID for the `redshift`, `sqs`, `sns`, and `eventbridge` destinations.",
+                            "description": "The AWS access key ID for the `redshift` destination.",
                             "example": "AKIAIOSFODNN7EXAMPLE"
                           },
                           "secretAccessKey": {
                             "type": "string",
-                            "description": "The AWS secret access key for the `redshift`, `sqs`, `sns`, and `eventbridge` destinations.",
+                            "description": "The AWS secret access key for the `redshift` destination.",
                             "example": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
                           },
                           "accessKey": {
@@ -51649,10 +51654,15 @@
                             "description": "The account access key for the `azureblob` destination.",
                             "example": "my-azure-access-key"
                           },
-                          "uri": {
+                          "username": {
                             "type": "string",
-                            "description": "The connection URI (embeds credentials) for the `rabbitmq` destination.",
-                            "example": "amqp://user:pass@rabbit.example.com:5672"
+                            "description": "The username for the `rabbitmq` destination. Required for `rabbitmq`.",
+                            "example": "ampersand"
+                          },
+                          "connectionString": {
+                            "type": "string",
+                            "description": "The connection string for the `azureservicebus` destination. Required for `azureservicebus`.",
+                            "example": "Endpoint=sb://my-namespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=..."
                           }
                         }
                       }
@@ -51824,30 +51834,30 @@
                           "description": "The SQS queue URL for the sqs destination",
                           "example": "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue"
                         },
-                        "topicArn": {
-                          "type": "string",
-                          "description": "The SNS topic ARN for the sns destination",
-                          "example": "arn:aws:sns:us-east-1:123456789012:my-topic"
-                        },
-                        "eventBusName": {
-                          "type": "string",
-                          "description": "The EventBridge event bus name for the eventbridge destination",
-                          "example": "default"
-                        },
-                        "detailType": {
-                          "type": "string",
-                          "description": "The EventBridge detail-type for published events (eventbridge)",
-                          "example": "ampersand.record"
-                        },
                         "topicId": {
                           "type": "string",
                           "description": "The Pub/Sub topic ID for the pubsub destination",
                           "example": "ampersand-events"
                         },
-                        "routingKey": {
+                        "serverUrl": {
                           "type": "string",
-                          "description": "The routing key for the rabbitmq destination",
+                          "description": "The AMQP server URL for the rabbitmq destination",
+                          "example": "amqp://rabbit.example.com:5672"
+                        },
+                        "exchange": {
+                          "type": "string",
+                          "description": "The exchange to publish to for the rabbitmq destination",
                           "example": "ampersand.events"
+                        },
+                        "tls": {
+                          "type": "boolean",
+                          "description": "Whether to connect over TLS (rabbitmq)",
+                          "example": true
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "The queue or topic name for the azureservicebus destination",
+                          "example": "ampersand-events"
                         },
                         "batchSize": {
                           "type": "integer",
@@ -69496,30 +69506,30 @@
                 "description": "The SQS queue URL for the sqs destination",
                 "example": "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue"
               },
-              "topicArn": {
-                "type": "string",
-                "description": "The SNS topic ARN for the sns destination",
-                "example": "arn:aws:sns:us-east-1:123456789012:my-topic"
-              },
-              "eventBusName": {
-                "type": "string",
-                "description": "The EventBridge event bus name for the eventbridge destination",
-                "example": "default"
-              },
-              "detailType": {
-                "type": "string",
-                "description": "The EventBridge detail-type for published events (eventbridge)",
-                "example": "ampersand.record"
-              },
               "topicId": {
                 "type": "string",
                 "description": "The Pub/Sub topic ID for the pubsub destination",
                 "example": "ampersand-events"
               },
-              "routingKey": {
+              "serverUrl": {
                 "type": "string",
-                "description": "The routing key for the rabbitmq destination",
+                "description": "The AMQP server URL for the rabbitmq destination",
+                "example": "amqp://rabbit.example.com:5672"
+              },
+              "exchange": {
+                "type": "string",
+                "description": "The exchange to publish to for the rabbitmq destination",
                 "example": "ampersand.events"
+              },
+              "tls": {
+                "type": "boolean",
+                "description": "Whether to connect over TLS (rabbitmq)",
+                "example": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The queue or topic name for the azureservicebus destination",
+                "example": "ampersand-events"
               },
               "batchSize": {
                 "type": "integer",
@@ -69702,30 +69712,30 @@
                 "description": "The SQS queue URL for the sqs destination",
                 "example": "https://sqs.us-east-1.amazonaws.com/123456789012/my-queue"
               },
-              "topicArn": {
-                "type": "string",
-                "description": "The SNS topic ARN for the sns destination",
-                "example": "arn:aws:sns:us-east-1:123456789012:my-topic"
-              },
-              "eventBusName": {
-                "type": "string",
-                "description": "The EventBridge event bus name for the eventbridge destination",
-                "example": "default"
-              },
-              "detailType": {
-                "type": "string",
-                "description": "The EventBridge detail-type for published events (eventbridge)",
-                "example": "ampersand.record"
-              },
               "topicId": {
                 "type": "string",
                 "description": "The Pub/Sub topic ID for the pubsub destination",
                 "example": "ampersand-events"
               },
-              "routingKey": {
+              "serverUrl": {
                 "type": "string",
-                "description": "The routing key for the rabbitmq destination",
+                "description": "The AMQP server URL for the rabbitmq destination",
+                "example": "amqp://rabbit.example.com:5672"
+              },
+              "exchange": {
+                "type": "string",
+                "description": "The exchange to publish to for the rabbitmq destination",
                 "example": "ampersand.events"
+              },
+              "tls": {
+                "type": "boolean",
+                "description": "Whether to connect over TLS (rabbitmq)",
+                "example": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The queue or topic name for the azureservicebus destination",
+                "example": "ampersand-events"
               },
               "batchSize": {
                 "type": "integer",

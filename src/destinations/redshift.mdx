@@ -1,0 +1,64 @@
+---
+title: Amazon Redshift destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand inserts the payload as rows into your Amazon Redshift table, delivered to a Redshift Serverless workgroup.
+
+## Prerequisites
+
+Before setting up a Redshift destination, ensure that you have:
+- An Amazon Redshift Serverless workgroup
+- A target database, and a table to insert into (see [Data format and table setup](#data-format-and-table-setup))
+- AWS credentials with permission to run the Redshift Data API and insert into the target table
+
+## Data format and table setup
+
+Ampersand delivers each read or subscribe message as a JSON object. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
+The Redshift destination writes each message into two columns: `created_at` (the insert time) and `payload` (the full message JSON). The payload is written as a string, so `payload` must be a character column large enough to hold it. Create the table like this:
+
+```sql
+CREATE TABLE events (
+  created_at TIMESTAMP,
+  payload    VARCHAR(65535)
+);
+```
+
+## Create a Redshift destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Redshift destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandRedshift` | Alias to reference in your `amp.yaml` file |
+| **Region** | string | Yes | `us-west-2` | AWS region where your Redshift resource lives |
+| **AWS Access Key ID** | string | Yes | `AKIAIOSFODNN7EXAMPLE` | AWS access key with Redshift Data API permissions |
+| **AWS Secret Access Key** | string | Yes | | AWS secret access key |
+| **Database** | string | Yes | `dev` | Target database name |
+| **Schema** | string | Yes | `public` | Target schema |
+| **Table name** | string | Yes | `events` | Target table |
+| **Workgroup name** | string | Yes | `my-workgroup` | Redshift Serverless workgroup name |
+| **Batch size** | integer | No | `1000` | Rows to buffer before flushing a batch (defaults to 1000) |
+| **Max wait (seconds)** | integer | No | `30` | Max seconds to wait before flushing a batch (defaults to 30) |
+
+## Refer to the destination in your integration
+
+After creating your Redshift destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToRedshift
+    displayName: Salesforce to Redshift
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandRedshift
+        - objectName: contact
+          destination: ampersandRedshift
+```
