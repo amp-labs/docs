@@ -479,6 +479,7 @@ const baseConfig = {
             "provider-guides/ramp",
             "provider-guides/rebilly",
             "provider-guides/recurly",
+            "provider-guides/reply",
             "provider-guides/revenuecat",
             "provider-guides/ringCentral",
             "provider-guides/sageIntacct",
