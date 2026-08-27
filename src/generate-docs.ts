@@ -421,6 +421,7 @@ const baseConfig = {
             "provider-guides/linear",
             "provider-guides/linkedin",
             "provider-guides/livestorm",
+            "provider-guides/lob",
             "provider-guides/loxo",
             "provider-guides/mailgun",
             "provider-guides/marketo",

@@ -1,0 +1,145 @@
+---
+title: Lob
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.lob.com`.
+
+The Lob connector supports reading from all standard objects and writing to most standard objects, including the following:
+
+export const rows = [
+  {
+    label: "addresses", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Addresses/operation/addresses_list"
+  }, {
+    label: "bank_accounts", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Bank-Accounts/operation/bank_accounts_list"
+  }, {
+    label: "billing_groups", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Billing-Groups/operation/billing_groups_list"
+  }, {
+    label: "booklets", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Booklets/operation/booklets_list"
+  }, {
+    label: "buckslips", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Buckslips/operation/buckslips_list"
+  }, {
+    label: "campaigns", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Campaigns/operation/campaigns_list"
+  }, {
+    label: "cards", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Cards/operation/cards_list"
+  }, {
+    label: "checks", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Checks/operation/checks_list"
+  }, {
+    label: "domains", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/URL-Shortener/operation/domain_list"
+  }, {
+    label: "informed_delivery_campaigns", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Informed-Delivery-Campaign/operation/informed_delivery_campaign_list"
+  }, {
+    label: "letters", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Letters/operation/letters_list"
+  }, {
+    label: "links", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/URL-Shortener/operation/links_list"
+  }, {
+    label: "postcards", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Postcards/operation/postcards_list"
+  }, {
+    label: "self_mailers", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Self-Mailers/operation/self_mailers_list"
+  }, {
+    label: "snap_packs", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Snap-Packs/operation/snap_packs_list"
+  }, {
+    label: "templates", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Templates/operation/templates_list"
+  }, {
+    label: "uploads", read: true, write: true, subscribe: false,
+    href: "https://docs.lob.com/#tag/Uploads/operation/uploads_list"
+  }
+]
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  if (typeof value === "string" && value.startsWith("<")) {
+    return <span dangerouslySetInnerHTML={{__html: value}}/>;
+  }
+
+  return value;
+}
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+      <th style={{width: '20%'}}>Read</th>
+      <th style={{width: '20%'}}>Write</th>
+      <th style={{width: '20%'}}>Subscribe</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td style={{textAlign: "left"}}>
+            <a href={row.href}>{row.label}</a>
+          </td>
+          <td>{renderCellValue(row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+          <td>{renderCellValue(row.subscribe)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+### Example integration
+
+For an example manifest file of a Lob integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/lob/amp.yaml).
+
+## Using the connector
+
+This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Lob:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://api.lob.com`.
+
+## Credential format for Lob
+
+Lob uses HTTP Basic Authentication with a non-standard credential format. The fields in the installation UI do not correspond to a Lob account email address and password:
+Lob uses a non-standard format for Basic Auth. The username and password fields do not correspond to the actual username and password that a customer uses to log in. Instead:
+- **Username**: Enter the Lob API key from the [Lob Dashboard API key settings](https://dashboard.lob.com/settings/api-keys).
+- **Password**: Leave this field empty.
+
+When making proxy calls, Ampersand encodes these values as a Basic Auth header and attaches it automatically.
+Choose the API key appropriate for the environment you are integrating with — for example,
+a **test key** for Lob’s test environment and a **live key** for production use.
+
+For more detail, see [Lob's authentication documentation](https://docs.lob.com/#tag/Authentication)
+and [API key documentation](https://docs.lob.com/#tag/Authentication/API-Keys).
