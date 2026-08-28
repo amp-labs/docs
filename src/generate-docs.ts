@@ -456,6 +456,7 @@ const baseConfig = {
             "provider-guides/miro",
             "provider-guides/mixmax",
             "provider-guides/mixpanel",
+            "provider-guides/monaco",
             "provider-guides/monday",
             "provider-guides/mural",
             "provider-guides/netsuite",
