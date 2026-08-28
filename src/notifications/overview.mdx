@@ -31,6 +31,9 @@ Ampersand supports the following notification event types:
 - **`write.async.done`**: Fires when an asynchronous write operation completes, indicating success or failure and which records were written or had errors
 
 **Subscribe**
+- **`subscribe.create.success`**: Fires when a subscription becomes active. For providers that Ampersand subscribes to programmatically, this is when the subscribe action is set up successfully; for providers whose webhooks are configured manually in the provider's UI, this is when the first event is delivered
+- **`subscribe.update.success`**: Fires when an update to an existing subscribe action completes successfully
+- **`subscribe.delete.success`**: Fires when a subscribe action is removed successfully, including tearing down the subscription on the provider's side
 - **`subscribe.create.error`**: Fires when Ampersand fails to set up a subscribe action for an installation
 - **`subscribe.update.error`**: Fires when Ampersand fails to update an existing subscribe action for an installation
 - **`subscribe.delete.error`**: Fires when a subscribe action is removed but Ampersand could not tear down the subscription on the provider's side, so it may still be active and continue to consume provider resources (for example, event or subscription quota). You may need to remove it manually in the provider
