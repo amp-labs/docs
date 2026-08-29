@@ -1,39 +1,56 @@
 ---
 title: "Livestorm"
 ---
+
 ## What's supported
 
 ### Supported actions
 
 This connector supports:
-- [Proxy Actions](/proxy-actions), using the base URL https://api.livestorm.co.
 
-## Before You Get Started
+- [Read Actions](/read-actions), including full historic backfill. Incremental read is supported for **`events`**.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.livestorm.co`.
 
-To integrate Livestorm with Ampersand, you must register a Livestorm OAuth2 application. To do this, contact [help@livestorm.co](mailto:help@livestorm.co) and provide the following details:
+### Supported objects
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
+<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
+  <thead style={{ display: 'table-header-group', width: '100%' }}>
+    <tr style={{ display: 'table-row', width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
+      <th style={{ width: '14%' }}>Read</th>
+      <th style={{ width: '14%' }}>Write</th>
+      <th style={{ width: '14%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody style={{ display: 'table-row-group', width: '100%' }}>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.livestorm.co/reference/get_events">events</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.livestorm.co/reference/get_people">people</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.livestorm.co/reference/get_people-attributes">people_attributes</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.livestorm.co/reference/post_users">users</a></td><td><Cross /></td><td><Check /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
+
+### Example integration
+
+For an example manifest file of a Livestorm integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/livestorm/amp.yaml).
+
+## Before you get started
+
+To integrate Livestorm with Ampersand using OAuth, you must register a Livestorm OAuth2 application. Contact [help@livestorm.co](mailto:help@livestorm.co) and provide the following details:
 
 - **Redirect URL**: Please provide a unique HTTPS redirect URL for your app. **Note** that dynamic URLs are not supported at this time.
-- **App Logo**: Provide logo for your app. The image should be square with a maximum size of 500px x 500px.
+- **App logo**: Provide logo for your app. The image should be square with a maximum size of 500px x 500px.
 - **Scope**: Specify the scope required for your app to function.
 
 Once your application is registered, you will receive two credentials: **client_id** and **client_secret.** These credentials are required to connect Livestorm with Ampersand.
 
-### Example integration
-
-To define an integration for livestorm, create a manifest file that looks like this:
-
-```YAML
-#amp.yaml
-specVersion: 1.0.0
-integrations: 
-  - name: livestormIntegration
-    displayName: Livestorm
-    provider: livestorm
-    proxy:
-      enabled: true
-```
-
-## Add Your Livestorm App Info to Ampersand
+## Add your Livestorm app info to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 
@@ -41,10 +58,33 @@ integrations:
 
    ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
 
-3. Select **Provider Apps**.  
+3. Select **Provider Apps**.
 
 4. Select Livestorm from the **Provider** list.
 
 5. Enter the previously obtained Client ID in the **Client ID** field, the Client Secret in the **Client Secret** field and scopes in the **Scopes** field.
 
    ![Ampersand Integration](/images/provider-guides/livestorm.gif)
+
+## Using the connector
+
+This connector uses **OAuth2 Authorization Code** grant type, so you must configure a **Provider App** before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
+
+To start integrating with Livestorm:
+
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/livestorm/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component so customers authorize Livestorm.
+- Start using the connector:
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Creating an API key for Livestorm
+
+1. Log in to your [Livestorm account](https://app.livestorm.co).
+2. Go to **Account Settings** → **Integrations**.
+3. Scroll to **Public API** and open the card.
+4. Generate a new API token and choose the scopes your integration needs (for example, **events** for read/write on events and participants, **admin** for **users**).
+5. Copy the token when it is shown—it is only displayed once.
