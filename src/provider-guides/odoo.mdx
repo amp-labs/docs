@@ -8,22 +8,25 @@ title: Odoo
 
 This connector supports:
 
-- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}`.
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}`, where `workspace` is your Odoo instance domain (e.g., `mycompany.odoo.com`).
+
+### Supported objects
+
+The Odoo connector supports reading from and writing to Odoo models accessible via the [JSON-2 API](https://www.odoo.com/documentation/19.0/developer/reference/external_api.html). Models are referenced by their technical name in the `objectName` field of your manifest (e.g., `res.partner`, `crm.lead`, `sale.order`).
+Which models are available depends on the modules installed on the customer's Odoo instance. Common examples include:
+
+- `res.partner` (Contacts)
+- `crm.lead` (Leads/Opportunities)
+- `sale.order` (Sales Orders)
+- `account.move` (Invoices/Journal Entries)
+- `product.product` (Products)
+- `project.task` (Tasks)
 
 ### Example integration
 
-To define an integration for Odoo, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: odooIntegration
-    displayName: Odoo Integration
-    provider: odoo
-    proxy:
-      enabled: true
-```
+For an example manifest file of an Odoo integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/odoo/amp.yaml).
 
 ## Before You Get Started
 
@@ -47,5 +50,9 @@ To integrate with Odoo:
 
 - Create a manifest file like the example above.
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API Key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API Key supplied by the customer.
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
