@@ -25,6 +25,9 @@ export interface DocsConfig {
     dark?: string;
   };
   favicon?: string;
+  contextual?: {
+    options: Array<string>;
+  };
   navigation: {
     tabs: Array<{
       tab: string;
@@ -109,6 +112,9 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     name: mintConfig.name,
     colors: mintConfig.colors,
     favicon: mintConfig.favicon,
+    contextual: {
+      options: ['copy', 'view']
+    },
     navigation: {
       tabs: [
         {
@@ -283,7 +289,32 @@ const baseConfig = {
           pages: [
             "destinations/overview",
             "destinations/webhooks",
-            "destinations/kinesis",
+            "destinations/slack",
+            {
+              group: "Blob storage",
+              pages: [
+                "destinations/s3",
+              ]
+            },
+            {
+              group: "Databases and warehouses",
+              pages: [
+                "destinations/bigquery",
+                "destinations/clickhouse",
+                "destinations/redshift",
+                "destinations/snowflake",
+              ]
+            },
+            {
+              group: "Streams and queues",
+              pages: [
+                "destinations/azureservicebus",
+                "destinations/kinesis",
+                "destinations/pubsub",
+                "destinations/rabbitmq",
+                "destinations/sqs",
+              ]
+            }
           ]
         },
         {
@@ -297,6 +328,7 @@ const baseConfig = {
           group: "Provider guides",
           pages: [
             "provider-guides/overview",
+            "provider-guides/accuLynx",
             "provider-guides/acuityScheduling",
             "provider-guides/aha",
             "provider-guides/aircall",
@@ -323,6 +355,7 @@ const baseConfig = {
             "provider-guides/braintree",
             "provider-guides/braze",
             "provider-guides/breakcold",
+            "provider-guides/breezy",
             "provider-guides/brevo",
             "provider-guides/bynder",
             "provider-guides/calendly",
@@ -353,6 +386,7 @@ const baseConfig = {
             "provider-guides/dixa",
             "provider-guides/docusign",
             "provider-guides/domo",
+            "provider-guides/dovetail",
             "provider-guides/drift",
             "provider-guides/dropbox",
             "provider-guides/dropboxsign",
@@ -401,6 +435,7 @@ const baseConfig = {
             "provider-guides/jobber",
             "provider-guides/joinMe",
             "provider-guides/jotform",
+            "provider-guides/jump",
             "provider-guides/justCall",
             "provider-guides/kaseyaVSAX",
             "provider-guides/keap",
@@ -411,14 +446,17 @@ const baseConfig = {
             "provider-guides/linear",
             "provider-guides/linkedin",
             "provider-guides/livestorm",
+            "provider-guides/lob",
             "provider-guides/loxo",
             "provider-guides/mailgun",
             "provider-guides/marketo",
             "provider-guides/meta",
             "provider-guides/microsoft",
+            "provider-guides/microsoftAdminConsent",
             "provider-guides/miro",
             "provider-guides/mixmax",
             "provider-guides/mixpanel",
+            "provider-guides/monaco",
             "provider-guides/monday",
             "provider-guides/mural",
             "provider-guides/netsuite",
@@ -438,11 +476,13 @@ const baseConfig = {
             "provider-guides/pipeliner",
             "provider-guides/podium",
             "provider-guides/productBoard",
+            "provider-guides/procore",
             "provider-guides/pylon",
             "provider-guides/quickbooks",
             "provider-guides/ramp",
             "provider-guides/rebilly",
             "provider-guides/recurly",
+            "provider-guides/reply",
             "provider-guides/revenuecat",
             "provider-guides/ringCentral",
             "provider-guides/sageIntacct",
@@ -463,6 +503,7 @@ const baseConfig = {
             "provider-guides/snapchatAds",
             "provider-guides/snowflake",
             "provider-guides/solarwindsServiceDesk",
+            "provider-guides/square",
             "provider-guides/stripe",
             "provider-guides/superSend",
             "provider-guides/surveyMonkey",
@@ -472,15 +513,18 @@ const baseConfig = {
             "provider-guides/timely",
             "provider-guides/tipalti",
             "provider-guides/vtiger",
+            "provider-guides/wealthbox",
             "provider-guides/webex",
             "provider-guides/webflow",
             "provider-guides/whereby",
             "provider-guides/wordpress",
             "provider-guides/wrike",
+            "provider-guides/workday",
             "provider-guides/xero",
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
             "provider-guides/zoom",
+            "provider-guides/zoominfo",
           ]
         },
         {
@@ -489,15 +533,16 @@ const baseConfig = {
             "customer-guides/overview",
             "customer-guides/bigquery",
             "customer-guides/google-workspace-delegation",
+            "customer-guides/housecallPro",
+            "customer-guides/hubspot",
+            "customer-guides/loxo",
+            "customer-guides/marketo",
+            "customer-guides/netsuite",
             "customer-guides/salesforce",
             "customer-guides/salesforce-jwt",
-            "customer-guides/loxo",
-            "customer-guides/hubspot",
-            "customer-guides/housecallPro",
-            "customer-guides/marketo",
             "customer-guides/snowflake",
-            "customer-guides/netsuite",
-            "customer-guides/update-connection"
+            "customer-guides/update-connection",
+            "customer-guides/zoho"
           ]
         },
         {

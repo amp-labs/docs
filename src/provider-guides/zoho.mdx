@@ -6,6 +6,7 @@ The Zoho connector supports the following Zoho products:
 
 - Zoho CRM (default)
 - Zoho Desk
+- Zoho Mail
 
 ## Zoho CRM
 
@@ -116,12 +117,145 @@ The Zoho connector allows you to read from and write to these objects:
 For an example manifest file of a Zoho Desk integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/zoho/desk/amp.yaml).
 
 
+## Zoho Mail
+
+To use Zoho Mail, add `module: mail` to your integration definition in `amp.yaml`:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: myZohoMailIntegration
+    provider: zoho
+    module: mail
+```
+
+### Supported Actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Zoho Mail instance will be done for each scheduled read.
+- [Write Actions](/write-actions).
+- [Subscribe Actions](/subscribe-actions). Please note that [special set up](#set-up-subscribe-actions-for-zoho-mail) is needed for Zoho Mail: Zoho Mail has no API to create or manage webhook subscriptions, so your customer configures an outgoing webhook by hand in the Zoho Mail console, and Ampersand verifies and processes the delivered events.
+
+### Supported Objects
+
+<div style={{ width: '100%', overflowX: 'auto' }}>
+<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse' }}>
+  <thead>
+    <tr style={{ width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '40%' }}>Object</th>
+      <th style={{ width: '20%' }}>Read</th>
+      <th style={{ width: '20%' }}>Write</th>
+      <th style={{ width: '20%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-users-accounts.html"><code>accounts</code></a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-folder-details.html"><code>accounts/folders</code></a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-label-details.html"><code>accounts/labels</code></a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-collections.html"><code>collections</code></a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-custom-status-of-task.html"><code>customStatus</code></a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-group-collections-api.html"><code>groups/collections</code></a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-bookmarks.html"><code>links</code></a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-favorite-bookmarks-api.html"><code>links/favorites</code></a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-link-groups.html"><code>links/groups</code></a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-bookmarks.html"><code>links/me</code></a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-bookmarks-in-trash-api.html"><code>links/trash</code></a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-emails-list.html"><code>messages</code></a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-notes.html"><code>notes</code></a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-books.html"><code>notes/books</code></a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-favourite-notes.html"><code>notes/favorites</code></a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-groups.html"><code>notes/groups</code></a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-shared-notes.html"><code>notes/sharedtome</code></a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-user-signature.html"><code>signature</code></a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-all-group-or-personal-tasks.html"><code>tasks</code></a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://www.zoho.com/mail/help/api/get-group-details.html"><code>tasks/groups</code></a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
+
+### Subscribe events
+
+Ampersand supports two of Zoho Mail's outgoing-webhook entities, delivered to the same endpoint:
+
+- **messages**: fires when a new email is received. When configuring the webhook, your customer can optionally narrow it with conditions (e.g. sender or subject filters) or tags; a webhook also fires when a matching tag is manually applied to an email. All mail deliveries surface as `createEvent` — Zoho Mail does not send webhooks for message updates or deletions.
+- **tasks**: fires on task activity in groups your customer owns or moderates. Supports `createEvent`, `updateEvent`, and `deleteEvent`, mapped from the task action that triggered the webhook.
+
+Zoho Mail's third outgoing-webhook entity, Streams Posts, is not supported.
+
+### Set up Subscribe Actions for Zoho Mail
+
+Zoho Mail has no API for creating webhook subscriptions, so unlike Zoho CRM, Ampersand cannot register the webhook on your customer's behalf. Instead:
+
+1. **Define the subscribe action** in your `amp.yaml` and deploy it with the [amp CLI](/cli/overview):
+
+   ```yaml
+   specVersion: 1.0.0
+   integrations:
+     - name: subscribeToZohoMail
+       provider: zoho
+       module: mail
+       read: # Read action is required for subscribe actions
+         objects:
+           - objectName: messages
+             destination: mailWebhook
+             requiredFields:
+               - fieldName: messageId
+               - fieldName: subject
+               - fieldName: fromAddress
+               - fieldName: receivedTime
+             optionalFields:
+               - fieldName: toAddress
+               - fieldName: summary
+           - objectName: tasks
+             destination: mailWebhook
+             requiredFields:
+               - fieldName: id
+               - fieldName: title
+             optionalFieldsAuto: all
+       subscribe:
+         objects:
+           # Zoho Mail only sends webhooks for newly received emails, so
+           # messages support createEvent only.
+           - objectName: messages
+             destination: mailWebhook
+             inheritFieldsAndMapping: true
+             createEvent:
+               enabled: always
+           # Task webhooks fire on group task activity; the task action is
+           # mapped to create/update/delete events.
+           - objectName: tasks
+             destination: mailWebhook
+             inheritFieldsAndMapping: true
+             createEvent:
+               enabled: always
+             updateEvent:
+               enabled: always
+               watchFieldsAuto: all
+             deleteEvent:
+               enabled: always
+   ```
+
+2. **Construct a webhook URL for your customer** in this format:
+
+   ```
+   https://subscribe-receiver.withampersand.com/zt1secx7jknlhb/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
+   ```
+
+3. **Share the [Zoho customer guide](/customer-guides/zoho)** with your customer along with the webhook URL from Step 2. Your customer will create an outgoing webhook in the Zoho Mail console (**Settings** > **Developer Space** > **Webhooks** > **Outgoing Webhooks** > **Create new configuration**) that delivers events to this URL. See the [Zoho Mail webhook documentation](https://www.zoho.com/mail/help/dev-platform/webhook.html) for details.
+
+### Example Integration
+
+For an example manifest file of a Zoho Mail integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/zoho/mail/amp.yaml).
+
+
 ## Before You Get Started
 
 To connect Zoho with Ampersand, you will need an account in an appropriate Zoho product:
 
 - [Zoho CRM Account](https://www.zoho.com/crm/)
 - [Zoho Desk Account](https://www.zoho.com/desk/)
+- [Zoho Mail Account](https://www.zoho.com/mail/)
 
 Once your account is created, you'll need to configure an app in Zoho and obtain the following credentials from your app:
 
@@ -137,6 +271,7 @@ Go to the particular Zoho product sign-up page and create an account:
 
 - [Zoho CRM Sign Up page](https://www.zoho.com/crm/signup.html)
 - [Zoho Desk Sign Up page](https://www.zoho.com/desk/signup.html)
+- [Zoho Mail Sign Up page](https://www.zoho.com/mail/signup.html)
 
 ### Creating a Zoho App
 
@@ -172,7 +307,10 @@ You'll see the details of your newly created application. Note the **Client ID**
 ```
 ZohoCRM.modules.ALL
 ZohoCRM.settings.ALL
-// Additional scope required for Subscribe Actions
+```
+
+In case you are using **Subscribe** action with Zoho CRM, additional scope is required
+```
 ZohoCRM.notifications.ALL
 ```
 
@@ -182,10 +320,18 @@ Desk.basic.READ
 Desk.settings.ALL 
 ```
 
-In case you are using **Subscribe** action, additional scope is required
+**Zoho Mail:**
 ```
-ZohoCRM.notifications.ALL
+ZohoMail.accounts.ALL
+ZohoMail.folders.ALL
+ZohoMail.tags.ALL
+ZohoMail.messages.ALL
+ZohoMail.tasks.ALL
+ZohoMail.notes.ALL
+ZohoMail.links.ALL
 ```
+
+The accounts scope is always required (`ZohoMail.accounts.READ` is sufficient): Ampersand uses it after authentication to resolve your customer's Zoho Mail account ID, which account-scoped objects (`messages`, `accounts/folders`, `accounts/labels`) depend on. You can drop the scopes for object families you don't use.
 
 7. Click **Save changes**.
 

@@ -6,45 +6,289 @@ title: "Slack"
 
 ### Supported actions
 
-This connector supports:
-- [Read Actions](/read-actions), including full historic backfill. Please note that incremental reading is only supported for `conversations`, `files`, `usergroups`, `users.conversations`, and `users`. For all other objects, a full read of the Slack instance will be done per scheduled read.
+The Slack integration is available through two connectors:
+
+- **Bot connector** — provider name: `slack`. This connector uses Slack bot token scopes.
+- **User connector** — provider name: `slackUserScope`. This connector uses Slack user token scopes.
+
+Both connectors support:
+- [Read Actions](/read-actions), including full historic backfill and incremental read.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://slack.com/api`.
 
+Both connectors use the same Slack app, OAuth configuration, client ID, client secret, and Ampersand redirect URI.
+The difference between them is the Slack token type and the scopes configured for that token.
+
+Choose the connector whose supported objects and operations match your use case.
+The required Slack scopes depend on the connector and the Slack API methods used.
+
 ### Supported objects
 
-The Slack connector supports reading from the following objects:
+The following matrix shows object and operation support for each Slack connector:
+- **✅** — supported.
+- **🚫** — the connector supports the object, but not that operation. Write may mean both or one of create/update.
+- **empty** — the object is not available through that connector.
 
-- [auth.teams](https://docs.slack.dev/reference/methods/auth.teams.list)
-- [conversations](https://docs.slack.dev/reference/methods/conversations.list) (supports incremental read)
-- [conversations.listConnectInvites](https://docs.slack.dev/reference/methods/conversations.listConnectInvites)
-- [conversations.requestSharedInvite](https://docs.slack.dev/reference/methods/conversations.requestSharedInvite.list)
-- [files](https://docs.slack.dev/reference/methods/files.list) (supports incremental read)
-- [files.remote](https://docs.slack.dev/reference/methods/files.remote.list)
-- [reactions](https://docs.slack.dev/reference/methods/reactions.list)
-- [team.externalTeams](https://docs.slack.dev/reference/methods/team.externalTeams.list)
-- [usergroups](https://docs.slack.dev/reference/methods/usergroups.list) (supports incremental read)
-- [users.conversations](https://docs.slack.dev/reference/methods/users.conversations) (supports incremental read)
-- [users](https://docs.slack.dev/reference/methods/users.list) (supports incremental read)
+Write indicates support for one or both of the following operations: create and update.
+Object access also depends on the Slack scopes granted to the installed app and, where applicable, the authorizing user's Slack permissions.
 
-The Slack connector supports writing to the following objects:
+export const rows = [
+  {
+    label: "admin.apps.activities",
+    bot: {read: null, write: null, subscribe: null},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/admin.apps.activities.list"
+  }, {
+    label: "admin.apps.approved",
+    bot: {read: null, write: null, subscribe: null},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/admin.apps.approved.list"
+  }, {
+    label: "admin.apps.requests",
+    bot: {read: null, write: null, subscribe: null},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/admin.apps.requests.list"
+  }, {
+    label: "admin.apps.restricted",
+    bot: {read: null, write: null, subscribe: null},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/admin.apps.restricted.list"
+  }, {
+    label: "admin.barriers",
+    bot: {read: null, write: null, subscribe: null},
+    user: {read: true, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/admin.barriers.list"
+  }, {
+    label: "admin.conversations",
+    bot: {read: null, write: null, subscribe: null},
+    user: {read: false, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/admin.conversations.create"
+  }, {
+    label: "admin.teams",
+    bot: {read: null, write: null, subscribe: null},
+    user: {read: true, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/admin.teams.list"
+  }, {
+    label: "admin.users",
+    bot: {read: null, write: null, subscribe: null},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/admin.users.list"
+  }, {
+    label: "admin.users.session",
+    bot: {read: null, write: null, subscribe: null},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/admin.users.session.list"
+  }, {
+    label: "auth.teams",
+    bot: {read: true, write: false, subscribe: false},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/auth.teams.list/"
+  }, {
+    label: "bookmarks",
+    bot: {read: false, write: true, subscribe: false},
+    user: {read: false, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/bookmarks.add"
+  }, {
+  //   label: "bots",
+  //   bot: {read: false, write: false, subscribe: "WIP"},
+  //   user: {read: false, write: false, subscribe: "WIP"},
+  //   href: "https://docs.slack.dev/reference/methods/bots.info"
+  // }, {
+    label: "calls",
+    bot: {read: false, write: true, subscribe: false},
+    user: {read: false, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/calls.add"
+  }, {
+    label: "canvases",
+    bot: {read: false, write: true, subscribe: false},
+    user: {read: false, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/canvases.create"
+  }, {
+    label: "chat.scheduledMessages",
+    bot: {read: true, write: false, subscribe: false},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/chat.scheduledMessages.list"
+  }, {
+    label: "conversations",
+    bot: {read: true, write: true, subscribe: false},
+    user: {read: true, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/conversations.list"
+  }, {
+    label: "conversations.canvases",
+    bot: {read: false, write: true, subscribe: false},
+    user: {read: false, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/conversations.canvases.create"
+  }, {
+    label: "conversations.listConnectInvites",
+    bot: {read: true, write: false, subscribe: false},
+    user: {read: null, write: null, subscribe: null},
+    href: "https://docs.slack.dev/reference/methods/conversations.listconnectinvites"
+  }, {
+    label: "conversations.requestSharedInvite",
+    bot: {read: true, write: false, subscribe: false},
+    user: {read: null, write: null, subscribe: null},
+    href: "https://docs.slack.dev/reference/methods/conversations.requestsharedinvite.list"
+  }, {
+    label: "files",
+    bot: {read: true, write: false, subscribe: false},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/files.list"
+  }, {
+    label: "files.remote",
+    bot: {read: true, write: true, subscribe: false},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/files.remote.list"
+  }, {
+    label: "slackLists",
+    bot: {read: false, write: true, subscribe: false},
+    user: {read: false, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/slacklists.create"
+  }, {
+    label: "slackLists.items",
+    bot: {read: false, write: true, subscribe: false},
+    user: {read: false, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/slacklists.items.create"
+  }, {
+  //   label: "team",
+  //   bot: {read: false, write: false, subscribe: "WIP"},
+  //   user: {read: false, write: false, subscribe: "WIP"},
+  //   href: "https://docs.slack.dev/reference/methods/team.info"
+  // }, {
+    label: "team.externalTeams",
+    bot: {read: true, write: false, subscribe: false},
+    user: {read: null, write: null, subscribe: null},
+    href: "https://docs.slack.dev/reference/methods/team.externalteams.list"
+  }, {
+    label: "usergroups",
+    bot: {read: true, write: true, subscribe: false},
+    user: {read: true, write: true, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/usergroups.list"
+  }, {
+    label: "users",
+    bot: {read: true, write: false, subscribe: false},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/users.list"
+  }, {
+    label: "users.conversations",
+    bot: {read: true, write: false, subscribe: false},
+    user: {read: true, write: false, subscribe: false},
+    href: "https://docs.slack.dev/reference/methods/users.conversations"
+  },
+]
 
-- [bookmarks](https://docs.slack.dev/reference/methods/bookmarks.add) 
-- [calls](https://docs.slack.dev/reference/methods/calls.add)   
-- [canvases](https://docs.slack.dev/reference/methods/canvases.create)
-- [conversations](https://docs.slack.dev/reference/methods/conversations.create) 
-- [conversations.canvases](https://docs.slack.dev/reference/methods/conversations.canvases.create) 
-- [files.remote](https://docs.slack.dev/reference/methods/files.remote.add)
-- [slackLists](https://docs.slack.dev/reference/methods/slackLists.create)
-- [slackLists.items](https://docs.slack.dev/reference/methods/slackLists.items.create)
-- [usergroups](https://docs.slack.dev/reference/methods/usergroups.create) 
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
 
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  if (typeof value === "string" && value.startsWith("<")) {
+    return <span dangerouslySetInnerHTML={{__html: value}}/>;
+  }
+
+  return value;
+}
+
+export const groupSeparator = {
+  borderLeft: "1px solid var(--ifm-table-border-color, #444)",
+  paddingLeft: "12px",
+};
+
+<div
+  style={{
+    width: "100%",
+    overflowX: "auto",
+    overflowY: "hidden",
+  }}
+>
+  <table
+    style={{
+      width: "100%",
+      minWidth: "720px",
+      tableLayout: "fixed",
+      textAlign: "center",
+      borderCollapse: "collapse",
+    }}
+  >
+    <thead>
+    <tr>
+      <th rowSpan={2} style={{textAlign: "left", width: "34%", padding: "6px 10px",}}>
+        Object
+      </th>
+      <th colSpan={3} style={{textAlign: "center", padding: "16px 4px",}}>
+        Bot connector
+      </th>
+      <th colSpan={3} style={{...groupSeparator, textAlign: "center", padding: "16px 4px",}}>
+        User connector
+      </th>
+    </tr>
+
+    <tr>
+      <th style={{ width: "11%" }}>Read</th>
+      <th style={{ width: "11%" }}>Write</th>
+      <th style={{ width: "11%" }}>Subscribe</th>
+
+      <th style={{ ...groupSeparator, width: "11%" }}>Read</th>
+      <th style={{ width: "11%" }}>Write</th>
+      <th style={{ width: "11%" }}>Subscribe</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr key={row.label} id={`row/${row.label}`}>
+          <td
+            style={{
+              textAlign: "left",
+              padding: "5px 10px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <a href={row.href}>
+              {row.label}
+            </a>
+          </td>
+
+          <td>{renderCellValue(row.bot.read)}</td>
+          <td>{renderCellValue(row.bot.write)}</td>
+          <td>{renderCellValue(row.bot.subscribe)}</td>
+
+          <td style={groupSeparator}>
+            {renderCellValue(row.user.read)}
+          </td>
+          <td>{renderCellValue(row.user.write)}</td>
+          <td>{renderCellValue(row.user.subscribe)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+### Choose a connector
+
+Use the **Bot connector** (`slack`) when your integration needs to operate with Slack bot token scopes.
+This is the typical choice for integrations that act as an installed Slack app or bot.
+
+Use the **User connector** (`slackUserScope`) when your integration needs to use Slack user token scopes
+and perform actions on behalf of the authorizing Slack user.
 
 ### Example integration
 
-For an example manifest file of a Slack integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/slack/amp.yaml).
+For an example manifest file of a Slack integration, visit our [samples repo on Github](https://github.com/amp-labs/samples).
+Use the sample corresponding to the connector you want to install:
 
+| Connector      | Provider name    | Example manifest                                                                           |
+|----------------|------------------|--------------------------------------------------------------------------------------------|
+| Bot connector  | `slack`          | [Bot connector sample](https://github.com/amp-labs/samples/blob/main/slack/amp.yaml)       |
+| User connector | `slackUserScope` | [User connector sample](https://github.com/amp-labs/samples/blob/main/slack-user/amp.yaml) |
 
+The two manifests use different provider names.
 
 ## Before you get started
 
@@ -54,7 +298,7 @@ Once your account is created, you'll need to create an app in Slack, configure t
 
 - Client ID
 - Client Secret
-- Bot scopes (user scopes are currently not supported)
+- **Bot scopes** and/or **User scopes**
 
 You will then use these credentials to connect your application to Ampersand.
 
@@ -83,7 +327,7 @@ Follow the steps below to create a Slack app and add the Ampersand redirect URL.
 
 7. Click **Add** and then **Save URLs**.
 
-8. In the **Scopes** section, add the necessary **Bot Token Scopes** for your app by clicking on **Add an OAuth Scope** and selecting the required scopes. **User Token Scopes are currently not supported.**
+8. In the **Scopes** section, add the necessary **Bot Token Scopes**/**User Token Scopes** for your app by clicking on **Add an OAuth Scope** and selecting the required scopes.
 
    ![Slack App Creation](/images/provider-guides/23f128f-slack1.gif)
 
@@ -99,11 +343,11 @@ Follow the steps below to create a Slack app and add the Ampersand redirect URL.
 
 3. Select **Provider Apps**.
 
-4. Select **Slack** from the **Provider** list.
+4. Select **Slack Bot Scope** or **Slack User Scope** from the **Provider** list.
 
 5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
 
-6. Enter the **bot scopes** set for your application in _Slack_.
+6. Enter the **bot scopes** or **user scopes** set for your application in _Slack_.
 
    ![Ampersand Integration](/images/provider-guides/88f33d5-slack2.gif)
 

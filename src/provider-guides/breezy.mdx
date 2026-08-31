@@ -1,0 +1,143 @@
+---
+title: "Breezy"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Incremental read is supported for `positions` only. For all other objects, a full read will be done on each scheduled read.
+- [Write Actions](/write-actions) (create/update) for `positions` only.
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.breezy.hr`.
+- Subscribe Actions are not currently supported.
+
+### Supported objects
+
+export const rows = [
+  {
+    label: "categories", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-pipelines-1-1",
+  }, {
+    label: "companies", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/companies",
+  }, {
+    label: "departments", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-pipelines-1",
+  }, {
+    label: "pipelines", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-pipelines",
+  }, {
+    label: "positions", read: true, write: true, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-positions",
+  }, {
+    label: "questionnaires", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-questionnaires",
+  }, {
+    label: "templates", read: true, write: false, subscribe: false,
+    href: "https://developer.breezy.hr/reference/company-templates",
+  },
+]
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  return value;
+}
+
+<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table',
+  }}>
+    <thead style={{ display: 'table-header-group', width: '100%' }}>
+      <tr style={{ display: 'table-row', width: '100%' }}>
+        <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
+        <th style={{ width: '14%' }}>Read</th>
+        <th style={{ width: '14%' }}>Write</th>
+        <th style={{ width: '14%' }}>Subscribe</th>
+      </tr>
+    </thead>
+    <tbody style={{ display: 'table-row-group', width: '100%' }}>
+      {[...rows]
+        .sort((a, b) => a.label.localeCompare(b.label))
+        .map((row) => (
+          <tr key={row.label}>
+            <td style={{ textAlign: 'left' }}>
+              <a href={row.href}>{row.label}</a>
+            </td>
+            <td>{renderCellValue(row.read)}</td>
+            <td>{renderCellValue(row.write)}</td>
+            <td>{renderCellValue(row.subscribe)}</td>
+          </tr>
+        ))}
+    </tbody>
+  </table>
+</div>
+
+For objects and fields, you can also use Ampersand’s [Object Metadata APIs](/reference/objects-&-fields/get-object-metadata-via-connection) to inspect what’s available for a specific connection.
+
+### Notes and limitations
+
+- **Published vs draft positions**: Write **create** leaves new positions in **draft**. The `positions` Read object returns **published** job postings only. The connector does **not** auto-publish on create. When the customer is ready to go live, publish via [Proxy Actions](/proxy-actions): `PUT /v3/company/{company_id}/position/{position_id}/state` with `{"state":"published"}`. Until published, the job will not appear in Read webhooks. Publish is intentional — Breezy does not support unpublishing.
+- **Incremental read**: Incremental read is supported for `positions` only (filtered by `updated_date`). Scheduled reads emit only positions updated since the last sync. `companies`, `pipelines`, `categories`, `departments`, `questionnaires`, and `templates` are read in full on each scheduled read.
+- **Pipelines**: Breezy returns a map of pipeline id → pipeline object (e.g. `default`, `default_pool`).
+- **API key expiry**: Breezy access tokens from `/v3/signin` expire after approximately 30 days.
+
+### Example integration
+
+To define an integration for Breezy, use a manifest file (`amp.yaml`). For a complete example, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/breezy/amp.yaml).
+
+## Before you get started
+
+To connect _Breezy_ with _Ampersand_, you will need [a Breezy account](https://breezy.hr/).
+
+Once your account is created, you'll need to obtain an **API Key** — a Breezy access token used as the `Authorization` header on API requests.
+
+Your customers enter this when they install the integration via the InstallIntegration UI.
+
+### Create a Breezy account
+
+Here's how you can sign up for a Breezy account:
+
+- Sign up at [Breezy](https://breezy.hr/).
+
+### Obtain API credentials
+
+Follow the steps below to obtain your API key from Breezy:
+
+1. Call Breezy's [sign-in endpoint](https://developer.breezy.hr/reference/signin) with a user that has API access. See [Authorization](https://developer.breezy.hr/reference/authorization).
+
+   ```bash
+   curl -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"email":"user@example.com","password":"YOUR_PASSWORD"}' \
+     https://api.breezy.hr/v3/signin
+   ```
+
+   Use the `access_token` value from the response as the API key.
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+The API key is sent in the `Authorization` header with no prefix, per [Breezy’s documentation](https://developer.breezy.hr/reference/authorization).
+
+To start integrating with Breezy:
+- Create a manifest file; see [Example integration](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls. Ampersand will automatically attach the API key for the connected account.

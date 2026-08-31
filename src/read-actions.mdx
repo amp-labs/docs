@@ -241,6 +241,32 @@ There are 2 types of reads that can be triggered:
 
 ```
 
+## Install-time validation
+
+When a customer creates or updates an installation, Ampersand runs a **sample read** before saving the configuration: a one-record read against the provider for each scheduled read object. This surfaces configuration errors — such as [field-level visibility](/troubleshooting-guides/salesforce#resolve-a-field-level-visibility-issue) restrictions or misconfigured field names — up front, so your customer sees the problem while they're still in the install flow instead of discovering it later through a broken sync.
+
+Sampling is on by default. No configuration is required.
+
+**What gets sampled**
+
+- Only read objects that will run **on a schedule** (enabled, with a `schedule` defined). Write and subscribe objects are not sampled.
+- The sample reads the object's selected fields plus the source fields of any [field mappings](/object-and-field-mapping).
+- On **create**, every scheduled read object is sampled. On **update**, Ampersand re-samples only what could have changed: newly added objects, objects newly put on a schedule, objects whose field selection changed, or — when the connection is swapped — every scheduled read object.
+
+**What happens on failure**
+
+If a sample read fails with a bad-request error (for example, a field the connected user can't see, or a field name that doesn't exist), the create/update request is rejected with an HTTP `422` response containing the provider's error message, and the installation is **not saved**. 
+
+Only bad-request errors block the save. Transient problems — authentication, rate limiting, or provider `5xx` errors — are ignored so they don't stop a legitimate installation on a best-effort probe.
+
+<Note>
+When using the [`InstallIntegration` component](/embeddable-ui-components#install-integration), sampling runs automatically on `@amp-labs/react` **2.13.5 and later**. 
+</Note>
+
+**Disabling sampling**
+
+Sampling can be turned off per request by passing `?skipSampling=true` to the [create](/reference/installation/create-a-new-installation) or [update](/reference/installation/update-an-installation) installation endpoints. This is useful if you intentionally save configurations before the connected user has been granted the necessary field access. Note that skipping validation means misconfigurations won't surface until reads actually run.
+
 ## Full example
 
 ```yaml yaml

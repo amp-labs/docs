@@ -1,0 +1,270 @@
+---
+title: "Procore"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects listed below. For all other objects, a full read of the Procore instance will be done per scheduled read.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.procore.com`.
+
+### Notes
+- During installation, you must provide your Procore company ID. You can find your company ID in the Procore URL after login. For example, in `https://procore.com/4283186/company/home/thumbnail`, the company ID is `4283186`.
+- Use the Procore Sandbox connector when you want to test against `https://sandbox.procore.com`.
+
+### Supported objects
+
+The Procore connector supports reading from and writing to the following objects:
+
+#### Read objects
+
+- [action_plans/plan_types](https://developers.procore.com/reference/rest/v1/action-plans) (supports incremental read)
+- [action_plans/verification_methods](https://developers.procore.com/reference/rest/v1/action-plans) (supports incremental read)
+- [app_configurations](https://developers.procore.com/reference/rest/v1/app-configurations)
+- [bid_packages](https://developers.procore.com/reference/rest/v1/bid-packages)
+- [change_order/statuses](https://developers.procore.com/reference/rest/v1/change-order-statuses)
+- [change_order_change_reasons](https://developers.procore.com/reference/rest/v1/change-order-change-reasons)
+- [change_types](https://developers.procore.com/reference/rest/v1/change-types)
+- [checklist/alternative_response_sets](https://developers.procore.com/reference/rest/v1/checklists)
+- [checklist/item/response_sets](https://developers.procore.com/reference/rest/v1/checklists) (supports incremental read)
+- [checklist/list_templates](https://developers.procore.com/reference/rest/v1/checklists) (supports incremental read)
+- [checklist/responses](https://developers.procore.com/reference/rest/v1/checklists)
+- [company/projects](https://developers.procore.com/reference/rest/v1/projects) (supports incremental read)
+- [configurable_field_sets](https://developers.procore.com/reference/rest/v1/configurable-field-sets)
+- [contributing_behaviors](https://developers.procore.com/reference/rest/v1/incident-filter-options) (supports incremental read)
+- [contributing_conditions](https://developers.procore.com/reference/rest/v1/incident-filter-options) (supports incremental read)
+- [currency_configuration/exchange_rates](https://developers.procore.com/reference/rest/v1/currency-configuration)
+- [custom-fields](https://developers.procore.com/reference/rest/v1/configurable-field-sets)
+- [custom_field_definitions](https://developers.procore.com/reference/rest/project-fields?version=2.0#list-project-fields)
+- [custom_field_metadata](https://developers.procore.com/reference/rest/project-fields?version=2.0#list-project-fields)
+- [custom_fields_sections](https://developers.procore.com/reference/rest/v1/custom-fields-sections)
+- [departments](https://developers.procore.com/reference/rest/v1/departments)
+- [distribution_groups](https://developers.procore.com/reference/rest/v1/distribution-groups)
+- [equipment_register](https://developers.procore.com/reference/rest/v2/equipment-register)
+- [estimating/bid_board_projects](https://developers.procore.com/reference/rest/v2/estimating)
+- [estimating/catalogs](https://developers.procore.com/reference/rest/v2/estimating)
+- [form_templates](https://developers.procore.com/reference/rest/v1/form-templates) (supports incremental read)
+- [generic_tools](https://developers.procore.com/reference/rest/v1/correspondences?version=1.0#list-generic-tools)
+- [generic_tools/default_types](https://developers.procore.com/reference/rest/v1/correspondences?version=1.0#list-generic-tools)
+- [gps_positions](https://developers.procore.com/reference/rest/v1/locations) (supports incremental read)
+- [groups](https://developers.procore.com/reference/rest/v1/groups)
+- [hazards](https://developers.procore.com/reference/rest/v1/incident-filter-options) (supports incremental read)
+- [incidents/action_types](https://developers.procore.com/reference/rest/v1/incident-picker-options) (supports incremental read)
+- [incidents/affliction_types](https://developers.procore.com/reference/rest/v1/affliction-types) (supports incremental read)
+- [incidents/body_parts](https://developers.procore.com/reference/rest/v1/incident-picker-options)
+- [incidents/environmental_types](https://developers.procore.com/reference/rest/v1/incident-picker-options)
+- [incidents/harm_sources](https://developers.procore.com/reference/rest/v1/harm-sources) (supports incremental read)
+- [incidents/injury_filing_types](https://developers.procore.com/reference/rest/v1/incident-picker-options)
+- [incidents/severity_levels](https://developers.procore.com/reference/rest/v1/incident-picker-options)
+- [incidents/statuses](https://developers.procore.com/reference/rest/v1/incident-picker-options)
+- [incidents/work_activities](https://developers.procore.com/reference/rest/v1/work-activities) (supports incremental read)
+- [inspection_types](https://developers.procore.com/reference/rest/v1/inspection-types)
+- [insurances](https://developers.procore.com/reference/rest/v1/company-vendor-insurances)
+- [meeting_templates](https://developers.procore.com/reference/rest/v1/meeting-templates)
+- [notification-profiles](https://developers.procore.com/reference/rest/v1/notification-profiles)
+- [observation_types](https://developers.procore.com/reference/rest/v1/observations)
+- [offices](https://developers.procore.com/reference/rest/v1/company-offices)
+- [operations](https://developers.procore.com/reference/rest/v2/operations)
+- [people](https://developers.procore.com/reference/rest/v1/project-users)
+- [people/inactive](https://developers.procore.com/reference/rest/v1/project-users)
+- [pdf_template_configs](https://developers.procore.com/reference/rest/v1/pdf-template-configs)
+- [payments/beneficiaries](https://developers.procore.com/reference/rest/v1/payments)
+- [payments/early_pay_programs](https://developers.procore.com/reference/rest/v1/early-pay-programs)
+- [payments/projects](https://developers.procore.com/reference/rest/v1/payments)
+- [permission_templates](https://developers.procore.com/reference/rest/v1/permission-templates)
+- [project_bid_types](https://developers.procore.com/reference/rest/v1/project-bid-types)
+- [project_owner_types](https://developers.procore.com/reference/rest/v1/project-owner-types)
+- [project_regions](https://developers.procore.com/reference/rest/v1/project-regions)
+- [project_stages](https://developers.procore.com/reference/rest/v1/project-stages)
+- [project_templates](https://developers.procore.com/reference/rest/v1/project-templates)
+- [project_types](https://developers.procore.com/reference/rest/v1/project-types)
+- [projects](https://developers.procore.com/reference/rest/v1/projects) (supports incremental read)
+- [programs](https://developers.procore.com/reference/rest/v1/programs)
+- [recycle_bin/action_plans/plan_template_item_assignees](https://developers.procore.com/reference/rest/v1/action-plans) (supports incremental read)
+- [recycle_bin/action_plans/plan_template_items](https://developers.procore.com/reference/rest/v1/action-plans) (supports incremental read)
+- [recycle_bin/action_plans/plan_template_references](https://developers.procore.com/reference/rest/v1/action-plans) (supports incremental read)
+- [recycle_bin/action_plans/plan_template_sections](https://developers.procore.com/reference/rest/v1/action-plans) (supports incremental read)
+- [recycle_bin/action_plans/plan_template_test_record_requests](https://developers.procore.com/reference/rest/v1/action-plans) (supports incremental read)
+- [recycle_bin/action_plans/plan_templates](https://developers.procore.com/reference/rest/v1/action-plans) (supports incremental read)
+- [recycle_bin/checklist/list_templates](https://developers.procore.com/reference/rest/v1/checklists)
+- [roles](https://developers.procore.com/reference/rest/v2/roles)
+- [schedule/resources](https://developers.procore.com/reference/rest/v1/schedule/resources)
+- [settings/permissions](https://developers.procore.com/reference/rest/v1/configurable-field-sets)
+- [submittal_statuses](https://developers.procore.com/reference/rest/v1/submittal-statuses)
+- [submittal_types](https://developers.procore.com/reference/rest/v1/submittal-types)
+- [tags](https://developers.procore.com/reference/rest/v1/tags)
+- [tax_codes](https://developers.procore.com/reference/rest/v1/tax-codes)
+- [tax_types](https://developers.procore.com/reference/rest/v1/tax-types)
+- [timecard_time_types](https://developers.procore.com/reference/rest/v1/timecard-time-types)
+- [timesheets/filters/crews](https://developers.procore.com/reference/rest/v1/timesheets)
+- [trades](https://developers.procore.com/reference/rest/v1/trades) (supports incremental read)
+- [uom_categories](https://developers.procore.com/reference/rest/v1/uom-categories)
+- [uoms](https://developers.procore.com/reference/rest/v1/uoms)
+- [users](https://developers.procore.com/reference/rest/v1/company-users) (supports incremental read)
+- [users/inactive](https://developers.procore.com/reference/rest/v1/company-users)
+- [vendors](https://developers.procore.com/reference/rest/v1/company-vendors) (supports incremental read)
+- [vendors/inactive](https://developers.procore.com/reference/rest/v1/company-vendors)
+- [webhooks/hooks](https://developers.procore.com/documentation/webhooks)
+- [work_classifications](https://developers.procore.com/reference/rest/v1/work-classifications)
+- [workflow_instances](https://developers.procore.com/reference/rest/v1/workflow-instances?version=1.0)
+- [workflows/bulk_replace_requests](https://developers.procore.com/reference/rest/v2/workflows)
+- [workflows/tools](https://developers.procore.com/reference/rest/v1/correspondences?version=1.0#list-generic-tools)
+
+#### Write objects
+
+- [action_plans/plan_types](https://developers.procore.com/reference/rest/v1/action-plans)
+- [action_plans/verification_methods](https://developers.procore.com/reference/rest/v1/action-plans)
+- [app_configurations](https://developers.procore.com/reference/rest/v1/app-configurations)
+- [bim_levels](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_levels/batch](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_mint_tokens](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_model_revision_plans](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_model_revision_plans/batch](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_model_revision_viewpoints/batch](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_model_revisions](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_models](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_plans](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_plans/batch](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_view_folders](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_viewpoints](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [bim_viewpoints/batch](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [budget_view_snapshots](https://developers.procore.com/reference/rest/v1/budget-views?version=1.0)
+- [change_order_change_reasons](https://developers.procore.com/reference/rest/v1/change-order-change-reasons)
+- [checklist/item/response_sets](https://developers.procore.com/reference/rest/v1/checklists)
+- [checklist/list_templates](https://developers.procore.com/reference/rest/v1/checklists)
+- [checklist/responses](https://developers.procore.com/reference/rest/v1/checklists)
+- [company/projects](https://developers.procore.com/reference/rest/v1/projects)
+- [configurable_field_sets](https://developers.procore.com/reference/rest/v1/configurable-field-sets)
+- [contributing_behaviors](https://developers.procore.com/reference/rest/v1/incident-filter-options)
+- [contributing_conditions](https://developers.procore.com/reference/rest/v1/incident-filter-options)
+- [contexts](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [contexts/get_or_create](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [coordination_issues](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [coordination_issues/bulk_delete](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [currency_configuration](https://developers.procore.com/reference/rest/v1/currency-configuration)
+- [currency_configuration/exchange_rates](https://developers.procore.com/reference/rest/v1/currency-configuration)
+- [custom-fields](https://developers.procore.com/reference/rest/v1/configurable-field-sets)
+- [custom_field_metadata](https://developers.procore.com/reference/rest/project-fields?version=2.0#list-project-fields)
+- [custom_fields_sections](https://developers.procore.com/reference/rest/v1/custom-fields-sections)
+- [departments](https://developers.procore.com/reference/rest/v1/departments)
+- [equipment_register](https://developers.procore.com/reference/rest/v2/equipment-register)
+- [equipment_register/associate](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [equipment_register_categories](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [equipment_register_makes](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [equipment_register_models](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [equipment_register/statuses](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [equipment_register_types](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [estimating/catalogs](https://developers.procore.com/reference/rest/v2/estimating)
+- [files](https://developers.procore.com/reference/rest/v1/project-folders-and-files)
+- [form_templates](https://developers.procore.com/reference/rest/v1/form-templates)
+- [generic_tools](https://developers.procore.com/reference/rest/v1/correspondences?version=1.0#list-generic-tools)
+- [gps_positions](https://developers.procore.com/reference/rest/v1/locations)
+- [groups](https://developers.procore.com/reference/rest/v1/groups)
+- [hazards](https://developers.procore.com/reference/rest/v1/incident-filter-options)
+- [incidents/action_types](https://developers.procore.com/reference/rest/v1/incident-picker-options)
+- [incidents/affliction_types](https://developers.procore.com/reference/rest/v1/affliction-types)
+- [incidents/harm_sources](https://developers.procore.com/reference/rest/v1/harm-sources)
+- [incidents/work_activities](https://developers.procore.com/reference/rest/v1/work-activities)
+- [inspection_types](https://developers.procore.com/reference/rest/v1/inspection-types)
+- [installation_requests](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [insurances](https://developers.procore.com/reference/rest/v1/company-vendor-insurances)
+- [job-titles](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [meeting_categories](https://developers.procore.com/reference/rest/v1/meeting-categories)
+- [nested_bim_view_folders](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [nested_bim_view_folders/batch](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [observations/items](https://developers.procore.com/reference/rest/v1/observations)
+- [offices](https://developers.procore.com/reference/rest/v1/company-offices)
+- [people](https://developers.procore.com/reference/rest/v1/project-users)
+- [pdf_template_configs](https://developers.procore.com/reference/rest/v1/pdf-template-configs)
+- [permission_templates](https://developers.procore.com/reference/rest/v1/permission-templates)
+- [payments/early_pay_programs](https://developers.procore.com/reference/rest/v1/early-pay-programs)
+- [programs](https://developers.procore.com/reference/rest/v1/programs)
+- [project_bid_types](https://developers.procore.com/reference/rest/v1/project-bid-types)
+- [project_owner_types](https://developers.procore.com/reference/rest/v1/project-owner-types)
+- [project_regions](https://developers.procore.com/reference/rest/v1/project-regions)
+- [project_stages](https://developers.procore.com/reference/rest/v1/project-stages)
+- [project_types](https://developers.procore.com/reference/rest/v1/project-types)
+- [projects](https://developers.procore.com/reference/rest/v1/projects) 
+- [punch_item_types](https://developers.procore.com/reference/rest/v1/punch-item-types)
+- [punch_items](https://developers.procore.com/reference/rest/v1/punch-items)
+- [recycle_bin/action_plans/plan_template_item_assignees](https://developers.procore.com/reference/rest/v1/action-plans)
+- [recycle_bin/action_plans/plan_template_items](https://developers.procore.com/reference/rest/v1/action-plans)
+- [recycle_bin/action_plans/plan_template_references](https://developers.procore.com/reference/rest/v1/action-plans)
+- [recycle_bin/action_plans/plan_template_sections](https://developers.procore.com/reference/rest/v1/action-plans)
+- [recycle_bin/action_plans/plan_template_test_record_requests](https://developers.procore.com/reference/rest/v1/action-plans)
+- [recycle_bin/action_plans/plan_templates](https://developers.procore.com/reference/rest/v1/action-plans)
+- [recycle_bin/action_plans/plan_template_references/bulk_create](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [rounding_configuration](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [roles](https://developers.procore.com/reference/rest/v2/roles)
+- [support_pins](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [tags](https://developers.procore.com/reference/rest/v1/tags)
+- [tax_codes](https://developers.procore.com/reference/rest/v1/tax-codes)
+- [tax_types](https://developers.procore.com/reference/rest/v1/tax-types)
+- [timecard_entries](https://developers.procore.com/reference/rest/v1/timecard-entries)
+- [timesheets/timesheet_to_budget_configuration](https://developers.procore.com/reference/rest/docs/rest-api-overview)
+- [trades](https://developers.procore.com/reference/rest/v1/trades)
+- [uoms](https://developers.procore.com/reference/rest/v1/uoms)
+- [uploads](https://developers.procore.com/reference/rest/document-uploads?version=2.0)
+- [users](https://developers.procore.com/reference/rest/v1/company-users)
+- [vendors](https://developers.procore.com/reference/rest/v1/company-vendors)
+- [webhooks/hooks](https://developers.procore.com/documentation/webhooks)
+- [work_classifications](https://developers.procore.com/reference/rest/v1/work-classifications)
+- [workflows/bulk_replace_requests](https://developers.procore.com/reference/rest/v2/workflows)
+
+
+### Example integration
+
+For an example manifest file of a Procore integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/procore/amp.yaml).
+
+## Before you get started
+
+To integrate Procore with Ampersand, you will need a [Procore developer account](https://developers.procore.com/).
+
+Once your account is created, you'll need to create an app in Procore, configure the Ampersand redirect URI within the app, and obtain the following credentials from your app:
+- Client ID
+- Client Secret
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Creating a Procore app
+
+Here's how you can sign up for a Procore account:
+
+1. Sign in to the [Procore developer portal](https://developers.procore.com/).
+2. Create a new OAuth 2.0 application.
+3. Add the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
+4. Save the app and copy the Client ID and Client Secret.
+
+### Add your Procore app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Choose the project where you want to integrate Procore.
+
+   ![Ampersand Project](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Navigate to the **Provider Apps** section.
+
+4. Select _Procore_ from the **Provider** list.
+
+5. Enter the **Client ID** and **Client Secret** obtained from Procore into the respective fields in Ampersand.
+
+   ![Dashboard](/images/provider-guides/procore-amp.gif)
+
+6. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Procore:
+
+- Create a manifest file using the [example](https://github.com/amp-labs/samples/blob/main/procore/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using [Read Actions](/read-actions) or [Write Actions](/write-actions), create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component prompts the customer for their Procore authorization and company ID (the numeric segment in their Procore URL, for example `4283186` in `https://procore.com/4283186/company/home/thumbnail`).
+- Start using the connector.
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.

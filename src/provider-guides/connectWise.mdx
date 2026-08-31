@@ -7,81 +7,377 @@ title: ConnectWise
 
 This connector supports:
 - [Read Actions](/read-actions), including full historic backfill and incremental read. Please note that incremental read is unreliable due to ConnectWise API limitations. You may get more data than what is within the time range.
+- [Subscribe Actions](/subscribe-actions).
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://{{.region}}.myconnectwise.net`.
 
-The ConnectWise connector supports reading from all standard objects, including the following objects:
-- activities
-- agreements
-- attachments
-- companies
-- configurations
-- contacts
-- countries
-- currencies
-- customFieldInfos
-- customReports
-- emailTemplates
-- entityTypes
-- expense/entries
-- finance/agreements/types
-- finance/billingCycles/info
-- finance/billingTerms/info
-- glAccounts
-- groups
-- invoices
-- knowledgeBaseArticles
-- knowledgeBaseCategories
-- kpis
-- management
-- noteTypes
-- sales/opportunities
-- orders
-- priorities
-- products
-- project/projectTemplates
+The ConnectWise connector supports reading from all standard objects and writing to most standard objects, including the following:
 
-- projects
-- purchaseorders
-- quotas
-- ratings
-- reports
-- rmaActions
-- rmaStatuses
-- schedule/entries
-- securityRoles
-- service/boards
-- service/slas/info
-- service/tickets
-- sources
-- states
-- system/departments
-- system/documents
-- system/locations
-- system/members
-- system/securityroles/info
-- system/workflows/events/actions
-- ticketLinks
-- time/entries
-- warehouses
-- workflows
+export const rows = [
+  {
+    label: "activities", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Activities"
+  }, {
+    label: "agreements", read: true, write: false, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Agreements",
+  }, {
+    label: "attachments", read: true, write: false, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/WorkflowAttachments",
+  }, {
+    label: "companies", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Companies",
+  }, {
+    label: "catalog", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/CatalogsItem",
+  }, {
+    label: "configurations", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Configurations",
+  }, {
+    label: "contacts", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Contacts",
+  }, {
+    label: "countries", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Countries",
+  }, {
+    label: "currencies", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Currencies",
+  }, {
+    label: "customFieldInfos", read: true, write: false, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/CustomFieldInfos",
+  }, {
+    label: "customReports", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/CustomReports",
+  }, {
+    label: "emailTemplates", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ServiceEmailTemplates",
+  }, {
+    label: "entityTypes", read: true, write: false, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/EntityTypes",
+  }, {
+    label: "expense/entries", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ExpenseEntries",
+  }, {
+    label: "finance/agreements/types", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/AgreementTypes",
+  }, {
+    label: "finance/billingCycles/info", read: true, write: false, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/BillingCycleInfos",
+  }, {
+    label: "finance/billingTerms/info", read: true, write: false, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/BillingTermInfos",
+  }, {
+    label: "glAccounts", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/GLAccounts",
+  }, {
+    label: "groups", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Groups",
+  }, {
+    label: "invoices", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Invoices",
+  }, {
+    label: "knowledgeBaseArticles", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/KnowledgeBaseArticles",
+  }, {
+    label: "knowledgeBaseCategories", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/KnowledgeBaseCategories",
+  }, {
+    label: "kpis", read: true, write: false, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/KPIs",
+  }, {
+    label: "management", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Managements",
+  }, {
+    label: "noteTypes", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/CompanyNoteTypes",
+  }, {
+    label: "sales/opportunities", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Opportunities",
+  }, {
+    label: "orders", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Orders",
+  }, {
+    label: "priorities", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Priorities",
+  }, {
+    label: "products", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ProductsItem",
+  }, {
+    label: "project/projectTemplates", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ProjectTemplates",
+  }, {
+    label: "project/tickets", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ProjectTickets",
+  }, {
+    label: "projects", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Projects",
+  }, {
+    label: "purchaseorders", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/PurchaseOrders",
+  }, {
+    label: "quotas", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/SalesQuotas",
+  }, {
+    label: "ratings", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/OpportunityRatings",
+  }, {
+    label: "reports", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ExpenseReports",
+  }, {
+    label: "rmaActions", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/RMAActions",
+  }, {
+    label: "rmaStatuses", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/RmaStatuses",
+  }, {
+    label: "schedule/entries", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ScheduleEntries",
+  }, {
+    label: "securityRoles", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ProjectSecurityRoles",
+  }, {
+    label: "service/boards", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Boards",
+  }, {
+    label: "service/slas/info", read: true, write: false, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/SLAInfos",
+  }, {
+    label: "service/tickets", read: true, write: true,
+    subscribe: <a href={"#row/project/tickets"}>Use project/tickets</a>,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Tickets",
+  }, {
+    label: "sources", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Sources",
+  }, {
+    label: "states", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/States",
+  }, {
+    label: "system/departments", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Departments",
+  }, {
+    label: "system/documents", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Documents",
+  }, {
+    label: "system/locations", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Locations",
+  }, {
+    label: "system/members", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Members",
+  }, {
+    label: "system/securityroles/info", read: true, write: false, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/SecurityRoleInfos",
+  }, {
+    label: "system/workflows/events/actions", read: true, write: false, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/WorkflowActions",
+  }, {
+    label: "ticketLinks", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/ServiceTicketLinks",
+  }, {
+    label: "time/entries", read: true, write: true, subscribe: true,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/TimeEntries",
+  }, {
+    label: "warehouses", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Warehouses",
+  }, {
+    label: "workflows", read: true, write: true, subscribe: false,
+    href: "https://developer.connectwise.com/Products/ConnectWise_PSA/REST#/Workflows",
+  },
+]
 
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  if (typeof value === "string" && value.startsWith("<")) {
+    return <span dangerouslySetInnerHTML={{__html: value}}/>;
+  }
+
+  return value;
+}
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+      <th style={{width: '20%'}}>Read</th>
+      <th style={{width: '20%'}}>Write</th>
+      <th style={{width: '20%'}}>Subscribe</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td style={{textAlign: "left"}}>
+            <a href={row.href}>{row.label}</a>
+          </td>
+          <td>{renderCellValue(row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+          <td>{renderCellValue(row.subscribe)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
 
 See the official [OpenAPI](https://developer.connectwise.com/Products/ConnectWise_PSA/REST) file for the complete list. (Requires ConnectWise Developer Network account)
 
+Connector supports write operations using a [JSON Patch document](https://datatracker.ietf.org/doc/html/rfc6902#section-3) passed in `record.patch`.
+When performing an update, `record.id` must also be provided so the connector can resolve which record to patch.
+
+Write payload example for the `contacts` object:
+```json
+{
+  "groupRef": "{{connectWiseGroupID}}",
+  "type": "update",
+  "record": {
+    "id": "58016",
+    "patch": [
+      {"op": "replace", "path": "/firstName", "value": "John"}
+    ]
+  }
+}
+```
+
+### Custom Fields
+
+The connector supports reading and writing custom fields on supported objects, and they behave like native fields.
+For reads, they're available through scheduled reads, historical backfills, and subscriptions.
+
+Each custom field is exposed as `customField<ID>`. Map it to a more readable name in your configuration with `mapToName`.
+
+> Example: a field with ID `59` representing a marketing preference is selected as `customField59` and can be mapped to `marketingEmailOn`.
+
+```yaml
+read:
+  objects:
+    - objectName: contacts
+      requiredFields:
+        - fieldName: customField59
+          mapToName: marketingEmailOn
+        - fieldName: customField83
+          mapToName: hobby
+```
+
+For writes, provide custom fields as if they were native fields; the connector converts them to the ConnectWise format automatically:
+
+```json
+{
+  "firstName": "Estella",
+  "customField59": true,
+  "customField83": "Traveling"
+}
+```
+
+You only need to include the custom fields you want to set or change. To clear a field, set its value to `null`.
+
+To find a custom field's ID, check a read response, custom fields are returned with their IDs in the `customFields` array.
+
+
 ### Example integration
 
-To define an integration for ConnectWise, create a manifest file that looks like this:
+For an example manifest file of a ConnectWise integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/connectwise/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: connectWise-integration
-    displayName: My ConnectWise Integration
-    provider: connectWise
-    proxy:
-      enabled: true
+### Contact Communication Items
+
+ConnectWise stores a contact's email, phone, and fax numbers inside a nested `communicationItems` array, which isn't directly mappable.
+To make these easy to read and write, the connector exposes the **default** email, phone, and fax of a contact
+as flat fields, which you can map like any other contact field.
+
+| Field                      | Description                              |
+|----------------------------|------------------------------------------|
+| `AMPERSAND-defaultEmail`   | The contact's default email address      |
+| `AMPERSAND-defaultEmailId` | The communication type of that email     |
+| `AMPERSAND-defaultPhone`   | The contact's default phone number       |
+| `AMPERSAND-defaultPhoneId` | The communication type of that phone     |
+| `AMPERSAND-defaultFax`     | The contact's default fax number         |
+| `AMPERSAND-defaultFaxId`   | The communication type of that fax       |
+
+Only the **default** item of each category is exposed. If a contact has several emails, only the one marked as default appears in `AMPERSAND-defaultEmail`.
+
+#### Reading
+
+Map these fields in a read action just like standard contact fields:
+
+```yaml
+read:
+  objects:
+    - objectName: contacts
+      requiredFields:
+        - fieldName: AMPERSAND-defaultEmail
 ```
+
+A contact whose default email is `john@example.com` reads back as:
+
+```json
+{
+  "AMPERSAND-defaultEmail": "john@example.com",
+  "AMPERSAND-defaultEmailId": "15"
+}
+```
+
+The `...Id` field identifies which communication type the default value belongs to. This matters when a contact has more than one item in the same category.
+
+#### Writing
+
+Map a value to `AMPERSAND-defaultEmail` (or phone/fax) to set it when creating or updating a contact:
+
+- Set just the value, and the connector uses the customer's default type for that category.
+- Set the matching `...Id` field too if you want to target a specific type (for example, a Work email vs a Home email).
+The value is applied to that type and marked as the default.
+
+Updates replace the fields you send. Any fields you omit will be cleared.
+For partial updates, see the [JSON Patch section below](#advanced-partial-updates-with-json-patch).
+
+Example -- replace a contact:
+
+```json
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "AMPERSAND-defaultEmail": "john@example.com"
+}
+```
+
+<Note>
+The `...Id` fields refer to ConnectWise "communication types" configured in the customer's ConnectWise account.
+  You only need them when a contact has more than one email, phone, or fax and you want to target a specific one.
+</Note>
+
+#### Advanced: partial updates with JSON Patch
+
+If you call the write API directly, you can send a JSON Patch to change a single field, including these virtual fields:
+
+```json
+{
+  "type": "update",
+  "record": {
+    "id": "58117",
+    "patch": [
+      { "op": "replace", "path": "/AMPERSAND-defaultEmail", "value": "john@example.com" }
+    ]
+  }
+}
+```
+
+- `replace` on a value updates the current default item.
+- `replace` on an `...Id` field switches which communication type is the default,
+(used together with `AMPERSAND-defaultEmail`, etc.)
+- `remove` deletes the current default item for that category.
+
+The connector translates these into the correct changes on the underlying `communicationItems` array.
 
 ## Using the connector
 

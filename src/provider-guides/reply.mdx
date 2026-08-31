@@ -1,0 +1,54 @@
+---
+title: "Reply"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.reply.io`.
+
+### Example integration
+
+To define an integration for Reply, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: replyIntegration
+    displayName: My Reply Integration
+    provider: reply
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To connect Reply with Ampersand, you will need a [Reply account](https://reply.io/). Reply offers a free trial that includes API access.
+
+### Creating an API key for Reply
+
+1. Sign in to your [Reply account](https://run.reply.io).
+2. Go to **Settings**, then select **API keys**.
+3. Click **Create My API key** and enter a descriptive name for the key.
+4. Leave the expiration date empty for a key that never expires, or set a date to make the key expire.
+5. Set the permission sliders to cover the scopes that your integration needs. The sliders default to **None**, and a key created without permissions returns `401 Unauthorized` on every request.
+6. Click **Create key**, then copy the key.
+
+![Creating a Reply API key](/images/provider-guides/reply-api-key.gif)
+
+[Click here](https://docs.reply.io/api-reference/authentication) for more information about generating an API key for Reply. The UI components will display this link, so that your users can successfully create API keys.
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Reply:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by API Key auth. Please note that this connector's base URL is `https://api.reply.io`.

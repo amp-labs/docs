@@ -379,6 +379,12 @@ import './App.css'; // Optional: your own CSS override
 
 ## Troubleshooting 
 
+### Why did installing or updating fail with a field error?
+
+When a customer creates or updates an installation, Ampersand runs a [sample read](/read-actions#install-time-validation) against the provider before saving. If a selected field isn't visible to the connected user, or a field name doesn't exist on the object, the install is rejected and the component shows the provider's error message. Your customer can fix it in the flow — for example, by granting field access — instead of hitting a broken sync later.
+
+This runs automatically on `@amp-labs/react` **2.13.5 and later**. Older versions show only a generic error, so upgrade for the detailed messages. See [Install-time validation](/read-actions#install-time-validation) for the full behavior.
+
 ### Why does styling look so bare?
 
 You likely forgot to import the stylesheet, please add this line once in your application.

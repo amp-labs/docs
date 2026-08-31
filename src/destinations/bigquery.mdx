@@ -1,0 +1,61 @@
+---
+title: BigQuery destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand inserts the payload as rows into your Google BigQuery table.
+
+## Prerequisites
+
+Before setting up a BigQuery destination, ensure that you have:
+- A Google Cloud project with BigQuery enabled
+- A dataset and table to insert into (see [Data format and table setup](#data-format-and-table-setup))
+- A service account with the `BigQuery Data Editor` role (or `bigquery.tables.updateData` permission) on that dataset, and a JSON key for it
+
+## Data format and table setup
+
+Ampersand delivers each read or subscribe message as a JSON object. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
+The BigQuery destination writes each message into two columns: `id` (a generated identifier) and `payload` (the full message JSON, written as a string). Create the table with exactly these columns:
+
+```sql
+CREATE TABLE `my-project.my_dataset.my_table` (
+  id STRING,
+  payload STRING
+);
+```
+
+## Create a BigQuery destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new BigQuery destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandBigQuery` | Alias to reference in your `amp.yaml` file |
+| **Project ID** | string | Yes | `my-gcp-project` | Google Cloud project ID |
+| **Dataset ID** | string | Yes | `analytics` | BigQuery dataset ID |
+| **Table ID** | string | Yes | `ampersand_events` | BigQuery table ID |
+| **Service account credentials** | string | Yes | | Service account key JSON with write access to the table |
+| **Batch size** | integer | No | `1000` | Rows to buffer before flushing a batch (defaults to 1000) |
+| **Max wait (seconds)** | integer | No | `30` | Max seconds to wait before flushing a batch (defaults to 30) |
+
+## Refer to the destination in your integration
+
+After creating your BigQuery destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToBigQuery
+    displayName: Salesforce to BigQuery
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandBigQuery
+        - objectName: contact
+          destination: ampersandBigQuery
+```
