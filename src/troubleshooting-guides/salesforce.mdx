@@ -1,6 +1,6 @@
 ---
 title: "Salesforce"
-description: "Diagnose and resolve common errors when running Salesforce integrations."
+description: "Diagnose and resolve common Salesforce integration errors, including No such column read and write failures and namespace linking OAuth errors."
 ---
 
 ## Read Action: `No such column` error
@@ -64,3 +64,19 @@ Remove the field from your write payload for this customer — for example, by c
 ### Connected user lacks field-level visibility
 
 If the field exists in the org but isn't visible to the connected user's profile, Salesforce returns the same `No such column` error. Follow the steps in [Resolve a field-level visibility issue](#resolve-a-field-level-visibility-issue).
+
+## Namespace linking: `missing required code challenge` error
+
+While [linking your namespace to the Dev Hub Org](/provider-guides/salesforce#3-link-namespace-to-dev-hub-org), Salesforce redirects with an error similar to:
+
+```text
+error=invalid_request&error_description=missing%20required%20code%20challenge
+```
+
+This error comes from Salesforce's login flow, not from Ampersand. It typically happens when your browser reuses an existing Salesforce session during the **Link Namespace** authentication step.
+
+To resolve it:
+
+1. Open an incognito or private browsing window.
+2. Log in to the Dev Hub Org and retry the **Link Namespace** flow, logging into the Namespace Org when prompted.
+3. If the error persists, log out of all Salesforce orgs, clear cookies for `salesforce.com` and `force.com`, and try again.
