@@ -78,7 +78,7 @@
     },
   ];
 
-  // Delegated: docs is a SPA and the navbar is re-rendered on navigation.
+  // Delegated: the navbar re-renders on client-side navigation.
   document.addEventListener(
     "click",
     function (event) {
