@@ -33,8 +33,14 @@
   var isLocal =
     location.hostname === "localhost" || location.hostname === "127.0.0.1";
 
+  // `array.js`, not `array.full.js`: 88KB over the wire instead of 185KB. The full
+  // bundle inlines session replay, surveys and the other extensions; this one
+  // fetches them on demand, and with every feature below turned off it never does.
+  // Same library, same API, same cookie — `posthog-js-lite` is not an option here,
+  // it persists to localStorage (origin-scoped) and writes a host-only cookie, so
+  // the cross-subdomain identity join with the site and the dashboard would break.
   var script = document.createElement("script");
-  script.src = "https://us-assets.i.posthog.com/static/array.full.js";
+  script.src = "https://us-assets.i.posthog.com/static/array.js";
   script.async = true;
 
   script.onload = function () {
