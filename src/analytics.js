@@ -22,6 +22,9 @@
 // the global leaves them no-oping in silence, which is the failure the dashboard
 // already hit.
 (function () {
+  // The only two events docs is allowed to send. Enforced by `before_send` below.
+  var ALLOWED_EVENTS = ["CTA Clicked", "Login Button Clicked"];
+
   // The same container also runs on the marketing site, which loads its own
   // instance. Two posthog-js on one page fight over the cookie and double-count.
   if (window.posthog) return;
@@ -59,8 +62,28 @@
       disable_session_recording: true,
       rageclick: false,
 
+      // These four are NOT off by default and were missed the first time round:
+      // surveys and feature flags ship enabled, and `capture_performance` has no
+      // local default at all — it is resolved by the /decide response, so web
+      // vitals can be switched on from the project settings without this file
+      // changing. Disabling /decide also stops the `$feature_flag_called` events
+      // and the request itself.
+      disable_surveys: true,
+      capture_exceptions: false,
+      capture_performance: false,
+      advanced_disable_decide: true,
+
       opt_out_capturing_by_default: isLocal,
       debug: isLocal,
+
+      // The lock. Every flag above is a request; this is a guarantee. Anything
+      // that is not one of the two docs events is dropped before it is sent —
+      // a new posthog-js version that adds another automatic event, or a remote
+      // setting flipped in the project, cannot get past it. Returning a falsy
+      // value aborts the capture outright.
+      before_send: function (event) {
+        return event && ALLOWED_EVENTS.indexOf(event.event) !== -1 ? event : null;
+      },
     });
   };
 
