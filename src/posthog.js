@@ -17,6 +17,13 @@
   // instance. Two posthog-js on one page fight over the cookie and double-count.
   if (window.posthog) return;
 
+  // The GTM container is injected in local preview too, so its tags fire there.
+  // On localhost posthog still loads and the tags still run — so the wiring is
+  // testable — but capturing starts opted out, and nothing leaves the browser.
+  // QA clicks must not land in the baseline or burn ingestion quota.
+  var isLocal =
+    location.hostname === "localhost" || location.hostname === "127.0.0.1";
+
   var script = document.createElement("script");
   script.src = "https://us-assets.i.posthog.com/static/array.full.js";
   script.async = true;
@@ -39,6 +46,9 @@
       capture_dead_clicks: false,
       disable_session_recording: true,
       rageclick: false,
+
+      opt_out_capturing_by_default: isLocal,
+      debug: isLocal,
     });
   };
 
