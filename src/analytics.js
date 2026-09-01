@@ -23,6 +23,14 @@
 // already hit.
 (function () {
   // The only two events docs is allowed to send. Enforced by `before_send` below.
+  //
+  // These are PostHog event names, NOT the dataLayer ones. Two namespaces:
+  //   dataLayer / GTM trigger : cta_clicked        (pushed in part 2, dies in GTM)
+  //   PostHog / capture()     : "CTA Clicked"      (what before_send sees)
+  //
+  // GTM translates between them. Putting the snake_case names here matches nothing,
+  // so before_send returns null for every event and docs sends absolutely nothing —
+  // with no error, just a debug log.
   var ALLOWED_EVENTS = ["CTA Clicked", "Login Button Clicked"];
 
   // The same container also runs on the marketing site, which loads its own
