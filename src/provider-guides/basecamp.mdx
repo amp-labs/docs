@@ -1,0 +1,80 @@
+---
+title: "Basecamp"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://3.basecampapi.com/{{.workspace}}`.
+
+### Supported objects
+
+Basecamp is supported through Proxy Actions only. Use the proxy to call any [Basecamp API](https://github.com/basecamp/bc3-api) endpoint, for example `GET /projects.json`.
+
+### Example integration
+
+To define an integration for Basecamp, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: basecampIntegration
+    displayName: My Basecamp Integration
+    provider: basecamp
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To integrate Basecamp with Ampersand, you will need a [Basecamp account](https://basecamp.com/).
+
+Once your account is created, you'll need to create a Basecamp app and obtain the following credentials from it:
+
+- Client ID
+- Client Secret
+
+You will then use these credentials to connect your application to Ampersand.
+
+Every Basecamp API endpoint is prefixed with an account ID, which is the `{{.workspace}}` token in the base URL. Your customers find their account ID in their Basecamp URL: for example, if the URL is `https://app.basecamp.com/6258233/projects`, the account ID is `6258233`. Ampersand prompts your customers for this value when they install the integration.
+
+### Creating a Basecamp app
+
+1. Log in to the [37signals Launchpad integrations page](https://launchpad.37signals.com/integrations).
+2. Click **Register another application**.
+3. Enter a **Name**, **Company**, and **Website URL** for your app.
+4. Set the **Redirect URI** to: `https://api.withampersand.com/callbacks/v1/oauth`
+5. Under **Products**, select **Basecamp** (the current version, not Basecamp 2 or Basecamp Classic).
+6. Click **Register this app**.
+7. Open the app you registered and copy the **Client ID** and **Client Secret**.
+
+Learn more about Basecamp OAuth apps in the [Basecamp API authentication guide](https://github.com/basecamp/api/blob/master/sections/authentication.md).
+
+### Add your Basecamp app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Basecamp integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/dd47b7a-Ampersand.png)
+
+3. Select **Provider Apps**.
+
+4. Select **Basecamp** from the **Provider** list.
+
+5. Enter the **Client ID** and **Client Secret** obtained from your Basecamp app.
+
+6. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Basecamp:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization and their Basecamp account ID.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically handle the authentication with Basecamp.
