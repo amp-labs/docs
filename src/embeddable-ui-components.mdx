@@ -1,5 +1,6 @@
 ---
 title: "Prebuilt UI components"
+description: "Embed Ampersand's React components for installing and managing integrations, and choose between API key or JWT authentication for the frontend."
 ---
 
 ## Project setup
@@ -64,6 +65,12 @@ The `AmpersandProvider` supports two authentication methods through the `options
 When you are first developing integrations with Ampersand, API keys are a quick way to get started.
 
 You can create an API key on the [API keys page](https://dashboard.withampersand.com/projects/_/api-keys) of your Ampersand Dashboard. Select "UI Library" for "Where will you use the API key?"
+
+<Warning>
+API keys passed to `AmpersandProvider` are bundled into your frontend and visible to anyone who inspects the browser's network requests or JavaScript. They are not time-bound and are not scoped to a specific end user, so a leaked key stays valid until you revoke it and can be used to access any customer's integration data.
+
+Use API key authentication only for local development or internal prototypes. For production, switch to [JWT authentication](#jwt-authentication) so signing stays on your backend and each token is short-lived and scoped to one `consumerRef` / `groupRef`.
+</Warning>
 
 #### JWT authentication
 
