@@ -1,5 +1,6 @@
 ---
 title: "Salesforce"
+description: "Connect Salesforce with Ampersand: enable Dev Hub, register and link a namespace, create an External Client App, and troubleshoot common errors."
 ---
 
 The Salesforce connector supports:
@@ -183,6 +184,13 @@ Please note that namespaces cannot be created in the Dev Hub Org you just enable
 * Click **Link Namespace** on the top right.
 * When prompted to authenticate, log into the Namespace Org from Step 2. If you are having trouble with this step, try again in an incognito window.
 * After linking, select **All Namespace Registries** filter to view the namespace.
+
+<Note>
+If the authentication step returns `error=invalid_client_id&error_description=client identifier invalid`, even in an incognito window, you are almost certainly signing in with the wrong org. Confirm both of the following:
+
+- You are authenticating with the **Namespace Org** credentials from Step 2, not the Dev Hub Org from Step 1.
+- The Namespace Org is a Developer Edition org that does **not** have Dev Hub enabled. Namespaces cannot be created in a Dev Hub Org, and enabling Dev Hub on the org you intended to use as the Namespace Org will surface as this error. If Dev Hub is enabled on it, sign up for a fresh [Developer Edition org](https://developer.salesforce.com/signup), register the namespace there, and link that org instead.
+</Note>
 
 ![Link namespace](/images/provider-guides/salesforce/link-namespace.png)
 
