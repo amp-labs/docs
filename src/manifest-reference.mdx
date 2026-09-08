@@ -209,6 +209,9 @@ Each object in the `objects` array defines a specific data type to read from the
 | `mapToName` | String | No | An optional name mapping for this object. Used to standardize object names across different providers. See [Object and Field Mapping](/object-and-field-mapping) for details. |
 | `mapToDisplayName` | String | No | An optional display name mapping for this object. Used for UI display. |
 
+These fields control **which fields** are read. To control **which records** are read, use `fieldFilters`, which is set per-installation in the installation config rather than in `amp.yaml`.
+> Learn more in [Field filters](#field-filters).
+
 <Note>
 When configuring fields for a read object, keep these points in mind:
 
@@ -312,7 +315,47 @@ Backfill Considerations
 
 - Setting `fullHistory: true` may result in longer initial sync times, especially for large datasets.
 - Some providers may have API rate limits that affect backfill performance.
+- In the installation config, the `backfill` object accepts one additional key, `fieldFilters`, which restricts the records read during backfill. It is not available in `amp.yaml`. See [Field filters](#field-filters).
 - See [Read Actions backfill behavior](/read-actions#backfill-behavior) for detailed implementation guidance.
+</Note>
+
+### Field filters
+
+Field filters restrict **which records** a read action returns, by matching against field values. Only matching records are read and delivered to your destination.
+
+Unlike every other field on this page, `fieldFilters` is **not part of the manifest schema** — it cannot be set in `amp.yaml`. It is set per-installation in the installation config, when creating or updating an installation via the [REST API](/reference/installation/create-a-new-installation) or Headless UI's [createInstallation method](/headless#create-update-and-delete-installations):
+
+```json
+{
+  "read": {
+    "objects": {
+      "contacts": {
+        "objectName": "contacts",
+        "selectedFields": { "email": true, "status": true },
+        "fieldFilters": [
+          { "fieldName": "status", "operator": "eq", "value": "active" }
+        ]
+      }
+    }
+  }
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `fieldName` | String | Yes | The name of the field to filter on. This must match the field name in the provider's API — a `mapToName` from your manifest is not resolved here. Case-sensitive. See [Filter field names](/read-actions#filter-field-names). |
+| `operator` | String | Yes | The comparison operator. Currently only `eq` (equals) is supported. |
+| `value` | String, Boolean, or Number | Yes | The value the field must equal. |
+
+Multiple filters are joined with AND logic, and each field can only have one condition.
+
+<Note>
+Field filter considerations
+
+- Filtered reads are currently only supported for **Salesforce** (CRM module) and **HubSpot**. For other providers the filter has no effect and all records are read.
+- Object-level `fieldFilters` apply to scheduled reads, backfill, and [triggered reads](/read-actions#trigger-a-read). Setting `fieldFilters` inside `backfill` overrides them during backfill only — see [backfill-specific filters](/read-actions#backfill-specific-filters).
+- Because filters live in the installation config rather than the manifest, each customer's installation can filter differently, and deploying a new manifest does not change them.
+- See [Filter by field values](/read-actions#filter-by-field-values) for full details.
 </Note>
 
 ### Field
