@@ -359,6 +359,7 @@ const baseConfig = {
             "provider-guides/brevo",
             "provider-guides/bynder",
             "provider-guides/calendly",
+            "provider-guides/callRail",
             "provider-guides/campaignMonitor",
             "provider-guides/capsule",
             "provider-guides/chargeOver",
