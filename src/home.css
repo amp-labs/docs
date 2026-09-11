@@ -1,0 +1,181 @@
+/* Docs home page (src/overview.mdx).
+   Only the hero and the provider browser are custom. Every other section on
+   that page uses native Mintlify components, so it inherits the docs' own
+   colors, type, and spacing. Everything here is scoped under .amp-home (or to
+   the home page's own path), so nothing leaks into the rest of the site. */
+
+/* The hero replaces Mintlify's page title on this page only. */
+html[data-current-path="/"] #header,
+html[data-current-path="/overview"] #header { display: none; }
+
+.amp-home {
+  container-type: inline-size;
+
+  /* Mintlify's own gray ramp plus this project's brand accent, so the custom
+     sections sit next to the generated ones without a visible seam. */
+  --amp-bg: #ffffff;
+  --amp-fg: #19171c;            /* gray-900 */
+  --amp-fg-2: #403f44;          /* gray-700, docs body text */
+  --amp-muted: #525055;         /* gray-600 */
+  --amp-muted-2: #727075;       /* gray-500 */
+  --amp-faint: #a09fa4;         /* gray-400 */
+  --amp-comment: #a09fa4;
+  --amp-accent: #6122E7;
+  --amp-accent-hover: #8850FF;
+  --amp-heading-accent: #4F1EB8;
+  --amp-green: #0d8f6c;
+  --amp-surface: #ffffff;
+  --amp-surface-2: #f5f3f8;     /* gray-50 */
+  --amp-border: rgba(9, 9, 11, 0.1);   /* same hairline as native cards */
+  --amp-border-2: #f0eef3;      /* gray-100 */
+  --amp-border-input: #e0dfe4;  /* gray-200 */
+  --amp-border-hover: #d0ced3;  /* gray-300 */
+
+  /* Mintlify loads its fonts via next/font and exposes them as variables;
+     consuming those keeps this page on the docs' typeface automatically. */
+  --amp-sans: var(--font-family-body-custom, var(--font-inter, ui-sans-serif)), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --amp-mono: var(--font-family-mono-custom, var(--font-jetbrains-mono, ui-monospace)), "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  font-family: var(--amp-sans);
+  color: var(--amp-fg);
+  letter-spacing: -0.0125rem;   /* docs prose tracking */
+  line-height: 1.5;
+}
+
+html.dark .amp-home {
+  --amp-bg: #0f1117;            /* Mintlify --background-dark */
+  --amp-fg: #e0dfe4;            /* gray-200 */
+  --amp-fg-2: #d0ced3;
+  --amp-muted: #a09fa4;
+  --amp-muted-2: #8b898f;
+  --amp-faint: #525055;
+  --amp-comment: #525055;
+  --amp-accent: #A67CFF;
+  --amp-accent-hover: #C3A7FF;
+  --amp-heading-accent: #C3A7FF;
+  --amp-green: #3fbf98;
+  --amp-surface: #0f1117;
+  --amp-surface-2: #16161c;
+  --amp-border: rgba(255, 255, 255, 0.1);
+  --amp-border-2: #1f1e24;
+  --amp-border-input: #2e2d33;
+  --amp-border-hover: #403f44;
+}
+
+.amp-home * { box-sizing: border-box; }
+.amp-home h1, .amp-home p { margin: 0; font-family: inherit; color: inherit; }
+.amp-home a { color: inherit; text-decoration: none; font-weight: inherit; border: 0; }
+.amp-home a:hover { text-decoration: none; }
+.amp-home input { font-family: inherit; }
+.amp-home input::placeholder { color: var(--amp-faint); }
+.amp-home [hidden] { display: none !important; }
+
+.amp-section { margin: 0 auto; }
+.amp-section--flush { margin-top: 4px; }
+
+/* ---------- Hero ---------- */
+.amp-hero {
+  padding: 8px 0 4px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 48px;
+  align-items: start;
+}
+.amp-eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--amp-accent);
+  margin-bottom: 10px;
+}
+/* Matches the docs page-title spec: text-3xl / font-bold / tracking-tight. */
+.amp-home h1.amp-title {
+  font-size: 30px;
+  line-height: 38px;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  text-wrap: pretty;
+}
+.amp-title-accent { color: var(--amp-heading-accent); }
+.amp-lede {
+  margin-top: 16px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--amp-fg-2);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+.amp-actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+.amp-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+.amp-btn--secondary { border: 1px solid var(--amp-border); color: var(--amp-fg); font-weight: 500; }
+.amp-home a.amp-btn--secondary:hover { border-color: var(--amp-accent); color: var(--amp-accent); }
+.amp-facts {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+  font-family: var(--amp-mono);
+  font-size: 13px;
+  color: var(--amp-muted-2);
+}
+
+/* Manifest panel, sized to match a native code block. */
+.amp-manifest {
+  border: 1px solid var(--amp-border);
+  border-radius: 16px;
+  background: var(--amp-surface-2);
+  overflow: hidden;
+}
+.amp-manifest-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--amp-border-2);
+  font-family: var(--amp-mono);
+}
+.amp-manifest-file { font-size: 13px; color: var(--amp-fg); }
+.amp-manifest-note { font-size: 12px; color: var(--amp-muted-2); }
+.amp-yaml {
+  padding: 18px 20px;
+  font-family: var(--amp-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--amp-fg-2);
+  overflow-x: auto;
+}
+.amp-yaml > div { white-space: nowrap; }
+.amp-i2 { padding-left: 2ch; }
+.amp-i4 { padding-left: 4ch; }
+.amp-i6 { padding-left: 6ch; }
+.amp-i8 { padding-left: 8ch; }
+.amp-i10 { padding-left: 10ch; }
+.amp-i12 { padding-left: 12ch; }
+.amp-k { color: var(--amp-muted-2); }
+.amp-v { color: var(--amp-fg-2); }
+.amp-s { color: var(--amp-green); }
+.amp-d { color: var(--amp-faint); }
+.amp-c { color: var(--amp-comment); }
+.amp-manifest-foot {
+  padding: 12px 20px;
+  border-top: 1px solid var(--amp-border-2);
+  font-family: var(--amp-mono);
+  font-size: 12px;
+  color: var(--amp-muted-2);
+}
+
+/* ---------- Responsive (container-based, since the sidebar narrows the content) ---------- */
+@container (max-width: 880px) {
+  .amp-hero { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+}
+@media (max-width: 640px) {
+  .amp-home h1.amp-title { font-size: 25px; line-height: 32px; }
+}
