@@ -1,0 +1,183 @@
+---
+title: "Troubleshooting"
+description: "Searchable index of known errors and their fixes, both general and provider-specific."
+---
+
+{/*
+  HOW TO ADD AN ENTRY
+  ===================
+  1. Write the fix as a `##` section on the right page:
+     - cross-provider issues  -> troubleshooting-guides/general.mdx
+     - provider-specific ones -> troubleshooting-guides/<provider>.mdx (create it if needed
+       and register it in generate-docs.ts)
+     Use this structure inside the section:
+       ## <Symptom-first title, quoting the error text in backticks>
+       **Symptom**: what the builder sees (error message verbatim if there is one).
+       **Why this happens**: the actual cause, one short paragraph.
+       **How to fix**: numbered steps, each one actionable, linking to the exact doc/API page.
+  2. Add a row to the index below: title, one-line description, data-tags
+     (provider + areas + error keywords, space-separated, lowercase; used for search),
+     a visible area tag, and the href with the section's anchor.
+  3. Run `pnpm run gen-docs` if you added a new page, then `make validate_links`.
+*/}
+
+Known errors and how to fix them. Search by error message or symptom, or filter by provider. Every entry links to a step-by-step fix.
+
+<div className="amp-ts" id="amp-ts-root">
+  <div className="amp-ts-controls">
+    <input className="amp-ts-search" id="amp-ts-search" type="text" placeholder="Search errors, e.g. 429, paused, no such column…" aria-label="Search troubleshooting entries" autoComplete="off" />
+    <div className="amp-ts-chips" id="amp-ts-chips">
+      <button className="amp-ts-chip is-active" type="button" data-tag="">All</button>
+      <button className="amp-ts-chip" type="button" data-tag="general">General</button>
+      <button className="amp-ts-chip" type="button" data-tag="salesforce">Salesforce</button>
+      <button className="amp-ts-chip" type="button" data-tag="google">Google</button>
+    </div>
+  </div>
+  <div className="amp-ts-list" id="amp-ts-list">
+    <a className="amp-ts-row" data-tags="general read paused schedule notification credentials" href="/troubleshooting-guides/general#scheduled-reads-stopped-running">
+      <div>
+        <div className="amp-ts-title">Scheduled reads stopped running</div>
+        <div className="amp-ts-desc">Reads paused after repeated failures. Check the connection, then unpause via API.</div>
+      </div>
+      <div className="amp-ts-tag">read</div>
+    </a>
+    <a className="amp-ts-row" data-tags="general proxy 429 rate limit throttle retry" href="/troubleshooting-guides/general#proxy-call-returns-429-too-many-requests">
+      <div>
+        <div className="amp-ts-title">Proxy call returns `429 Too Many Requests`</div>
+        <div className="amp-ts-desc">Use throttle mode and the retry-after headers instead of hammering the provider.</div>
+      </div>
+      <div className="amp-ts-tag">proxy</div>
+    </a>
+    <a className="amp-ts-row" data-tags="general webhooks 413 payload too large express body limit" href="/troubleshooting-guides/general#webhook-receiver-rejects-large-payloads">
+      <div>
+        <div className="amp-ts-title">Webhook receiver rejects large payloads</div>
+        <div className="amp-ts-desc">Payloads reach 300 KB, so raise your body-size limit or switch to URL delivery.</div>
+      </div>
+      <div className="amp-ts-tag">webhooks</div>
+    </a>
+    <a className="amp-ts-row" data-tags="general webhooks svix signature verification secret" href="/troubleshooting-guides/general#webhook-signature-verification-fails">
+      <div>
+        <div className="amp-ts-title">Webhook signature verification fails</div>
+        <div className="amp-ts-desc">Verify the `svix-signature` header with that destination's own signing secret.</div>
+      </div>
+      <div className="amp-ts-tag">webhooks</div>
+    </a>
+    <a className="amp-ts-row" data-tags="general auth bad_credentials expired connection oauth reauthenticate" href="/troubleshooting-guides/general#connection-shows-bad_credentials">
+      <div>
+        <div className="amp-ts-title">Connection shows `bad_credentials`</div>
+        <div className="amp-ts-desc">The customer's credentials are no longer valid, so have them re-authenticate.</div>
+      </div>
+      <div className="amp-ts-tag">auth</div>
+    </a>
+    <a className="amp-ts-row" data-tags="general write async operation missing record retry" href="/troubleshooting-guides/general#async-write-accepted-but-the-record-is-missing">
+      <div>
+        <div className="amp-ts-title">Async write accepted but the record is missing</div>
+        <div className="amp-ts-desc">Accepted is not applied. Check the operation's status and logs.</div>
+      </div>
+      <div className="amp-ts-tag">write</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce read no such column field visibility" href="/troubleshooting-guides/salesforce#read-action-no-such-column-error">
+      <div>
+        <div className="amp-ts-title">Salesforce read: `No such column` error</div>
+        <div className="amp-ts-desc">The connected user lacks field-level visibility, or the field name is wrong.</div>
+      </div>
+      <div className="amp-ts-tag">read</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce write no such column field visibility" href="/troubleshooting-guides/salesforce#write-action-no-such-column-error">
+      <div>
+        <div className="amp-ts-title">Salesforce write: `No such column` error</div>
+        <div className="amp-ts-desc">The field doesn't exist in the customer's org, or the user can't see it.</div>
+      </div>
+      <div className="amp-ts-tag">write</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce subscribe cdc limit_exceeded entities change data capture" href="/troubleshooting-guides/salesforce#subscribe-installation-fails-with-limit_exceeded">
+      <div>
+        <div className="amp-ts-title">Salesforce subscribe fails with `LIMIT_EXCEEDED`</div>
+        <div className="amp-ts-desc">Salesforce allows Change Data Capture on 5 entities by default. Reduce objects or add the license.</div>
+      </div>
+      <div className="amp-ts-tag">subscribe</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce subscribe field change event derived lastactivitydate" href="/troubleshooting-guides/salesforce#subscribe-events-do-not-fire-when-a-field-changes">
+      <div>
+        <div className="amp-ts-title">Salesforce subscribe events don't fire for a field</div>
+        <div className="amp-ts-desc">Salesforce only emits change events for direct fields, not derived ones like LastActivityDate.</div>
+      </div>
+      <div className="amp-ts-tag">subscribe</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce auth bad_credentials refresh_token revoked oauth 401" href="/troubleshooting-guides/salesforce#connection-shows-bad_credentials-after-working-previously">
+      <div>
+        <div className="amp-ts-title">Salesforce connection turns `bad_credentials`</div>
+        <div className="amp-ts-desc">Missing refresh_token scope, a reused app, an expiring token policy, or revoked access.</div>
+      </div>
+      <div className="amp-ts-tag">auth</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce auth invalid_session_id session not valid scopes api" href="/troubleshooting-guides/salesforce#salesforce-returns-invalid_session_id">
+      <div>
+        <div className="amp-ts-title">Salesforce returns `INVALID_SESSION_ID`</div>
+        <div className="amp-ts-desc">Check the connection's scopes, app reuse across projects, and duplicate connections.</div>
+      </div>
+      <div className="amp-ts-tag">auth</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce read junction ids emailmessage 500 limit soql" href="/troubleshooting-guides/salesforce#read-fails-with-too-many-junction-ids">
+      <div>
+        <div className="amp-ts-title">Salesforce read: `too many junction ids`</div>
+        <div className="amp-ts-desc">EmailMessage junction lookups exceed 500. Drop the ID fields or read EmailMessageRelation.</div>
+      </div>
+      <div className="amp-ts-tag">read</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce auth oauth_approval_error_generic install permission connected app" href="/troubleshooting-guides/salesforce#oauth_approval_error_generic-in-the-oauth-window">
+      <div>
+        <div className="amp-ts-title">Salesforce OAuth: `OAUTH_APPROVAL_ERROR_GENERIC`</div>
+        <div className="amp-ts-desc">The installing user needs Use Any API Client or Approve Uninstalled Connected Apps.</div>
+      </div>
+      <div className="amp-ts-tag">auth</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce auth oauth_ec_app_not_found external client app org package install" href="/troubleshooting-guides/salesforce#oauth_ec_app_not_found-in-the-oauth-window">
+      <div>
+        <div className="amp-ts-title">Salesforce OAuth: `OAUTH_EC_APP_NOT_FOUND`</div>
+        <div className="amp-ts-desc">The package was never installed, or the app was created in the wrong org.</div>
+      </div>
+      <div className="amp-ts-tag">auth</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce object type not supported standard object permission profile" href="/troubleshooting-guides/salesforce#object-type-is-not-supported-for-a-standard-object">
+      <div>
+        <div className="amp-ts-title">Salesforce: `Object type is not supported` for a standard object</div>
+        <div className="amp-ts-desc">Usually an object permission gap for the connected user, not a missing object.</div>
+      </div>
+      <div className="amp-ts-tag">read</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce quota limits proxy rate limit api usage" href="/troubleshooting-guides/salesforce#check-salesforce-api-quota">
+      <div>
+        <div className="amp-ts-title">Check a customer's Salesforce API quota</div>
+        <div className="amp-ts-desc">Query the limits endpoint through the proxy when you suspect rate limiting.</div>
+      </div>
+      <div className="amp-ts-tag">proxy</div>
+    </a>
+    <a className="amp-ts-row" data-tags="salesforce auth jwt certificate consumer key install" href="/customer-guides/salesforce-jwt#troubleshooting">
+      <div>
+        <div className="amp-ts-title">Salesforce (JWT) installation fails</div>
+        <div className="amp-ts-desc">Certificate, consumer key, and OAuth policy checks for the JWT flow.</div>
+      </div>
+      <div className="amp-ts-tag">auth</div>
+    </a>
+    <a className="amp-ts-row" data-tags="google auth unauthorized_client workspace delegation service account" href="/customer-guides/google-workspace-delegation#unauthorized_client-error">
+      <div>
+        <div className="amp-ts-title">Google delegation: `unauthorized_client` error</div>
+        <div className="amp-ts-desc">Domain-wide delegation isn't authorized for the service account's client ID and scopes.</div>
+      </div>
+      <div className="amp-ts-tag">auth</div>
+    </a>
+    <a className="amp-ts-row" data-tags="google auth invalid_grant workspace delegation service account" href="/customer-guides/google-workspace-delegation#invalid_grant-error">
+      <div>
+        <div className="amp-ts-title">Google delegation: `invalid_grant` error</div>
+        <div className="amp-ts-desc">The impersonated user or key is invalid. Check the connection details.</div>
+      </div>
+      <div className="amp-ts-tag">auth</div>
+    </a>
+  </div>
+  <div className="amp-ts-count" id="amp-ts-count" aria-live="polite"></div>
+</div>
+
+## Can't find your error?
+
+Email [support@withampersand.com](mailto:support@withampersand.com) or ask in your shared Slack channel with our engineers. If you think the docs should cover it, [file an issue](https://github.com/amp-labs/docs/issues).

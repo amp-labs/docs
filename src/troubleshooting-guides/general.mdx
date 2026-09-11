@@ -1,0 +1,77 @@
+---
+title: "General"
+description: "Fixes for errors that can occur with any provider: paused reads, rate limits, webhook delivery, credentials, and async writes."
+---
+
+These issues can occur with any provider. For provider-specific errors, see the guides in this section or use the [troubleshooting index](/troubleshooting-guides/overview).
+
+## Scheduled reads stopped running
+
+**Symptom**: reads for an installation no longer run on schedule, or you received a `read.schedule.paused` [notification](/notifications/overview).
+
+**Why this happens**: Ampersand pauses a read schedule when runs keep failing, most often because the customer's connection has expired or lost access.
+
+**How to fix**:
+
+1. Check the connection's status in the [Dashboard](https://dashboard.withampersand.com) or with the [Get connection endpoint](/reference/connection/get-a-connection). If it shows `bad_credentials`, have your customer [update the connection](/customer-guides/update-connection).
+2. Once the connection is healthy, resume the schedule with the [Unpause reads endpoint](/reference/read/unpause-reads-for-an-installation).
+3. Confirm the next run with the [List operations endpoint](/reference/operation/list-operations).
+
+## Proxy call returns `429 Too Many Requests`
+
+**Symptom**: [Proxy actions](/proxy-actions) intermittently return HTTP 429.
+
+**Why this happens**: the provider is rate limiting the customer's account. Many providers penalize repeated 429s in a row, and some lock out a token entirely after too many unsuccessful requests.
+
+**How to fix**:
+
+1. Send the `X-Amp-Rate-Limiter-Mode: throttle` request header. Ampersand will then stop forwarding requests to the provider until it's safe to retry.
+2. On a 429 response, read the `X-Amp-Retry-After` header (a UTC timestamp for when to retry) and `X-Amp-Retryable` (whether retrying is possible at all).
+3. Retry after the suggested time. See [managing API rate limits](/proxy-actions#use-ampersand-to-manage-api-rate-limits).
+
+## Webhook receiver rejects large payloads
+
+**Symptom**: webhook deliveries fail or your endpoint returns `413 Payload Too Large`, especially during backfills.
+
+**Why this happens**: Ampersand webhook payloads can be up to **300 KB**, and some HTTP frameworks default to a smaller request body limit. For example, Express's `json` middleware defaults to 100 KB.
+
+**How to fix**:
+
+1. Raise your framework's body size limit to at least 350 KB (for example, `express.json({ limit: "350kb" })`).
+2. If your receiver can't accept payloads of this size at all, deliver results by URL instead. See [handling the payload size](/destinations/webhooks#handling-the-payload-size).
+
+## Webhook signature verification fails
+
+**Symptom**: the signature on incoming webhook messages doesn't validate.
+
+**Why this happens**: Ampersand delivers webhooks through Svix, and each destination has its own signing secret. Verifying with the wrong destination's secret, or reading the wrong header, fails validation.
+
+**How to fix**:
+
+1. Read the signature from the `svix-signature` header.
+2. Verify it with the **webhook signing secret for that specific destination**, found in the [Dashboard](https://dashboard.withampersand.com).
+3. Follow the steps in [webhook signature verification](/destinations/webhooks#webhook-signature-verification).
+
+## Connection shows `bad_credentials`
+
+**Symptom**: a connection's status is `bad_credentials`, or an installation stopped working after the customer changed their password, rotated a key, or revoked access.
+
+**Why this happens**: the credentials Ampersand holds for the customer's SaaS instance are no longer valid, so every API call on their behalf fails.
+
+**How to fix**:
+
+1. Have your customer re-authenticate from the **Manage** tab of the embedded UI. See [update a connection](/customer-guides/update-connection).
+2. If they need to switch accounts entirely, the same flow applies.
+3. If reads were paused in the meantime, [unpause them](/reference/read/unpause-reads-for-an-installation) after re-authentication.
+
+## Async write accepted but the record is missing
+
+**Symptom**: an asynchronous [write](/write-actions) returned successfully, but the record never appeared in the customer's SaaS.
+
+**Why this happens**: async mode accepts the write and processes it in the background. A success response means *accepted*, not *applied*. The operation may still be retrying or may have failed after retries. Ampersand retries failures with exponential backoff for 1 hour by default (configurable up to 48 hours).
+
+**How to fix**:
+
+1. Take the operation ID from the write response and check it with the [Get operation endpoint](/reference/operation/get-an-operation).
+2. If the operation failed, inspect its logs with the [List logs endpoint](/reference/operation/list-logs-for-an-operation) for the provider's error.
+3. For time-sensitive writes, consider [synchronous mode](/write-actions#synchronous-mode), or lengthen the [retry deadline](/write-actions#retry-policy-for-async-writes).
