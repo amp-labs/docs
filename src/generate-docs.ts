@@ -264,6 +264,7 @@ const baseConfig = {
         "overview",
         "concepts",
         "quickstart",
+        "starter-project",
         "use-with-ai-ide",
       ],
     },
