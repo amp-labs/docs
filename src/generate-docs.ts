@@ -549,6 +549,8 @@ const baseConfig = {
         {
           group: "Troubleshooting guides",
           pages: [
+            "troubleshooting-guides/overview",
+            "troubleshooting-guides/general",
             "troubleshooting-guides/salesforce"
           ]
         },
