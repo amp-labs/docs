@@ -32,7 +32,7 @@ Ampersand pauses reads automatically after repeated failures to avoid overloadin
 ### Verify the field name
 
 1. Look up the field in the [Salesforce Object Reference](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_concepts.htm). If it's listed, the field is standard and this is a [field-level visibility issue](#resolve-a-field-level-visibility-issue).
-2. If it's not listed, it's a custom field. Custom field API names must end with `__c` — if your read object configuration is missing the suffix, fix it.
+2. If it's not listed, it's a custom field. Custom field API names must end with `__c`. If your read object configuration is missing the suffix, fix it.
 3. If the suffix is already correct, this is a [field-level visibility issue](#resolve-a-field-level-visibility-issue).
 
 ## Write Action: `No such column` error
@@ -59,8 +59,175 @@ Call [Get object metadata via installation](/reference/objects-&-fields/get-obje
 
 ### Field doesn't exist in the customer's org
 
-Remove the field from your write payload for this customer — for example, by checking object metadata before writing, or by falling back to a default. Longer-term, update your application to handle per-customer schema differences.
+Remove the field from your write payload for this customer, for example by checking object metadata before writing, or by falling back to a default. Longer-term, update your application to handle per-customer schema differences.
 
 ### Connected user lacks field-level visibility
 
 If the field exists in the org but isn't visible to the connected user's profile, Salesforce returns the same `No such column` error. Follow the steps in [Resolve a field-level visibility issue](#resolve-a-field-level-visibility-issue).
+
+## Subscribe installation fails with `LIMIT_EXCEEDED`
+
+Creating an installation with subscribe actions fails with an error similar to:
+
+```text
+You can't select more entities. You've exceeded the maximum number of unique
+Change Data Capture selected entities. Your total number of entities includes
+the ones selected here and through custom channels. (errorCode: LIMIT_EXCEEDED)
+```
+
+By default, a Salesforce instance allows Change Data Capture on at most **five entities**. Entities your customer has selected through custom channels count toward the same limit, so the ceiling can be reached before your integration is installed.
+
+You have two ways to resolve this:
+
+1. Reduce the number of objects your integration subscribes to, so the total stays within the customer's limit.
+2. Ask your customer to purchase the Salesforce Change Data Capture add-on license, which removes the limit on their instance.
+
+## Subscribe events do not fire when a field changes
+
+A subscription is healthy and other updates arrive, but changes to one specific field never produce an event.
+
+Salesforce only emits change events for **direct fields** on a record. Derived fields such as `LastActivityDate` never trigger change events, no matter how they are configured. See Salesforce's [change event documentation](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_associated_objects_change_event.htm) for the full list of limitations.
+
+Watch a direct field instead, or subscribe to the object whose direct fields capture the change you care about.
+
+## Connection shows `bad_credentials` after working previously
+
+An integration that used to work starts failing: proxy requests return `401`, reads and writes fail, and the connection's status is `bad_credentials`.
+
+<Tip>
+**Which case is this?**
+- Failing for *every* customer → most likely your [External Client App is misconfigured](#check-your-external-client-app) or shared across projects.
+- Failing for *one* customer → most likely a [token policy or revoked access](#check-the-customers-salesforce-settings) on their side.
+</Tip>
+
+### Check your External Client App
+
+Confirm the app requests the `refresh_token` scope. Without it, Salesforce issues an access token that expires and cannot be renewed. Review your configuration against [Create External Client App](/provider-guides/salesforce#4-create-external-client-app).
+
+Also confirm you are not reusing one app across multiple Ampersand projects. Each project should have its own app.
+
+### Check the customer's Salesforce settings
+
+Two customer-side settings commonly invalidate credentials:
+
+1. **Refresh token policy.** If their policy expires refresh tokens after a set period, credentials break on that schedule. Ask them to set the policy to **Refresh token is valid until revoked** in the app's OAuth policies.
+2. **Revoked access.** A Salesforce admin can revoke an app from the OAuth Connected Apps Usage page. Ask their admin to confirm the app has not been revoked.
+
+Once resolved, your customer can reconnect from the **Manage** tab. See [Update a connection](/customer-guides/update-connection).
+
+## Salesforce returns `INVALID_SESSION_ID`
+
+An API call fails with an error similar to:
+
+```json
+{
+  "message": "This session is not valid for use with the specified REST API endpoint. One of the following scopes is required: Full access, Manage user data via APIs, Access Connect REST API resources",
+  "errorCode": "INVALID_SESSION_ID"
+}
+```
+
+Work through these in order:
+
+1. Confirm the connection's scopes include both `api` and `refresh_token`. If either is missing, correct your [External Client App configuration](/provider-guides/salesforce#4-create-external-client-app).
+2. Confirm you are not using the same app across multiple projects.
+3. Check for duplicate connections for the same customer. Connecting the same Salesforce instance twice invalidates the earlier refresh token, so the first connection stops working. Delete the duplicates.
+
+If none of those apply, ask your customer to uninstall and reinstall the integration, following the [Salesforce customer guide](/customer-guides/salesforce).
+
+## Read fails with `too many junction ids`
+
+A read of `EmailMessage` fails with:
+
+```text
+Query is requesting too many junction ids; limit is 500
+```
+
+The query exceeded Salesforce's limit on junction object lookups. On `EmailMessage`, the junction fields are `ToIds`, `CcIds`, `BccIds`, and `ContentDocumentIds`. A single mass email with hundreds of recipients can exceed the limit of 500 on its own.
+
+<Tip>
+**Which case is this?** Check whether you actually need the recipient IDs, or only their addresses.
+- You only need addresses → [remove the junction fields](#remove-the-junction-fields).
+- You need the IDs → [read `EmailMessageRelation` instead](#read-emailmessagerelation-instead).
+</Tip>
+
+### Remove the junction fields
+
+Drop the junction fields from `requiredFields` in your manifest:
+
+```yaml
+requiredFields:
+  - fieldName: toids   # remove this
+```
+
+The recipient addresses remain available through `toAddress`, `ccAddress`, and `bccAddress`, so most integrations lose nothing.
+
+### Read `EmailMessageRelation` instead
+
+If you need the IDs themselves, add the [`EmailMessageRelation`](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_emailmessagerelation.htm) object to your read action. This is the object that `ToIds`, `CcIds`, and `BccIds` actually refer to, and it exposes the same information without the junction limit:
+
+- `EmailMessageId`
+- `RelationAddress`
+- `RelationId`
+- `RelationObjectType`
+- `RelationType`, for example `ToAddress`, `CcAddress`, or `BccAddress`
+
+## `OAUTH_APPROVAL_ERROR_GENERIC` in the OAuth window
+
+Your customer sees `OAUTH_APPROVAL_ERROR_GENERIC` in the Salesforce OAuth window while installing the integration.
+
+This is a Salesforce permission issue: the installing user is not allowed to approve the app. Their admin needs to enable one of the following for that user:
+
+- **Use Any API Client**, if their org has API Access Control enabled
+- **Approve Uninstalled Connected Apps**, if **Use Any API Client** is not shown
+
+Both are covered in [Required system permissions](/customer-guides/salesforce#required-system-permissions).
+
+## `OAUTH_EC_APP_NOT_FOUND` in the OAuth window
+
+The OAuth window reports that the external client app is not installed in the org.
+
+<Tip>
+**Which case is this?**
+- Only this customer is affected → they likely [never installed the package](#the-customer-did-not-install-the-package).
+- Every customer is affected → your app is likely [in the wrong org](#the-app-was-created-in-the-wrong-org).
+</Tip>
+
+### The customer did not install the package
+
+Your customer must open the package install URL and install the package before connecting. Send them the URL described in [Build the Package Install URL](/provider-guides/salesforce#6-build-the-package-install-url).
+
+### The app was created in the wrong org
+
+The External Client App must be created in your **Dev Hub Org**, not your Namespace Org. If it was created in the wrong org, no customer can install it. See [Salesforce orgs needed](/provider-guides/salesforce#salesforce-orgs-needed).
+
+## `Object type is not supported` for a standard object
+
+A read or write fails with an error similar to:
+
+```text
+Object type 'contact' is not supported. If you are attempting to use a custom object,
+be sure to append the '__c' after the entity name.
+```
+
+When the object named is a standard Salesforce object, this error is misleading. It usually means the connected user does not have permission to access the object, so Salesforce reports it as though it does not exist.
+
+Ask your customer's Salesforce admin to check the connected user's object permissions:
+
+- For a standard profile, see [Field permissions for a standard profile](/customer-guides/salesforce#2a-field-permissions-for-a-standard-profile).
+- For a custom profile, see [Object and field permissions for a custom profile](/customer-guides/salesforce#2b-object-and-field-permissions-for-a-custom-profile).
+
+## Check Salesforce API quota
+
+When you suspect a customer is hitting Salesforce API limits, you can read their remaining quota through the proxy:
+
+```bash
+curl --request GET "https://proxy.withampersand.com/services/data/v62.0/limits" \
+  --header "Content-Type: application/json" \
+  --header "x-amp-proxy-version: 1" \
+  --header "x-amp-project-id: YOUR_PROJECT_ID" \
+  --header "x-api-key: YOUR_API_KEY" \
+  --header "x-amp-integration-name: YOUR_INTEGRATION" \
+  --header "x-amp-group-ref: GROUP_REF"
+```
+
+The response includes `DailyApiRequests`, which shows the org's daily allocation and how much of it remains.
