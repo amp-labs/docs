@@ -1,17 +1,21 @@
 ---
 title: "Quickstart"
+description: "Build your first integration end to end: define a manifest, deploy it, and embed the install UI."
 ---
 
-For this Quickstart, we are going to build integrations for a cool new app called MailMonkey - an AI-powered email campaign manager that integrates with Salesforce. You can see the final `amp.yaml` file on [Github](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml).
+For this Quickstart, we are going to build integrations for a cool new app called MailMonkey, an AI-powered email campaign manager that integrates with Salesforce. You can see the final `amp.yaml` file on [Github](https://github.com/amp-labs/samples/blob/main/quickstart/amp.yaml).
 
-<img width="300" src="/images/28feb09-Group_2987.png" />
+<Frame>
+  <img width="300" src="/images/28feb09-Group_2987.png" alt="MailMonkey logo" />
+</Frame>
 
 ## Create an Ampersand org and project
 
 Sign up for an [Ampersand account](https://dashboard.withampersand.com/sign-up), and then follow the steps on the screen to create an org and then a project. Each org can have multiple projects, this is helpful for separating development and production environments.
 
-### Claim your domain
-Claim your domain to let teammates auto-join your organization when they sign up. You can do this as an org owner in the dashboard under org settings. Once enabled, anyone with a `@yourcompany.com` email will automatically be added to your org.
+## Claim your domain
+
+Claim your domain to let teammates auto-join your organization when they sign up. As an org owner, you can do this in the dashboard under org settings. Once enabled, anyone signing up with a `@yourcompany.com` email joins your org automatically, so teammates do not need an invite.
 
 ## Create a provider app
 
@@ -19,7 +23,7 @@ We'll first set up a Salesforce Connected App and put the Client ID and Client S
 
 ## Create a destination
 
-Next, we create a webhook destination for Ampersand to send data that it reads from Salesforce. See [Destinations](destinations) for more details.
+Next, we create a webhook destination for Ampersand to send data that it reads from Salesforce. See [Destinations](/destinations/overview) for more details.
 
 ## Define the integrations
 
@@ -34,7 +38,7 @@ Let's create a folder called `source`, with a file inside called `amp.yaml`, thi
 
 Our integration will have a [Read Actions](/read-actions). We'll read 2 objects from Salesforce: contacts and leads.
 
-```YAML YAML
+```yaml amp.yaml
 specVersion: 1.0.0
 integrations:
   - name: mailmonkey-salesforce
@@ -80,8 +84,7 @@ integrations:
 
 Next we will add a [Write Action](/write-actions). We want to insert new leads into our customer's Salesforce.
 
-
-```YAML YAML
+```yaml amp.yaml
 ...
     # Append to the integration definition from above.
     write:
@@ -98,7 +101,7 @@ You can see the final `amp.yaml` file on [Github](https://github.com/amp-labs/sa
 
 Once we are happy with the definition of our integrations, we can deploy them with the [amp CLI](/cli/overview):
 
-```
+```bash Deploy
 amp login
 # Our amp.yaml file is located in a folder called source.
 amp deploy source --project=my-project-id-or-name
@@ -106,11 +109,11 @@ amp deploy source --project=my-project-id-or-name
 
 ## Embed UI components
 
-Next, we will use Ampersand's react library to embed ready-made UI components into our app, so that our customers can start using our shiny new integrations! We'll use the `InstallIntegration` component for the auth flow and configuration steps. Check out [Embed UI components](/embeddable-ui-components) for more details on this component and other components to help your users set up and manage their integrations. If you don't already have a frontend codebase, you can use our [Starter Project](https://github.com/amp-labs/starter-project/tree/main).
+Next, we will use Ampersand's react library to embed ready-made UI components into our app, so that our customers can start using our shiny new integrations! We'll use the `InstallIntegration` component for the auth flow and configuration steps. Check out [Embed UI components](/embeddable-ui-components) for more details on this component and other components to help your users set up and manage their integrations. If you don't already have a frontend codebase, you can use our [starter project](/starter-project).
 
 Here's a simplified version of what our frontend code would look like:
 
-```TypeScript TypeScript
+```tsx App.tsx
 import { AmpersandProvider, InstallIntegration } from '@amp-labs/react';
 
 const options = {
@@ -123,7 +126,7 @@ function App() {
     <AmpersandProvider options={options}>
       <InstallIntegration 
         // The name of the integration from amp.yaml
-        integration = "readContactsAndLeads"
+        integration = "mailmonkey-salesforce"
         // The ID that your app uses to identify this end user.
         consumerRef = {userId}
         // The display name that your app uses for this end user.
