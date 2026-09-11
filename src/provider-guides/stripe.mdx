@@ -10,63 +10,16 @@ The Stripe connector supports:
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.stripe.com`.
 
-
 ### Supported Objects
 
-export const NA = () => <span style={{fontSize: "0.9em", color: "#666"}}>N/A</span>
-export const Check = () => <span>✅</span>
-export const Cross = () => <span>🚫</span>
-export const Incremental = () => (
-  <span style={{display: "inline-flex", alignItems: "center", gap: 6}}>
-    <span>✅</span>
-    <span style={{fontSize: "0.9em", color: "#666"}}>incremental</span>
-  </span>
-);
-export function objectCell(row) {
-  return (
-    <div style={{textAlign: "left"}}>
-      {row.href ? (
-        <a href={row.href}>{row.label}</a>
-      ) : (
-        <span>{row.label}</span>
-      )}
-      {row.display ? (
-        <div style={{fontSize: "0.9em", color: "#666", marginTop: 4}}>
-          {row.display}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-export function renderCellValue(value) {
-  if (value === null) {
-    return <NA/>
-  }
+> Note: In theory, nested fields can be used with all Stripe objects.
+However, the objects marked as supporting nested fields in the tables also enable automatic expansion of related data
+via Stripe's [expand feature](https://docs.stripe.com/api/expanding_objects). For those objects,
+the connector can fetch extra fields that are not returned by default, and surface them. Field example for object `balance_transactions`: `"$['source']['payment_intent']['currency']"`.
 
-  if (typeof value === "boolean") {
-    return value ? <Check/> : <Cross/>;
-  }
-
-  if (typeof value === "function") {
-    return value();
-  }
-
-  return <span>{value}</span>;
-}
-export const renderRows = (items) =>
-  [...items]
-    .sort((a, b) => a.label.localeCompare(b.label))
-    .map((row) => (
-      <tr id={"row/" + row.label} key={row.label}>
-        <td>{objectCell(row)}</td>
-        <td>{renderCellValue(row.incr ? Incremental : row.read)}</td>
-        <td>{renderCellValue(row.write)}</td>
-        <td>{renderCellValue(row.nested ? true : <></>)}</td>
-      </tr>
-    ));
+The Stripe connector supports reading and writing to and from the following objects:
 
 export const rows = [
-  // Read(incr) + Write
   {
     label: "accounts", read: true, write: true, incr: true, nested: true,
     href: "https://docs.stripe.com/api/accounts/object"
@@ -135,7 +88,7 @@ export const rows = [
     href: "https://docs.stripe.com/api/prices/object"
   }, {
     label: "products", read: true, write: true, incr: true, nested: true,
-    href: "https://docs.stripe.com/api/product-feature/object"
+    href: "https://docs.stripe.com/api/products/object"
   }, {
     label: "promotion_codes", read: true, write: true, incr: true, nested: true,
     href: "https://docs.stripe.com/api/promotion_codes/object"
@@ -169,9 +122,7 @@ export const rows = [
   }, {
     label: "transfers", read: true, write: true, incr: true, nested: true,
     href: "https://docs.stripe.com/api/transfers/object"
-  },
-  // Read(without incr) + Write.
-  {
+  }, {
     label: "billing/alerts", read: true, write: true, incr: false, nested: true,
     href: "https://docs.stripe.com/api/billing/alert/object"
   }, {
@@ -231,9 +182,7 @@ export const rows = [
   }, {
     label: "apple_pay/domains", read: true, write: true, incr: false, nested: false,
     display: "Apple Pay Domains"
-  },
-  // Read only (with incr).
-  {
+  }, {
     label: "application_fees", read: true, write: false, incr: true, nested: true,
     href: "https://docs.stripe.com/api/application_fees/object"
   }, {
@@ -254,14 +203,18 @@ export const rows = [
   }, {
     label: "balance/history", read: true, write: false, incr: true, nested: true,
     display: "Transaction history for balance changes"
-  },
-  // Read only (no incr).
-  {
+  }, {
     label: "climate/products", read: true, write: false, incr: false, nested: true,
     href: "https://docs.stripe.com/api/climate/product/object"
   }, {
     label: "climate/suppliers", read: true, write: false, incr: false, nested: true,
     href: "https://docs.stripe.com/api/climate/supplier/object"
+  }, {
+    label: "billing/credit_balance_transactions", read: true, write: false, incr: false, nested: true,
+    href: "https://docs.stripe.com/api/billing/credit-balance-transaction/object"
+  }, {
+    label: "invoice_payments", read: true, write: false, incr: false, nested: true,
+    href: "https://docs.stripe.com/api/invoice-payment/object"
   }, {
     label: "country_specs", read: true, write: false, incr: false, nested: true,
     href: "https://docs.stripe.com/api/country_specs/object"
@@ -283,9 +236,7 @@ export const rows = [
   }, {
     label: "tax_codes", read: true, write: false, incr: false, nested: false,
     href: "https://docs.stripe.com/api/tax_codes/object"
-  },
-  // Write only
-  {
+  }, {
     label: "account_links", read: false, write: true, incr: false, nested: false,
     href: "https://docs.stripe.com/api/account_links/object"
   }, {
@@ -348,39 +299,95 @@ export const rows = [
   }, {
     label: "ephemeral_keys", read: false, write: true, incr: false, nested: false,
     display: "Creates a short-lived API key for a given resource"
-  }
+  },
 ]
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+export const NA = () => <span>N/A</span>
+export const Incremental = () => <span>✅ incremental</span>
+
+export function renderCellValue(value) {
+  if (value === null) {
+    return <NA/>
+  }
+
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>
+  }
+
+  return value
+}
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+      <th style={{width: '20%'}}>Read</th>
+      <th style={{width: '20%'}}>Write</th>
+      <th style={{width: '20%'}}>Nested Field</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td style={{textAlign: "left"}}>
+            {row.href ? <a href={row.href}>{row.label}</a> : row.label}
+            {row.display ? <div style={{fontSize: "0.9em", color: "#666", marginTop: 4}}>{row.display}</div> : null}
+          </td>
+          <td>{row.incr ? <Incremental/> : renderCellValue(row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+          <td>{row.nested ? <Check/> : null}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+#### Treasury API
+
+The Stripe connector supports reading and writing to and from the following Treasury API objects:
 
 export const treasuryApiRows = [
   {
     label: "treasury/financial_accounts", read: true, write: true, incr: true, nested: true,
     href: "https://docs.stripe.com/api/treasury/financial_accounts/object"
   }, {
-    label: "treasury/credit_reversals", read: true, write: true, incr: true, nested: false,
+    label: "treasury/credit_reversals", read: true, write: true, incr: false, nested: false,
     href: "https://docs.stripe.com/api/treasury/credit_reversals/object"
   }, {
-    label: "treasury/debit_reversals", read: true, write: true, incr: true, nested: false,
+    label: "treasury/debit_reversals", read: true, write: true, incr: false, nested: false,
     href: "https://docs.stripe.com/api/treasury/debit_reversals/object"
   }, {
-    label: "treasury/inbound_transfers", read: true, write: true, incr: true, nested: false,
+    label: "treasury/inbound_transfers", read: true, write: true, incr: false, nested: false,
     href: "https://docs.stripe.com/api/treasury/inbound_transfers/object"
   }, {
-    label: "treasury/outbound_payments", read: true, write: true, incr: true, nested: false,
+    label: "treasury/outbound_payments", read: true, write: true, incr: false, nested: false,
     href: "https://docs.stripe.com/api/treasury/outbound_payments/object"
   }, {
-    label: "treasury/outbound_transfers", read: true, write: true, incr: true, nested: false,
+    label: "treasury/outbound_transfers", read: true, write: true, incr: false, nested: false,
     href: "https://docs.stripe.com/api/treasury/outbound_transfers/object"
   }, {
-    label: "treasury/received_credits", read: true, write: null, incr: true, nested: false,
+    label: "treasury/received_credits", read: true, write: null, incr: false, nested: false,
     href: "https://docs.stripe.com/api/treasury/received_credits/object"
   }, {
-    label: "treasury/received_debits", read: true, write: null, incr: true, nested: false,
+    label: "treasury/received_debits", read: true, write: null, incr: false, nested: false,
     href: "https://docs.stripe.com/api/treasury/received_debits/object"
   }, {
-    label: "treasury/transaction_entries", read: true, write: null, incr: true, nested: false,
+    label: "treasury/transaction_entries", read: true, write: null, incr: false, nested: false,
     href: "https://docs.stripe.com/api/treasury/transaction_entries/object"
   }, {
-    label: "treasury/transactions", read: true, write: null, incr: true, nested: false,
+    label: "treasury/transactions", read: true, write: null, incr: false, nested: false,
     href: "https://docs.stripe.com/api/treasury/transactions/object"
   }, {
     label: "test_helpers/treasury/outbound_payments", read: false, write: true, incr: false, nested: false,
@@ -390,20 +397,13 @@ export const treasuryApiRows = [
     href: "https://docs.stripe.com/api/treasury/outbound_transfers/test_mode_update"
   }, {
     label: "test_helpers/treasury/received_credits", read: false, write: true, incr: false, nested: false,
-    href: "https://docs.stripe.com/api/treasury/received_credits/object"
+    href: "https://docs.stripe.com/api/treasury/received_credits/test_mode_create"
   }, {
     label: "test_helpers/treasury/received_debits", read: false, write: true, incr: false, nested: false,
-    href: "https://docs.stripe.com/api/treasury/received_debits/object"
+    href: "https://docs.stripe.com/api/treasury/received_debits/test_mode_create"
   },
 ]
 
-> Note: In theory, nested fields can be used with all Stripe objects.
-However, the objects marked as supporting nested fields in the tables also enable automatic expansion of related data
-via Stripe's [expand feature](https://docs.stripe.com/api/expanding_objects). For those objects,
-the connector can fetch extra fields that are not returned by default, and surface them. Field example for object `balance_transactions`: `"$['source']['payment_intent']['currency']"`.
-
-The Stripe connector supports reading and writing to and from the following objects:
-
 <div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
   <table style={{
     width: '100%',
@@ -422,33 +422,19 @@ The Stripe connector supports reading and writing to and from the following obje
     </tr>
     </thead>
     <tbody style={{display: 'table-row-group', width: '100%'}}>
-    {renderRows(rows)}
-    </tbody>
-  </table>
-</div>
-
-#### Treasury API
-The Stripe connector supports reading and writing to and from the following Treasury API objects:
-
-<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
-  <table style={{
-    width: '100%',
-    minWidth: '100%',
-    tableLayout: 'fixed',
-    textAlign: 'center',
-    borderCollapse: 'collapse',
-    display: 'table'
-  }}>
-    <thead style={{display: 'table-header-group', width: '100%'}}>
-    <tr style={{display: 'table-row', width: '100%'}}>
-      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
-      <th style={{width: '20%'}}>Read</th>
-      <th style={{width: '20%'}}>Write</th>
-      <th style={{width: '20%'}}>Nested Field</th>
-    </tr>
-    </thead>
-    <tbody style={{display: 'table-row-group', width: '100%'}}>
-    {renderRows(treasuryApiRows)}
+    {[...treasuryApiRows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td style={{textAlign: "left"}}>
+            {row.href ? <a href={row.href}>{row.label}</a> : row.label}
+            {row.display ? <div style={{fontSize: "0.9em", color: "#666", marginTop: 4}}>{row.display}</div> : null}
+          </td>
+          <td>{row.incr ? <Incremental/> : renderCellValue(row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+          <td>{row.nested ? <Check/> : null}</td>
+        </tr>
+      ))}
     </tbody>
   </table>
 </div>
