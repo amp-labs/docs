@@ -1,25 +1,173 @@
 ---
-title: "Overview"
+title: "Ampersand documentation"
+sidebarTitle: "Overview"
+description: "Build native SaaS integrations with a declarative manifest. Ampersand handles auth, field mapping, rate limits, and delivery."
+mode: "wide"
 ---
 
-[Ampersand](https://www.withampersand.com/) is a declarative platform for SaaS builders who are creating product integrations. It allows you to:
+{/* Only the hero is custom (see /home.css). Everything else on this page uses
+    native Mintlify components, so it matches the rest of the docs. */}
 
-* Read data from your customer's SaaS
-* Write data to your customer's SaaS
-* Subscribe to events (creates, deletes, and field changes) in your customer's SaaS. 
+<div className="amp-home not-prose">
 
-Here's an overview of the Ampersand platform:
+<section className="amp-section amp-hero">
+  <div>
+    <div className="amp-eyebrow">Documentation</div>
+    <h1 className="amp-title">Build native integrations with a <span className="amp-title-accent">declarative manifest.</span></h1>
+    <p className="amp-lede">Declare what to read, write, and subscribe to in a single manifest. Ampersand handles auth, field mapping, rate limits, and delivery.</p>
+    <div className="amp-actions">
+      <a className="amp-btn amp-btn--secondary" href="/quickstart">Quickstart</a>
+      <a className="amp-btn amp-btn--secondary" href="/concepts">How Ampersand works</a>
+    </div>
+    <div className="amp-facts">
+      <span>190+ providers</span>
+      <span>OAuth managed</span>
+      <span>Deploy via CLI</span>
+    </div>
+  </div>
+  <div className="amp-manifest">
+    <div className="amp-manifest-bar">
+      <span className="amp-manifest-file">amp.yaml</span>
+      <span className="amp-manifest-note">declarative integration manifest</span>
+    </div>
+    <div className="amp-yaml">
+      <div><span className="amp-k">specVersion:</span> <span className="amp-v">1.0.0</span></div>
+      <div><span className="amp-k">integrations:</span></div>
+      <div className="amp-i2"><span className="amp-d">-</span> <span className="amp-k">name:</span> <span className="amp-s">crm-sync</span></div>
+      <div className="amp-i4"><span className="amp-k">provider:</span> <span className="amp-s">salesforce</span></div>
+      <div className="amp-i4"><span className="amp-k">read:</span></div>
+      <div className="amp-i6"><span className="amp-k">objects:</span></div>
+      <div className="amp-i8"><span className="amp-d">-</span> <span className="amp-k">objectName:</span> <span className="amp-s">contact</span></div>
+      <div className="amp-i10"><span className="amp-k">destination:</span> <span className="amp-s">contactsWebhook</span></div>
+      <div className="amp-i10"><span className="amp-k">schedule:</span> <span className="amp-s">{'"*/15 * * * *"'}</span></div>
+      <div className="amp-i10"><span className="amp-c">{'# mapped by the customer'}</span></div>
+      <div className="amp-i10"><span className="amp-k">requiredFields:</span></div>
+      <div className="amp-i12"><span className="amp-d">-</span> <span className="amp-k">fieldName:</span> <span className="amp-s">email</span></div>
+      <div className="amp-i12"><span className="amp-d">-</span> <span className="amp-k">mapToName:</span> <span className="amp-s">lifecycle_stage</span></div>
+      <div className="amp-i10"><span className="amp-k">optionalFieldsAuto:</span> <span className="amp-v">all</span></div>
+      <div className="amp-i4"><span className="amp-k">write:</span></div>
+      <div className="amp-i6"><span className="amp-k">objects:</span></div>
+      <div className="amp-i8"><span className="amp-d">-</span> <span className="amp-k">objectName:</span> <span className="amp-s">note</span></div>
+    </div>
+    <div className="amp-manifest-foot">
+      <span>$ amp deploy ./integrations --project my-app</span>
+    </div>
+  </div>
+</section>
 
-<Frame caption="The Ampersand platform">![The Ampersand platform](/images/overview.png)</Frame>
+</div>
 
-The key components include:
+## Actions
 
-* **Manifest file:** an `amp.yaml` file, where you define all your integrations: API to connect to, objects and fields you want to read or write, and configuration options you'd like to expose to your customers.
-* **Ampersand server:** a managed service that keeps track of each of your customer’s configurations, and makes the appropriate API calls to your customer's SaaS, while optimizing for cost, handling retries and error message parsing.
-* **Embeddable UI components** with Ampersand, you can embed set-up, configuration, and management UIs that allow your end users to customize and manage their integrations.
+Actions are the verbs of every integration. You declare them in your manifest.
 
-<Frame caption="Our React SDK offers embeddable UI components">![Our React SDK offers embeddable UI components](/images/f5c6c9b-image.png)</Frame>
+<CardGroup cols={3}>
+  <Card title="Read" icon="download" href="/read-actions">
+    Scheduled or on-demand reads with incremental syncs, delivered anywhere.
+  </Card>
+  <Card title="Write" icon="upload" href="/write-actions">
+    Create and update records in your customer's SaaS, one at a time or in bulk.
+  </Card>
+  <Card title="Subscribe" icon="bell" href="/subscribe-actions">
+    React to creates, updates, deletes, and field changes as they happen.
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/search-actions">
+    Targeted, synchronous queries with filters. No stored copy required.
+  </Card>
+  <Card title="Proxy" icon="arrow-right-arrow-left" href="/proxy-actions">
+    Call any provider endpoint directly with managed auth attached.
+  </Card>
+</CardGroup>
 
-* **Dashboard**: our dashboard allows you to monitor and troubleshoot your customers' integrations.
+## Get started
 
-<Frame caption="Ampersand Dashboard">![Ampersand Dashboard](/images/ef05f17-image.png)</Frame>
+Three ways in, depending on how you like to learn.
+
+<CardGroup cols={3}>
+  <Card title="1. How Ampersand works" icon="book" href="/concepts">
+    The model in five minutes: integrations, installations, revisions, and the config that decides what runs for each customer.
+  </Card>
+  <Card title="2. Build your first integration" icon="rocket" href="/quickstart">
+    Create a project, define a manifest, deploy it with the CLI, and embed the install UI in your app.
+  </Card>
+  <Card title="Or: clone a working app" icon="github" href="/starter-project">
+    A React app with HubSpot already wired up. Swap in your own manifest and deploy.
+  </Card>
+</CardGroup>
+
+## Guides
+
+The hard parts, already handled.
+
+### Reads and backfills
+
+- [Backfill historical data on install](/read-actions#backfill-behavior): none, full history, or time-boxed per object, with an API to monitor progress.
+- [Read only the records that match](/read-actions#filter-by-field-values): per-installation field filters, plus backfill-specific filters for the initial sync.
+
+### Writes that respect customer data
+
+- [Bulk writes with retries built in](/write-actions#write-modes): batching, async mode, and exponential backoff for up to 48 hours.
+- [Never clobber customer data](/write-actions#advanced-use-cases): mark fields write-on-create-only or update-only, with defaults.
+
+### Real-time events
+
+- [Watch individual fields, not whole objects](/subscribe-actions#specify-fields-to-watch): subscribe to updates only for the fields you list, quota-optimized at the source.
+- [Track when records are linked, not just changed](/subscribe-actions#association-changes): subscribe to association changes.
+- [Get notified when integrations change](/notifications/overview): events for installs, config changes, completed backfills, and paused syncs.
+
+### Schemas and mapping
+
+- [Map nested and dynamic fields](/object-and-field-mapping#user-defined-mapping): nested JSON paths, value mapping, and per-customer field sets.
+- [React when a customer's schema drifts](/manage-customer-schemas#watch-schema-changes): get events when fields are created, deleted, or change type.
+- [Create custom fields in the customer's SaaS](/manage-customer-schemas#create-or-update-custom-fields): upsert custom fields programmatically.
+- [Support multiple CRMs with one manifest](/unified-api): shared object names, per-provider overrides, no forked code.
+
+### Running in production
+
+- [Verify every webhook cryptographically](/destinations/webhooks#webhook-signature-verification): Svix-signed payloads, plus payload size and frequency controls.
+- [Stay under provider rate limits](/proxy-actions#use-ampersand-to-manage-api-rate-limits): throttle mode returns a retry-after instead of burning 429s.
+- [Call the API from the browser, safely](/api/jwt-auth): short-lived JWTs signed by your server, no API keys in frontend code.
+
+## Reference
+
+<CardGroup cols={2}>
+  <Card title="Manifest schema" icon="file-code" href="/manifest-reference">
+    Every field for read, write, subscribe, proxy, and field mapping in `amp.yaml`.
+  </Card>
+  <Card title="CLI" icon="terminal" href="/cli/reference">
+    Commands, flags, and CI usage for deploying and diffing manifests.
+  </Card>
+  <Card title="REST API" icon="code" href="/api/overview">
+    Installations, connections, records, and webhook payloads.
+  </Card>
+  <Card title="React SDK" icon="cube" href="/headless">
+    Hooks for connections, installations, and config in `@amp-labs/react`.
+  </Card>
+</CardGroup>
+
+## Integrations
+
+Ampersand supports 190+ providers through one manifest surface. Each provider guide lists the supported objects, the authentication type, and whether read, write, and subscribe actions are available.
+
+<CardGroup cols={2}>
+  <Card title="Browse the provider directory" icon="plug" href="/provider-guides/overview">
+    Search every supported provider, from Salesforce and HubSpot to NetSuite and Workday.
+  </Card>
+  <Card title="Request a provider" icon="github" href="https://github.com/amp-labs/connectors">
+    Missing an API you need? File an issue on the open-source connectors repository.
+  </Card>
+</CardGroup>
+
+## Troubleshooting and support
+
+<CardGroup cols={3}>
+  <Card title="Troubleshooting" icon="wrench" href="/troubleshooting-guides/overview">
+    A searchable index of known errors, general and provider-specific, with step-by-step fixes.
+  </Card>
+  <Card title="Changelog" icon="clock-rotate-left" href="https://www.withampersand.com/changelog">
+    Manifest spec versions, provider additions, breaking changes.
+  </Card>
+  <Card title="Support" icon="life-ring" href="mailto:support@withampersand.com">
+    Shared Slack channel with our engineers, or email support@withampersand.com.
+  </Card>
+</CardGroup>
