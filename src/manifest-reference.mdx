@@ -323,40 +323,7 @@ Backfill Considerations
 
 Field filters restrict **which records** a read action returns, by matching against field values. Only matching records are read and delivered to your destination.
 
-Unlike every other field on this page, `fieldFilters` is **not part of the manifest schema** — it cannot be set in `amp.yaml`. It is set per-installation in the installation config, when creating or updating an installation via the [REST API](/reference/installation/create-a-new-installation) or Headless UI's [createInstallation method](/headless#create-update-and-delete-installations):
-
-```json
-{
-  "read": {
-    "objects": {
-      "contacts": {
-        "objectName": "contacts",
-        "selectedFields": { "email": true, "status": true },
-        "fieldFilters": [
-          { "fieldName": "status", "operator": "eq", "value": "active" }
-        ]
-      }
-    }
-  }
-}
-```
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `fieldName` | String | Yes | The name of the field to filter on. This must match the field name in the provider's API — a `mapToName` from your manifest is not resolved here. Case-sensitive. See [Filter field names](/read-actions#filter-field-names). |
-| `operator` | String | Yes | The comparison operator. Currently only `eq` (equals) is supported. |
-| `value` | String, Boolean, or Number | Yes | The value the field must equal. |
-
-Multiple filters are joined with AND logic, and each field can only have one condition.
-
-<Note>
-Field filter considerations
-
-- Filtered reads are currently only supported for **Salesforce** (CRM module) and **HubSpot**. For other providers the filter has no effect and all records are read.
-- Object-level `fieldFilters` apply to scheduled reads, backfill, and [triggered reads](/read-actions#trigger-a-read). Setting `fieldFilters` inside `backfill` overrides them during backfill only — see [backfill-specific filters](/read-actions#backfill-specific-filters).
-- Because filters live in the installation config rather than the manifest, each customer's installation can filter differently, and deploying a new manifest does not change them.
-- See [Filter by field values](/read-actions#filter-by-field-values) for full details.
-</Note>
+Unlike every other field on this page, `fieldFilters` is **not part of the manifest schema** — it cannot be set in `amp.yaml`. It is set per-installation in the installation config, when creating or updating an installation via the [REST API](/reference/installation/create-a-new-installation) or Headless UI's [createInstallation method](/headless#create-update-and-delete-installations). See the linked documentation for more information.
 
 ### Field
 
