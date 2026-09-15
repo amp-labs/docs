@@ -47,6 +47,7 @@ Ampersand supports the following notification event types:
 
 **Destination**
 - **`destination.webhook.disabled`**: Fires when a webhook destination endpoint is disabled. This can happen automatically after repeated failed delivery attempts.
+- **`destination.delivery.error`**: Fires when Ampersand could not deliver read or subscribe results to a destination after all retry attempts were exhausted. This applies to every destination type (webhooks, Kinesis, S3, and other sinks). The payload identifies the destination, the installation and object whose data could not be delivered, and the error.
 
 ## Setting up notifications
 
