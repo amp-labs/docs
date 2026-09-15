@@ -699,5 +699,54 @@ Note: For partial failures, `success` is `false` with both `successfulRecordIds`
 }
 ```
 </Accordion>
+
+<Accordion title="destination.delivery.error">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "destination.delivery.error",
+  "data": {
+    "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
+    "provider": "salesforce",
+    "integrationId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+    "integrationName": "Salesforce Integration",
+    "installationId": "a3bb189e-8bf9-3888-9912-ace4e6543002",
+    "connectionId": "c4e7f2a1-8b3d-4f6e-9a2c-5d1e3f4b6a7c",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "destinationId": "2e8f4c1a-9b3d-4e7f-8a2c-0d1e2f3a4b5c",
+    "destinationName": "production-kinesis",
+    "objectName": "account",
+    "action": "subscribe",
+    "error": "Delivery to aws_kinesis destination exhausted retries after 3 attempts. ResourceNotFoundException: Stream not found."
+  }
+}
+```
+
+**Kinesis and S3 destination payload:**
+```json
+{
+  "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
+  "provider": "salesforce",
+  "integrationId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+  "integrationName": "Salesforce Integration",
+  "installationId": "a3bb189e-8bf9-3888-9912-ace4e6543002",
+  "connectionId": "c4e7f2a1-8b3d-4f6e-9a2c-5d1e3f4b6a7c",
+  "groupRef": "customer-group-ref",
+  "groupName": "Customer Name",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "destinationId": "2e8f4c1a-9b3d-4e7f-8a2c-0d1e2f3a4b5c",
+  "destinationName": "production-kinesis",
+  "objectName": "account",
+  "action": "subscribe",
+  "error": "Delivery to aws_kinesis destination exhausted retries after 3 attempts. ResourceNotFoundException: Stream not found."
+}
+```
+
+Note: `action` is `read` or `subscribe`, and `error` describes why the final delivery attempt failed. When the destination is a webhook, the payload also includes its `url`. This notification is sent to the destinations configured for `destination.delivery.error`, which may or may not include the destination that failed.
+</Accordion>
 </AccordionGroup>
 
