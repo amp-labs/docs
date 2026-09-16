@@ -553,6 +553,12 @@ const baseConfig = {
             "troubleshooting-guides/salesforce"
           ]
         },
+        {
+          group: "Security",
+          pages: [
+            "security/outgoing-ip-addresses"
+          ]
+        },
         "dev-and-prod-environments",
         "terminology",
         "unified-api",
