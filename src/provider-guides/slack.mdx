@@ -386,6 +386,89 @@ Edits, deletions and thread replies all arrive through the subscriptions above, 
 
 So subscribing to `message.channels` alone gives you creates, updates and deletes for public channels.
 
+#### Set up a message subscription
+
+<Steps>
+  <Step title="Configure your Slack app">
+    Add the event subscriptions and scopes for the conversation types you want, using the table above.
+    Invite the bot to the channels you want messages from, since scopes alone do not deliver events for channels it has not joined.
+  </Step>
+
+  <Step title="Add the subscribe object to your manifest">
+    Use the `messages` block shown above.
+    Do not add `messages` to your read objects.
+  </Step>
+
+  <Step title="Deploy the manifest">
+    Deploy with the [amp CLI](/cli/overview).
+    Create the [destination](/destinations) your subscribe object names, if it does not exist yet.
+  </Step>
+
+  <Step title="Have your customer install the integration">
+    Embed the [InstallIntegration](/embeddable-ui-components#install-integration) component.
+    Your customer authorizes Slack and the installation is created.
+  </Step>
+
+  <Step title="Add `messages` to the installation">
+    The install component cannot add `messages` on its own, because Slack publishes no field metadata for it.
+    Until it can, add the object to the installation with [Update an installation](/reference/installation/update-an-installation):
+
+    ```bash
+    curl -X PATCH \
+      -H "X-Api-Key: $AMPERSAND_API_KEY" \
+      -H "Content-Type: application/json" \
+      "https://api.withampersand.com/v1/projects/$PROJECT_ID/integrations/$INTEGRATION_ID/installations/$INSTALLATION_ID" \
+      -d '{
+      "updateMask": ["config.content.read.objects.messages"],
+      "installation": {
+        "config": {
+          "content": {
+            "read": {
+              "objects": {
+                "messages": {
+                  "disabled": false,
+                  "objectName": "messages",
+                  "destination": "messageWebhook",
+                  "selectedFieldMappings": {},
+                  "selectedFields": {
+                    "ts": true,
+                    "text": true,
+                    "user": true,
+                    "channel": true,
+                    "type": true,
+                    "thread_ts": true,
+                    "event_ts": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }'
+    ```
+
+    Three details matter:
+
+    - The update mask must name the object, as `config.content.read.objects.messages`. A bare `config` is rejected.
+    - Because the mask names one object, the patch merges. Read objects already in the config are left alone.
+    - `destination` is required here and must match a destination in your project. Your manifest has no `messages` read object for it to inherit one from.
+
+    Repeat this if the installation is later updated through the install component, which rebuilds the config and drops the object.
+  </Step>
+
+  <Step title="Post a message and check your destination">
+    Send a message in a channel the bot has joined.
+    A create event should arrive at your destination with the message in `raw`.
+  </Step>
+</Steps>
+
+<Warning>
+  Step five is a temporary requirement, not the intended workflow.
+  It exists because Ampersand validates every read object against the provider's field metadata, which Slack does not publish for messages.
+  Expect it to become unnecessary.
+</Warning>
+
 #### Other Slack limits
 
 A bot only receives events for channels it has been invited to, so adding the scopes is not enough on its own.
