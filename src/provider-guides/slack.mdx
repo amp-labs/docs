@@ -393,19 +393,11 @@ So subscribing to `message.channels` alone gives you creates, updates and delete
 #### Set up a message subscription
 
 <Steps>
-  <Step title="Configure your Slack app">
-    Add the event subscriptions and scopes for the conversation types you want, using the table above.
-    Invite the bot to the channels you want messages from, since scopes alone do not deliver events for channels it has not joined.
-  </Step>
-
-  <Step title="Add the subscribe object to your manifest">
-    Use the `messages` block shown above.
-    Do not add `messages` to your read objects.
-  </Step>
-
-  <Step title="Deploy the manifest">
-    Deploy with the [amp CLI](/cli/overview).
-    Create the [destination](/destinations) your subscribe object names, if it does not exist yet.
+  <Step title="Add the subscribe object to your manifest and deploy">
+    Add a `messages` subscribe object using the [example above](#watch-all-fields-on-updates), and do
+    not add `messages` to your read objects.
+    Deploy with the [amp CLI](/cli/overview), and create the [destination](/destinations) your
+    subscribe object names if it does not exist yet.
   </Step>
 
   <Step title="Have your customer install the integration">
