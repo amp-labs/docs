@@ -140,6 +140,11 @@ export const rows = [
     user: {read: true, write: false, subscribe: false},
     href: "https://docs.slack.dev/reference/methods/files.remote.list"
   }, {
+    label: "messages",
+    bot: {read: false, write: false, subscribe: true},
+    user: {read: false, write: false, subscribe: true},
+    href: "https://docs.slack.dev/reference/events/message"
+  }, {
     label: "slackLists",
     bot: {read: false, write: true, subscribe: false},
     user: {read: false, write: true, subscribe: false},
@@ -265,6 +270,10 @@ export const groupSeparator = {
     </tbody>
   </table>
 </div>
+
+`messages` is subscribe-only: Slack has no endpoint that reads a single message, so the record is
+delivered in the event payload instead. See [Subscribing to message
+events](#subscribing-to-message-events) for how to configure it and what the webhook contains.
 
 ### Choose a connector
 
