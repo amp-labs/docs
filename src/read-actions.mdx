@@ -202,6 +202,34 @@ If you want different filter behavior for backfill vs. incremental reads, you ca
 
 In this example, the backfill will only return contacts whose `firstname` equals "Brian", while subsequent incremental reads will only return contacts whose `status` equals "active".
 
+### Filter field names
+
+The `fieldName` of a filter must be the field's name in the provider's API, and it is case-sensitive.
+
+<Warning>
+Read filters do **not** resolve [object and field mappings](/object-and-field-mapping). A `mapToName` from your `amp.yaml`, or a mapping your customer selected during installation, is not translated to the underlying provider field. This differs from [search actions](/search-actions#execute-a-search), which do accept mapped field names.
+</Warning>
+
+For example, if your manifest maps the provider field `mobilephone` to `phone`:
+
+```yaml
+requiredFields:
+  - fieldName: mobilephone
+    mapToName: phone
+```
+
+then a filter on that field must still reference `mobilephone`:
+
+```json
+// Correct — the provider's field name
+{ "fieldName": "mobilephone", "operator": "eq", "value": "1234567890" }
+
+// Incorrect — mapToName is not resolved, so the read will fail or return no records
+{ "fieldName": "phone", "operator": "eq", "value": "1234567890" }
+```
+
+The field you filter on does not have to be one of the object's `selectedFields`. You can filter on a field that you don't read.
+
 ### Valid filter values
 
 The `value` field of the filter accepts strings, booleans, and numbers:
