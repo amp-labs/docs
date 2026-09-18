@@ -360,11 +360,38 @@ subscribe:
 `inheritFieldsAndMapping` is required whenever create, update or delete events are set.
 For `messages` it resolves to an empty field selection, which is expected.
 
-#### Configure your Slack app
+#### Scopes and event subscriptions
 
-Your customer's Slack app needs event subscriptions for the conversation types you care about, meaning `message.channels`, `message.groups`, `message.im` and `message.mpim`, along with the matching history scopes.
-A bot only receives events for channels it has been added to.
-Slack caps event delivery at 30,000 events per workspace per hour and expects acknowledgement within three seconds.
+Which event subscription you need depends on the conversation type you want messages from.
+Each one requires the matching history scope, added under **Event Subscriptions** and **OAuth & Permissions** in your Slack app:
+
+| Conversation type     | Event subscription | Scope required     |
+|-----------------------|--------------------|--------------------|
+| Public channels       | `message.channels` | `channels:history` |
+| Private channels      | `message.groups`   | `groups:history`   |
+| Direct messages       | `message.im`       | `im:history`       |
+| Group direct messages | `message.mpim`     | `mpim:history`     |
+
+Add these as **Bot Token Scopes** for the Bot connector (`slack`), or as **User Token Scopes** for the User connector (`slackUserScope`).
+Subscribe only to the conversation types you need, since each one adds volume.
+
+You do not subscribe to subtypes.
+Edits, deletions and thread replies all arrive through the subscriptions above, and Ampersand derives the event type from the payload:
+
+| Subscribe event type | Slack payload                                         |
+|----------------------|-------------------------------------------------------|
+| `create`             | a `message` with no subtype, or subtype `thread_broadcast` |
+| `update`             | subtype `message_changed`                             |
+| `delete`             | subtype `message_deleted`                             |
+
+So subscribing to `message.channels` alone gives you creates, updates and deletes for public channels.
+
+#### Other Slack limits
+
+A bot only receives events for channels it has been invited to, so adding the scopes is not enough on its own.
+With the User connector, the authorizing user receives events for the conversations they are a member of.
+
+Slack caps event delivery at 30,000 events per workspace per hour and expects your endpoint to acknowledge within three seconds.
 
 ## Before you get started
 
