@@ -140,6 +140,12 @@ export const rows = [
     user: {read: true, write: false, subscribe: false},
     href: "https://docs.slack.dev/reference/methods/files.remote.list"
   }, {
+    label: "messages",
+    bot: {read: false, write: false, subscribe: true},
+    user: {read: false, write: false, subscribe: true},
+    href: "#subscribing-to-message-events",
+    note: "Subscribe only."
+  }, {
     label: "slackLists",
     bot: {read: false, write: true, subscribe: false},
     user: {read: false, write: true, subscribe: false},
@@ -249,6 +255,20 @@ export const groupSeparator = {
             <a href={row.href}>
               {row.label}
             </a>
+
+            {row.note && (
+              <div
+                style={{
+                  whiteSpace: "normal",
+                  fontSize: "0.8em",
+                  opacity: 0.75,
+                  marginTop: "2px",
+                  lineHeight: 1.3,
+                }}
+              >
+                {row.note} <a href={row.href}>See this section for details.</a>
+              </div>
+            )}
           </td>
 
           <td>{renderCellValue(row.bot.read)}</td>
@@ -265,6 +285,16 @@ export const groupSeparator = {
     </tbody>
   </table>
 </div>
+
+<Note>
+  To receive messages, thread replies, edits and deletions, subscribe to the `messages` object.
+  `conversations` covers channel lifecycle events such as creation, rename and archive, not what is
+  said inside them, so subscribing to it alone will not deliver a single message.
+
+  `messages` is subscribe-only: Slack has no endpoint that reads a single message, so the record is
+  delivered in the event payload instead. See [Subscribing to message
+  events](#subscribing-to-message-events) for how to configure it and what the webhook contains.
+</Note>
 
 ### Choose a connector
 
@@ -285,6 +315,144 @@ Use the sample corresponding to the connector you want to install:
 | User connector | `slackUserScope` | [User connector sample](https://github.com/amp-labs/samples/blob/main/slack-user/amp.yaml) |
 
 The two manifests use different provider names.
+
+### Subscribing to message events
+
+Slack delivers every message as an event of type [`message`](https://docs.slack.dev/reference/events/message), distinguished by a [subtype](https://docs.slack.dev/reference/events/message#subtypes).
+Ampersand maps them onto a single object, `messages`:
+
+| Slack event                          | Subscribe event type |
+|--------------------------------------|----------------------|
+| `message`, `thread_broadcast`        | `create`             |
+| `message_changed`                    | `update`             |
+| `message_deleted`                    | `delete`             |
+
+A thread reply is a plain `message` event carrying a `thread_ts`.
+Slack does not populate a `message_replied` subtype, so watch for `thread_ts` to identify replies.
+
+#### The record arrives in the webhook
+
+`messages` behaves differently from every other subscribe object.
+Slack has no endpoint that fetches a single message by id, so Ampersand cannot look the record up after the event arrives.
+Instead, the full message is delivered from the event payload itself.
+
+Two consequences follow:
+
+- Do not add `messages` to your read objects. It is not a readable Slack object, and a manifest that reads it will fail to deploy to your customers.
+- `fields` and `mappedFields` are empty, because there is no read action to inherit them from. Read the message out of `raw` instead.
+
+#### Watch all fields on updates
+
+Slack does not say which parts of a message changed when it sends `message_changed`.
+Set `watchFieldsAuto: all` on the update event, or edits will not be delivered:
+
+```yaml
+subscribe:
+  objects:
+    - objectName: messages
+      destination: messageWebhook
+      inheritFieldsAndMapping: true
+      createEvent:
+        enabled: always
+      updateEvent:
+        enabled: always
+        watchFieldsAuto: all
+      deleteEvent:
+        enabled: always
+```
+
+`inheritFieldsAndMapping` is required whenever create, update or delete events are set.
+For `messages` it resolves to an empty field selection, which is expected.
+
+#### Scopes and event subscriptions
+
+Which event subscription you need depends on the conversation type you want messages from.
+Each one requires the matching history scope, added under **Event Subscriptions** and **OAuth & Permissions** in your Slack app:
+
+| Conversation type     | Event subscription | Scope required     |
+|-----------------------|--------------------|--------------------|
+| Public channels       | `message.channels` | `channels:history` |
+| Private channels      | `message.groups`   | `groups:history`   |
+| Direct messages       | `message.im`       | `im:history`       |
+| Group direct messages | `message.mpim`     | `mpim:history`     |
+
+Add these as **Bot Token Scopes** for the Bot connector (`slack`), or as **User Token Scopes** for the User connector (`slackUserScope`).
+Subscribe only to the conversation types you need, since each one adds volume.
+
+You do not subscribe to subtypes.
+Edits, deletions and thread replies all arrive through the subscriptions above, and Ampersand derives the event type from the payload:
+
+| Subscribe event type | Slack payload                                         |
+|----------------------|-------------------------------------------------------|
+| `create`             | a `message` with no subtype, or subtype `thread_broadcast` |
+| `update`             | subtype `message_changed`                             |
+| `delete`             | subtype `message_deleted`                             |
+
+So subscribing to `message.channels` alone gives you creates, updates and deletes for public channels.
+
+#### Set up a message subscription
+
+<Steps>
+  <Step title="Add the subscribe object to your manifest and deploy">
+    Add a `messages` subscribe object using the [example above](#watch-all-fields-on-updates), and do
+    not add `messages` to your read objects.
+    Deploy with the [amp CLI](/cli/overview), and create the [destination](/destinations) your
+    subscribe object names if it does not exist yet.
+  </Step>
+
+  <Step title="Have your customer install the integration">
+    Embed the [InstallIntegration](/embeddable-ui-components#install-integration) component.
+    Your customer authorizes Slack and the installation is created.
+  </Step>
+
+  <Step title="Add `messages` to the installation">
+    The install component cannot add `messages` on its own, because Slack publishes no field metadata for it.
+    Until it can, add the object to the installation with [Update an installation](/reference/installation/update-an-installation):
+
+    ```bash
+    curl -X PATCH \
+      -H "X-Api-Key: $AMPERSAND_API_KEY" \
+      -H "Content-Type: application/json" \
+      "https://api.withampersand.com/v1/projects/$PROJECT_ID/integrations/$INTEGRATION_ID/installations/$INSTALLATION_ID" \
+      -d '{
+      "updateMask": ["config.content.read.objects.messages"],
+      "installation": {
+        "config": {
+          "content": {
+            "read": {
+              "objects": {
+                "messages": {
+                  "disabled": false,
+                  "objectName": "messages",
+                  "destination": "messageWebhook",
+                  "selectedFields": {
+                    "ts": true,
+                    "text": true,
+                    "user": true,
+                    "channel": true,
+                    "type": true,
+                    "thread_ts": true,
+                    "event_ts": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }'
+    ```
+
+    Repeat this if the installation is later updated through the install component, which rebuilds the config and drops the object.
+  </Step>
+</Steps>
+
+#### Other Slack limits
+
+A bot only receives events for channels it has been invited to, so adding the scopes is not enough on its own.
+With the User connector, the authorizing user receives events for the conversations they are a member of.
+
+Slack caps event delivery at 30,000 events per workspace per hour and expects your endpoint to acknowledge within three seconds.
 
 ## Before you get started
 
