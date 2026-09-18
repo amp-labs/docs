@@ -287,6 +287,10 @@ export const groupSeparator = {
 </div>
 
 <Note>
+  To receive messages, thread replies, edits and deletions, subscribe to the `messages` object.
+  `conversations` covers channel lifecycle events such as creation, rename and archive, not what is
+  said inside them, so subscribing to it alone will not deliver a single message.
+
   `messages` is subscribe-only: Slack has no endpoint that reads a single message, so the record is
   delivered in the event payload instead. See [Subscribing to message
   events](#subscribing-to-message-events) for how to configure it and what the webhook contains.
