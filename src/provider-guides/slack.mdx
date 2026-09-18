@@ -286,6 +286,60 @@ Use the sample corresponding to the connector you want to install:
 
 The two manifests use different provider names.
 
+### Subscribing to message events
+
+Slack delivers every message as an event of type `message`, distinguished by a subtype.
+Ampersand maps them onto a single object, `messages`:
+
+| Slack event                          | Subscribe event type |
+|--------------------------------------|----------------------|
+| `message`, `thread_broadcast`        | `create`             |
+| `message_changed`                    | `update`             |
+| `message_deleted`                    | `delete`             |
+
+A thread reply is a plain `message` event carrying a `thread_ts`.
+Slack does not populate a `message_replied` subtype, so watch for `thread_ts` to identify replies.
+
+#### The record arrives in the webhook
+
+`messages` behaves differently from every other subscribe object.
+Slack has no endpoint that fetches a single message by id, so Ampersand cannot look the record up after the event arrives.
+Instead, the full message is delivered from the event payload itself.
+
+Two consequences follow:
+
+- Do not add `messages` to your read objects. It is not a readable Slack object, and a manifest that reads it will fail to deploy to your customers.
+- `fields` and `mappedFields` are empty, because there is no read action to inherit them from. Read the message out of `raw` instead.
+
+#### Watch all fields on updates
+
+Slack does not say which parts of a message changed when it sends `message_changed`.
+Set `watchFieldsAuto: all` on the update event, or edits will not be delivered:
+
+```yaml
+subscribe:
+  objects:
+    - objectName: messages
+      destination: messageWebhook
+      inheritFieldsAndMapping: true
+      createEvent:
+        enabled: always
+      updateEvent:
+        enabled: always
+        watchFieldsAuto: all
+      deleteEvent:
+        enabled: always
+```
+
+`inheritFieldsAndMapping` is required whenever create, update or delete events are set.
+For `messages` it resolves to an empty field selection, which is expected.
+
+#### Configure your Slack app
+
+Your customer's Slack app needs event subscriptions for the conversation types you care about, meaning `message.channels`, `message.groups`, `message.im` and `message.mpim`, along with the matching history scopes.
+A bot only receives events for channels it has been added to.
+Slack caps event delivery at 30,000 events per workspace per hour and expects acknowledgement within three seconds.
+
 ## Before you get started
 
 To connect Slack with Ampersand, you will need [a Slack Developer Account](https://api.slack.com/developer-program/join).
