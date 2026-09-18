@@ -444,18 +444,7 @@ So subscribing to `message.channels` alone gives you creates, updates and delete
     }'
     ```
 
-    Three details matter:
-
-    - The update mask must name the object, as `config.content.read.objects.messages`. A bare `config` is rejected.
-    - Because the mask names one object, the patch merges. Read objects already in the config are left alone.
-    - `destination` is required here and must match a destination in your project. Your manifest has no `messages` read object for it to inherit one from.
-
     Repeat this if the installation is later updated through the install component, which rebuilds the config and drops the object.
-  </Step>
-
-  <Step title="Post a message and check your destination">
-    Send a message in a channel the bot has joined.
-    A create event should arrive at your destination with the message in `raw`.
   </Step>
 </Steps>
 
