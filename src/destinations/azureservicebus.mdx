@@ -1,0 +1,47 @@
+---
+title: Azure Service Bus destinations
+---
+
+For more information on destinations, see the [Destinations](/destinations) page.
+
+When new data is read from a SaaS instance via a [Read Action](/read-actions) or [Subscribe Action](/subscribe-actions), Ampersand publishes the payload as messages to your Azure Service Bus queue or topic.
+
+## Prerequisites
+
+Before setting up an Azure Service Bus destination, ensure that you have:
+- An Azure Service Bus namespace with a queue or topic
+- A connection string with `Send` permission on that queue or topic
+
+## Data format
+
+Ampersand publishes each read or subscribe message to your queue or topic as JSON. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+
+## Create an Azure Service Bus destination
+
+Go to the [Destinations page](https://dashboard.withampersand.com/projects/_/destinations) in the Ampersand Dashboard and create a new Azure Service Bus destination.
+
+You'll need to provide:
+
+| Field | Type | Required | Example | Description |
+|-------|------|----------|---------|-------------|
+| **Destination name** | string | Yes | `ampersandServiceBus` | Alias to reference in your `amp.yaml` file |
+| **Name** | string | Yes | `ampersand-events` | Name of the queue or topic to publish to |
+| **Connection string** | string | Yes | | Connection string with `Send` permission |
+
+## Refer to the destination in your integration
+
+After creating your Azure Service Bus destination, reference it in your `amp.yaml` file:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforceToServiceBus
+    displayName: Salesforce to Azure Service Bus
+    provider: salesforce
+    read:
+      objects:
+        - objectName: account
+          destination: ampersandServiceBus
+        - objectName: contact
+          destination: ampersandServiceBus
+```

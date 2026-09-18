@@ -306,13 +306,12 @@ const baseConfig = {
               ]
             },
             {
-              group: "Queues",
+              group: "Streams and queues",
               pages: [
-                "destinations/eventbridge",
+                "destinations/azureservicebus",
                 "destinations/kinesis",
                 "destinations/pubsub",
                 "destinations/rabbitmq",
-                "destinations/sns",
                 "destinations/sqs",
               ]
             }
@@ -345,6 +344,7 @@ const baseConfig = {
             "provider-guides/avoma",
             "provider-guides/aweber",
             "provider-guides/aws",
+            "provider-guides/basecamp",
             "provider-guides/bentley",
             "provider-guides/bigquery",
             "provider-guides/bird",
@@ -356,9 +356,11 @@ const baseConfig = {
             "provider-guides/braintree",
             "provider-guides/braze",
             "provider-guides/breakcold",
+            "provider-guides/breezy",
             "provider-guides/brevo",
             "provider-guides/bynder",
             "provider-guides/calendly",
+            "provider-guides/callRail",
             "provider-guides/campaignMonitor",
             "provider-guides/capsule",
             "provider-guides/chargeOver",
@@ -446,6 +448,7 @@ const baseConfig = {
             "provider-guides/linear",
             "provider-guides/linkedin",
             "provider-guides/livestorm",
+            "provider-guides/lob",
             "provider-guides/loxo",
             "provider-guides/mailgun",
             "provider-guides/marketo",
@@ -455,6 +458,7 @@ const baseConfig = {
             "provider-guides/miro",
             "provider-guides/mixmax",
             "provider-guides/mixpanel",
+            "provider-guides/monaco",
             "provider-guides/monday",
             "provider-guides/mural",
             "provider-guides/netsuite",
@@ -480,6 +484,7 @@ const baseConfig = {
             "provider-guides/ramp",
             "provider-guides/rebilly",
             "provider-guides/recurly",
+            "provider-guides/reply",
             "provider-guides/revenuecat",
             "provider-guides/ringCentral",
             "provider-guides/sageIntacct",
@@ -546,6 +551,12 @@ const baseConfig = {
           group: "Troubleshooting guides",
           pages: [
             "troubleshooting-guides/salesforce"
+          ]
+        },
+        {
+          group: "Security",
+          pages: [
+            "security/outgoing-ip-addresses"
           ]
         },
         "dev-and-prod-environments",

@@ -11,12 +11,12 @@ When new data is read from a SaaS instance via a [Read Action](/read-actions) or
 
 Before setting up a RabbitMQ destination, ensure that you have:
 - A RabbitMQ instance reachable from the internet
-- A connection URI with permission to publish
-- A routing key that reaches a queue you can consume from
+- An exchange that already exists on that instance
+- A username and password with permission to publish to that exchange
 
 ## Data format
 
-Ampersand publishes each read or subscribe message to your RabbitMQ instance as JSON, using the routing key you configure. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
+Ampersand publishes each read or subscribe message to your RabbitMQ exchange as JSON. The full payload schema is defined in [webhook.yaml](https://github.com/amp-labs/openapi/blob/main/webhook/webhook.yaml).
 
 ## Create a RabbitMQ destination
 
@@ -27,8 +27,11 @@ You'll need to provide:
 | Field | Type | Required | Example | Description |
 |-------|------|----------|---------|-------------|
 | **Destination name** | string | Yes | `ampersandRabbitMQ` | Alias to reference in your `amp.yaml` file |
-| **Connection URI** | string | Yes | `amqp://user:pass@host:5672` | AMQP connection URI (it embeds your credentials) |
-| **Routing key** | string | Yes | `ampersand-events` | Routing key to publish messages with |
+| **Server URL** | string | Yes | `rabbitmq.example.com:5672` | Host and port of your RabbitMQ instance |
+| **Exchange** | string | Yes | `ampersand-events` | Name of an exchange that already exists |
+| **TLS** | boolean | No | `false` | Whether to connect over TLS. Defaults to false (plain AMQP); set to true for managed brokers that require TLS, e.g. CloudAMQP |
+| **Username** | string | Yes | `ampersand` | Username with permission to publish |
+| **Password** | string | Yes | | Password for the username |
 
 ## Refer to the destination in your integration
 

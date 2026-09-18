@@ -1,30 +1,83 @@
 ---
-title: "Survey Monkey"
+title: "SurveyMonkey"
 ---
-## What's Supported
 
-### Supported Actions
+## What's supported
+
+### Supported actions
 
 This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill.
+- [Write Actions](/write-actions) (create, update, and delete — depending on the object).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.surveymonkey.com`.
+- Subscribe Actions are not currently supported.
 
-## Before You Get Started
+### Supported objects
 
-To connect SurveyMonkey with Ampersand, you need to [Create a SurveyMonkey Account](#create-a-surveymonkey-account) and obtain the following credentials from your SurveyMonkey App:
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+<div style={{ width: '100%', overflowX: 'auto' }}>
+<table style={{ width: '100%', minWidth: '1000px', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse' }}>
+  <thead>
+    <tr style={{ width: '100%' }}>
+      <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
+      <th style={{ width: '11.2%' }}>Metadata</th>
+      <th style={{ width: '11.2%' }}>Read</th>
+      <th style={{ width: '11.2%' }}>Write</th>
+      <th style={{ width: '11.2%' }}>Subscribe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-benchmark_bundles">benchmark_bundles</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-contact_fields">contact_fields</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-contact_lists">contact_lists</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-contacts">contacts</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-groups">groups</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-organizations">organizations</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-question_bank-questions">question_bank_questions</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-roles">roles</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-survey_categories">survey_categories</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-survey_folders">survey_folders</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-survey_languages">survey_languages</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-survey_templates">survey_templates</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-surveys">surveys</a></td><td><Check /></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-team_survey_templates">team_survey_templates</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+    <tr><td style={{ textAlign: 'left' }}><a href="https://api.surveymonkey.com/v3/docs#api-endpoints-get-workgroups">workgroups</a></td><td><Check /></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
+  </tbody>
+</table>
+</div>
+
+### Notes and limitations
+
+- **Write support**
+  - `contacts`, `contact_lists`, `surveys`: create, update, and delete
+  - `survey_folders`: create only
+  - `contact_fields`: update only (label)
+- **Not available as objects:** survey responses, collectors, survey pages, survey questions, and webhooks. Use [Proxy Actions](/proxy-actions) if you need access to other SurveyMonkey API endpoints.
+
+### Example integration
+
+For an example manifest file of a SurveyMonkey integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/surveyMonkey/amp.yaml).
+
+## Before you get started
+
+To connect SurveyMonkey with Ampersand, you need to [create a SurveyMonkey account](#create-a-surveymonkey-account) and obtain the following credentials from your SurveyMonkey app:
 
 - Client ID
 - Client Secret
 
-You will then use these credentials to connect your application to Ampersand.
+You will use these credentials to connect your application to Ampersand.
 
-### Create a SurveyMonkey Account
+### Create a SurveyMonkey account
 
 You need a **SurveyMonkey** account to connect with Ampersand. If you do not have a SurveyMonkey account, here's how you can sign up:
 
-- Go to the [SurveyMonkey site](https://www.surveymonkey.com/). 
+- Go to the [SurveyMonkey site](https://www.surveymonkey.com/).
 - Sign up for a free account using your preferred method.
 
-### Creating a SurveyMonkey App
+### Creating a SurveyMonkey app
 
 1. Log in to the [SurveyMonkey Developer Portal](https://developer.surveymonkey.com/).
 
@@ -32,8 +85,8 @@ You need a **SurveyMonkey** account to connect with Ampersand. If you do not hav
 
 3. On the _Create a New App_ form, enter the following details:
    1. **App Name**: The name of the app.
-   2. **App Creator**: Email address of the app owner. 
-   3. **Select an app type.**: Specify whether the application should be private or public. 
+   2. **App Creator**: Email address of the app owner.
+   3. **Select an app type**: Specify whether the application should be private or public.
 
 4. Click **Create App**.
 
@@ -47,7 +100,9 @@ You need a **SurveyMonkey** account to connect with Ampersand. If you do not hav
 
 7. Click **Submit changes**.
 
-8. From the **Scopes** section, select the scopes required for your application.
+8. From the **Scopes** section, select the scopes required for your application. Common scopes include:
+   - **View Surveys** / **Create/Modify Surveys** — for reading and writing surveys
+   - **View Contacts** / **Create/Modify Contacts** — for reading and writing contacts and contact lists
 
 9. Click **Update Scopes**.
 
@@ -57,20 +112,39 @@ You need a **SurveyMonkey** account to connect with Ampersand. If you do not hav
 
 You can find the **Client ID** and **Client Secret** keys on the **Overview** page of your application. Note these keys, as they are essential for connecting your app to Ampersand.
 
-## Add SurveyMonkey App Details in Ampersand
+Some scopes require a paid SurveyMonkey plan or additional approval for public apps. Configure only the scopes your integration uses.
+
+## Add your SurveyMonkey app info to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 
-2. Select the project where you want to add the SurveyMonkey App.
+2. Select the project where you want to add the SurveyMonkey app.
 
    ![Ampersand Project Selection](/images/provider-guides/2fd1283-Ampersand.png)
 
 3. Navigate to the **Provider Apps** section.
 
-4. Select **SurveyMonkey** from the Provider list.
+4. Select **SurveyMonkey** from the **Provider** list.
 
 5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
 
-   ![Ampersand Project Selection](/images/provider-guides/67af4d6-surveymonkey3.gif)
+   ![SurveyMonkey Integration in Ampersand](/images/provider-guides/67af4d6-surveymonkey3.gif)
 
 6. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with SurveyMonkey:
+
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/surveyMonkey/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If using Read or Write actions: create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## API documentation
+
+- [SurveyMonkey API v3](https://api.surveymonkey.com/v3/docs)
