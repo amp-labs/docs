@@ -143,7 +143,8 @@ export const rows = [
     label: "messages",
     bot: {read: false, write: false, subscribe: true},
     user: {read: false, write: false, subscribe: true},
-    href: "#subscribing-to-message-events"
+    href: "#subscribing-to-message-events",
+    note: "Subscribe only. The record arrives in the webhook."
   }, {
     label: "slackLists",
     bot: {read: false, write: true, subscribe: false},
@@ -254,6 +255,20 @@ export const groupSeparator = {
             <a href={row.href}>
               {row.label}
             </a>
+
+            {row.note && (
+              <div
+                style={{
+                  whiteSpace: "normal",
+                  fontSize: "0.8em",
+                  opacity: 0.75,
+                  marginTop: "2px",
+                  lineHeight: 1.3,
+                }}
+              >
+                {row.note} <a href={row.href}>See this section for details.</a>
+              </div>
+            )}
           </td>
 
           <td>{renderCellValue(row.bot.read)}</td>
