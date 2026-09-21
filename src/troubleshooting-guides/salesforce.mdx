@@ -64,3 +64,41 @@ Remove the field from your write payload for this customer — for example, by c
 ### Connected user lacks field-level visibility
 
 If the field exists in the org but isn't visible to the connected user's profile, Salesforce returns the same `No such column` error. Follow the steps in [Resolve a field-level visibility issue](#resolve-a-field-level-visibility-issue).
+
+## `INVALID_SESSION_ID` error
+
+A read, write, or proxy call fails with an error similar to:
+
+```text
+INVALID_SESSION_ID: Session expired or invalid
+```
+
+Salesforce returns this when the access token Ampersand presented is no longer valid. The connection's `status` field on [Get a connection](/reference/connection/get-a-connection) will typically be `bad_credentials` once this happens.
+
+<Tip>
+**Which case is this?**
+- The integration used to work and started failing → the [connected user's session or approval was revoked](#session-or-approval-was-revoked).
+- The integration has never worked, or breaks a few hours or days after every install → the connected app's [Refresh Token Policy is misconfigured](#refresh-token-policy-is-misconfigured).
+</Tip>
+
+### Session or approval was revoked
+
+Salesforce invalidates existing sessions when any of the following happens to the connected user:
+
+- The user's password is reset or changed.
+- An admin revokes the OAuth authorization for the Ampersand app under **Setup → Connected Apps OAuth Usage**.
+- The user is deactivated, or their profile loses access to the connected app.
+- IP restrictions on the profile or the connected app block Ampersand's request.
+
+To recover, the customer must re-authenticate through the [Update a connection](/customer-guides/update-connection) flow in the **Manage** tab. Ampersand will fetch a new access token and resume calls; if reads were auto-paused after the failures, resume them with the [Unpause Reads endpoint](/reference/read/unpause-reads-for-an-installation).
+
+### Refresh Token Policy is misconfigured
+
+If the connected app's **Refresh Token Policy** is not set to **Refresh token is valid until revoked**, Salesforce silently expires the refresh token. Ampersand can no longer mint new access tokens, and subsequent API calls fail with `INVALID_SESSION_ID` (OAuth Web Server flow) or `invalid_grant` (JWT Bearer flow).
+
+Fix the connected app configuration:
+
+- OAuth Web Server flow: follow [Configure token policy settings](/customer-guides/salesforce#configure-token-policy-settings) in the Salesforce customer guide.
+- JWT Bearer flow: follow the token policy step in the [Salesforce JWT guide](/customer-guides/salesforce-jwt).
+
+After updating the policy, the customer needs to reconnect via [Update a connection](/customer-guides/update-connection) so Ampersand obtains a fresh refresh token under the new policy.
