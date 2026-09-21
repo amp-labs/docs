@@ -344,8 +344,7 @@ Note: `error` describes what went wrong during the triggered read.
     "consumerName": "John Doe",
     "objectName": "Account",
     "success": true,
-    "successfulRecordIds": ["provider-record-id-1", "provider-record-id-2"],
-    "errors": []
+    "successfulRecordIds": ["provider-record-id-1", "provider-record-id-2"]
   }
 }
 ```
@@ -365,12 +364,24 @@ Note: `error` describes what went wrong during the triggered read.
   "consumerName": "John Doe",
   "objectName": "Account",
   "success": true,
-  "successfulRecordIds": ["provider-record-id-1", "provider-record-id-2"],
-  "errors": []
+  "successfulRecordIds": ["provider-record-id-1", "provider-record-id-2"]
 }
 ```
 
-Note: For partial failures, `success` is `false` with both `successfulRecordIds` and `errors` populated.
+**On failure**, `success` is `false` and the error fields are present. For a partial failure,
+`successfulRecordIds` is populated too — the records that did land:
+
+```json
+{
+  "objectName": "Account",
+  "success": false,
+  "successfulRecordIds": ["provider-record-id-1"],
+  "error": "field validation failed; duplicate record"
+}
+```
+
+`error` is a single string holding every failure message; when several records fail, their messages
+are joined with `; `. It is omitted entirely when the write succeeds.
 </Accordion>
 
 <Accordion title="subscribe.create.success">
