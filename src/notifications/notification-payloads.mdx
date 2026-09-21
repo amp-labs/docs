@@ -376,18 +376,12 @@ Note: `error` describes what went wrong during the triggered read.
   "objectName": "Account",
   "success": false,
   "successfulRecordIds": ["provider-record-id-1"],
-  "error": "field validation failed; duplicate record",
-  "errors": ["field validation failed", "duplicate record"]
+  "error": "field validation failed; duplicate record"
 }
 ```
 
 `error` is a single string holding every failure message; when several records fail, their messages
-are joined with `; `. Both fields are omitted entirely when the write succeeds.
-
-<Warning>
-  The `errors` array is deprecated and will be removed in a future release. It carries the same
-  messages as `error`, one per entry. Migrate to `error`.
-</Warning>
+are joined with `; `. It is omitted entirely when the write succeeds.
 </Accordion>
 
 <Accordion title="subscribe.create.success">
