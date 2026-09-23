@@ -24,6 +24,15 @@ export interface DocsConfig {
     light?: string;
     dark?: string;
   };
+  background?: {
+    color?: {
+      light?: string;
+      dark?: string;
+    };
+  };
+  styling?: {
+    codeblocks?: "system" | "dark";
+  };
   favicon?: string;
   contextual?: {
     options: Array<string>;
@@ -111,6 +120,8 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     theme: 'mint',
     name: mintConfig.name,
     colors: mintConfig.colors,
+    background: mintConfig.background,
+    styling: mintConfig.styling,
     favicon: mintConfig.favicon,
     contextual: {
       options: ['copy', 'view']
@@ -161,6 +172,7 @@ export function writeDocsJson(docsConfig: DocsConfig, outputPath: string = 'docs
 }
 
 // Create the base configuration
+// See https://www.mintlify.com/docs/organize/settings-appearance#settings
 const baseConfig = {
   name: "Ampersand",
   openapi: [openApiPlatform, openApiRead, openApiWrite, openApiSearch],
@@ -170,10 +182,22 @@ const baseConfig = {
     href: "https://withampersand.com"
   },
   favicon: "logos/favicon.svg",
-  colors: {
-    primary: "#4F1EB8",
-    light: "#A67CFF",
-    dark: "#6122E7",
+  appearance: {
+    default: "dark",
+  },
+  "colors": {
+    "primary": "#4491E4",
+    "light": "#F3F89B",
+    "dark": "#2B2B2B"
+  },
+  "background": {
+    "color": {
+      "light": "#FFFCF0",
+      "dark": "#2B2B2B"
+    }
+  },
+  "styling": {
+    "codeblocks": "dark"
   },
   topbarCtaButton: {
     name: "Start building now",
