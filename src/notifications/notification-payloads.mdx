@@ -169,6 +169,49 @@ Note: `config` contains the complete installation configuration object including
 ```
 </Accordion>
 
+<Accordion title="read.backfill.error">
+**Webhook destination payload:**
+```json
+{
+  "notificationType": "read.backfill.error",
+  "data": {
+    "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
+    "provider": "salesforce",
+    "integrationId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+    "integrationName": "Salesforce Integration",
+    "installationId": "a3bb189e-8bf9-3888-9912-ace4e6543002",
+    "connectionId": "c4e7f2a1-8b3d-4f6e-9a2c-5d1e3f4b6a7c",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "objectName": "Account",
+    "error": "Authentication failed"
+  }
+}
+```
+
+**Kinesis and S3 destination payload:**
+```json
+{
+  "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
+  "provider": "salesforce",
+  "integrationId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+  "integrationName": "Salesforce Integration",
+  "installationId": "a3bb189e-8bf9-3888-9912-ace4e6543002",
+  "connectionId": "c4e7f2a1-8b3d-4f6e-9a2c-5d1e3f4b6a7c",
+  "groupRef": "customer-group-ref",
+  "groupName": "Customer Name",
+  "consumerRef": "user-123",
+  "consumerName": "John Doe",
+  "objectName": "Account",
+  "error": "Authentication failed"
+}
+```
+
+Note: `error` describes what went wrong during the backfill. A later retry of the backfill can still succeed, in which case a `read.backfill.done` notification follows.
+</Accordion>
+
 <Accordion title="read.schedule.paused">
 **Webhook destination payload:**
 ```json
