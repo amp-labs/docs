@@ -1,9 +1,9 @@
 ---
 title: "General"
-description: "Fixes for errors that can occur with any provider: paused reads, rate limits, webhook delivery, credentials, and async writes."
+description: "Fixes for errors that can happen with any provider."
 ---
 
-These issues can occur with any provider. For provider-specific errors, see the guides in this section or use the [troubleshooting index](/troubleshooting-guides/overview).
+For errors specific to one provider, see the other guides in this section or search the [troubleshooting index](/troubleshooting-guides/overview).
 
 ## Scheduled reads stopped running
 
@@ -39,18 +39,6 @@ These issues can occur with any provider. For provider-specific errors, see the 
 
 1. Raise your framework's body size limit to at least 350 KB (for example, `express.json({ limit: "350kb" })`).
 2. If your receiver can't accept payloads of this size at all, deliver results by URL instead. See [handling the payload size](/destinations/webhooks#handling-the-payload-size).
-
-## Webhook signature verification fails
-
-**Symptom**: the signature on incoming webhook messages doesn't validate.
-
-**Why this happens**: Ampersand delivers webhooks through Svix, and each destination has its own signing secret. Verifying with the wrong destination's secret, or reading the wrong header, fails validation.
-
-**How to fix**:
-
-1. Read the signature from the `svix-signature` header.
-2. Verify it with the **webhook signing secret for that specific destination**, found in the [Dashboard](https://dashboard.withampersand.com).
-3. Follow the steps in [webhook signature verification](/destinations/webhooks#webhook-signature-verification).
 
 ## Connection shows `bad_credentials`
 

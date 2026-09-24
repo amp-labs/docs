@@ -171,35 +171,6 @@ If you need the IDs themselves, add the [`EmailMessageRelation`](https://develop
 - `RelationObjectType`
 - `RelationType`, for example `ToAddress`, `CcAddress`, or `BccAddress`
 
-## `OAUTH_APPROVAL_ERROR_GENERIC` in the OAuth window
-
-Your customer sees `OAUTH_APPROVAL_ERROR_GENERIC` in the Salesforce OAuth window while installing the integration.
-
-This is a Salesforce permission issue: the installing user is not allowed to approve the app. Their admin needs to enable one of the following for that user:
-
-- **Use Any API Client**, if their org has API Access Control enabled
-- **Approve Uninstalled Connected Apps**, if **Use Any API Client** is not shown
-
-Both are covered in [Required system permissions](/customer-guides/salesforce#required-system-permissions).
-
-## `OAUTH_EC_APP_NOT_FOUND` in the OAuth window
-
-The OAuth window reports that the external client app is not installed in the org.
-
-<Tip>
-**Which case is this?**
-- Only this customer is affected → they likely [never installed the package](#the-customer-did-not-install-the-package).
-- Every customer is affected → your app is likely [in the wrong org](#the-app-was-created-in-the-wrong-org).
-</Tip>
-
-### The customer did not install the package
-
-Your customer must open the package install URL and install the package before connecting. Send them the URL described in [Build the Package Install URL](/provider-guides/salesforce#6-build-the-package-install-url).
-
-### The app was created in the wrong org
-
-The External Client App must be created in your **Dev Hub Org**, not your Namespace Org. If it was created in the wrong org, no customer can install it. See [Salesforce orgs needed](/provider-guides/salesforce#salesforce-orgs-needed).
-
 ## `Object type is not supported` for a standard object
 
 A read or write fails with an error similar to:
