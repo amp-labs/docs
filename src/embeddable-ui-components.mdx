@@ -1,5 +1,6 @@
 ---
 title: "Prebuilt UI components"
+description: "Drop InstallIntegration, ConnectProvider, and related React components into your app so end users can connect and configure SaaS integrations."
 ---
 
 ## Project setup
@@ -172,6 +173,8 @@ To activate wizard mode, pass `variant="wizard"` to the `InstallIntegration` com
 ```
 
 When no installation exists, the wizard renders. If an installation already exists, the standard configuration UI is shown instead.
+
+If the object-selection step shows **"No objects available for this integration"**, the integration in the currently deployed `amp.yaml` has no objects defined under `read.objects` or `write.objects`. Add the objects you want end users to configure, then redeploy with the [amp CLI](/cli/overview). Also confirm you are pointing the component at the same project the manifest was deployed to. See [Read objects](/read-actions) and [Write objects](/write-actions) for the required manifest format.
 
 | Feature | Supported |
 |---|---|
