@@ -1,5 +1,6 @@
 ---
 title: "Prebuilt UI components"
+description: "Embed Ampersand's React components to let customers connect SaaS accounts, configure integrations, and manage or uninstall existing installations."
 ---
 
 ## Project setup
@@ -91,6 +92,17 @@ The `getToken` function should return a promise that resolves to a valid JWT tok
 ### Install integration
 
 The `InstallIntegration` component prompts your customer for their SaaS credentials, and then guides them through the installation flow for an integration. If they've already installed this integration, then the component will display the current configuration of the integration and allow them to update it.
+
+#### Install, manage, and uninstall states
+
+The component renders one of two states based on whether an installation already exists for the current `groupRef` and `integration`:
+
+* **Not installed:** Shows the connect and configure flow. When the consumer finishes, the `onInstallSuccess` callback fires with the new `installationId` and `Config`.
+* **Already installed:** Shows the manage view with the current configuration. From here, the consumer can update objects, fields, and mappings, or uninstall the integration.
+  * Saving configuration changes fires `onUpdateSuccess` with the `installationId` and updated `Config`.
+  * Uninstalling removes the installation and its configuration, fires `onUninstallSuccess` with the `installationId`, and returns the component to the not-installed state so the consumer can install again.
+
+You render the same `InstallIntegration` component in both states — you do not need a separate component or route for the manage or uninstall flow.
 
 Please note that each [group](/terminology#group) is able to install the integration once, so if someone else with the same `groupRef` has already installed the integration, then the user will not be able to install the same integration again.
 
