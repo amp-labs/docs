@@ -1,5 +1,6 @@
 ---
 title: "NetSuite"
+description: "Connect a NetSuite account to an Ampersand integration using OAuth 2.0 Client Credentials (machine-to-machine) and TBA authentication."
 ---
 
 This guide walks you through connecting your NetSuite account to an integration using OAuth 2.0 Client Credentials (Machine to Machine).
@@ -91,7 +92,11 @@ openssl ecparam -name prime256v1 -genkey -noout -out private-key.pem
 openssl req -new -x509 -key private-key.pem -out cert.pem -days 730
 ```
 
-The second command will prompt you for certificate details (country, organization name, email, etc.). **Press Enter at every prompt to accept the defaults** — these values are not used by the integration, so it doesn't matter what they are.
+The second command will prompt you for certificate details (country, organization name, email, etc.). These values are not used by the integration, so it doesn't matter what they are — you can press **Enter** to accept the defaults for each field.
+
+<Warning>
+Some OpenSSL builds reject a certificate where every field is left blank and fail with `error, no objects specified in config file`. If you hit this, re-run the second command and type any value (for example, `test`) for at least one prompt — **Common Name** works well — then press **Enter** through the rest.
+</Warning>
 
 #### c. Confirm the two files were created
 
