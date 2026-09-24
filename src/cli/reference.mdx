@@ -1,3 +1,8 @@
+---
+title: "CLI reference"
+description: "Reference for Ampersand CLI commands, including login, deploy, delete, and listing your projects, integrations, installations, and destinations."
+---
+
 This section provides a detailed overview of the Ampersand CLI, including the available commands, their usage, and options.
 
 ## Usage
@@ -123,6 +128,7 @@ amp deploy <folder_with_amp.yaml> --project <id-or-name> [--key <api-key>] [--de
 - Requires a folder containing an `amp.yaml` file.
 - Use this command to deploy new integrations or update existing ones.
 - Use this command when you've made changes to your integration
+- Deploying creates a new [revision](/terminology#revision) of the integration. It does not change the saved configuration of existing installations. To add a newly deployed object to an existing installation, update its config with the [Update an installation](/reference/installation/update-an-installation) endpoint or have the customer update it through your install UI. Objects with `enabled: always` in the manifest are the exception: they apply to every installation as soon as you deploy. See the [manifest reference](/manifest-reference#read-object).
 
 **Example:**
 
@@ -204,6 +210,9 @@ Displays all current installations of a given integration in your project.
 ```bash
 amp list:installations <integration-id> --project <id-or-name> [--key <api-key>] [--debug]
 ```
+
+**Notes:**
+- The CLI does not filter this list by installation ID or customer. To fetch a single installation by its ID, use the [Get an installation](/reference/installation/get-an-installation) endpoint. To filter by customer, pass the `groupRef` query parameter to the [List installations for an integration](/reference/installation/list-installations-for-an-integration) or [List installations for a project](/reference/installation/list-installations-for-a-project) endpoints.
 
 **Example:**
 
