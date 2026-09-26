@@ -306,6 +306,7 @@ const {
     object: HydratedIntegrationObject | null;
     getRequiredFields: () => HydratedIntegrationField[] | null;
     getOptionalFields: () => HydratedIntegrationField[] | null;
+    isAlwaysEnabled: () => boolean;  // Object is marked `enabled: always` in amp.yaml (v2.18.0+)
   },
   getCustomerFieldsForObject: (objectName: string) => {
     // Map of field names to field metadata.
@@ -514,6 +515,10 @@ The `readObject()` handlers include `setEnableRead` and `setDisableRead` to cont
 - **`setEnableRead`** — initializes a read object in the draft config and enables it. Safe to call multiple times (idempotent). For convenience, you can skip calling this function if you are already calling `setFieldMapping` or `setSelectedField`.
 - **`setDisableRead`** — pauses reads for the object without removing its config (sets a `disabled` flag).
 - **`removeObject`** — fully deletes an object from all actions (both read and write) in the draft config.
+
+<Note>
+Objects marked [`enabled: always`](/manifest-reference) in your `amp.yaml` are read for every installation, so they can't be turned off. Starting in `v2.18.0`, `setDisableRead` does nothing for them (and logs a warning), and `removeObject` removes only their write config. Use `useManifest().getReadObject(objectName).isAlwaysEnabled()` to find these objects, for example to show them as selected and locked in your UI.
+</Note>
 
 <Note>
 Calling `setSelectedField` or `setFieldMapping` will also automatically enable the read object, so `setEnableRead` is primarily useful when you want to enable an object without configuring fields, or to re-enable an object that was previously disabled.
