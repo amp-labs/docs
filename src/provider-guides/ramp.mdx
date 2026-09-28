@@ -8,7 +8,7 @@ title: "Ramp"
 
 This connector supports:
 
-- [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects marked in the table below. For all other objects, a full read of the Ramp instance will be done per scheduled read.
+- [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects marked in the table below, a full read of the Ramp instance will be done per scheduled read.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.ramp.com`.
 
@@ -24,35 +24,39 @@ export const rows = [
   { label: "bank-accounts", read: true, write: false, incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/bank-accounts" },
   { label: "bills", read: true, write: true, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/bills" },
   { label: "bills/drafts", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/bills" },
-  { label: "cards", read: true, write: true, incremental: false, href: "https://docs.ramp.com/developer-api/v1/cards-and-funds" },
+  { label: "cards", read: true, write: "update only", incremental: false, href: "https://docs.ramp.com/developer-api/v1/cards-and-funds" },
   { label: "cashbacks", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/cashbacks" },
   { label: "departments", read: true, write: true, incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/departments" },
   { label: "entities", read: true, write: false, incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/entities" },
-  { label: "item-receipts", read: true, write: true, incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/item-receipts" },
+  { label: "item-receipts", read: true, write: "create only", incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/item-receipts" },
   { label: "limits", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/funds" },
   { label: "locations", read: true, write: true, incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/locations" },
   { label: "memos", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/memos" },
   { label: "merchants", read: true, write: false, incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/merchants" },
   { label: "purchase-orders", read: true, write: true, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/purchase-orders" },
-  { label: "receipts", read: true, write: true, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/receipts" },
+  { label: "receipts", read: true, write: "create only", incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/receipts" },
   { label: "reimbursements", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/reimbursements" },
   { label: "repayments", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/repayments" },
-  { label: "spend-programs", read: true, write: true, incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/spend-programs" },
+  { label: "spend-programs", read: true, write: "create only", incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/spend-programs" },
   { label: "statements", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/statements" },
   { label: "transactions", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/transactions" },
   { label: "transfers", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/transfers" },
   { label: "trips", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/trips" },
-  { label: "unified-requests", read: true, write: false, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/unified-requests" },
-  { label: "users", read: true, write: true, incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/users" },
+  { label: "users", read: true, write: "update only", incremental: false, href: "https://docs.ramp.com/developer-api/v1/api/users" },
   { label: "vendors", read: true, write: true, incremental: true, href: "https://docs.ramp.com/developer-api/v1/api/vendors" },
 ]
 
 export const Check = () => <span>✅</span>
 export const Cross = () => <span>🚫</span>
+export const Partial = ({ label }) => <span title={label}>✅*</span>
 
 export function renderCellValue(value) {
   if (typeof value === "boolean") {
     return value ? <Check/> : <Cross/>;
+  }
+
+  if (typeof value === "string") {
+    return <Partial label={value}/>;
   }
 
   return value;
