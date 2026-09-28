@@ -226,6 +226,8 @@ In order to connect with your customer's Salesforce instances, you'll need to cr
 
 <img src="/images/provider-guides/salesforce_eca_authorization.png"/>
 
+> **Note:** "Relax IP restrictions" applies to the IP address your customer's browser authorizes from, not to the IP addresses Ampersand makes API calls from. Leave it relaxed. See [IP restrictions](#ip-restrictions) for how customers can still restrict API access by IP address.
+
 6. Go to the Settings tab, expand “OAuth Settings”. Click on “Consumer Key and Secret”.
 
 <img src="/images/provider-guides/salesforce_eca_oauth.png" width="200"/>
@@ -413,11 +415,35 @@ Whenever you would like to, you can follow these steps to migrate a Connected Ap
 
 <img src="/images/provider-guides/salesforce_eca_authorization.png"/>
 
+> **Note:** "Relax IP restrictions" applies to the IP address your customer's browser authorizes from, not to the IP addresses Ampersand makes API calls from. Leave it relaxed. See [IP restrictions](#ip-restrictions) for how customers can still restrict API access by IP address.
+
 9. [Enable Dev Hub](#1-enable-dev-hub) on your Salesforce org that is hosting the Connected App (which is now an External Client App).
 
 10. Create a new Developer Edition Salesforce org and [register a namespace](#2-register-a-namespace), then [link the namespace](#3-link-namespace-to-dev-hub-org) to the Dev Hub Org.
 
 11. Package the External Client App by [following these instructions](#5-package-the-external-client-app).
+
+## IP restrictions
+
+Salesforce has several IP controls, and they apply at different points.
+
+### IP Relaxation on your External Client App
+
+The **IP Relaxation** setting in your app's OAuth policies applies to the IP address the **browser** connects from when one of your customers signs in and authorizes the app. Your customers authorize from their own machines, on IP addresses you cannot predict. When they connect through the [embeddable UI components](/embeddable-ui-components), the sign-in originates from the end user's browser, not from Ampersand.
+
+For that reason, leave this set to **Relax IP restrictions**. Enforcing IP restrictions here blocks the OAuth flow for any customer signing in from outside their org's allowed ranges.
+
+### If a customer asks about restricting access by IP address
+
+Security reviews often ask whether the integration can be locked to a known set of IP addresses. It can, but not through the setting above. Salesforce has three controls whose names sound alike:
+
+- **IP Relaxation** (on your External Client App, or on a Connected App) applies to the IP address the browser connects from at authorization time. It has to stay relaxed, for the reason above.
+- **Login IP Ranges** on a user's profile **deny** access from any address outside the ranges listed. This is the control that actually restricts access.
+- **Trusted IP Ranges** (**Setup** → **Security** → **Network Access**) are **not** a restriction. Logins from those addresses skip identity verification, but logins from other addresses are still allowed, so these alone do not block a stolen token.
+
+Once a token has been minted, every API request Ampersand makes to Salesforce originates from a [fixed set of IP addresses](/security/outgoing-ip-addresses). A customer can restrict the profile of the user that connects the integration so that it can only log in from those addresses. This is configured in the customer's Salesforce org, not in your External Client App, so it requires no change on your side.
+
+Point customers at [Restrict API access by IP address](/customer-guides/salesforce#restrict-api-access-by-ip-address) in the Salesforce customer guide.
 
 ## Using the connector
 
