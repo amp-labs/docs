@@ -463,7 +463,7 @@ To tell deleted records apart from active ones, add `IsDeleted` to the object's 
 
 - The filter can only use fields the object has. Setup objects such as User, Profile and RecordType have no `IsDeleted` field, so a filter that uses it fails.
 - The filter must be a condition only, as it would appear after `WHERE`. Clauses such as `LIMIT`, `ORDER BY` or `GROUP BY` aren't allowed. Subqueries are, for example `Id IN (SELECT ContactId FROM CampaignMember WHERE Status = 'Sent')`.
-- The filter is wrapped in parentheses and joined with AND to Ampersand's incremental read window, so its own `OR` conditions stay grouped. Keep its parentheses balanced: a filter that closes the wrapping parentheses early, such as `A) OR (B`, is no longer limited to the read window.
+- The filter is wrapped in parentheses and joined with AND to Ampersand's incremental read window, so its own `OR` conditions stay grouped. A filter with unbalanced parentheses, such as `A) OR (B`, is rejected, since it would close the wrapping parentheses early and escape the read window.
 - Salesforce checks the filter when the read runs. An invalid filter fails the read with Salesforce's error, so try it with a [search](/search-actions#search-with-a-raw-filter) first.
 - Raw filters are supported by the CRM module, not Account Engagement.
 
