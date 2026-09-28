@@ -14,7 +14,7 @@ This connector has two modules, with CRM as the default.
 
 The **CRM** module supports:
 - [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.my.salesforce.com`.
-- [Read Actions](/read-actions), including full historic backfill, incremental read, and filters.
+- [Read Actions](/read-actions), including full historic backfill, incremental read, and filters, including [raw SOQL filters](#raw-filters-soql).
 - [Subscribe Actions](/subscribe-actions).
 - [Write Actions](/write-actions), including Bulk Write and Delete.
 
@@ -430,6 +430,41 @@ To start integrating with Salesforce:
    - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
    - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Raw filters (SOQL)
+
+[Read actions](/read-actions#filter-with-a-raw-filter) and [search](/search-actions#search-with-a-raw-filter) accept a raw filter of type `soql`: a SOQL condition, as it would appear after `WHERE`.
+
+```json
+"rawFilter": {
+  "type": "soql",
+  "filter": "Status = 'Qualified' AND (Country = 'US' OR Country = 'CA')"
+}
+```
+
+### Deleted and archived records
+
+Reads and searches with a raw filter use Salesforce's `queryAll` endpoint instead of `query`. Unlike `query`, `queryAll` also returns deleted records that are still in the Recycle Bin, and archived Task and Event records. Your filter decides whether they're returned:
+
+| Filter | Returns |
+| --- | --- |
+| `IsDeleted = false` | Active records only, the same as reading without a raw filter |
+| `IsDeleted = true` | Deleted records only |
+| `IsDeleted = true OR IsDeleted = false` | Both deleted and active records |
+| `Status = 'Qualified'` | Qualified records, **including deleted ones** |
+
+To tell deleted records apart from active ones, add `IsDeleted` to the object's `requiredFields` or `optionalFields`. A raw filter doesn't add any fields to what's read, and without `IsDeleted` a deleted record looks the same as an active one.
+
+<Note>
+  Salesforce keeps deleted records in the Recycle Bin for 15 days. Once they're purged, `queryAll` no longer returns them.
+</Note>
+
+### Filter rules
+
+- The filter can only use fields the object has. Setup objects such as User, Profile and RecordType have no `IsDeleted` field, so a filter that uses it fails.
+- The filter is wrapped in parentheses and joined with AND to Ampersand's incremental read window, so its own `OR` conditions stay grouped.
+- These are rejected: unbalanced parentheses, unterminated string literals, `;`, and clauses such as `LIMIT`, `ORDER BY`, `GROUP BY`, `OFFSET` or `WITH` outside parentheses. Subqueries inside parentheses are allowed, for example `Id IN (SELECT ContactId FROM CampaignMember WHERE Status = 'Sent')`.
+- Raw filters are supported by the CRM module, not Account Engagement.
 
 ## Customer guide
 
