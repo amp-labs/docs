@@ -212,8 +212,10 @@ const baseConfig = {
   },
   "background": {
     "color": {
+      // Background color for light mode
+      "light": "#FDFBF9", // cream 100
       // Background color for dark mode
-      "dark": "#121212" // cream-1000
+      "dark": "#121212" // cream 1000
     }
   },
   "styling": {
@@ -232,7 +234,7 @@ const baseConfig = {
       "family": "Helvetica Neue",
       "source": "/fonts/HelveticaNeue/HelveticaNeueRoman.woff2",
       "format": "woff2",
-      "weight": 400
+      "weight": 500
     }
   },
   topbarCtaButton: {
