@@ -353,8 +353,8 @@ You will receive messages about events happening in your customer's SaaS instanc
 
 ## Subscription lifecycle observability
 
-Creating, updating, or deleting a subscription produces an operation for each subscribed object in the Ampersand dashboard. These operations appear as **Subscription Created**, **Subscription Updated**, or **Subscription Deleted**, with logs that provide details about the lifecycle action.
+The dashboard shows an operation when Ampersand creates, updates, or deletes a subscription, with logs describing the action. It does not show a separate operation or log for each incoming webhook. Lifecycle operations provide visibility into subscription setup without waiting for the first data event.
 
-These operations track subscription setup and changes, not the individual SaaS data events delivered through the subscription. For example, setting up a subscription to Salesforce contacts produces a **Subscription Created** operation. Receiving a webhook because a contact’s email address changed does not create an operation.
+For example, setting up a subscription to Salesforce contacts produces a **Subscription Created** operation. Receiving a webhook because a contact’s email address changed does not create an operation.
 
 Subscription lifecycle changes can also trigger success or error notifications. See [Notifications](/notifications/overview) for the supported events and configuration instructions.
