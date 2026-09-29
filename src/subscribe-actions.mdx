@@ -11,14 +11,6 @@ With subscribe actions, you'll receive near-instant webhooks as events occur in 
   - It takes 1-2 minutes, and occasionally up to 10 minutes, for the first events to arrive after the initial installation.
 </Note>
 
-## Subscription lifecycle observability
-
-Creating, updating, or deleting a subscription produces an operation for each subscribed object in the Ampersand dashboard. These operations appear as **Subscription Created**, **Subscription Updated**, or **Subscription Deleted**, with logs that provide details about the lifecycle action.
-
-These operations track subscription setup and changes, not the individual SaaS data events delivered through the subscription. For example, setting up a subscription to Salesforce contacts produces a **Subscription Created** operation. Receiving a webhook when a contact changes does not produce a dashboard operation or log for that message.
-
-Subscription lifecycle changes can also trigger success or error notifications. See [Notifications](/notifications/overview) for the supported events and configuration instructions.
-
 ## Defining subscriptions
 
 To subscribe to an object, you need to specify:
@@ -358,3 +350,11 @@ Your read action's set of fields and field mappings will apply to the subscribe 
 ## Receiving data
 
 You will receive messages about events happening in your customer's SaaS instance. These look very similar to the messages for read actions. See [Subscribe action webhooks](/destinations/webhooks#subscribe-action-webhooks) for more information.
+
+## Subscription lifecycle observability
+
+Creating, updating, or deleting a subscription produces an operation for each subscribed object in the Ampersand dashboard. These operations appear as **Subscription Created**, **Subscription Updated**, or **Subscription Deleted**, with logs that provide details about the lifecycle action.
+
+These operations track subscription setup and changes, not the individual SaaS data events delivered through the subscription. For example, setting up a subscription to Salesforce contacts produces a **Subscription Created** operation. Receiving a webhook because a contact’s email address changed does not create an operation.
+
+Subscription lifecycle changes can also trigger success or error notifications. See [Notifications](/notifications/overview) for the supported events and configuration instructions.
