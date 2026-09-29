@@ -198,10 +198,10 @@ const baseConfig = {
     href: "https://withampersand.com"
   },
   favicon: "logos/favicon.svg",
-  appearance: {
-    // Default to dark mode
-    default: "dark",
-  },
+  // appearance: {
+  //   // Default to dark mode
+  //   default: "dark",
+  // },
   "colors": {
     // Generally used for emphasis in light mode
     "primary": "#1F71D6", // denim 600
