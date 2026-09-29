@@ -7,9 +7,17 @@ With subscribe actions, you'll receive near-instant webhooks as events occur in 
 <Note>
   Please note that:
   - Subscribe actions are supported for a subset of providers. See the [provider guides](/provider-guides/overview) to check whether your provider supports subscribe actions and whether any additional setup is required.
-  - Subscribe actions do not produce Operations or Logs that can be viewed in the Ampersand dashboard.
+  - Subscription lifecycle changes produce operations and logs in the [Ampersand dashboard](https://dashboard.withampersand.com). Receiving individual SaaS data events through a subscription does not. See [Subscription lifecycle observability](#subscription-lifecycle-observability).
   - It takes 1-2 minutes, and occasionally up to 10 minutes, for the first events to arrive after the initial installation.
 </Note>
+
+## Subscription lifecycle observability
+
+Creating, updating, or deleting a subscription produces an operation for each subscribed object in the Ampersand dashboard. These operations appear as **Subscription Created**, **Subscription Updated**, or **Subscription Deleted**, with logs that provide details about the lifecycle action.
+
+These operations track subscription setup and changes, not the individual SaaS data events delivered through the subscription. For example, setting up a subscription to Salesforce contacts produces a **Subscription Created** operation. Receiving a webhook when a contact changes does not produce a dashboard operation or log for that message.
+
+Subscription lifecycle changes can also trigger success or error notifications. See [Notifications](/notifications/overview) for the supported events and configuration instructions.
 
 ## Defining subscriptions
 
