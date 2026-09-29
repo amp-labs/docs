@@ -33,6 +33,13 @@ export interface DocsConfig {
   styling?: {
     codeblocks?: "system" | "dark";
   };
+  fonts?: {
+    heading?: FontConfig;
+    body?: FontConfig;
+  };
+  appearance?: {
+    default?: "system" | "light" | "dark";
+  };
   favicon?: string;
   contextual?: {
     options: Array<string>;
@@ -74,6 +81,13 @@ export interface DocsConfig {
     source: string;
     destination: string;
   }>;
+}
+
+interface FontConfig {
+  family: string;
+  weight?: number;
+  source?: string;
+  format?: "woff" | "woff2";
 }
 
 interface NavigationGroup {
@@ -122,6 +136,8 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     colors: mintConfig.colors,
     background: mintConfig.background,
     styling: mintConfig.styling,
+    fonts: mintConfig.fonts,
+    appearance: mintConfig.appearance,
     favicon: mintConfig.favicon,
     contextual: {
       options: ['copy', 'view']
@@ -183,21 +199,41 @@ const baseConfig = {
   },
   favicon: "logos/favicon.svg",
   appearance: {
+    // Default to dark mode
     default: "dark",
   },
   "colors": {
-    "primary": "#4491E4",
-    "light": "#F3F89B",
-    "dark": "#2B2B2B"
+    // Generally used for emphasis in light mode
+    "primary": "#1F71D6", // denim 600
+    // Used for emphasis in dark mode
+    "light": "#F3F89B", // butter yellow 300
+    // Used for buttons and hover states across both light and dark modes
+    "dark": "#2B2B2B" // Charcoal
   },
   "background": {
     "color": {
-      "light": "#FFFCF0",
-      "dark": "#2B2B2B"
+      // Background color for dark mode
+      "dark": "#121212" // cream-1000
     }
   },
   "styling": {
     "codeblocks": "dark"
+  },
+  // See https://www.mintlify.com/docs/customize/fonts
+  // Other weights (e.g. bold text) are declared in fonts.css
+  "fonts": {
+    "heading": {
+      "family": "Helvetica Neue",
+      "source": "/fonts/HelveticaNeue/HelveticaNeueMedium.woff2",
+      "format": "woff2",
+      "weight": 500
+    },
+    "body": {
+      "family": "Helvetica Neue",
+      "source": "/fonts/HelveticaNeue/HelveticaNeueRoman.woff2",
+      "format": "woff2",
+      "weight": 400
+    }
   },
   topbarCtaButton: {
     name: "Start building now",
