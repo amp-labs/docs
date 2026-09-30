@@ -33,12 +33,91 @@ This connector supports:
 
 The Microsoft Graph connector supports **many Microsoft Graph API objects** including but not limited to:
 
-- [users](https://learn.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0)
-- [calendars](https://learn.microsoft.com/en-us/graph/api/resources/calendar?view=graph-rest-1.0)
-- [me/events](https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-1.0)
-- [me/messages](https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0)
+export const rows = [
+  {
+    label: "calendars", read: true, write: true, subscribe: false,
+    href: "https://learn.microsoft.com/en-us/graph/api/resources/calendar?view=graph-rest-1.0",
+  }, {
+    label: "me/events", read: true, write: true, subscribe: false,
+    href: "https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-1.0",
+  }, {
+    label: "me/messages", read: true, write: true, subscribe: false,
+    href: "https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0",
+  }, {
+    label: "users", read: true, write: true, subscribe: false,
+    href: "https://learn.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0"
+  }, {
+    label: "AMPERSAND-sentMessages", read: true, write: false, subscribe: false,
+    display: "MailFolder: Sent items.",
+    href: "https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0",
+  }, {
+    label: "AMPERSAND-messages", read: true, write: true, subscribe: false,
+    display: "MailFolder: Inbox. Write sends an email.",
+    href: "https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0",
+  }, {
+    label: "AMPERSAND-drafts", read: true, write: true, subscribe: false,
+    display: "MailFolder: Drafts.",
+    href: "https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0",
+  },
+]
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  if (typeof value === "string" && value.startsWith("<")) {
+    return <span dangerouslySetInnerHTML={{__html: value}}/>;
+  }
+
+  return value;
+}
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+      <th style={{width: '20%'}}>Read</th>
+      <th style={{width: '20%'}}>Write</th>
+      <th style={{width: '20%'}}>Subscribe</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td style={{textAlign: "left"}}>
+            <a href={row.href}>{row.label}</a>
+            {row.display && (
+              <div style={{fontSize: "0.9em", color: "#666", marginTop: 4}}>
+                {row.display}
+              </div>
+            )}
+          </td>
+          <td>{renderCellValue(row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+          <td>{renderCellValue(row.subscribe)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
 
 For the complete list of supported Graph API resources, refer to the [Microsoft Graph API documentation](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
+
 
 To figure the exact OAuth scope you will require based on the objects you need to integrate with, you can use a tool such as [Graph Permissions Explorer](https://graphpermissions.merill.net/permission/).
 
