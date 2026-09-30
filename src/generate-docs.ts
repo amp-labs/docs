@@ -24,6 +24,22 @@ export interface DocsConfig {
     light?: string;
     dark?: string;
   };
+  background?: {
+    color?: {
+      light?: string;
+      dark?: string;
+    };
+  };
+  styling?: {
+    codeblocks?: "system" | "dark";
+  };
+  fonts?: {
+    heading?: FontConfig;
+    body?: FontConfig;
+  };
+  appearance?: {
+    default?: "system" | "light" | "dark";
+  };
   favicon?: string;
   contextual?: {
     options: Array<string>;
@@ -65,6 +81,13 @@ export interface DocsConfig {
     source: string;
     destination: string;
   }>;
+}
+
+interface FontConfig {
+  family: string;
+  weight?: number;
+  source?: string;
+  format?: "woff" | "woff2";
 }
 
 interface NavigationGroup {
@@ -111,6 +134,10 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     theme: 'mint',
     name: mintConfig.name,
     colors: mintConfig.colors,
+    background: mintConfig.background,
+    styling: mintConfig.styling,
+    fonts: mintConfig.fonts,
+    appearance: mintConfig.appearance,
     favicon: mintConfig.favicon,
     contextual: {
       options: ['copy', 'view']
@@ -118,7 +145,7 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     navigation: {
       tabs: [
         {
-          tab: 'Documentation',
+          tab: 'Guides',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
             group.group.match(/^(Get started|Actions|Data and schemas|UI library|Destinations|Notifications|Reference|Security|Resources)$/)))
         },
@@ -171,6 +198,7 @@ export function writeDocsJson(docsConfig: DocsConfig, outputPath: string = 'docs
 }
 
 // Create the base configuration
+// See https://www.mintlify.com/docs/organize/settings-appearance#settings
 const baseConfig = {
   name: "Ampersand",
   openapi: [openApiPlatform, openApiRead, openApiWrite, openApiSearch],
@@ -180,10 +208,44 @@ const baseConfig = {
     href: "https://withampersand.com"
   },
   favicon: "logos/favicon.svg",
-  colors: {
-    primary: "#4F1EB8",
-    light: "#A67CFF",
-    dark: "#6122E7",
+  // appearance: {
+  //   // Default to dark mode
+  //   default: "dark",
+  // },
+  "colors": {
+    // Generally used for emphasis in light mode
+    "primary": "#1F71D6", // denim 600
+    // Used for emphasis in dark mode
+    "light": "#F3F89B", // butter yellow 300
+    // Used for buttons and hover states across both light and dark modes
+    "dark": "#2B2B2B" // Charcoal
+  },
+  "background": {
+    "color": {
+      // Background color for light mode
+      "light": "#FDFBF9", // cream 100
+      // Background color for dark mode
+      "dark": "#121212" // cream 1000
+    }
+  },
+  "styling": {
+    "codeblocks": "dark"
+  },
+  // See https://www.mintlify.com/docs/customize/fonts
+  // Other weights (e.g. bold text) are declared in fonts.css
+  "fonts": {
+    "heading": {
+      "family": "Helvetica Neue",
+      "source": "/fonts/HelveticaNeue/HelveticaNeueMedium.woff2",
+      "format": "woff2",
+      "weight": 600
+    },
+    "body": {
+      "family": "Helvetica Neue",
+      "source": "/fonts/HelveticaNeue/HelveticaNeueRoman.woff2",
+      "format": "woff2",
+      "weight": 500
+    }
   },
   topbarCtaButton: {
     name: "Start building now",
