@@ -951,13 +951,13 @@
                                   "type": "string",
                                   "description": "The time the group was created.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816Z"
+                                  "example": "2023-07-13T21:34:44.816354Z"
                                 },
                                 "updateTime": {
                                   "type": "string",
                                   "description": "The time the group was last updated.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816Z"
+                                  "example": "2023-07-13T21:34:44.816354Z"
                                 }
                               }
                             },
@@ -990,13 +990,13 @@
                                   "type": "string",
                                   "description": "The time the consumer was created.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816Z"
+                                  "example": "2023-07-13T21:34:44.816354Z"
                                 },
                                 "updateTime": {
                                   "type": "string",
                                   "description": "The time the consumer was last updated.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816Z"
+                                  "example": "2023-07-13T21:34:44.816354Z"
                                 }
                               }
                             },
@@ -1014,13 +1014,13 @@
                               "type": "string",
                               "description": "The time the connection was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the connection was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "authScheme": {
                               "type": "string",
@@ -13257,13 +13257,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -13438,13 +13438,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -13477,13 +13477,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -13501,13 +13501,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -13890,6 +13890,27 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "rawFilter": {
+                                                  "title": "Raw Filter",
+                                                  "type": "object",
+                                                  "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                  "required": [
+                                                    "type",
+                                                    "filter"
+                                                  ],
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                      "example": "soql"
+                                                    },
+                                                    "filter": {
+                                                      "title": "Raw Filter Value",
+                                                      "description": "The filter expression.",
+                                                      "example": "IsDeleted = true OR IsDeleted = false"
+                                                    }
+                                                  }
                                                 }
                                               }
                                             },
@@ -13923,6 +13944,27 @@
                                                     "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                     "example": "active"
                                                   }
+                                                }
+                                              }
+                                            },
+                                            "rawFilter": {
+                                              "title": "Raw Filter",
+                                              "type": "object",
+                                              "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                              "required": [
+                                                "type",
+                                                "filter"
+                                              ],
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                  "example": "soql"
+                                                },
+                                                "filter": {
+                                                  "title": "Raw Filter Value",
+                                                  "description": "The filter expression.",
+                                                  "example": "IsDeleted = true OR IsDeleted = false"
                                                 }
                                               }
                                             }
@@ -14320,6 +14362,27 @@
                                                           }
                                                         }
                                                       }
+                                                    },
+                                                    "rawFilter": {
+                                                      "title": "Raw Filter",
+                                                      "type": "object",
+                                                      "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                      "required": [
+                                                        "type",
+                                                        "filter"
+                                                      ],
+                                                      "properties": {
+                                                        "type": {
+                                                          "type": "string",
+                                                          "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                          "example": "soql"
+                                                        },
+                                                        "filter": {
+                                                          "title": "Raw Filter Value",
+                                                          "description": "The filter expression.",
+                                                          "example": "IsDeleted = true OR IsDeleted = false"
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 },
@@ -14353,6 +14416,27 @@
                                                         "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                         "example": "active"
                                                       }
+                                                    }
+                                                  }
+                                                },
+                                                "rawFilter": {
+                                                  "title": "Raw Filter",
+                                                  "type": "object",
+                                                  "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                  "required": [
+                                                    "type",
+                                                    "filter"
+                                                  ],
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                      "example": "soql"
+                                                    },
+                                                    "filter": {
+                                                      "title": "Raw Filter Value",
+                                                      "description": "The filter expression.",
+                                                      "example": "IsDeleted = true OR IsDeleted = false"
                                                     }
                                                   }
                                                 }
@@ -14565,6 +14649,27 @@
                                                               }
                                                             }
                                                           }
+                                                        },
+                                                        "rawFilter": {
+                                                          "title": "Raw Filter",
+                                                          "type": "object",
+                                                          "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                          "required": [
+                                                            "type",
+                                                            "filter"
+                                                          ],
+                                                          "properties": {
+                                                            "type": {
+                                                              "type": "string",
+                                                              "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                              "example": "soql"
+                                                            },
+                                                            "filter": {
+                                                              "title": "Raw Filter Value",
+                                                              "description": "The filter expression.",
+                                                              "example": "IsDeleted = true OR IsDeleted = false"
+                                                            }
+                                                          }
                                                         }
                                                       }
                                                     },
@@ -14598,6 +14703,27 @@
                                                             "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                             "example": "active"
                                                           }
+                                                        }
+                                                      }
+                                                    },
+                                                    "rawFilter": {
+                                                      "title": "Raw Filter",
+                                                      "type": "object",
+                                                      "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                      "required": [
+                                                        "type",
+                                                        "filter"
+                                                      ],
+                                                      "properties": {
+                                                        "type": {
+                                                          "type": "string",
+                                                          "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                          "example": "soql"
+                                                        },
+                                                        "filter": {
+                                                          "title": "Raw Filter Value",
+                                                          "description": "The filter expression.",
+                                                          "example": "IsDeleted = true OR IsDeleted = false"
                                                         }
                                                       }
                                                     }
@@ -16134,6 +16260,27 @@
                                                   }
                                                 }
                                               }
+                                            },
+                                            "rawFilter": {
+                                              "title": "Raw Filter",
+                                              "type": "object",
+                                              "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                              "required": [
+                                                "type",
+                                                "filter"
+                                              ],
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                  "example": "soql"
+                                                },
+                                                "filter": {
+                                                  "title": "Raw Filter Value",
+                                                  "description": "The filter expression.",
+                                                  "example": "IsDeleted = true OR IsDeleted = false"
+                                                }
+                                              }
                                             }
                                           }
                                         },
@@ -16167,6 +16314,27 @@
                                                 "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                 "example": "active"
                                               }
+                                            }
+                                          }
+                                        },
+                                        "rawFilter": {
+                                          "title": "Raw Filter",
+                                          "type": "object",
+                                          "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                          "required": [
+                                            "type",
+                                            "filter"
+                                          ],
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                              "example": "soql"
+                                            },
+                                            "filter": {
+                                              "title": "Raw Filter Value",
+                                              "description": "The filter expression.",
+                                              "example": "IsDeleted = true OR IsDeleted = false"
                                             }
                                           }
                                         }
@@ -16564,6 +16732,27 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "rawFilter": {
+                                                  "title": "Raw Filter",
+                                                  "type": "object",
+                                                  "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                  "required": [
+                                                    "type",
+                                                    "filter"
+                                                  ],
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                      "example": "soql"
+                                                    },
+                                                    "filter": {
+                                                      "title": "Raw Filter Value",
+                                                      "description": "The filter expression.",
+                                                      "example": "IsDeleted = true OR IsDeleted = false"
+                                                    }
+                                                  }
                                                 }
                                               }
                                             },
@@ -16597,6 +16786,27 @@
                                                     "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                     "example": "active"
                                                   }
+                                                }
+                                              }
+                                            },
+                                            "rawFilter": {
+                                              "title": "Raw Filter",
+                                              "type": "object",
+                                              "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                              "required": [
+                                                "type",
+                                                "filter"
+                                              ],
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                  "example": "soql"
+                                                },
+                                                "filter": {
+                                                  "title": "Raw Filter Value",
+                                                  "description": "The filter expression.",
+                                                  "example": "IsDeleted = true OR IsDeleted = false"
                                                 }
                                               }
                                             }
@@ -16809,6 +17019,27 @@
                                                           }
                                                         }
                                                       }
+                                                    },
+                                                    "rawFilter": {
+                                                      "title": "Raw Filter",
+                                                      "type": "object",
+                                                      "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                      "required": [
+                                                        "type",
+                                                        "filter"
+                                                      ],
+                                                      "properties": {
+                                                        "type": {
+                                                          "type": "string",
+                                                          "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                          "example": "soql"
+                                                        },
+                                                        "filter": {
+                                                          "title": "Raw Filter Value",
+                                                          "description": "The filter expression.",
+                                                          "example": "IsDeleted = true OR IsDeleted = false"
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 },
@@ -16842,6 +17073,27 @@
                                                         "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                         "example": "active"
                                                       }
+                                                    }
+                                                  }
+                                                },
+                                                "rawFilter": {
+                                                  "title": "Raw Filter",
+                                                  "type": "object",
+                                                  "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                  "required": [
+                                                    "type",
+                                                    "filter"
+                                                  ],
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                      "example": "soql"
+                                                    },
+                                                    "filter": {
+                                                      "title": "Raw Filter Value",
+                                                      "description": "The filter expression.",
+                                                      "example": "IsDeleted = true OR IsDeleted = false"
                                                     }
                                                   }
                                                 }
@@ -17697,13 +17949,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -17878,13 +18130,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -17917,13 +18169,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -17941,13 +18193,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -18330,6 +18582,27 @@
                                                     }
                                                   }
                                                 }
+                                              },
+                                              "rawFilter": {
+                                                "title": "Raw Filter",
+                                                "type": "object",
+                                                "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                "required": [
+                                                  "type",
+                                                  "filter"
+                                                ],
+                                                "properties": {
+                                                  "type": {
+                                                    "type": "string",
+                                                    "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                    "example": "soql"
+                                                  },
+                                                  "filter": {
+                                                    "title": "Raw Filter Value",
+                                                    "description": "The filter expression.",
+                                                    "example": "IsDeleted = true OR IsDeleted = false"
+                                                  }
+                                                }
                                               }
                                             }
                                           },
@@ -18363,6 +18636,27 @@
                                                   "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                   "example": "active"
                                                 }
+                                              }
+                                            }
+                                          },
+                                          "rawFilter": {
+                                            "title": "Raw Filter",
+                                            "type": "object",
+                                            "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                            "required": [
+                                              "type",
+                                              "filter"
+                                            ],
+                                            "properties": {
+                                              "type": {
+                                                "type": "string",
+                                                "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                "example": "soql"
+                                              },
+                                              "filter": {
+                                                "title": "Raw Filter Value",
+                                                "description": "The filter expression.",
+                                                "example": "IsDeleted = true OR IsDeleted = false"
                                               }
                                             }
                                           }
@@ -18760,6 +19054,27 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  "rawFilter": {
+                                                    "title": "Raw Filter",
+                                                    "type": "object",
+                                                    "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                    "required": [
+                                                      "type",
+                                                      "filter"
+                                                    ],
+                                                    "properties": {
+                                                      "type": {
+                                                        "type": "string",
+                                                        "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                        "example": "soql"
+                                                      },
+                                                      "filter": {
+                                                        "title": "Raw Filter Value",
+                                                        "description": "The filter expression.",
+                                                        "example": "IsDeleted = true OR IsDeleted = false"
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               },
@@ -18793,6 +19108,27 @@
                                                       "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                       "example": "active"
                                                     }
+                                                  }
+                                                }
+                                              },
+                                              "rawFilter": {
+                                                "title": "Raw Filter",
+                                                "type": "object",
+                                                "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                "required": [
+                                                  "type",
+                                                  "filter"
+                                                ],
+                                                "properties": {
+                                                  "type": {
+                                                    "type": "string",
+                                                    "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                    "example": "soql"
+                                                  },
+                                                  "filter": {
+                                                    "title": "Raw Filter Value",
+                                                    "description": "The filter expression.",
+                                                    "example": "IsDeleted = true OR IsDeleted = false"
                                                   }
                                                 }
                                               }
@@ -19005,6 +19341,27 @@
                                                             }
                                                           }
                                                         }
+                                                      },
+                                                      "rawFilter": {
+                                                        "title": "Raw Filter",
+                                                        "type": "object",
+                                                        "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                        "required": [
+                                                          "type",
+                                                          "filter"
+                                                        ],
+                                                        "properties": {
+                                                          "type": {
+                                                            "type": "string",
+                                                            "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                            "example": "soql"
+                                                          },
+                                                          "filter": {
+                                                            "title": "Raw Filter Value",
+                                                            "description": "The filter expression.",
+                                                            "example": "IsDeleted = true OR IsDeleted = false"
+                                                          }
+                                                        }
                                                       }
                                                     }
                                                   },
@@ -19038,6 +19395,27 @@
                                                           "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                           "example": "active"
                                                         }
+                                                      }
+                                                    }
+                                                  },
+                                                  "rawFilter": {
+                                                    "title": "Raw Filter",
+                                                    "type": "object",
+                                                    "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                    "required": [
+                                                      "type",
+                                                      "filter"
+                                                    ],
+                                                    "properties": {
+                                                      "type": {
+                                                        "type": "string",
+                                                        "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                        "example": "soql"
+                                                      },
+                                                      "filter": {
+                                                        "title": "Raw Filter Value",
+                                                        "description": "The filter expression.",
+                                                        "example": "IsDeleted = true OR IsDeleted = false"
                                                       }
                                                     }
                                                   }
@@ -20653,13 +21031,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -20834,13 +21212,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -20873,13 +21251,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -20897,13 +21275,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -21286,6 +21664,27 @@
                                                     }
                                                   }
                                                 }
+                                              },
+                                              "rawFilter": {
+                                                "title": "Raw Filter",
+                                                "type": "object",
+                                                "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                "required": [
+                                                  "type",
+                                                  "filter"
+                                                ],
+                                                "properties": {
+                                                  "type": {
+                                                    "type": "string",
+                                                    "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                    "example": "soql"
+                                                  },
+                                                  "filter": {
+                                                    "title": "Raw Filter Value",
+                                                    "description": "The filter expression.",
+                                                    "example": "IsDeleted = true OR IsDeleted = false"
+                                                  }
+                                                }
                                               }
                                             }
                                           },
@@ -21319,6 +21718,27 @@
                                                   "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                   "example": "active"
                                                 }
+                                              }
+                                            }
+                                          },
+                                          "rawFilter": {
+                                            "title": "Raw Filter",
+                                            "type": "object",
+                                            "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                            "required": [
+                                              "type",
+                                              "filter"
+                                            ],
+                                            "properties": {
+                                              "type": {
+                                                "type": "string",
+                                                "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                "example": "soql"
+                                              },
+                                              "filter": {
+                                                "title": "Raw Filter Value",
+                                                "description": "The filter expression.",
+                                                "example": "IsDeleted = true OR IsDeleted = false"
                                               }
                                             }
                                           }
@@ -21716,6 +22136,27 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  "rawFilter": {
+                                                    "title": "Raw Filter",
+                                                    "type": "object",
+                                                    "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                    "required": [
+                                                      "type",
+                                                      "filter"
+                                                    ],
+                                                    "properties": {
+                                                      "type": {
+                                                        "type": "string",
+                                                        "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                        "example": "soql"
+                                                      },
+                                                      "filter": {
+                                                        "title": "Raw Filter Value",
+                                                        "description": "The filter expression.",
+                                                        "example": "IsDeleted = true OR IsDeleted = false"
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               },
@@ -21749,6 +22190,27 @@
                                                       "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                       "example": "active"
                                                     }
+                                                  }
+                                                }
+                                              },
+                                              "rawFilter": {
+                                                "title": "Raw Filter",
+                                                "type": "object",
+                                                "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                "required": [
+                                                  "type",
+                                                  "filter"
+                                                ],
+                                                "properties": {
+                                                  "type": {
+                                                    "type": "string",
+                                                    "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                    "example": "soql"
+                                                  },
+                                                  "filter": {
+                                                    "title": "Raw Filter Value",
+                                                    "description": "The filter expression.",
+                                                    "example": "IsDeleted = true OR IsDeleted = false"
                                                   }
                                                 }
                                               }
@@ -21961,6 +22423,27 @@
                                                             }
                                                           }
                                                         }
+                                                      },
+                                                      "rawFilter": {
+                                                        "title": "Raw Filter",
+                                                        "type": "object",
+                                                        "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                        "required": [
+                                                          "type",
+                                                          "filter"
+                                                        ],
+                                                        "properties": {
+                                                          "type": {
+                                                            "type": "string",
+                                                            "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                            "example": "soql"
+                                                          },
+                                                          "filter": {
+                                                            "title": "Raw Filter Value",
+                                                            "description": "The filter expression.",
+                                                            "example": "IsDeleted = true OR IsDeleted = false"
+                                                          }
+                                                        }
                                                       }
                                                     }
                                                   },
@@ -21994,6 +22477,27 @@
                                                           "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                           "example": "active"
                                                         }
+                                                      }
+                                                    }
+                                                  },
+                                                  "rawFilter": {
+                                                    "title": "Raw Filter",
+                                                    "type": "object",
+                                                    "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                    "required": [
+                                                      "type",
+                                                      "filter"
+                                                    ],
+                                                    "properties": {
+                                                      "type": {
+                                                        "type": "string",
+                                                        "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                        "example": "soql"
+                                                      },
+                                                      "filter": {
+                                                        "title": "Raw Filter Value",
+                                                        "description": "The filter expression.",
+                                                        "example": "IsDeleted = true OR IsDeleted = false"
                                                       }
                                                     }
                                                   }
@@ -23720,6 +24224,27 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "rawFilter": {
+                                                  "title": "Raw Filter",
+                                                  "type": "object",
+                                                  "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                  "required": [
+                                                    "type",
+                                                    "filter"
+                                                  ],
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                      "example": "soql"
+                                                    },
+                                                    "filter": {
+                                                      "title": "Raw Filter Value",
+                                                      "description": "The filter expression.",
+                                                      "example": "IsDeleted = true OR IsDeleted = false"
+                                                    }
+                                                  }
                                                 }
                                               }
                                             },
@@ -23753,6 +24278,27 @@
                                                     "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                     "example": "active"
                                                   }
+                                                }
+                                              }
+                                            },
+                                            "rawFilter": {
+                                              "title": "Raw Filter",
+                                              "type": "object",
+                                              "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                              "required": [
+                                                "type",
+                                                "filter"
+                                              ],
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                  "example": "soql"
+                                                },
+                                                "filter": {
+                                                  "title": "Raw Filter Value",
+                                                  "description": "The filter expression.",
+                                                  "example": "IsDeleted = true OR IsDeleted = false"
                                                 }
                                               }
                                             }
@@ -24220,13 +24766,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -24401,13 +24947,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -24440,13 +24986,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -24464,13 +25010,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -24853,6 +25399,27 @@
                                                     }
                                                   }
                                                 }
+                                              },
+                                              "rawFilter": {
+                                                "title": "Raw Filter",
+                                                "type": "object",
+                                                "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                "required": [
+                                                  "type",
+                                                  "filter"
+                                                ],
+                                                "properties": {
+                                                  "type": {
+                                                    "type": "string",
+                                                    "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                    "example": "soql"
+                                                  },
+                                                  "filter": {
+                                                    "title": "Raw Filter Value",
+                                                    "description": "The filter expression.",
+                                                    "example": "IsDeleted = true OR IsDeleted = false"
+                                                  }
+                                                }
                                               }
                                             }
                                           },
@@ -24886,6 +25453,27 @@
                                                   "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                   "example": "active"
                                                 }
+                                              }
+                                            }
+                                          },
+                                          "rawFilter": {
+                                            "title": "Raw Filter",
+                                            "type": "object",
+                                            "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                            "required": [
+                                              "type",
+                                              "filter"
+                                            ],
+                                            "properties": {
+                                              "type": {
+                                                "type": "string",
+                                                "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                "example": "soql"
+                                              },
+                                              "filter": {
+                                                "title": "Raw Filter Value",
+                                                "description": "The filter expression.",
+                                                "example": "IsDeleted = true OR IsDeleted = false"
                                               }
                                             }
                                           }
@@ -25283,6 +25871,27 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  "rawFilter": {
+                                                    "title": "Raw Filter",
+                                                    "type": "object",
+                                                    "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                    "required": [
+                                                      "type",
+                                                      "filter"
+                                                    ],
+                                                    "properties": {
+                                                      "type": {
+                                                        "type": "string",
+                                                        "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                        "example": "soql"
+                                                      },
+                                                      "filter": {
+                                                        "title": "Raw Filter Value",
+                                                        "description": "The filter expression.",
+                                                        "example": "IsDeleted = true OR IsDeleted = false"
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               },
@@ -25316,6 +25925,27 @@
                                                       "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                       "example": "active"
                                                     }
+                                                  }
+                                                }
+                                              },
+                                              "rawFilter": {
+                                                "title": "Raw Filter",
+                                                "type": "object",
+                                                "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                "required": [
+                                                  "type",
+                                                  "filter"
+                                                ],
+                                                "properties": {
+                                                  "type": {
+                                                    "type": "string",
+                                                    "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                    "example": "soql"
+                                                  },
+                                                  "filter": {
+                                                    "title": "Raw Filter Value",
+                                                    "description": "The filter expression.",
+                                                    "example": "IsDeleted = true OR IsDeleted = false"
                                                   }
                                                 }
                                               }
@@ -25528,6 +26158,27 @@
                                                             }
                                                           }
                                                         }
+                                                      },
+                                                      "rawFilter": {
+                                                        "title": "Raw Filter",
+                                                        "type": "object",
+                                                        "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                        "required": [
+                                                          "type",
+                                                          "filter"
+                                                        ],
+                                                        "properties": {
+                                                          "type": {
+                                                            "type": "string",
+                                                            "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                            "example": "soql"
+                                                          },
+                                                          "filter": {
+                                                            "title": "Raw Filter Value",
+                                                            "description": "The filter expression.",
+                                                            "example": "IsDeleted = true OR IsDeleted = false"
+                                                          }
+                                                        }
                                                       }
                                                     }
                                                   },
@@ -25561,6 +26212,27 @@
                                                           "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                           "example": "active"
                                                         }
+                                                      }
+                                                    }
+                                                  },
+                                                  "rawFilter": {
+                                                    "title": "Raw Filter",
+                                                    "type": "object",
+                                                    "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                    "required": [
+                                                      "type",
+                                                      "filter"
+                                                    ],
+                                                    "properties": {
+                                                      "type": {
+                                                        "type": "string",
+                                                        "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                        "example": "soql"
+                                                      },
+                                                      "filter": {
+                                                        "title": "Raw Filter Value",
+                                                        "description": "The filter expression.",
+                                                        "example": "IsDeleted = true OR IsDeleted = false"
                                                       }
                                                     }
                                                   }
@@ -27342,13 +28014,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -27523,13 +28195,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -27562,13 +28234,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -27586,13 +28258,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -27975,6 +28647,27 @@
                                                     }
                                                   }
                                                 }
+                                              },
+                                              "rawFilter": {
+                                                "title": "Raw Filter",
+                                                "type": "object",
+                                                "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                "required": [
+                                                  "type",
+                                                  "filter"
+                                                ],
+                                                "properties": {
+                                                  "type": {
+                                                    "type": "string",
+                                                    "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                    "example": "soql"
+                                                  },
+                                                  "filter": {
+                                                    "title": "Raw Filter Value",
+                                                    "description": "The filter expression.",
+                                                    "example": "IsDeleted = true OR IsDeleted = false"
+                                                  }
+                                                }
                                               }
                                             }
                                           },
@@ -28008,6 +28701,27 @@
                                                   "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                   "example": "active"
                                                 }
+                                              }
+                                            }
+                                          },
+                                          "rawFilter": {
+                                            "title": "Raw Filter",
+                                            "type": "object",
+                                            "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                            "required": [
+                                              "type",
+                                              "filter"
+                                            ],
+                                            "properties": {
+                                              "type": {
+                                                "type": "string",
+                                                "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                "example": "soql"
+                                              },
+                                              "filter": {
+                                                "title": "Raw Filter Value",
+                                                "description": "The filter expression.",
+                                                "example": "IsDeleted = true OR IsDeleted = false"
                                               }
                                             }
                                           }
@@ -28405,6 +29119,27 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  "rawFilter": {
+                                                    "title": "Raw Filter",
+                                                    "type": "object",
+                                                    "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                    "required": [
+                                                      "type",
+                                                      "filter"
+                                                    ],
+                                                    "properties": {
+                                                      "type": {
+                                                        "type": "string",
+                                                        "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                        "example": "soql"
+                                                      },
+                                                      "filter": {
+                                                        "title": "Raw Filter Value",
+                                                        "description": "The filter expression.",
+                                                        "example": "IsDeleted = true OR IsDeleted = false"
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               },
@@ -28438,6 +29173,27 @@
                                                       "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                       "example": "active"
                                                     }
+                                                  }
+                                                }
+                                              },
+                                              "rawFilter": {
+                                                "title": "Raw Filter",
+                                                "type": "object",
+                                                "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                "required": [
+                                                  "type",
+                                                  "filter"
+                                                ],
+                                                "properties": {
+                                                  "type": {
+                                                    "type": "string",
+                                                    "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                    "example": "soql"
+                                                  },
+                                                  "filter": {
+                                                    "title": "Raw Filter Value",
+                                                    "description": "The filter expression.",
+                                                    "example": "IsDeleted = true OR IsDeleted = false"
                                                   }
                                                 }
                                               }
@@ -28650,6 +29406,27 @@
                                                             }
                                                           }
                                                         }
+                                                      },
+                                                      "rawFilter": {
+                                                        "title": "Raw Filter",
+                                                        "type": "object",
+                                                        "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                        "required": [
+                                                          "type",
+                                                          "filter"
+                                                        ],
+                                                        "properties": {
+                                                          "type": {
+                                                            "type": "string",
+                                                            "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                            "example": "soql"
+                                                          },
+                                                          "filter": {
+                                                            "title": "Raw Filter Value",
+                                                            "description": "The filter expression.",
+                                                            "example": "IsDeleted = true OR IsDeleted = false"
+                                                          }
+                                                        }
                                                       }
                                                     }
                                                   },
@@ -28683,6 +29460,27 @@
                                                           "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                           "example": "active"
                                                         }
+                                                      }
+                                                    }
+                                                  },
+                                                  "rawFilter": {
+                                                    "title": "Raw Filter",
+                                                    "type": "object",
+                                                    "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                    "required": [
+                                                      "type",
+                                                      "filter"
+                                                    ],
+                                                    "properties": {
+                                                      "type": {
+                                                        "type": "string",
+                                                        "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                        "example": "soql"
+                                                      },
+                                                      "filter": {
+                                                        "title": "Raw Filter Value",
+                                                        "description": "The filter expression.",
+                                                        "example": "IsDeleted = true OR IsDeleted = false"
                                                       }
                                                     }
                                                   }
@@ -30661,13 +31459,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -30842,13 +31640,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -30881,13 +31679,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -30905,13 +31703,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -31294,6 +32092,27 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "rawFilter": {
+                                                  "title": "Raw Filter",
+                                                  "type": "object",
+                                                  "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                  "required": [
+                                                    "type",
+                                                    "filter"
+                                                  ],
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                      "example": "soql"
+                                                    },
+                                                    "filter": {
+                                                      "title": "Raw Filter Value",
+                                                      "description": "The filter expression.",
+                                                      "example": "IsDeleted = true OR IsDeleted = false"
+                                                    }
+                                                  }
                                                 }
                                               }
                                             },
@@ -31327,6 +32146,27 @@
                                                     "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                     "example": "active"
                                                   }
+                                                }
+                                              }
+                                            },
+                                            "rawFilter": {
+                                              "title": "Raw Filter",
+                                              "type": "object",
+                                              "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                              "required": [
+                                                "type",
+                                                "filter"
+                                              ],
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                  "example": "soql"
+                                                },
+                                                "filter": {
+                                                  "title": "Raw Filter Value",
+                                                  "description": "The filter expression.",
+                                                  "example": "IsDeleted = true OR IsDeleted = false"
                                                 }
                                               }
                                             }
@@ -31724,6 +32564,27 @@
                                                           }
                                                         }
                                                       }
+                                                    },
+                                                    "rawFilter": {
+                                                      "title": "Raw Filter",
+                                                      "type": "object",
+                                                      "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                      "required": [
+                                                        "type",
+                                                        "filter"
+                                                      ],
+                                                      "properties": {
+                                                        "type": {
+                                                          "type": "string",
+                                                          "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                          "example": "soql"
+                                                        },
+                                                        "filter": {
+                                                          "title": "Raw Filter Value",
+                                                          "description": "The filter expression.",
+                                                          "example": "IsDeleted = true OR IsDeleted = false"
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 },
@@ -31757,6 +32618,27 @@
                                                         "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                         "example": "active"
                                                       }
+                                                    }
+                                                  }
+                                                },
+                                                "rawFilter": {
+                                                  "title": "Raw Filter",
+                                                  "type": "object",
+                                                  "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                  "required": [
+                                                    "type",
+                                                    "filter"
+                                                  ],
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                      "example": "soql"
+                                                    },
+                                                    "filter": {
+                                                      "title": "Raw Filter Value",
+                                                      "description": "The filter expression.",
+                                                      "example": "IsDeleted = true OR IsDeleted = false"
                                                     }
                                                   }
                                                 }
@@ -31969,6 +32851,27 @@
                                                               }
                                                             }
                                                           }
+                                                        },
+                                                        "rawFilter": {
+                                                          "title": "Raw Filter",
+                                                          "type": "object",
+                                                          "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                          "required": [
+                                                            "type",
+                                                            "filter"
+                                                          ],
+                                                          "properties": {
+                                                            "type": {
+                                                              "type": "string",
+                                                              "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                              "example": "soql"
+                                                            },
+                                                            "filter": {
+                                                              "title": "Raw Filter Value",
+                                                              "description": "The filter expression.",
+                                                              "example": "IsDeleted = true OR IsDeleted = false"
+                                                            }
+                                                          }
                                                         }
                                                       }
                                                     },
@@ -32002,6 +32905,27 @@
                                                             "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                             "example": "active"
                                                           }
+                                                        }
+                                                      }
+                                                    },
+                                                    "rawFilter": {
+                                                      "title": "Raw Filter",
+                                                      "type": "object",
+                                                      "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                                      "required": [
+                                                        "type",
+                                                        "filter"
+                                                      ],
+                                                      "properties": {
+                                                        "type": {
+                                                          "type": "string",
+                                                          "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                          "example": "soql"
+                                                        },
+                                                        "filter": {
+                                                          "title": "Raw Filter Value",
+                                                          "description": "The filter expression.",
+                                                          "example": "IsDeleted = true OR IsDeleted = false"
                                                         }
                                                       }
                                                     }
@@ -35596,7 +36520,7 @@
                             "type": "string",
                             "description": "The time the operation was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       }
@@ -37277,7 +38201,7 @@
                       "type": "string",
                       "description": "The time the operation was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     }
                   }
                 },
@@ -37549,7 +38473,7 @@
                       "timestamp": {
                         "type": "string",
                         "description": "The time the log was created.",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "message": {
                         "type": "object",
@@ -44890,13 +45814,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -44929,13 +45853,13 @@
                             "type": "string",
                             "description": "The time the consumer was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the consumer was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -44953,13 +45877,13 @@
                         "type": "string",
                         "description": "The time the connection was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the connection was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "authScheme": {
                         "type": "string",
@@ -45954,13 +46878,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -45993,13 +46917,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -46017,13 +46941,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -47149,13 +48073,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -47188,13 +48112,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -47212,13 +48136,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -48275,13 +49199,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -48314,13 +49238,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -48338,13 +49262,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -69320,13 +70244,13 @@
                         "type": "string",
                         "description": "The time the group was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the group was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       }
                     }
                   },
@@ -69359,13 +70283,13 @@
                         "type": "string",
                         "description": "The time the consumer was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the consumer was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       }
                     }
                   },
@@ -69383,13 +70307,13 @@
                     "type": "string",
                     "description": "The time the connection was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the connection was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   },
                   "authScheme": {
                     "type": "string",
@@ -71837,13 +72761,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               }
             }
           },
@@ -72018,13 +72942,13 @@
                     "type": "string",
                     "description": "The time the group was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the group was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   }
                 }
               },
@@ -72057,13 +72981,13 @@
                     "type": "string",
                     "description": "The time the consumer was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the consumer was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   }
                 }
               },
@@ -72081,13 +73005,13 @@
                 "type": "string",
                 "description": "The time the connection was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the connection was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "authScheme": {
                 "type": "string",
@@ -72470,6 +73394,27 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "rawFilter": {
+                                      "title": "Raw Filter",
+                                      "type": "object",
+                                      "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                      "required": [
+                                        "type",
+                                        "filter"
+                                      ],
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                          "example": "soql"
+                                        },
+                                        "filter": {
+                                          "title": "Raw Filter Value",
+                                          "description": "The filter expression.",
+                                          "example": "IsDeleted = true OR IsDeleted = false"
+                                        }
+                                      }
                                     }
                                   }
                                 },
@@ -72503,6 +73448,27 @@
                                         "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                         "example": "active"
                                       }
+                                    }
+                                  }
+                                },
+                                "rawFilter": {
+                                  "title": "Raw Filter",
+                                  "type": "object",
+                                  "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                  "required": [
+                                    "type",
+                                    "filter"
+                                  ],
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                      "example": "soql"
+                                    },
+                                    "filter": {
+                                      "title": "Raw Filter Value",
+                                      "description": "The filter expression.",
+                                      "example": "IsDeleted = true OR IsDeleted = false"
                                     }
                                   }
                                 }
@@ -72900,6 +73866,27 @@
                                               }
                                             }
                                           }
+                                        },
+                                        "rawFilter": {
+                                          "title": "Raw Filter",
+                                          "type": "object",
+                                          "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                          "required": [
+                                            "type",
+                                            "filter"
+                                          ],
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                              "example": "soql"
+                                            },
+                                            "filter": {
+                                              "title": "Raw Filter Value",
+                                              "description": "The filter expression.",
+                                              "example": "IsDeleted = true OR IsDeleted = false"
+                                            }
+                                          }
                                         }
                                       }
                                     },
@@ -72933,6 +73920,27 @@
                                             "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                             "example": "active"
                                           }
+                                        }
+                                      }
+                                    },
+                                    "rawFilter": {
+                                      "title": "Raw Filter",
+                                      "type": "object",
+                                      "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                      "required": [
+                                        "type",
+                                        "filter"
+                                      ],
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                          "example": "soql"
+                                        },
+                                        "filter": {
+                                          "title": "Raw Filter Value",
+                                          "description": "The filter expression.",
+                                          "example": "IsDeleted = true OR IsDeleted = false"
                                         }
                                       }
                                     }
@@ -73145,6 +74153,27 @@
                                                   }
                                                 }
                                               }
+                                            },
+                                            "rawFilter": {
+                                              "title": "Raw Filter",
+                                              "type": "object",
+                                              "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                              "required": [
+                                                "type",
+                                                "filter"
+                                              ],
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                                  "example": "soql"
+                                                },
+                                                "filter": {
+                                                  "title": "Raw Filter Value",
+                                                  "description": "The filter expression.",
+                                                  "example": "IsDeleted = true OR IsDeleted = false"
+                                                }
+                                              }
                                             }
                                           }
                                         },
@@ -73178,6 +74207,27 @@
                                                 "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                                 "example": "active"
                                               }
+                                            }
+                                          }
+                                        },
+                                        "rawFilter": {
+                                          "title": "Raw Filter",
+                                          "type": "object",
+                                          "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                          "required": [
+                                            "type",
+                                            "filter"
+                                          ],
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                              "example": "soql"
+                                            },
+                                            "filter": {
+                                              "title": "Raw Filter Value",
+                                              "description": "The filter expression.",
+                                              "example": "IsDeleted = true OR IsDeleted = false"
                                             }
                                           }
                                         }
@@ -74176,6 +75226,27 @@
                                       }
                                     }
                                   }
+                                },
+                                "rawFilter": {
+                                  "title": "Raw Filter",
+                                  "type": "object",
+                                  "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                  "required": [
+                                    "type",
+                                    "filter"
+                                  ],
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                      "example": "soql"
+                                    },
+                                    "filter": {
+                                      "title": "Raw Filter Value",
+                                      "description": "The filter expression.",
+                                      "example": "IsDeleted = true OR IsDeleted = false"
+                                    }
+                                  }
                                 }
                               }
                             },
@@ -74209,6 +75280,27 @@
                                     "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                     "example": "active"
                                   }
+                                }
+                              }
+                            },
+                            "rawFilter": {
+                              "title": "Raw Filter",
+                              "type": "object",
+                              "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                              "required": [
+                                "type",
+                                "filter"
+                              ],
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                  "example": "soql"
+                                },
+                                "filter": {
+                                  "title": "Raw Filter Value",
+                                  "description": "The filter expression.",
+                                  "example": "IsDeleted = true OR IsDeleted = false"
                                 }
                               }
                             }
@@ -74606,6 +75698,27 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "rawFilter": {
+                                      "title": "Raw Filter",
+                                      "type": "object",
+                                      "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                      "required": [
+                                        "type",
+                                        "filter"
+                                      ],
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                          "example": "soql"
+                                        },
+                                        "filter": {
+                                          "title": "Raw Filter Value",
+                                          "description": "The filter expression.",
+                                          "example": "IsDeleted = true OR IsDeleted = false"
+                                        }
+                                      }
                                     }
                                   }
                                 },
@@ -74639,6 +75752,27 @@
                                         "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                         "example": "active"
                                       }
+                                    }
+                                  }
+                                },
+                                "rawFilter": {
+                                  "title": "Raw Filter",
+                                  "type": "object",
+                                  "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                  "required": [
+                                    "type",
+                                    "filter"
+                                  ],
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                      "example": "soql"
+                                    },
+                                    "filter": {
+                                      "title": "Raw Filter Value",
+                                      "description": "The filter expression.",
+                                      "example": "IsDeleted = true OR IsDeleted = false"
                                     }
                                   }
                                 }
@@ -74851,6 +75985,27 @@
                                               }
                                             }
                                           }
+                                        },
+                                        "rawFilter": {
+                                          "title": "Raw Filter",
+                                          "type": "object",
+                                          "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                          "required": [
+                                            "type",
+                                            "filter"
+                                          ],
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                              "example": "soql"
+                                            },
+                                            "filter": {
+                                              "title": "Raw Filter Value",
+                                              "description": "The filter expression.",
+                                              "example": "IsDeleted = true OR IsDeleted = false"
+                                            }
+                                          }
                                         }
                                       }
                                     },
@@ -74884,6 +76039,27 @@
                                             "description": "The value to filter on. Allowed types are string, boolean, and number.",
                                             "example": "active"
                                           }
+                                        }
+                                      }
+                                    },
+                                    "rawFilter": {
+                                      "title": "Raw Filter",
+                                      "type": "object",
+                                      "description": "A filter in the provider's native query syntax. It cannot be combined with fieldFilters.  It can apply to incremental reads, backfills or a search API call.\n",
+                                      "required": [
+                                        "type",
+                                        "filter"
+                                      ],
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "description": "The syntax of the filter. Supported values are documented in each provider's guide. For example, `soql` is a supported filter type for Salesforce.\n",
+                                          "example": "soql"
+                                        },
+                                        "filter": {
+                                          "title": "Raw Filter Value",
+                                          "description": "The filter expression.",
+                                          "example": "IsDeleted = true OR IsDeleted = false"
                                         }
                                       }
                                     }
@@ -75758,13 +76934,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               }
             }
           },
@@ -75797,13 +76973,13 @@
                 "type": "string",
                 "description": "The time the consumer was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the consumer was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               }
             }
           },
@@ -75821,13 +76997,13 @@
             "type": "string",
             "description": "The time the connection was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the connection was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "authScheme": {
             "type": "string",
@@ -76759,13 +77935,13 @@
             "type": "string",
             "description": "The time the group was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the group was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           }
         }
       },
@@ -76798,13 +77974,13 @@
             "type": "string",
             "description": "The time the consumer was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the consumer was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           }
         }
       },
@@ -76931,7 +78107,7 @@
             "type": "string",
             "description": "The time the operation was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           }
         }
       },
@@ -76991,7 +78167,7 @@
           "timestamp": {
             "type": "string",
             "description": "The time the log was created.",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "message": {
             "type": "object",
