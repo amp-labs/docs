@@ -162,7 +162,7 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
         {
           tab: 'Integrations',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            group.group.match(/^Providers$/)))
+            group.group.match(/^Integration guides$/)))
         },
         {
           tab: 'Troubleshooting',
@@ -427,9 +427,28 @@ const baseConfig = {
       ],
     },
 {
-      group: "Providers",
+      group: "Integration guides",
       pages: [
         "provider-guides/overview",
+        {
+          group: "Customer guides",
+          expanded: false,
+          pages: [
+            "customer-guides/overview",
+            "customer-guides/bigquery",
+            "customer-guides/google-workspace-delegation",
+            "customer-guides/housecallPro",
+            "customer-guides/hubspot",
+            "customer-guides/loxo",
+            "customer-guides/marketo",
+            "customer-guides/netsuite",
+            "customer-guides/salesforce",
+            "customer-guides/salesforce-jwt",
+            "customer-guides/snowflake",
+            "customer-guides/update-connection",
+            "customer-guides/zoho"
+          ]
+        },
         "provider-guides/accuLynx",
         "provider-guides/acuityScheduling",
         "provider-guides/aha",
@@ -629,25 +648,6 @@ const baseConfig = {
         "provider-guides/zoho",
         "provider-guides/zoom",
         "provider-guides/zoominfo",
-        {
-          group: "Customer setup guides",
-          expanded: false,
-          pages: [
-        "customer-guides/overview",
-        "customer-guides/bigquery",
-        "customer-guides/google-workspace-delegation",
-        "customer-guides/housecallPro",
-        "customer-guides/hubspot",
-        "customer-guides/loxo",
-        "customer-guides/marketo",
-        "customer-guides/netsuite",
-        "customer-guides/salesforce",
-        "customer-guides/salesforce-jwt",
-        "customer-guides/snowflake",
-        "customer-guides/update-connection",
-        "customer-guides/zoho"
-          ]
-        },
       ]
     },
 {
