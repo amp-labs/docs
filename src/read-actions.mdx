@@ -272,6 +272,7 @@ A raw filter has two parts:
 Raw filters follow the same rules as `fieldFilters`:
 - Set `rawFilter` on the object to filter both incremental reads and backfill, or inside `backfill` to filter only the backfill. During a backfill, a filter set inside `backfill` (`rawFilter` or `fieldFilters`) replaces the object's filter. [Triggered reads](#trigger-a-read) use the object's filter.
 - On the same level, use either `rawFilter` or `fieldFilters`, not both. The object and its `backfill` can use different kinds.
+- A `backfill` block in the installation replaces the backfill settings from `amp.yaml` entirely, so a `backfill` block that sets a filter must also set `defaultPeriod` (`days` or `fullHistory`).
 - The raw filter is joined with AND to the time window Ampersand uses for incremental reads, so it can only narrow which records are read.
 - Field names are the provider's own. [Object and field mappings](/object-and-field-mapping) are not resolved.
 

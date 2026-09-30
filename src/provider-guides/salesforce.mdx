@@ -455,6 +455,8 @@ Reads and searches with a raw filter use Salesforce's `queryAll` endpoint instea
 
 To tell deleted records apart from active ones, add `IsDeleted` to the object's `requiredFields` or `optionalFields`. A raw filter doesn't add any fields to what's read, and without `IsDeleted` a deleted record looks the same as an active one.
 
+Deleting a record, or restoring it from the Recycle Bin, updates its `SystemModstamp`. So when the raw filter includes deleted records, the next incremental read delivers the record again, with `isdeleted` set to `true` after a delete and `false` after a restore.
+
 <Note>
   Salesforce keeps deleted records in the Recycle Bin for 15 days. Once they're purged, `queryAll` no longer returns them.
 </Note>
@@ -464,6 +466,7 @@ To tell deleted records apart from active ones, add `IsDeleted` to the object's 
 - The filter can only use fields the object has. Setup objects such as User, Profile and RecordType have no `IsDeleted` field, so a filter that uses it fails.
 - The filter must be a condition only, as it would appear after `WHERE`. Clauses such as `LIMIT`, `ORDER BY` or `GROUP BY` aren't allowed. Subqueries are, for example `Id IN (SELECT ContactId FROM CampaignMember WHERE Status = 'Sent')`.
 - The filter is wrapped in parentheses and joined with AND to Ampersand's incremental read window, so its own `OR` conditions stay grouped. A filter with unbalanced parentheses, such as `A) OR (B`, is rejected, since it would close the wrapping parentheses early and escape the read window.
+- The filter is sent to Salesforce in the request URL, so its length is limited. For example, a `NOT IN` list of 300 IDs (about 7,000 characters) works, while one of 1,000 IDs (about 23,000 characters) is refused by Salesforce with HTTP 431 and the read fails.
 - Salesforce checks the filter when the read runs. An invalid filter fails the read with Salesforce's error, so try it with a [search](/search-actions#search-with-a-raw-filter) first.
 - Raw filters are supported by the CRM module, not Account Engagement.
 
