@@ -145,7 +145,7 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     navigation: {
       tabs: [
         {
-          tab: 'Documentation',
+          tab: 'Guides',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
             group.group.match(/^(Get started|Actions|Data and schemas|UI library|Destinations|Notifications|Reference|Security|Resources)$/)))
         },
@@ -238,7 +238,7 @@ const baseConfig = {
       "family": "Helvetica Neue",
       "source": "/fonts/HelveticaNeue/HelveticaNeueMedium.woff2",
       "format": "woff2",
-      "weight": 500
+      "weight": 600
     },
     "body": {
       "family": "Helvetica Neue",
