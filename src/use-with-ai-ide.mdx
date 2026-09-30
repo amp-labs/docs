@@ -2,7 +2,44 @@
 title: "Use with coding agent"
 ---
 
-The official Ampersand docs MCP server provides access to the full Ampersand documentation context, directly within your favorite Coding Agent or IDE. You can use it to help you build integrations quickly with Ampersand.
+Ampersand offers two MCP servers that you can add to your favorite coding agent or IDE:
+
+- The **builder MCP server** works with your Ampersand account. Your agent can use it to validate your `amp.yaml`, manage installations, connections and destinations, troubleshoot failed operations, and scaffold webhook handlers.
+- The **docs MCP server** gives your agent the full Ampersand documentation, to help you build integrations quickly.
+
+You can add either one, or both.
+
+## Builder MCP server
+
+Ampersand's builder MCP server is hosted at `https://builder-mcp.withampersand.com/v1/mcp`.
+
+If you are using Claude Code, you can run this command:
+
+```shell
+claude mcp add ampersand --transport http "https://builder-mcp.withampersand.com/v1/mcp"
+```
+
+Then run `/mcp` in Claude Code, select `ampersand`, and choose **Authenticate**.
+
+For other clients, add the server to the client's MCP configuration. Most clients accept a configuration like this one; see [Client specific configuration](#client-specific-configuration) for where it goes:
+
+```json
+{
+  "mcpServers": {
+    "ampersand": {
+      "url": "https://builder-mcp.withampersand.com/v1/mcp"
+    }
+  }
+}
+```
+
+### Signing in
+
+The first time your agent connects, it opens your browser so you can sign in with your Ampersand account, the same way you sign in to the [Ampersand Dashboard](https://dashboard.withampersand.com). After you approve access, your agent connects automatically. You'll be asked to sign in again from time to time.
+
+Your agent can work with the projects your Ampersand account has access to, with the same read or write permissions. If you're added to a project or removed from one, the change reaches your agent within a minute.
+
+## Docs MCP server
 
 Ampersand's docs MCP server is hosted at `https://docs.withampersand.com/mcp`.
 
@@ -14,7 +51,7 @@ claude mcp add ampersand-docs --transport http "https://docs.withampersand.com/m
 
 ## Client specific configuration
 
-You can use Ampersand's MCP server with any AI application that support [MCP](https://modelcontextprotocol.io/clients). You need to add `https://docs.withampersand.com/mcp` to the appropriate configuration file or setting. Below are some of the most popular coding agents, and where to configure MCP servers for them:
+You can use Ampersand's MCP servers with any AI application that supports [MCP](https://modelcontextprotocol.io/clients). You need to add `https://builder-mcp.withampersand.com/v1/mcp`, `https://docs.withampersand.com/mcp`, or both to the appropriate configuration file or setting. Below are some of the most popular coding agents, and where to configure MCP servers for them:
 
 | Client | Configuration File Location | Documentation |
 |--------|------------------------------|---------------|
@@ -28,6 +65,8 @@ You can use Ampersand's MCP server with any AI application that support [MCP](ht
 ## Tips for better prompts
 
 - Mention Ampersand in your prompt. For example, "How do I build X with Ampersand?"
+
+- Name the project you want your agent to work in. For example, "In my Ampersand project Acme Sync, why did the last read of Salesforce contacts fail?"
 
 - Ask your agent to verify field names against the provider's documentation. For example, "Verify that the field names are real field names for the Account object, according to Salesforce documentation."
 
