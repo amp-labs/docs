@@ -242,7 +242,7 @@ The `value` field of the filter accepts strings, booleans, and numbers:
 
 ## Filter with a raw filter
 
-Use `rawFilter` when you need filtering that `fieldFilters` can't express, such as `OR` conditions, comparisons, or reading deleted records. A raw filter is written in the provider's own query syntax and passed to the provider as written.
+Use `rawFilter` when you need filtering that `fieldFilters` can't express, such as very specific conditions, comparisons, or reading deleted records. A raw filter is written in the provider's own query syntax and passed to the provider as written.
 
 A raw filter has two parts:
 - `type`: the filter syntax. Each provider guide lists the types it supports, for example `soql` for [Salesforce](/provider-guides/salesforce#raw-filters-soql).
@@ -270,10 +270,9 @@ A raw filter has two parts:
 ```
 
 Raw filters follow the same rules as `fieldFilters`:
-- Set `rawFilter` on the object to filter both incremental reads and backfill, or inside `backfill` to filter only the backfill. During a backfill, a filter set inside `backfill` (`rawFilter` or `fieldFilters`) replaces the object's filter. [Triggered reads](#trigger-a-read) use the object's filter.
-- On the same level, use either `rawFilter` or `fieldFilters`, not both. The object and its `backfill` can use different kinds.
+- Set `rawFilter` on the object to filter incremental reads, or inside `backfill` to filter only the backfill. A backfill with no filter of its own uses the object's filter. [Triggered reads](#trigger-a-read) use the object's filter.
+- Only one of `rawFilter` or `fieldFilters` is supported, on the object and inside `backfill`.
 - A `backfill` block in the installation replaces the backfill settings from `amp.yaml` entirely, so a `backfill` block that sets a filter must also set `defaultPeriod` (`days` or `fullHistory`).
-- The raw filter is joined with AND to the time window Ampersand uses for incremental reads, so it can only narrow which records are read.
 - Field names are the provider's own. [Object and field mappings](/object-and-field-mapping) are not resolved.
 
 An installation is rejected if the provider doesn't support the filter's `type`, or if the filter isn't the kind of value that type expects (for `soql`, a non-empty string). The provider checks the filter's syntax when a read runs, so try a raw filter with a [search](/search-actions#search-with-a-raw-filter) before adding it to an installation; searches apply raw filters the same way.
