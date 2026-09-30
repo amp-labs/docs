@@ -1,0 +1,81 @@
+/* Provider browser: the searchable provider list on the Integrations tab
+   (provider-guides/overview.mdx). Behaviour lives in /provider-search.js.
+   All colors come from Mintlify's own gray ramp so this matches the docs. */
+
+.amp-providers {
+  --pv-fg: #19171c;             /* gray-900 */
+  --pv-fg-2: #403f44;           /* gray-700 */
+  --pv-muted: #727075;          /* gray-500 */
+  --pv-faint: #a09fa4;          /* gray-400 */
+  --pv-accent: #6122E7;
+  --pv-surface: #ffffff;
+  --pv-border: rgba(9, 9, 11, 0.1);
+  --pv-border-input: #e0dfe4;   /* gray-200 */
+  --pv-mono: var(--font-family-mono-custom, var(--font-jetbrains-mono, ui-monospace)), "SF Mono", SFMono-Regular, Menlo, monospace;
+
+  margin: 1.25rem 0 0;
+}
+
+html.dark .amp-providers {
+  --pv-fg: #e0dfe4;
+  --pv-fg-2: #d0ced3;
+  --pv-muted: #8b898f;
+  --pv-faint: #525055;
+  --pv-accent: #A67CFF;
+  --pv-surface: #0f1117;
+  --pv-border: rgba(255, 255, 255, 0.1);
+  --pv-border-input: #2e2d33;
+}
+
+.amp-providers [hidden] { display: none !important; }
+
+.amp-providers input.amp-search {
+  width: 100%;
+  max-width: 420px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--pv-border-input);
+  background: var(--pv-surface);
+  color: var(--pv-fg);
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 120ms ease;
+}
+.amp-providers input.amp-search:focus { border-color: var(--pv-accent); }
+.amp-providers input.amp-search::placeholder { color: var(--pv-faint); }
+
+.amp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+/* Before the script runs, respect the page's limit so there is no flash of all
+   197 providers. One rule per limit used, keep in sync with data-limit. */
+.amp-providers[data-limit="24"] .amp-chips:not(.amp-chips--ready) .amp-chip:nth-child(n + 25) { display: none; }
+
+.amp-providers a.amp-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--pv-border);
+  border-radius: 12px;
+  background: var(--pv-surface);
+  font-size: 14px;
+  line-height: 1;
+  color: var(--pv-fg-2);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+.amp-providers a.amp-chip:hover { border-color: var(--pv-accent); color: var(--pv-accent); }
+
+.amp-chips-count {
+  margin-top: 14px;
+  font-family: var(--pv-mono);
+  font-size: 12px;
+  color: var(--pv-muted);
+}
