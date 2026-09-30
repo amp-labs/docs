@@ -11,25 +11,27 @@ html[data-current-path="/overview"] #header { display: none; }
 .amp-home {
   container-type: inline-size;
 
-  /* Mintlify's own gray ramp plus this project's brand accent, so the custom
-     sections sit next to the generated ones without a visible seam. */
-  --amp-bg: #ffffff;
-  --amp-fg: #19171c;            /* gray-900 */
-  --amp-fg-2: #403f44;          /* gray-700, docs body text */
-  --amp-muted: #525055;         /* gray-600 */
-  --amp-muted-2: #727075;       /* gray-500 */
-  --amp-faint: #a09fa4;         /* gray-400 */
-  --amp-comment: #a09fa4;
-  --amp-accent: #6122E7;
-  --amp-accent-hover: #8850FF;
-  --amp-heading-accent: #4F1EB8;
-  --amp-green: #0d8f6c;
-  --amp-surface: #ffffff;
-  --amp-surface-2: #f5f3f8;     /* gray-50 */
-  --amp-border: rgba(9, 9, 11, 0.1);   /* same hairline as native cards */
-  --amp-border-2: #f0eef3;      /* gray-100 */
-  --amp-border-input: #e0dfe4;  /* gray-200 */
-  --amp-border-hover: #d0ced3;  /* gray-300 */
+  /* Every color reads from the variables Mintlify emits from docs.json, so a
+     brand change carries through without editing this file. `primary` is the
+     light-mode accent, `primary-light` the dark-mode one, and `primary-dark`
+     is the shared button/hover color (see the notes in generate-docs.ts). */
+  --amp-bg: rgb(var(--background-light));
+  --amp-fg: rgb(var(--gray-900));
+  --amp-fg-2: rgb(var(--gray-700));
+  --amp-muted: rgb(var(--gray-600));
+  --amp-muted-2: rgb(var(--gray-500));
+  --amp-faint: rgb(var(--gray-400));
+  --amp-comment: rgb(var(--gray-400));
+  --amp-accent: rgb(var(--primary));
+  --amp-accent-hover: rgb(var(--primary-dark));
+  --amp-heading-accent: rgb(var(--primary));
+  --amp-green: #0d8f6c;         /* syntax color for YAML strings, not brand */
+  --amp-surface: rgb(var(--background-light));
+  --amp-surface-2: rgb(var(--gray-50));
+  --amp-border: rgb(var(--gray-950) / 0.1);   /* same hairline as native cards */
+  --amp-border-2: rgb(var(--gray-100));
+  --amp-border-input: rgb(var(--gray-200));
+  --amp-border-hover: rgb(var(--gray-300));
 
   /* Mintlify loads its fonts via next/font and exposes them as variables;
      consuming those keeps this page on the docs' typeface automatically. */
@@ -37,29 +39,29 @@ html[data-current-path="/overview"] #header { display: none; }
   --amp-mono: var(--font-family-mono-custom, var(--font-jetbrains-mono, ui-monospace)), "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 
   font-family: var(--amp-sans);
+  font-weight: var(--font-weight-body-custom, 400);
   color: var(--amp-fg);
-  letter-spacing: -0.0125rem;   /* docs prose tracking */
   line-height: 1.5;
 }
 
 html.dark .amp-home {
-  --amp-bg: #0f1117;            /* Mintlify --background-dark */
-  --amp-fg: #e0dfe4;            /* gray-200 */
-  --amp-fg-2: #d0ced3;
-  --amp-muted: #a09fa4;
-  --amp-muted-2: #8b898f;
-  --amp-faint: #525055;
-  --amp-comment: #525055;
-  --amp-accent: #A67CFF;
-  --amp-accent-hover: #C3A7FF;
-  --amp-heading-accent: #C3A7FF;
-  --amp-green: #3fbf98;
-  --amp-surface: #0f1117;
-  --amp-surface-2: #16161c;
-  --amp-border: rgba(255, 255, 255, 0.1);
-  --amp-border-2: #1f1e24;
-  --amp-border-input: #2e2d33;
-  --amp-border-hover: #403f44;
+  --amp-bg: rgb(var(--background-dark));
+  --amp-fg: rgb(var(--gray-200));
+  --amp-fg-2: rgb(var(--gray-300));
+  --amp-muted: rgb(var(--gray-400));
+  --amp-muted-2: rgb(var(--gray-400));
+  --amp-faint: rgb(var(--gray-500));
+  --amp-comment: rgb(var(--gray-500));
+  --amp-accent: rgb(var(--primary-light));
+  --amp-accent-hover: rgb(var(--primary-light));
+  --amp-heading-accent: rgb(var(--primary-light));
+  --amp-green: #3fbf98;         /* syntax color for YAML strings, not brand */
+  --amp-surface: rgb(var(--background-dark));
+  --amp-surface-2: rgb(255 255 255 / 0.04);
+  --amp-border: rgb(255 255 255 / 0.1);
+  --amp-border-2: rgb(255 255 255 / 0.08);
+  --amp-border-input: rgb(255 255 255 / 0.14);
+  --amp-border-hover: rgb(255 255 255 / 0.28);
 }
 
 .amp-home * { box-sizing: border-box; }
