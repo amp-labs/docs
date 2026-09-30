@@ -92,6 +92,10 @@ interface FontConfig {
 
 interface NavigationGroup {
   group: string;
+
+  // Nested groups only: Mintlify collapses the group when false. Top-level groups ignore it.
+  expanded?: boolean;
+
   pages: Array<string | NavigationGroup>;
 
   // OpenAPI spec to refer to for all methods in this group. This is helpful to avoid collisions when we have similar
@@ -120,6 +124,7 @@ function convertNavigation(mintNavigation: Array<any>): Array<NavigationGroup> {
         }
         return {
           group: page.group,
+          ...(page.expanded === undefined ? {} : { expanded: page.expanded }),
           pages: page.pages
         };
       }) : []
@@ -157,7 +162,7 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
         {
           tab: 'Integrations',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            group.group.match(/^(Provider guides|Customer guides)$/)))
+            group.group.match(/^Providers$/)))
         },
         {
           tab: 'Troubleshooting',
@@ -422,7 +427,7 @@ const baseConfig = {
       ],
     },
 {
-      group: "Provider guides",
+      group: "Providers",
       pages: [
         "provider-guides/overview",
         "provider-guides/accuLynx",
@@ -624,11 +629,10 @@ const baseConfig = {
         "provider-guides/zoho",
         "provider-guides/zoom",
         "provider-guides/zoominfo",
-      ]
-    },
-{
-      group: "Customer guides",
-      pages: [
+        {
+          group: "Customer setup guides",
+          expanded: false,
+          pages: [
         "customer-guides/overview",
         "customer-guides/bigquery",
         "customer-guides/google-workspace-delegation",
@@ -642,6 +646,8 @@ const baseConfig = {
         "customer-guides/snowflake",
         "customer-guides/update-connection",
         "customer-guides/zoho"
+          ]
+        },
       ]
     },
 {
