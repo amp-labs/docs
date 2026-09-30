@@ -2,9 +2,9 @@
     "name": "@amp-labs/docs",
     "scripts": {
         "dev": "cd src && mint dev",
-        "test:openapi": "cd src && mintlify openapi-check platform.json && mintlify openapi-check read.json && mintlify openapi-check write.json && mintlify openapi-check search.json",
+        "test:openapi": "cd src && mint openapi-check platform.json && mint openapi-check read.json && mint openapi-check write.json && mint openapi-check search.json",
         "test": "pnpm run test:links",
-        "test:links": "cd src && mintlify broken-links; exitCode=$?; exit $exitCode",
+        "test:links": "cd src && mint broken-links; exitCode=$?; exit $exitCode",
         "gen": "pnpm run generate",
         "generate": "run-s download-spec:* && run-s gen-api-pages:* && pnpm run gen-docs",
         "download-spec:platform": "curl --fail https://raw.githubusercontent.com/amp-labs/openapi/main/api/generated/api.json > src/platform.json",
@@ -25,7 +25,7 @@
         "axios": "^1.18.1",
         "fs": "0.0.1-security",
         "gray-matter": "^4.0.3",
-        "mintlify": "4.0.549",
+        "mint": "4.2.949",
         "npm-run-all": "^4.1.5",
         "path": "^0.12.7"
     },
