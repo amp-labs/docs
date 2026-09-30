@@ -1,0 +1,72 @@
+/* Mermaid diagrams (currently just the one on /concepts).
+   Mermaid ships a lavender default palette that predates the brand, and it
+   writes those colours as inline styles on the SVG — so these overrides need
+   !important to win. Colours come from the variables Mintlify emits from
+   docs.json, so a future brand change carries through untouched.
+
+   Light mode tints the nodes with the brand accent. Dark mode stays neutral:
+   the dark-mode accent is butter yellow, which reads as a warning colour on a
+   diagram rather than a brand one. */
+
+.mermaid {
+  --dg-fill: rgb(var(--primary) / 0.07);
+  --dg-stroke: rgb(var(--primary) / 0.4);
+  --dg-text: rgb(var(--gray-900));
+  --dg-line: rgb(var(--gray-500));
+  --dg-edge-bg: rgb(var(--background-light));
+}
+
+html.dark .mermaid {
+  --dg-fill: rgb(255 255 255 / 0.05);
+  --dg-stroke: rgb(255 255 255 / 0.18);
+  --dg-text: rgb(var(--gray-200));
+  --dg-line: rgb(var(--gray-400));
+  --dg-edge-bg: rgb(var(--background-dark));
+}
+
+/* Node boxes, whatever shape the diagram uses. */
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node path,
+.mermaid .label-container {
+  fill: var(--dg-fill) !important;
+  stroke: var(--dg-stroke) !important;
+}
+
+/* Node text. Mermaid renders labels in a foreignObject, so this is `color`,
+   not `fill`. */
+.mermaid .nodeLabel,
+.mermaid .nodeLabel p,
+.mermaid .node .label,
+.mermaid .node foreignObject div {
+  color: var(--dg-text) !important;
+}
+
+/* Connectors. */
+.mermaid .flowchart-link,
+.mermaid .edgePath .path,
+.mermaid .edge-thickness-normal {
+  stroke: var(--dg-line) !important;
+}
+
+/* Arrowheads are filled, not stroked. */
+.mermaid .marker,
+.mermaid marker path,
+.mermaid defs marker path {
+  fill: var(--dg-line) !important;
+  stroke: var(--dg-line) !important;
+}
+
+/* Labels sitting on a connector ("amp deploy") carry their own background so
+   the line does not run through the text. */
+.mermaid .edgeLabel,
+.mermaid .edgeLabel p,
+.mermaid .edgeLabel rect,
+.mermaid .edgeLabel foreignObject div {
+  background: var(--dg-edge-bg) !important;
+  background-color: var(--dg-edge-bg) !important;
+  color: var(--dg-text) !important;
+}
+.mermaid .edgeLabel rect { fill: var(--dg-edge-bg) !important; }
