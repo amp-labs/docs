@@ -102,7 +102,7 @@ The parameters of the component are:
 * **consumerName** (string, optional): the display name for this end user.
 * **groupRef** (string): the ID that your app uses to identify a company, team, or workspace. See [group](/terminology#group).
 * **groupName** (string, optional): the display name for this group.
-* **onInstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully installs the integration.
+* **onInstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully installs the integration. If the integration has [always-enabled objects](#always-enabled-objects), this fires right after the consumer connects.
 * **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
 * **onUninstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully uninstalls the integration.
 * **fieldMapping** (JSON): a JSON object that specifies the dynamic mapping configuration for this installation. Learn more about dynamic mapping [here](/object-and-field-mapping#dynamic-field-mappings)
@@ -149,6 +149,19 @@ Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the follo
   </Step>
 </Steps>
 
+#### Always-enabled objects
+
+When your integration has [read objects marked `enabled: always`](/read-actions#always-enabled-objects), the component installs them for the consumer, since the consumer can't opt out of them:
+
+- **As soon as the consumer connects**, the component creates the installation with those objects, and `onInstallSuccess` fires. Reads and backfills for them start right away, even if the consumer leaves before configuring anything else.
+- **When the consumer opens an existing installation** that doesn't have one of those objects, the component adds it, and `onUpdateSuccess` fires.
+- After that, the consumer only updates the installation. They can pick optional fields and mappings for these objects, but the component doesn't offer a way to stop reading them.
+- If installing them fails (for example, the [sample read](/read-actions#install-time-validation) is rejected because the connected user can't access the object), the component shows the error with a **Retry** button, and the consumer can't continue until it succeeds.
+
+<Note>
+If you close your install dialog in `onInstallSuccess`, it will close right after the consumer connects when the integration has always-enabled objects. Use `onUpdateSuccess`, or keep the dialog open until the consumer finishes, if you want them to configure the rest of the integration first.
+</Note>
+
 
 #### Wizard mode (Beta)
 
@@ -173,6 +186,8 @@ To activate wizard mode, pass `variant="wizard"` to the `InstallIntegration` com
 ```
 
 When no installation exists, the wizard renders. If an installation already exists, the standard configuration UI is shown instead.
+
+With [always-enabled objects](#always-enabled-objects), the installation is created when the consumer connects, and the wizard continues from there: those objects are preselected on the object selection step and can't be deselected, and the review step saves the existing installation instead of creating a new one.
 
 | Feature | Supported |
 |---|---|
