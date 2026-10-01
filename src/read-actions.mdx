@@ -2,7 +2,7 @@
 title: "Read actions"
 ---
 
-A read action reads data from your customer's SaaS and send them to Destinations that you define.
+A read action reads data from your customer's SaaS and sends them to Destinations that you define.
 
 ## Define reads
 
@@ -27,7 +27,7 @@ To read an object, you need to specify:
 
 ### Required fields and optional fields
 
-Fields can be either be required or optional. If a field is required, then all users who install this integration will need to give your app read access to that field. If a field is optional, then users can choose whether they'd like your app to read that field. For these fields, you will specify:
+Fields can either be required or optional. If a field is required, then all users who install this integration will need to give your app read access to that field. If a field is optional, then users can choose whether they'd like your app to read that field. For these fields, you will specify:
 
 * **fieldName:**  the name of the field from the official SaaS API documentation.
 
@@ -84,6 +84,43 @@ If you want to give your user the option to pick from any of the fields in their
 ### Object and field mappings
 
 You might want to ask your users during the set up of the integration to map a field (standard or custom) to a concept in your product, because your various customers might be using different fields for the same purpose. You can also predefine object and field mappings that do not involve user interaction. Learn more in [Object and Field Mapping](/object-and-field-mapping).
+
+### Always-enabled objects
+
+By default, each customer chooses which objects to read when they install your integration. Set `enabled: always` on an object to read it for **every** installation instead. Customers can't turn it off, but they can still pick its optional fields and mappings.
+
+Because the object is read without asking the customer, it can't have required field mappings: every required field needs a `fieldName`, so there's nothing the customer must choose. Optional field mappings are fine.
+
+```YAML YAML
+...
+     objects:
+        - objectName: account
+          destination: accountWebhook
+          schedule: "*/30 * * * *"
+          enabled: always
+          requiredFields:
+            - fieldName: name
+          optionalFields:
+            - fieldName: industry
+          ...
+```
+
+**When the object is added to an installation**
+
+- **New installations:** Ampersand adds the object to the installation's config when the installation is created or imported, even if the config doesn't include it. It's then validated, scheduled and backfilled like any other object.
+- **Existing installations:** when you deploy an `amp.yaml` that adds a new object with `enabled: always`, or adds the flag to an existing object, Ampersand updates the config of every existing installation that doesn't have the object, as part of the deploy. An installation's own entry for the object, with its selected fields and mappings, is never overwritten. If the [sample read](#install-time-validation) fails for an installation, that installation isn't updated. Updating an installation through the API doesn't add missing always-enabled objects; only creating one does.
+- **Prebuilt UI:** the [`InstallIntegration` component](/embeddable-ui-components#install-integration) installs these objects as soon as the customer connects, and adds a missing one when the customer opens an existing installation.
+
+Reads, including any [backfill](#backfill-behavior), start as soon as the object is installed.
+
+**Rules**
+
+- A config that sets `disabled: true` on an always-enabled object is rejected with an HTTP `400` response.
+- The object needs at least one entry in `requiredFields`, and none of them can be a mapping the customer fills in (a `mapToName` without a `fieldName`). A deploy that breaks either rule is rejected.
+
+**Removing the flag**
+
+If a later deploy removes `enabled: always`, installations that already have the object keep reading it. New installations stop getting it automatically.
 
 ## Backfill behavior
 
@@ -240,6 +277,43 @@ The `value` field of the filter accepts strings, booleans, and numbers:
 { "fieldName": "employeeCount", "operator": "eq", "value": 50 }
 ```
 
+## Filter with a raw filter
+
+Use `rawFilter` when you need filtering that `fieldFilters` can't express, such as very specific conditions, comparisons, or reading deleted records. A raw filter is written in the provider's own query syntax and passed to the provider as written.
+
+A raw filter has two parts:
+- `type`: the filter syntax. Each provider guide lists the types it supports, for example `soql` for [Salesforce](/provider-guides/salesforce#raw-filters-soql).
+- `filter`: the filter expression, in that syntax.
+
+<Note>
+Raw filters are currently only supported for [Salesforce](/provider-guides/salesforce) using the `soql` type. You can learn more about each provider's raw filter support in its provider guide.
+</Note>
+
+```json
+{
+  "read": {
+    "objects": {
+      "contacts": {
+        "objectName": "contact",
+        "selectedFields": { "email": true, "firstname": true, "isdeleted": true },
+        "rawFilter": {
+          "type": "soql",
+          "filter": "IsDeleted = true OR IsDeleted = false"
+        }
+      }
+    }
+  }
+}
+```
+
+Raw filters follow the same rules as `fieldFilters`:
+- Set `rawFilter` on the object to filter incremental reads, or inside `backfill` to filter only the backfill. A backfill with no filter of its own uses the object's filter. [Triggered reads](#trigger-a-read) use the object's filter.
+- Only one of `rawFilter` or `fieldFilters` is supported, on the object and inside `backfill`.
+- A `backfill` block in the installation replaces the backfill settings from `amp.yaml` entirely, so a `backfill` block that sets a filter must also set `defaultPeriod` (`days` or `fullHistory`).
+- Field names are the provider's own. [Object and field mappings](/object-and-field-mapping) are not resolved.
+
+An installation is rejected if the provider doesn't support the filter's `type`, or if the filter isn't the kind of value that type expects (for `soql`, a non-empty string). The provider checks the filter's syntax when a read runs, so try a raw filter with a [search](/search-actions#search-with-a-raw-filter) before adding it to an installation; searches apply raw filters the same way.
+
 ## Trigger a read
 
 You can call the [trigger read API](/reference/read/trigger-a-read) when you want Ampersand to read data for a particular customer. The data will be sent asynchronously to your destination. You can either use this API alongside a scheduled read (defined by the `schedule` field in the `amp.yaml`), or you can exclusively use the trigger read API without defining a schedule.
@@ -370,7 +444,7 @@ integrations:
 
 When you set the delivery mode to `onRequest`, Ampersand will not send webhooks as it reads new data, but only when you request for more results. This is useful when you want to control the rate at which you receive data. For precise control over how much data you receive each time, you can configure the page size, which specifies the number of records to send in each webhook payload.
 
-Please note that the page size is a *maximum*, and the actual number of records in each payload may be less if there are fewer records available in the SaaS instance. Currently, may configure a page size between 50 and 500. Please reach out to us if you need this to be lower or higher.
+Please note that the page size is a *maximum*, and the actual number of records in each payload may be less if there are fewer records available in the SaaS instance. Currently, you may configure a page size between 50 and 500. Please reach out to us if you need this to be lower or higher.
 
 Here's an example of how to configure the delivery mode to `onRequest` for a Salesforce Contact object, with a max page size of 50 records per webhook message:
 

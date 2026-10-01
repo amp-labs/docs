@@ -1,61 +1,52 @@
 ---
-title: "Ampersand documentation"
+title: "Integration infrastructure for enterprise agents"
 sidebarTitle: "Overview"
-description: "Build native SaaS integrations with a declarative manifest. Ampersand handles auth, field mapping, rate limits, and delivery."
-mode: "wide"
+description: "Ampersand lets your enterprise agent read, write, and subscribe to events in customers' SaaS, with per-customer field mappings and a managed runtime."
 ---
 
-{/* Only the hero is custom (see /home.css). Everything else on this page uses
-    native Mintlify components, so it matches the rest of the docs. */}
+If you are a developer building an enterprise agent, Ampersand enables your agent to reliably work across your customers’ systems of record. More specifically, you can:
 
-<div className="amp-home not-prose">
+- Read historical and current data from your customer’s SaaS.
+- Write data to your customer’s SaaS.
+- Subscribe to events (creates, deletes, and field changes) in your customer’s SaaS.
 
-<section className="amp-section amp-hero">
-  <div>
-    <div className="amp-eyebrow">Documentation</div>
-    <h1 className="amp-title">Build native integrations with a <span className="amp-title-accent">declarative manifest.</span></h1>
-    <p className="amp-lede">Declare what to read, write, and subscribe to in a single manifest. Ampersand handles auth, field mapping, rate limits, and delivery.</p>
-    <div className="amp-actions">
-      <a className="amp-btn amp-btn--secondary" href="/starter-project">Get started</a>
-      <a className="amp-btn amp-btn--secondary" href="/concepts">How Ampersand works</a>
-    </div>
-    <div className="amp-facts">
-      <span>190+ providers</span>
-      <span>OAuth managed</span>
-      <span>Deploy via CLI</span>
-    </div>
-  </div>
-  <div className="amp-manifest">
-    <div className="amp-manifest-bar">
-      <span className="amp-manifest-file">amp.yaml</span>
-      <span className="amp-manifest-note">declarative integration manifest</span>
-    </div>
-    <div className="amp-yaml">
-      <div><span className="amp-k">specVersion:</span> <span className="amp-v">1.0.0</span></div>
-      <div><span className="amp-k">integrations:</span></div>
-      <div className="amp-i2"><span className="amp-d">-</span> <span className="amp-k">name:</span> <span className="amp-s">crm-sync</span></div>
-      <div className="amp-i4"><span className="amp-k">provider:</span> <span className="amp-s">salesforce</span></div>
-      <div className="amp-i4"><span className="amp-k">read:</span></div>
-      <div className="amp-i6"><span className="amp-k">objects:</span></div>
-      <div className="amp-i8"><span className="amp-d">-</span> <span className="amp-k">objectName:</span> <span className="amp-s">contact</span></div>
-      <div className="amp-i10"><span className="amp-k">destination:</span> <span className="amp-s">contactsWebhook</span></div>
-      <div className="amp-i10"><span className="amp-k">schedule:</span> <span className="amp-s">{'"*/15 * * * *"'}</span></div>
-      <div className="amp-i10"><span className="amp-c">{'# mapped by the customer'}</span></div>
-      <div className="amp-i10"><span className="amp-k">requiredFields:</span></div>
-      <div className="amp-i12"><span className="amp-d">-</span> <span className="amp-k">fieldName:</span> <span className="amp-s">email</span></div>
-      <div className="amp-i12"><span className="amp-d">-</span> <span className="amp-k">mapToName:</span> <span className="amp-s">lifecycle_stage</span></div>
-      <div className="amp-i10"><span className="amp-k">optionalFieldsAuto:</span> <span className="amp-v">all</span></div>
-      <div className="amp-i4"><span className="amp-k">write:</span></div>
-      <div className="amp-i6"><span className="amp-k">objects:</span></div>
-      <div className="amp-i8"><span className="amp-d">-</span> <span className="amp-k">objectName:</span> <span className="amp-s">note</span></div>
-    </div>
-    <div className="amp-manifest-foot">
-      <span>$ amp deploy ./integrations --project my-app</span>
-    </div>
-  </div>
-</section>
+Ampersand’s declarative interface and UI components let your customers configure integrations for their instance of Salesforce, NetSuite, and other supported systems, directly inside your product.
 
-</div>
+[Quickstart →](/starter-project) · [Explore supported systems →](/provider-guides/overview)
+
+## Built for each of your customers’ configurations
+
+**Ampersand handles multi-tenancy at scale.** Say you have 400 customers on Salesforce. Every one of them has customized it to reflect how they run their business, with different custom objects, fields, permissions, and rules for how your product interacts with their data. Two very similar companies can store the same data in completely different places.
+
+Ampersand separates the integration you build from each customer’s configuration. You define the schema and operations your application needs once, and each customer’s installation maps them to their own instance. For example, you define `renewalDate` once, and each customer maps it to wherever their Salesforce keeps it:
+
+| Customer | Where `renewalDate` lives |
+|---|---|
+| Customer A | `Account.Renewal_Date__c` |
+| Customer B | `Account.Contract_End__c` |
+| Customer C | `Subscription__c.End_Date__c` |
+| …397 more | Each set by the customer during setup |
+
+Your application reads and writes `renewalDate`. Ampersand translates it to each customer’s field.
+
+## How Ampersand works
+
+<Steps>
+  <Step title="Define an integration">
+    Use an `amp.yaml` file to declare each integration: the system to connect to, the objects and fields to read or write, and the configuration options to expose to your customers. See the [manifest reference](/manifest-reference).
+  </Step>
+  <Step title="Let customers connect and configure">
+    Embed authentication and configuration in your product with the [prebuilt UI components](/embeddable-ui-components), the [headless UI library](/headless), or the [API](/api/overview). Customers connect their own instance and choose field mappings and preferences, and Ampersand saves those choices in their installation.
+  </Step>
+  <Step title="Ampersand runs it">
+    A managed runtime tracks every customer’s configuration and makes the right API calls for each one. It handles authentication, scheduling, retries, and cost, and parses provider error messages. Results are delivered to your [destinations](/destinations/overview).
+  </Step>
+  <Step title="Monitor, adapt, and recover">
+    Inspect installations and operation logs, get [notifications](/notifications/overview) about connection issues, sync failures, and configuration changes, and [watch for schema changes](/manage-customer-schemas#watch-schema-changes) when fields are added, removed, or modified. Use these signals to build self-healing loops in your product: diagnose an issue, refresh metadata or update configuration, and retry once the cause is resolved.
+  </Step>
+</Steps>
+
+[Explore the core concepts →](/concepts) · [Configure customer mappings →](/object-and-field-mapping)
 
 ## Actions
 
@@ -144,7 +135,7 @@ The hard parts, already handled.
 
 ## Integrations
 
-Ampersand supports 190+ providers through one manifest surface. Each provider guide lists the supported objects, the authentication type, and whether read, write, and subscribe actions are available.
+Ampersand connects to CRMs, ERPs, support desks, warehouses, and more through one manifest surface. Each provider guide lists the supported objects, the authentication type, and whether read, write, and subscribe actions are available.
 
 <CardGroup cols={2}>
   <Card title="Browse the provider directory" icon="plug" href="/provider-guides/overview">

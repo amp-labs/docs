@@ -41,6 +41,12 @@ export interface DocsConfig {
     default?: "system" | "light" | "dark";
   };
   favicon?: string;
+
+  // Hidden pages (e.g. the provider guides, kept out of the sidebar) are
+  // otherwise excluded from site search, the sitemap, and AI context.
+  seo?: {
+    indexing?: "navigable" | "all";
+  };
   contextual?: {
     options: Array<string>;
   };
@@ -92,6 +98,10 @@ interface FontConfig {
 
 interface NavigationGroup {
   group: string;
+
+  // Nested groups only: Mintlify collapses the group when false. Top-level groups ignore it.
+  expanded?: boolean;
+
   pages: Array<string | NavigationGroup>;
 
   // OpenAPI spec to refer to for all methods in this group. This is helpful to avoid collisions when we have similar
@@ -120,6 +130,7 @@ function convertNavigation(mintNavigation: Array<any>): Array<NavigationGroup> {
         }
         return {
           group: page.group,
+          ...(page.expanded === undefined ? {} : { expanded: page.expanded }),
           pages: page.pages
         };
       }) : []
@@ -139,6 +150,9 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     fonts: mintConfig.fonts,
     appearance: mintConfig.appearance,
     favicon: mintConfig.favicon,
+    seo: {
+      indexing: 'all'
+    },
     contextual: {
       options: ['copy', 'view']
     },
@@ -157,7 +171,7 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
         {
           tab: 'Integrations',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            group.group.match(/^(Provider guides|Customer guides)$/)))
+            group.group.match(/^Provider guides$/)))
         },
         {
           tab: 'Troubleshooting',
@@ -425,6 +439,25 @@ const baseConfig = {
       group: "Provider guides",
       pages: [
         "provider-guides/overview",
+        {
+          group: "Customer guides",
+          expanded: false,
+          pages: [
+            "customer-guides/overview",
+            "customer-guides/bigquery",
+            "customer-guides/google-workspace-delegation",
+            "customer-guides/housecallPro",
+            "customer-guides/hubspot",
+            "customer-guides/loxo",
+            "customer-guides/marketo",
+            "customer-guides/netsuite",
+            "customer-guides/salesforce",
+            "customer-guides/salesforce-jwt",
+            "customer-guides/snowflake",
+            "customer-guides/update-connection",
+            "customer-guides/zoho"
+          ]
+        },
         "provider-guides/accuLynx",
         "provider-guides/acuityScheduling",
         "provider-guides/aha",
@@ -627,26 +660,10 @@ const baseConfig = {
       ]
     },
 {
-      group: "Customer guides",
-      pages: [
-        "customer-guides/overview",
-        "customer-guides/bigquery",
-        "customer-guides/google-workspace-delegation",
-        "customer-guides/housecallPro",
-        "customer-guides/hubspot",
-        "customer-guides/loxo",
-        "customer-guides/marketo",
-        "customer-guides/netsuite",
-        "customer-guides/salesforce",
-        "customer-guides/salesforce-jwt",
-        "customer-guides/snowflake",
-        "customer-guides/update-connection",
-        "customer-guides/zoho"
-      ]
-    },
-{
       group: "Troubleshooting guides",
       pages: [
+        "troubleshooting-guides/overview",
+        "troubleshooting-guides/general",
         "troubleshooting-guides/salesforce"
       ]
     },

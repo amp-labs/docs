@@ -1,0 +1,387 @@
+/* Integrations directory (provider-guides/overview.mdx).
+   The page renders its own header and layout, so Mintlify's page title is
+   hidden for this path only. Colors and the mono stack come from shared-variables.css. */
+
+html[data-current-path="/provider-guides/overview"] #header { display: none; }
+
+/* Wide mode still caps the prose column; the directory manages its own width. */
+html[data-current-path="/provider-guides/overview"] .mdx-content {
+  max-width: none;
+  margin-top: 0;
+}
+
+/* The page is not-prose, so text color and font set here cascade to every
+   component below; only the exceptions restate them. */
+.amp-intg {
+  max-width: 1180px;
+  margin: 0 auto;
+  color: var(--amp-fg);
+  line-height: 1.5;
+}
+.amp-intg * { box-sizing: border-box; }
+.amp-intg a { color: inherit; text-decoration: none; }
+
+/* ---------- Shared pieces ---------- */
+/* Mono labels. a.amp-back lives outside .amp-intg (on provider guides). */
+.amp-find-status,
+.amp-intg-facts,
+.amp-orbit-core i,
+.amp-node-label,
+.amp-cat-n,
+.amp-intg-card-code,
+.amp-intg-card-cta,
+a.amp-back { font-family: var(--amp-mono); }
+
+.amp-find-status,
+.amp-intg-facts,
+.amp-intg-head-sub,
+.amp-cat-n { color: var(--amp-muted-2); }
+
+.amp-intg-eyebrow,
+.amp-intg-title-accent,
+.amp-intg-card-code,
+.amp-intg-card-cta,
+a.amp-back { color: var(--amp-accent); }
+
+/* Bordered surfaces: search box, logos, logo labels, chips, cards. */
+.amp-find-input,
+.amp-node a,
+.amp-node-label,
+.amp-cat-chips a,
+.amp-intg-card {
+  border: 1px solid var(--amp-border);
+  background: var(--amp-surface);
+}
+.amp-cat-chips a:hover,
+.amp-cat-chips a:focus-visible,
+.amp-intg-card:hover { border-color: var(--amp-border-hover); }
+
+.amp-node a:focus-visible,
+.amp-cat-head:focus-visible { outline: 2px solid var(--amp-accent); }
+
+/* ---------- Hero ---------- */
+.amp-intg-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 56px;
+  align-items: center;
+  padding: 40px 0 8px;
+}
+
+/* Matches the breadcrumb Mintlify shows above other pages' titles. */
+.amp-intg-eyebrow {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.amp-intg h1.amp-intg-title {
+  margin: 0;
+  font-size: 36px;
+  line-height: 44px;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  text-wrap: pretty;
+}
+
+.amp-intg p.amp-intg-lede {
+  margin: 20px 0 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--amp-muted);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+.amp-find { margin-top: 28px; max-width: 360px; }
+.amp-find-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 120ms ease;
+}
+.amp-find-input:focus { border-color: var(--amp-accent); }
+.amp-find-input::placeholder { color: var(--amp-faint); }
+.amp-find-status {
+  margin-top: 10px;
+  font-size: 11.5px;
+  min-height: 16px;
+}
+
+.amp-intg-facts {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 34px;
+  font-size: 13px;
+}
+
+/* ---------- Constellation ---------- */
+.amp-orbit {
+  position: relative;
+  width: min(100%, 540px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  container-type: inline-size;
+}
+.amp-orbit::before,
+.amp-orbit::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 1px solid var(--amp-border-2);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.amp-orbit::before { width: 52cqw; height: 52cqw; }
+.amp-orbit::after  { width: 86cqw; height: 86cqw; border-style: dashed; }
+
+.amp-orbit-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 15cqw;
+  height: 15cqw;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--amp-accent);
+  color: #fff;
+  box-shadow: 0 10px 30px var(--amp-accent-soft);
+  transition: background 120ms ease;
+}
+.amp-orbit-core:hover { background: var(--amp-accent-hover); }
+.amp-orbit-core b { font-size: 4.2cqw; font-weight: 600; line-height: 1; }
+.amp-orbit-core i {
+  font-size: 2.1cqw;
+  font-style: normal;
+  opacity: 0.88;
+  line-height: 1.5;
+}
+
+/* Polar placement: rotate out to the ring, then un-rotate the logo. */
+.amp-node {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--a))
+    translate(var(--r))
+    rotate(calc(-1 * var(--a)));
+}
+.amp-node a {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--sz);
+  height: var(--sz);
+  border-radius: 50%;
+  transition: transform 200ms cubic-bezier(0.34, 1.4, 0.64, 1), border-color 200ms ease;
+}
+.amp-node--lg { --sz: 15cqw; }
+.amp-node--sm { --sz: 9.5cqw; }
+
+.amp-node img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #ffffff;   /* these logos are drawn for light grounds */
+  padding: 3%;
+  /* Mintlify makes content images click-to-zoom. These are links, not figures,
+     so pass the click through to the anchor instead of opening a lightbox. */
+  pointer-events: none;
+}
+
+/* The large logos are already the focal point, so they answer a hover with the
+   accent border alone. Only the small ones grow, and gently. Hover only: focus
+   keeps its outline but no scale, or a node stays enlarged after a click. */
+.amp-node a:hover,
+.amp-node a:focus-visible { border-color: var(--amp-accent); }
+.amp-node--sm a:hover { transform: scale(1.12); }
+.amp-node a:focus-visible { outline-offset: 3px; }
+.amp-node:has(a:hover), .amp-node:has(a:focus-visible) { z-index: 3; }
+
+.amp-node-label {
+  position: absolute;
+  top: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%) translateY(3px);
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+.amp-node a:hover .amp-node-label,
+.amp-node a:focus-visible .amp-node-label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- Section headers ---------- */
+.amp-intg-section { padding-top: 56px; }
+.amp-intg-section--last { padding-bottom: 72px; }
+
+.amp-intg-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--amp-border-2);
+}
+.amp-intg h2.amp-intg-head-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+.amp-intg-head-sub { font-size: 13.5px; }
+
+/* ---------- Categories ---------- */
+.amp-cats { margin-top: 8px; }
+
+.amp-cat { border-bottom: 1px solid var(--amp-border-3); }
+
+.amp-cat-head {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 17px 4px;
+  cursor: pointer;
+  user-select: none;
+}
+.amp-cat-head:hover .amp-cat-name { color: var(--amp-accent); }
+.amp-cat-head:focus-visible { outline-offset: 2px; border-radius: 4px; }
+
+.amp-cat-caret {
+  width: 0;
+  height: 0;
+  border-left: 5px solid var(--amp-faint);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transition: transform 160ms ease;
+}
+.amp-cat[data-open="true"] .amp-cat-caret {
+  transform: rotate(90deg);
+  border-left-color: var(--amp-accent);
+}
+
+.amp-cat-name {
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  transition: color 120ms ease;
+}
+.amp-cat-n {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Closed rows hide their chips. The markup carries the open state, so the
+   first category is expanded even before provider-grid.js runs. */
+.amp-cat:not([data-open="true"]) .amp-cat-chips { display: none; }
+
+.amp-cat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 2px 4px 22px 24px;
+}
+.amp-cat-chips a {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 7px;
+  font-size: 13px;
+  color: var(--amp-fg-2);
+  white-space: nowrap;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+.amp-cat-chips a:hover,
+.amp-cat-chips a:focus-visible { color: var(--amp-fg); }
+
+/* ---------- Closing cards ---------- */
+.amp-intg-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.amp-intg-card {
+  display: block;
+  padding: 20px;
+  border-radius: 10px;
+  transition: border-color 120ms ease;
+}
+.amp-intg-card-code { font-size: 13.5px; }
+.amp-intg-card-title { margin-top: 10px; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+.amp-intg-card-desc { margin-top: 7px; font-size: 14px; line-height: 1.55; color: var(--amp-muted); }
+.amp-intg-card-cta { margin-top: 14px; font-size: 11.5px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 960px) {
+  .amp-intg-hero { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .amp-intg h1.amp-intg-title { font-size: 30px; line-height: 38px; }
+}
+@media (max-width: 640px) {
+  .amp-intg h1.amp-intg-title { font-size: 27px; line-height: 34px; }
+  .amp-intg-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .amp-cat-chips { padding-left: 4px; }
+}
+
+/* ---------- Motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .amp-node a {
+    animation: amp-bob 6s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  .amp-node a:hover, .amp-node a:focus-visible { animation-play-state: paused; }
+  .amp-orbit::after { animation: amp-spin 90s linear infinite; }
+}
+
+@keyframes amp-bob {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -5px; }
+}
+@keyframes amp-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Anyone who has asked for less motion gets a still picture. */
+@media (prefers-reduced-motion: reduce) {
+  .amp-node a { animation: none; transition: border-color 160ms ease; }
+  .amp-node--sm a:hover { transform: none; }
+  .amp-orbit::after { animation: none; }
+  .amp-cat-caret { transition: none; }
+}
+
+/* ---------- Back link on provider guides ---------- */
+/* Inserted above the page title by provider-grid.js. The guides are hidden
+   from the sidebar, so this is the only route back to the directory. */
+a.amp-back {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: 12.5px;
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+a.amp-back:hover { color: var(--amp-accent-hover); }
+
+/* Rows and chips the filter has ruled out. */
+.amp-cat[hidden], .amp-cat-chips a[hidden] { display: none !important; }
