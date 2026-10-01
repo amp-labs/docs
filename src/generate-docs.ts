@@ -171,7 +171,7 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
         {
           tab: 'Integrations',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            group.group.match(/^Integration guides$/)))
+            group.group.match(/^Provider guides$/)))
         },
         {
           tab: 'Troubleshooting',
@@ -436,7 +436,7 @@ const baseConfig = {
       ],
     },
 {
-      group: "Integration guides",
+      group: "Provider guides",
       pages: [
         "provider-guides/overview",
         {
