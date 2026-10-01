@@ -277,6 +277,43 @@ The `value` field of the filter accepts strings, booleans, and numbers:
 { "fieldName": "employeeCount", "operator": "eq", "value": 50 }
 ```
 
+## Filter with a raw filter
+
+Use `rawFilter` when you need filtering that `fieldFilters` can't express, such as very specific conditions, comparisons, or reading deleted records. A raw filter is written in the provider's own query syntax and passed to the provider as written.
+
+A raw filter has two parts:
+- `type`: the filter syntax. Each provider guide lists the types it supports, for example `soql` for [Salesforce](/provider-guides/salesforce#raw-filters-soql).
+- `filter`: the filter expression, in that syntax.
+
+<Note>
+Raw filters are currently only supported for [Salesforce](https://docs.withampersand.com/provider-guides/salesforce) using the `soql` type. You can learn more about each provider's raw filter support in its provider guide.
+</Note>
+
+```json
+{
+  "read": {
+    "objects": {
+      "contacts": {
+        "objectName": "contact",
+        "selectedFields": { "email": true, "firstname": true, "isdeleted": true },
+        "rawFilter": {
+          "type": "soql",
+          "filter": "IsDeleted = true OR IsDeleted = false"
+        }
+      }
+    }
+  }
+}
+```
+
+Raw filters follow the same rules as `fieldFilters`:
+- Set `rawFilter` on the object to filter incremental reads, or inside `backfill` to filter only the backfill. A backfill with no filter of its own uses the object's filter. [Triggered reads](#trigger-a-read) use the object's filter.
+- Only one of `rawFilter` or `fieldFilters` is supported, on the object and inside `backfill`.
+- A `backfill` block in the installation replaces the backfill settings from `amp.yaml` entirely, so a `backfill` block that sets a filter must also set `defaultPeriod` (`days` or `fullHistory`).
+- Field names are the provider's own. [Object and field mappings](/object-and-field-mapping) are not resolved.
+
+An installation is rejected if the provider doesn't support the filter's `type`, or if the filter isn't the kind of value that type expects (for `soql`, a non-empty string). The provider checks the filter's syntax when a read runs, so try a raw filter with a [search](/search-actions#search-with-a-raw-filter) before adding it to an installation; searches apply raw filters the same way.
+
 ## Trigger a read
 
 You can call the [trigger read API](/reference/read/trigger-a-read) when you want Ampersand to read data for a particular customer. The data will be sent asynchronously to your destination. You can either use this API alongside a scheduled read (defined by the `schedule` field in the `amp.yaml`), or you can exclusively use the trigger read API without defining a schedule.

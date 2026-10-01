@@ -432,6 +432,46 @@ To start integrating with Salesforce:
    - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 
+## Raw filters (SOQL)
+
+[Read actions](/read-actions#filter-with-a-raw-filter) and [search](/search-actions#search-with-a-raw-filter) accept a raw filter of type `soql`: a SOQL condition, as it would appear after `WHERE`.
+
+```json
+"rawFilter": {
+  "type": "soql",
+  "filter": "Status = 'Qualified' AND (Country = 'US' OR Country = 'CA')"
+}
+```
+
+<Tip>
+  To try out a raw filter, run it with the [Search API](/search-actions#search-with-a-raw-filter) first. A search applies the filter the same way a read does and returns the matching records right away.
+</Tip>
+
+### Deleted and archived records
+
+Reads and searches with a raw filter use Salesforce's `queryAll` endpoint instead of `query`. Unlike `query`, `queryAll` also returns deleted records that are still in the Recycle Bin, and archived Task and Event records. Your filter decides whether they're returned:
+
+| Filter | Returns |
+| --- | --- |
+| `IsDeleted = false` | Active records only, the same as reading without a raw filter |
+| `IsDeleted = true` | Deleted records only |
+| `IsDeleted = true OR IsDeleted = false` | Both deleted and active records |
+| `Status = 'Qualified'` | Qualified records, **including deleted ones** |
+
+To tell deleted records apart from active ones, add `IsDeleted` to the object's `requiredFields` or `optionalFields`. A raw filter doesn't add any fields to what's read, and without `IsDeleted` a deleted record looks the same as an active one.
+
+Deleting a record, or restoring it from the Recycle Bin, updates its `SystemModstamp`. So when the raw filter includes deleted records, the next incremental read delivers the record again, with `isdeleted` set to `true` after a delete and `false` after a restore.
+
+<Note>
+  Salesforce keeps deleted records in the Recycle Bin for 15 days. Once they're purged, `queryAll` no longer returns them.
+</Note>
+
+### Filter rules
+
+- The filter can only use fields the object has. Setup objects such as User, Profile and RecordType have no `IsDeleted` field, so a filter that uses it fails.
+- The filter must be a condition only, as it would appear after `WHERE`. Clauses such as `LIMIT`, `ORDER BY` or `GROUP BY` aren't allowed. Subqueries are, for example `Id IN (SELECT ContactId FROM CampaignMember WHERE Status = 'Sent')`.
+- Raw filters are only supported by the CRM module.
+
 ## Customer guide
 
 The [Salesforce customer guide](/customer-guides/salesforce) is a guide that can be shared with your customers to help them be successful in using your integration.
