@@ -85,6 +85,43 @@ If you want to give your user the option to pick from any of the fields in their
 
 You might want to ask your users during the set up of the integration to map a field (standard or custom) to a concept in your product, because your various customers might be using different fields for the same purpose. You can also predefine object and field mappings that do not involve user interaction. Learn more in [Object and Field Mapping](/object-and-field-mapping).
 
+### Always-enabled objects
+
+By default, each customer chooses which objects to read when they install your integration. Set `enabled: always` on an object to read it for **every** installation instead. Customers can't turn it off, but they can still pick its optional fields and mappings.
+
+Because the object is read without asking the customer, it can't have required field mappings: every required field needs a `fieldName`, so there's nothing the customer must choose. Optional field mappings are fine.
+
+```YAML YAML
+...
+     objects:
+        - objectName: account
+          destination: accountWebhook
+          schedule: "*/30 * * * *"
+          enabled: always
+          requiredFields:
+            - fieldName: name
+          optionalFields:
+            - fieldName: industry
+          ...
+```
+
+**When the object is added to an installation**
+
+- **New installations:** Ampersand adds the object to the installation's config when the installation is created or imported, even if the config doesn't include it. It's then validated, scheduled and backfilled like any other object.
+- **Existing installations:** when you deploy an `amp.yaml` that adds a new object with `enabled: always`, or adds the flag to an existing object, Ampersand updates the config of every existing installation that doesn't have the object, as part of the deploy. An installation's own entry for the object, with its selected fields and mappings, is never overwritten. If the [sample read](#install-time-validation) fails for an installation, that installation isn't updated. Updating an installation through the API doesn't add missing always-enabled objects; only creating one does.
+- **Prebuilt UI:** the [`InstallIntegration` component](/embeddable-ui-components#install-integration) installs these objects as soon as the customer connects, and adds a missing one when the customer opens an existing installation.
+
+Reads, including any [backfill](#backfill-behavior), start as soon as the object is installed.
+
+**Rules**
+
+- A config that sets `disabled: true` on an always-enabled object is rejected with an HTTP `400` response.
+- The object needs at least one entry in `requiredFields`, and none of them can be a mapping the customer fills in (a `mapToName` without a `fieldName`). A deploy that breaks either rule is rejected.
+
+**Removing the flag**
+
+If a later deploy removes `enabled: always`, installations that already have the object keep reading it. New installations stop getting it automatically.
+
 ## Backfill behavior
 
 Backfill behavior describes whether Ampersand will do an initial read of your customer's historic data when they connect their SaaS instance, and how far back data will be read. For example, if your integration reads a customer's contacts stored in their CRM, you can configure whether you want to only read new and updated contacts going forward, or if you also want to do an initial backfill of the pre-existing contacts in their CRM.
