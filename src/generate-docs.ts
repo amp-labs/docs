@@ -41,6 +41,12 @@ export interface DocsConfig {
     default?: "system" | "light" | "dark";
   };
   favicon?: string;
+
+  // Hidden pages (e.g. the provider guides, kept out of the sidebar) are
+  // otherwise excluded from site search, the sitemap, and AI context.
+  seo?: {
+    indexing?: "navigable" | "all";
+  };
   contextual?: {
     options: Array<string>;
   };
@@ -144,6 +150,9 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     fonts: mintConfig.fonts,
     appearance: mintConfig.appearance,
     favicon: mintConfig.favicon,
+    seo: {
+      indexing: 'all'
+    },
     contextual: {
       options: ['copy', 'view']
     },
