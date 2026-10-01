@@ -1,7 +1,6 @@
 /* Integrations directory (provider-guides/overview.mdx).
    The page renders its own header and layout, so Mintlify's page title is
-   hidden for this path only. Every color reads from Mintlify's own variables,
-   so a brand change carries through without touching this file. */
+   hidden for this path only. Colors and the mono stack come from shared-variables.css. */
 
 html[data-current-path="/provider-guides/overview"] #header { display: none; }
 
@@ -11,70 +10,54 @@ html[data-current-path="/provider-guides/overview"] .mdx-content {
   margin-top: 0;
 }
 
-/* The directory is itself a full-page index, so its sidebar (which offers one
-   other destination) is hidden and the hero takes the full width. Every other
-   page in the tab keeps its nav. On a customer guide the rail lists all 13
-   sibling guides, which is real navigation worth keeping. */
-html[data-current-path="/provider-guides/overview"] #sidebar { display: none; }
-
-/* Mintlify reserves the sidebar's strip on #content-area with a left padding
-   (lg:pl-[23.7rem] lg:-ml-12) that stays whether or not the sidebar renders.
-   With the rail hidden here, reclaim it or the page sits in a narrow column
-   with a dead gutter beside it. */
-html[data-current-path="/provider-guides/overview"] #content-area {
-  padding-left: 0;
-  margin-left: 0;
-  width: 100%;
-  max-width: none;
-}
-
+/* The page is not-prose, so text color and font set here cascade to every
+   component below; only the exceptions restate them. */
 .amp-intg {
-  --ig-fg: rgb(var(--gray-900));
-  --ig-fg-2: rgb(var(--gray-700));
-  --ig-muted: rgb(var(--gray-600));
-  --ig-muted-2: rgb(var(--gray-500));
-  --ig-faint: rgb(var(--gray-400));
-  --ig-accent: rgb(var(--primary));
-  --ig-accent-hover: rgb(var(--primary-dark));
-  --ig-heading-accent: rgb(var(--primary));
-  --ig-accent-soft: rgb(var(--primary) / 0.16);
-  --ig-surface: rgb(var(--background-light));
-  --ig-border: rgb(var(--gray-950) / 0.1);
-  --ig-border-2: rgb(var(--gray-950) / 0.07);
-  --ig-border-3: rgb(var(--gray-950) / 0.05);
-  --ig-border-hover: rgb(var(--gray-950) / 0.22);
-
-  --ig-sans: var(--font-family-body-custom, var(--font-inter, ui-sans-serif)), -apple-system,
-             BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --ig-mono: var(--font-family-mono-custom, var(--font-jetbrains-mono, ui-monospace)),
-             "SF Mono", SFMono-Regular, Menlo, monospace;
-
   max-width: 1180px;
   margin: 0 auto;
-  font-family: var(--ig-sans);
-  color: var(--ig-fg);
+  color: var(--amp-fg);
   line-height: 1.5;
 }
-
-html.dark .amp-intg {
-  --ig-fg: rgb(var(--gray-100));
-  --ig-fg-2: rgb(var(--gray-300));
-  --ig-muted: rgb(var(--gray-400));
-  --ig-muted-2: rgb(var(--gray-400));
-  --ig-faint: rgb(var(--gray-500));
-  --ig-accent: rgb(var(--primary-light));
-  --ig-accent-hover: rgb(var(--primary-light));
-  --ig-heading-accent: rgb(var(--primary-light));
-  --ig-accent-soft: rgb(var(--primary-light) / 0.22);
-  --ig-surface: rgb(var(--background-dark));
-  --ig-border: rgb(255 255 255 / 0.13);
-  --ig-border-2: rgb(255 255 255 / 0.09);
-  --ig-border-3: rgb(255 255 255 / 0.07);
-  --ig-border-hover: rgb(255 255 255 / 0.3);
-}
-
 .amp-intg * { box-sizing: border-box; }
 .amp-intg a { color: inherit; text-decoration: none; }
+
+/* ---------- Shared pieces ---------- */
+/* Mono labels. a.amp-back lives outside .amp-intg (on provider guides). */
+.amp-find-status,
+.amp-intg-facts,
+.amp-orbit-core i,
+.amp-node-label,
+.amp-cat-n,
+.amp-intg-card-code,
+.amp-intg-card-cta,
+a.amp-back { font-family: var(--amp-mono); }
+
+.amp-find-status,
+.amp-intg-facts,
+.amp-intg-head-sub,
+.amp-cat-n { color: var(--amp-muted-2); }
+
+.amp-intg-eyebrow,
+.amp-intg-title-accent,
+.amp-intg-card-code,
+.amp-intg-card-cta,
+a.amp-back { color: var(--amp-accent); }
+
+/* Bordered surfaces: search box, logos, logo labels, chips, cards. */
+.amp-find-input,
+.amp-node a,
+.amp-node-label,
+.amp-cat-chips a,
+.amp-intg-card {
+  border: 1px solid var(--amp-border);
+  background: var(--amp-surface);
+}
+.amp-cat-chips a:hover,
+.amp-cat-chips a:focus-visible,
+.amp-intg-card:hover { border-color: var(--amp-border-hover); }
+
+.amp-node a:focus-visible,
+.amp-cat-head:focus-visible { outline: 2px solid var(--amp-accent); }
 
 /* ---------- Hero ---------- */
 .amp-intg-hero {
@@ -85,32 +68,27 @@ html.dark .amp-intg {
   padding: 40px 0 8px;
 }
 
+/* Matches the breadcrumb Mintlify shows above other pages' titles. */
 .amp-intg-eyebrow {
-  font-family: var(--ig-mono);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ig-accent);
-  margin-bottom: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
 }
 
 .amp-intg h1.amp-intg-title {
   margin: 0;
-  font-family: var(--ig-sans);
   font-size: 36px;
   line-height: 44px;
   letter-spacing: -0.025em;
   font-weight: 600;
-  color: var(--ig-fg);
   text-wrap: pretty;
 }
-.amp-intg-title-accent { color: var(--ig-heading-accent); }
 
 .amp-intg p.amp-intg-lede {
   margin: 20px 0 0;
   font-size: 16px;
   line-height: 1.6;
-  color: var(--ig-muted);
+  color: var(--amp-muted);
   max-width: 46ch;
   text-wrap: pretty;
 }
@@ -121,21 +99,17 @@ html.dark .amp-intg {
   height: 40px;
   padding: 0 12px;
   border-radius: 8px;
-  border: 1px solid var(--ig-border);
-  background: var(--ig-surface);
-  color: var(--ig-fg);
-  font-family: inherit;
+  color: inherit;
+  font: inherit;
   font-size: 14px;
   outline: none;
   transition: border-color 120ms ease;
 }
-.amp-find-input:focus { border-color: var(--ig-accent); }
-.amp-find-input::placeholder { color: var(--ig-faint); }
+.amp-find-input:focus { border-color: var(--amp-accent); }
+.amp-find-input::placeholder { color: var(--amp-faint); }
 .amp-find-status {
   margin-top: 10px;
-  font-family: var(--ig-mono);
   font-size: 11.5px;
-  color: var(--ig-muted-2);
   min-height: 16px;
 }
 
@@ -144,9 +118,7 @@ html.dark .amp-intg {
   gap: 24px;
   flex-wrap: wrap;
   margin-top: 34px;
-  font-family: var(--ig-mono);
   font-size: 13px;
-  color: var(--ig-muted-2);
 }
 
 /* ---------- Constellation ---------- */
@@ -164,7 +136,7 @@ html.dark .amp-intg {
   left: 50%;
   top: 50%;
   border-radius: 50%;
-  border: 1px solid var(--ig-border-2);
+  border: 1px solid var(--amp-border-2);
   transform: translate(-50%, -50%);
   pointer-events: none;
 }
@@ -183,15 +155,14 @@ html.dark .amp-intg {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: var(--ig-accent);
+  background: var(--amp-accent);
   color: #fff;
-  box-shadow: 0 10px 30px var(--ig-accent-soft);
+  box-shadow: 0 10px 30px var(--amp-accent-soft);
   transition: background 120ms ease;
 }
-.amp-orbit-core:hover { background: var(--ig-accent-hover); }
+.amp-orbit-core:hover { background: var(--amp-accent-hover); }
 .amp-orbit-core b { font-size: 4.2cqw; font-weight: 600; line-height: 1; }
 .amp-orbit-core i {
-  font-family: var(--ig-mono);
   font-size: 2.1cqw;
   font-style: normal;
   opacity: 0.88;
@@ -216,8 +187,6 @@ html.dark .amp-intg {
   width: var(--sz);
   height: var(--sz);
   border-radius: 50%;
-  border: 1px solid var(--ig-border);
-  background: var(--ig-surface);
   transition: transform 200ms cubic-bezier(0.34, 1.4, 0.64, 1), border-color 200ms ease;
 }
 .amp-node--lg { --sz: 15cqw; }
@@ -235,18 +204,13 @@ html.dark .amp-intg {
   pointer-events: none;
 }
 
-/* One multiplier would move the large nodes far more in pixels than the small
-   ones, so each tier gets its own: the big logos only need a nudge. */
-.amp-node a:hover,
-.amp-node a:focus-visible {
-  border-color: var(--ig-accent);
-}
 /* The large logos are already the focal point, so they answer a hover with the
-   accent border alone. Only the small ones grow, and gently. */
-/* Hover only. Focus keeps its outline but no scale, or a node stays enlarged
-   after it is clicked. */
+   accent border alone. Only the small ones grow, and gently. Hover only: focus
+   keeps its outline but no scale, or a node stays enlarged after a click. */
+.amp-node a:hover,
+.amp-node a:focus-visible { border-color: var(--amp-accent); }
 .amp-node--sm a:hover { transform: scale(1.12); }
-.amp-node a:focus-visible { outline: 2px solid var(--ig-accent); outline-offset: 3px; }
+.amp-node a:focus-visible { outline-offset: 3px; }
 .amp-node:has(a:hover), .amp-node:has(a:focus-visible) { z-index: 3; }
 
 .amp-node-label {
@@ -256,10 +220,6 @@ html.dark .amp-intg {
   transform: translateX(-50%) translateY(3px);
   padding: 3px 9px;
   border-radius: 6px;
-  border: 1px solid var(--ig-border);
-  background: var(--ig-surface);
-  color: var(--ig-fg);
-  font-family: var(--ig-mono);
   font-size: 11.5px;
   white-space: nowrap;
   opacity: 0;
@@ -281,23 +241,19 @@ html.dark .amp-intg {
   align-items: baseline;
   gap: 14px;
   padding-bottom: 18px;
-  border-bottom: 1px solid var(--ig-border-2);
+  border-bottom: 1px solid var(--amp-border-2);
 }
 .amp-intg h2.amp-intg-head-title {
   margin: 0;
-  font-family: var(--ig-mono);
   font-size: 15px;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--ig-fg);
 }
-.amp-intg-head-sub { font-size: 13.5px; color: var(--ig-muted-2); }
+.amp-intg-head-sub { font-size: 13.5px; }
 
 /* ---------- Categories ---------- */
 .amp-cats { margin-top: 8px; }
 
-.amp-cat { border-bottom: 1px solid var(--ig-border-3); }
+.amp-cat { border-bottom: 1px solid var(--amp-border-3); }
 
 .amp-cat-head {
   display: grid;
@@ -308,37 +264,30 @@ html.dark .amp-intg {
   cursor: pointer;
   user-select: none;
 }
-.amp-cat-head:hover .amp-cat-name { color: var(--ig-accent); }
-.amp-cat-head:focus-visible {
-  outline: 2px solid var(--ig-accent);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
+.amp-cat-head:hover .amp-cat-name { color: var(--amp-accent); }
+.amp-cat-head:focus-visible { outline-offset: 2px; border-radius: 4px; }
 
 .amp-cat-caret {
   width: 0;
   height: 0;
-  border-left: 5px solid var(--ig-faint);
+  border-left: 5px solid var(--amp-faint);
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
   transition: transform 160ms ease;
 }
 .amp-cat[data-open="true"] .amp-cat-caret {
   transform: rotate(90deg);
-  border-left-color: var(--ig-accent);
+  border-left-color: var(--amp-accent);
 }
 
 .amp-cat-name {
   font-size: 14.5px;
   font-weight: 500;
   letter-spacing: -0.005em;
-  color: var(--ig-fg);
   transition: color 120ms ease;
 }
 .amp-cat-n {
-  font-family: var(--ig-mono);
   font-size: 11px;
-  color: var(--ig-muted-2);
   font-variant-numeric: tabular-nums;
 }
 
@@ -357,19 +306,14 @@ html.dark .amp-intg {
   align-items: center;
   height: 32px;
   padding: 0 12px;
-  border: 1px solid var(--ig-border);
   border-radius: 7px;
-  background: var(--ig-surface);
   font-size: 13px;
-  color: var(--ig-fg-2);
+  color: var(--amp-fg-2);
   white-space: nowrap;
   transition: border-color 120ms ease, color 120ms ease;
 }
 .amp-cat-chips a:hover,
-.amp-cat-chips a:focus-visible {
-  border-color: var(--ig-border-hover);
-  color: var(--ig-fg);
-}
+.amp-cat-chips a:focus-visible { color: var(--amp-fg); }
 
 /* ---------- Closing cards ---------- */
 .amp-intg-cards {
@@ -381,16 +325,13 @@ html.dark .amp-intg {
 .amp-intg-card {
   display: block;
   padding: 20px;
-  border: 1px solid var(--ig-border);
   border-radius: 10px;
-  background: var(--ig-surface);
   transition: border-color 120ms ease;
 }
-.amp-intg-card:hover { border-color: var(--ig-border-hover); }
-.amp-intg-card-code { font-family: var(--ig-mono); font-size: 13.5px; color: var(--ig-accent); }
+.amp-intg-card-code { font-size: 13.5px; }
 .amp-intg-card-title { margin-top: 10px; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
-.amp-intg-card-desc { margin-top: 7px; font-size: 14px; line-height: 1.55; color: var(--ig-muted); }
-.amp-intg-card-cta { margin-top: 14px; font-family: var(--ig-mono); font-size: 11.5px; color: var(--ig-accent); }
+.amp-intg-card-desc { margin-top: 7px; font-size: 14px; line-height: 1.55; color: var(--amp-muted); }
+.amp-intg-card-cta { margin-top: 14px; font-size: 11.5px; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
@@ -436,16 +377,11 @@ html.dark .amp-intg {
 a.amp-back {
   display: inline-block;
   margin-bottom: 12px;
-  font-family: var(--font-family-mono-custom, var(--font-jetbrains-mono, ui-monospace)),
-               "SF Mono", SFMono-Regular, Menlo, monospace;
   font-size: 12.5px;
-  color: rgb(var(--primary));
   text-decoration: none;
   transition: color 120ms ease;
 }
-a.amp-back:hover { color: rgb(var(--primary-dark)); }
-html.dark a.amp-back { color: rgb(var(--primary-light)); }
-html.dark a.amp-back:hover { color: rgb(var(--primary)); }
+a.amp-back:hover { color: var(--amp-accent-hover); }
 
 /* Rows and chips the filter has ruled out. */
 .amp-cat[hidden], .amp-cat-chips a[hidden] { display: none !important; }
