@@ -6,11 +6,11 @@ description: "Ampersand lets your enterprise agent read, write, and subscribe to
 
 If you are a developer building an enterprise agent, Ampersand enables your agent to reliably work across your customers’ systems of record. More specifically, you can:
 
-- Read historical and current data from your customer’s SaaS.
-- Write data to your customer’s SaaS.
-- Subscribe to events (creates, deletes, and field changes) in your customer’s SaaS.
+- Read historical and current data from your customer’s system.
+- Write data to your customer’s system.
+- Subscribe to events (creates, deletes, and field changes) in your customer’s system.
 
-Ampersand’s declarative interface and UI components let your customers configure integrations for their instance of Salesforce, NetSuite, and other supported systems, directly inside your product.
+Ampersand’s declarative interface and UI components let your customers configure integrations with their CRM, ERP, or other systems of record directly within your product.
 
 [Quickstart →](/starter-project) · [Explore supported systems →](/provider-guides/overview)
 
@@ -18,7 +18,7 @@ Ampersand’s declarative interface and UI components let your customers configu
 
 **Ampersand handles multi-tenancy at scale.** Say you have 400 customers on Salesforce. Every one of them has customized it to reflect how they run their business, with different custom objects, fields, permissions, and rules for how your product interacts with their data. Two very similar companies can store the same data in completely different places.
 
-Ampersand separates the integration you build from each customer’s configuration. You define the schema and operations your application needs once, and each customer’s installation maps them to their own instance. For example, you define `renewalDate` once, and each customer maps it to wherever their Salesforce keeps it:
+Ampersand separates the integration you build from each customer's configuration. You define the schema and actions your application needs once, and each installation keeps track of the per-customer mappings. For example, you define `renewalDate` once, and each customer uses the embeddable UI library to map it to where they're actually storing the renewal date in their Salesforce.
 
 | Customer | Where `renewalDate` lives |
 |---|---|
@@ -36,17 +36,19 @@ Your application reads and writes `renewalDate`. Ampersand translates it to each
     Use an `amp.yaml` file to declare each integration: the system to connect to, the objects and fields to read or write, and the configuration options to expose to your customers. See the [manifest reference](/manifest-reference).
   </Step>
   <Step title="Let customers connect and configure">
-    Embed authentication and configuration in your product with the [prebuilt UI components](/embeddable-ui-components), the [headless UI library](/headless), or the [API](/api/overview). Customers connect their own instance and choose field mappings and preferences, and Ampersand saves those choices in their installation.
+    Embed authentication and configuration in your product with [prebuilt UI components](/embeddable-ui-components), [headless UI library](/headless), or [API](/api/overview). Customers connect their own instance and choose field mappings and preferences, and Ampersand saves those choices in their installation.
   </Step>
   <Step title="Ampersand runs it">
-    A managed runtime tracks every customer’s configuration and makes the right API calls for each one. It handles authentication, scheduling, retries, and cost, and parses provider error messages. Results are delivered to your [destinations](/destinations/overview).
+
+    A managed runtime tracks every customer's configuration and makes the right API calls for each one. It handles authentication, scheduling, retries, rate limits, and non-standard provider error messages. You can either make direct API calls or have async results delivered to your [destinations](/destinations/overview).
+
   </Step>
   <Step title="Monitor, adapt, and recover">
-    Inspect installations and operation logs, get [notifications](/notifications/overview) about connection issues, sync failures, and configuration changes, and [watch for schema changes](/manage-customer-schemas#watch-schema-changes) when fields are added, removed, or modified. Use these signals to build self-healing loops in your product: diagnose an issue, refresh metadata or update configuration, and retry once the cause is resolved.
+
+    Inspect installations and operation logs, get [notifications](/notifications/overview) about connection issues, sync failures, and configuration changes, and [watch for schema changes](/manage-customer-schemas#watch-schema-changes) when fields are added, removed, or modified. Use these signals to operationalize your integrations by alerting your team or your customers when actions need to be taken.
+
   </Step>
 </Steps>
-
-[Explore the core concepts →](/concepts) · [Configure customer mappings →](/object-and-field-mapping)
 
 ## Actions
 
@@ -54,108 +56,58 @@ Actions are the verbs of every integration. You declare them in your manifest.
 
 <CardGroup cols={3}>
   <Card title="Read" icon="download" href="/read-actions">
-    Scheduled or on-demand reads with incremental syncs, delivered anywhere.
+    Scheduled or on-demand reads with full backfills and incremental syncs.
   </Card>
   <Card title="Write" icon="upload" href="/write-actions">
-    Create and update records in your customer's SaaS, one at a time or in bulk.
+    Create and update records, synchronously or asynchronously.
   </Card>
   <Card title="Subscribe" icon="bell" href="/subscribe-actions">
-    React to creates, updates, deletes, and field changes as they happen.
+    Get notified about creates, updates, and deletes as they happen.
   </Card>
   <Card title="Search" icon="magnifying-glass" href="/search-actions">
-    Targeted, synchronous queries with filters. No stored copy required.
+    Targeted searches based on field filters.
   </Card>
   <Card title="Proxy" icon="arrow-right-arrow-left" href="/proxy-actions">
-    Call any provider endpoint directly with managed auth attached.
+    Call any provider endpoint directly with managed auth and rate limit handling.
   </Card>
 </CardGroup>
 
 ## Get started
 
-Two steps to your first integration.
-
 <CardGroup cols={2}>
-  <Card title="1. How Ampersand works" icon="book" href="/concepts">
-    The model in five minutes: integrations, installations, revisions, and the config that decides what runs for each customer.
+  <Card title="Clone the starter project" icon="rocket" href="/starter-project">
+    If you want to see an example.
   </Card>
-  <Card title="2. Build your first integration" icon="rocket" href="/starter-project">
-    Clone a React app with HubSpot already wired up, then swap in your own manifest and deploy.
+  <Card title="Onboard with Claude Code" icon="rocket" href="/use-with-ai-ide">
+    If you want to add integrations to an existing codebase.
   </Card>
 </CardGroup>
 
-## Guides
-
-The hard parts, already handled.
-
-### Reads and backfills
-
-- [Backfill historical data on install](/read-actions#backfill-behavior): none, full history, or time-boxed per object, with an API to monitor progress.
-- [Read only the records that match](/read-actions#filter-by-field-values): per-installation field filters, plus backfill-specific filters for the initial sync.
-
-### Writes that respect customer data
-
-- [Bulk writes with retries built in](/write-actions#write-modes): batching, async mode, and exponential backoff for up to 48 hours.
-- [Never clobber customer data](/write-actions#prevent-overwriting-of-customer-data): control per field whether Ampersand writes on create, on update, or only when the field is empty.
-
-### Real-time events
-
-- [Watch individual fields, not whole objects](/subscribe-actions#specify-fields-to-watch): subscribe to updates only for the fields you list, quota-optimized at the source.
-- [Track when records are linked, not just changed](/subscribe-actions#association-changes): subscribe to association changes.
-- [Get notified when integrations change](/notifications/overview): events for installs, config changes, completed backfills, and paused syncs.
-
-### Schemas and mapping
-
-- [Map nested and dynamic fields](/object-and-field-mapping#user-defined-mapping): nested JSON paths, value mapping, and per-customer field sets.
-- [React when a customer's schema drifts](/manage-customer-schemas#watch-schema-changes): get events when fields are created, deleted, or change type.
-- [Create custom fields in the customer's SaaS](/manage-customer-schemas#create-or-update-custom-fields): upsert custom fields programmatically.
-- [Support multiple CRMs with one manifest](/unified-api): shared object names, per-provider overrides, no forked code.
-
-### Running in production
-
-- [Verify every webhook cryptographically](/destinations/webhooks#webhook-signature-verification): Svix-signed payloads, plus payload size and frequency controls.
-- [Stay under provider rate limits](/proxy-actions#use-ampersand-to-manage-api-rate-limits): throttle mode returns a retry-after instead of burning 429s.
-- [Call the API from the browser, safely](/api/jwt-auth): short-lived JWTs signed by your server, no API keys in frontend code.
-
-## Reference
+## Dig deeper
 
 <CardGroup cols={2}>
-  <Card title="Manifest schema" icon="file-code" href="/manifest-reference">
-    Every field for read, write, subscribe, proxy, and field mapping in `amp.yaml`.
+  <Card title="Browse the integration directory" icon="plug" href="/provider-guides/overview">
+    Search the supported providers.
   </Card>
-  <Card title="CLI" icon="terminal" href="/cli/reference">
-    Commands, flags, and CI usage for deploying and diffing manifests.
+  <Card title="How Ampersand works" icon="book" href="/concepts">
+    Learn the concepts.
   </Card>
   <Card title="REST API" icon="code" href="/api/overview">
-    Installations, connections, records, and webhook payloads.
+    Platform, read, write, search, and proxy APIs.
   </Card>
-  <Card title="React SDK" icon="cube" href="/headless">
-    Hooks for connections, installations, and config in `@amp-labs/react`.
+  <Card title="UI Library" icon="cube" href="/headless">
+    Prebuilt components and headless UI.
   </Card>
-</CardGroup>
-
-## Integrations
-
-Ampersand connects to CRMs, ERPs, support desks, warehouses, and more through one manifest surface. Each provider guide lists the supported objects, the authentication type, and whether read, write, and subscribe actions are available.
-
-<CardGroup cols={2}>
-  <Card title="Browse the provider directory" icon="plug" href="/provider-guides/overview">
-    Search every supported provider, from Salesforce and HubSpot to NetSuite and Workday.
+  <Card title="Manifest schema" icon="file-code" href="/manifest-reference">
+    Learn what goes into the `amp.yaml` file.
   </Card>
-  <Card title="Request a provider" icon="github" href="https://github.com/amp-labs/connectors">
-    Missing an API you need? File an issue on the open-source connectors repository.
+  <Card title="CLI" icon="terminal" href="/cli/reference">
+    Install the Ampersand CLI for deploying and managing integrations.
   </Card>
 </CardGroup>
 
-## Troubleshooting and support
+## Contact us
 
-<CardGroup cols={3}>
-  <Card title="Troubleshooting" icon="wrench" href="/troubleshooting-guides/overview">
-    A searchable index of known errors, general and provider-specific, with step-by-step fixes.
-  </Card>
-  <Card title="Changelog" icon="clock-rotate-left" href="https://www.withampersand.com/changelog">
-    Manifest spec versions, provider additions, breaking changes.
-  </Card>
-  <Card title="Support" icon="life-ring" href="mailto:support@withampersand.com">
-    Shared Slack channel with our engineers, or email support@withampersand.com.
-  </Card>
-</CardGroup>
+Need help? Join our [Discord channel](https://discord.gg/BWP4BpKHvf) or email [support@withampersand.com](mailto:support@withampersand.com).
+
+If you want a dedicated Slack channel with our team, explore our [pricing plans](https://www.ampersand.ai/pricing).
