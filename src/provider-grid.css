@@ -24,18 +24,14 @@ html[data-current-path="/provider-guides/overview"] .mdx-content {
 /* ---------- Shared pieces ---------- */
 /* Mono labels. a.amp-back lives outside .amp-intg (on provider guides). */
 .amp-find-status,
-.amp-intg-facts,
 .amp-orbit-core i,
 .amp-node-label,
-.amp-cat-n,
 .amp-intg-card-code,
 .amp-intg-card-cta,
 a.amp-back { font-family: var(--amp-mono); }
 
 .amp-find-status,
-.amp-intg-facts,
-.amp-intg-head-sub,
-.amp-cat-n { color: var(--amp-muted-2); }
+.amp-intg-head-sub { color: var(--amp-muted-2); }
 
 .amp-intg-eyebrow,
 .amp-intg-title-accent,
@@ -111,14 +107,6 @@ a.amp-back { color: var(--amp-accent); }
   margin-top: 10px;
   font-size: 11.5px;
   min-height: 16px;
-}
-
-.amp-intg-facts {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  margin-top: 34px;
-  font-size: 13px;
 }
 
 /* ---------- Constellation ---------- */
@@ -257,7 +245,7 @@ a.amp-back { color: var(--amp-accent); }
 
 .amp-cat-head {
   display: grid;
-  grid-template-columns: 10px minmax(0, 1fr) auto;
+  grid-template-columns: 10px minmax(0, 1fr);
   align-items: center;
   gap: 14px;
   padding: 17px 4px;
@@ -286,10 +274,6 @@ a.amp-back { color: var(--amp-accent); }
   letter-spacing: -0.005em;
   transition: color 120ms ease;
 }
-.amp-cat-n {
-  font-size: 11px;
-  font-variant-numeric: tabular-nums;
-}
 
 /* Closed rows hide their chips. The markup carries the open state, so the
    first category is expanded even before provider-grid.js runs. */
@@ -301,6 +285,17 @@ a.amp-back { color: var(--amp-accent); }
   gap: 8px;
   padding: 2px 4px 22px 24px;
 }
+/* A whole section that expands (Auth and proxy): the section heading is the
+   toggle, with the caret in front of the title. */
+.amp-cat--section { border-bottom: 0; }
+.amp-intg-head.amp-cat-head {
+  display: flex;
+  align-items: baseline;
+  padding: 0 0 18px;
+}
+.amp-intg-head.amp-cat-head:hover .amp-intg-head-title { color: var(--amp-accent); }
+.amp-cat--section .amp-cat-caret { align-self: center; margin-right: 0; }
+.amp-cat--section .amp-cat-chips { padding: 20px 4px 22px; }
 .amp-cat-chips a {
   display: inline-flex;
   align-items: center;
