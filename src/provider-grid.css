@@ -144,11 +144,19 @@ a.amp-back { color: var(--amp-accent); }
   justify-content: center;
   border-radius: 50%;
   background: var(--amp-accent);
-  color: #fff;
   box-shadow: 0 10px 30px var(--amp-accent-soft);
-  transition: background 120ms ease;
+  transition: transform 200ms ease, box-shadow 200ms ease;
 }
-.amp-orbit-core:hover { background: var(--amp-accent-hover); }
+/* The core is a link, so it needs a.-level specificity to beat the
+   `.amp-intg a { color: inherit }` reset. White on the light-mode accent;
+   dark text on the pale dark-mode accent. */
+.amp-intg a.amp-orbit-core { color: #fff; }
+html.dark .amp-intg a.amp-orbit-core { color: var(--amp-surface); }
+.amp-orbit-core:hover,
+.amp-orbit-core:focus-visible {
+  transform: translate(-50%, -50%) scale(1.06);
+  box-shadow: 0 14px 36px var(--amp-accent-soft);
+}
 .amp-orbit-core b { font-size: 4.2cqw; font-weight: 600; line-height: 1; }
 .amp-orbit-core i {
   font-size: 2.1cqw;
@@ -252,7 +260,8 @@ a.amp-back { color: var(--amp-accent); }
   cursor: pointer;
   user-select: none;
 }
-.amp-cat-head:hover .amp-cat-name { color: var(--amp-accent); }
+.amp-cat-head:hover .amp-cat-name,
+.amp-cat-head:hover .amp-intg-head-title { color: var(--amp-accent); }
 .amp-cat-head:focus-visible { outline-offset: 2px; border-radius: 4px; }
 
 .amp-cat-caret {
@@ -293,9 +302,8 @@ a.amp-back { color: var(--amp-accent); }
   align-items: baseline;
   padding: 0 0 18px;
 }
-.amp-intg-head.amp-cat-head:hover .amp-intg-head-title { color: var(--amp-accent); }
-.amp-cat--section .amp-cat-caret { align-self: center; margin-right: 0; }
-.amp-cat--section .amp-cat-chips { padding: 20px 4px 22px; }
+.amp-cat--section .amp-cat-caret { align-self: center; }
+.amp-cat--section .amp-cat-chips { padding-top: 20px; }
 .amp-cat-chips a {
   display: inline-flex;
   align-items: center;
@@ -364,6 +372,7 @@ a.amp-back { color: var(--amp-accent); }
   .amp-node--sm a:hover { transform: none; }
   .amp-orbit::after { animation: none; }
   .amp-cat-caret { transition: none; }
+  .amp-orbit-core:hover, .amp-orbit-core:focus-visible { transform: translate(-50%, -50%); }
 }
 
 /* ---------- Back link on provider guides ---------- */
