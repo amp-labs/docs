@@ -1,8 +1,48 @@
 ---
-title: "Use with coding agent"
+title: "Use with Claude Code"
 ---
 
-The official Ampersand docs MCP server provides access to the full Ampersand documentation context, directly within your favorite Coding Agent or IDE. You can use it to help you build integrations quickly with Ampersand.
+Ampersand offers two MCP servers that you can add to Claude Code or favorite coding agent:
+
+- The [builder MCP server](#builder-mcp-server) helps you build and manage integrations with Ampersand. Your agent can use it to create new integrations, manage installations, connections and destinations, troubleshoot failed operations, and scaffold webhook handlers. It requires an Ampersand account.
+- The [docs MCP server](#docs-mcp-server) gives your agent access to the Ampersand documentation. It does not require an Ampersand account.
+
+## Builder MCP server
+
+Ampersand's builder MCP server is hosted at `https://builder-mcp.withampersand.com/v1/mcp`.
+
+### Claude Code set up
+
+1. If you don't have an Ampersand account yet, [create an account for free](https://dashboard.withampersand.com/sign-up).
+
+2. Add the MCP server to Claude Code by running this command in your terminal.
+
+```shell
+claude mcp add ampersand --transport http "https://builder-mcp.withampersand.com/v1/mcp"
+```
+
+3. Launch Claude Code, then type `/mcp`, select `ampersand`, and choose **Authenticate**.
+
+4. Sign into your Ampersand account.
+
+5. Verify that the MCP server is set up correctly by asking Claude:
+
+```
+What can Ampersand do?
+```
+
+### Tips for better prompts
+
+- Mention Ampersand in your prompt. For example, "How do I build X with Ampersand?"
+
+- Name the project you want your agent to work in. For example, "In my Ampersand project acme-dev, why did the last read of Salesforce contacts fail?"
+
+- Ask your agent to verify field names against the provider's documentation. For example, "Verify that the field names are real field names for the Account object, according to Salesforce documentation."
+
+- Explicitly ask your agent to refer to Ampersand documentation and OpenAPI spec.
+
+
+## Docs MCP server
 
 Ampersand's docs MCP server is hosted at `https://docs.withampersand.com/mcp`.
 
@@ -12,9 +52,13 @@ If you are using Claude Code, you can run this command:
 claude mcp add ampersand-docs --transport http "https://docs.withampersand.com/mcp"
 ```
 
-## Client specific configuration
+## Other coding agents
 
-You can use Ampersand's MCP server with any AI application that supports [MCP](https://modelcontextprotocol.io/clients). You need to add `https://docs.withampersand.com/mcp` to the appropriate configuration file or setting. Below are some of the most popular coding agents, and where to configure MCP servers for them:
+You can use Ampersand's MCP servers with any AI application that supports [MCP](https://modelcontextprotocol.io/clients). You need to add the appropriate URL for the MCP server you want to use:
+- Builder MCP: `https://builder-mcp.withampersand.com/v1/mcp`
+- Docs MCP: `https://docs.withampersand.com/mcp`
+
+Below are some of the most popular coding agents, and where to configure MCP servers for them:
 
 | Client | Configuration File Location | Documentation |
 |--------|------------------------------|---------------|
@@ -24,11 +68,3 @@ You can use Ampersand's MCP server with any AI application that supports [MCP](h
 | Visual Studio Code | `.vscode/mcp.json` (workspace) or user `mcp.json` (**MCP: Open User Configuration**) | [link](https://code.visualstudio.com/docs/copilot/customization/mcp-servers) |
 | Windsurf | `~/.codeium/windsurf/mcp_config.json` | [link](https://docs.windsurf.com/windsurf/cascade/mcp) |
 | Zed | `context_servers` in `settings.json` (macOS/Linux: `~/.config/zed/settings.json`; Windows: `%AppData%\Zed\settings.json`) | [link](https://zed.dev/docs/ai/mcp) |
-
-## Tips for better prompts
-
-- Mention Ampersand in your prompt. For example, "How do I build X with Ampersand?"
-
-- Ask your agent to verify field names against the provider's documentation. For example, "Verify that the field names are real field names for the Account object, according to Salesforce documentation."
-
-- Ask your agent to refer to Ampersand's OpenAPI spec at https://github.com/amp-labs/openapi.
