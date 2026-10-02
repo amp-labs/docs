@@ -229,7 +229,7 @@ const baseConfig = {
   logo: {
     light: "/logos/dark.png",
     dark: "/logos/light.png",
-    href: "https://withampersand.com"
+    href: "https://www.ampersand.ai"
   },
   favicon: "logos/favicon.svg",
   // appearance: {
