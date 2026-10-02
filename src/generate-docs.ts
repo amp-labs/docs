@@ -338,10 +338,9 @@ const baseConfig = {
       group: "Get started",
       pages: [
         "overview",
-        "concepts",
-        "quickstart",
         "starter-project",
         "use-with-ai-ide",
+        "concepts",
       ]
     },
     {
