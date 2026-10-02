@@ -7,7 +7,39 @@ hidden: true
 ### Supported actions
 
 This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects listed below. For all other objects, a full read of the Okta instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.okta.com`.
+
+### Supported objects
+
+The Okta connector supports reading from the following objects:
+
+- [apps](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/) (supports incremental read)
+- [authenticators](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Authenticator/) (supports incremental read)
+- [authorizationServers](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/AuthorizationServer/) (supports incremental read)
+- [brands](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Brands/)
+- [devices](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Device/) (supports incremental read)
+- [domains](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/CustomDomain/)
+- [eventHooks](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/EventHook/) (supports incremental read)
+- [features](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Feature/)
+- [groups](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Group/) (supports incremental read)
+- [idps](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProvider/) (supports incremental read)
+- [logs](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/SystemLog/) (supports incremental read)
+- [policies](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/) (supports incremental read)
+- [trustedOrigins](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/TrustedOrigin/) (supports incremental read)
+- [users](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/User/) (supports incremental read)
+- [zones](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/NetworkZone/) (supports incremental read)
+
+The Okta connector supports writing to the following objects:
+
+- [groups](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Group/)
+- [users](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/User/)
+
+### Example integration
+
+For an example manifest file of an Okta integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/okta/amp.yaml).
 
 ## Before you get started
 
@@ -47,7 +79,7 @@ To configure scopes, navigate to the **Okta API Scopes** tab and click **Grant**
 
 ![Okta App Creation](/images/provider-guides/okta1.gif)
 
-## Add your Okta app info to Ampersand
+### Add your Okta app info to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 
@@ -57,12 +89,25 @@ To configure scopes, navigate to the **Okta API Scopes** tab and click **Grant**
 
 3. Select **Provider Apps**.
 
-4. Select _Okta_ from the **Provider** list.
+4. Select **Okta** from the **Provider** list.
 
-5. Enter the previously obtained **Client ID** in the **Client ID** field and the **Client Secret** in the **Client Secret** field.
+5. Enter the **Client ID** and **Client Secret** obtained from your Okta app.
 
 6. Enter the scopes set for your application in _Okta_. For a list of available scopes, refer to the [Okta documentation](https://developer.okta.com/docs/guides/implement-oauth-for-okta/main/#scopes-and-supported-endpoints).
 
    ![Okta Ampersand integration](/images/provider-guides/okta2.gif)
 
 7. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Okta:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
