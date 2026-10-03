@@ -97,8 +97,6 @@
       total += hits;
 
       row.hidden = !!q && hits === 0;
-      var count = row.querySelector(".amp-cat-n");
-      if (count) count.textContent = q ? hits : row.getAttribute("data-total");
 
       var open = q ? hits > 0 : row.getAttribute("data-initial") === "true";
       row.setAttribute("data-open", open ? "true" : "false");
