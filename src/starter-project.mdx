@@ -12,7 +12,7 @@ It contains two things:
     A minimal React and Vite app that embeds the `InstallIntegration` component, so you can watch a customer connect their account.
   </Card>
   <Card title="Three integrations" icon="file-code">
-    HubSpot, Salesforce, and GitHub integrations, each defined in its own folder under `integrations/`.
+    HubSpot, Salesforce, and GitHub integrations, each defined in its own folder under [`integrations/`](https://github.com/amp-labs/starter-project/tree/main/integrations).
   </Card>
 </CardGroup>
 
@@ -37,7 +37,7 @@ Setting up the accounts and credentials takes longer than running the app itself
     - **Salesforce** reads and writes accounts and contacts. Follow the [Salesforce provider guide](/provider-guides/salesforce).
     - **GitHub** reads and writes gists. Follow the [GitHub provider guide](/provider-guides/github).
 
-    To use a different provider instead, pick its [provider guide](/provider-guides/overview) and swap the manifest in the next section.
+    To use a different provider, pick its [provider guide](/provider-guides/overview) and add its manifest as described in [Make it yours](#make-it-yours).
   </Step>
   <Step title="Install the CLI">
     Install the [Ampersand CLI](/cli/overview) and run `amp login` to authenticate.
@@ -77,7 +77,10 @@ Setting up the accounts and credentials takes longer than running the app itself
     ```bash
     npm run dev
     ```
-    Open the app and use the embedded component to connect an account for the integration you deployed. Once installed, reads run on the schedule in the manifest and results arrive at your `defaultWebhook` destination.
+    Open the app (`http://localhost:5173` by default) and use the embedded component to connect an account for the integration you deployed. Once installed, reads run on the schedule in the manifest.
+  </Step>
+  <Step title="Check that it worked">
+    Results arrive at your `defaultWebhook` destination once there is data to read. If you used [play.svix.com](https://play.svix.com), they show up on that page. To see every read, write, and proxy call and whether it succeeded, go to **Integrations** in the dashboard, open your integration, and select the installation.
   </Step>
 </Steps>
 
@@ -120,7 +123,7 @@ The `consumerRef` and `groupRef` values identify which of your customers is inst
     Add a new folder under `integrations/` with your own `amp.yaml`, or one from the [samples repository](https://github.com/amp-labs/samples), and deploy it the same way. See the [manifest schema](/manifest-reference) for every available field.
   </Step>
   <Step title="Keep the names aligned">
-    Three names have to match up: the integration name in `amp.yaml` and the `integration` variable in `App.tsx`, and the destination name in `amp.yaml` and the destination you created in the dashboard.
+    Two names have to match: the integration name in `amp.yaml` and the `integration` variable in `App.tsx`, and the destination name in `amp.yaml` and the destination you created in the dashboard.
   </Step>
   <Step title="Redeploy after changes">
     Run `amp deploy` again whenever you edit the manifest. Each deploy creates a new revision. Settings a customer has already overridden in their [config](/concepts#config) stay as they set them.
@@ -133,8 +136,8 @@ The `consumerRef` and `groupRef` values identify which of your customers is inst
   <Card title="How Ampersand works" icon="book" href="/concepts">
     Integrations, installations, revisions, and configs.
   </Card>
-  <Card title="Read actions" icon="download" href="/read-actions">
-    Schedules, backfills, field filters, and delivery.
+  <Card title="Actions" icon="bolt" href="/overview#actions">
+    Read, write, subscribe, and proxy.
   </Card>
   <Card title="Prebuilt UI components" icon="window-maximize" href="/embeddable-ui-components">
     Props, theming, and the other components in the library.
