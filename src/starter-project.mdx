@@ -1,6 +1,6 @@
 ---
 title: "Quickstart"
-description: "Clone a working React app with an Ampersand integration already wired up."
+description: "Clone a working React app with sample Ampersand integrations already wired up."
 ---
 
 The [starter project](https://github.com/amp-labs/starter-project) is a small, working application you can clone and run. Use it when you would rather see a live integration first and read the details afterwards.
@@ -11,8 +11,8 @@ It contains two things:
   <Card title="A React app" icon="react">
     A minimal React and Vite app that embeds the `InstallIntegration` component, so you can watch a customer connect their account.
   </Card>
-  <Card title="An integration" icon="file-code">
-    A HubSpot integration defined in `integrations/amp.yaml`, reading contacts and companies and writing back to both.
+  <Card title="Three integrations" icon="file-code">
+    Pick between HubSpot, Salesforce, and GitHub, or add your own.
   </Card>
 </CardGroup>
 
@@ -25,13 +25,19 @@ Setting up the accounts and credentials takes longer than running the app itself
     Sign up for a [free Ampersand account](https://dashboard.withampersand.com/sign-up) and follow the prompts to create a project.
   </Step>
   <Step title="Create an API key">
-    In the dashboard, open [API keys](https://dashboard.withampersand.com/projects/_/api-keys) and create one. You will paste it into the app later.
+    In the dashboard, open [API keys](https://dashboard.withampersand.com/projects/_/api-keys) and create one. Since the key is used by the React app, choose **UI Library** when asked where you will use it. You will paste it into the app later.
   </Step>
   <Step title="Create a destination named `defaultWebhook`">
     In [Destinations](https://dashboard.withampersand.com/projects/_/destinations), create a webhook destination called `defaultWebhook`. If you do not have an endpoint to point it at, [play.svix.com](https://play.svix.com) gives you a disposable one that shows incoming payloads in the browser, which is ideal for a first run.
   </Step>
   <Step title="Set up the provider">
-    The included integration uses HubSpot, so you need a HubSpot account and a HubSpot app. Follow the [HubSpot provider guide](/provider-guides/hubspot). To use a different provider instead, pick its [provider guide](/provider-guides/overview) and swap the manifest in the next section.
+    You can start with any of the three included integrations. Each provider guide walks you through creating an account and an app:
+
+    - **HubSpot** reads and writes contacts and companies. Follow the [HubSpot provider guide](/provider-guides/hubspot).
+    - **Salesforce** reads and writes accounts and contacts. Follow the [Salesforce provider guide](/provider-guides/salesforce).
+    - **GitHub** reads and writes gists. Follow the [GitHub provider guide](/provider-guides/github).
+
+    You can also use another integrations from our [samples repo](https://github.com/amp-labs/samples), or browse [our provider guides](/provider-guides/overview) for all supported integrations. Learn more in [Make it yours](#make-it-yours).
   </Step>
   <Step title="Install the CLI">
     Install the [Ampersand CLI](/cli/overview) and run `amp login` to authenticate.
@@ -50,9 +56,9 @@ Setting up the accounts and credentials takes longer than running the app itself
   </Step>
   <Step title="Deploy the integration">
     ```bash
-    amp deploy integrations -p <your-project-name>
+    amp deploy integrations/hubspot -p <your-project-name>
     ```
-    This creates a [revision](/concepts#revision) of the integration from `integrations/amp.yaml`. Nothing syncs yet, because no customer has installed it.
+    Swap `hubspot` for `salesforce` or `github` to deploy one of the other included integrations. This creates a [revision](/concepts#revision) of the integration from its `amp.yaml`. Nothing syncs yet, because no customer has installed it.
   </Step>
   <Step title="Point the app at your project">
     In `src/App.tsx`, replace the placeholders with your project name and API key:
@@ -62,13 +68,19 @@ Setting up the accounts and credentials takes longer than running the app itself
       project: 'MY-PROJECT-NAME',
       apiKey: 'MY-API-KEY',
     };
+
+    const integration = "hubspotCRM";
     ```
+    If you deployed Salesforce or GitHub, set `integration` to `readAndWriteSalesforce` or `githubIntegration`, the `name` defined in that integration's `amp.yaml`.
   </Step>
   <Step title="Start the app">
     ```bash
     npm run dev
     ```
-    Open the app and use the embedded component to connect a HubSpot account. Once installed, reads run on the schedule in the manifest and results arrive at your `defaultWebhook` destination.
+    Open the app (`http://localhost:5173` by default) and use the embedded component to connect an account for the integration you deployed. Once installed, reads run on the schedule in the manifest.
+  </Step>
+  <Step title="Check that it worked">
+    Results arrive at your `defaultWebhook` destination once there is data to read. If you used [play.svix.com](https://play.svix.com), they show up on that page. To see every read, write, and proxy call and whether it succeeded, go to **Integrations** in the dashboard, open your integration, and select the installation.
   </Step>
 </Steps>
 
@@ -86,7 +98,7 @@ const options = {
 };
 
 function App() {
-  const integration = "hubspotCRM"; // must match the name in integrations/amp.yaml
+  const integration = "hubspotCRM"; // must match the name in the amp.yaml you deployed
 
   return (
     <AmpersandProvider options={options}>
@@ -108,13 +120,13 @@ The `consumerRef` and `groupRef` values identify which of your customers is inst
 
 <Steps>
   <Step title="Swap the integration">
-    Replace `integrations/amp.yaml` with your own manifest, or with one from the [samples repository](https://github.com/amp-labs/samples). See the [manifest schema](/manifest-reference) for every available field.
+    Add a new folder under `integrations/` with your own `amp.yaml`, or one from the [samples repository](https://github.com/amp-labs/samples), and deploy it the same way. See the [manifest schema](/manifest-reference) for every available field.
   </Step>
   <Step title="Keep the names aligned">
-    Three names have to match up: the integration name in `amp.yaml` and the `integration` variable in `App.tsx`, and the destination name in `amp.yaml` and the destination you created in the dashboard.
+    Two names have to match: the integration name in `amp.yaml` and the `integration` variable in `App.tsx`, and the destination name in `amp.yaml` and the destination you created in the dashboard.
   </Step>
   <Step title="Redeploy after changes">
-    Run `amp deploy` again whenever you edit the manifest. Each deploy creates a new revision. Settings a customer has already overridden in their [config](/concepts#config) stay as they set them.
+    Run `amp deploy` again whenever you edit the manifest. You only need one manifest for all your customers, and you can have multiple integrations in the same manifest.
   </Step>
 </Steps>
 
@@ -124,8 +136,8 @@ The `consumerRef` and `groupRef` values identify which of your customers is inst
   <Card title="How Ampersand works" icon="book" href="/concepts">
     Integrations, installations, revisions, and configs.
   </Card>
-  <Card title="Read actions" icon="download" href="/read-actions">
-    Schedules, backfills, field filters, and delivery.
+  <Card title="Actions" icon="bolt" href="/overview#actions">
+    Read, write, subscribe, and proxy.
   </Card>
   <Card title="Prebuilt UI components" icon="window-maximize" href="/embeddable-ui-components">
     Props, theming, and the other components in the library.
