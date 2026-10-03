@@ -24,18 +24,14 @@ html[data-current-path="/provider-guides/overview"] .mdx-content {
 /* ---------- Shared pieces ---------- */
 /* Mono labels. a.amp-back lives outside .amp-intg (on provider guides). */
 .amp-find-status,
-.amp-intg-facts,
 .amp-orbit-core i,
 .amp-node-label,
-.amp-cat-n,
 .amp-intg-card-code,
 .amp-intg-card-cta,
 a.amp-back { font-family: var(--amp-mono); }
 
 .amp-find-status,
-.amp-intg-facts,
-.amp-intg-head-sub,
-.amp-cat-n { color: var(--amp-muted-2); }
+.amp-intg-head-sub { color: var(--amp-muted-2); }
 
 .amp-intg-eyebrow,
 .amp-intg-title-accent,
@@ -113,14 +109,6 @@ a.amp-back { color: var(--amp-accent); }
   min-height: 16px;
 }
 
-.amp-intg-facts {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  margin-top: 34px;
-  font-size: 13px;
-}
-
 /* ---------- Constellation ---------- */
 .amp-orbit {
   position: relative;
@@ -156,11 +144,19 @@ a.amp-back { color: var(--amp-accent); }
   justify-content: center;
   border-radius: 50%;
   background: var(--amp-accent);
-  color: #fff;
   box-shadow: 0 10px 30px var(--amp-accent-soft);
-  transition: background 120ms ease;
+  transition: transform 200ms ease, box-shadow 200ms ease;
 }
-.amp-orbit-core:hover { background: var(--amp-accent-hover); }
+/* The core is a link, so it needs a.-level specificity to beat the
+   `.amp-intg a { color: inherit }` reset. White on the light-mode accent;
+   dark text on the pale dark-mode accent. */
+.amp-intg a.amp-orbit-core { color: #fff; }
+html.dark .amp-intg a.amp-orbit-core { color: var(--amp-surface); }
+.amp-orbit-core:hover,
+.amp-orbit-core:focus-visible {
+  transform: translate(-50%, -50%) scale(1.06);
+  box-shadow: 0 14px 36px var(--amp-accent-soft);
+}
 .amp-orbit-core b { font-size: 4.2cqw; font-weight: 600; line-height: 1; }
 .amp-orbit-core i {
   font-size: 2.1cqw;
@@ -257,14 +253,15 @@ a.amp-back { color: var(--amp-accent); }
 
 .amp-cat-head {
   display: grid;
-  grid-template-columns: 10px minmax(0, 1fr) auto;
+  grid-template-columns: 10px minmax(0, 1fr);
   align-items: center;
   gap: 14px;
   padding: 17px 4px;
   cursor: pointer;
   user-select: none;
 }
-.amp-cat-head:hover .amp-cat-name { color: var(--amp-accent); }
+.amp-cat-head:hover .amp-cat-name,
+.amp-cat-head:hover .amp-intg-head-title { color: var(--amp-accent); }
 .amp-cat-head:focus-visible { outline-offset: 2px; border-radius: 4px; }
 
 .amp-cat-caret {
@@ -286,10 +283,6 @@ a.amp-back { color: var(--amp-accent); }
   letter-spacing: -0.005em;
   transition: color 120ms ease;
 }
-.amp-cat-n {
-  font-size: 11px;
-  font-variant-numeric: tabular-nums;
-}
 
 /* Closed rows hide their chips. The markup carries the open state, so the
    first category is expanded even before provider-grid.js runs. */
@@ -301,6 +294,16 @@ a.amp-back { color: var(--amp-accent); }
   gap: 8px;
   padding: 2px 4px 22px 24px;
 }
+/* A whole section that expands (Auth and proxy): the section heading is the
+   toggle, with the caret in front of the title. */
+.amp-cat--section { border-bottom: 0; }
+.amp-intg-head.amp-cat-head {
+  display: flex;
+  align-items: baseline;
+  padding: 0 0 18px;
+}
+.amp-cat--section .amp-cat-caret { align-self: center; }
+.amp-cat--section .amp-cat-chips { padding-top: 20px; }
 .amp-cat-chips a {
   display: inline-flex;
   align-items: center;
@@ -369,6 +372,7 @@ a.amp-back { color: var(--amp-accent); }
   .amp-node--sm a:hover { transform: none; }
   .amp-orbit::after { animation: none; }
   .amp-cat-caret { transition: none; }
+  .amp-orbit-core:hover, .amp-orbit-core:focus-visible { transform: translate(-50%, -50%); }
 }
 
 /* ---------- Back link on provider guides ---------- */
