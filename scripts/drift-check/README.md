@@ -9,6 +9,7 @@ pnpm run drift-check                         # full sweep, default ./drift-repor
 pnpm run drift-check -- --out /tmp/out       # custom output directory
 pnpm run drift-check -- --mode provider --provider hubspot
 pnpm run drift-check -- --fail-on-error      # exit non-zero on any error finding
+pnpm run drift-check -- --mode per-pr --changed-from "$BASE_SHA" --changed-to "$HEAD_SHA"
 ```
 
 Both `--out X` and `-- --out X` (the pnpm forwarding form) work. Output is written to `drift-report.json` (canonical) and `drift-report.md` (human-readable rollup).
@@ -16,7 +17,7 @@ Both `--out X` and `-- --out X` (the pnpm forwarding form) work. Output is writt
 ## Modes
 
 - `full` (default): scan every guide; run the undocumented-provider check.
-- `per-pr --changed <path>...`: scan only the listed `.mdx` files. Skips the undocumented check (needs a global view).
+- `per-pr`: scan only changed `.mdx` files; skips the undocumented check (needs a global view). Pass the set as `--changed <path>...`, or as a commit range with `--changed-from <sha> --changed-to <sha>` (resolved via `git diff`, failing closed if the range cannot be computed).
 - `provider --provider <catalogKey>`: scan a single guide. Useful while iterating.
 
 ## Finding types
