@@ -227,15 +227,9 @@ const baseConfig = {
   name: "Ampersand",
   openapi: [openApiPlatform, openApiRead, openApiWrite, openApiSearch],
   logo: {
-<<<<<<< Updated upstream
     light: "/logos/dark.png",
     dark: "/logos/light.png",
     href: "https://www.ampersand.ai"
-=======
-    light: "/logos/light.png",
-    dark: "/logos/dark.png",
-    href: "https://ampersand.ai"
->>>>>>> Stashed changes
   },
   favicon: "logos/favicon.svg",
   // appearance: {
