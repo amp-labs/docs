@@ -227,8 +227,8 @@ const baseConfig = {
   name: "Ampersand",
   openapi: [openApiPlatform, openApiRead, openApiWrite, openApiSearch],
   logo: {
-    light: "/logos/dark.png",
-    dark: "/logos/light.png",
+    light: "/logos/light.png",
+    dark: "/logos/dark.png",
     href: "https://www.ampersand.ai"
   },
   favicon: "logos/favicon.svg",
