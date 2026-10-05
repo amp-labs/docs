@@ -88,19 +88,3 @@ You will need to share the following information with the integration builder:
 | **Service Account Key** | The base64-encoded contents of the JSON key file from step 3. |
 | **User Emails** | A full list of email addresses of all the users whose data the integration should access (e.g. `user1@company.com, user2@company.com`). |
 | **Scopes** | The exact list of OAuth scopes you authorized in step 4 (or a subset). |
-
-## Troubleshooting
-
-### unauthorized_client error
-
-Sample error message: `unauthorized_client: Client is unauthorized to retrieve access tokens using this method`
-
-This means that either:
-- The service account's numeric Client ID was not added to **Manage Domain Wide Delegation** in the Admin console (revisit step 4), or
-- One or more scopes provided to the integration were not a part of the scopes authorized in step 4.
-
-### invalid_grant error
-
-Sample error message: `invalid_grant: Invalid email or User ID`
-
-This means that a **user email** you provided is not a valid active user in the Workspace domain. Workspace delegation does not work for suspended or deleted users. Confirm that the user's address exists in **Admin console** > **Directory** > **Users**.

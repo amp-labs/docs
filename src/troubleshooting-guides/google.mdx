@@ -1,0 +1,38 @@
+---
+title: "Google"
+description: "Diagnose and resolve common errors when running Google integrations, including Gmail."
+---
+
+## Google API calls fail with `400 Precondition check failed`
+
+**Symptom**: calls to Google fail with HTTP `400` and the message `Precondition check failed.`, either in proxy responses or in the error details of failed operations.
+
+**Why this happens**: Google can't authorize the request for that customer's account. Most often your provider app doesn't request the Gmail scopes the request needs, or your customer unchecked some of the requested permissions on Google's consent screen, which Google lets users do one scope at a time. For an installation that used to work, the customer or their Google Workspace admin may have revoked your app's access.
+
+**How to fix**:
+
+1. Find the affected installation in the [Ampersand Dashboard](https://dashboard.withampersand.com) or with the [List operations endpoint](/reference/operation/list-operations).
+2. In the Dashboard, open **Provider Apps**, select your Google provider app, and check that the **Scopes** field includes every Gmail scope your integration needs. Also check that the Gmail API is [enabled in your Google Cloud project](/provider-guides/google#enable-the-appropriate-apis).
+3. Ask your customer to [reconnect](/customer-guides/update-connection) and keep every requested permission checked on Google's consent screen.
+4. If the installation used to work, ask your customer whether they or their Google Workspace admin revoked access to your app. Reconnecting restores access, as long as their Workspace admin allows your app.
+5. If the error continues, contact [support@withampersand.com](mailto:support@withampersand.com) with the installation ID.
+
+## Google returns `403 Forbidden` intermittently
+
+**Symptom**: calls to Google sometimes fail with HTTP `403`, but not every time.
+
+**Why this happens**: Google returns `403` for quota exceeded errors as well as for actual forbidden (permission) errors. If you see `403`s but not all the time, it's likely a quota issue, not an authorization issue.
+
+## Google (workspace delegation): `unauthorized_client` error
+
+**Symptom**: an error such as `unauthorized_client: Client is unauthorized to retrieve access tokens using this method`.
+
+**Why this happens**: either:
+- The service account's numeric Client ID wasn't added to **Manage Domain Wide Delegation** in your customer's Google Admin console (see [step 4 of the customer guide](/customer-guides/google-workspace-delegation#4-authorize-domain-wide-delegation)), or
+- One or more scopes provided to the integration weren't among the scopes authorized in that step.
+
+## Google (workspace delegation): `invalid_grant` error
+
+**Symptom**: an error such as `invalid_grant: Invalid email or User ID`.
+
+**Why this happens**: a user email provided for the connection isn't a valid, active user in your customer's Workspace domain. Workspace delegation doesn't work for suspended or deleted users. Confirm that the user's address exists in **Admin console** > **Directory** > **Users**.
