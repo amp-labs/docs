@@ -9,7 +9,7 @@ These fixes apply to both [Dynamics 365 CRM](/provider-guides/dynamicsCRM) and [
 
 **Symptom**: your customer completes the OAuth flow and the connection is created, but every read, write, and proxy call for that installation returns `401 Unauthorized`. The installation UI may also get stuck while loading the customer's objects and fields.
 
-**Why this happens**: your provider app requests scopes that Dynamics doesn't accept, most often Microsoft Graph scopes such as `User.Read`. A Microsoft access token is issued for a single API, and when the requested scopes belong to more than one API, Microsoft issues the token for the API of the first one. The OAuth flow succeeds, but the token is for Microsoft Graph, so Dynamics rejects it.
+**Why this happens**: this is possibly due to invalid scopes. Dynamics rejects API calls if your provider app includes scopes that Dynamics doesn't support, even if the OAuth flow succeeds. You may have added `User.Read` or other scopes that belong to the Microsoft Graph API, not the Microsoft Dynamics API. Microsoft uses the first scope it sees to decide which API to grant access to.
 
 **How to fix**:
 
@@ -21,15 +21,3 @@ These fixes apply to both [Dynamics 365 CRM](/provider-guides/dynamicsCRM) and [
    Enter only the scope name, not a full URL. Each customer's Dynamics instance has its own URL, and Ampersand adds it for you: for CRM, `.default` becomes `https://<instance>.api.<region>.dynamics.com/.default`. For Business Central, `.default` becomes `https://api.businesscentral.dynamics.com/.default`. If your integration needs a Dynamics scope other than these, contact [support@withampersand.com](mailto:support@withampersand.com).
 3. Click **Save Changes**.
 4. Ask each affected customer to [reconnect](/customer-guides/update-connection). Tokens that were already issued are still for the wrong API, so the new scopes only take effect once the customer authorizes again.
-
-## Customers have to reconnect about every hour
-
-**Symptom**: reads, writes, and proxy calls for an installation start failing roughly an hour after the customer connects, and they keep failing until the customer reconnects.
-
-**Why this happens**: your provider app doesn't request the `offline_access` scope. Without it, Microsoft doesn't issue a refresh token, so Ampersand can't renew the customer's access token when it expires, which is typically after about an hour.
-
-**How to fix**:
-
-1. In the [Ampersand Dashboard](https://dashboard.withampersand.com), open **Provider Apps** and select your Dynamics provider app.
-2. Add `offline_access` to the **Scopes** field, alongside your Dynamics scopes, and click **Save Changes**.
-3. Ask each affected customer to [reconnect](/customer-guides/update-connection) once more. Their new connection includes a refresh token, and Ampersand renews access automatically from then on.
