@@ -673,6 +673,8 @@ const baseConfig = {
       pages: [
         "troubleshooting-guides/overview",
         "troubleshooting-guides/general",
+        "troubleshooting-guides/google",
+        "troubleshooting-guides/microsoft-dynamics",
         "troubleshooting-guides/salesforce"
       ]
     },
