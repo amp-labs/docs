@@ -57,7 +57,7 @@ To start integrating with Salesforce (JWT):
 - Create a manifest file like the [Salesforce example](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml), using `salesforceJWT` as the provider instead of `salesforce`.
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
-- Collect your customer's credentials (Consumer Key, Username, Private Key, Subdomain) and create a connection.
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, passing the name of your `salesforceJWT` integration as the `integration` prop. The UI component prompts the customer for their Consumer Key, Salesforce Username, Private Key, and Subdomain instead of showing a Salesforce login screen. If you already embed `InstallIntegration` for the standard Salesforce connector, you only need to point it at the new integration name.
 - Start using the connector!
    - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
    - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
