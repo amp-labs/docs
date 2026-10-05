@@ -1,0 +1,23 @@
+---
+title: "Microsoft Dynamics"
+description: "Diagnose and resolve common errors when running Microsoft Dynamics 365 CRM and Business Central integrations."
+---
+
+These fixes apply to both [Dynamics 365 CRM](/provider-guides/dynamicsCRM) and [Dynamics 365 Business Central](/provider-guides/dynamicsBusinessCentral) unless noted.
+
+## Every API call returns `401 Unauthorized` after the customer connects
+
+**Symptom**: your customer completes the OAuth flow and the connection is created, but every read, write, and proxy call for that installation returns `401 Unauthorized`. The installation UI may also get stuck while loading the customer's objects and fields.
+
+**Why this happens**: this is possibly due to invalid scopes. Dynamics rejects API calls if your provider app includes scopes that Dynamics doesn't support, even if the OAuth flow succeeds. You may have added `User.Read` or other scopes that belong to the Microsoft Graph API, not the Microsoft Dynamics API. Microsoft uses the first scope it sees to decide which API to grant access to.
+
+**How to fix**:
+
+1. In the [Ampersand Dashboard](https://dashboard.withampersand.com), open **Provider Apps** and select your Dynamics provider app.
+2. In the **Scopes** field, remove any Microsoft Graph scopes and keep only Dynamics scopes plus `offline_access`:
+   - **Dynamics 365 CRM**: `.default` or `user_impersonation`.
+   - **Business Central**: `.default`.
+
+   Enter only the scope name, not a full URL. Each customer's Dynamics instance has its own URL, and Ampersand adds it for you: for CRM, `.default` becomes `https://<instance>.api.<region>.dynamics.com/.default`. For Business Central, `.default` becomes `https://api.businesscentral.dynamics.com/.default`. If your integration needs a Dynamics scope other than these, contact [support@withampersand.com](mailto:support@withampersand.com).
+3. Click **Save Changes**.
+4. Ask each affected customer to reconnect. Tokens that were already issued are still for the wrong API, so the new scopes only take effect once the customer authorizes again. Your customer can re-authenticate in your product's Ampersand UI: from the **Manage** tab of the [Install integration](/embeddable-ui-components#install-integration) component (see [Update a connection](/customer-guides/update-connection); requires `@amp-labs/react` v2.7 or later), or with the reauthenticate option in the [Connect provider](/embeddable-ui-components#connect-provider) component.
