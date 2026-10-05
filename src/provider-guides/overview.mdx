@@ -1,12 +1,29 @@
 ---
 title: "Browse supported provider integrations"
 sidebarTitle: "Providers"
-description: "Browse guides for CRMs, ERPs, support desks, call recording, and warehouses, each listing supported objects, authentication type, and available actions."
+description: "Browse provider guides for CRMs, ERPs, help desks, and warehouses, split into deep connectors that read, write, and subscribe and auth and proxy connectors."
 mode: "wide"
 ---
 
 {/* This page renders its own header (see /provider-grid.css), so Mintlify's
-    page title is hidden for this path only. */}
+    page title is hidden for this path only.
+
+  HOW TO ADD A PROVIDER
+  =====================
+  1. Write the guide at provider-guides/<slug>.mdx with the writing-provider-guides
+     skill (.claude/skills/writing-provider-guides). Its frontmatter needs
+     `hidden: true`: guides stay out of the sidebar but are still searchable
+     (docs.json sets seo.indexing to "all").
+  2. Register it in the "Provider guides" group in generate-docs.ts
+     (alphabetical), then run `pnpm run gen-docs`.
+  3. Add a chip below, alphabetically:
+       <a href="/provider-guides/<slug>">Display Name</a>
+     - Deep connector (the guide lists Read, Write, or Subscribe actions):
+       under "Deep connectors", in the category that matches what it does.
+     - Proxy only (the guide lists only Proxy actions): under "Auth and proxy".
+     When a proxy-only connector gains Read/Write/Subscribe, move its chip out
+     of "Auth and proxy" into a category. Search picks chips up automatically.
+  4. Check with `mint broken-links` (from src/) and `pnpm dev`. */}
 
 <div className="amp-intg not-prose">
 
@@ -14,15 +31,10 @@ mode: "wide"
   <div>
     <div className="amp-intg-eyebrow">Integrations</div>
     <h1 className="amp-intg-title">Connect to the systems your customers <span className="amp-intg-title-accent">already run.</span></h1>
-    <p className="amp-intg-lede">CRMs and ERPs, support desks, call recording, email and calendar, warehouses and analytics. Each guide lists the objects that provider supports, its authentication type, and which actions are available.</p>
+    <p className="amp-intg-lede">Explore integrations across CRMs, ERPs, communication tools, help desks, warehouses, and more. Each provider guide details supported objects, available actions, and prerequisite steps.</p>
     <div className="amp-find">
       <input className="amp-find-input" id="amp-provider-search" type="search" placeholder="Search providers…" aria-label="Search providers" autoComplete="off" />
       <div className="amp-find-status" id="amp-find-status" aria-live="polite" />
-    </div>
-    <div className="amp-intg-facts">
-      <span>OAuth managed</span>
-      <span>One manifest surface</span>
-      <span>Open-source connectors</span>
     </div>
   </div>
   <div className="amp-orbit">
@@ -136,15 +148,25 @@ mode: "wide"
 
 <section className="amp-intg-section" id="browse-by-category">
   <div className="amp-intg-head">
-    <h2 className="amp-intg-head-title">Browse by category</h2>
-    <span className="amp-intg-head-sub">Every provider, grouped by what it does.</span>
+    <h2 className="amp-intg-head-title">Deep connectors</h2>
+    <span className="amp-intg-head-sub">Read, write, search, and subscribe. Check guide for supported actions and objects.</span>
   </div>
   <div className="amp-cats">
-    <div className="amp-cat" data-total="19" data-initial="true" data-open="true">
+    <div className="amp-cat" data-initial="true" data-open="true">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
         <span className="amp-cat-name">Enterprise CRM</span>
-        <span className="amp-cat-n">19</span>
+      </div>
+      <div className="amp-cat-chips">
+        <a href="/provider-guides/dynamicsCRM">Dynamics 365 CRM</a>
+        <a href="/provider-guides/hubspot">HubSpot</a>
+        <a href="/provider-guides/salesforce">Salesforce</a>
+        <a href="/provider-guides/salesforce-jwt">Salesforce (JWT authentication)</a>
+      </div>
+    <div className="amp-cat" data-initial="false">
+      <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
+        <span className="amp-cat-caret" />
+        <span className="amp-cat-name">SMB CRM</span>
       </div>
       <div className="amp-cat-chips">
         <a href="/provider-guides/attio">Attio</a>
@@ -152,27 +174,21 @@ mode: "wide"
         <a href="/provider-guides/capsule">Capsule</a>
         <a href="/provider-guides/close">Close</a>
         <a href="/provider-guides/copper">Copper</a>
-        <a href="/provider-guides/dynamicsCRM">Dynamics 365 CRM</a>
-        <a href="/provider-guides/hubspot">HubSpot</a>
         <a href="/provider-guides/insightly">Insightly</a>
         <a href="/provider-guides/keap">Keap</a>
         <a href="/provider-guides/nutshell">Nutshell</a>
         <a href="/provider-guides/pipedrive">Pipedrive</a>
-        <a href="/provider-guides/pipeliner">Pipeliner</a>
         <a href="/provider-guides/salesflare">Salesflare</a>
-        <a href="/provider-guides/salesforce">Salesforce</a>
-        <a href="/provider-guides/salesforce-jwt">Salesforce (JWT authentication)</a>
         <a href="/provider-guides/sellsy">Sellsy</a>
         <a href="/provider-guides/teamleader">Teamleader</a>
-        <a href="/provider-guides/vtiger">Vtiger</a>
         <a href="/provider-guides/zoho">Zoho</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="11" data-initial="false">
+    </div>
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
-        <span className="amp-cat-name">Industry CRM</span>
-        <span className="amp-cat-n">11</span>
+        <span className="amp-cat-name">Vertical CRM</span>
       </div>
       <div className="amp-cat-chips">
         <a href="/provider-guides/accuLynx">AccuLynx</a>
@@ -181,46 +197,34 @@ mode: "wide"
         <a href="/provider-guides/highlevel">HighLevel</a>
         <a href="/provider-guides/housecallPro">Housecall Pro</a>
         <a href="/provider-guides/jobber">Jobber</a>
-        <a href="/provider-guides/jump">Jump</a>
         <a href="/provider-guides/loxo">Loxo</a>
-        <a href="/provider-guides/monaco">Monaco</a>
         <a href="/provider-guides/procore">Procore</a>
-        <a href="/provider-guides/wealthbox">Wealthbox</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="10" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
-        <span className="amp-cat-name">ERP and finance</span>
-        <span className="amp-cat-n">10</span>
+        <span className="amp-cat-name">ERP and accounting</span>
       </div>
       <div className="amp-cat-chips">
-        <a href="/provider-guides/coupa">Coupa</a>
         <a href="/provider-guides/dynamicsBusinessCentral">Dynamics 365 Business Central</a>
         <a href="/provider-guides/netsuite">NetSuite</a>
         <a href="/provider-guides/netsuite-m2m">NetSuite (M2M)</a>
-        <a href="/provider-guides/odoo">Odoo</a>
         <a href="/provider-guides/quickbooks">QuickBooks</a>
-        <a href="/provider-guides/ramp">Ramp</a>
         <a href="/provider-guides/sageIntacct">Sage Intacct</a>
-        <a href="/provider-guides/tipalti">Tipalti</a>
         <a href="/provider-guides/xero">Xero</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="12" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
-        <span className="amp-cat-name">Payments, billing, and commerce</span>
-        <span className="amp-cat-n">12</span>
+        <span className="amp-cat-name">Other financial tools</span>
       </div>
       <div className="amp-cat-chips">
         <a href="/provider-guides/braintree">Braintree</a>
         <a href="/provider-guides/chargebee">Chargebee</a>
-        <a href="/provider-guides/chargeOver">ChargeOver</a>
-        <a href="/provider-guides/chartMogul">ChartMogul</a>
         <a href="/provider-guides/paddle">Paddle</a>
-        <a href="/provider-guides/paddleSandbox">Paddle Sandbox</a>
-        <a href="/provider-guides/rebilly">Rebilly</a>
+        <a href="/provider-guides/ramp">Ramp</a>
         <a href="/provider-guides/recurly">Recurly</a>
         <a href="/provider-guides/revenuecat">RevenueCat</a>
         <a href="/provider-guides/shopify">Shopify</a>
@@ -228,299 +232,276 @@ mode: "wide"
         <a href="/provider-guides/stripe">Stripe</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="11" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
-        <span className="amp-cat-name">Call recording and conversation intelligence</span>
-        <span className="amp-cat-n">11</span>
-      </div>
-      <div className="amp-cat-chips">
-        <a href="/provider-guides/avoma">Avoma</a>
-        <a href="/provider-guides/callRail">CallRail</a>
-        <a href="/provider-guides/chorus">Chorus</a>
-        <a href="/provider-guides/clari">Clari</a>
-        <a href="/provider-guides/clariCopilot">Clari Copilot</a>
-        <a href="/provider-guides/dovetail">Dovetail</a>
-        <a href="/provider-guides/fathom">Fathom</a>
-        <a href="/provider-guides/fireflies">Fireflies</a>
-        <a href="/provider-guides/fourFour">Four/Four</a>
-        <a href="/provider-guides/gong">Gong</a>
-        <a href="/provider-guides/granola">Granola</a>
-      </div>
-    </div>
-    <div className="amp-cat" data-total="9" data-initial="false">
-      <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
-        <span className="amp-cat-caret" />
-        <span className="amp-cat-name">Email and calendar</span>
-        <span className="amp-cat-n">9</span>
+        <span className="amp-cat-name">Call recording, email, and calendar</span>
       </div>
       <div className="amp-cat-chips">
         <a href="/provider-guides/acuityScheduling">Acuity Scheduling</a>
+        <a href="/provider-guides/avoma">Avoma</a>
         <a href="/provider-guides/calendly">Calendly</a>
+        <a href="/provider-guides/callRail">CallRail</a>
         <a href="/provider-guides/chilipiper">ChiliPiper</a>
+        <a href="/provider-guides/chorus">Chorus</a>
+        <a href="/provider-guides/clariCopilot">Clari Copilot</a>
+        <a href="/provider-guides/fathom">Fathom</a>
+        <a href="/provider-guides/fireflies">Fireflies</a>
+        <a href="/provider-guides/fourFour">Four/Four</a>
         <a href="/provider-guides/front">Front</a>
+        <a href="/provider-guides/gong">Gong</a>
         <a href="/provider-guides/google">Google</a>
         <a href="/provider-guides/google-workspace-delegation">Google (workspace delegation)</a>
+        <a href="/provider-guides/granola">Granola</a>
         <a href="/provider-guides/microsoft">Microsoft</a>
         <a href="/provider-guides/microsoftAdminConsent">Microsoft (Admin consent)</a>
         <a href="/provider-guides/mixmax">Mixmax</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="13" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
-        <span className="amp-cat-name">Support and help desk</span>
-        <span className="amp-cat-n">13</span>
-      </div>
-      <div className="amp-cat-chips">
-        <a href="/provider-guides/discourse">Discourse</a>
-        <a href="/provider-guides/dixa">Dixa</a>
-        <a href="/provider-guides/freshchat">Freshchat</a>
-        <a href="/provider-guides/freshdesk">Freshdesk</a>
-        <a href="/provider-guides/gorgias">Gorgias</a>
-        <a href="/provider-guides/groove">Groove</a>
-        <a href="/provider-guides/guru">Guru</a>
-        <a href="/provider-guides/happyfox">HappyFox</a>
-        <a href="/provider-guides/helpScoutMailbox">Help Scout Mailbox</a>
-        <a href="/provider-guides/intercom">Intercom</a>
-        <a href="/provider-guides/pylon">Pylon</a>
-        <a href="/provider-guides/serviceNow">ServiceNow</a>
-        <a href="/provider-guides/zendeskSupport">Zendesk Support</a>
-      </div>
-    </div>
-    <div className="amp-cat" data-total="5" data-initial="false">
-      <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
-        <span className="amp-cat-caret" />
-        <span className="amp-cat-name">IT, security, and infrastructure</span>
-        <span className="amp-cat-n">5</span>
+        <span className="amp-cat-name">Support, IT, and security</span>
       </div>
       <div className="amp-cat-chips">
         <a href="/provider-guides/aws">AWS</a>
         <a href="/provider-guides/connectWise">ConnectWise</a>
-        <a href="/provider-guides/kaseyaVSAX">Kaseya VSAX</a>
+        <a href="/provider-guides/dixa">Dixa</a>
+        <a href="/provider-guides/freshdesk">Freshdesk</a>
+        <a href="/provider-guides/gorgias">Gorgias</a>
+        <a href="/provider-guides/groove">Groove</a>
+        <a href="/provider-guides/happyfox">HappyFox</a>
+        <a href="/provider-guides/helpScoutMailbox">Help Scout Mailbox</a>
+        <a href="/provider-guides/intercom">Intercom</a>
         <a href="/provider-guides/okta">Okta</a>
+        <a href="/provider-guides/pylon">Pylon</a>
+        <a href="/provider-guides/serviceNow">ServiceNow</a>
         <a href="/provider-guides/solarwindsServiceDesk">SolarWinds Service Desk</a>
+        <a href="/provider-guides/zendeskSupport">Zendesk Support</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="17" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
-        <span className="amp-cat-name">Sales engagement</span>
-        <span className="amp-cat-n">17</span>
+        <span className="amp-cat-name">Sales and marketing</span>
       </div>
       <div className="amp-cat-chips">
-        <a href="/provider-guides/amplemarket">Amplemarket</a>
         <a href="/provider-guides/apollo">Apollo</a>
-        <a href="/provider-guides/crunchbase">Crunchbase</a>
-        <a href="/provider-guides/emailBison">EmailBison</a>
-        <a href="/provider-guides/heyreach">HeyReach</a>
-        <a href="/provider-guides/hunter">Hunter</a>
-        <a href="/provider-guides/instantly">Instantly</a>
-        <a href="/provider-guides/lemlist">Lemlist</a>
-        <a href="/provider-guides/outplay">Outplay</a>
-        <a href="/provider-guides/outreach">Outreach</a>
-        <a href="/provider-guides/reply">Reply</a>
-        <a href="/provider-guides/salesfinity">Salesfinity</a>
-        <a href="/provider-guides/salesloft">Salesloft</a>
-        <a href="/provider-guides/seismic">Seismic</a>
-        <a href="/provider-guides/smartlead">Smartlead</a>
-        <a href="/provider-guides/superSend">SuperSend</a>
-        <a href="/provider-guides/zoominfo">ZoomInfo</a>
-      </div>
-    </div>
-    <div className="amp-cat" data-total="18" data-initial="false">
-      <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
-        <span className="amp-cat-caret" />
-        <span className="amp-cat-name">Marketing</span>
-        <span className="amp-cat-n">18</span>
-      </div>
-      <div className="amp-cat-chips">
-        <a href="/provider-guides/aweber">AWeber</a>
         <a href="/provider-guides/blueshift">Blueshift</a>
-        <a href="/provider-guides/blueshiftEU">Blueshift (EU)</a>
         <a href="/provider-guides/braze">Braze</a>
         <a href="/provider-guides/brevo">Brevo</a>
         <a href="/provider-guides/campaignMonitor">Campaign Monitor</a>
         <a href="/provider-guides/constantContact">Constant Contact</a>
         <a href="/provider-guides/customerJourneysApp">Customer.io Journeys App</a>
-        <a href="/provider-guides/customerJourneysTrack">Customer.io Journeys Track</a>
         <a href="/provider-guides/drift">Drift</a>
-        <a href="/provider-guides/drip">Drip</a>
         <a href="/provider-guides/getResponse">GetResponse</a>
+        <a href="/provider-guides/heyreach">HeyReach</a>
+        <a href="/provider-guides/hunter">Hunter</a>
+        <a href="/provider-guides/instantly">Instantly</a>
         <a href="/provider-guides/iterable">Iterable</a>
         <a href="/provider-guides/kit">Kit</a>
         <a href="/provider-guides/klaviyo">Klaviyo</a>
-        <a href="/provider-guides/mailgun">Mailgun</a>
-        <a href="/provider-guides/marketo">Marketo</a>
-        <a href="/provider-guides/sendGrid">SendGrid</a>
-      </div>
-    </div>
-    <div className="amp-cat" data-total="4" data-initial="false">
-      <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
-        <span className="amp-cat-caret" />
-        <span className="amp-cat-name">Advertising and social</span>
-        <span className="amp-cat-n">4</span>
-      </div>
-      <div className="amp-cat-chips">
+        <a href="/provider-guides/lemlist">Lemlist</a>
         <a href="/provider-guides/linkedin">LinkedIn</a>
-        <a href="/provider-guides/meta">Meta</a>
+        <a href="/provider-guides/marketo">Marketo</a>
+        <a href="/provider-guides/outplay">Outplay</a>
+        <a href="/provider-guides/outreach">Outreach</a>
         <a href="/provider-guides/pinterest">Pinterest</a>
+        <a href="/provider-guides/salesfinity">Salesfinity</a>
+        <a href="/provider-guides/salesloft">Salesloft</a>
+        <a href="/provider-guides/seismic">Seismic</a>
+        <a href="/provider-guides/sendGrid">SendGrid</a>
+        <a href="/provider-guides/smartlead">Smartlead</a>
         <a href="/provider-guides/snapchatAds">Snapchat Ads</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="16" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
         <span className="amp-cat-name">Project and product</span>
-        <span className="amp-cat-n">16</span>
       </div>
       <div className="amp-cat-chips">
         <a href="/provider-guides/aha">Aha!</a>
-        <a href="/provider-guides/airtable">Airtable</a>
         <a href="/provider-guides/asana">Asana</a>
-        <a href="/provider-guides/basecamp">Basecamp</a>
         <a href="/provider-guides/clickup">ClickUp</a>
-        <a href="/provider-guides/coda">Coda</a>
-        <a href="/provider-guides/hive">Hive</a>
         <a href="/provider-guides/jira">Jira</a>
         <a href="/provider-guides/linear">Linear</a>
         <a href="/provider-guides/monday">Monday</a>
-        <a href="/provider-guides/notion">Notion</a>
-        <a href="/provider-guides/productBoard">Productboard</a>
-        <a href="/provider-guides/smartsheet">Smartsheet</a>
         <a href="/provider-guides/teamwork">Teamwork</a>
-        <a href="/provider-guides/timely">Timely</a>
-        <a href="/provider-guides/wrike">Wrike</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="8" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
-        <span className="amp-cat-name">Developer tools and AI</span>
-        <span className="amp-cat-n">8</span>
+        <span className="amp-cat-name">Developer tools</span>
       </div>
       <div className="amp-cat-chips">
-        <a href="/provider-guides/anthropic">Anthropic</a>
         <a href="/provider-guides/atlassian">Atlassian</a>
         <a href="/provider-guides/bitbucket">Bitbucket</a>
         <a href="/provider-guides/devrev">DevRev</a>
         <a href="/provider-guides/flatfile">Flatfile</a>
         <a href="/provider-guides/github">GitHub</a>
         <a href="/provider-guides/gitlab">GitLab</a>
-        <a href="/provider-guides/openAI">OpenAI</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="8" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
         <span className="amp-cat-name">Data and analytics</span>
-        <span className="amp-cat-n">8</span>
       </div>
       <div className="amp-cat-chips">
         <a href="/provider-guides/amplitude">Amplitude</a>
         <a href="/provider-guides/bigquery">BigQuery</a>
-        <a href="/provider-guides/domo">Domo</a>
-        <a href="/provider-guides/geckoboard">Geckoboard</a>
-        <a href="/provider-guides/hightouch">Hightouch</a>
-        <a href="/provider-guides/mixpanel">Mixpanel</a>
-        <a href="/provider-guides/segment">Segment</a>
         <a href="/provider-guides/snowflake">Snowflake</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="17" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
         <span className="amp-cat-name">Communication and messaging</span>
-        <span className="amp-cat-n">17</span>
       </div>
       <div className="amp-cat-chips">
         <a href="/provider-guides/aircall">Aircall</a>
-        <a href="/provider-guides/bird">Bird (MessageBird)</a>
         <a href="/provider-guides/cloudtalk">CloudTalk</a>
-        <a href="/provider-guides/discord">Discord</a>
         <a href="/provider-guides/goTo">GoTo</a>
-        <a href="/provider-guides/joinMe">Join.me</a>
         <a href="/provider-guides/justCall">JustCall</a>
-        <a href="/provider-guides/livestorm">Livestorm</a>
         <a href="/provider-guides/lob">Lob</a>
         <a href="/provider-guides/phoneBurner">PhoneBurner</a>
-        <a href="/provider-guides/podium">Podium</a>
         <a href="/provider-guides/ringCentral">RingCentral</a>
         <a href="/provider-guides/slack">Slack</a>
         <a href="/provider-guides/talkdesk">Talkdesk</a>
         <a href="/provider-guides/webex">Webex</a>
-        <a href="/provider-guides/whereby">Whereby</a>
         <a href="/provider-guides/zoom">Zoom</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="11" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
         <span className="amp-cat-name">Content and documents</span>
-        <span className="amp-cat-n">11</span>
       </div>
       <div className="amp-cat-chips">
-        <a href="/provider-guides/box">Box</a>
-        <a href="/provider-guides/bynder">Bynder</a>
-        <a href="/provider-guides/docusign">Docusign</a>
-        <a href="/provider-guides/dropbox">Dropbox</a>
         <a href="/provider-guides/dropboxsign">Dropbox Sign</a>
-        <a href="/provider-guides/figma">Figma</a>
-        <a href="/provider-guides/ironclad">Ironclad</a>
-        <a href="/provider-guides/miro">Miro</a>
-        <a href="/provider-guides/mural">Mural</a>
-        <a href="/provider-guides/webflow">Webflow</a>
-        <a href="/provider-guides/wordpress">WordPress</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="5" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
         <span className="amp-cat-name">Surveys and feedback</span>
-        <span className="amp-cat-n">5</span>
       </div>
       <div className="amp-cat-chips">
-        <a href="/provider-guides/delighted">Delighted</a>
-        <a href="/provider-guides/formstack">Formstack</a>
-        <a href="/provider-guides/g2">G2</a>
-        <a href="/provider-guides/jotform">Jotform</a>
         <a href="/provider-guides/surveyMonkey">SurveyMonkey</a>
       </div>
     </div>
-    <div className="amp-cat" data-total="5" data-initial="false">
+    <div className="amp-cat" data-initial="false">
       <div className="amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
         <span className="amp-cat-caret" />
         <span className="amp-cat-name">HR and recruiting</span>
-        <span className="amp-cat-n">5</span>
       </div>
       <div className="amp-cat-chips">
         <a href="/provider-guides/ashby">Ashby</a>
         <a href="/provider-guides/breezy">Breezy</a>
         <a href="/provider-guides/gusto">Gusto</a>
         <a href="/provider-guides/lever">Lever</a>
-        <a href="/provider-guides/workday">Workday</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<section className="amp-intg-section" id="auth-and-proxy">
+  <div className="amp-cat amp-cat--section" data-initial="false">
+    <div className="amp-intg-head amp-cat-head" role="button" tabIndex={0} aria-expanded="false">
+      <span className="amp-cat-caret" />
+      <h2 className="amp-intg-head-title">Auth and proxy</h2>
+      <span className="amp-intg-head-sub">Managed authentication and proxy access to the provider's API.</span>
+    </div>
+    <div className="amp-cat-chips">
+      <a href="/provider-guides/airtable">Airtable</a>
+      <a href="/provider-guides/amplemarket">Amplemarket</a>
+      <a href="/provider-guides/anthropic">Anthropic</a>
+      <a href="/provider-guides/aweber">AWeber</a>
+      <a href="/provider-guides/basecamp">Basecamp</a>
+      <a href="/provider-guides/bird">Bird (MessageBird)</a>
+      <a href="/provider-guides/blueshiftEU">Blueshift (EU)</a>
+      <a href="/provider-guides/box">Box</a>
+      <a href="/provider-guides/bynder">Bynder</a>
+      <a href="/provider-guides/chargeOver">ChargeOver</a>
+      <a href="/provider-guides/chartMogul">ChartMogul</a>
+      <a href="/provider-guides/clari">Clari</a>
+      <a href="/provider-guides/coda">Coda</a>
+      <a href="/provider-guides/coupa">Coupa</a>
+      <a href="/provider-guides/crunchbase">Crunchbase</a>
+      <a href="/provider-guides/customerJourneysTrack">Customer.io Journeys Track</a>
+      <a href="/provider-guides/delighted">Delighted</a>
+      <a href="/provider-guides/discord">Discord</a>
+      <a href="/provider-guides/discourse">Discourse</a>
+      <a href="/provider-guides/docusign">Docusign</a>
+      <a href="/provider-guides/domo">Domo</a>
+      <a href="/provider-guides/dovetail">Dovetail</a>
+      <a href="/provider-guides/drip">Drip</a>
+      <a href="/provider-guides/dropbox">Dropbox</a>
+      <a href="/provider-guides/emailBison">EmailBison</a>
+      <a href="/provider-guides/figma">Figma</a>
+      <a href="/provider-guides/formstack">Formstack</a>
+      <a href="/provider-guides/freshchat">Freshchat</a>
+      <a href="/provider-guides/g2">G2</a>
+      <a href="/provider-guides/geckoboard">Geckoboard</a>
+      <a href="/provider-guides/guru">Guru</a>
+      <a href="/provider-guides/hightouch">Hightouch</a>
+      <a href="/provider-guides/hive">Hive</a>
+      <a href="/provider-guides/ironclad">Ironclad</a>
+      <a href="/provider-guides/joinMe">Join.me</a>
+      <a href="/provider-guides/jotform">Jotform</a>
+      <a href="/provider-guides/jump">Jump</a>
+      <a href="/provider-guides/kaseyaVSAX">Kaseya VSAX</a>
+      <a href="/provider-guides/livestorm">Livestorm</a>
+      <a href="/provider-guides/mailgun">Mailgun</a>
+      <a href="/provider-guides/meta">Meta</a>
+      <a href="/provider-guides/miro">Miro</a>
+      <a href="/provider-guides/mixpanel">Mixpanel</a>
+      <a href="/provider-guides/monaco">Monaco</a>
+      <a href="/provider-guides/mural">Mural</a>
+      <a href="/provider-guides/notion">Notion</a>
+      <a href="/provider-guides/odoo">Odoo</a>
+      <a href="/provider-guides/openAI">OpenAI</a>
+      <a href="/provider-guides/paddleSandbox">Paddle Sandbox</a>
+      <a href="/provider-guides/pipeliner">Pipeliner</a>
+      <a href="/provider-guides/podium">Podium</a>
+      <a href="/provider-guides/productBoard">Productboard</a>
+      <a href="/provider-guides/rebilly">Rebilly</a>
+      <a href="/provider-guides/reply">Reply</a>
+      <a href="/provider-guides/segment">Segment</a>
+      <a href="/provider-guides/smartsheet">Smartsheet</a>
+      <a href="/provider-guides/superSend">SuperSend</a>
+      <a href="/provider-guides/timely">Timely</a>
+      <a href="/provider-guides/tipalti">Tipalti</a>
+      <a href="/provider-guides/vtiger">Vtiger</a>
+      <a href="/provider-guides/wealthbox">Wealthbox</a>
+      <a href="/provider-guides/webflow">Webflow</a>
+      <a href="/provider-guides/whereby">Whereby</a>
+      <a href="/provider-guides/wordpress">WordPress</a>
+      <a href="/provider-guides/workday">Workday</a>
+      <a href="/provider-guides/wrike">Wrike</a>
+      <a href="/provider-guides/zoominfo">ZoomInfo</a>
     </div>
   </div>
 </section>
 
 <section className="amp-intg-section amp-intg-section--last">
   <div className="amp-intg-head">
-    <h2 className="amp-intg-head-title">Before you build</h2>
-    <span className="amp-intg-head-sub">Two things worth knowing up front.</span>
+    <h2 className="amp-intg-head-title">More resources</h2>
   </div>
   <div className="amp-intg-cards">
     <a className="amp-intg-card" href="/customer-guides/overview">
-      <div className="amp-intg-card-code">customer-guides/</div>
-      <div className="amp-intg-card-title">Customer setup guides</div>
-      <div className="amp-intg-card-desc">Some providers need configuration on your customer's side before an integration can be installed. Share those pages directly with your customers.</div>
+      <div className="amp-intg-card-code">Customer guides</div>
+      <div className="amp-intg-card-title">Docs for your customers</div>
+      <div className="amp-intg-card-desc">Helpful instructions and tips to help your customers set up a successful integration.</div>
       <div className="amp-intg-card-cta">Read the guides &rarr;</div>
     </a>
-    <a className="amp-intg-card" href="https://github.com/amp-labs/connectors">
-      <div className="amp-intg-card-code">amp-labs/connectors</div>
-      <div className="amp-intg-card-title">Missing a provider?</div>
-      <div className="amp-intg-card-desc">Ampersand's connectors are open source. If an API you need isn't listed, file an issue and tell us which objects and actions you need.</div>
-      <div className="amp-intg-card-cta">File an issue &rarr;</div>
+    <a className="amp-intg-card" href="https://calendly.com/d/dz96-zhq-f7b/ampersand-integration-demo?utm_source=docs&amp;utm_medium=cta&amp;utm_content=provider_guide" target="_blank" rel="noopener noreferrer">
+      <div className="amp-intg-card-code">Request a connector</div>
+      <div className="amp-intg-card-title">Missing a provider or need a deeper integration?</div>
+      <div className="amp-intg-card-desc">We can build it for you. Tell an engineer which provider, objects, and actions you need.</div>
+      <div className="amp-intg-card-cta">Chat with an engineer &rarr;</div>
     </a>
   </div>
 </section>

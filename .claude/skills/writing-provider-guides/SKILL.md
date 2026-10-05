@@ -28,7 +28,9 @@ Every provider guide in `src/provider-guides/*.mdx` follows one canonical struct
 
 4. **Assemble the MDX** in the canonical section order from templates.md, choosing the auth-type variants. For **updates to an existing guide**: bring headings/wording of the sections you touch up to the canonical templates; keep factual content (credential steps, screenshots) as-is; move any non-template sections (e.g. "API documentation", "Rate limits") to the end of the file unchanged.
 
-5. **Register navigation** (new guides only): add `"provider-guides/<slug>"` to the "Provider guides" group in `src/generate-docs.ts`, keeping the list alphabetically sorted case-insensitively. Then run `pnpm run gen` (or tell the user to).
+5. **Register navigation** (new guides only): add `"provider-guides/<slug>"` to the "Provider guides" group in `src/generate-docs.ts`, keeping the list alphabetically sorted case-insensitively. Then run `pnpm run gen-docs` (or tell the user to). The guide's frontmatter has `hidden: true`, so it stays out of the sidebar but is still searchable.
+
+   Then **add the provider to the Integrations page** (`src/provider-guides/overview.mdx`): one chip, `<a href="/provider-guides/<slug>">Display Name</a>`, in alphabetical order. Deep connectors (guide lists Read, Write, or Subscribe) go under "Deep connectors" in the matching category; proxy-only connectors go under "Auth and proxy". The comment at the top of that file has the details. When updating an existing guide from proxy-only to deep, move its chip out of "Auth and proxy" into a category.
 
 6. **Run the verification checklist** below before declaring the guide done.
 
@@ -62,6 +64,8 @@ Then confirm by eye:
 - [ ] Auth intro + prompt lines match the auth-type table
 - [ ] Samples link verified with curl (200) if used
 - [ ] New guide registered alphabetically in `src/generate-docs.ts`
+- [ ] Frontmatter has `hidden: true`
+- [ ] Chip added to the Integrations page (`src/provider-guides/overview.mdx`) under "Deep connectors" or "Auth and proxy"
 - [ ] No fabricated objects, scopes, or URLs; TODOs mark every unknown
 
 ## Common mistakes
@@ -74,4 +78,5 @@ Then confirm by eye:
 | Linking samples repo without checking it exists | curl the raw amp.yaml URL first; 404 → inline manifest |
 | `## Add <Provider> App Details in Ampersand` as H2 / rephrased | `### Add your <Provider> app info to Ampersand`, nested under "Before you get started" |
 | Provider-app instructions for non-OAuth-auth-code providers | Only OAuth2 Authorization Code needs a Provider App; others get the "no Provider App" intro line |
-| Forgetting navigation registration | New slug goes into `src/generate-docs.ts`, alphabetical, then `pnpm run gen` |
+| Forgetting navigation registration | New slug goes into `src/generate-docs.ts`, alphabetical, then `pnpm run gen-docs` |
+| Forgetting the Integrations page | Add a chip to `src/provider-guides/overview.mdx`: "Deep connectors" category or "Auth and proxy" |

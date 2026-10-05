@@ -64,6 +64,11 @@ export interface DocsConfig {
   api?: {
     openapi?: Array<string>;
   };
+  integrations?: {
+    gtm?: {
+      tagId: string;
+    };
+  };
   navbar?: {
     links?: Array<{
       label: string;
@@ -184,6 +189,11 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     api: {
       openapi: ['./platform.json', './read.json', './write.json', './search.json']
     },
+    integrations: {
+      gtm: {
+        tagId: 'GTM-KKG4NLZD'
+      }
+    },
     navbar: {
       links: mintConfig.topbarLinks?.map((link: any) => ({
         label: link.name,
@@ -217,9 +227,9 @@ const baseConfig = {
   name: "Ampersand",
   openapi: [openApiPlatform, openApiRead, openApiWrite, openApiSearch],
   logo: {
-    light: "/logos/dark.png",
-    dark: "/logos/light.png",
-    href: "https://withampersand.com"
+    light: "/logos/light.png",
+    dark: "/logos/dark.png",
+    href: "https://www.ampersand.ai"
   },
   favicon: "logos/favicon.svg",
   // appearance: {
@@ -263,12 +273,12 @@ const baseConfig = {
   },
   topbarCtaButton: {
     name: "Start building now",
-    url: "https://dashboard.withampersand.com/sign-up",
+    url: "https://dashboard.withampersand.com/sign-up?trk=docs",
   },
   topbarLinks: [
     {
       name: "Sign in",
-      url: "https://dashboard.withampersand.com/sign-in",
+      url: "https://dashboard.withampersand.com/sign-in?trk=docs",
     },
   ],
   redirects: [
@@ -338,10 +348,9 @@ const baseConfig = {
       group: "Get started",
       pages: [
         "overview",
-        "concepts",
-        "quickstart",
         "starter-project",
         "use-with-ai-ide",
+        "concepts",
       ]
     },
     {

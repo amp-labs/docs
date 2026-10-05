@@ -7,6 +7,7 @@
 ```markdown
 ---
 title: "<Provider Display Name>"
+hidden: true
 ---
 
 <optional 1–2 sentence intro — ONLY when the provider needs disambiguation,
