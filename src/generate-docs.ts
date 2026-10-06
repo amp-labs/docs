@@ -287,6 +287,10 @@ const baseConfig = {
       destination: "/:slug*"
     },
     {
+      source: "/provider-guides",
+      destination: "/provider-guides/overview"
+    },
+    {
       source: "/docs/read-actions",
       destination: "/read-actions"
     },
