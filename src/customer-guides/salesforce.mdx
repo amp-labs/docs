@@ -76,6 +76,8 @@ Ask the developer whether this integration uses an **External Client App** or a 
 
   After you connect the app, also confirm **Permitted Users** under app policies. See [After installing the integration](#after-installing-the-integration).
 
+  **IP Relaxation** applies to the IP address you sign in from when you authorize the app, not to the IP addresses the integration makes API calls from. If you want to limit where the integration's API calls can come from, see [Restrict API access by IP address](#restrict-api-access-by-ip-address).
+
   </Tab>
 </Tabs>
 
@@ -242,6 +244,8 @@ Configure OAuth policies so the integration can maintain a stable connection.
      - Set **IP Relaxation** to **Relax IP restrictions**.
   8. Click **Save**.
 
+  **IP Relaxation** applies to the IP address you sign in from when you authorize the app, not to the IP addresses the integration makes API calls from. If you want to limit where the integration's API calls can come from, see [Restrict API access by IP address](#restrict-api-access-by-ip-address).
+
   ![Configure ECA OAuth Policies](/images/customer-guides/salesforce-eca/after-install-policies.gif)
 
   </Tab>
@@ -267,6 +271,54 @@ Configure OAuth policies so the integration can maintain a stable connection.
 
   </Tab>
 </Tabs>
+
+## Restrict API access by IP address
+
+This section is optional. It restricts the addresses that the integration's Salesforce user is allowed to log in from.
+
+All API requests the integration makes to your Salesforce org originate from a [fixed set of Ampersand IP addresses](/security/outgoing-ip-addresses), so you can limit that user to those addresses plus your own.
+
+Two settings are easy to mistake for this one:
+
+- **IP Relaxation** on the app applies to the IP address your browser connects from when you authorize the integration, not to the addresses the integration makes API calls from. Leave it set to **Relax IP restrictions**.
+- **Trusted IP Ranges** under **Setup** → **Security** → **Network Access** are not a restriction. Logins from those addresses skip identity verification, but logins from other addresses are still allowed, so listing Ampersand's addresses there does not block a stolen token.
+
+The control that actually restricts access is **Login IP Ranges** on a profile, which is what the steps below configure.
+
+### Before you start
+
+Login IP ranges are set on one profile at a time, from that profile's detail page. If you do not see a **Login IP Ranges** section, check that you opened a profile rather than the profile list, and that your edition sets the ranges on profiles rather than on the Session Settings page (see the note at the end of this section).
+
+You need the **Manage Profiles and Permission Sets** permission to add or edit login IP ranges, and **View Setup and Configuration** to view them.
+
+Two things determine whether this works:
+
+- **Whose profile you restrict.** You choose which profile to put the ranges on, and every user on that profile is then restricted by them. It has to be the profile of whoever authorizes the integration, so if that person is on a shared profile such as **System Administrator**, everyone else on that profile is restricted too. Create a user for the integration and give it a profile of its own.
+- **Which addresses you allow.** The list must include Ampersand's addresses **and** the addresses that same user signs in from in a browser. Authorization happens in a browser, so if their own address is missing they cannot log in to connect or reconnect the integration.
+
+### Step 1: Add the allowed IP ranges to the profile
+
+1. Log in to **Salesforce**.
+2. Go to **Setup**.
+3. In the **Quick Find** box, search for **Profiles** and open the profile list.
+4. Click the **name** of the profile belonging to the user who authorizes the integration. Do not click **Edit** next to it; login IP ranges are not on the edit page, only on the profile's detail page.
+5. Find **Login IP Ranges** on that detail page:
+   - In the original profile interface, scroll to the bottom of the page to the **Login IP Ranges** related list and click **New**.
+   - If your org has the enhanced profile user interface enabled, click **Login IP Ranges** in the list of links near the top of the page, then click **Add IP Ranges**.
+6. Add one entry for each address listed in [Ampersand's outgoing IP addresses](/security/outgoing-ip-addresses). A single address is entered as a range, so put the same address in both **Start IP Address** and **End IP Address**, and give each entry a description such as `Ampersand` so it is recognizable later.
+7. Add one more entry for the range your own users sign in from, so the person who authorizes the integration is not locked out.
+8. Click **Save**.
+
+At this point, the user cannot log in from anywhere outside the addresses you listed.
+
+### Step 2: Verify the integration still works
+
+1. Reconnect the integration from your vendor's app.
+2. Confirm that data still syncs in both directions.
+
+If requests start failing with login or authentication errors after this change, an address is missing from the profile's login IP ranges.
+
+Restricting login IP addresses is available in all Salesforce editions, but where you set the ranges depends on the edition. In Enterprise, Performance, Unlimited, and Developer editions they are set on a profile, as described above. In other editions they are set from **Setup** → **Session Settings** instead. For details, see Salesforce's guide to [restricting login IP addresses in profiles](https://help.salesforce.com/s/articleView?id=platform.login_ip_ranges.htm&type=5).
 
 ## Subscribe Action permissions
 
