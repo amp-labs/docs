@@ -28,7 +28,7 @@ Every provider guide in `src/provider-guides/*.mdx` follows one canonical struct
 
 4. **Assemble the MDX** in the canonical section order from templates.md, choosing the auth-type variants. For **updates to an existing guide**: bring headings/wording of the sections you touch up to the canonical templates; keep factual content (credential steps, screenshots) as-is; move any non-template sections (e.g. "API documentation", "Rate limits") to the end of the file unchanged.
 
-5. **Register navigation** (new guides only): add `"provider-guides/<slug>"` to the "Provider guides" group in `src/generate-docs.ts`, keeping the list alphabetically sorted case-insensitively. Then run `pnpm run gen-docs` (or tell the user to). The guide's frontmatter has `hidden: true`, so it stays out of the sidebar but is still searchable.
+5. **Register navigation** (new guides only): add `"provider-guides/<slug>"` to the collapsed "All providers" group (nested in "Integrations") in `src/generate-docs.ts`, keeping the list alphabetically sorted case-insensitively. Then run `pnpm run gen-docs` (or tell the user to).
 
    Then **add the provider to the Integrations page** (`src/provider-guides/overview.mdx`): one chip, `<a href="/provider-guides/<slug>">Display Name</a>`, in alphabetical order. Deep connectors (guide lists Read, Write, or Subscribe) go under "Deep connectors" in the matching category; proxy-only connectors go under "Auth and proxy". The comment at the top of that file has the details. When updating an existing guide from proxy-only to deep, move its chip out of "Auth and proxy" into a category.
 
@@ -64,7 +64,6 @@ Then confirm by eye:
 - [ ] Auth intro + prompt lines match the auth-type table
 - [ ] Samples link verified with curl (200) if used
 - [ ] New guide registered alphabetically in `src/generate-docs.ts`
-- [ ] Frontmatter has `hidden: true`
 - [ ] Chip added to the Integrations page (`src/provider-guides/overview.mdx`) under "Deep connectors" or "Auth and proxy"
 - [ ] No fabricated objects, scopes, or URLs; TODOs mark every unknown
 
