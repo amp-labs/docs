@@ -7,7 +7,6 @@
 ```markdown
 ---
 title: "<Provider Display Name>"
-hidden: true
 ---
 
 <optional 1–2 sentence intro — ONLY when the provider needs disambiguation,
@@ -301,6 +300,6 @@ For each object, find the provider's API reference page for that resource (try `
 
 ## Navigation registration (new guides)
 
-1. In `src/generate-docs.ts`, find the `group: "Provider guides"` block.
+1. In `src/generate-docs.ts`, find the `group: "All providers"` block (nested in `group: "Integrations"`).
 2. Insert `"provider-guides/<slug>",` keeping case-insensitive alphabetical order; one entry per line, double quotes, trailing comma.
-3. Run `pnpm run gen`. If the user asked for no build, remind them to run it later.
+3. Run `pnpm run gen-docs`. If the user asked for no build, remind them to run it later.
