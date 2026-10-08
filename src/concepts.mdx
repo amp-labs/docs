@@ -5,92 +5,151 @@ description: "Understand how Ampersand integrations, installations, revisions, c
 
 Ampersand has one core idea: **you define an integration once, and each of your customers gets their own installation of it.**
 
-You describe what the integration can do in a manifest file. Each customer then connects their own account and chooses how much of that to enable. Ampersand stores those choices as a config and runs the integration against that customer's SaaS instance on their behalf.
+You describe what the integration can do in `amp.yaml` (also called the manifest). Each customer then connects their own account and chooses how much of that to enable. Ampersand stores those choices as a config and runs the integration against that customer's account on their behalf.
 
-```mermaid
-flowchart TD
-    A["amp.yaml<br/>what the integration can do"] -->|amp deploy| B["Revision<br/>a versioned snapshot"]
-    B --> C["Your customer connects<br/>and picks objects and fields"]
-    C --> D["Installation"]
-    D --> E["Connection<br/>their credentials"]
-    D --> F["Config<br/>what they chose"]
-    B --> G["What actually runs<br/>= revision, with config overrides applied"]
-    F --> G
-```
+<img
+  src="/images/concepts-integration-to-installation.png"
+  alt="amp.yaml describes what the integration can do. Running amp deploy creates a revision, a versioned snapshot. When your customer connects and picks objects and fields, an installation is created. Each installation holds a connection (their credentials) and a config (what they chose). What actually runs is the revision, with the config's overrides applied."
+  className="rounded-xl"
+  style={{ maxWidth: "520px", width: "100%", margin: "0 auto", display: "block" }}
+/>
 
 ## Integration
 
-An **integration** defines how your application interacts with a third-party SaaS tool. You have a single integration for every customer connecting to that provider. For example, one integration called `mySalesforceIntegration`, where Salesforce is the **provider**.
+An **integration** defines how your application works with a third-party system. You build it once, and every customer who connects that system uses it. For example, one integration called `salesforce-accounts` serves all of your Salesforce customers. Salesforce is the **provider**.
 
-You create an integration by defining it in a [manifest file](/manifest-reference) and deploying it with the [`amp` CLI](/cli/overview).
+You create an integration by defining it in your [`amp.yaml`](/manifest-reference) and deploying it with the [`amp` CLI](/cli/overview).
 
-The manifest describes what is *possible*, not what any particular customer has turned on. It can say:
+Your `amp.yaml` describes what is *possible*, not what any particular customer has turned on. It can say:
 
 - objects and fields that are always read (`requiredFields`)
 - fields the customer may choose from (`optionalFields`, or `optionalFieldsAuto: all`)
-- fields the customer must map to their own schema (`mapToName`)
+- fields the customer must map to one of their own fields (`mapToName`)
 - a schedule, a destination, and backfill behavior
+
+<Accordion title="What's the difference between an integration and an installation?">
+  The integration is what you build, once. An installation is one customer's own copy of it.
+</Accordion>
+
+## Revision
+
+Every time you change `amp.yaml` and run `amp deploy`, Ampersand stores a new **revision**, a versioned snapshot of the integration's definition.
+
+Your customers aren't all on the same version at the same moment. Each config records the revision it was created or last updated against, so you can tell which version a customer is running.
+
+When you deploy a new revision, every customer's config stays exactly as it is. Changes to your required fields apply to every installation on its next read, because required fields always come from the current revision.
+
+<Accordion title="If I add an object to amp.yaml and deploy, do existing customers get it?">
+  Only if you mark it `enabled: always`. Then Ampersand adds it to every existing installation as part of the deploy. Otherwise it's added for new installations, and an existing customer gets it when it's added to their config: when they reopen setup, or when you call [Update an installation](/reference/installation/update-an-installation). See [always-enabled objects](/read-actions#always-enabled-objects).
+</Accordion>
+
+<Note>
+When your customer opens setup, Ampersand fills in the revision with the fields that actually exist in their account, with their display names and types. This is called a **hydrated revision**, and it's how the setup screen can offer each customer *their* custom fields, not a generic list.
+</Note>
 
 ## Installation
 
-An **installation** is one customer's instance of an integration. `mySalesforceIntegration` might have 30 installations, one per customer who has connected their Salesforce.
+An **installation** is one customer's own copy of your integration. `salesforce-accounts` might have 30 installations, one for each customer who has connected their Salesforce.
 
-An installation is created when a customer connects through an [embeddable UI component](/embeddable-ui-components), or when you call the [Create installation](/reference/installation/create-a-new-installation) endpoint.
+An installation is created when a customer finishes setup in the [`InstallIntegration` component](/embeddable-ui-components), or when you call the [Create installation](/reference/installation/create-a-new-installation) endpoint. Deploy your `amp.yaml` first: without a deployed integration, there's nothing to install.
+
+When you add the component to your product, you tell Ampersand which integration to install and who it's for:
+
+```tsx
+<InstallIntegration
+  integration="salesforce-accounts" // the name in your amp.yaml
+  consumerRef={userId}               // the person setting it up
+  consumerName={userFullName}
+  groupRef={companyId}               // the customer company the installation belongs to
+  groupName={companyName}
+/>
+```
+
+Your "customer" is the **group**: the company, team, or workspace in your app. The **consumer** is the person in that group who clicks through setup. One installation serves the whole group.
 
 Each installation holds two things:
 
 <CardGroup cols={2}>
   <Card title="Connection" icon="key">
-    The credentials for that customer's SaaS instance. Ampersand supports OAuth, API keys, and basic auth, and handles token refresh for you.
+    The credentials for that customer's account. Ampersand supports OAuth, API keys, and basic auth, and handles token refresh for you.
   </Card>
   <Card title="Config" icon="sliders">
     That customer's choices, stored as overrides on the integration's definition: fields, mappings, schedule, and destination.
   </Card>
 </CardGroup>
 
-## Revision
+<Accordion title="What's the difference between a connection and an installation?">
+  A connection is only the customer's credentials. Connecting an account on its own, for example with the [`ConnectProvider` component](/embeddable-ui-components), creates a connection but not an installation.
 
-Every time you change `amp.yaml` and run `amp deploy`, Ampersand stores a new **revision**, a versioned snapshot of the integration's definition.
-
-Revisions matter because your customers are not all on the same version at the same moment. A config records the revision it was created or last updated against, so you can tell which definition a given customer is running.
-
-<Note>
-When Ampersand renders the field-mapping UI, it requests a **hydrated revision**: the revision enriched with live field metadata from that customer's connected instance. It carries the fields that actually exist in their account, with display names and types. That is how the UI can offer a customer *their* custom fields, not a generic list.
-</Note>
+  That's also why you can change a customer's setup without them signing in again: update their config by showing them the `InstallIntegration` component again, or call [Update an installation](/reference/installation/update-an-installation). Their connection stays as it is.
+</Accordion>
 
 ## Config
 
-The **config** records one customer's choices for an installation. It is not a complete description of what runs. It is a set of **overrides on top of the revision**.
+The **config** records one customer's choices for an installation, as **overrides on top of the revision**.
 
 <Note>
 Anything the config specifies wins for that installation. Anything it leaves unset falls back to what the integration's revision defines. A config is a diff, not a replacement.
 </Note>
 
-This is why two customers on the same integration can behave differently without you maintaining two manifests, and why a customer who has changed nothing simply follows what you declared.
+<Accordion title="Is my amp.yaml the same as a customer's config?">
+  No. Your `amp.yaml` defines what's possible for everyone. A config holds only what one customer chose or changed. What runs for that customer is your revision with their config applied on top.
+</Accordion>
 
 ### What a config can override
 
-For a read object, a config can set the fields the customer selected (`selectedFields`, or `selectedFieldsAuto: all`), the mappings they chose (`selectedFieldMappings`, `selectedValueMappings`), and operational settings: `schedule`, `destination`, `backfill`, `fieldFilters`, and `disabled` to pause an object entirely. For a write object it can set `deletionSettings`, `selectedFieldSettings`, and `selectedValueDefaults`.
+| For a | A config can set |
+|---|---|
+| **Read object** | Selected fields (`selectedFields` or `selectedFieldsAuto: all`), mappings (`selectedFieldMappings`, `selectedValueMappings`), `schedule`, `destination`, `backfill`, `fieldFilters`, and `disabled` to pause the object |
+| **Write object** | `deletionSettings`, `selectedFieldSettings`, and `selectedValueDefaults` |
+
+### What a config can't do
+
+- **Remove a required field.** Required fields always come from your revision. A config can only add fields on top.
+- **Add a write object.** To write to an object, it has to be in your `amp.yaml`.
+
+<Accordion title="What's the difference between mapToName and fieldName?">
+  `mapToName` is the name your application uses, like `renewalDate`. `fieldName` is the field's actual name in the customer's system, like `Contract_End__c`. Mixing them up is a common reason a sync quietly misses data.
+
+  The same idea works for objects. `objectName` is the object's name in the provider, like `account`. A `mapToName` on the object is what your app calls it, like `company`, and results are delivered under that name. See [Object and field mapping](/object-and-field-mapping).
+</Accordion>
 
 ### A worked example
 
-Suppose your manifest declares:
+Suppose your `amp.yaml` declares:
 
 ```yaml
-- objectName: contact
-  destination: contactsWebhook
+- objectName: account
+  destination: defaultWebhook
   schedule: "*/15 * * * *"
   requiredFields:
-    - fieldName: email
-    - mapToName: lifecycle_stage
+    - fieldName: name
+    - mapToName: renewalDate
   optionalFieldsAuto: all
 ```
 
-A customer installs it and maps `lifecycle_stage` to their `hs_lead_status` field, adds two optional fields, and leaves everything else alone. Their config carries only those choices.
+A customer installs it and maps `renewalDate` to their `Contract_End__c` field, adds two optional fields, and leaves everything else alone. Their config carries only those choices:
 
-What actually runs for them is the merge: `email` and their two optional fields are read, `hs_lead_status` is mapped to `lifecycle_stage`, and the schedule and destination come from your revision, because the config never mentioned them.
+```json
+{
+  "provider": "salesforce",
+  "read": {
+    "objects": {
+      "account": {
+        "objectName": "account",
+        "selectedFields": { "industry": true, "website": true },
+        "selectedFieldMappings": { "renewalDate": "Contract_End__c" }
+      }
+    }
+  }
+}
+```
 
-If that customer later asks for hourly syncs, you set `schedule` on their config. It now overrides yours, for them alone. Every other installation still follows the manifest.
+No schedule, no destination, no required fields: those come from your revision.
+
+So for this customer, `name` and their two optional fields are read, with `Contract_End__c` delivered as `renewalDate`.
+
+If that customer later asks for hourly syncs, you set `schedule` on their config. It now overrides yours, for them alone. Every other installation still follows your `amp.yaml`.
 
 You can read a config with [Get an installation](/reference/installation/get-an-installation), or from the SDK via `installation.config`, and change one with [Update an installation](/reference/installation/update-an-installation).
 
@@ -98,28 +157,27 @@ You can read a config with [Get an installation](/reference/installation/get-an-
 
 <Steps>
   <Step title="You deploy an integration">
-    `amp deploy` creates a revision from your `amp.yaml`. Nothing runs yet. You have only described what is possible.
+    `amp deploy` creates a revision. Nothing runs yet.
   </Step>
   <Step title="A customer connects">
-    They authenticate against their own SaaS instance through your embedded UI. Ampersand stores those credentials as a connection.
+    They sign in to their own account in your product. That creates a connection.
+
+    <img src="/images/connect-provider-v2.13.7.png" alt="The first screen of the Salesforce setup, asking the customer for their Salesforce subdomain" style={{ maxWidth: "420px", width: "100%" }} />
   </Step>
   <Step title="They choose what to share">
-    Ampersand hydrates the revision with the live schema from their instance, and the UI offers the fields your manifest allows. Their selections become the config.
+    Their selections become the config. Each part of your `amp.yaml` shows up on this screen. Required fields are listed as fields your app reads. Each `mapToName` becomes a "Map the following fields" dropdown, with your `prompt` as the tooltip. Optional fields are a list they can tick.
+
+    <img src="/images/install-integration-v2.13.7.png" alt="The Salesforce setup screen. It lists the fields the app reads (Account Name, Billing City), asks the customer to map Country to one of their fields, offers Industry as an optional mapping, and shows a searchable list of optional fields to read." style={{ maxWidth: "460px", width: "100%" }} />
   </Step>
   <Step title="Ampersand runs it">
-    Scheduled reads, writes, and subscriptions execute against that customer's instance, using your revision with their config's overrides applied, and deliver results to your destination.
+    Ampersand uses your revision with their config's overrides applied. Reads and subscriptions run on their own and deliver results to your destination. Writes, searches, and proxy calls run against their account whenever your app calls the API.
   </Step>
 </Steps>
-
-### What this means in practice
-
-- **One integration, many configs.** Two customers on the same integration can read different fields, because each customer's config decides what's included.
-- **A config only carries what the customer changed.** Everything else follows your manifest, so defaults stay in one place.
-- **To change one customer, update their config.** To change the default for everyone, change the manifest and deploy.
-- **Mapped fields need a customer decision.** A `mapToName` entry cannot resolve until someone tells Ampersand which of their fields it corresponds to.
 
 ## Related terms
 
 A **provider** is the third-party API you integrate with. A **provider app** is the OAuth app you register with that provider, stored in Ampersand so customers can authenticate against it. A **destination** is where read results are delivered: a webhook, warehouse, or queue.
+
+A **project** holds your integrations. Use one project per environment, like dev and prod, each with its own provider apps. See [Dev and prod environments](/dev-and-prod-environments). An **operation** is logged every time Ampersand makes a read, write, or proxy request to a provider, so you can trace it in the dashboard.
 
 For the full glossary, see [Terminology](/terminology).
