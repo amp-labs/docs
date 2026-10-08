@@ -1,40 +1,58 @@
 ---
 title: "Integration infrastructure for enterprise agents"
 sidebarTitle: "Overview"
-description: "Ampersand lets your enterprise agent read, write, search, and subscribe to events in customers' SaaS, with per-customer field mappings and a managed runtime."
+description: "Ampersand lets your enterprise agent read, write, search, subscribe to events in, and call the APIs of customers' SaaS, with per-customer field mappings and a managed runtime."
 ---
 
-If you are a developer building an enterprise agent, Ampersand enables your agent to reliably work across your customers’ systems of record. More specifically, you can:
+Building an enterprise agent? Ampersand lets it work reliably across your customers' systems of record, like Salesforce, HubSpot, NetSuite, and [many more](/provider-guides/overview). **You define the integration once**, and each customer can set it up within your product. Your agent can:
 
-- Read historical and current data from your customer’s system.
-- Write data to your customer’s system.
-- Search your customer’s system by filter criteria, with matching records returned immediately.
-- Subscribe to events (creates, deletes, and field changes) in your customer’s system.
+<CardGroup cols={3}>
+  <Card title="Read" icon="download" href="/read-actions">
+    Keep your customer's data current with incremental reads and optional backfills of their history.
+  </Card>
+  <Card title="Write" icon="upload" href="/write-actions">
+    Create or update records straight in your customer's system.
+  </Card>
+  <Card title="Subscribe" icon="bell" href="/subscribe-actions">
+    Get notified in near real time when a record is created, updated, or deleted, so your agent can act.
+  </Card>
+</CardGroup>
 
-Ampersand’s declarative interface and UI components let your customers configure integrations with their CRM, ERP, or other systems of record directly within your product.
-
-[Quickstart →](/starter-project) · [Explore supported systems →](/provider-guides/overview)
-
-## Built for each of your customers’ configurations
-
-**Ampersand handles multi-tenancy at scale.** Say you have 400 customers on Salesforce. Every one of them has customized it to reflect how they run their business, with different custom objects, fields, permissions, and rules for how your product interacts with their data. Two very similar companies can store the same data in completely different places.
-
-Ampersand separates the integration you build from each customer's configuration. You define the schema and actions your application needs once, and each installation keeps track of the per-customer mappings. For example, you define `renewalDate` once, and each customer uses the embeddable UI library to map it to where they're actually storing the renewal date in their Salesforce.
-
-| Customer | Where `renewalDate` lives |
-|---|---|
-| Customer A | `Account.Renewal_Date__c` |
-| Customer B | `Account.Contract_End__c` |
-| Customer C | `Subscription__c.End_Date__c` |
-| …397 more | Each set by the customer during setup |
-
-Your application reads and writes `renewalDate`. Ampersand translates it to each customer’s field.
+<div className="md:w-2/3 mx-auto">
+  <CardGroup cols={2}>
+    <Card title="Search" icon="magnifying-glass" href="/search-actions">
+      Find exactly the record you need by its field values, returned right away.
+    </Card>
+    <Card title="Proxy" icon="arrow-right-arrow-left" href="/proxy-actions">
+      Need something else? Call any endpoint directly. We handle auth and help with rate limits.
+    </Card>
+  </CardGroup>
+</div>
 
 ## How Ampersand works
 
 <Steps>
   <Step title="Define an integration">
     Use an `amp.yaml` file to declare each integration: the system to connect to, the objects and fields to read or write, and the configuration options to expose to your customers. See the [manifest reference](/manifest-reference).
+
+    ```yaml amp.yaml
+    specVersion: 1.0.0
+    integrations:
+      - name: salesforce-accounts
+        displayName: Salesforce Accounts
+        provider: salesforce
+        read:
+          objects:
+            - objectName: account
+              destination: defaultWebhook
+              schedule: "*/10 * * * *" # Every 10 minutes
+              requiredFields:
+                - fieldName: name
+                # Each customer picks which of their fields holds this
+                - mapToName: renewalDate
+                  mapToDisplayName: Renewal date
+                  prompt: Which field holds the renewal date?
+    ```
   </Step>
   <Step title="Let customers connect and configure">
     Embed authentication and configuration in your product with [prebuilt UI components](/embeddable-ui-components), [headless UI library](/headless), or [API](/api/overview). Customers connect their own instance and choose field mappings and preferences, and Ampersand saves those choices in their installation.
@@ -51,27 +69,27 @@ Your application reads and writes `renewalDate`. Ampersand translates it to each
   </Step>
 </Steps>
 
-## Actions
+## Same data, different places
 
-Actions are the verbs of every integration. You declare them in your manifest.
+**Ampersand handles multi-tenancy at scale.** Say you have 400 customers on Salesforce. Every one of them has customized it to reflect how they run their business, with different custom objects, fields, permissions, and rules for how your product interacts with their data. Two very similar companies can store the same data in completely different places.
 
-<CardGroup cols={3}>
-  <Card title="Read" icon="download" href="/read-actions">
-    Scheduled or on-demand reads with full backfills and incremental syncs.
-  </Card>
-  <Card title="Write" icon="upload" href="/write-actions">
-    Create and update records, synchronously or asynchronously.
-  </Card>
-  <Card title="Subscribe" icon="bell" href="/subscribe-actions">
-    Get notified about creates, updates, and deletes as they happen.
-  </Card>
-  <Card title="Search" icon="magnifying-glass" href="/search-actions">
-    Targeted searches based on field filters.
-  </Card>
-  <Card title="Proxy" icon="arrow-right-arrow-left" href="/proxy-actions">
-    Call any provider endpoint directly with managed auth and rate limit handling.
-  </Card>
-</CardGroup>
+Ampersand separates the integration you build from each customer's configuration. You define the schema and actions your application needs once, and each installation keeps track of the per-customer mappings. For example, you define `renewalDate` once, and each customer uses the embeddable UI library to map it to where they're actually storing the renewal date in their Salesforce.
+
+<img
+  src="/images/how-ampersand-works.png"
+  alt="Your application or agent calls Ampersand's managed integration runtime with synchronous API calls and receives async delivery to destinations. The runtime runs Read, Subscribe, Search, Write, and Proxy, and handles token refreshes, scheduling, retries, and operation logs. One shared amp.yaml defines objects, fields, available mappings, and actions. Customer A's installation maps renewalDate to Account.Renewal_Date__c and Customer B's maps it to Account.Contract_End__c in their own Salesforce."
+  className="rounded-xl"
+  style={{ maxWidth: "520px", width: "100%", margin: "0 auto", display: "block" }}
+/>
+
+| Customer | Where `renewalDate` lives |
+|---|---|
+| Customer A | `Account.Renewal_Date__c` |
+| Customer B | `Account.Contract_End__c` |
+| Customer C | `Subscription__c.End_Date__c` |
+| …397 more | Each set by the customer during setup |
+
+Your application reads and writes `renewalDate`. Ampersand translates it to each customer’s field.
 
 ## Watch demo
 
@@ -88,39 +106,43 @@ Actions are the verbs of every integration. You declare them in your manifest.
 ## Get started
 
 <CardGroup cols={2}>
-  <Card title="Clone the starter project" icon="rocket" href="/starter-project">
-    If you want to see an example.
+  <Card title="Start manually" icon="rocket" href="/starter-project">
+    Clone the starter project and run a working HubSpot, Salesforce, or GitHub integration.
   </Card>
-  <Card title="Onboard with Claude Code" icon="rocket" href="/use-with-ai-ide">
-    If you want to add integrations to an existing codebase.
+  <Card title="Start with AI" icon="wand-magic-sparkles" href="/use-with-ai-ide">
+    Let Claude Code or another coding agent add integrations to your existing codebase.
   </Card>
 </CardGroup>
 
 ## Dig deeper
 
 <CardGroup cols={2}>
-  <Card title="Browse the integration directory" icon="plug" href="/provider-guides/overview">
-    Search the supported providers.
+  <Card title="Integration directory" icon="plug" href="/provider-guides/overview">
+    Find the system you want to connect to and how to set it up.
   </Card>
-  <Card title="How Ampersand works" icon="book" href="/concepts">
-    Learn the concepts.
+  <Card title="Concepts" icon="book" href="/concepts">
+    How integrations, installations, and configs fit together.
   </Card>
-  <Card title="REST API" icon="code" href="/api/overview">
-    Platform, read, write, search, and proxy APIs.
+  <Card title="Manifest reference" icon="file-code" href="/manifest-reference">
+    Everything you can put in `amp.yaml`.
   </Card>
   <Card title="UI Library" icon="cube" href="/headless">
-    Prebuilt components and headless UI.
+    Use our prebuilt components, or go headless to build your own UI.
   </Card>
-  <Card title="Manifest schema" icon="file-code" href="/manifest-reference">
-    Learn what goes into the `amp.yaml` file.
+  <Card title="REST API" icon="code" href="/api/overview">
+    Read, write, search, proxy, and manage installations from your backend.
   </Card>
   <Card title="CLI" icon="terminal" href="/cli/reference">
-    Install the Ampersand CLI for deploying and managing integrations.
+    Deploy and manage your integrations from the terminal.
   </Card>
 </CardGroup>
 
+## Security
+
+Your customers trust you with their data. Our [Trust Center](https://trust.withampersand.com) shows how we keep their credentials and records safe.
+
 ## Contact us
 
-Need help? Join our [Discord channel](https://discord.gg/7XTz4HRR47) or email [support@withampersand.com](mailto:support@withampersand.com).
+We're here to help. Ask us anything in our [Discord channel](https://discord.gg/7XTz4HRR47) or email [support@withampersand.com](mailto:support@withampersand.com).
 
-If you want to chat through your use case with our team, <a href="https://www.ampersand.ai/demo?cta=docs_home" target="_blank" rel="noopener noreferrer">book a call</a>.
+Want to talk through your use case? <a href="https://www.ampersand.ai/demo?cta=docs_home" target="_blank" rel="noopener noreferrer">Book a call</a> with our team.
