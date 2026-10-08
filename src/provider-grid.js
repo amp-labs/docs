@@ -3,19 +3,11 @@
 //  1. Category rows on the directory (provider-guides/overview.mdx). Mintlify
 //     strips <details>, so the rows are divs and the open state lives in
 //     data-open.
-//  2. A "back to the directory" link above the title on every provider guide.
-//     The guides are hidden: true, so the sidebar cannot list them and gives
-//     no way back; this is that way back.
+//  2. Filtering the categories from the search box on the same page.
 //
 // Mintlify auto-includes every .js file in the content directory, so both parts
-// are guarded: they do nothing unless the page in question is on screen.
+// are guarded: they do nothing unless the directory is on screen.
 (function () {
-  var DIRECTORY = "/provider-guides/overview";
-
-  function currentPath() {
-    return document.documentElement.getAttribute("data-current-path") || window.location.pathname;
-  }
-
   /* ---------- 1. Category rows ---------- */
 
   function toggle(head) {
@@ -49,31 +41,7 @@
     }
   });
 
-  /* ---------- 2. Back link on provider guides ---------- */
-
-  function syncBackLink() {
-    var path = currentPath();
-    var wanted = path.indexOf("/provider-guides/") === 0 && path !== DIRECTORY;
-    var existing = document.querySelector(".amp-back");
-
-    // Mintlify navigates client-side, so drop the link when we leave a guide.
-    if (!wanted) {
-      if (existing) existing.remove();
-      return;
-    }
-    if (existing) return;
-
-    var header = document.getElementById("header");
-    if (!header || !header.parentNode) return;
-
-    var link = document.createElement("a");
-    link.className = "amp-back";
-    link.href = DIRECTORY;
-    link.textContent = "← All providers";
-    header.parentNode.insertBefore(link, header);
-  }
-
-  /* ---------- 3. Filtering the categories ---------- */
+  /* ---------- 2. Filtering the categories ---------- */
 
   // Typing narrows the categories in place: matching chips stay, categories
   // with no match drop out, and every surviving one opens so results are
@@ -116,7 +84,6 @@
 
   function init() {
     syncRows();
-    syncBackLink();
   }
 
   if (document.readyState === "loading") {
