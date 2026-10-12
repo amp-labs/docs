@@ -93,6 +93,46 @@ subscribe:
 }
 ```
 
+### 4. Write with your unified schema
+
+Ampersand doesn't impose a fixed common model. You define one integration per provider in `amp.yaml`, and each integration maps that provider's object and fields to your shared names. To write using those shared names, add a write action with `inheritMapping: true` to each integration. `inheritMapping` reuses the mappings from the read action for the same object, so each object you write must also be defined in the integration's `read` block.
+
+For example, to create invoices in both QuickBooks and Xero:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: quickbooks-invoices
+    provider: quickbooks
+    read:
+      objects:
+        - objectName: invoice        # QuickBooks
+          mapToName: invoice
+          requiredFields:
+            - fieldName: DueDate
+              mapToName: due_date
+    write:
+      objects:
+        - objectName: invoice
+          inheritMapping: true
+
+  - name: xero-invoices
+    provider: xero
+    read:
+      objects:
+        - objectName: invoices       # Xero
+          mapToName: invoice
+          requiredFields:
+            - fieldName: DueDate
+              mapToName: due_date
+    write:
+      objects:
+        - objectName: invoices
+          inheritMapping: true
+```
+
+Your app then calls the same [Write API](/write-actions#writing-records) for each integration. The request shape is identical across providers. The `integrationId` and `objectName` in the URL identify the provider integration and its object, and the `record` body uses your mapped field names, such as `due_date`. Ampersand translates mapped fields back to each provider's field names before writing. See [Object and field mapping](/object-and-field-mapping) for details.
+
 ## Key architectural differences from Merge
 
 ### Data persistence
