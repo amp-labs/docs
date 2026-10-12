@@ -2,7 +2,11 @@
 title: "Read actions"
 ---
 
-A read action reads data from your customer's SaaS and sends them to Destinations that you define.
+**Use a read action to bring your customers' data into your product.** Ampersand reads the objects you choose, like contacts from their CRM, and delivers the records to your destination. Scheduled incremental reads keep the data current, an optional backfill brings in their history, and you can trigger a read anytime.
+
+<Note>
+Each [provider guide](/provider-guides/overview) lists the objects you can read and which of them support incremental reads.
+</Note>
 
 ## Define reads
 
@@ -12,6 +16,25 @@ To read an object, you need to specify:
 * **destination:** the name of the [destination](/destinations) that you've defined
 * **schedule** (optional): how frequently the read should happen. This value must be a schedule in [cron syntax](https://docs.gitlab.com/ee/topics/cron/), and can be as frequent as every 10 minutes. If you do not define a schedule, you can explicitly [trigger reads via API](#trigger-a-read).
 * **backfill** (optional): whether Ampersand should read historical data when a customer installs an integration. See [Backfill behavior](#backfill-behavior) for details. If you omit this, it means that a backfill won't happen at the time of installation, but you can still [trigger a backfill later via API](#trigger-a-read).
+
+<Warning>
+Use the provider's API name for `objectName`, not the name shown in their app. For example, Salesforce shows "Product", but its API name is `Product2`.
+</Warning>
+
+If an installation's [config](/concepts#config) sets its own `schedule`, it takes priority over the one in `amp.yaml`, so changing `schedule` here won't affect that installation. Setting `schedule: ""` is the same as leaving it out: no scheduled reads run for that object, and if there's no `backfill` either, nothing is read until you [trigger a read](#trigger-a-read).
+
+<Accordion title="Cron schedule examples">
+
+A cron schedule has five parts: minute, hour, day of month, month, and day of week. `*` means "every", and `*/N` means "every N".
+
+| Schedule | Runs |
+| --- | --- |
+| `*/10 * * * *` | Every 10 minutes |
+| `*/30 * * * *` | Every 30 minutes |
+| `0 * * * *` | Every hour, on the hour |
+| `0 */6 * * *` | Every 6 hours |
+
+</Accordion>
 
 ```YAML YAML
 ...
@@ -25,12 +48,13 @@ To read an object, you need to specify:
           ...
 ```
 
+Each read sends the records it finds to your destination. To see what a message looks like, see [Read action webhooks](/destinations/webhooks#read-action-webhooks).
+
 ### Required fields and optional fields
 
 Fields can either be required or optional. If a field is required, then all users who install this integration will need to give your app read access to that field. If a field is optional, then users can choose whether they'd like your app to read that field. For these fields, you will specify:
 
 * **fieldName:** the name of the field from the official SaaS API documentation.
-
 
 ```YAML YAML
    objects:
@@ -67,6 +91,12 @@ This works in both `requiredFields` and `optionalFields`, with or without [field
 
 If you want to give your user the option to pick from any of the fields in their object, use `optionalFieldsAuto: all`. The UI component will populate a list of all the fields pulled from that object (including custom fields) and allow them to pick which ones your app will be able to read.
 
+<Warning>
+**Objects with many custom fields: list fields instead of using `optionalFieldsAuto: all`.** On objects like HubSpot contacts and deals or Salesforce accounts, letting customers select every field can make the read request too long. The read then fails with a `414 URI Too Long` (or `431`) error and is paused. This affects [subscribe actions](/subscribe-actions) too.
+
+- **To prevent it:** list the fields you need in `requiredFields` and `optionalFields`.
+- **If it happens:** [update the installation's config](/reference/installation/update-an-installation) to select fewer fields, then [unpause reads](/reference/read/unpause-reads-for-an-installation).
+</Warning>
 
 ```YAML YAML
       objects:
@@ -77,7 +107,8 @@ If you want to give your user the option to pick from any of the fields in their
           - fieldName: firstname
           - fieldName: lastname
           - fieldName: email
-          # All other fields are optional
+          # All other fields are optional. Best for objects with fewer
+          # custom fields; see the warning above.
           optionalFieldsAuto: all
 ```
 
@@ -89,7 +120,11 @@ You might want to ask your users during the set up of the integration to map a f
 
 By default, each customer chooses which objects to read when they install your integration. Set `enabled: always` on an object to read it for **every** installation instead. Customers can't turn it off, but they can still pick its optional fields and mappings.
 
-Because the object is read without asking the customer, it can't have required field mappings: every required field needs a `fieldName`, so there's nothing the customer must choose. Optional field mappings are fine.
+Because the object is read without asking the customer, there can't be anything the customer must choose.
+
+**Rules:**
+- The object needs at least one field in `requiredFields`, and every required field needs a `fieldName` (no customer-filled mappings). Optional field mappings are fine. Otherwise the deploy is rejected.
+- A config that sets `disabled: true` on it is rejected with a `400`.
 
 ```YAML YAML
 ...
@@ -105,7 +140,10 @@ Because the object is read without asking the customer, it can't have required f
           ...
 ```
 
-**When the object is added to an installation**
+- **Every installation gets it.** New installations get the object when they're created, and existing ones get it when you deploy. An installation's own field choices are never overwritten.
+- **Removing `enabled: always` later** doesn't remove the object from installations that already have it. Only new installations stop getting it.
+
+<Accordion title="When each installation gets the object">
 
 - **New installations:** Ampersand adds the object to the installation's config when the installation is created or imported, even if the config doesn't include it. It's then validated, scheduled and backfilled like any other object.
 - **Existing installations:** when you deploy an `amp.yaml` that adds a new object with `enabled: always`, or adds the flag to an existing object, Ampersand updates the config of every existing installation that doesn't have the object, as part of the deploy. An installation's own entry for the object, with its selected fields and mappings, is never overwritten. If the [sample read](#install-time-validation) fails for an installation, that installation isn't updated. Updating an installation through the API doesn't add missing always-enabled objects; only creating one does.
@@ -113,22 +151,26 @@ Because the object is read without asking the customer, it can't have required f
 
 Reads, including any [backfill](#backfill-behavior), start as soon as the object is installed.
 
-**Rules**
+</Accordion>
 
-- A config that sets `disabled: true` on an always-enabled object is rejected with an HTTP `400` response.
-- The object needs at least one entry in `requiredFields`, and none of them can be a mapping the customer fills in (a `mapToName` without a `fieldName`). A deploy that breaks either rule is rejected.
+## How scheduled reads work
 
-**Removing the flag**
+When a customer installs your integration, Ampersand first runs the [backfill](#backfill-behavior), if you defined one. After that, each scheduled read is an **incremental read**: it returns only the records that were created or updated since the last successful read, based on when each record was last modified in the provider. You don't receive unchanged records again, and if a scheduled read doesn't run, the next one picks up from where the last successful read left off.
 
-If a later deploy removes `enabled: always`, installations that already have the object keep reading it. New installations stop getting it automatically.
+- **Some objects don't support incremental reads.** For those, every scheduled read is a full read that returns all records. [Provider guides](/provider-guides/overview) note the objects that only support full reads.
+- **Deleted records aren't included.** See [Deleted records](#deleted-records).
+- **Need data outside the schedule?** [Trigger a read](#trigger-a-read), for example to re-read everything since a given time.
 
 ## Backfill behavior
 
 Backfill behavior describes whether Ampersand will do an initial read of your customer's historic data when they connect their SaaS instance, and how far back data will be read. For example, if your integration reads a customer's contacts stored in their CRM, you can configure whether you want to only read new and updated contacts going forward, or if you also want to do an initial backfill of the pre-existing contacts in their CRM.
 
-### No backfill
+Choose one of three options:
 
-If you only want to read new and updated records moving forward and do not wish to read any pre-existing records, then you can simply omit the `backfill` key in the integration definition, or you can write 0 days as the default period.
+<Tabs>
+<Tab title="No backfill">
+
+Read only new and updated records from the time the customer installs. Omit the `backfill` key, or set the default period to 0 days.
 
 ```YAML YAML
       objects:
@@ -139,9 +181,10 @@ If you only want to read new and updated records moving forward and do not wish 
           ...
 ```
 
-### Full historical backfill
+</Tab>
+<Tab title="Full history">
 
-If you want to do a full backfill of all the existing records when a customer connects their SaaS instance, set `fullHistory` to true. If you have customers that have large SaaS instances, please ensure that your webhook endpoint can handle a high number of messages in quick succession. You may find it helpful to use a webhook gateway solution like [Hookdeck](https://hookdeck.com/docs/receive-webhooks).
+Read all existing records when the customer installs. If your customers have large SaaS instances, make sure your webhook endpoint can handle many messages in quick succession. A webhook gateway like [Hookdeck](https://hookdeck.com/docs/receive-webhooks) can help.
 
 ```yaml yaml
       objects:
@@ -152,9 +195,10 @@ If you want to do a full backfill of all the existing records when a customer co
           ...
 ```
 
-### Limited time backfill
+</Tab>
+<Tab title="Last N days">
 
-You can select a specific time frame for backfill, such as "the last 30 days" or "the last 90 days". Here's an example of how to do so:
+Read records from a recent time window, such as the last 30 or 90 days.
 
 ```yaml yaml
       objects:
@@ -164,6 +208,9 @@ You can select a specific time frame for backfill, such as "the last 30 days" or
               days: 30 # Backfill the last 30 days of data
           ...
 ```
+
+</Tab>
+</Tabs>
 
 ### Monitor backfill progress
 
@@ -176,9 +223,18 @@ The API returns:
 - **createTime** — When the backfill started
 - **updateTime** — When progress was last updated
 
+## Deleted records
+
+Scheduled reads and backfills return the records that exist in your customer's SaaS, so a deleted record just stops appearing. To find out when records are deleted:
+
+- Use a [subscribe action](/subscribe-actions) with `deleteEvent`, if the provider supports it.
+- For Salesforce, read deleted records with a [raw filter](#filter-with-a-raw-filter) on `IsDeleted`. See [Deleted and archived records](/provider-guides/salesforce#deleted-and-archived-records).
+
 ## Filter by field values
 
-You can filter which records are returned by a read action by setting `fieldFilters` in the installation config when you are creating the installation using the [REST API](/reference/installation/create-a-new-installation) or Headless UI's [createInstallation method](/headless#create-update-and-delete-installations). Then only matching records are read and delivered to your destination.
+You can filter which records are returned by a read action by setting `fieldFilters` in an installation's config. Then only matching records are read and delivered to your destination.
+
+Filters are set **per installation, not in `amp.yaml`**, so each customer can have different filters. Set them in the installation config, for example when you create an installation with the [REST API](/reference/installation/create-a-new-installation) or Headless UI's [createInstallation method](/headless#create-update-and-delete-installations). That's why the examples below are installation config JSON instead of YAML.
 
 Each filter specifies a field name, an operator, and a value. Currently, only the `eq` (equals) operator is supported. Multiple filters are joined with AND logic, and each field can only have one condition.
 
@@ -211,7 +267,7 @@ To filter both incremental reads and backfill, set `fieldFilters` on the object 
 
 In this example, only contacts whose `firstname` equals "Brian" will be returned during both scheduled reads and backfill.
 
-### Backfill-specific filters
+<Accordion title="Use different filters for backfill and incremental reads">
 
 If you want different filter behavior for backfill vs. incremental reads, you can set `fieldFilters` inside the `backfill` object. When set, this overrides the object-level `fieldFilters` during backfill. Please note that [triggered reads](#trigger-a-read) will still use the object-level `fieldFilters`, if it is defined.
 
@@ -238,6 +294,8 @@ If you want different filter behavior for backfill vs. incremental reads, you ca
 ```
 
 In this example, the backfill will only return contacts whose `firstname` equals "Brian", while subsequent incremental reads will only return contacts whose `status` equals "active".
+
+</Accordion>
 
 ### Filter field names
 
@@ -316,58 +374,54 @@ An installation is rejected if the provider doesn't support the filter's `type`,
 
 ## Trigger a read
 
-You can call the [trigger read API](/reference/read/trigger-a-read) when you want Ampersand to read data for a particular customer. The data will be sent asynchronously to your destination. You can either use this API alongside a scheduled read (defined by the `schedule` field in the `amp.yaml`), or you can exclusively use the trigger read API without defining a schedule.
+Call the [trigger read API](/reference/read/trigger-a-read) when you want Ampersand to read data for a particular customer right away. The results are sent asynchronously to your destination. You can use it alongside a scheduled read (defined by the `schedule` field in `amp.yaml`), or on its own without a schedule.
 
-There are 2 types of reads that can be triggered:
+Put the object you want to read in the URL. The request body takes:
 
-- Full historic read
+- **`groupRef`** (required): the customer whose data to read, the same ID you used when they installed.
+- **`mode`** (required): always `async`.
+- **`sinceTimestamp`** (optional): read records from this UTC time. If you leave it out, Ampersand reads all records, which is a full historic read.
+- **`untilTimestamp`** (optional): read records up to this UTC time.
 
-```json
-
-  {
-    groupRef: "xye23r3df",
-    mode: "async"
-  }
-
+```bash
+curl --location 'https://read.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+--header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
+--header 'Content-Type: application/json' \
+--data '{
+    "groupRef": "customer-123",
+    "mode": "async",
+    "sinceTimestamp": "2026-01-01T00:00:00Z"
+}'
 ```
 
-- Read all records from a specific timestamp to now
+This reads every contact created or updated since January 1, 2026 for `customer-123`. Leave out `sinceTimestamp` to read all of their contacts.
 
-```json
+## Stop reading an object
 
-  {
-    groupRef: "xye23r3df",
-    mode: "async",
-    sinceTimestamp: "2012-04-23T18:25:43.511Z"
-  }
+To stop reading an object for one customer, set `disabled: true` on the object in that installation's config, for example with the [Update an installation object endpoint](/reference/installation/update-an-installation-object). This stops its scheduled reads and blocks triggered reads for it. Other installations aren't affected.
 
-```
-
+Removing the object from the installation's config doesn't stop it, so keep it in the config with `disabled: true`.
 ## Install-time validation
 
 When a customer creates or updates an installation, Ampersand runs a **sample read** before saving the configuration: a one-record read against the provider for each scheduled read object. This surfaces configuration errors — such as [field-level visibility](/troubleshooting-guides/salesforce#resolve-a-field-level-visibility-issue) restrictions or misconfigured field names — up front, so your customer sees the problem while they're still in the install flow instead of discovering it later through a broken sync.
 
 Sampling is on by default. No configuration is required.
 
-**What gets sampled**
-
-- Only read objects that will run **on a schedule** (enabled, with a `schedule` defined). Write and subscribe objects are not sampled.
-- The sample reads the object's selected fields plus the source fields of any [field mappings](/object-and-field-mapping).
-- On **create**, every scheduled read object is sampled. On **update**, Ampersand re-samples only what could have changed: newly added objects, objects newly put on a schedule, objects whose field selection changed, or — when the connection is swapped — every scheduled read object.
-
-**What happens on failure**
-
-If a sample read fails with a bad-request error (for example, a field the connected user can't see, or a field name that doesn't exist), the create/update request is rejected with an HTTP `422` response containing the provider's error message, and the installation is **not saved**. 
-
-Only bad-request errors block the save. Transient problems — authentication, rate limiting, or provider `5xx` errors — are ignored so they don't stop a legitimate installation on a best-effort probe.
+If the sample read fails with a bad-request error, such as a field the connected user can't see or a field name that doesn't exist, the installation isn't saved. The create or update request returns an HTTP `422` with the provider's error message. Other problems, like expired credentials, rate limits, or provider `5xx` errors, don't block the save.
 
 <Note>
 When using the [`InstallIntegration` component](/embeddable-ui-components#install-integration), sampling runs automatically on `@amp-labs/react` **2.13.5 and later**. 
 </Note>
 
-**Disabling sampling**
+To skip the check, pass `?skipSampling=true` to the [create](/reference/installation/create-a-new-installation) or [update](/reference/installation/update-an-installation) installation endpoint. This is useful if you save a configuration before the connected user has access to all its fields, but misconfigurations then won't surface until reads run.
 
-Sampling can be turned off per request by passing `?skipSampling=true` to the [create](/reference/installation/create-a-new-installation) or [update](/reference/installation/update-an-installation) installation endpoints. This is useful if you intentionally save configurations before the connected user has been granted the necessary field access. Note that skipping validation means misconfigurations won't surface until reads actually run.
+<Accordion title="Which objects and fields are sampled">
+
+- Only read objects that will run **on a schedule** (enabled, with a `schedule` defined). Write and subscribe objects are not sampled.
+- The sample reads the object's selected fields plus the source fields of any [field mappings](/object-and-field-mapping).
+- On **create**, every scheduled read object is sampled. On **update**, Ampersand re-samples only what could have changed: newly added objects, objects newly put on a schedule, objects whose field selection changed, or — when the connection is swapped — every scheduled read object.
+
+</Accordion>
 
 ## Full example
 
@@ -408,7 +462,8 @@ integrations:
             - mapToName: pronoun
               mapToDisplayName: Pronoun
               prompt: We will use this word in emails we send out.
-          # All other field are optional
+          # All other fields are optional. Best for objects with fewer custom
+          # fields; see "Allow users to pick from all fields" above.
           optionalFieldsAuto: all
 ```
 
@@ -418,11 +473,13 @@ integrations:
 Delivery modes are deprecated. If you don't want read results to be automatically delivered to you, you should omit `schedule` and `backfill` when defining a read action in `amp.yaml`, and [trigger a read](#trigger-a-read) when you want to receive data from your customer's SaaS.
 </Warning>
 
+<Accordion title="Deprecated delivery modes (auto and onRequest)">
+
 Ampersand sends data to [destinations](/destinations/overview) that you specify in your manifest file. Please refer to [webhook destinations](/destinations/webhooks) for more information on the data schema of the webhooks.
 
 You can define the delivery mode within the manifest file.
 
-### Auto
+**Auto**
 
 This is the default delivery mode if you do not specify one. When you set the delivery mode to `auto`, Ampersand will automatically send results to your destination as it reads new data from the SaaS instance.
 
@@ -440,7 +497,7 @@ integrations:
             mode: auto # Data is delivered as soon as it is available
 ```
 
-### On request (deprecated)
+**On request**
 
 When you set the delivery mode to `onRequest`, Ampersand will not send webhooks as it reads new data, but only when you request for more results. This is useful when you want to control the rate at which you receive data. For precise control over how much data you receive each time, you can configure the page size, which specifies the number of records to send in each webhook payload.
 
@@ -463,14 +520,16 @@ integrations:
             pageSize: 50
 ```
 
-#### Requesting results
+**Requesting results**
 
 When you are ready to receive & process webhook messages, you can call the [deliver results endpoint](/reference/read/deliver-results), which will asynchronously send the stored results to the configured destination.
 
 For example, if you are ready to receive and process a maximum of 300 records, and you have a `pageSize` of 50 in your `amp.yaml`, you should request 6 pages (300 divided by 50).
 
-#### What happens if you request for more pages than are available?
+**What happens if you request more pages than are available?**
 
 If you request for more pages than are available, Ampersand will first send you all the available records at the time of your request. Then, as it reads new data, it will send you the new records as they become available until you have received your requested number of pages.
 
 For example, if you request for 10 pages of results, but there are only 4 pages available at the time of your request, Ampersand will send you the 4 pages immediately. If Ampersand reads 20 pages of results in the next scheduled read, Ampersand will send you 6 pages more, resulting in a total of 10 pages of results being delivered. Ampersand will then hold the next 14 pages until you request for more results.
+
+</Accordion>

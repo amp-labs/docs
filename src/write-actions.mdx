@@ -2,7 +2,7 @@
 title: "Write actions"
 ---
 
-A write action writes data to your customer's SaaS whenever you make an API request to us. This page focuses on writing data to existing fields. If you are looking to create new custom fields prior to writing data, please see [Create or update custom fields](/manage-customer-schemas#create-or-update-custom-fields).
+**Use a write action to create, update, or delete records straight in your customer's system** whenever your app calls Ampersand's Write API. Writes run against your customer's own account, so they use your customer's API quota with that provider. This page focuses on writing data to existing fields. If you are looking to create new custom fields prior to writing data, please see [Create or update custom fields](/manage-customer-schemas#create-or-update-custom-fields).
 
 ## Defining writes
 
@@ -21,9 +21,11 @@ integrations:
         - objectName: touchpoints__c # You can include custom objects
 ```
 
+You can only write to objects listed here. An installation's [config](/concepts#config) can change settings for these objects, but it can't add new ones, so to write to another object, add it to `amp.yaml` and deploy again.
+
 ### Share mappings with read actions
 
-If you are using Read Actions and have already defined [field mappings](/read-actions#object-and-field-mappings), your Write Actions can automatically use the same mappings if you add `inheritMapping` to your manifest file. When you call our Write API, we will ensure that we are writing back to the appropriate field that the customer has mapped.
+If your read actions use [field mappings](/read-actions#object-and-field-mappings), add `inheritMapping: true` to a write object to use the same mappings when writing. You then send the mapped field names in the write request, and Ampersand writes each one to the field that customer mapped it to.
 
 ```YAML
 specVersion: 1.0.0
@@ -37,9 +39,15 @@ integrations:
           inheritMapping: true
 ```
 
+- **The object needs a matching read object.** Mappings are defined on read objects, so `inheritMapping` uses the read object with the same `objectName`.
+
+<Warning>
+Without `inheritMapping: true`, mapped field names aren't translated, so a mapped field like `campaignName` won't be written to the customer's field.
+</Warning>
+
 ## Writing records
 
-Once your users install an integration with a write action, your app can write data to their SaaS by making a POST call to Ampersand, the URL is in the format of:
+Once your users install an integration with a write action, your app can write data to their SaaS by making a POST call to Ampersand. The URL is in the format of:
 
 `https://write.withampersand.com/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
 
@@ -55,7 +63,16 @@ amp list:integrations --project <PROJECT_ID>
 
 `objectName` refers to the `objectName` key within the `amp.yaml` file that defines your integration. This must match the name of an object that exists within the SaaS instance.
 
-### Create a new record
+<Note>
+Call the Write API from your backend with a server API key. API keys created for the **UI Library** can't make write calls.
+</Note>
+
+The `record` you send is passed to the provider in the provider's own format, so use the provider's field names and structure. The exception is mapped fields when you use [`inheritMapping`](#share-mappings-with-read-actions).
+
+### Create, update, or delete a record
+
+<Tabs>
+<Tab title="Create">
 
 To create a new record, make a request to the [Write endpoint](/reference/write/write-records) with `type` being `create`. For example:
 
@@ -73,11 +90,9 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 }'
 ```
 
-#### Create associations when creating a record
+<Accordion title="Create associations with the record (HubSpot only)">
 
 If you'd like to create records that are associated with other records, you can make a similar request with the `associations` parameter.
-
-<Info> This is currently only supported for HubSpot. </Info>
 
 ```bash
 curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_ID_OR_NAME>/integrations/<INTEGRATION_ID>/objects/contact' \
@@ -102,7 +117,10 @@ curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_ID_OR
 }'
 ```
 
-### Update an existing record
+</Accordion>
+
+</Tab>
+<Tab title="Update">
 
 To update an existing record, you need to know the ID of the record, which is the ID that the SaaS provider uses to uniquely identify this record. If you created the record using Ampersand, this ID is available in the API response. If you are reading the record first using Ampersand's Read Actions, make sure you add the ID as a required field in the read action. Here is an example request:
 
@@ -121,7 +139,8 @@ curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-
 }'
 ```
 
-### Delete a record
+</Tab>
+<Tab title="Delete">
 
 <Info>
 Deletion must be enabled for the object in the installation config. See [Enabling deletion for an object](#enabling-deletion-for-an-object) to enable deletion when creating or updating an installation.
@@ -144,11 +163,30 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 }'
 ```
 
-### Pass additional headers
+</Tab>
+</Tabs>
+
+A synchronous write returns the result, including the provider's `recordId` for the record:
+
+```json
+{
+  "operationId": "acb0d75a-1b59-4aad-a191-48c5b75ea9e4",
+  "result": {
+    "success": true,
+    "recordId": "003xx000001",
+    "data": {
+      "email": "david@withampersand.com",
+      "warmthScore": "ready-for-close"
+    }
+  }
+}
+```
+
+An [asynchronous](#write-modes) write returns only an `operationId`.
+
+<Accordion title="Pass additional headers to the provider (Salesforce only)">
 
 If you need to pass additional headers when creating, updating, or deleting records for a provider, you can include those headers directly in the request body when calling the write endpoint. Ampersand will forward those headers as part of the outbound request to the provider.
-
-<Info>This is currently only supported for Salesforce. </Info>
 
 ```bash
 curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_ID_OR_NAME>/integrations/<INTEGRATION_ID>/objects/contact' \
@@ -176,6 +214,8 @@ curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_ID_OR
 }'
 ```
 
+</Accordion>
+
 ### Batch write
 
 Batch write allows you to create or update multiple records in a single API call. This is useful when you need to write large amounts of data efficiently. You can include 1-100 records per batch.
@@ -190,7 +230,8 @@ Batch writes support both [synchronous and asynchronous modes](#write-modes). By
 
 <Info>HubSpot batch updates always result in partial success due to a provider limitation, regardless of the `allOrNone` setting.</Info>
 
-#### Batch create
+<Tabs>
+<Tab title="Batch create">
 
 To create multiple records in a batch, set `type` to `create`:
 
@@ -221,7 +262,8 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 }'
 ```
 
-#### Batch update
+</Tab>
+<Tab title="Batch update">
 
 To update multiple records in a batch, set `type` to `update` and include the record IDs:
 
@@ -252,11 +294,10 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 }'
 ```
 
-#### Batch write with associations
+</Tab>
+<Tab title="With associations (HubSpot only)">
 
 You can create records with associations in batch mode. Each record in the batch can have its own associations.
-
-<Info>Associations in batch write are currently only supported for HubSpot.</Info>
 
 ```bash
 curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
@@ -298,6 +339,11 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
     ]
 }'
 ```
+
+</Tab>
+</Tabs>
+
+A batch write returns a result for each record, plus `successCount` and `failureCount`.
 
 ### Auto batching
 
@@ -366,7 +412,8 @@ The operation status will show:
 
 Write actions support two modes: `synchronous` and `asynchronous`. The mode determines how the API handles your write request and when you receive a response. These modes apply to both single record writes and batch writes. **Delete operations are always synchronous** and do not use the `mode` field.
 
-### Synchronous mode
+<Tabs>
+<Tab title="Synchronous">
 
 In synchronous mode, the write operation is processed immediately and the API waits for the operation to complete before returning a response.
 
@@ -388,7 +435,8 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 }'
 ```
 
-### Asynchronous mode
+</Tab>
+<Tab title="Asynchronous">
 
 In asynchronous mode, Ampersand validates the request and immediately returns an operation ID. The write is then processed in the background. This is recommended for large batch writes or when you don't need to wait for the result.
 
@@ -421,7 +469,7 @@ The response returns an operation ID immediately:
 }
 ```
 
-### Checking status of an async write operation
+**Check the status of an async write**
 
 To check the status of an async write operation, use the [Get Operation endpoint](/reference/operation/get-an-operation) with the operation ID in the response body of the write API endpoint.
 
@@ -449,6 +497,11 @@ The response includes the operation status and result:
 ```
 
 An operation can be in a `success`, `failure` or `in_progress` state.
+
+Instead of polling, you can get a [`write.async.done` notification](/notifications/overview) when an async write finishes. It says whether the write succeeded and which records were written or had errors.
+
+</Tab>
+</Tabs>
 
 ### Retry policy for async writes
 
@@ -482,7 +535,8 @@ Retry policies only apply to asynchronous mode.
 
 By default, delete operations are disabled. To enable deletion, set `deletionSettings.enabled` to `true` for the object when creating or updating an installation.
 
-#### Using headless UI
+<Tabs>
+<Tab title="Headless UI">
 
 You can enable or disable deletion on a customer-by-customer basis using `setEnableDeletion` and `setDisableDeletion` from `config.writeObject()`. Learn more about [pre-requisites for headless UI here](/headless#prerequisites).
 
@@ -499,7 +553,8 @@ function WriteObjectConfig() {
 }
 ```
 
-#### Using API
+</Tab>
+<Tab title="API">
 
 You can use these APIs to set `deletionSettings.enabled`:
 
@@ -577,6 +632,9 @@ Use `"op": "replace"` if the object already has `deletionSettings` and you are c
   </Accordion>
 </AccordionGroup>
 
+</Tab>
+</Tabs>
+
 ### Prevent overwriting of customer data
 
 You can control whether a field is included in write requests. For example, you can avoid overwriting data the customer has changed, or leave a field blank on create and write to it only on update.
@@ -596,7 +654,8 @@ You can control whether a field is included in write requests. For example, you 
 - Fill on update only when the field is empty → `writeOnUpdate: "ifEmpty"`
 - Never write to the field for this customer → `writeOnCreate: "never"`, `writeOnUpdate: "never"`
 
-#### Using headless UI
+<Tabs>
+<Tab title="Headless UI">
 
 You can set overwrite behavior on a customer-by-customer basis using the function `setFieldSettings`. Learn more about [pre-requisites for headless UI here](/headless#prerequisites).
 
@@ -616,7 +675,8 @@ function WriteObjectConfig() {
 }
 ```
 
-#### Using API
+</Tab>
+<Tab title="API">
 
 As an alternative to headless UI, you can set overwrite behavior on a customer-by-customer basis when you make a call to the [Create Installation API](/reference/installation/create-a-new-installation). Here is a sample request body:
 
@@ -649,11 +709,15 @@ As an alternative to headless UI, you can set overwrite behavior on a customer-b
 }
 ```
 
+</Tab>
+</Tabs>
+
 ### Default values
 
 Default values are applied to a field whenever that value is missing from the write request. We currently support string, boolean and number values.
 
-#### Using headless UI
+<Tabs>
+<Tab title="Headless UI">
 
 You can set default values on a customer-by-customer basis using the `setFieldSettings` function. Learn more about [pre-requisites for headless UI here](/headless#prerequisites).
 
@@ -692,7 +756,8 @@ function WriteObjectConfig() {
 }
 ```
 
-#### Using API
+</Tab>
+<Tab title="API">
 
 As an alternative to headless UI, you can set this behavior on a customer-by-customer basis when you make a call to the [Create Installation API](/reference/installation/create-a-new-installation). Here is a sample request body:
 
@@ -733,6 +798,9 @@ As an alternative to headless UI, you can set this behavior on a customer-by-cus
 }
 ```
 
+</Tab>
+</Tabs>
+
 ### Remove unmapped fields
 
 If your write action is [sharing mapping with read actions](#share-mappings-with-read-actions), we can drop unmapped fields from the write request before sending the request to the provider API. Please contact support@withampersand.com if you want to use this preview feature.
@@ -744,11 +812,7 @@ Here is a full example for a request body to the [Create Installation API](/refe
 - applying default values
 - configuring when the field should be written to
 
-#### Using headless UI
-
-You can see an [example here of combining multiple use cases](/headless#configure-features-together).
-
-#### Using API
+For the headless UI version, see [Configure features together](/headless#configure-features-together).
 
 ```Javascript
 {
@@ -766,7 +830,7 @@ You can see an [example here of combining multiple use cases](/headless#configur
             "selectedFieldSettings": {
               "customSource": { // customSource is a mapped field
                   "default": {
-                    "stringValue": "myApp" // Use "mapApp" as default value
+                    "stringValue": "myApp" // Use "myApp" as the default value
                   },
                   // Do not write to the field when updating a record.
                   "writeOnUpdate": "never",
@@ -793,4 +857,4 @@ You can see an [example here of combining multiple use cases](/headless#configur
 }
 ```
 
-For this installation, `customSource` has been mapped to the `myCustomSource` field in this customer's Hubspot instance, the default value for this field is "myApp" and the field will only be written to when it is a create record request, and not an update request.
+For this installation, `customSource` has been mapped to the `myCustomSource` field in this customer's HubSpot instance, the default value for this field is "myApp" and the field will only be written to when it is a create record request, and not an update request.
