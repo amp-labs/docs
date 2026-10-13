@@ -283,6 +283,30 @@ const baseConfig = {
   ],
   redirects: [
     {
+      source: "/docs/box",
+      destination: "/provider-guides/box"
+    },
+    {
+      source: "/box",
+      destination: "/provider-guides/box"
+    },
+    {
+      source: "/docs/asana",
+      destination: "/provider-guides/asana"
+    },
+    {
+      source: "/asana",
+      destination: "/provider-guides/asana"
+    },
+    {
+      source: "/docs/drift",
+      destination: "/provider-guides/drift"
+    },
+    {
+      source: "/drift",
+      destination: "/provider-guides/drift"
+    },
+    {
       source: "/docs/:slug*",
       destination: "/:slug*"
     },
@@ -573,6 +597,7 @@ const baseConfig = {
             "provider-guides/klaviyo",
             "provider-guides/lemlist",
             "provider-guides/lever",
+            "provider-guides/lightfield",
             "provider-guides/linear",
             "provider-guides/linkedin",
             "provider-guides/livestorm",
