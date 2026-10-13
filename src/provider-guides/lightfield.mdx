@@ -1,5 +1,5 @@
 ---
-title: Lightfield
+title: "Lightfield"
 ---
 
 ## What's supported
@@ -7,23 +7,63 @@ title: Lightfield
 ### Supported actions
 
 This connector supports:
-- [Read Actions](/read-actions), including full historic backfill.
 
-### Supported Objects
+- [Read Actions](/read-actions), including full historic backfill and incremental read for all supported objects.
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.lightfield.app`.
 
-The Lightfield connector supports the following objects:
-- accounts (read)
-- contacts (read)
-- opportunities (read)
-- members (read)
+### Notes
+
+- Lightfield requires a `Lightfield-Version: 2026-03-01` header on every API request. Read Actions send it for you; Proxy calls must include it themselves.
+
+### Supported objects
+
+The Lightfield connector supports reading from the following objects:
+
+- [accounts](https://docs.lightfield.app/api/resources/account/methods/list/)
+- [contacts](https://docs.lightfield.app/api/resources/contact/methods/list/)
+- [members](https://docs.lightfield.app/api/resources/member/methods/list/)
+- [opportunities](https://docs.lightfield.app/api/resources/opportunity/methods/list/)
+
+### Example integration
+
+To define an integration for Lightfield, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: lightfieldIntegration
+    displayName: My Lightfield Integration
+    provider: lightfield
+    read:
+      objects:
+        - objectName: accounts
+          destination: myWebhook
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To connect Lightfield with Ampersand, you will need a [Lightfield account](https://lightfield.app).
+
+### Creating an API key for Lightfield
+
+1. Sign in to Lightfield as an admin (only admins can manage API keys).
+2. Open the [API keys settings page](https://crm.lightfield.app/crm/settings/api-keys) and create a key.
+3. Grant the read scopes for the objects you need: `accounts:read`, `contacts:read`, `opportunities:read` and `members:read`.
+4. Copy the key. Lightfield shows it only once.
 
 ## Using the connector
 
 This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
-To start integrating:
-- Create a manifest file (see the [samples](https://github.com/amp-labs/samples)).
+To start integrating with Lightfield:
+
+- Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. It will prompt the customer for their Lightfield API key.
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key.
 - Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
