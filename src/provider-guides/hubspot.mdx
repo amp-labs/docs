@@ -61,6 +61,8 @@ The connector supports reading from:
 
 Read an event type as its own object: `AMPERSAND-event-occurrences-<EVENT_TYPE>`.
 
+Event occurrences are actions captured at a point in time, such as a form submission, an email delivery, or sequence activity. They record when something happened so you can relate it to automation or a downstream workflow.
+
 <Note>
   **occurrences** is spelled with two c's and two r's.
 </Note>
@@ -118,11 +120,11 @@ Legacy apps have no install limit. They do not receive new HubSpot features. Det
 
 ### Method 1: New Project Apps
 
-New Project Apps are [limited to 25 installs](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits) until the app is listed on the HubSpot Marketplace. Start [publishing to the HubSpot marketplace](#publish-to-hubspot-marketplace) once the integration is tested.
+New Project Apps are [limited to 25 installs](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits) until the app is listed on the HubSpot Marketplace. We recommend starting the process to [publish to HubSpot marketplace](#publish-to-hubspot-marketplace) as soon as you've finished building your integration and tested it internally or with a customer.
 
 #### Install and log in to the HubSpot CLI
 
-Skip to [Create the project](#create-project) if the HubSpot CLI is already authenticated.
+Skip to [Create the project](#create-the-project) if the HubSpot CLI is already authenticated.
 
 1. Open a terminal.
 2. Install the HubSpot CLI: `npm install -g @hubspot/cli`
@@ -152,7 +154,7 @@ Skip to [Create the project](#create-project) if the HubSpot CLI is already auth
 hs project create --name your-project-name --project-base app --distribution marketplace --auth oauth --features
 ```
 
-2. Open the project folder and edit `src/app/app-hsmeta.json`. Replace the `auth` section with the snippet below. Add scopes for any objects besides contacts. To read companies, add `crm.objects.companies.read`. The full list is in [HubSpot's scopes documentation](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/scopes#list-of-available-scopes).
+2. Open the project folder and edit `src/app/app-hsmeta.json`. Replace the `auth` section with the snippet below. Add scopes for any objects besides contacts. For example, to read companies, add `crm.objects.companies.read`. The full list is in [HubSpot's scopes documentation](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/scopes#list-of-available-scopes).
 
 ```json
 {
@@ -182,7 +184,7 @@ When prompted to create the project, select yes.
 
 #### Accept HubSpot's Acceptable Use Policy
 
-The first time you create a HubSpot app, accept the Acceptable Use Policy before anyone can install the integration.
+If this is your first time creating a HubSpot app, you will need to accept HubSpot’s Acceptable Use Policy before any users can install your integration.
 
 1. Log in to HubSpot.
 2. Select **Development** at the bottom of the left nav.
@@ -197,7 +199,7 @@ The first time you create a HubSpot app, accept the Acceptable Use Policy before
 
 <img src="/images/provider-guides/hubspot-select-app.png" alt="Select App" />
 
-5. Open the **Distribution** tab, click **Begin Publishing**, and complete **Agree to HubSpot's Acceptable Use Policy**. You can stop there.
+5. Open the **Distribution** tab, click **Begin Publishing**, and complete **Agree to HubSpot's Acceptable Use Policy**. You do not need to complete the rest of the steps to finish setup.
 
 ![Acceptable Use Policy](/images/provider-guides/hubspot-acceptable-use-policy.gif)
 
@@ -212,10 +214,10 @@ Then [add the app in Ampersand](#add-app-to-ampersand).
 ### Method 2: Legacy Apps
 
 <Note>
-  Legacy apps have no install limit, but they [won't receive new HubSpot features](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/overview). Migrating one to a new project app brings back the 25-install limit until the app is listed on the HubSpot marketplace. See the [HubSpot changelog](https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits).
+  Legacy Apps have no install limits but won’t receive new HubSpot features. When you migrate a Legacy App to a new Project App, you will be subject to the 25 install limit until your app is listed in the HubSpot marketplace. Please see HubSpot changelog for more details.
 </Note>
 
-Where you start depends on when the developer account was created. The auth, scopes, and client ID steps are the same after that.
+Depending on when you created your HubSpot developer account, you will see different UI.
 
 #### Developer accounts created after September 2025
 
@@ -270,31 +272,21 @@ After creating your app using any method above:
 
    ![Alt text](/images/provider-guides/f4ada70-hubspot6.gif)
 
-## Using the connector
-
-To start integrating with HubSpot:
-
-- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/hubspot/amp.yaml)
-- Deploy it using the [amp CLI](/cli/overview)
-- If using Read or Subscribe Actions, create a [destination](/destinations)
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component
-- Start using the connector!
-
 ## Set up Subscribe Actions
 
 <Note>
   Subscriptions on your HubSpot app cover standard fields. To receive changes to custom fields, see [Subscribe to HubSpot custom fields](/additional-setup/hubspot-subscribe-custom-fields).
 </Note>
 
-Define the subscribe action in `amp.yaml` and deploy it. See [Subscribe actions](/subscribe-actions). Then add webhooks on the HubSpot app:
+Define the subscribe action in `amp.yaml` and deploy it. See [Subscribe actions](/subscribe-actions). Then point that app's webhooks at Ampersand. Which steps you follow depends on how you created the app:
 
-- [New project apps](#new-project-apps) if you created the app with the HubSpot CLI.
-- [Legacy apps](#legacy-apps) if you created it in the HubSpot UI.
+- [New project app: add a webhooks file](#new-project-app-add-a-webhooks-file)
+- [Legacy app: add the webhook in HubSpot](#legacy-app-add-the-webhook-in-hubspot)
 
 
-### New project apps
+### New project app: add a webhooks file
 
-If you are using a new project app (that was created with the HubSpot CLI), then follow the instructions below. If you don't have any apps yet, follow the instructions in [Method 1: New Project Apps](#method-1-new-project-apps) above to create one.
+Use this if you created the app with the HubSpot CLI. If you don't have an app yet, create one in [Method 1: New Project Apps](#method-1-new-project-apps) first.
 
 #### Create webhooks-hsmeta.json file
 
@@ -368,9 +360,9 @@ Once you are done editing `webhooks-hsmeta.json`, deploy it using the following 
 hs project upload
 ```
 
-### Legacy apps
+### Legacy app: add the webhook in HubSpot
 
-If you have a legacy app (that was created in the HubSpot UI), follow the instructions below.
+Use this if you created the app in the HubSpot UI.
 
 1. Log in to your HubSpot account.
 2. Go to the **Apps** section.
@@ -391,6 +383,16 @@ If you have a legacy app (that was created in the HubSpot UI), follow the instru
 9. Click **Activate**.
 
 ![Subscribe actions HubSpot](/images/subscribeactions-hubspot.gif)
+
+## Using the connector
+
+To start integrating with HubSpot:
+
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/hubspot/amp.yaml)
+- Deploy it using the [amp CLI](/cli/overview)
+- If using Read or Subscribe Actions, create a [destination](/destinations)
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component
+- Start using the connector!
 
 ## Customer guide
 
