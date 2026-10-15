@@ -579,6 +579,7 @@ const baseConfig = {
             "provider-guides/hive",
             "provider-guides/housecallPro",
             "provider-guides/hubspot",
+            "provider-guides/hubspot-subscribe-custom-fields",
             "provider-guides/hunter",
             "provider-guides/insightly",
             "provider-guides/instantly",
