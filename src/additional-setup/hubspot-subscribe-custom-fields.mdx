@@ -43,36 +43,16 @@ Deploy this manifest before the customer creates the private app.
 
 ## 2. Install the integration
 
-The customer installs the integration first. The webhook URL in the next step includes their installation ID.
+The customer installs the integration. The webhook URL in the next step requires their installation ID.
 
-The [InstallIntegration](/embeddable-ui-components#install-integration) component returns the installation ID in `onInstallSuccess`. You can also retrieve it from the [list installations](/reference/installation/list-installations) API.
+The [InstallIntegration](/embeddable-ui-components#install-integration) component returns the installation ID in `onInstallSuccess`. You can also retrieve it from the [list installations](/reference/installation/list-installations-for-an-integration) API.
 
 ## 3. Create a private app in the customer's HubSpot account
 
-A HubSpot super admin does this in the customer's account. If **Development** is missing from the sidebar, that user needs Super Admin permissions.
-
-Set the webhook target URL to:
+Ask your customer to create a private app in their HubSpot account and point its webhooks at this URL. They must be a HubSpot super admin.
 
 ```
 https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
 ```
 
-- `PROJECT_ID`: Dashboard [General Settings](https://dashboard.withampersand.com/projects/_/settings)
-- `INTEGRATION_ID`: Dashboard [Home](https://dashboard.withampersand.com/projects/_)
-- `INSTALLATION_ID`: the ID from step 2
-
-Then:
-
-1. Go to **Development**, then **Legacy apps**.
-2. Click **Create**, then select **Private**.
-3. On **Basic Info**, enter a name and description.
-4. Open **Webhooks**.
-5. Under **Target URL**, paste the URL above.
-6. Click **Create subscription**.
-7. Select the objects and events to send. For a custom field, choose **Property changed** and select that property. If it is missing from the dropdown, paste its internal name.
-8. Add any scopes HubSpot asks for.
-9. Click **Subscribe**, then **Create app**.
-
-Subscribe the private app to the custom properties you want. Subscribing to an event you already configured on your HubSpot app delivers two webhooks for that change.
-
-HubSpot documents the same screens in [Create a private app](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/overview) and [Edit webhook subscriptions](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/create-and-edit-webhook-subscriptions-in-private-apps).
+HubSpot's guides cover [private apps](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/build-with-projects/create-private-apps-with-projects) and [configuring webhooks](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/build-with-projects/configure-webhooks).
