@@ -293,7 +293,7 @@ To start integrating with HubSpot:
 ## Set up Subscribe Actions
 
 <Note>
-  Subscriptions on your HubSpot app cover standard fields. To receive changes to custom fields, see [Subscribe to HubSpot custom fields](/additional-setup/hubspot-subscribe-custom-fields).
+  Subscriptions on your HubSpot app cover standard fields. To receive changes to custom fields, see [Custom fields](#custom-fields).
 </Note>
 
 To enable HubSpot subscribe actions, you will need to:
@@ -397,6 +397,48 @@ If you have a legacy app (that was created in the HubSpot UI), follow the instru
 10. Click **Activate**.
 
 ![Subscribe actions HubSpot](/images/subscribeactions-hubspot.gif)
+
+### Custom fields
+
+To receive webhooks when a custom HubSpot field changes, each customer creates a private app in their own HubSpot account. OAuth, reads, and writes stay on the HubSpot app you configured above.
+
+1. In your `amp.yaml`, set `inheritFieldsAndMapping` to `true`, enable create, update, and delete, and set `watchFieldsAuto: all` on the update event. Include a read action for the same object. Deploy it before the customer creates the private app.
+
+  ```yaml
+  specVersion: 1.0.0
+  integrations:
+    - name: subscribeToHubspot
+      provider: hubspot
+      subscribe:
+        objects:
+          - objectName: contacts
+            destination: myWebhook
+            inheritFieldsAndMapping: true
+            createEvent:
+              enabled: always
+            updateEvent:
+              enabled: always
+              watchFieldsAuto: all
+            deleteEvent:
+              enabled: always
+      read:
+        objects:
+          - objectName: contacts
+            destination: myWebhook
+            requiredFields:
+              - fieldName: email
+              - fieldName: firstname
+  ```
+
+2. After the customer installs the integration, get their installation ID. The [InstallIntegration](/embeddable-ui-components#install-integration) component returns it in `onInstallSuccess`, or you can retrieve it from the [list installations](/reference/installation/list-installations-for-an-integration) API.
+3. Build the customer's webhook URL:
+  ```
+  https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
+  ```
+  - Replace `PROJECT_ID` with your Ampersand project ID, which can be found in the Dashboard's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
+  - Replace `INTEGRATION_ID` with your integration's ID, which can be found in the Dashboard's [Home page](https://dashboard.withampersand.com/projects/_).
+  - Replace `INSTALLATION_ID` with the installation ID from the previous step.
+4. Send the webhook URL to your customer along with [Set up a private app for custom field changes](/customer-guides/hubspot#set-up-a-private-app-for-custom-field-changes) in the HubSpot customer guide.
 
 ## Customer guide
 

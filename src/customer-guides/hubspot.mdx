@@ -24,3 +24,14 @@ To check if you have a Sales Hub seat:
 5. If you do not have a Sales Hub seat, ask your HubSpot administrator to assign one to you.
 
 Learn more about different HubSpot seats [here](https://knowledge.hubspot.com/account-management/manage-seats).
+
+## Set up a private app for custom field changes
+
+If the app you're integrating with needs to know when custom fields change in HubSpot, it asks you to create a private app in your HubSpot account. You must be a HubSpot **Super Admin**.
+
+1. Get the webhook URL from the app you're integrating with. It looks like this:
+  ```
+  https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
+  ```
+2. [Create a private app](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/build-with-projects/create-private-apps-with-projects) in your HubSpot account.
+3. [Configure the private app's webhooks](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/build-with-projects/configure-webhooks) to send events to the webhook URL from step 1.
