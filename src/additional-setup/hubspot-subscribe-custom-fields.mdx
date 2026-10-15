@@ -3,17 +3,15 @@ title: "Subscribe to HubSpot custom fields"
 sidebarTitle: "HubSpot custom fields"
 ---
 
-HubSpot apps can subscribe to record creation, deletion, and changes to standard properties. They cannot subscribe to property changes on custom fields. A private app created inside a customer's HubSpot account can, because that account is where the custom properties are defined.
+To receive webhooks when a custom HubSpot field changes, each customer creates a private app in their own HubSpot account. OAuth, reads, and writes stay on the HubSpot provider app you already configured. [Standard subscribe setup](/provider-guides/hubspot#set-up-subscribe-actions) on that app covers standard fields.
 
-Use this setup when you need webhooks for custom field updates. Standard HubSpot subscribe setup stays on your own HubSpot app. See [Set up Subscribe Actions](/provider-guides/hubspot#set-up-subscribe-actions).
+1. [Deploy `amp.yaml`](#1-deploy-ampyaml)
+2. [Install the integration](#2-install-the-integration)
+3. [Create a private app in the customer's HubSpot account](#3-create-a-private-app-in-the-customers-hubspot-account)
 
-Reads, writes, and OAuth stay on the HubSpot app you already added in Ampersand. The customer's private app only sends webhook events. Keep the client ID and client secret on your provider app. Ampersand does not use the private app's access token.
+## 1. Deploy `amp.yaml`
 
-## Configure `amp.yaml`
-
-Enable create, update, and delete on the object, and set `watchFieldsAuto: all` on the update event. The private app decides which of those events HubSpot actually sends. These settings tell Ampersand to deliver them, including changes to custom fields.
-
-Custom fields differ by HubSpot account, so watch every field with `watchFieldsAuto: all`. Set `inheritFieldsAndMapping` to `true`, and define a read action for the same object. See [Subscribe actions](/subscribe-actions) for how fields, mapping, and backfill work.
+Set `inheritFieldsAndMapping` to `true`, enable create, update, and delete, and set `watchFieldsAuto: all` on the update event. Include a read action for the same object.
 
 ```yaml
 specVersion: 1.0.0
@@ -41,36 +39,40 @@ integrations:
             - fieldName: firstname
 ```
 
-Deploy this manifest before the customer creates the private app. The installation exists only after the customer installs the integration, and the webhook URL includes that installation ID.
+Deploy this manifest before the customer creates the private app.
 
-## Set up the customer's private app
+## 2. Install the integration
 
-Each customer does this in their own HubSpot account. A HubSpot super admin creates the private app. If the **Development** menu is missing, the user needs Super Admin permissions.
-
-The webhook URL includes that customer's installation ID. Ampersand uses it to match the event to the installation. Private app webhook payloads do not include a portal ID Ampersand can use for that match.
+The customer installs the integration first. The webhook URL in the next step includes their installation ID.
 
 The [InstallIntegration](/embeddable-ui-components#install-integration) component returns the installation ID in `onInstallSuccess`. You can also retrieve it from the [list installations](/reference/installation/list-installations) API.
+
+## 3. Create a private app in the customer's HubSpot account
+
+A HubSpot super admin does this in the customer's account. If **Development** is missing from the sidebar, that user needs Super Admin permissions.
+
+Set the webhook target URL to:
 
 ```
 https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
 ```
 
-- Replace `PROJECT_ID` with your Ampersand project ID, from the Dashboard's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
-- Replace `INTEGRATION_ID` with your integration's ID, from the Dashboard's [Home page](https://dashboard.withampersand.com/projects/_).
-- Replace `INSTALLATION_ID` with this customer's installation ID.
+- `PROJECT_ID`: Dashboard [General Settings](https://dashboard.withampersand.com/projects/_/settings)
+- `INTEGRATION_ID`: Dashboard [Home](https://dashboard.withampersand.com/projects/_)
+- `INSTALLATION_ID`: the ID from step 2
 
-In the customer's HubSpot account:
+Then:
 
 1. Go to **Development**, then **Legacy apps**.
 2. Click **Create**, then select **Private**.
-3. On the **Basic Info** tab, enter a name and description for the app.
-4. Open the **Webhooks** tab.
-5. Under **Target URL**, enter the installation URL above.
+3. On **Basic Info**, enter a name and description.
+4. Open **Webhooks**.
+5. Under **Target URL**, paste the URL above.
 6. Click **Create subscription**.
-7. Select the object types and events to send. For custom field updates, choose **Property changed**, then select the custom properties. If a custom property is missing from the dropdown, paste its internal name from the property settings.
-8. If HubSpot prompts you to add scopes for those objects, add them. These scopes apply only to this private app.
+7. Select the objects and events to send. For a custom field, choose **Property changed** and select that property. If it is missing from the dropdown, paste its internal name.
+8. Add any scopes HubSpot asks for.
 9. Click **Subscribe**, then **Create app**.
 
-HubSpot's guides to [creating a private app](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/overview) and [editing its webhook subscriptions](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/create-and-edit-webhook-subscriptions-in-private-apps) cover the same screens.
+Subscribe the private app to the custom properties you want. Subscribing to an event you already configured on your HubSpot app delivers two webhooks for that change.
 
-Subscribe the private app to the custom properties you want. If it also subscribes to events you already configured on your HubSpot app, Ampersand delivers both, and you receive two webhooks for the same change.
+HubSpot documents the same screens in [Create a private app](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/overview) and [Edit webhook subscriptions](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/create-and-edit-webhook-subscriptions-in-private-apps).
