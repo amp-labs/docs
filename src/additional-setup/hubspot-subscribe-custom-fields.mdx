@@ -1,0 +1,57 @@
+---
+title: "Subscribe to HubSpot custom fields"
+---
+
+To receive webhooks when a custom HubSpot field changes, each customer creates a private app in their own HubSpot account. OAuth, reads, and writes stay on the HubSpot provider app you already configured. [Standard subscribe setup](/provider-guides/hubspot#set-up-subscribe-actions) on that app covers standard fields.
+
+1. [Deploy `amp.yaml`](#1-deploy-ampyaml)
+2. [Install the integration](#2-install-the-integration)
+3. [Create a private app in the customer's HubSpot account](#3-create-a-private-app-in-the-customers-hubspot-account)
+
+## 1. Deploy `amp.yaml`
+
+Set `inheritFieldsAndMapping` to `true`, enable create, update, and delete, and set `watchFieldsAuto: all` on the update event. Include a read action for the same object.
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: subscribeToHubspot
+    provider: hubspot
+    subscribe:
+      objects:
+        - objectName: contacts
+          destination: myWebhook
+          inheritFieldsAndMapping: true
+          createEvent:
+            enabled: always
+          updateEvent:
+            enabled: always
+            watchFieldsAuto: all
+          deleteEvent:
+            enabled: always
+    read:
+      objects:
+        - objectName: contacts
+          destination: myWebhook
+          requiredFields:
+            - fieldName: email
+            - fieldName: firstname
+```
+
+Deploy this manifest before the customer creates the private app.
+
+## 2. Install the integration
+
+The customer installs the integration. The webhook URL in the next step requires their installation ID.
+
+The [InstallIntegration](/embeddable-ui-components#install-integration) component returns the installation ID in `onInstallSuccess`. You can also retrieve it from the [list installations](/reference/installation/list-installations-for-an-integration) API.
+
+## 3. Create a private app in the customer's HubSpot account
+
+Ask your customer to create a private app in their HubSpot account and point its webhooks at this URL. They must be a HubSpot super admin.
+
+```
+https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
+```
+
+HubSpot's guides cover [private apps](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/build-with-projects/create-private-apps-with-projects) and [configuring webhooks](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/build-with-projects/configure-webhooks).
