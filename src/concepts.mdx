@@ -50,7 +50,7 @@ Each installation holds two things:
 
 ## Revision
 
-Every time you change `amp.yaml` and run `amp deploy`, Ampersand stores a new **revision**, a versioned snapshot of the integration's definition.
+Every time you change [`amp.yaml`](/manifest-reference) and run `amp deploy`, Ampersand stores a new **revision**, a versioned snapshot of the integration's definition.
 
 Revisions matter because your customers are not all on the same version at the same moment. A config records the revision it was created or last updated against, so you can tell which definition a given customer is running.
 
@@ -70,7 +70,12 @@ This is why two customers on the same integration can behave differently without
 
 ### What a config can override
 
-For a read object, a config can set the fields the customer selected (`selectedFields`, or `selectedFieldsAuto: all`), the mappings they chose (`selectedFieldMappings`, `selectedValueMappings`), and operational settings: `schedule`, `destination`, `backfill`, `fieldFilters`, and `disabled` to pause an object entirely. For a write object it can set `deletionSettings`, `selectedFieldSettings`, and `selectedValueDefaults`.
+- **[Read objects](/config-reference#read-object):** the fields the customer selected (`selectedFields`, or `selectedFieldsAuto: all`), the mappings they chose (`selectedFieldMappings`, `selectedValueMappings`), filters (`fieldFilters` or `rawFilter`), and operational settings: `schedule`, `destination`, `backfill`, and `disabled` to pause an object entirely.
+- **[Write objects](/config-reference#write-object):** `deletionSettings` and `selectedFieldSettings` (default values and overwrite behavior).
+- **[Subscribe objects](/config-reference#subscribe-object):** which events are on (`createEvent`, `updateEvent`, `deleteEvent`, `otherEvents`), which fields to watch, `destination`, and provider-specific `providerOptions`.
+- **[Proxy](/config-reference#proxy):** whether proxy calls are `enabled`.
+
+For every field, its type, and how it maps from `amp.yaml`, see the [Config schema reference](/config-reference).
 
 ### A worked example
 
@@ -92,7 +97,7 @@ What actually runs for them is the merge: `email` and their two optional fields 
 
 If that customer later asks for hourly syncs, you set `schedule` on their config. It now overrides yours, for them alone. Every other installation still follows the manifest.
 
-You can read a config with [Get an installation](/reference/installation/get-an-installation), or from the SDK via `installation.config`, and change one with [Update an installation](/reference/installation/update-an-installation).
+You can read a config with [Get an installation](/reference/installation/get-an-installation), or from the SDK via `installation.config`, and change one with [Update an installation](/reference/installation/update-an-installation). See [Creating and updating a config](/config-reference#creating-and-updating-a-config) for example requests.
 
 ## How they work together
 
