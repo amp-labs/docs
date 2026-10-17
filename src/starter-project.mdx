@@ -8,17 +8,17 @@ The [starter project](https://github.com/amp-labs/starter-project) is a small, w
 It contains two things:
 
 <CardGroup cols={2}>
-  <Card title="A React app" icon="react">
+  <Card title="A React app" icon="react" href="https://github.com/amp-labs/starter-project/blob/main/src/App.tsx">
     A minimal React and Vite app that embeds the `InstallIntegration` component, so you can watch a customer connect their account.
   </Card>
-  <Card title="Three integrations" icon="file-code">
+  <Card title="Three integrations" icon="file-code" href="https://github.com/amp-labs/starter-project/tree/main/integrations">
     Pick between HubSpot, Salesforce, and GitHub, or add your own.
   </Card>
 </CardGroup>
 
 ## Before you start
 
-Setting up the accounts and credentials takes longer than running the app itself. Budget around twenty minutes for these steps the first time.
+Setting up the accounts and credentials takes longer than running the app itself. Budget around twenty minutes for these steps the first time. You'll also need Git and Node.js 18 or later.
 
 <Steps>
   <Step title="Create an Ampersand project">
@@ -26,6 +26,10 @@ Setting up the accounts and credentials takes longer than running the app itself
   </Step>
   <Step title="Create an API key">
     In the dashboard, open [API keys](https://dashboard.withampersand.com/projects/_/api-keys) and create one. Since the key is used by the React app, choose **UI Library** when asked where you will use it. You will paste it into the app later.
+
+    <Accordion title="Which key type should I use, and is it safe in the browser?">
+      Choose **UI Library**. These keys can only call the endpoints the UI components need, like creating installations. They can't make write or proxy calls, so they're fine for trying things out in a frontend. For production, switch to [JWT authentication](/embeddable-ui-components#jwt-authentication), which is more secure. Keep server keys, which can call every endpoint, on your backend.
+    </Accordion>
   </Step>
   <Step title="Create a destination named `defaultWebhook`">
     In [Destinations](https://dashboard.withampersand.com/projects/_/destinations), create a webhook destination called `defaultWebhook`. If you do not have an endpoint to point it at, [play.svix.com](https://play.svix.com) gives you a disposable one that shows incoming payloads in the browser, which is ideal for a first run.
@@ -33,7 +37,7 @@ Setting up the accounts and credentials takes longer than running the app itself
   <Step title="Set up the provider">
     You can start with any of the three included integrations. Each provider guide walks you through creating an account and an app:
 
-    - **HubSpot** reads and writes contacts and companies. Follow the [HubSpot provider guide](/provider-guides/hubspot).
+    - **HubSpot** reads and writes contacts and companies, and subscribes to contact changes. Follow the [HubSpot provider guide](/provider-guides/hubspot).
     - **Salesforce** reads and writes accounts and contacts. Follow the [Salesforce provider guide](/provider-guides/salesforce).
     - **GitHub** reads and writes gists. Follow the [GitHub provider guide](/provider-guides/github).
 
@@ -54,33 +58,77 @@ Setting up the accounts and credentials takes longer than running the app itself
     npm install
     ```
   </Step>
-  <Step title="Deploy the integration">
-    ```bash
-    amp deploy integrations/hubspot -p <your-project-name>
-    ```
-    Swap `hubspot` for `salesforce` or `github` to deploy one of the other included integrations. This creates a [revision](/concepts#revision) of the integration from its `amp.yaml`. Nothing syncs yet, because no customer has installed it.
+  <Step title="Deploy an integration">
+    Pick the one you set up:
+
+    <Tabs>
+      <Tab title="HubSpot">
+        ```bash
+        amp deploy integrations/hubspot -p <your-project-name>
+        ```
+        Integration name: `hubspotCRM`
+      </Tab>
+      <Tab title="Salesforce">
+        ```bash
+        amp deploy integrations/salesforce -p <your-project-name>
+        ```
+        Integration name: `readAndWriteSalesforce`
+      </Tab>
+      <Tab title="GitHub">
+        ```bash
+        amp deploy integrations/github -p <your-project-name>
+        ```
+        Integration name: `githubIntegration`
+      </Tab>
+    </Tabs>
+
+    This creates a [revision](/concepts#revision) of the integration from its `amp.yaml`. Nothing syncs yet, because no customer has installed it.
   </Step>
   <Step title="Point the app at your project">
-    In `src/App.tsx`, replace the placeholders with your project name and API key:
-
-    ```tsx
-    const options = {
-      project: 'MY-PROJECT-NAME',
-      apiKey: 'MY-API-KEY',
-    };
-
-    const integration = "hubspotCRM";
-    ```
-    If you deployed Salesforce or GitHub, set `integration` to `readAndWriteSalesforce` or `githubIntegration`, the `name` defined in that integration's `amp.yaml`.
+    In `src/App.tsx`, replace `MY-PROJECT-NAME` and `MY-API-KEY` with your project name and API key, and set `integration` to the name from the step above.
   </Step>
   <Step title="Start the app">
     ```bash
     npm run dev
     ```
-    Open the app (`http://localhost:5173` by default) and use the embedded component to connect an account for the integration you deployed. Once installed, reads run on the schedule in the manifest.
+    Open `http://localhost:5173` and connect an account. You'll see a four-step setup: **Connect**, **Select objects**, **Configure**, and **Review**. These screens show Salesforce:
+
+    <img src="/images/quickstart-wizard-connect.png" alt="Step 1 of the setup, Connect: the customer enters their Salesforce workspace and clicks Next. The steps Select Objects, Configure, and Review are shown at the top." style={{ maxWidth: "460px", width: "100%" }} />
+
+    In **Configure**, the customer maps your fields to theirs. `Country` here comes from a `mapToName` in your `amp.yaml`.
+
+    <img src="/images/quickstart-wizard-configure.png" alt="Step 3 of the setup, Configure: for the Account object, the customer opens a dropdown of their Salesforce fields to choose which one maps to Country." style={{ maxWidth: "460px", width: "100%" }} />
+
+    <Accordion title="I connected an account, but nothing is happening. What's wrong?">
+      Check that you deployed the integration before connecting, and that the `integration` name in `App.tsx` matches your `amp.yaml`. Without a deployed integration, connecting creates a connection but not an installation.
+    </Accordion>
   </Step>
   <Step title="Check that it worked">
-    Results arrive at your `defaultWebhook` destination once there is data to read. If you used [play.svix.com](https://play.svix.com), they show up on that page. To see every read, write, and proxy call and whether it succeeded, go to **Integrations** in the dashboard, open your integration, and select the installation.
+    The starter integrations read existing records first, so results start arriving at your `defaultWebhook` destination soon after setup. After that, new and updated records keep arriving. If you used [play.svix.com](https://play.svix.com), they show up on that page. To see every read, write, and proxy call and whether it succeeded, go to **Integrations** in the dashboard, open your integration, and select the installation.
+
+    <Accordion title="What does a message look like?">
+      Here's a shortened example:
+
+      ```json
+      {
+        "action": "read",
+        "provider": "salesforce",
+        "objectName": "Contact",
+        "groupRef": "xyz-company",
+        "readType": "scheduled",
+        "result": [
+          {
+            "fields": { "id": "001Dp00000P8QurIAF", "firstname": "Sally", "lastname": "Jones" },
+            "mappedFields": { "pronoun": "she" }
+          }
+        ]
+      }
+      ```
+
+      `fields` holds the fields you asked for, and `mappedFields` holds the ones each customer mapped. See [webhook messages](/destinations/webhooks#read-action-webhooks) for every field.
+    </Accordion>
+
+    That's it: you have a working integration.
   </Step>
 </Steps>
 
@@ -89,55 +137,43 @@ Setting up the accounts and credentials takes longer than running the app itself
 The whole integration surface is one component. `AmpersandProvider` holds your project credentials, and `InstallIntegration` renders the connect and configure flow your customers see:
 
 ```tsx src/App.tsx
-import { AmpersandProvider, InstallIntegration } from '@amp-labs/react'
-import '@amp-labs/react/styles';
-
-const options = {
-  project: 'MY-PROJECT-NAME',
-  apiKey: 'MY-API-KEY',
-};
-
-function App() {
-  const integration = "hubspotCRM"; // must match the name in the amp.yaml you deployed
-
-  return (
-    <AmpersandProvider options={options}>
-      <InstallIntegration
-        integration={integration}
-        consumerName="demo-user-name"
-        consumerRef="demo-user-id"
-        groupName="demo-company-name"
-        groupRef="demo-company-id"
-      />
-    </AmpersandProvider>
-  )
-}
+<AmpersandProvider options={options}>
+  <InstallIntegration
+    integration={integration}
+    consumerName="demo-user-name"
+    consumerRef="demo-user-id"
+    groupName="demo-company-name"
+    groupRef="demo-company-id"
+    // @ts-expect-error -- opt into wizard variant
+    variant="wizard"
+  />
+</AmpersandProvider>
 ```
 
-The `consumerRef` and `groupRef` values identify which of your customers is installing. In your own application these come from your user and account records, not hardcoded strings. See [Prebuilt UI components](/embeddable-ui-components) for the full set of props.
+`consumerRef` and `groupRef` identify which of your customers is installing; in your app, they come from your user and account records. `variant="wizard"` turns on the step-by-step setup, which is in [beta](/embeddable-ui-components#wizard-mode-beta). See [Prebuilt UI components](/embeddable-ui-components) for every prop.
 
 ## Make it yours
 
 <Steps>
   <Step title="Swap the integration">
-    Add a new folder under `integrations/` with your own `amp.yaml`, or one from the [samples repository](https://github.com/amp-labs/samples), and deploy it the same way. See the [manifest schema](/manifest-reference) for every available field.
-  </Step>
-  <Step title="Keep the names aligned">
-    Two names have to match: the integration name in `amp.yaml` and the `integration` variable in `App.tsx`, and the destination name in `amp.yaml` and the destination you created in the dashboard.
+    Add a folder under `integrations/` with your own `amp.yaml`, or one from the [samples repository](https://github.com/amp-labs/samples), and deploy it the same way. Then set `integration` in `App.tsx` to its `name`, and make sure its `destination` exists in the dashboard. See the [manifest reference](/manifest-reference) for every field.
   </Step>
   <Step title="Redeploy after changes">
-    Run `amp deploy` again whenever you edit the manifest. You only need one manifest for all your customers, and you can have multiple integrations in the same manifest.
+    Run `amp deploy` again whenever you edit your `amp.yaml`. You only need one `amp.yaml` for all your customers, and it can hold multiple integrations.
+  </Step>
+  <Step title="Get ready for production">
+    Switch from an API key to [JWT authentication](/embeddable-ui-components#jwt-authentication), and use a separate Ampersand project for production, with its own provider apps. See [Dev and prod environments](/dev-and-prod-environments).
   </Step>
 </Steps>
 
 ## Where to go next
 
 <CardGroup cols={3}>
-  <Card title="How Ampersand works" icon="book" href="/concepts">
+  <Card title="Concepts" icon="book" href="/concepts">
     Integrations, installations, revisions, and configs.
   </Card>
-  <Card title="Actions" icon="bolt" href="/overview#actions">
-    Read, write, subscribe, and proxy.
+  <Card title="Actions" icon="bolt" href="/overview">
+    Read, write, subscribe, search, and proxy.
   </Card>
   <Card title="Prebuilt UI components" icon="window-maximize" href="/embeddable-ui-components">
     Props, theming, and the other components in the library.
