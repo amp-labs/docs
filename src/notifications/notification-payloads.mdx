@@ -430,8 +430,8 @@ Note: `error` describes what went wrong during the triggered read.
     "objectName": "Account",
     "success": false,
     "successfulRecordIds": ["provider-record-id-1"],
-    "error": "field validation failed; duplicate record",
-    "errors": ["field validation failed", "duplicate record"]
+    "error": "field validation failed; duplicate record"
+    // "errors": ["field validation failed", "duplicate record"] // Deprecated. Still sent today, but scheduled for removal — read `error` instead.
   }
 }
 ```
@@ -443,9 +443,9 @@ When the write fails, `success` is `false` and the error fields are present. For
 are joined with `; `. It is omitted entirely when the write succeeds.
 
 <Warning>
-  The `errors` array is **deprecated** and will be removed in an upcoming release. It carries the same
-  messages as `error`, one per entry. Use `error` instead — if you are reading `errors` today, migrate
-  now to avoid breaking when it is removed.
+  The payload also contains an `errors` array, shown commented out above. It is **deprecated**: it
+  carries the same messages as `error`, one per entry, and will be removed in a future release. If you
+  are reading `errors` today, migrate to `error` now to avoid breaking when it is removed.
 </Warning>
 </Accordion>
 
