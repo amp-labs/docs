@@ -371,7 +371,7 @@ Note: `error` describes what went wrong during the triggered read.
 </Accordion>
 
 <Accordion title="write.async.done">
-**Webhook destination payload:**
+**Webhook destination payload (success):**
 ```json
 {
   "notificationType": "write.async.done",
@@ -393,7 +393,7 @@ Note: `error` describes what went wrong during the triggered read.
 }
 ```
 
-**Kinesis and S3 destination payload:**
+**Kinesis and S3 destination payload (success):**
 ```json
 {
   "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
@@ -412,18 +412,32 @@ Note: `error` describes what went wrong during the triggered read.
 }
 ```
 
-**On failure**, `success` is `false` and the error fields are present. For a partial failure,
-`successfulRecordIds` is populated too — the records that did land:
-
+**Webhook destination payload (partial failure):**
 ```json
 {
-  "objectName": "Account",
-  "success": false,
-  "successfulRecordIds": ["provider-record-id-1"],
-  "error": "field validation failed; duplicate record",
-  "errors": ["field validation failed", "duplicate record"]
+  "notificationType": "write.async.done",
+  "data": {
+    "projectId": "8f4a2b1c-3d5e-4f6a-9b0c-1d2e3f4a5b6c",
+    "provider": "salesforce",
+    "integrationId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+    "integrationName": "Salesforce Integration",
+    "installationId": "a3bb189e-8bf9-3888-9912-ace4e6543002",
+    "connectionId": "c4e7f2a1-8b3d-4f6e-9a2c-5d1e3f4b6a7c",
+    "groupRef": "customer-group-ref",
+    "groupName": "Customer Name",
+    "consumerRef": "user-123",
+    "consumerName": "John Doe",
+    "objectName": "Account",
+    "success": false,
+    "successfulRecordIds": ["provider-record-id-1"],
+    "error": "field validation failed; duplicate record",
+    "errors": ["field validation failed", "duplicate record"]
+  }
 }
 ```
+
+When the write fails, `success` is `false` and the error fields are present. For a partial failure,
+`successfulRecordIds` lists the records that did land, as above.
 
 `error` is a single string holding every failure message; when several records fail, their messages
 are joined with `; `. It is omitted entirely when the write succeeds.
