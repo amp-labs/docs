@@ -21,7 +21,7 @@ integrations:
         - objectName: touchpoints__c # You can include custom objects
 ```
 
-You can only write to objects listed here. An installation's [config](/concepts#config) can change settings for these objects, but it can't add new ones, so to write to another object, add it to `amp.yaml` and deploy again.
+You can only write to objects listed here. An installation's [config](/concepts#config) can currently change settings for these objects but not add new ones, so to write to another object, add it to `amp.yaml` and deploy again.
 
 ### Share mappings with read actions
 
@@ -64,7 +64,7 @@ amp list:integrations --project <PROJECT_ID>
 `objectName` refers to the `objectName` key within the `amp.yaml` file that defines your integration. This must match the name of an object that exists within the SaaS instance.
 
 <Note>
-Call the Write API from your backend with a server API key. API keys created for the **UI Library** can't make write calls.
+Call the Write API from your backend with a server API key. API keys created for the **UI Library** currently can't make write calls.
 </Note>
 
 The `record` you send is passed to the provider in the provider's own format, so use the provider's field names and structure. The exception is mapped fields when you use [`inheritMapping`](#share-mappings-with-read-actions).
