@@ -283,6 +283,10 @@ const baseConfig = {
   ],
   redirects: [
     {
+      source: "/provider-guides/hubspot-subscribe-custom-fields",
+      destination: "/additional-setup/hubspot-subscribe-custom-fields"
+    },
+    {
       source: "/docs/box",
       destination: "/provider-guides/box"
     },
@@ -699,6 +703,13 @@ const baseConfig = {
             "customer-guides/snowflake",
             "customer-guides/update-connection",
             "customer-guides/zoho"
+          ]
+        },
+        {
+          group: "Additional setup",
+          expanded: false,
+          pages: [
+            "additional-setup/hubspot-subscribe-custom-fields",
           ]
         },
       ]
