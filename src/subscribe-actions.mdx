@@ -6,11 +6,9 @@ title: "Subscribe actions"
 
 Subscribe actions work alongside [read actions](/read-actions): a read can backfill your customer's existing records, and a subscription keeps you up to date from then on.
 
-## Supported providers
-
-Subscribe actions are supported for a subset of providers. Each [provider guide](/provider-guides/overview) says whether its provider supports subscribe actions.
-
-Some providers need setup in your provider app before events arrive: [HubSpot](/provider-guides/hubspot#set-up-subscribe-actions), [Gong](/provider-guides/gong#set-up-subscribe-actions), [Housecall Pro](/provider-guides/housecallPro#set-up-subscribe-actions), [Gmail](/provider-guides/google#set-up-gmail-push-notifications-for-subscribe-actions), and [Zoho Mail](/provider-guides/zoho#set-up-subscribe-actions-for-zoho-mail).
+<Note>
+  Subscribe actions are supported for a subset of providers. See the [provider guides](/provider-guides/overview) to check whether your provider supports them. Some providers need setup in your provider app before events arrive: [HubSpot](/provider-guides/hubspot#set-up-subscribe-actions), [Gong](/provider-guides/gong#set-up-subscribe-actions), [Housecall Pro](/provider-guides/housecallPro#set-up-subscribe-actions), [Gmail](/provider-guides/google#set-up-gmail-push-notifications-for-subscribe-actions), and [Zoho Mail](/provider-guides/zoho#set-up-subscribe-actions-for-zoho-mail).
+</Note>
 
 ## Defining subscriptions
 
@@ -389,7 +387,7 @@ Revoking Ampersand's permissions or deactivating the connected user doesn't stop
 Check that:
 
 - **Enough time has passed.** The first events usually arrive 1–2 minutes after installation, and occasionally up to 10 minutes. For Salesforce, a new subscription can take 10–30 minutes to start delivering.
-- **Your provider app is set up.** Some providers send events to Ampersand only after setup in your provider app, like [HubSpot](/provider-guides/hubspot#set-up-subscribe-actions). See [Supported providers](#supported-providers).
+- **Your provider app is set up.** Some providers send events to Ampersand only after setup in your provider app, like [HubSpot](/provider-guides/hubspot#set-up-subscribe-actions). The note at the top of this page lists the others.
 - **You're changing records in the connected account.** Events only come from the account your customer connected, so when testing, make your changes in that same account.
 - **Salesforce hasn't hit its Change Data Capture limit.** Salesforce subscriptions use Change Data Capture, and Salesforce limits how many objects an org can select for it. That limit is shared with the customer's other tools. If it's reached, ask the customer to free up objects, or use a scheduled [read action](/read-actions) instead.
 - **The object doesn't have too many fields selected.** Subscriptions fetch the read action's fields for each changed record, so the same [too-many-fields limit](/read-actions#allow-users-to-pick-from-all-fields) applies: a Salesforce object with hundreds of selected fields can fail with a `414` or `431` error.
