@@ -1,37 +1,127 @@
 ---
-title: "Use with Claude Code"
+title: "Use with your coding agent"
+description: "Add Ampersand's builder and docs MCP servers to Claude Code or another coding agent, so it can build integrations and look up the docs for you."
 ---
 
-Ampersand offers two MCP servers that you can add to Claude Code or favorite coding agent:
+Ampersand offers two MCP servers that you can add to Claude Code or your favorite coding agent:
 
-- The [builder MCP server](#builder-mcp-server) helps you build and manage integrations with Ampersand. Your agent can use it to create new integrations, manage installations, connections and destinations, troubleshoot failed operations, and scaffold webhook handlers. It requires an Ampersand account.
-- The [docs MCP server](#docs-mcp-server) gives your agent access to the Ampersand documentation. It does not require an Ampersand account.
+- The [builder MCP server](#set-up-the-mcp-servers) helps you build and manage integrations with Ampersand. Your agent can use it to create new integrations, manage installations, connections and destinations, troubleshoot failed operations, and scaffold webhook handlers. It requires an Ampersand account.
+- The [docs MCP server](#set-up-the-mcp-servers) gives your agent access to the Ampersand documentation. It does not require an Ampersand account.
 
-## Builder MCP server
+<Accordion title="Is this the same as the Ampersand MCP Server?">
+  No. These two servers help *you* build with Ampersand. The [MCP Server](/mcp-server) is for your product's own agent: it gives that agent access to your customers' connected systems.
+</Accordion>
 
-Ampersand's builder MCP server is hosted at `https://builder-mcp.withampersand.com/v1/mcp`.
+## Set up the MCP servers
 
-### Claude Code set up
+The builder MCP server is at `https://builder-mcp.withampersand.com/v1/mcp`, and the docs MCP server is at `https://docs.ampersand.ai/mcp`. Pick your coding agent:
 
-1. If you don't have an Ampersand account yet, [create an account for free](https://dashboard.withampersand.com/sign-up).
+<Tabs>
+  <Tab title="Claude Code">
+    Run these commands in your terminal:
 
-2. Add the MCP server to Claude Code by running this command in your terminal.
+    ```shell
+    claude mcp add ampersand --transport http "https://builder-mcp.withampersand.com/v1/mcp"
+    claude mcp add ampersand-docs --transport http "https://docs.ampersand.ai/mcp"
+    ```
 
-```shell
-claude mcp add ampersand --transport http "https://builder-mcp.withampersand.com/v1/mcp"
-```
+    Then launch Claude Code, type `/mcp`, select `ampersand`, choose **Authenticate**, and sign in to your Ampersand account.
+  </Tab>
+  <Tab title="Cursor">
+    Add both servers to `~/.cursor/mcp.json` (all projects) or `.cursor/mcp.json` (one project):
 
-3. Launch Claude Code, then type `/mcp`, select `ampersand`, and choose **Authenticate**.
+    ```json
+    {
+      "mcpServers": {
+        "ampersand": { "url": "https://builder-mcp.withampersand.com/v1/mcp" },
+        "ampersand-docs": { "url": "https://docs.ampersand.ai/mcp" }
+      }
+    }
+    ```
 
-4. Sign into your Ampersand account.
+    When Cursor connects to `ampersand`, sign in to your Ampersand account.
+  </Tab>
+  <Tab title="VS Code">
+    Add both servers to `.vscode/mcp.json` in your workspace:
 
-5. Verify that the MCP server is set up correctly by asking Claude:
+    ```json
+    {
+      "servers": {
+        "ampersand": { "type": "http", "url": "https://builder-mcp.withampersand.com/v1/mcp" },
+        "ampersand-docs": { "type": "http", "url": "https://docs.ampersand.ai/mcp" }
+      }
+    }
+    ```
+
+    When VS Code connects to `ampersand`, sign in to your Ampersand account.
+  </Tab>
+  <Tab title="Codex">
+    Run these commands in your terminal:
+
+    ```shell
+    codex mcp add ampersand --url "https://builder-mcp.withampersand.com/v1/mcp"
+    codex mcp add ampersand-docs --url "https://docs.ampersand.ai/mcp"
+    codex mcp login ampersand
+    ```
+
+    The last command opens a browser so you can sign in to your Ampersand account.
+  </Tab>
+  <Tab title="JetBrains">
+    For Junie in JetBrains IDEs, add both servers to `~/.junie/mcp/mcp.json` (all projects) or `.junie/mcp/mcp.json` (one project):
+
+    ```json
+    {
+      "mcpServers": {
+        "ampersand": { "url": "https://builder-mcp.withampersand.com/v1/mcp" },
+        "ampersand-docs": { "url": "https://docs.ampersand.ai/mcp" }
+      }
+    }
+    ```
+
+    When `ampersand` shows **Authorization required**, choose **Authorize** and sign in to your Ampersand account.
+  </Tab>
+  <Tab title="Windsurf">
+    Add both servers to Windsurf's `mcp_config.json` (see [Windsurf's MCP docs](https://docs.windsurf.com/windsurf/cascade/mcp) for where it lives):
+
+    ```json
+    {
+      "mcpServers": {
+        "ampersand": { "serverUrl": "https://builder-mcp.withampersand.com/v1/mcp" },
+        "ampersand-docs": { "serverUrl": "https://docs.ampersand.ai/mcp" }
+      }
+    }
+    ```
+
+    When Windsurf connects to `ampersand`, sign in to your Ampersand account.
+  </Tab>
+  <Tab title="Zed">
+    Add both servers under `context_servers` in your Zed `settings.json`:
+
+    ```json
+    {
+      "context_servers": {
+        "ampersand": { "url": "https://builder-mcp.withampersand.com/v1/mcp" },
+        "ampersand-docs": { "url": "https://docs.ampersand.ai/mcp" }
+      }
+    }
+    ```
+
+    Zed asks you to sign in to your Ampersand account when it first connects.
+  </Tab>
+  <Tab title="Other">
+    Any AI application that supports [MCP](https://modelcontextprotocol.io/clients) can use these servers. Add the two URLs above wherever your tool configures MCP servers, and sign in to your Ampersand account when it connects to the builder server.
+  </Tab>
+</Tabs>
+
+The builder MCP server needs an Ampersand account. If you don't have one yet, [create one for free](https://dashboard.withampersand.com/sign-up). The docs MCP server doesn't need an account.
+
+To check that it works, ask your agent:
 
 ```
 What can Ampersand do?
 ```
 
-### Tips for better prompts
+## Tips for better prompts
 
 - Mention Ampersand in your prompt. For example, "How do I build X with Ampersand?"
 
@@ -41,30 +131,6 @@ What can Ampersand do?
 
 - Explicitly ask your agent to refer to Ampersand documentation and OpenAPI spec.
 
+- For example `amp.yaml` files, point your agent to the [starter project](https://github.com/amp-labs/starter-project) or the [samples repo](https://github.com/amp-labs/samples).
 
-## Docs MCP server
-
-Ampersand's docs MCP server is hosted at `https://docs.ampersand.ai/mcp`.
-
-If you are using Claude Code, you can run this command:
-
-```shell
-claude mcp add ampersand-docs --transport http "https://docs.ampersand.ai/mcp"
-```
-
-## Other coding agents
-
-You can use Ampersand's MCP servers with any AI application that supports [MCP](https://modelcontextprotocol.io/clients). You need to add the appropriate URL for the MCP server you want to use:
-- Builder MCP: `https://builder-mcp.withampersand.com/v1/mcp`
-- Docs MCP: `https://docs.withampersand.com/mcp`
-
-Below are some of the most popular coding agents, and where to configure MCP servers for them:
-
-| Client | Configuration File Location | Documentation |
-|--------|------------------------------|---------------|
-| Claude Code | `.mcp.json` (project scope) or `~/.claude.json` (user/local scope); or `claude mcp add` | [link](https://code.claude.com/docs/en/mcp) |
-| Cursor | `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) | [link](https://cursor.com/docs/mcp) |
-| JetBrains IDEs (Junie) | `~/.junie/mcp/mcp.json` (user) or `.junie/mcp/mcp.json` (project); or **Settings → Tools → Junie → MCP Settings** | [link](https://junie.jetbrains.com/docs/junie-plugin-mcp-settings.html) |
-| Visual Studio Code | `.vscode/mcp.json` (workspace) or user `mcp.json` (**MCP: Open User Configuration**) | [link](https://code.visualstudio.com/docs/copilot/customization/mcp-servers) |
-| Windsurf | `~/.codeium/windsurf/mcp_config.json` | [link](https://docs.windsurf.com/windsurf/cascade/mcp) |
-| Zed | `context_servers` in `settings.json` (macOS/Linux: `~/.config/zed/settings.json`; Windows: `%AppData%\Zed\settings.json`) | [link](https://zed.dev/docs/ai/mcp) |
+- If a deploy fails with "project doesn't exist", give your agent your project ID from the dashboard instead of the project name.
