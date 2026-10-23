@@ -449,6 +449,7 @@ const baseConfig = {
       group: "Reference",
       pages: [
         "manifest-reference",
+        "config-reference",
     {
           group: "CLI",
           pages: [
