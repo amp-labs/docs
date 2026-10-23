@@ -567,6 +567,7 @@ const baseConfig = {
             "provider-guides/google",
             "provider-guides/google-workspace-delegation",
             "provider-guides/gorgias",
+            "provider-guides/grain",
             "provider-guides/granola",
             // "provider-guides/greenhouseJobBoard",
             "provider-guides/groove",
