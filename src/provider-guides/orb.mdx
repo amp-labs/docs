@@ -1,0 +1,74 @@
+---
+title: "Orb"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Orb instance will be done for each scheduled read.
+
+### Notes
+
+- Orb's list endpoints can only filter by creation date (or by invoice and due date for invoices), and Orb records have no last-updated field. So every scheduled read returns all records, including ones that haven't changed since the last read.
+- `invoices` includes invoices of every status: `draft`, `issued`, `paid`, `synced` and `void`. By default, Orb's API leaves out draft and void invoices. A draft invoice holds Orb's last computed amounts, which may lag behind usage that Orb hasn't processed yet.
+- Field names are Orb's own top-level keys, in snake_case (for example `external_customer_id`, `created_at`). Related records arrive as nested objects, not as separate fields. For example, `customer` on a subscription or an invoice holds that customer's `id` and `external_customer_id`.
+- `metrics` are Orb's billable metrics.
+- Subscription usage (`/v1/subscriptions/{subscription_id}/usage`) is not available as an object.
+- Proxy Actions are not available for Orb yet.
+
+### Supported objects
+
+The Orb connector supports reading from the following objects:
+
+- [customers](https://docs.withorb.com/api-reference/customer/list-customers)
+- [invoices](https://docs.withorb.com/api-reference/invoice/list-invoices)
+- [metrics](https://docs.withorb.com/api-reference/metric/list-metrics)
+- [subscriptions](https://docs.withorb.com/api-reference/subscription/list-subscriptions)
+
+### Example integration
+
+To define an integration for Orb, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: orbIntegration
+    displayName: My Orb Integration
+    provider: orb
+    read:
+      objects:
+        - objectName: subscriptions
+          destination: myWebhook
+```
+
+## Before you get started
+
+To connect Orb with Ampersand, you will need an [Orb account](https://www.withorb.com).
+
+### Creating an API key for Orb
+
+1. Log in to the Orb dashboard.
+2. Go to the **Developers** section and click **API Keys**.
+3. Create a new API key and give it a name. A key created while **Test Mode** is on only reaches Test Mode data, so create the key outside Test Mode to read production data.
+4. Copy the key.
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Orb:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+
+## Rate limits
+
+Orb limits `GET` requests to 100 per second in live mode, 50 per second in Test Mode and 10 per second on trial accounts. See [Orb's rate limits](https://docs.withorb.com/api-reference/rate-limits).
