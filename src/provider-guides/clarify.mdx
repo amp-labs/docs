@@ -1,5 +1,6 @@
 ---
 title: "Clarify"
+description: "Connect Clarify to Ampersand to read companies, people, deals, meetings, tasks, users and custom objects with incremental reads, and proxy calls using a Clarify API key."
 ---
 
 ## What's supported
@@ -9,10 +10,11 @@ title: "Clarify"
 This connector supports:
 
 - [Read Actions](/read-actions), including full historic backfill and incremental read for all supported objects.
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.clarify.ai/v1/workspaces/{{.workspace}}`.
 
 ### Notes
 
-- **Workspace scope.** Every Clarify request is scoped to one workspace, so the customer gives their workspace slug when they connect. See [Before you get started](#before-you-get-started).
+- **Workspace scope.** Every Clarify request is scoped to one workspace, so the customer gives their workspace slug when they connect. It fills the `{{.workspace}}` token in the base URL, so proxy paths start after it, for example `GET /objects/person/resources`. See [Before you get started](#before-you-get-started).
 - **Field names.** Fields keep Clarify's own attribute names:
   - Names are snake_case, and system fields start with an underscore: `_id`, `_created_at`, `_updated_at`, `_created_by`.
   - Collection fields such as `email_addresses`, `phone_numbers` and `domains` are objects that hold an `items` array.
@@ -23,13 +25,17 @@ This connector supports:
 - **Relationships.**
   - Records include links to one other record as ID fields, such as `company_id`, `owner_id` and `deal_id`.
   - Links to many records aren't included: the people on a deal, meeting attendees as linked `person` or `users` records, and meeting recordings. Meetings do include a `participants` field.
-- **Meeting content.** Meeting fields such as `title`, `notes`, `summary` and `description` are filled in only when the API key's user can see that meeting. A personal key can see everything its creator can; a workspace key sees only public workspace data.
-- **Not available.** Comments, meeting transcripts and recording files aren't available through Read Actions. Records deleted in Clarify aren't delivered either.
+- **Meeting content.** Clarify marks these meeting fields as secure: `title`, `description`, `location`, `conferencing`, `notes`, `summary`, `external_summary`, `prep` and `external_prep`.
+  - They are filled in only when the API key's user can see that meeting; the meeting's `_has_access` field says whether they can.
+  - A personal key can see everything its creator can; a workspace key sees only public workspace data.
+- **Not available.** Comments, meeting transcripts and recording files aren't available through Read Actions.
+- **Deleted and merged records.** Records deleted in Clarify aren't delivered. Merged records behave the same way: when records are merged in Clarify, the records merged away stop appearing in reads, and the surviving record lists their IDs in `_merged_ids`.
 
 ### Supported objects
 
 The Clarify connector supports reading from the following objects:
 
+- [`c_<name>`](https://developer.clarify.ai/docs/guides/schemas-and-relationships#custom-objects): any custom object in the workspace, by its Clarify name (for example `c_sales_order`)
 - [company](https://developer.clarify.ai/docs/api-reference/resources/getResources)
 - [deal](https://developer.clarify.ai/docs/api-reference/resources/getResources)
 - [meeting](https://developer.clarify.ai/docs/api-reference/resources/getResources)
@@ -52,6 +58,8 @@ integrations:
       objects:
         - objectName: company
           destination: myWebhook
+    proxy:
+      enabled: true
 ```
 
 ## Before you get started
@@ -65,7 +73,7 @@ To connect Clarify with Ampersand, you will need a [Clarify account](https://www
    - A **personal** key acts as you and can read everything you can, including meeting content shared with you. Any workspace member can create one.
    - A **workspace** key is shared and limited to public data in the workspace. Only workspace admins can create one.
 3. Copy the key.
-4. Note your workspace slug. It appears in your Clarify login URL and under the user avatar menu. See [Clarify's workspace docs](https://developer.clarify.ai/docs/getting-started/key-concepts#workspace).
+4. Note your workspace slug, the `{{.workspace}}` token in the base URL. It appears in your Clarify login URL and under the user avatar menu. See [Clarify's workspace docs](https://developer.clarify.ai/docs/getting-started/key-concepts#workspace).
 
 ## Using the connector
 
@@ -79,3 +87,4 @@ To start integrating with Clarify:
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key and workspace slug.
 - Start using the connector!
    - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
