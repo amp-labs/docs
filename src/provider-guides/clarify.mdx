@@ -1,0 +1,81 @@
+---
+title: "Clarify"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill and incremental read for all supported objects.
+
+### Notes
+
+- **Workspace scope.** Every Clarify request is scoped to one workspace, so the customer gives their workspace slug when they connect. See [Before you get started](#before-you-get-started).
+- **Field names.** Fields keep Clarify's own attribute names:
+  - Names are snake_case, and system fields start with an underscore: `_id`, `_created_at`, `_updated_at`, `_created_by`.
+  - Collection fields such as `email_addresses`, `phone_numbers` and `domains` are objects that hold an `items` array.
+  - `name` on `person` and `users` is an object with `first_name` and `last_name`.
+  - Field definitions, including each workspace's custom fields, come from the workspace's own schemas.
+- **Incremental reads.** Incremental reads use each record's `_updated_at`. Clarify's `users` endpoint has no time filter, so each read of `users` fetches all workspace users and keeps the ones updated in the window.
+- **Custom objects.** Read a custom object by its Clarify name, which always starts with `c_`. For example, an object named "Sales Order" is read as `c_sales_order`.
+- **Relationships.**
+  - Records include links to one other record as ID fields, such as `company_id`, `owner_id` and `deal_id`.
+  - Links to many records aren't included: the people on a deal, meeting attendees as linked `person` or `users` records, and meeting recordings. Meetings do include a `participants` field.
+- **Meeting content.** Meeting fields such as `title`, `notes`, `summary` and `description` are filled in only when the API key's user can see that meeting. A personal key can see everything its creator can; a workspace key sees only public workspace data.
+- **Not available.** Comments, meeting transcripts and recording files aren't available through Read Actions. Records deleted in Clarify aren't delivered either.
+
+### Supported objects
+
+The Clarify connector supports reading from the following objects:
+
+- [company](https://developer.clarify.ai/docs/api-reference/resources/getResources)
+- [deal](https://developer.clarify.ai/docs/api-reference/resources/getResources)
+- [meeting](https://developer.clarify.ai/docs/api-reference/resources/getResources)
+- [person](https://developer.clarify.ai/docs/api-reference/resources/getResources)
+- [task](https://developer.clarify.ai/docs/api-reference/resources/getResources)
+- [users](https://developer.clarify.ai/docs/api-reference/users/getUsers)
+
+### Example integration
+
+To define an integration for Clarify, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: clarifyIntegration
+    displayName: My Clarify Integration
+    provider: clarify
+    read:
+      objects:
+        - objectName: company
+          destination: myWebhook
+```
+
+## Before you get started
+
+To connect Clarify with Ampersand, you will need a [Clarify account](https://www.clarify.ai).
+
+### Creating an API key for Clarify
+
+1. Sign in to Clarify and open [**Settings → API Keys**](https://app.clarify.ai/redirect/settings/api-keys).
+2. Create a key. Pick its type:
+   - A **personal** key acts as you and can read everything you can, including meeting content shared with you. Any workspace member can create one.
+   - A **workspace** key is shared and limited to public data in the workspace. Only workspace admins can create one.
+3. Copy the key.
+4. Note your workspace slug. It appears in your Clarify login URL and under the user avatar menu. See [Clarify's workspace docs](https://developer.clarify.ai/docs/getting-started/key-concepts#workspace).
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Clarify:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key and workspace slug.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
