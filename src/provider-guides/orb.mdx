@@ -8,16 +8,15 @@ title: "Orb"
 
 This connector supports:
 
-- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the Orb instance will be done for each scheduled read.
+- [Read Actions](/read-actions), including full historic backfill. Each scheduled read is a full read of the Orb instance (Orb has no updated-since filter).
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.withorb.com`.
 
 ### Notes
 
-- Orb's list endpoints can only filter by creation date (or by invoice and due date for invoices), and Orb records have no last-updated field. So every scheduled read returns all records, including ones that haven't changed since the last read.
-- `invoices` includes invoices of every status: `draft`, `issued`, `paid`, `synced` and `void`. By default, Orb's API leaves out draft and void invoices. A draft invoice holds Orb's last computed amounts, which may lag behind usage that Orb hasn't processed yet.
-- Field names are Orb's own top-level keys, in snake_case (for example `external_customer_id`, `created_at`). Related records arrive as nested objects, not as separate fields. For example, `customer` on a subscription or an invoice holds that customer's `id` and `external_customer_id`.
-- `metrics` are Orb's billable metrics.
-- Subscription usage (`/v1/subscriptions/{subscription_id}/usage`) is not available as an object.
-- Proxy Actions are not available for Orb yet.
+- `invoices` includes invoices of every status: `draft`, `issued`, `paid`, `synced` and `void`. By default, Orb's API returns only issued, paid and synced invoices. A draft invoice holds Orb's last computed amounts, which may lag behind usage that Orb hasn't processed yet.
+- Field names are Orb's own top-level keys, in snake_case (for example `external_customer_id`, `created_at`). Related records arrive as nested objects. For example, `customer` on a subscription or an invoice holds that customer's `id` and `external_customer_id`.
+- `metrics` are Orb's billable metrics, including archived ones.
+- Orb's API paths start with its version, so Proxy calls include it, for example `GET /v1/customers`.
 
 ### Supported objects
 
@@ -43,6 +42,8 @@ integrations:
       objects:
         - objectName: subscriptions
           destination: myWebhook
+    proxy:
+      enabled: true
 ```
 
 ## Before you get started
@@ -68,6 +69,7 @@ To start integrating with Orb:
 - Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key.
 - Start using the connector!
    - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 
 ## Rate limits
 
