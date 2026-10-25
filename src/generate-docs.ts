@@ -623,6 +623,7 @@ const baseConfig = {
             "provider-guides/odoo",
             "provider-guides/okta",
             "provider-guides/openAI",
+            "provider-guides/orb",
             "provider-guides/outplay",
             "provider-guides/outreach",
             "provider-guides/paddle",
