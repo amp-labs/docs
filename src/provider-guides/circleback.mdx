@@ -1,6 +1,5 @@
 ---
 title: "Circleback"
-description: "Connect Circleback to Ampersand with an API key to read meetings with their notes, attendees and transcripts, action items, people, companies and tags, plus proxy calls to the Circleback API."
 ---
 
 ## What's supported
@@ -11,20 +10,6 @@ This connector supports:
 
 - [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects listed below. For all other objects, a full read of the Circleback instance will be done per scheduled read.
 - [Proxy Actions](/proxy-actions), using the base URL `https://circleback.ai/api`.
-
-### Notes
-
-- **Access is per user.** A Circleback API key belongs to one user. The connector reads what that user can access in Circleback, including every meeting they can access, not only the meetings they own.
-- **Meetings carry their notes, attendees and transcript as fields of `meetings`:**
-  - `notes` holds the meeting notes in Markdown, and `privateNotes` holds the connected user's private notes.
-  - `attendees` lists each participant's `name`, `email`, `profileId` and `companyName`.
-  - `transcript` holds the transcript as a list of segments, each with `speaker`, `text` and `timestamp` (seconds from the start of the meeting). Ampersand fetches each meeting's transcript from [Get meeting transcript](https://circleback.ai/docs/api/meetings/get-meeting-transcript), only when you select the `transcript` field. A meeting with no transcript has `transcript: null`.
-- **Incremental read of `meetings` uses `updatedAt`.** Each scheduled read lists all of the user's meetings and delivers those whose `updatedAt` changed since the last read.
-- **Recording links expire.** Circleback's `recordingUrl` is valid for 24 hours, and is only set when the customer has enabled saving meeting recordings.
-- **`action-items` covers every assignee and both states.** The connector reads action items assigned to anyone, not only the connected user, both pending (`PENDING`) and done (`DONE`).
-- **Companies are identified by `domain`.** Use `domain` as the stable identifier of a `companies` record.
-- **Field names** are Circleback's own, in camelCase (for example `createdAt`, `updatedAt`, `icalUid`).
-- **Rate limits** are per Circleback account and depend on its plan: 3 requests per second and 20 per minute on Free, and 20 per second and 300 per minute on Pro, Business and Enterprise. Ampersand paces transcript requests to the account's limit. See [Circleback rate limits](https://circleback.ai/docs/api#rate-limits).
 
 ### Supported objects
 
@@ -78,7 +63,18 @@ To start integrating with Circleback:
 - Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key.
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the consumer for their API key.
 - Start using the connector!
    - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Notes
+
+- **Access is per user.** A Circleback API key belongs to one user. The connector reads what that user can access in Circleback, including every meeting they can access, not only the meetings they own.
+- **Meetings carry their notes, attendees and transcript as fields of `meetings`:**
+  - `notes` holds the meeting notes in Markdown, and `privateNotes` holds the connected user's private notes.
+  - `attendees` lists each participant's `name`, `email`, `profileId` and `companyName`.
+  - `transcript` holds the transcript as a list of segments, each with `speaker`, `text` and `timestamp` (seconds from the start of the meeting). Ampersand fetches each meeting's transcript from [Get meeting transcript](https://circleback.ai/docs/api/meetings/get-meeting-transcript), only when you select the `transcript` field. A meeting with no transcript has `transcript: null`.
+- **Recording links expire.** Circleback's `recordingUrl` is valid for 24 hours, and is only set when the consumer has enabled saving meeting recordings.
+- **`action-items` covers every assignee and both states.** The connector reads action items assigned to anyone, not only the connected user, both pending (`PENDING`) and done (`DONE`).
+- **Companies are identified by `domain`.** Use `domain` as the stable identifier of a `companies` record.
