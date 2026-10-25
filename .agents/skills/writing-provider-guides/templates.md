@@ -16,8 +16,6 @@ title: "<Provider Display Name>"
 
 ### Supported actions
 
-### Notes                    ← optional; only when real caveats exist
-
 ### Supported objects        ← deep connectors only
 
 ### Example integration
@@ -28,8 +26,11 @@ title: "<Provider Display Name>"
 
 ## Using the connector
 
-<extra provider-specific sections (API documentation, rate limits, credential
- format quirks) — always LAST, after "Using the connector">
+<extra provider-specific sections (API documentation, credential format quirks),
+ after "Using the connector">
+
+## Notes                      ← optional, always last; only notes a builder wouldn't
+                                assume from Ampersand (see SKILL.md)
 ```
 
 ---
@@ -52,13 +53,13 @@ Rules: order is Read → Subscribe → Write → Proxy; include only supported a
 ### Read bullet — Pattern A: no incremental read
 
 ```markdown
-- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the <Provider> instance will be done for each scheduled read.
+- [Read Actions](/read-actions), including full historic backfill. Each scheduled read is a full read of the <Provider> instance.
 ```
 
 ### Read bullet — Pattern B: incremental for ≤5 objects (list inline)
 
 ```markdown
-- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `<object1>`, `<object2>` and `<object3>` currently. For all other objects, a full read of the <Provider> instance will be done per scheduled read.
+- [Read Actions](/read-actions), including full historic backfill and incremental read for `<object1>`, `<object2>` and `<object3>`. Each scheduled read of any other object is a full read.
 ```
 
 ### Read bullet — Pattern C: incremental for all objects
@@ -70,7 +71,7 @@ Rules: order is Read → Subscribe → Write → Proxy; include only supported a
 ### Read bullet — Pattern D: incremental for >5 objects (annotate object list)
 
 ```markdown
-- [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects listed below. For all other objects, a full read of the <Provider> instance will be done per scheduled read.
+- [Read Actions](/read-actions), including full historic backfill, and incremental read for the objects marked below. Each scheduled read of any other object is a full read.
 ```
 
 With Pattern D, append ` (supports incremental read)` to each supporting bullet in the read-objects list.
@@ -216,7 +217,7 @@ To connect <Provider> with Ampersand, you will need a [<Provider> account](<sign
 
 - Section title options: `### Creating an API key for <Provider>`, `### Creating <Provider> credentials` — pick what fits the credential.
 - **Each dynamic token gets explained here.** Example (from outplay.mdx): "Note your workspace identifier - this is the subdomain in your <Provider> URL (e.g., if your URL is `https://mycompany-api.outplayhq.com`, your workspace is `mycompany`)."
-- Nonstandard Basic Auth mapping (e.g. API key as username, blank password) gets stated explicitly and linked to the provider's auth docs, plus this sentence: "The UI components will display this link, so that your users can successfully provide their credentials." For extensive quirks, add a `## Credential format for <Provider>` section at the end of the file (see connectWise.mdx).
+- Nonstandard Basic Auth mapping (e.g. API key as username, blank password) gets stated explicitly and linked to the provider's auth docs, plus this sentence: "The UI components will display this link, so that your consumers can successfully provide their credentials." For extensive quirks, add a `## Credential format for <Provider>` section at the end of the file (see connectWise.mdx).
 
 ---
 
@@ -248,12 +249,12 @@ Rules:
 
 | Auth type | `<auth intro line>` | `<auth prompt line>` |
 |---|---|---|
-| OAuth2 Authorization Code | *(omit)* | The UI component will prompt the customer for OAuth authorization. |
-| OAuth2 Client Credentials | This connector uses OAuth2 Client Credentials grant type, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.) | The UI component will prompt the customer for their credentials. |
-| API Key | This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.) | The UI component will prompt the customer for their API key. |
-| Basic Auth | This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.) | The UI component will prompt the customer for their username and password. |
+| OAuth2 Authorization Code | *(omit)* | The UI component will prompt the consumer for OAuth authorization. |
+| OAuth2 Client Credentials | This connector uses OAuth2 Client Credentials grant type, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.) | The UI component will prompt the consumer for their credentials. |
+| API Key | This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.) | The UI component will prompt the consumer for their API key. |
+| Basic Auth | This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.) | The UI component will prompt the consumer for their username and password. |
 
-If the customer must also supply dynamic tokens, extend the prompt line, e.g. "…for their API credentials and workspace location."
+If the consumer must also supply dynamic tokens, extend the prompt line, e.g. "…for their API credentials and workspace location."
 
 ### Proxy-only ending variant
 
@@ -268,6 +269,18 @@ For OAuth (either grant type) proxy-only connectors, the last bullet is instead:
 ```markdown
 - Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically handle the authentication with <Provider>.
 ```
+
+---
+
+## Notes
+
+```markdown
+## Notes
+
+- <one fact about <Provider> that a builder needs and wouldn't assume from Ampersand>
+```
+
+Omit the section when there are none. SKILL.md ("What a note is") says what qualifies.
 
 ---
 

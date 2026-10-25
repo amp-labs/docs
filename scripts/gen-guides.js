@@ -75,7 +75,7 @@ async function createBasicGuide(provider, info) {
   const docsSection = `
 ## Credential format for ${DISPLAY_NAME}
 
-${DISPLAY_NAME} uses a non-standard format for Basic Auth, which means that the username and password fields do not correspond to the actual username and password that a customer uses to log in. [Click here](${DOCS_URL}) for more information about the expected credential format for ${DISPLAY_NAME}. The UI components will display this link, so that your users can successfully provide their credentials.
+${DISPLAY_NAME} uses a non-standard format for Basic Auth, which means that the username and password fields do not correspond to the actual username and password that a consumer uses to log in. [Click here](${DOCS_URL}) for more information about the expected credential format for ${DISPLAY_NAME}. The UI components will display this link, so that your consumers can successfully provide their credentials.
 `
   const template = Handlebars.compile(basicAuthTemplate)
   const substituted = template(vars);
