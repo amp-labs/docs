@@ -523,6 +523,7 @@ const baseConfig = {
             "provider-guides/chorus",
             "provider-guides/clari",
             "provider-guides/clariCopilot",
+            "provider-guides/clarify",
             "provider-guides/clickup",
             "provider-guides/close",
             "provider-guides/cloudtalk",
