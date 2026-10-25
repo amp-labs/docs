@@ -1,6 +1,5 @@
 ---
 title: "Orb"
-description: "Connect Orb to Ampersand with an API key to read customers, subscriptions, invoices and billable metrics, and make proxy calls."
 ---
 
 ## What's supported
@@ -11,13 +10,6 @@ This connector supports:
 
 - [Read Actions](/read-actions), including full historic backfill. Each scheduled read reads every record again.
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.withorb.com`.
-
-### Notes
-
-- `invoices` includes invoices of every status: `draft`, `issued`, `paid`, `synced` and `void`. By default, Orb's API returns only issued, paid and synced invoices. A draft invoice holds Orb's last computed amounts, which may lag behind usage that Orb hasn't processed yet.
-- Field names are Orb's own top-level keys, in snake_case (for example `external_customer_id`, `created_at`). Related records arrive as nested objects. For example, `customer` on a subscription or an invoice holds that customer's `id` and `external_customer_id`.
-- `metrics` are Orb's billable metrics, including archived ones.
-- Orb's API paths start with its version, so Proxy calls include it, for example `GET /v1/customers`.
 
 ### Supported objects
 
@@ -67,7 +59,13 @@ To start integrating with Orb:
 - Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key.
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the consumer for their API key.
 - Start using the connector!
    - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Notes
+
+- `invoices` includes invoices of every status: `draft`, `issued`, `paid`, `synced` and `void`. A draft invoice holds Orb's last computed amounts, which may lag behind usage that Orb hasn't processed yet.
+- `metrics` are Orb's billable metrics, including archived ones.
+- Orb's API paths start with its version, so Proxy calls include it, for example `GET /v1/customers`.
