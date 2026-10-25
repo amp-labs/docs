@@ -20,7 +20,7 @@ This connector supports:
   - Collection fields such as `email_addresses`, `phone_numbers` and `domains` are objects that hold an `items` array.
   - `name` on `person` and `users` is an object with `first_name` and `last_name`.
   - Field definitions, including each workspace's custom fields, come from the workspace's own schemas.
-- **Incremental reads.** Incremental reads use each record's `_updated_at`. Clarify's `users` endpoint has no time filter, so each read of `users` fetches all workspace users and keeps the ones updated in the window.
+- **Incremental reads.** Incremental reads use each record's `_updated_at`. For `users`, each read fetches all workspace users and keeps the ones updated in the window.
 - **Custom objects.** Read a custom object by its Clarify name, which always starts with `c_`. For example, an object named "Sales Order" is read as `c_sales_order`.
 - **Relationships.** Records include links to one other record as ID fields, such as `company_id`, `owner_id` and `deal_id`. Meetings include their attendees in a `participants` field.
 - **Meeting content.** Clarify marks these meeting fields as secure: `title`, `description`, `location`, `conferencing`, `notes`, `summary`, `external_summary`, `prep` and `external_prep`.
