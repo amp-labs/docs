@@ -1,6 +1,5 @@
 ---
 title: "Clarify"
-description: "Connect Clarify to Ampersand to read companies, people, deals, meetings, tasks, users and custom objects with incremental reads, and proxy calls using a Clarify API key."
 ---
 
 ## What's supported
@@ -11,22 +10,6 @@ This connector supports:
 
 - [Read Actions](/read-actions), including full historic backfill and incremental read for all supported objects.
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.clarify.ai`.
-
-### Notes
-
-- **Workspace scope.** Every Clarify request is scoped to one workspace, so the customer gives their workspace slug when they connect. Proxy paths start with the API version and the workspace: `/v1/workspaces/<your workspace slug>`, for example `GET /v1/workspaces/<your workspace slug>/objects/person/resources`. See [Before you get started](#before-you-get-started).
-- **Field names.** Fields keep Clarify's own attribute names:
-  - Names are snake_case, and system fields start with an underscore: `_id`, `_created_at`, `_updated_at`, `_created_by`.
-  - Collection fields such as `email_addresses`, `phone_numbers` and `domains` are objects that hold an `items` array.
-  - `name` on `person` and `users` is an object with `first_name` and `last_name`.
-  - Field definitions, including each workspace's custom fields, come from the workspace's own schemas.
-- **Incremental reads.** Incremental reads use each record's `_updated_at`. For `users`, each read fetches all workspace users and keeps the ones updated in the window.
-- **Custom objects.** Read a custom object by its Clarify name, which always starts with `c_`. For example, an object named "Sales Order" is read as `c_sales_order`.
-- **Relationships.** Records include links to one other record as ID fields, such as `company_id`, `owner_id` and `deal_id`. Meetings include their attendees in a `participants` field.
-- **Meeting content.** Clarify marks these meeting fields as secure: `title`, `description`, `location`, `conferencing`, `notes`, `summary`, `external_summary`, `prep` and `external_prep`.
-  - They are filled in only when the API key's user can see that meeting; the meeting's `_has_access` field says whether they can.
-  - A personal key can see everything its creator can; a workspace key sees only public workspace data.
-- **Merged records.** When records are merged in Clarify, the records merged away stop appearing in reads, as deleted records do. The surviving record lists their IDs in `_merged_ids`.
 
 ### Supported objects
 
@@ -81,7 +64,17 @@ To start integrating with Clarify:
 - Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key and workspace slug.
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the consumer for their API key and workspace slug.
 - Start using the connector!
    - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Notes
+
+- **Workspace scope.** Every Clarify request is scoped to one workspace, so the consumer gives their workspace slug when they connect. Proxy paths start with the API version and the workspace: `/v1/workspaces/<workspace slug>`, for example `GET /v1/workspaces/<workspace slug>/objects/person/resources`.
+- **Custom objects.** Read a custom object by its Clarify name, which always starts with `c_`. For example, an object named "Sales Order" is read as `c_sales_order`.
+- **Relationships.** Records include links to one other record as ID fields, such as `company_id`, `owner_id` and `deal_id`. Meetings include their attendees in a `participants` field.
+- **Meeting content.** Clarify marks these meeting fields as secure: `title`, `description`, `location`, `conferencing`, `notes`, `summary`, `external_summary`, `prep` and `external_prep`.
+  - They are filled in only when the API key's user can see that meeting; the meeting's `_has_access` field says whether they can.
+  - A personal key can see everything its creator can; a workspace key sees only public workspace data.
+- **Merged records.** When records are merged in Clarify, the records merged away stop appearing in reads, as deleted records do. The surviving record lists their IDs in `_merged_ids`.
