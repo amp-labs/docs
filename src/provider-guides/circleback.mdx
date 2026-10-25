@@ -1,0 +1,80 @@
+---
+title: "Circleback"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects listed below. For all other objects, a full read of the Circleback instance will be done per scheduled read.
+- [Proxy Actions](/proxy-actions), using the base URL `https://circleback.ai/api`.
+
+### Supported objects
+
+The Circleback connector supports reading from the following objects:
+
+- [action-items](https://circleback.ai/docs/api/action-items/list-action-items)
+- [companies](https://circleback.ai/docs/api/companies/list-companies)
+- [meetings](https://circleback.ai/docs/api/meetings/list-meetings) (supports incremental read)
+- [people](https://circleback.ai/docs/api/people/list-people)
+- [tag](https://circleback.ai/docs/api/tags/list-tags)
+
+### Example integration
+
+To define an integration for Circleback, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: circlebackIntegration
+    displayName: My Circleback Integration
+    provider: circleback
+    read:
+      objects:
+        - objectName: meetings
+          destination: meetingWebhook
+        - objectName: people
+          destination: meetingWebhook
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To connect Circleback with Ampersand, you will need a [Circleback account](https://circleback.ai). The API is available on every Circleback plan, including Free.
+
+### Creating an API key for Circleback
+
+1. Log in to Circleback and go to [Settings → API keys](https://circleback.ai/settings?tab=api-access).
+2. Create an API key.
+3. Copy the key, which looks like `cb_<secret>`. Circleback shows it only once, at creation.
+
+For more details, see [Get an API key](https://circleback.ai/docs/api#get-an-api-key) in the Circleback docs.
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Circleback:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the consumer for their API key.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Notes
+
+- **Access is per user.** A Circleback API key belongs to one user. The connector reads what that user can access in Circleback, including every meeting they can access, not only the meetings they own.
+- **Meetings carry their notes, attendees and transcript as fields of `meetings`:**
+  - `notes` holds the meeting notes in Markdown, and `privateNotes` holds the connected user's private notes.
+  - `attendees` lists each participant's `name`, `email`, `profileId` and `companyName`.
+  - `transcript` holds the transcript as a list of segments, each with `speaker`, `text` and `timestamp` (seconds from the start of the meeting). Ampersand fetches each meeting's transcript from [Get meeting transcript](https://circleback.ai/docs/api/meetings/get-meeting-transcript), only when you select the `transcript` field. A meeting with no transcript has `transcript: null`.
+- **Recording links expire.** Circleback's `recordingUrl` is valid for 24 hours, and is only set when the consumer has enabled saving meeting recordings.
+- **`action-items` covers every assignee and both states.** The connector reads action items assigned to anyone, not only the connected user, both pending (`PENDING`) and done (`DONE`).
+- **Companies are identified by `domain`.** Use `domain` as the stable identifier of a `companies` record.
