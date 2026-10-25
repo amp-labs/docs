@@ -521,6 +521,7 @@ const baseConfig = {
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
             "provider-guides/chorus",
+            "provider-guides/circleback",
             "provider-guides/clari",
             "provider-guides/clariCopilot",
             "provider-guides/clarify",
