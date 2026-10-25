@@ -1,5 +1,6 @@
 ---
 title: "Orb"
+description: "Connect Orb to Ampersand with an API key to read customers, subscriptions, invoices and billable metrics, and make proxy calls."
 ---
 
 ## What's supported
@@ -8,7 +9,7 @@ title: "Orb"
 
 This connector supports:
 
-- [Read Actions](/read-actions), including full historic backfill. Each scheduled read is a full read of the Orb instance (Orb has no updated-since filter).
+- [Read Actions](/read-actions), including full historic backfill. Each scheduled read reads every record again.
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.withorb.com`.
 
 ### Notes
@@ -70,7 +71,3 @@ To start integrating with Orb:
 - Start using the connector!
    - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
-
-## Rate limits
-
-Orb limits `GET` requests to 100 per second in live mode, 50 per second in Test Mode and 10 per second on trial accounts. See [Orb's rate limits](https://docs.withorb.com/api-reference/rate-limits).
