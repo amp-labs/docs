@@ -289,6 +289,7 @@ Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-compone
   groupName={teamName}
   subscribeEvents={{
     messages: {
+      inheritFieldsAndMappings: false,
       selectedFields: ["text", "user"],
       selectedFieldMappings: { timeStamp: "ts", channelName: "channel" },
       createEvent: { userSelect: false },
@@ -301,7 +302,7 @@ Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-compone
 
 Use this when your end users connect their own Slack workspace through your UI. The component handles the connection, creates the installation, and applies the config above.
 
-The component writes **`inheritFieldsAndMappings: false`** into the config for you. That value is required for an object like this. Unset means `true`, and the server then requires a matching read object, failing with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it — only the installation config is read.
+**`inheritFieldsAndMappings` is a prop**, defaulting to `false`, which is what an object like this needs. Omitting it from the config is not the same thing: the server reads an absent value as `true`, then requires a matching read object and fails with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it — only the installation config is read.
 
 </Tab>
 <Tab title="API">
