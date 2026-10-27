@@ -264,10 +264,8 @@ That is the whole manifest. Each piece, and why there is so little of it:
 | `read.objects: []` | A manifest with `subscribe` and no `read` is rejected, and so is a `read` with no `objects` list. An empty list satisfies both, and nothing is read. |
 | `objectName` | Matches the object an installation configures. Use the provider's own name for it. |
 | `destination` | Where events are delivered. An installation can override it, and events have nowhere to go without one. |
-| *(no event blocks)* | Declaring `createEvent`, `updateEvent`, `deleteEvent`, or `associationChangeEvent` here requires `inheritFieldsAndMapping: true`, which is the opposite of what this object does. The events belong in the installation. |
-| *(no `inheritFieldsAndMapping`)* | Leave it out. Each installation sets `inheritFieldsAndMappings: false` for itself. |
 
-The last two are the ones that bite. If you add an `updateEvent` block to the manifest above, deploying it fails with `subscribe must have inheritFieldsAndMapping set to true`.
+Which events to subscribe to, and which fields to deliver, are set per installation rather than here. That is covered next.
 
 <Note>
 Slack needs setup in your provider app before any events arrive, and Ampersand does not register the subscription for you. See [Set up Subscribe Actions](/provider-guides/slack#set-up-subscribe-actions).
@@ -302,6 +300,8 @@ Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-compone
 ```
 
 Use this when your end users connect their own Slack workspace through your UI. The component handles the connection, creates the installation, and applies the config above.
+
+The component writes **`inheritFieldsAndMappings: false`** into the config for you. That value is required for an object like this: left unset it means `true`, and the install is rejected for naming a read object that doesn't exist.
 
 </Tab>
 <Tab title="API">
@@ -342,14 +342,15 @@ curl -X POST \
 
 You need a `connectionId` first, from a connection your end user has already made. Use this when you build your own installation UI, or when you install on your end users' behalf rather than having them click through a flow.
 
+**`inheritFieldsAndMappings` must be `false`, and you have to write it out.** Leaving it unset means `true`, and the install is rejected for naming a read object that doesn't exist. The events belong here too, alongside the fields.
+
 To change the fields or events later, [update the installation](/reference/installation/update-an-installation) with `config.content.subscribe.objects.messages` in the `updateMask`. That path replaces the whole object, so send every key you want to keep.
 
 </Tab>
 </Tabs>
 
-Whichever route you take, four rules apply to the config:
+Whichever route you take, three more rules apply to the config:
 
-- **`inheritFieldsAndMappings` must be `false`**, and must be written out. Leaving it unset means `true`, and the install is then rejected for naming a read object that doesn't exist. The React component writes it for you.
 - **Name at least one field**, in `selectedFields`, `selectedFieldMappings`, or both. An object that inherits nothing and selects nothing has no fields to deliver, and the install is rejected.
 - **There is no field metadata for these objects**, so the names are taken as written rather than checked against the provider. A typo gets you an event with a missing field, not an error.
 - **`updateEvent` watches the fields you named.** To watch a different set, list them in `requiredWatchFields`; to watch every field, set `watchFieldsAuto` to `all`.
