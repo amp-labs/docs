@@ -20,6 +20,8 @@ To subscribe to an object, you need to specify:
 
 A subscribe action reuses the fields and mappings of a [read action](/read-actions). So each object that uses `createEvent`, `updateEvent`, `deleteEvent`, or `associationChangeEvent` also needs an object with the same `objectName` under `read`. That read object doesn't need a `schedule` or `backfill`: without them, it doesn't read anything and only supplies the fields and mappings. Objects that only use [`otherEvents`](#other-events) don't need one.
 
+If the object you want to subscribe to isn't one you read at all, you can leave the events out of `amp.yaml` and let each installation carry its own fields and events instead. See [Subscribe without a read action](#subscribe-without-a-read-action).
+
 <Note>
 In `amp.yaml` the setting is `inheritFieldsAndMapping`. In an installation's config it's spelled `inheritFieldsAndMappings`, with an **s**.
 </Note>
@@ -228,6 +230,66 @@ integrations:
 ```
 
 If you only want changes from now on, leave out `backfill` (and `schedule`). The read object then doesn't read anything; it only supplies the fields and mappings for the subscription.
+
+## Subscribe without a read action
+
+Some objects are only worth subscribing to. A Slack `messages` object, for instance, has no backfill worth running and no read schedule that makes sense — you want each new message as it arrives, and nothing else.
+
+An object like that can skip the matching read object entirely. Instead of inheriting fields from a read action, each installation carries its own fields, mappings, and events. The fields come from whoever creates the installation: your app through the [API](/reference/installation/create-a-new-installation), or the [React component](/embeddable-ui-components#subscribe-events) through its `subscribeEvents` prop.
+
+### In amp.yaml
+
+Declare only the object name and the destination:
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: slackSubscribeOnly
+    provider: slack
+
+    # Required because `subscribe` is present, but nothing is read.
+    read:
+      objects: []
+
+    subscribe:
+      objects:
+        - objectName: messages
+          destination: slackWebhook
+```
+
+Two things about that manifest are easy to get wrong:
+
+- **The empty `read` block is required.** A manifest with `subscribe` and no `read` is rejected, and so is a `read` with no `objects` list. An empty list satisfies both, and nothing is read.
+- **Leave the event blocks out.** Declaring `createEvent`, `updateEvent`, `deleteEvent`, or `associationChangeEvent` in `amp.yaml` requires `inheritFieldsAndMapping: true`, which is the opposite of what this object does. The events belong in the installation config.
+
+### In the installation config
+
+The config names the fields and the events, and sets `inheritFieldsAndMappings` to `false`:
+
+```json
+{
+  "subscribe": {
+    "objects": {
+      "messages": {
+        "objectName": "messages",
+        "inheritFieldsAndMappings": false,
+        "selectedFields": { "text": true, "user": true },
+        "selectedFieldMappings": { "timeStamp": "ts", "channelName": "channel" },
+        "createEvent": { "enabled": "always" },
+        "updateEvent": { "enabled": "always" },
+        "deleteEvent": { "enabled": "always" }
+      }
+    }
+  }
+}
+```
+
+- **`inheritFieldsAndMappings` must be `false`**, and must be written out. Leaving it unset means `true`, and the install is then rejected for naming a read object that doesn't exist.
+- **Name at least one field**, in `selectedFields`, `selectedFieldMappings`, or both. An object that inherits nothing and selects nothing has no fields to deliver, and the install is rejected.
+- **There is no field metadata for these objects**, so the names are taken as written rather than checked against the provider. A typo gets you an event with a missing field, not an error.
+- **`updateEvent` watches the fields you named.** List `requiredWatchFields` to watch a different set, or set `watchFieldsAuto` to `all` to watch every field.
+
+Events are delivered under their mapped names, so the config above delivers `text`, `user`, `timeStamp`, and `channelName`.
 
 ## What you receive
 
