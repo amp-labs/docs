@@ -205,6 +205,8 @@ Keys are object names, matching the `objectName` in your `amp.yaml`.
 
 **`updateEvent` watches the fields you named.** An object that names no fields watches every field instead.
 
+**The component writes `inheritFieldsAndMappings: false`** into the config for you. That value is required for an object that carries its own fields: left unset it means `true`, and the installation is rejected for naming a read object that doesn't exist.
+
 This works in both the standard flow and [wizard mode](#wizard-mode-beta). In each, the events are configured as the installation is created — the consumer never sees a step for them. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
 
 <Warning>`subscribeEvents` is in beta preview and its shape may change.</Warning>
