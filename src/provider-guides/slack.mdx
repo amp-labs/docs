@@ -14,7 +14,7 @@ The Slack integration is available through two connectors:
 Both connectors support:
 - [Read Actions](/read-actions), including full historic backfill and incremental read.
 - [Write Actions](/write-actions).
-- [Subscribe Actions](/subscribe-actions).
+- [Subscribe Actions](/subscribe-actions). Please note that [special set up](#set-up-subscribe-actions) is needed for Slack.
 - [Proxy Actions](/proxy-actions), using the base URL `https://slack.com/api`.
 
 Both connectors use the same Slack app, OAuth configuration, client ID, client secret, and Ampersand redirect URI.
@@ -353,6 +353,48 @@ Follow the steps below to create a Slack app and add the Ampersand redirect URL.
    ![Ampersand Integration](/images/provider-guides/88f33d5-slack2.gif)
 
 7. Click **Save Changes**.
+
+## Set up Subscribe Actions
+
+Slack message events work differently from the other objects on this page, in two ways worth knowing before you start.
+
+### Messages are a subscribe-only object
+
+There is no read action for Slack messages: there is no backfill worth running and no schedule that makes sense, and `messages` is not in the object matrix above. So the object carries its own fields rather than inheriting them from a read action, and each installation says which fields it wants.
+
+That shape is covered in full, with both the manifest and the two ways to create the installation, in [Subscribe without a read action](/subscribe-actions#subscribe-without-a-read-action). The short version is a manifest with an empty read block:
+
+```yaml amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: slackSubscribeOnly
+    provider: slack
+
+    # Required because `subscribe` is present, even though nothing is read.
+    read:
+      objects: []
+
+    subscribe:
+      objects:
+        - objectName: messages
+          destination: slackWebhook
+```
+
+Leave the event blocks out of the manifest. Each installation sets `inheritFieldsAndMappings: false` and names its own fields and events, either through the [`subscribeEvents` prop](/embeddable-ui-components#subscribe-events) on the React component or through the [installation API](/subscribe-actions#subscribe-without-a-read-action).
+
+### Ampersand does not register the subscription
+
+For most providers, Ampersand registers the event subscription with the provider when a customer installs. Slack does not work that way: you turn on Event Subscriptions in your own Slack app, once, and every installation delivers through it.
+
+1. **Add the bot scopes** for the events you want, under **OAuth & Permissions**. Message events in public channels need `channels:history`; private channels, group DMs and DMs need `groups:history`, `mpim:history` and `im:history`.
+2. **Turn on Event Subscriptions** in your Slack app and set the Request URL to your Ampersand subscribe webhook endpoint. Slack sends a challenge request to verify it before saving.
+3. **Subscribe to the bot events** you want under **Subscribe to bot events** — `message.channels` for messages in public channels, and the matching `message.*` event for other conversation types.
+4. **Reinstall the app** to your workspace. Slack does not apply new scopes or new event subscriptions to an app that is already installed, so an app you have not reinstalled sends nothing. This is the most common reason no events arrive.
+5. **Invite the bot to the channels** you want events from. The bot only receives events from conversations it is in.
+
+<Note>
+Events stop at step 4 more often than anywhere else. If the Request URL verified but nothing arrives, reinstall the app before looking anywhere else.
+</Note>
 
 ## Using the connector
 
