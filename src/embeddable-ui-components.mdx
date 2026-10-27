@@ -106,6 +106,7 @@ The parameters of the component are:
 * **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
 * **onUninstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully uninstalls the integration.
 * **fieldMapping** (JSON): a JSON object that specifies the dynamic mapping configuration for this installation. Learn more about dynamic mapping [here](/object-and-field-mapping#dynamic-field-mappings)
+* **subscribeEvents** (JSON, optional): the subscribe configuration for objects that don't inherit fields from a read action. See [Subscribe events](#subscribe-events).
 
 Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`. `Config` is an exported type from `@amp-labs/react`.
 
@@ -163,6 +164,47 @@ If you close your install dialog in `onInstallSuccess`, it will close right afte
 </Note>
 
 
+#### Subscribe events
+
+An integration can have [subscribe objects that carry their own fields](/subscribe-actions#subscribe-without-a-read-action) rather than inheriting them from a read action. Those objects have no field metadata and no configuration screen, so the component can't ask the consumer about them. You tell it what to configure, with the `subscribeEvents` prop:
+
+```JSX
+<InstallIntegration
+  integration={myIntegrationName}
+  consumerRef={userId}
+  consumerName={userFullName}
+  groupRef={teamId}
+  groupName={teamName}
+  subscribeEvents={{
+    messages: {
+      selectedFields: ["text", "user"],
+      selectedFieldMappings: { timeStamp: "ts", channelName: "channel" },
+      createEvent: { userSelect: false },
+      updateEvent: { userSelect: false },
+      deleteEvent: { userSelect: false },
+    },
+  }}
+/>
+```
+
+Keys are object names, matching the `objectName` in your `amp.yaml`.
+
+| Key | Meaning |
+|---|---|
+| `selectedFields` | Provider field names to deliver with each event. |
+| `selectedFieldMappings` | Mapped name to provider field name, so `{ timeStamp: "ts" }` delivers Slack's `ts` as `timeStamp`. |
+| `createEvent` / `updateEvent` / `deleteEvent` | Subscribe to this event. **Leave a key out to not subscribe to that event at all.** |
+
+**An event's presence is what subscribes to it.** `userSelect` only decides whether the consumer is asked: `false` configures the event without a question. `userSelect: true` is reserved for a consumer-facing step that doesn't exist yet, so use `false` for now.
+
+**Name at least one field.** An object that inherits nothing and selects nothing has no fields to deliver, and the installation is rejected. The names are not validated against the provider, so a typo gets you an event with a missing field rather than an error.
+
+**`updateEvent` watches the fields you named.** An object that names no fields watches every field instead.
+
+This works in both the standard flow and [wizard mode](#wizard-mode-beta). In each, the events are configured as the installation is created — the consumer never sees a step for them. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
+
+<Warning>`subscribeEvents` is in beta preview. The shape may change, and it requires a recent enough Ampersand backend — if your installs fail with an error about `watchFieldsAuto`, get in touch.</Warning>
+
 #### Wizard mode (Beta)
 
 The wizard mode replaces the standard configuration view with a guided, multi-step installation flow during initial set up. It walks your end users through connecting, selecting objects, configuring fields/mappings, and reviewing before creating an installation.
@@ -200,6 +242,7 @@ With [always-enabled objects](#always-enabled-objects), the installation is crea
 | [Value mappings](/object-and-field-mapping#mapping-values) | No |
 | [Field mapping `default`](/object-and-field-mapping#field-mapping-1) | No |
 | [Dynamic field mappings](/object-and-field-mapping#dynamic-field-mappings) (`fieldMapping` prop) | No |
+| [Subscribe events](#subscribe-events) (`subscribeEvents` prop) | Yes |
 
 ### Connect provider
 
