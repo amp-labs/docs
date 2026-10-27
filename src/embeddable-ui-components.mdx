@@ -205,7 +205,7 @@ Keys are object names, matching the `objectName` in your `amp.yaml`.
 
 **`updateEvent` watches the fields you named.** An object that names no fields watches every field instead.
 
-**The component writes `inheritFieldsAndMappings: false`** into the config for you. That value is required for an object that carries its own fields: left unset it means `true`, and the installation is rejected for naming a read object that doesn't exist.
+**The component writes `inheritFieldsAndMappings: false`** into the config for you. That value is required for an object that carries its own fields. Unset means `true`, and the server then requires a matching read object, failing with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it — only the installation config is read.
 
 This works in both the standard flow and [wizard mode](#wizard-mode-beta). In each, the events are configured as the installation is created — the consumer never sees a step for them. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
 
