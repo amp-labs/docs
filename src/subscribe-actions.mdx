@@ -233,7 +233,7 @@ If you only want changes from now on, leave out `backfill` (and `schedule`). The
 
 ## Subscribe without a read action
 
-Some objects are only worth subscribing to. A Slack `messages` object, for instance, has no backfill worth running and no read schedule that makes sense — you want each new message as it arrives, and nothing else.
+Some objects can only be subscribed to. Slack `messages` is one: it isn't available to [read](/read-actions) on a schedule or to [search](/search-actions), so a subscription is the only way to get messages at all.
 
 An object like that can skip the matching read object entirely. Instead of inheriting fields from a read action, each installation carries its own fields, mappings, and events, set when the installation is created.
 
