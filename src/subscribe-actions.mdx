@@ -301,7 +301,7 @@ Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-compone
 
 Use this when your end users connect their own Slack workspace through your UI. The component handles the connection, creates the installation, and applies the config above.
 
-The component writes **`inheritFieldsAndMappings: false`** into the config for you. That value is required for an object like this: left unset it means `true`, and the install is rejected for naming a read object that doesn't exist.
+The component writes **`inheritFieldsAndMappings: false`** into the config for you. That value is required for an object like this. Unset means `true`, and the server then requires a matching read object, failing with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it — only the installation config is read.
 
 </Tab>
 <Tab title="API">
@@ -342,7 +342,7 @@ curl -X POST \
 
 You need a `connectionId` first, from a connection your end user has already made. Use this when you build your own installation UI, or when you install on your end users' behalf rather than having them click through a flow.
 
-**`inheritFieldsAndMappings` must be `false`, and you have to write it out.** Leaving it unset means `true`, and the install is rejected for naming a read object that doesn't exist. The events belong here too, alongside the fields.
+**`inheritFieldsAndMappings` must be `false`, and you have to write it out.** Unset means `true`, and the server then requires a matching read object, failing with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it — only the installation config is read. The events belong here too, alongside the fields.
 
 To change the fields or events later, [update the installation](/reference/installation/update-an-installation) with `config.content.subscribe.objects.messages` in the `updateMask`. That path replaces the whole object, so send every key you want to keep.
 
