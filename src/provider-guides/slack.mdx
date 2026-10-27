@@ -148,7 +148,8 @@ export const rows = [
     label: "messages",
     bot: {read: false, write: false, subscribe: true},
     user: {read: false, write: false, subscribe: true},
-    href: "https://docs.slack.dev/reference/events/message"
+    href: "https://docs.slack.dev/reference/events/message",
+    note: "#set-up-subscribe-actions"
   }, {
     label: "slackLists",
     bot: {read: false, write: true, subscribe: false},
@@ -259,6 +260,15 @@ export const groupSeparator = {
             <a href={row.href}>
               {row.label}
             </a>
+            {row.note && (
+              <a
+                href={row.note}
+                aria-label={`Notes on the ${row.label} object`}
+                style={{textDecoration: "none", marginLeft: "2px"}}
+              >
+                *
+              </a>
+            )}
           </td>
 
           <td>{renderCellValue(row.bot.read)}</td>
@@ -275,6 +285,8 @@ export const groupSeparator = {
     </tbody>
   </table>
 </div>
+
+\* `messages` is subscribe only, and its installations carry their own fields rather than inheriting them from a read action. See [Set up Subscribe Actions](#set-up-subscribe-actions).
 
 ### Choose a connector
 
