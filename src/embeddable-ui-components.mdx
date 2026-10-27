@@ -196,7 +196,7 @@ Keys are object names, matching the `objectName` in your `amp.yaml`.
 
 | Key | Meaning |
 |---|---|
-| `inheritFieldsAndMappings` | Whether the object takes its fields from the matching read object. Defaults to `false`, which is what a subscribe-only object needs. |
+| `inheritFieldsAndMappings` | **Required.** Whether the object takes its fields from the matching read object. `false` for a subscribe-only object. |
 | `selectedFields` | Provider field names to deliver with each event. |
 | `selectedFieldMappings` | Mapped name to provider field name, so `{ timeStamp: "ts" }` delivers Slack's `ts` as `timeStamp`. |
 | `createEvent` / `updateEvent` / `deleteEvent` | Subscribe to this event. **Leave a key out to not subscribe to that event at all.** |
@@ -207,7 +207,7 @@ Keys are object names, matching the `objectName` in your `amp.yaml`.
 
 **`updateEvent` watches the fields you named.** An object that names no fields watches every field instead.
 
-**`inheritFieldsAndMappings` is written into the config either way**, defaulting to `false`. Omitting it from the config entirely is not the same thing: the server reads an absent value as `true`, then requires a matching read object and fails with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it — only the installation config is read. Set the prop to `true` for an object that does have a read action, and leave the two field keys out.
+**`inheritFieldsAndMappings` is required, and must be `false` for a subscribe-only object.** There is no default: the two values describe different objects, and the component will not guess which you meant. Leaving the key out of the config is not the same as `false` — the server reads an absent value as `true`, then requires a matching read object and fails with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it; only the installation config is read. Set it to `true` for an object that does have a read action, and leave the two field keys out in that case.
 
 This works in both the standard flow and [wizard mode](#wizard-mode-beta). In each, the events are configured as the installation is created — the consumer never sees a step for them. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
 
