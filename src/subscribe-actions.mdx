@@ -7,7 +7,7 @@ title: "Subscribe actions"
 Subscribe actions work alongside [read actions](/read-actions): a read can backfill your customer's existing records, and a subscription keeps you up to date from then on.
 
 <Note>
-  Subscribe actions are supported for a subset of providers. See the [provider guides](/provider-guides/overview) to check whether your provider supports them. Some providers need setup in your provider app before events arrive: [HubSpot](/provider-guides/hubspot#set-up-subscribe-actions), [Gong](/provider-guides/gong#set-up-subscribe-actions), [Housecall Pro](/provider-guides/housecallPro#set-up-subscribe-actions), [Gmail](/provider-guides/google#set-up-gmail-push-notifications-for-subscribe-actions), and [Zoho Mail](/provider-guides/zoho#set-up-subscribe-actions-for-zoho-mail).
+  Subscribe actions are supported for a subset of providers. See the [provider guides](/provider-guides/overview) to check whether your provider supports them. Some providers need setup in your provider app before events arrive: [HubSpot](/provider-guides/hubspot#set-up-subscribe-actions), [Gong](/provider-guides/gong#set-up-subscribe-actions), [Housecall Pro](/provider-guides/housecallPro#set-up-subscribe-actions), [Gmail](/provider-guides/google#set-up-gmail-push-notifications-for-subscribe-actions), [Zoho Mail](/provider-guides/zoho#set-up-subscribe-actions-for-zoho-mail), and [Slack](/provider-guides/slack#set-up-subscribe-actions).
 </Note>
 
 ## Defining subscriptions
@@ -235,19 +235,19 @@ If you only want changes from now on, leave out `backfill` (and `schedule`). The
 
 Some objects are only worth subscribing to. A Slack `messages` object, for instance, has no backfill worth running and no read schedule that makes sense — you want each new message as it arrives, and nothing else.
 
-An object like that can skip the matching read object entirely. Instead of inheriting fields from a read action, each installation carries its own fields, mappings, and events. The fields come from whoever creates the installation: your app through the [API](/reference/installation/create-a-new-installation), or the [React component](/embeddable-ui-components#subscribe-events) through its `subscribeEvents` prop.
+An object like that can skip the matching read object entirely. Instead of inheriting fields from a read action, each installation carries its own fields, mappings, and events, set when the installation is created.
 
-### In amp.yaml
+### Define the integration
 
-Declare only the object name and the destination:
+This is a complete manifest for subscribing to Slack messages. The destination (`slackWebhook` here) is something you [create separately](/destinations) and refer to by name:
 
-```yaml
+```yaml amp.yaml
 specVersion: 1.0.0
 integrations:
   - name: slackSubscribeOnly
     provider: slack
 
-    # Required because `subscribe` is present, but nothing is read.
+    # Required because `subscribe` is present, even though nothing is read.
     read:
       objects: []
 
@@ -257,37 +257,102 @@ integrations:
           destination: slackWebhook
 ```
 
-Two things about that manifest are easy to get wrong:
+That is the whole manifest. Each piece, and why there is so little of it:
 
-- **The empty `read` block is required.** A manifest with `subscribe` and no `read` is rejected, and so is a `read` with no `objects` list. An empty list satisfies both, and nothing is read.
-- **Leave the event blocks out.** Declaring `createEvent`, `updateEvent`, `deleteEvent`, or `associationChangeEvent` in `amp.yaml` requires `inheritFieldsAndMapping: true`, which is the opposite of what this object does. The events belong in the installation config.
+| Key | Why |
+| --- | --- |
+| `read.objects: []` | A manifest with `subscribe` and no `read` is rejected, and so is a `read` with no `objects` list. An empty list satisfies both, and nothing is read. |
+| `objectName` | Matches the object an installation configures. Use the provider's own name for it. |
+| `destination` | Where events are delivered. An installation can override it, and events have nowhere to go without one. |
+| *(no event blocks)* | Declaring `createEvent`, `updateEvent`, `deleteEvent`, or `associationChangeEvent` here requires `inheritFieldsAndMapping: true`, which is the opposite of what this object does. The events belong in the installation. |
+| *(no `inheritFieldsAndMapping`)* | Leave it out. Each installation sets `inheritFieldsAndMappings: false` for itself. |
 
-### In the installation config
+The last two are the ones that bite. If you add an `updateEvent` block to the manifest above, deploying it fails with `subscribe must have inheritFieldsAndMapping set to true`.
 
-The config names the fields and the events, and sets `inheritFieldsAndMappings` to `false`:
+<Note>
+Slack needs setup in your provider app before any events arrive, and Ampersand does not register the subscription for you. See [Set up Subscribe Actions](/provider-guides/slack#set-up-subscribe-actions).
+</Note>
 
-```json
-{
-  "subscribe": {
-    "objects": {
-      "messages": {
-        "objectName": "messages",
-        "inheritFieldsAndMappings": false,
-        "selectedFields": { "text": true, "user": true },
-        "selectedFieldMappings": { "timeStamp": "ts", "channelName": "channel" },
-        "createEvent": { "enabled": "always" },
-        "updateEvent": { "enabled": "always" },
-        "deleteEvent": { "enabled": "always" }
-      }
-    }
-  }
-}
+### Create the installation
+
+The installation names the fields, the mappings, and the events. Both routes write the same config — pick whichever fits how your app installs integrations.
+
+<Tabs>
+<Tab title="React component">
+
+Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-components#subscribe-events). The component writes the config when it creates the installation, so your end user never sees a step for it:
+
+```JSX
+<InstallIntegration
+  integration="slackSubscribeOnly"
+  consumerRef={userId}
+  consumerName={userFullName}
+  groupRef={teamId}
+  groupName={teamName}
+  subscribeEvents={{
+    messages: {
+      selectedFields: ["text", "user"],
+      selectedFieldMappings: { timeStamp: "ts", channelName: "channel" },
+      createEvent: { userSelect: false },
+      updateEvent: { userSelect: false },
+      deleteEvent: { userSelect: false },
+    },
+  }}
+/>
 ```
 
-- **`inheritFieldsAndMappings` must be `false`**, and must be written out. Leaving it unset means `true`, and the install is then rejected for naming a read object that doesn't exist.
+Use this when your end users connect their own Slack workspace through your UI. The component handles the connection, creates the installation, and applies the config above.
+
+</Tab>
+<Tab title="API">
+
+[Create the installation](/reference/installation/create-a-new-installation) yourself, with the same config in the request body:
+
+```bash
+curl -X POST \
+  'https://api.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations' \
+  -H 'X-Api-Key: YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "groupRef": "YOUR_GROUP_REF",
+    "connectionId": "CONNECTION_ID",
+    "config": {
+      "content": {
+        "provider": "slack",
+        "subscribe": {
+          "objects": {
+            "messages": {
+              "objectName": "messages",
+              "inheritFieldsAndMappings": false,
+              "selectedFields": { "text": true, "user": true },
+              "selectedFieldMappings": {
+                "timeStamp": "ts",
+                "channelName": "channel"
+              },
+              "createEvent": { "enabled": "always" },
+              "updateEvent": { "enabled": "always" },
+              "deleteEvent": { "enabled": "always" }
+            }
+          }
+        }
+      }
+    }
+  }'
+```
+
+You need a `connectionId` first, from a connection your end user has already made. Use this when you build your own installation UI, or when you install on your end users' behalf rather than having them click through a flow.
+
+To change the fields or events later, [update the installation](/reference/installation/update-an-installation) with `config.content.subscribe.objects.messages` in the `updateMask`. That path replaces the whole object, so send every key you want to keep.
+
+</Tab>
+</Tabs>
+
+Whichever route you take, four rules apply to the config:
+
+- **`inheritFieldsAndMappings` must be `false`**, and must be written out. Leaving it unset means `true`, and the install is then rejected for naming a read object that doesn't exist. The React component writes it for you.
 - **Name at least one field**, in `selectedFields`, `selectedFieldMappings`, or both. An object that inherits nothing and selects nothing has no fields to deliver, and the install is rejected.
 - **There is no field metadata for these objects**, so the names are taken as written rather than checked against the provider. A typo gets you an event with a missing field, not an error.
-- **`updateEvent` watches the fields you named.** List `requiredWatchFields` to watch a different set, or set `watchFieldsAuto` to `all` to watch every field.
+- **`updateEvent` watches the fields you named.** To watch a different set, list them in `requiredWatchFields`; to watch every field, set `watchFieldsAuto` to `all`.
 
 Events are delivered under their mapped names, so the config above delivers `text`, `user`, `timeStamp`, and `channelName`.
 
