@@ -360,7 +360,7 @@ Slack message events work differently from the other objects on this page, in tw
 
 ### Messages are a subscribe-only object
 
-There is no read action for Slack messages: there is no backfill worth running and no schedule that makes sense, and `messages` is not in the object matrix above. So the object carries its own fields rather than inheriting them from a read action, and each installation says which fields it wants.
+Slack messages aren't available to [read](/read-actions) on a schedule or to [search](/search-actions) — `messages` is not in the object matrix above — so subscribing is the only way to get them. That means there is no read action for the object to inherit fields from, so it carries its own, and each installation says which fields it wants.
 
 That shape is covered in full, with both the manifest and the two ways to create the installation, in [Subscribe without a read action](/subscribe-actions#subscribe-without-a-read-action). The short version is a manifest with an empty read block:
 
