@@ -278,7 +278,7 @@ The installation names the fields, the mappings, and the events. Both routes wri
 <Tabs>
 <Tab title="React component">
 
-Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-components#subscribe-events), supported in `@amp-labs/react` `vX.Y.Z+`. The component writes the config when it creates the installation, so your end user never sees a step for it:
+Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-components#subscribe-events), supported in `@amp-labs/react` `vX.Y.Z+` and, for now, in [wizard mode](/embeddable-ui-components#wizard-mode-beta) only. The component writes the config when it creates the installation, so your end user never sees a step for it:
 
 ```JSX
 <InstallIntegration
@@ -287,13 +287,15 @@ Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-compone
   consumerName={userFullName}
   groupRef={teamId}
   groupName={teamName}
+  variant="wizard"
   subscribeEvents={{
     messages: {
       inheritFieldsAndMappings: false,
-      selectedFields: ["text", "user"],
-      selectedFieldMappings: { timeStamp: "ts", channelName: "channel" },
       createEvent: { userSelect: false },
-      updateEvent: { userSelect: false },
+      updateEvent: {
+        userSelect: false,
+        requiredWatchFields: ["text", "user"],
+      },
       deleteEvent: { userSelect: false },
     },
   }}
@@ -301,6 +303,8 @@ Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-compone
 ```
 
 Use this when your end users connect their own Slack workspace through your UI. The component handles the connection, creates the installation, and applies the config above.
+
+`requiredWatchFields` names the fields the events deliver, and the changes that trigger an update event — one list, not two. Field mappings are not settable through the prop yet, so events arrive under Slack's own field names. Use the API route if you need mapped names today.
 
 **`inheritFieldsAndMappings` is required, and must be `false` here.** There is no default — the component will not guess whether the object inherits. Leaving the key out of the config is not the same as `false`: the server reads an absent value as `true`, then requires a matching read object and fails with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it; only the installation config is read.
 
@@ -352,11 +356,11 @@ To change the fields or events later, [update the installation](/reference/insta
 
 Whichever route you take, three more rules apply to the config:
 
-- **Name at least one field**, in `selectedFields`, `selectedFieldMappings`, or both. An object that inherits nothing and selects nothing has no fields to deliver, and the install is rejected.
+- **Name at least one field**, in `selectedFields`, `selectedFieldMappings`, or the update event's `requiredWatchFields`. Any one of them is enough — they all name the fields the object cares about. An object that inherits nothing and names nothing has no fields to deliver, and the install is rejected.
 - **There is no field metadata for these objects**, so the names are taken as written rather than checked against the provider. A typo gets you an event with a missing field, not an error.
-- **`updateEvent` watches the fields you named.** To watch a different set, list them in `requiredWatchFields`; to watch every field, set `watchFieldsAuto` to `all`.
+- **`updateEvent` watches the fields you named.** An object that names none watches every field; to say so explicitly, set `watchFieldsAuto` to `all`.
 
-Events are delivered under their mapped names, so the config above delivers `text`, `user`, `timeStamp`, and `channelName`.
+Events are delivered under their mapped names, so the API config above delivers `text`, `user`, `timeStamp`, and `channelName`. With no mappings, as in the React example, they arrive as `text` and `user`.
 
 ## What you receive
 
