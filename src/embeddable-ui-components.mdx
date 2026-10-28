@@ -106,7 +106,7 @@ The parameters of the component are:
 * **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
 * **onUninstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully uninstalls the integration.
 * **fieldMapping** (JSON): a JSON object that specifies the dynamic mapping configuration for this installation. Learn more about dynamic mapping [here](/object-and-field-mapping#dynamic-field-mappings)
-* **subscribeEvents** (JSON, optional): the subscribe configuration for objects that don't inherit fields from a read action. Supported in `@amp-labs/react` `vX.Y.Z+`. See [Subscribe events](#subscribe-events).
+* **subscribeEvents** (JSON, optional): the subscribe configuration for objects that don't inherit fields from a read action. Supported in `@amp-labs/react` `vX.Y.Z+`, in [wizard mode](#wizard-mode-beta) only. See [Subscribe events](#subscribe-events).
 
 Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`. `Config` is an exported type from `@amp-labs/react`.
 
@@ -167,7 +167,7 @@ If you close your install dialog in `onInstallSuccess`, it will close right afte
 #### Subscribe events
 
 <Note>
-`subscribeEvents` is supported in `@amp-labs/react` `vX.Y.Z+`. On an earlier version the prop is ignored, and an installation for a subscribe-only object is created without its fields.
+`subscribeEvents` is supported in `@amp-labs/react` `vX.Y.Z+`, and **only in [wizard mode](#wizard-mode-beta)** for now. In the standard flow the prop is not applied, and an installation for a subscribe-only object is created without its fields — as happens on any earlier version, in either flow.
 </Note>
 
 An integration can have [subscribe objects that carry their own fields](/subscribe-actions#subscribe-without-a-read-action) rather than inheriting them from a read action. Those objects have no field metadata and no configuration screen, so the component can't ask the consumer about them. You tell it what to configure, with the `subscribeEvents` prop:
@@ -182,10 +182,11 @@ An integration can have [subscribe objects that carry their own fields](/subscri
   subscribeEvents={{
     messages: {
       inheritFieldsAndMappings: false,
-      selectedFields: ["text", "user"],
-      selectedFieldMappings: { timeStamp: "ts", channelName: "channel" },
       createEvent: { userSelect: false },
-      updateEvent: { userSelect: false },
+      updateEvent: {
+        userSelect: false,
+        requiredWatchFields: ["text", "user"],
+      },
       deleteEvent: { userSelect: false },
     },
   }}
@@ -197,19 +198,18 @@ Keys are object names, matching the `objectName` in your `amp.yaml`.
 | Key | Meaning |
 |---|---|
 | `inheritFieldsAndMappings` | **Required.** Whether the object takes its fields from the matching read object. `false` for a subscribe-only object. |
-| `selectedFields` | Provider field names to deliver with each event. |
-| `selectedFieldMappings` | Mapped name to provider field name, so `{ timeStamp: "ts" }` delivers Slack's `ts` as `timeStamp`. |
 | `createEvent` / `updateEvent` / `deleteEvent` | Subscribe to this event. **Leave a key out to not subscribe to that event at all.** |
+| `updateEvent.requiredWatchFields` | Provider field names. Changes to these trigger an update event, and these are the fields every event delivers — one list, not two. |
 
 **An event's presence is what subscribes to it.** `userSelect` only decides whether the consumer is asked: `false` configures the event without a question. `userSelect: true` is reserved for a consumer-facing step that doesn't exist yet, so use `false` for now.
 
-**Name at least one field.** An object that inherits nothing and selects nothing has no fields to deliver, and the installation is rejected. The names are not validated against the provider, so a typo gets you an event with a missing field rather than an error.
+**Name at least one field, in `requiredWatchFields`.** An object that inherits nothing and names nothing has no fields to deliver, and the installation is rejected. An object that names none watches and delivers every field. The names are not validated against the provider, so a typo gets you an event with a missing field rather than an error.
 
-**`updateEvent` watches the fields you named.** An object that names no fields watches every field instead.
+**Field mappings are not settable through this prop yet.** The installation config supports `selectedFields` and `selectedFieldMappings`, and the API route below accepts both — the prop doesn't, pending a step that lets your end user pick fields and mappings. Until then events are delivered under the provider's own field names.
 
-**`inheritFieldsAndMappings` is required, and must be `false` for a subscribe-only object.** There is no default: the two values describe different objects, and the component will not guess which you meant. Leaving the key out of the config is not the same as `false` — the server reads an absent value as `true`, then requires a matching read object and fails with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it; only the installation config is read. Set it to `true` for an object that does have a read action, and leave the two field keys out in that case.
+**`inheritFieldsAndMappings` is required, and must be `false` for a subscribe-only object.** There is no default: the two values describe different objects, and the component will not guess which you meant. Leaving the key out of the config is not the same as `false` — the server reads an absent value as `true`, then requires a matching read object and fails with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it; only the installation config is read. Set it to `true` for an object that does have a read action, whose fields it then takes.
 
-This works in both the standard flow and [wizard mode](#wizard-mode-beta). In each, the events are configured as the installation is created — the consumer never sees a step for them. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
+This works in [wizard mode](#wizard-mode-beta) only for now. The events are configured as the installation is created, so the consumer never sees a step for them. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
 
 <Warning>`subscribeEvents` is in beta preview and its shape may change.</Warning>
 
