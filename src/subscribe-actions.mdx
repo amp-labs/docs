@@ -306,7 +306,7 @@ Use this when your end users connect their own Slack workspace through your UI. 
 
 `requiredWatchFields` names the fields the events deliver, and the changes that trigger an update event — one list, not two. Field mappings are not settable through the prop yet, so events arrive under Slack's own field names. Use the API route if you need mapped names today.
 
-**`inheritFieldsAndMappings` is required, and must be `false` here.** There is no default — the component will not guess whether the object inherits. Leaving the key out of the config is not the same as `false`: the server reads an absent value as `true`, then requires a matching read object and fails with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it; only the installation config is read.
+**`inheritFieldsAndMappings` is required, and must be `false` here.** There is no default — the component will not guess whether the object inherits.
 
 </Tab>
 <Tab title="API">
@@ -347,7 +347,7 @@ curl -X POST \
 
 You need a `connectionId` first, from a connection your end user has already made. Use this when you build your own installation UI, or when you install on your end users' behalf rather than having them click through a flow.
 
-**`inheritFieldsAndMappings` is required, and must be `false` here.** Unset means `true`, and the server then requires a matching read object, failing with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it; only the installation config is read. The events belong here too, alongside the fields.
+**Set `inheritFieldsAndMappings: false` here.** If you leave it out, the server takes `inheritFieldsAndMapping` from the matching subscribe object in your `amp.yaml`, and rejects the config with `inheritFieldsAndMappings is required when amp.yaml has no matching subscribe object to take it from` if there is none. A value in the config always overrides the manifest. The events belong here too, alongside the fields.
 
 To change the fields or events later, [update the installation](/reference/installation/update-an-installation) with `config.content.subscribe.objects.messages` in the `updateMask`. That path replaces the whole object, so send every key you want to keep.
 
