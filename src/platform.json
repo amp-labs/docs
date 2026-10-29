@@ -951,13 +951,13 @@
                                   "type": "string",
                                   "description": "The time the group was created.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816Z"
+                                  "example": "2023-07-13T21:34:44.816354Z"
                                 },
                                 "updateTime": {
                                   "type": "string",
                                   "description": "The time the group was last updated.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816Z"
+                                  "example": "2023-07-13T21:34:44.816354Z"
                                 }
                               }
                             },
@@ -990,13 +990,13 @@
                                   "type": "string",
                                   "description": "The time the consumer was created.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816Z"
+                                  "example": "2023-07-13T21:34:44.816354Z"
                                 },
                                 "updateTime": {
                                   "type": "string",
                                   "description": "The time the consumer was last updated.",
                                   "format": "date-time",
-                                  "example": "2023-07-13T21:34:44.816Z"
+                                  "example": "2023-07-13T21:34:44.816354Z"
                                 }
                               }
                             },
@@ -1014,13 +1014,13 @@
                               "type": "string",
                               "description": "The time the connection was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the connection was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "authScheme": {
                               "type": "string",
@@ -13309,13 +13309,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -13490,13 +13490,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -13529,13 +13529,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -13553,13 +13553,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -15159,14 +15159,13 @@
                                               "type": "object",
                                               "required": [
                                                 "objectName",
-                                                "destination",
-                                                "inheritFieldsAndMappings"
+                                                "destination"
                                               ],
                                               "properties": {
                                                 "inheritFieldsAndMappings": {
                                                   "type": "boolean",
                                                   "nullable": true,
-                                                  "description": "Whether to inherit fields and mappings from the read config.",
+                                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                   "example": true
                                                 },
                                                 "objectName": {
@@ -15181,6 +15180,22 @@
                                                   "description": "The name of the destination that the result should be sent to.",
                                                   "example": "accountWebhook",
                                                   "type": "string"
+                                                },
+                                                "selectedFields": {
+                                                  "type": "object",
+                                                  "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                  "example": "{ phone: true, fax: true }",
+                                                  "additionalProperties": {
+                                                    "type": "boolean"
+                                                  }
+                                                },
+                                                "selectedFieldMappings": {
+                                                  "type": "object",
+                                                  "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                  "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                  "additionalProperties": {
+                                                    "type": "string"
+                                                  }
                                                 },
                                                 "createEvent": {
                                                   "title": "Create Event",
@@ -15342,14 +15357,13 @@
                                                   "type": "object",
                                                   "required": [
                                                     "objectName",
-                                                    "destination",
-                                                    "inheritFieldsAndMappings"
+                                                    "destination"
                                                   ],
                                                   "properties": {
                                                     "inheritFieldsAndMappings": {
                                                       "type": "boolean",
                                                       "nullable": true,
-                                                      "description": "Whether to inherit fields and mappings from the read config.",
+                                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                       "example": true
                                                     },
                                                     "objectName": {
@@ -15364,6 +15378,22 @@
                                                       "description": "The name of the destination that the result should be sent to.",
                                                       "example": "accountWebhook",
                                                       "type": "string"
+                                                    },
+                                                    "selectedFields": {
+                                                      "type": "object",
+                                                      "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                      "example": "{ phone: true, fax: true }",
+                                                      "additionalProperties": {
+                                                        "type": "boolean"
+                                                      }
+                                                    },
+                                                    "selectedFieldMappings": {
+                                                      "type": "object",
+                                                      "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                      "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                      "additionalProperties": {
+                                                        "type": "string"
+                                                      }
                                                     },
                                                     "createEvent": {
                                                       "title": "Create Event",
@@ -15486,8 +15516,7 @@
                                                   "type": "object",
                                                   "required": [
                                                     "objectName",
-                                                    "destination",
-                                                    "inheritFieldsAndMappings"
+                                                    "destination"
                                                   ]
                                                 }
                                               ]
@@ -16104,7 +16133,6 @@
                         "default": "api:create-installation"
                       },
                       "content": {
-                        "description": "The content of the config.",
                         "title": "Config Content",
                         "allOf": [
                           {
@@ -17534,14 +17562,13 @@
                                           "type": "object",
                                           "required": [
                                             "objectName",
-                                            "destination",
-                                            "inheritFieldsAndMappings"
+                                            "destination"
                                           ],
                                           "properties": {
                                             "inheritFieldsAndMappings": {
                                               "type": "boolean",
                                               "nullable": true,
-                                              "description": "Whether to inherit fields and mappings from the read config.",
+                                              "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                               "example": true
                                             },
                                             "objectName": {
@@ -17556,6 +17583,22 @@
                                               "description": "The name of the destination that the result should be sent to.",
                                               "example": "accountWebhook",
                                               "type": "string"
+                                            },
+                                            "selectedFields": {
+                                              "type": "object",
+                                              "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                              "example": "{ phone: true, fax: true }",
+                                              "additionalProperties": {
+                                                "type": "boolean"
+                                              }
+                                            },
+                                            "selectedFieldMappings": {
+                                              "type": "object",
+                                              "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                              "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                              "additionalProperties": {
+                                                "type": "string"
+                                              }
                                             },
                                             "createEvent": {
                                               "title": "Create Event",
@@ -17717,14 +17760,13 @@
                                               "type": "object",
                                               "required": [
                                                 "objectName",
-                                                "destination",
-                                                "inheritFieldsAndMappings"
+                                                "destination"
                                               ],
                                               "properties": {
                                                 "inheritFieldsAndMappings": {
                                                   "type": "boolean",
                                                   "nullable": true,
-                                                  "description": "Whether to inherit fields and mappings from the read config.",
+                                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                   "example": true
                                                 },
                                                 "objectName": {
@@ -17739,6 +17781,22 @@
                                                   "description": "The name of the destination that the result should be sent to.",
                                                   "example": "accountWebhook",
                                                   "type": "string"
+                                                },
+                                                "selectedFields": {
+                                                  "type": "object",
+                                                  "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                  "example": "{ phone: true, fax: true }",
+                                                  "additionalProperties": {
+                                                    "type": "boolean"
+                                                  }
+                                                },
+                                                "selectedFieldMappings": {
+                                                  "type": "object",
+                                                  "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                  "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                  "additionalProperties": {
+                                                    "type": "string"
+                                                  }
                                                 },
                                                 "createEvent": {
                                                   "title": "Create Event",
@@ -17861,8 +17919,7 @@
                                               "type": "object",
                                               "required": [
                                                 "objectName",
-                                                "destination",
-                                                "inheritFieldsAndMappings"
+                                                "destination"
                                               ]
                                             }
                                           ]
@@ -17874,7 +17931,8 @@
                               }
                             }
                           }
-                        ]
+                        ],
+                        "description": "The content of the config."
                       }
                     },
                     "description": "The config of the installation."
@@ -18011,13 +18069,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -18192,13 +18250,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -18231,13 +18289,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -18255,13 +18313,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -19861,14 +19919,13 @@
                                             "type": "object",
                                             "required": [
                                               "objectName",
-                                              "destination",
-                                              "inheritFieldsAndMappings"
+                                              "destination"
                                             ],
                                             "properties": {
                                               "inheritFieldsAndMappings": {
                                                 "type": "boolean",
                                                 "nullable": true,
-                                                "description": "Whether to inherit fields and mappings from the read config.",
+                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                 "example": true
                                               },
                                               "objectName": {
@@ -19883,6 +19940,22 @@
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
                                                 "type": "string"
+                                              },
+                                              "selectedFields": {
+                                                "type": "object",
+                                                "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                "example": "{ phone: true, fax: true }",
+                                                "additionalProperties": {
+                                                  "type": "boolean"
+                                                }
+                                              },
+                                              "selectedFieldMappings": {
+                                                "type": "object",
+                                                "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                "additionalProperties": {
+                                                  "type": "string"
+                                                }
                                               },
                                               "createEvent": {
                                                 "title": "Create Event",
@@ -20044,14 +20117,13 @@
                                                 "type": "object",
                                                 "required": [
                                                   "objectName",
-                                                  "destination",
-                                                  "inheritFieldsAndMappings"
+                                                  "destination"
                                                 ],
                                                 "properties": {
                                                   "inheritFieldsAndMappings": {
                                                     "type": "boolean",
                                                     "nullable": true,
-                                                    "description": "Whether to inherit fields and mappings from the read config.",
+                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                     "example": true
                                                   },
                                                   "objectName": {
@@ -20066,6 +20138,22 @@
                                                     "description": "The name of the destination that the result should be sent to.",
                                                     "example": "accountWebhook",
                                                     "type": "string"
+                                                  },
+                                                  "selectedFields": {
+                                                    "type": "object",
+                                                    "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                    "example": "{ phone: true, fax: true }",
+                                                    "additionalProperties": {
+                                                      "type": "boolean"
+                                                    }
+                                                  },
+                                                  "selectedFieldMappings": {
+                                                    "type": "object",
+                                                    "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                    "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                    "additionalProperties": {
+                                                      "type": "string"
+                                                    }
                                                   },
                                                   "createEvent": {
                                                     "title": "Create Event",
@@ -20188,8 +20276,7 @@
                                                 "type": "object",
                                                 "required": [
                                                   "objectName",
-                                                  "destination",
-                                                  "inheritFieldsAndMappings"
+                                                  "destination"
                                                 ]
                                               }
                                             ]
@@ -21098,13 +21185,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -21279,13 +21366,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -21318,13 +21405,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -21342,13 +21429,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -22948,14 +23035,13 @@
                                             "type": "object",
                                             "required": [
                                               "objectName",
-                                              "destination",
-                                              "inheritFieldsAndMappings"
+                                              "destination"
                                             ],
                                             "properties": {
                                               "inheritFieldsAndMappings": {
                                                 "type": "boolean",
                                                 "nullable": true,
-                                                "description": "Whether to inherit fields and mappings from the read config.",
+                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                 "example": true
                                               },
                                               "objectName": {
@@ -22970,6 +23056,22 @@
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
                                                 "type": "string"
+                                              },
+                                              "selectedFields": {
+                                                "type": "object",
+                                                "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                "example": "{ phone: true, fax: true }",
+                                                "additionalProperties": {
+                                                  "type": "boolean"
+                                                }
+                                              },
+                                              "selectedFieldMappings": {
+                                                "type": "object",
+                                                "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                "additionalProperties": {
+                                                  "type": "string"
+                                                }
                                               },
                                               "createEvent": {
                                                 "title": "Create Event",
@@ -23131,14 +23233,13 @@
                                                 "type": "object",
                                                 "required": [
                                                   "objectName",
-                                                  "destination",
-                                                  "inheritFieldsAndMappings"
+                                                  "destination"
                                                 ],
                                                 "properties": {
                                                   "inheritFieldsAndMappings": {
                                                     "type": "boolean",
                                                     "nullable": true,
-                                                    "description": "Whether to inherit fields and mappings from the read config.",
+                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                     "example": true
                                                   },
                                                   "objectName": {
@@ -23153,6 +23254,22 @@
                                                     "description": "The name of the destination that the result should be sent to.",
                                                     "example": "accountWebhook",
                                                     "type": "string"
+                                                  },
+                                                  "selectedFields": {
+                                                    "type": "object",
+                                                    "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                    "example": "{ phone: true, fax: true }",
+                                                    "additionalProperties": {
+                                                      "type": "boolean"
+                                                    }
+                                                  },
+                                                  "selectedFieldMappings": {
+                                                    "type": "object",
+                                                    "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                    "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                    "additionalProperties": {
+                                                      "type": "string"
+                                                    }
                                                   },
                                                   "createEvent": {
                                                     "title": "Create Event",
@@ -23275,8 +23392,7 @@
                                                 "type": "object",
                                                 "required": [
                                                   "objectName",
-                                                  "destination",
-                                                  "inheritFieldsAndMappings"
+                                                  "destination"
                                                 ]
                                               }
                                             ]
@@ -24572,14 +24688,13 @@
                                           "type": "object",
                                           "required": [
                                             "objectName",
-                                            "destination",
-                                            "inheritFieldsAndMappings"
+                                            "destination"
                                           ],
                                           "properties": {
                                             "inheritFieldsAndMappings": {
                                               "type": "boolean",
                                               "nullable": true,
-                                              "description": "Whether to inherit fields and mappings from the read config.",
+                                              "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                               "example": true
                                             },
                                             "objectName": {
@@ -24594,6 +24709,22 @@
                                               "description": "The name of the destination that the result should be sent to.",
                                               "example": "accountWebhook",
                                               "type": "string"
+                                            },
+                                            "selectedFields": {
+                                              "type": "object",
+                                              "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                              "example": "{ phone: true, fax: true }",
+                                              "additionalProperties": {
+                                                "type": "boolean"
+                                              }
+                                            },
+                                            "selectedFieldMappings": {
+                                              "type": "object",
+                                              "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                              "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                              "additionalProperties": {
+                                                "type": "string"
+                                              }
                                             },
                                             "createEvent": {
                                               "title": "Create Event",
@@ -24843,13 +24974,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -25024,13 +25155,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -25063,13 +25194,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -25087,13 +25218,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -26693,14 +26824,13 @@
                                             "type": "object",
                                             "required": [
                                               "objectName",
-                                              "destination",
-                                              "inheritFieldsAndMappings"
+                                              "destination"
                                             ],
                                             "properties": {
                                               "inheritFieldsAndMappings": {
                                                 "type": "boolean",
                                                 "nullable": true,
-                                                "description": "Whether to inherit fields and mappings from the read config.",
+                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                 "example": true
                                               },
                                               "objectName": {
@@ -26715,6 +26845,22 @@
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
                                                 "type": "string"
+                                              },
+                                              "selectedFields": {
+                                                "type": "object",
+                                                "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                "example": "{ phone: true, fax: true }",
+                                                "additionalProperties": {
+                                                  "type": "boolean"
+                                                }
+                                              },
+                                              "selectedFieldMappings": {
+                                                "type": "object",
+                                                "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                "additionalProperties": {
+                                                  "type": "string"
+                                                }
                                               },
                                               "createEvent": {
                                                 "title": "Create Event",
@@ -26876,14 +27022,13 @@
                                                 "type": "object",
                                                 "required": [
                                                   "objectName",
-                                                  "destination",
-                                                  "inheritFieldsAndMappings"
+                                                  "destination"
                                                 ],
                                                 "properties": {
                                                   "inheritFieldsAndMappings": {
                                                     "type": "boolean",
                                                     "nullable": true,
-                                                    "description": "Whether to inherit fields and mappings from the read config.",
+                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                     "example": true
                                                   },
                                                   "objectName": {
@@ -26898,6 +27043,22 @@
                                                     "description": "The name of the destination that the result should be sent to.",
                                                     "example": "accountWebhook",
                                                     "type": "string"
+                                                  },
+                                                  "selectedFields": {
+                                                    "type": "object",
+                                                    "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                    "example": "{ phone: true, fax: true }",
+                                                    "additionalProperties": {
+                                                      "type": "boolean"
+                                                    }
+                                                  },
+                                                  "selectedFieldMappings": {
+                                                    "type": "object",
+                                                    "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                    "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                    "additionalProperties": {
+                                                      "type": "string"
+                                                    }
                                                   },
                                                   "createEvent": {
                                                     "title": "Create Event",
@@ -27020,8 +27181,7 @@
                                                 "type": "object",
                                                 "required": [
                                                   "objectName",
-                                                  "destination",
-                                                  "inheritFieldsAndMappings"
+                                                  "destination"
                                                 ]
                                               }
                                             ]
@@ -28096,13 +28256,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -28277,13 +28437,13 @@
                               "type": "string",
                               "description": "The time the group was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the group was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -28316,13 +28476,13 @@
                               "type": "string",
                               "description": "The time the consumer was created.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             },
                             "updateTime": {
                               "type": "string",
                               "description": "The time the consumer was last updated.",
                               "format": "date-time",
-                              "example": "2023-07-13T21:34:44.816Z"
+                              "example": "2023-07-13T21:34:44.816354Z"
                             }
                           }
                         },
@@ -28340,13 +28500,13 @@
                           "type": "string",
                           "description": "The time the connection was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the connection was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "authScheme": {
                           "type": "string",
@@ -29946,14 +30106,13 @@
                                             "type": "object",
                                             "required": [
                                               "objectName",
-                                              "destination",
-                                              "inheritFieldsAndMappings"
+                                              "destination"
                                             ],
                                             "properties": {
                                               "inheritFieldsAndMappings": {
                                                 "type": "boolean",
                                                 "nullable": true,
-                                                "description": "Whether to inherit fields and mappings from the read config.",
+                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                 "example": true
                                               },
                                               "objectName": {
@@ -29968,6 +30127,22 @@
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
                                                 "type": "string"
+                                              },
+                                              "selectedFields": {
+                                                "type": "object",
+                                                "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                "example": "{ phone: true, fax: true }",
+                                                "additionalProperties": {
+                                                  "type": "boolean"
+                                                }
+                                              },
+                                              "selectedFieldMappings": {
+                                                "type": "object",
+                                                "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                "additionalProperties": {
+                                                  "type": "string"
+                                                }
                                               },
                                               "createEvent": {
                                                 "title": "Create Event",
@@ -30129,14 +30304,13 @@
                                                 "type": "object",
                                                 "required": [
                                                   "objectName",
-                                                  "destination",
-                                                  "inheritFieldsAndMappings"
+                                                  "destination"
                                                 ],
                                                 "properties": {
                                                   "inheritFieldsAndMappings": {
                                                     "type": "boolean",
                                                     "nullable": true,
-                                                    "description": "Whether to inherit fields and mappings from the read config.",
+                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                     "example": true
                                                   },
                                                   "objectName": {
@@ -30151,6 +30325,22 @@
                                                     "description": "The name of the destination that the result should be sent to.",
                                                     "example": "accountWebhook",
                                                     "type": "string"
+                                                  },
+                                                  "selectedFields": {
+                                                    "type": "object",
+                                                    "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                    "example": "{ phone: true, fax: true }",
+                                                    "additionalProperties": {
+                                                      "type": "boolean"
+                                                    }
+                                                  },
+                                                  "selectedFieldMappings": {
+                                                    "type": "object",
+                                                    "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                    "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                    "additionalProperties": {
+                                                      "type": "string"
+                                                    }
                                                   },
                                                   "createEvent": {
                                                     "title": "Create Event",
@@ -30273,8 +30463,7 @@
                                                 "type": "object",
                                                 "required": [
                                                   "objectName",
-                                                  "destination",
-                                                  "inheritFieldsAndMappings"
+                                                  "destination"
                                                 ]
                                               }
                                             ]
@@ -31546,13 +31735,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -31727,13 +31916,13 @@
                                 "type": "string",
                                 "description": "The time the group was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the group was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -31766,13 +31955,13 @@
                                 "type": "string",
                                 "description": "The time the consumer was created.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               },
                               "updateTime": {
                                 "type": "string",
                                 "description": "The time the consumer was last updated.",
                                 "format": "date-time",
-                                "example": "2023-07-13T21:34:44.816Z"
+                                "example": "2023-07-13T21:34:44.816354Z"
                               }
                             }
                           },
@@ -31790,13 +31979,13 @@
                             "type": "string",
                             "description": "The time the connection was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the connection was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "authScheme": {
                             "type": "string",
@@ -33396,14 +33585,13 @@
                                               "type": "object",
                                               "required": [
                                                 "objectName",
-                                                "destination",
-                                                "inheritFieldsAndMappings"
+                                                "destination"
                                               ],
                                               "properties": {
                                                 "inheritFieldsAndMappings": {
                                                   "type": "boolean",
                                                   "nullable": true,
-                                                  "description": "Whether to inherit fields and mappings from the read config.",
+                                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                   "example": true
                                                 },
                                                 "objectName": {
@@ -33418,6 +33606,22 @@
                                                   "description": "The name of the destination that the result should be sent to.",
                                                   "example": "accountWebhook",
                                                   "type": "string"
+                                                },
+                                                "selectedFields": {
+                                                  "type": "object",
+                                                  "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                  "example": "{ phone: true, fax: true }",
+                                                  "additionalProperties": {
+                                                    "type": "boolean"
+                                                  }
+                                                },
+                                                "selectedFieldMappings": {
+                                                  "type": "object",
+                                                  "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                  "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                  "additionalProperties": {
+                                                    "type": "string"
+                                                  }
                                                 },
                                                 "createEvent": {
                                                   "title": "Create Event",
@@ -33579,14 +33783,13 @@
                                                   "type": "object",
                                                   "required": [
                                                     "objectName",
-                                                    "destination",
-                                                    "inheritFieldsAndMappings"
+                                                    "destination"
                                                   ],
                                                   "properties": {
                                                     "inheritFieldsAndMappings": {
                                                       "type": "boolean",
                                                       "nullable": true,
-                                                      "description": "Whether to inherit fields and mappings from the read config.",
+                                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                                       "example": true
                                                     },
                                                     "objectName": {
@@ -33601,6 +33804,22 @@
                                                       "description": "The name of the destination that the result should be sent to.",
                                                       "example": "accountWebhook",
                                                       "type": "string"
+                                                    },
+                                                    "selectedFields": {
+                                                      "type": "object",
+                                                      "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                                      "example": "{ phone: true, fax: true }",
+                                                      "additionalProperties": {
+                                                        "type": "boolean"
+                                                      }
+                                                    },
+                                                    "selectedFieldMappings": {
+                                                      "type": "object",
+                                                      "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                                      "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                                      "additionalProperties": {
+                                                        "type": "string"
+                                                      }
                                                     },
                                                     "createEvent": {
                                                       "title": "Create Event",
@@ -33723,8 +33942,7 @@
                                                   "type": "object",
                                                   "required": [
                                                     "objectName",
-                                                    "destination",
-                                                    "inheritFieldsAndMappings"
+                                                    "destination"
                                                   ]
                                                 }
                                               ]
@@ -36620,7 +36838,7 @@
                             "type": "string",
                             "description": "The time the operation was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       }
@@ -38301,7 +38519,7 @@
                       "type": "string",
                       "description": "The time the operation was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     }
                   }
                 },
@@ -38573,7 +38791,7 @@
                       "timestamp": {
                         "type": "string",
                         "description": "The time the log was created.",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "message": {
                         "type": "object",
@@ -45914,13 +46132,13 @@
                             "type": "string",
                             "description": "The time the group was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the group was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -45953,13 +46171,13 @@
                             "type": "string",
                             "description": "The time the consumer was created.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           },
                           "updateTime": {
                             "type": "string",
                             "description": "The time the consumer was last updated.",
                             "format": "date-time",
-                            "example": "2023-07-13T21:34:44.816Z"
+                            "example": "2023-07-13T21:34:44.816354Z"
                           }
                         }
                       },
@@ -45977,13 +46195,13 @@
                         "type": "string",
                         "description": "The time the connection was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the connection was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "authScheme": {
                         "type": "string",
@@ -46978,13 +47196,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -47017,13 +47235,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -47041,13 +47259,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -48173,13 +48391,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -48212,13 +48430,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -48236,13 +48454,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -49299,13 +49517,13 @@
                           "type": "string",
                           "description": "The time the group was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the group was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -49338,13 +49556,13 @@
                           "type": "string",
                           "description": "The time the consumer was created.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         },
                         "updateTime": {
                           "type": "string",
                           "description": "The time the consumer was last updated.",
                           "format": "date-time",
-                          "example": "2023-07-13T21:34:44.816Z"
+                          "example": "2023-07-13T21:34:44.816354Z"
                         }
                       }
                     },
@@ -49362,13 +49580,13 @@
                       "type": "string",
                       "description": "The time the connection was created.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "updateTime": {
                       "type": "string",
                       "description": "The time the connection was last updated.",
                       "format": "date-time",
-                      "example": "2023-07-13T21:34:44.816Z"
+                      "example": "2023-07-13T21:34:44.816354Z"
                     },
                     "authScheme": {
                       "type": "string",
@@ -70370,13 +70588,13 @@
                         "type": "string",
                         "description": "The time the group was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the group was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       }
                     }
                   },
@@ -70409,13 +70627,13 @@
                         "type": "string",
                         "description": "The time the consumer was created.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       },
                       "updateTime": {
                         "type": "string",
                         "description": "The time the consumer was last updated.",
                         "format": "date-time",
-                        "example": "2023-07-13T21:34:44.816Z"
+                        "example": "2023-07-13T21:34:44.816354Z"
                       }
                     }
                   },
@@ -70433,13 +70651,13 @@
                     "type": "string",
                     "description": "The time the connection was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the connection was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   },
                   "authScheme": {
                     "type": "string",
@@ -72900,13 +73118,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               }
             }
           },
@@ -73081,13 +73299,13 @@
                     "type": "string",
                     "description": "The time the group was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the group was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   }
                 }
               },
@@ -73120,13 +73338,13 @@
                     "type": "string",
                     "description": "The time the consumer was created.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   },
                   "updateTime": {
                     "type": "string",
                     "description": "The time the consumer was last updated.",
                     "format": "date-time",
-                    "example": "2023-07-13T21:34:44.816Z"
+                    "example": "2023-07-13T21:34:44.816354Z"
                   }
                 }
               },
@@ -73144,13 +73362,13 @@
                 "type": "string",
                 "description": "The time the connection was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the connection was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "authScheme": {
                 "type": "string",
@@ -74750,14 +74968,13 @@
                                   "type": "object",
                                   "required": [
                                     "objectName",
-                                    "destination",
-                                    "inheritFieldsAndMappings"
+                                    "destination"
                                   ],
                                   "properties": {
                                     "inheritFieldsAndMappings": {
                                       "type": "boolean",
                                       "nullable": true,
-                                      "description": "Whether to inherit fields and mappings from the read config.",
+                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                       "example": true
                                     },
                                     "objectName": {
@@ -74772,6 +74989,22 @@
                                       "description": "The name of the destination that the result should be sent to.",
                                       "example": "accountWebhook",
                                       "type": "string"
+                                    },
+                                    "selectedFields": {
+                                      "type": "object",
+                                      "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                      "example": "{ phone: true, fax: true }",
+                                      "additionalProperties": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "selectedFieldMappings": {
+                                      "type": "object",
+                                      "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                      "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                      "additionalProperties": {
+                                        "type": "string"
+                                      }
                                     },
                                     "createEvent": {
                                       "title": "Create Event",
@@ -74933,14 +75166,13 @@
                                       "type": "object",
                                       "required": [
                                         "objectName",
-                                        "destination",
-                                        "inheritFieldsAndMappings"
+                                        "destination"
                                       ],
                                       "properties": {
                                         "inheritFieldsAndMappings": {
                                           "type": "boolean",
                                           "nullable": true,
-                                          "description": "Whether to inherit fields and mappings from the read config.",
+                                          "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                           "example": true
                                         },
                                         "objectName": {
@@ -74955,6 +75187,22 @@
                                           "description": "The name of the destination that the result should be sent to.",
                                           "example": "accountWebhook",
                                           "type": "string"
+                                        },
+                                        "selectedFields": {
+                                          "type": "object",
+                                          "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                          "example": "{ phone: true, fax: true }",
+                                          "additionalProperties": {
+                                            "type": "boolean"
+                                          }
+                                        },
+                                        "selectedFieldMappings": {
+                                          "type": "object",
+                                          "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                          "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                          "additionalProperties": {
+                                            "type": "string"
+                                          }
                                         },
                                         "createEvent": {
                                           "title": "Create Event",
@@ -75077,8 +75325,7 @@
                                       "type": "object",
                                       "required": [
                                         "objectName",
-                                        "destination",
-                                        "inheritFieldsAndMappings"
+                                        "destination"
                                       ]
                                     }
                                   ]
@@ -76587,14 +76834,13 @@
                               "type": "object",
                               "required": [
                                 "objectName",
-                                "destination",
-                                "inheritFieldsAndMappings"
+                                "destination"
                               ],
                               "properties": {
                                 "inheritFieldsAndMappings": {
                                   "type": "boolean",
                                   "nullable": true,
-                                  "description": "Whether to inherit fields and mappings from the read config.",
+                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                   "example": true
                                 },
                                 "objectName": {
@@ -76609,6 +76855,22 @@
                                   "description": "The name of the destination that the result should be sent to.",
                                   "example": "accountWebhook",
                                   "type": "string"
+                                },
+                                "selectedFields": {
+                                  "type": "object",
+                                  "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                  "example": "{ phone: true, fax: true }",
+                                  "additionalProperties": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "selectedFieldMappings": {
+                                  "type": "object",
+                                  "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                  "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                  "additionalProperties": {
+                                    "type": "string"
+                                  }
                                 },
                                 "createEvent": {
                                   "title": "Create Event",
@@ -76770,14 +77032,13 @@
                                   "type": "object",
                                   "required": [
                                     "objectName",
-                                    "destination",
-                                    "inheritFieldsAndMappings"
+                                    "destination"
                                   ],
                                   "properties": {
                                     "inheritFieldsAndMappings": {
                                       "type": "boolean",
                                       "nullable": true,
-                                      "description": "Whether to inherit fields and mappings from the read config.",
+                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
                                       "example": true
                                     },
                                     "objectName": {
@@ -76792,6 +77053,22 @@
                                       "description": "The name of the destination that the result should be sent to.",
                                       "example": "accountWebhook",
                                       "type": "string"
+                                    },
+                                    "selectedFields": {
+                                      "type": "object",
+                                      "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
+                                      "example": "{ phone: true, fax: true }",
+                                      "additionalProperties": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "selectedFieldMappings": {
+                                      "type": "object",
+                                      "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
+                                      "example": "{ phoneNumber: phone, faxNumber: fax }",
+                                      "additionalProperties": {
+                                        "type": "string"
+                                      }
                                     },
                                     "createEvent": {
                                       "title": "Create Event",
@@ -76914,8 +77191,7 @@
                                   "type": "object",
                                   "required": [
                                     "objectName",
-                                    "destination",
-                                    "inheritFieldsAndMappings"
+                                    "destination"
                                   ]
                                 }
                               ]
@@ -77083,13 +77359,13 @@
                 "type": "string",
                 "description": "The time the group was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the group was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               }
             }
           },
@@ -77122,13 +77398,13 @@
                 "type": "string",
                 "description": "The time the consumer was created.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               },
               "updateTime": {
                 "type": "string",
                 "description": "The time the consumer was last updated.",
                 "format": "date-time",
-                "example": "2023-07-13T21:34:44.816Z"
+                "example": "2023-07-13T21:34:44.816354Z"
               }
             }
           },
@@ -77146,13 +77422,13 @@
             "type": "string",
             "description": "The time the connection was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the connection was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "authScheme": {
             "type": "string",
@@ -78084,13 +78360,13 @@
             "type": "string",
             "description": "The time the group was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the group was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           }
         }
       },
@@ -78123,13 +78399,13 @@
             "type": "string",
             "description": "The time the consumer was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "updateTime": {
             "type": "string",
             "description": "The time the consumer was last updated.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           }
         }
       },
@@ -78256,7 +78532,7 @@
             "type": "string",
             "description": "The time the operation was created.",
             "format": "date-time",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           }
         }
       },
@@ -78316,7 +78592,7 @@
           "timestamp": {
             "type": "string",
             "description": "The time the log was created.",
-            "example": "2023-07-13T21:34:44.816Z"
+            "example": "2023-07-13T21:34:44.816354Z"
           },
           "message": {
             "type": "object",
