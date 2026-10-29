@@ -200,8 +200,9 @@ Keys are object names, matching the `objectName` in your `amp.yaml`.
 | `inheritFieldsAndMappings` | **Required.** Whether the object takes its fields from the matching read object. `false` for a subscribe-only object. |
 | `createEvent` / `updateEvent` / `deleteEvent` | Subscribe to this event. **Leave a key out to not subscribe to that event at all.** |
 | `updateEvent.requiredWatchFields` | Provider field names. Changes to these trigger an update event, and these are the fields every event delivers — one list, not two. |
+| `updateEvent.enabled` | Defaults to `true`. `false` installs the object without update events: the update event is kept as `never`, so its `requiredWatchFields` still name the fields the create and delete events deliver. |
 
-**An event's presence is what subscribes to it.** `userSelect` only decides whether the consumer is asked: `false` configures the event without a question. `userSelect: true` is reserved for a consumer-facing step that doesn't exist yet, so use `false` for now.
+**An event's presence is what subscribes to it,** except an `updateEvent` with `enabled: false`, which names the fields without subscribing to updates. `userSelect` only decides whether the consumer is asked: `false` configures the event without a question. `userSelect: true` is reserved for a consumer-facing step that doesn't exist yet, so use `false` for now.
 
 **Name at least one field, in `requiredWatchFields`.** An object that inherits nothing and names nothing has no fields to deliver, and the installation is rejected. An object that names none watches and delivers every field. The names are not validated against the provider, so a typo gets you an event with a missing field rather than an error.
 
