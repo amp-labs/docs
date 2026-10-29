@@ -207,7 +207,7 @@ Keys are object names, matching the `objectName` in your `amp.yaml`.
 
 **Field mappings are not settable through this prop yet.** The installation config supports `selectedFields` and `selectedFieldMappings`, and the API route below accepts both — the prop doesn't, pending a step that lets your end user pick fields and mappings. Until then events are delivered under the provider's own field names.
 
-**`inheritFieldsAndMappings` is required, and must be `false` for a subscribe-only object.** There is no default: the two values describe different objects, and the component will not guess which you meant. Leaving the key out of the config is not the same as `false` — the server reads an absent value as `true`, then requires a matching read object and fails with `read object config is required to subscribe object`. The manifest's `inheritFieldsAndMapping` does not stand in for it; only the installation config is read. Set it to `true` for an object that does have a read action, whose fields it then takes.
+**`inheritFieldsAndMappings` is required, and must be `false` for a subscribe-only object.** There is no default: the two values describe different objects, and the component will not guess which you meant. Set it to `true` for an object that does have a read action, whose fields it then takes.
 
 This works in [wizard mode](#wizard-mode-beta) only for now. The events are configured as the installation is created, so the consumer never sees a step for them. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
 
