@@ -304,7 +304,7 @@ Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-compone
 
 Use this when your end users connect their own Slack workspace through your UI. The component handles the connection, creates the installation, and applies the config above.
 
-`requiredWatchFields` names the fields the events deliver, and the changes that trigger an update event — one list, not two. Field mappings are not settable through the prop yet, so events arrive under Slack's own field names. Use the API route if you need mapped names today.
+`requiredWatchFields` names the fields the events deliver, and the changes that trigger an update event — one list, not two. To install without update events, add `enabled: false` to `updateEvent`: its `requiredWatchFields` still name the fields the create and delete events deliver. Field mappings are not settable through the prop yet, so events arrive under Slack's own field names. Use the API route if you need mapped names today.
 
 **`inheritFieldsAndMappings` is required, and must be `false` here.** There is no default — the component will not guess whether the object inherits.
 
