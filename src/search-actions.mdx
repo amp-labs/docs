@@ -112,3 +112,25 @@ Response example
     ]
 }
 ```
+
+### Search with a raw filter
+
+Instead of `fieldFilters`, you can search with a [raw filter](/read-actions#filter-with-a-raw-filter) in the provider's own query syntax. A search applies a raw filter exactly as a read action does, so it's a quick way to check a filter before adding it to an installation.
+
+```bash
+curl --location 'https://search.withampersand.com/v1/projects/04bbc51e-7b5e-43c4-a453-e6d77ee55cb2/integrations/9a22a71b-d90b-4118-84c6-558771f3f6db?groupRef=searchTest-group-ref' \
+  --header 'x-amp-request-type: search' \
+  --header 'Content-Type: application/json' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --data '{
+    "objectName": "account",
+    "rawFilter": {
+      "type": "soql",
+      "filter": "AnnualRevenue > 1000000 OR NumberOfEmployees > 500"
+    }
+  }'
+```
+
+- A request needs exactly one of `fieldFilters` or `rawFilter`.
+- Field names in a raw filter are the provider's own. Field mappings are not applied to them.
+- Raw filters are currently only supported for **Salesforce** (CRM Module). See [Salesforce raw filters](/provider-guides/salesforce#raw-filters-soql).

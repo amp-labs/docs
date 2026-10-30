@@ -2,7 +2,6 @@
 title: "Gong"
 slug: "gong"
 excerpt: ""
-hidden: false
 createdAt: "Wed Jun 12 2024 11:09:29 GMT+0000 (Coordinated Universal Time)"
 updatedAt: "Fri Jul 19 2024 21:54:48 GMT+0000 (Coordinated Universal Time)"
 ---
@@ -29,7 +28,7 @@ This connector supports:
 
 <Note>
   **Gong processing latency.** Gong takes time to process recordings before they become available, which delays both Read Actions and Subscribe webhooks:
-  - **Calls** are available through through Read and Subscribe Actions after they have finished processing in Gong, which may take up to **1 hour** after a call ends.
+  - **Calls** are available through Read and Subscribe Actions after they have finished processing in Gong, which may take up to **1 hour** after a call ends.
   - **Transcripts** may not be available for up to **24 hours** after a call ends.
 </Note>
 
@@ -37,7 +36,7 @@ This connector supports:
 
 For an example manifest file of a Gong integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/gong/amp.yaml).
 
-## Before You Get Started
+## Before you get started
 
 To connect Gong with Ampersand, you must complete the [Gong partnership process](https://www.gong.io/partners/) and obtain a _Gong Sandbox_ environment. 
 
@@ -56,6 +55,12 @@ In the **Redirect URI** section, add the Ampersand Callback URL: `https://api.wi
 You will then use these credentials to connect your application to Ampersand.
 
 Learn more about the Gong Partnership process [here](https://help.gong.io/docs/how-to-use-the-gong-developers-hub).
+
+### Allowlist Ampersand's IP addresses
+
+Gong is now requesting that the IP addresses making API calls on behalf of your app are added to an allowlist. Add [Ampersand's outgoing IP addresses](/security/outgoing-ip-addresses) to your Gong app's allowlist so that API requests made by Ampersand on behalf of your integration are not blocked:
+
+Learn more about how Gong restricts API access to trusted IP addresses in [Gong's API key documentation](https://help.gong.io/docs/receive-access-to-the-api).
 
 ## Add Gong App Details in Ampersand
 
@@ -76,7 +81,7 @@ Learn more about the Gong Partnership process [here](https://help.gong.io/docs/h
 6. Enter the scopes set for your application in _Gong_.
 
 
-8. Click **Save Changes**.
+7. Click **Save Changes**.
 
 ## Set up Subscribe Actions
 
@@ -105,7 +110,7 @@ Learn more about the Gong Partnership process [here](https://help.gong.io/docs/h
 2. **Construct a webhook URL for your customer** in this format:
 
    ```
-   https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
+   https://subscribe-receiver.withampersand.com/zt1secx7jknlhb/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
    ```
 
 3. **Share the [Gong customer guide](/customer-guides/gong)** with your customer along with the webhook URL from Step 2. Your customer will create an automation rule in Gong that fires a webhook when a new call is created.

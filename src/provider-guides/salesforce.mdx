@@ -226,6 +226,8 @@ In order to connect with your customer's Salesforce instances, you'll need to cr
 
 <img src="/images/provider-guides/salesforce_eca_authorization.png"/>
 
+> **Note:** "Relax IP restrictions" applies to the IP address your customer's browser authorizes from, not to the IP addresses Ampersand makes API calls from. Leave it relaxed. See [IP restrictions](#ip-restrictions) for how customers can still restrict API access by IP address.
+
 6. Go to the Settings tab, expand “OAuth Settings”. Click on “Consumer Key and Secret”.
 
 <img src="/images/provider-guides/salesforce_eca_oauth.png" width="200"/>
@@ -375,7 +377,7 @@ The UI library will not prompt your users to install the package, you must indep
 
 ## Migrating Connected App to External Client App
 
-Salesforce no longer supports the creation of new Connected Apps. If you had previously created a Connected App to be used for Ampersand integrations, it will continue to work for your existing and new customers as long as their user profile has the `Approve Uninstalled Connected Apps` or `Use Any API Client` permissions. See [Salesforce customer guide](/customer-guides/salesforce#1-view-and-edit-permissions-for-profile) for details.
+Salesforce no longer supports the creation of new Connected Apps. If you had previously created a Connected App to be used for Ampersand integrations, it will continue to work for your existing and new customers as long as their user profile has the `Approve Uninstalled Connected Apps` or `Use Any API Client` permissions. See [Salesforce customer guide](/customer-guides/salesforce#required-system-permissions) for details.
 
 Whenever you would like to, you can follow these steps to migrate a Connected App to an External Client App:
 
@@ -413,11 +415,35 @@ Whenever you would like to, you can follow these steps to migrate a Connected Ap
 
 <img src="/images/provider-guides/salesforce_eca_authorization.png"/>
 
+> **Note:** "Relax IP restrictions" applies to the IP address your customer's browser authorizes from, not to the IP addresses Ampersand makes API calls from. Leave it relaxed. See [IP restrictions](#ip-restrictions) for how customers can still restrict API access by IP address.
+
 9. [Enable Dev Hub](#1-enable-dev-hub) on your Salesforce org that is hosting the Connected App (which is now an External Client App).
 
 10. Create a new Developer Edition Salesforce org and [register a namespace](#2-register-a-namespace), then [link the namespace](#3-link-namespace-to-dev-hub-org) to the Dev Hub Org.
 
 11. Package the External Client App by [following these instructions](#5-package-the-external-client-app).
+
+## IP restrictions
+
+Salesforce has several IP controls, and they apply at different points.
+
+### IP Relaxation on your External Client App
+
+The **IP Relaxation** setting in your app's OAuth policies applies to the IP address the **browser** connects from when one of your customers signs in and authorizes the app. Your customers authorize from their own machines, on IP addresses you cannot predict. When they connect through the [embeddable UI components](/embeddable-ui-components), the sign-in originates from the end user's browser, not from Ampersand.
+
+For that reason, leave this set to **Relax IP restrictions**. Enforcing IP restrictions here blocks the OAuth flow for any customer signing in from outside their org's allowed ranges.
+
+### If a customer asks about restricting access by IP address
+
+Security reviews often ask whether the integration can be locked to a known set of IP addresses. It can, but not through the setting above. Salesforce has three controls whose names sound alike:
+
+- **IP Relaxation** (on your External Client App, or on a Connected App) applies to the IP address the browser connects from at authorization time. It has to stay relaxed, for the reason above.
+- **Login IP Ranges** on a user's profile **deny** access from any address outside the ranges listed. This is the control that actually restricts access.
+- **Trusted IP Ranges** (**Setup** → **Security** → **Network Access**) are **not** a restriction. Logins from those addresses skip identity verification, but logins from other addresses are still allowed, so these alone do not block a stolen token.
+
+Once a token has been minted, every API request Ampersand makes to Salesforce originates from a [fixed set of IP addresses](/security/outgoing-ip-addresses). A customer can restrict the profile of the user that connects the integration so that it can only log in from those addresses. This is configured in the customer's Salesforce org, not in your External Client App, so it requires no change on your side.
+
+Point customers at [Restrict API access by IP address](/customer-guides/salesforce#restrict-api-access-by-ip-address) in the Salesforce customer guide.
 
 ## Using the connector
 
@@ -430,6 +456,46 @@ To start integrating with Salesforce:
    - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
    - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Raw filters (SOQL)
+
+[Read actions](/read-actions#filter-with-a-raw-filter) and [search](/search-actions#search-with-a-raw-filter) accept a raw filter of type `soql`: a SOQL condition, as it would appear after `WHERE`.
+
+```json
+"rawFilter": {
+  "type": "soql",
+  "filter": "Status = 'Qualified' AND (Country = 'US' OR Country = 'CA')"
+}
+```
+
+<Tip>
+  To try out a raw filter, run it with the [Search API](/search-actions#search-with-a-raw-filter) first. A search applies the filter the same way a read does and returns the matching records right away.
+</Tip>
+
+### Deleted and archived records
+
+Reads and searches with a raw filter use Salesforce's `queryAll` endpoint instead of `query`. Unlike `query`, `queryAll` also returns deleted records that are still in the Recycle Bin, and archived Task and Event records. Your filter decides whether they're returned:
+
+| Filter | Returns |
+| --- | --- |
+| `IsDeleted = false` | Active records only, the same as reading without a raw filter |
+| `IsDeleted = true` | Deleted records only |
+| `IsDeleted = true OR IsDeleted = false` | Both deleted and active records |
+| `Status = 'Qualified'` | Qualified records, **including deleted ones** |
+
+To tell deleted records apart from active ones, add `IsDeleted` to the object's `requiredFields` or `optionalFields`. A raw filter doesn't add any fields to what's read, and without `IsDeleted` a deleted record looks the same as an active one.
+
+Deleting a record, or restoring it from the Recycle Bin, updates its `SystemModstamp`. So when the raw filter includes deleted records, the next incremental read delivers the record again, with `isdeleted` set to `true` after a delete and `false` after a restore.
+
+<Note>
+  Salesforce keeps deleted records in the Recycle Bin for 15 days. Once they're purged, `queryAll` no longer returns them.
+</Note>
+
+### Filter rules
+
+- The filter can only use fields the object has. Setup objects such as User, Profile and RecordType have no `IsDeleted` field, so a filter that uses it fails.
+- The filter must be a condition only, as it would appear after `WHERE`. Clauses such as `LIMIT`, `ORDER BY` or `GROUP BY` aren't allowed. Subqueries are, for example `Id IN (SELECT ContactId FROM CampaignMember WHERE Status = 'Sent')`.
+- Raw filters are only supported by the CRM module.
 
 ## Customer guide
 

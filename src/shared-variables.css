@@ -1,0 +1,46 @@
+/* Shared CSS variables for every custom component in these docs (Integrations
+   directory, troubleshooting index, Mermaid diagrams). Mintlify loads every
+   .css file on every page, so these are defined once, on the root, and each
+   component reads them directly.
+
+   Every color reads from the variables Mintlify emits from docs.json, so a
+   brand change carries through without editing this file. `primary` is the
+   light-mode accent, `primary-light` the dark-mode one, and `primary-dark`
+   is the shared button/hover color (see the notes in generate-docs.ts). */
+
+:root {
+  --amp-fg: rgb(var(--gray-900));
+  --amp-fg-2: rgb(var(--gray-700));
+  --amp-muted: rgb(var(--gray-600));
+  --amp-muted-2: rgb(var(--gray-500));
+  --amp-faint: rgb(var(--gray-400));
+  --amp-accent: rgb(var(--primary));
+  --amp-accent-hover: rgb(var(--primary-dark));
+  --amp-accent-soft: rgb(var(--primary) / 0.16);
+  --amp-surface: rgb(var(--background-light));
+  --amp-surface-2: rgb(var(--gray-950) / 0.04);
+  --amp-border: rgb(var(--gray-950) / 0.1);
+  --amp-border-2: rgb(var(--gray-950) / 0.07);
+  --amp-border-3: rgb(var(--gray-950) / 0.05);
+  --amp-border-hover: rgb(var(--gray-950) / 0.22);
+
+  --amp-mono: var(--font-family-mono-custom, var(--font-jetbrains-mono, ui-monospace)),
+              "SF Mono", SFMono-Regular, Menlo, monospace;
+}
+
+html.dark {
+  --amp-fg: rgb(var(--gray-100));
+  --amp-fg-2: rgb(var(--gray-300));
+  --amp-muted: rgb(var(--gray-400));
+  --amp-muted-2: rgb(var(--gray-400));
+  --amp-faint: rgb(var(--gray-500));
+  --amp-accent: rgb(var(--primary-light));
+  --amp-accent-hover: rgb(var(--primary-light));
+  --amp-accent-soft: rgb(var(--primary-light) / 0.22);
+  --amp-surface: rgb(var(--background-dark));
+  --amp-surface-2: rgb(255 255 255 / 0.05);
+  --amp-border: rgb(255 255 255 / 0.13);
+  --amp-border-2: rgb(255 255 255 / 0.09);
+  --amp-border-3: rgb(255 255 255 / 0.07);
+  --amp-border-hover: rgb(255 255 255 / 0.3);
+}

@@ -1,25 +1,126 @@
 ---
-title: "Overview"
+title: "Integration infrastructure for enterprise products"
+sidebarTitle: "Overview"
+description: "Ampersand lets your enterprise product read, write, search, and subscribe to events in customers' SaaS, with per-customer field mappings and a managed runtime."
 ---
 
-[Ampersand](https://www.withampersand.com/) is a declarative platform for SaaS builders who are creating product integrations. It allows you to:
+If you are a developer building an enterprise product or agent, Ampersand enables your product to reliably work across your customers’ systems of record. More specifically, you can:
 
-* Read data from your customer's SaaS
-* Write data to your customer's SaaS
-* Subscribe to events (creates, deletes, and field changes) in your customer's SaaS. 
+- Read historical and current data from your customer’s system.
+- Write data to your customer’s system.
+- Search your customer’s system by filter criteria, with matching records returned immediately.
+- Subscribe to events (creates, deletes, and field changes) in your customer’s system.
 
-Here's an overview of the Ampersand platform:
+Ampersand’s declarative interface and UI components let your customers configure integrations with their CRM, ERP, or other systems of record directly within your product.
 
-<Frame caption="The Ampersand platform">![The Ampersand platform](/images/overview.png)</Frame>
+[Quickstart →](/starter-project) · [Explore supported systems →](/provider-guides/overview)
 
-The key components include:
+## Built for each of your customers’ configurations
 
-* **Manifest file:** an `amp.yaml` file, where you define all your integrations: API to connect to, objects and fields you want to read or write, and configuration options you'd like to expose to your customers.
-* **Ampersand server:** a managed service that keeps track of each of your customer’s configurations, and makes the appropriate API calls to your customer's SaaS, while optimizing for cost, handling retries and error message parsing.
-* **Embeddable UI components** with Ampersand, you can embed set-up, configuration, and management UIs that allow your end users to customize and manage their integrations.
+**Ampersand handles multi-tenancy at scale.** Say you have 400 customers on Salesforce. Every one of them has customized it to reflect how they run their business, with different custom objects, fields, permissions, and rules for how your product interacts with their data. Two very similar companies can store the same data in completely different places.
 
-<Frame caption="Our React SDK offers embeddable UI components">![Our React SDK offers embeddable UI components](/images/f5c6c9b-image.png)</Frame>
+Ampersand separates the integration you build from each customer's configuration. You define the schema and actions your application needs once, and each installation keeps track of the per-customer mappings. For example, you define `renewalDate` once, and each customer uses the embeddable UI library to map it to where they're actually storing the renewal date in their Salesforce.
 
-* **Dashboard**: our dashboard allows you to monitor and troubleshoot your customers' integrations.
+| Customer | Where `renewalDate` lives |
+|---|---|
+| Customer A | `Account.Renewal_Date__c` |
+| Customer B | `Account.Contract_End__c` |
+| Customer C | `Subscription__c.End_Date__c` |
+| …397 more | Each set by the customer during setup |
 
-<Frame caption="Ampersand Dashboard">![Ampersand Dashboard](/images/ef05f17-image.png)</Frame>
+Your application reads and writes `renewalDate`. Ampersand translates it to each customer’s field.
+
+## How Ampersand works
+
+<Steps>
+  <Step title="Define an integration">
+    Use an `amp.yaml` file to declare each integration: the system to connect to, the objects and fields to read or write, and the configuration options to expose to your customers. See the [manifest reference](/manifest-reference).
+  </Step>
+  <Step title="Let customers connect and configure">
+    Embed authentication and configuration in your product with [prebuilt UI components](/embeddable-ui-components), [headless UI library](/headless), or [API](/api/overview). Customers connect their own instance and choose field mappings and preferences, and Ampersand saves those choices in their installation.
+  </Step>
+  <Step title="Ampersand runs it">
+
+    A managed runtime tracks every customer's configuration and makes the right API calls for each one. It handles authentication, scheduling, retries, rate limits, and non-standard provider error messages. You can either make direct API calls or have async results delivered to your [destinations](/destinations/overview).
+
+  </Step>
+  <Step title="Monitor, adapt, and recover">
+
+    Inspect installations and operation logs, get [notifications](/notifications/overview) about connection issues, sync failures, and configuration changes, and [watch for schema changes](/manage-customer-schemas#watch-schema-changes) when fields are added, removed, or modified. Use these signals to operationalize your integrations by alerting your team or your customers when actions need to be taken.
+
+  </Step>
+</Steps>
+
+## Actions
+
+Actions are the verbs of every integration. You declare them in your manifest.
+
+<CardGroup cols={3}>
+  <Card title="Read" icon="download" href="/read-actions">
+    Scheduled or on-demand reads with full backfills and incremental syncs.
+  </Card>
+  <Card title="Write" icon="upload" href="/write-actions">
+    Create and update records, synchronously or asynchronously.
+  </Card>
+  <Card title="Subscribe" icon="bell" href="/subscribe-actions">
+    Get notified about creates, updates, and deletes as they happen.
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/search-actions">
+    Targeted searches based on field filters.
+  </Card>
+  <Card title="Proxy" icon="arrow-right-arrow-left" href="/proxy-actions">
+    Call any provider endpoint directly with managed auth and rate limit handling.
+  </Card>
+</CardGroup>
+
+## Watch demo
+
+<iframe
+  className="w-full aspect-video rounded-xl"
+  src="https://www.youtube.com/embed/fS9QD76jYns"
+  title="Ampersand demo"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerPolicy="strict-origin-when-cross-origin"
+  allowFullScreen
+></iframe>
+
+## Get started
+
+<CardGroup cols={2}>
+  <Card title="Clone the starter project" icon="rocket" href="/starter-project">
+    If you want to see an example.
+  </Card>
+  <Card title="Onboard with Claude Code" icon="rocket" href="/use-with-ai-ide">
+    If you want to add integrations to an existing codebase.
+  </Card>
+</CardGroup>
+
+## Dig deeper
+
+<CardGroup cols={2}>
+  <Card title="Browse the integration directory" icon="plug" href="/provider-guides/overview">
+    Search the supported providers.
+  </Card>
+  <Card title="How Ampersand works" icon="book" href="/concepts">
+    Learn the concepts.
+  </Card>
+  <Card title="REST API" icon="code" href="/api/overview">
+    Platform, read, write, search, and proxy APIs.
+  </Card>
+  <Card title="UI Library" icon="cube" href="/headless">
+    Prebuilt components and headless UI.
+  </Card>
+  <Card title="Manifest schema" icon="file-code" href="/manifest-reference">
+    Learn what goes into the `amp.yaml` file.
+  </Card>
+  <Card title="CLI" icon="terminal" href="/cli/reference">
+    Install the Ampersand CLI for deploying and managing integrations.
+  </Card>
+</CardGroup>
+
+## Contact us
+
+Need help? Join our [Discord channel](https://discord.gg/7XTz4HRR47) or email [support@withampersand.com](mailto:support@withampersand.com).
+
+If you want to chat through your use case with our team, <a href="https://www.ampersand.ai/demo?cta=docs_home" target="_blank" rel="noopener noreferrer">book a call</a>.

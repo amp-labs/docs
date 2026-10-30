@@ -1,0 +1,55 @@
+---
+title: Wealthbox
+---
+## What's supported
+
+### Supported actions
+
+This connector supports:
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.crmworkspace.com`.
+
+### Example integration
+
+To define an integration for Wealthbox, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: wealthbox-integration
+    displayName: My Wealthbox Integration
+    provider: wealthbox
+    proxy:
+      enabled: true
+```
+
+## Before You Get Started
+
+To use the Wealthbox connector, your customer will need a Wealthbox **API access token**.
+
+Here's how a user can create one:
+
+1. Log in to [Wealthbox](https://app.crmworkspace.com/).
+2. Open **Settings** from the three-dot menu.
+3. Go to **API Access** (`https://app.crmworkspace.com/settings/access_tokens`).
+4. Click **Create Access Token**.
+5. Enter a label for the token and click **Save**.
+6. Copy the generated token — this is the value your customer will supply to Ampersand.
+
+<Note>
+If **API Access** isn't available on the account, the customer must email `support@wealthbox.com` to request access.
+</Note>
+
+For more information, see the [Wealthbox API documentation](https://dev.wealthbox.com/) and their [help article on creating an API access token](https://help.wealthbox.com/hc/en-us/articles/29980458723739-How-do-I-create-an-API-access-token).
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Wealthbox:
+- Create a manifest file like the example above.
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API access token.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://api.crmworkspace.com`.
+
+For detailed information about available endpoints and request formats, refer to the [Wealthbox API Reference](https://dev.wealthbox.com/).

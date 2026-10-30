@@ -1,0 +1,76 @@
+---
+title: ZoomInfo
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.zoominfo.com`.
+
+### Example integration
+
+To define an integration for ZoomInfo, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: zoominfo-integration
+    displayName: My ZoomInfo Integration
+    provider: zoominfo
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To connect ZoomInfo with Ampersand, you will need a ZoomInfo account with access to the [ZoomInfo Developer Portal](https://developer.zoominfo.com).
+
+Once your account is created, you'll need to register an app in the Developer Portal and obtain the following credentials:
+
+- Client ID
+- Client Secret
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Creating a ZoomInfo app
+
+1. Log in to the [ZoomInfo Developer Portal](https://developer.zoominfo.com).
+
+2. Click **Create App**.
+
+3. Enter a descriptive name for your application, and select **OAuth 2.0 Authorization Code** as the authentication type.
+
+4. Under redirect URIs, add: `https://api.withampersand.com/callbacks/v1/oauth`
+
+5. Assign the OAuth scopes that your integration needs. Scopes define the specific types of data and actions your application can access.
+
+6. Note the **Client ID** and **Client Secret**. You will need these to connect your app to Ampersand.
+
+For more details, see the [ZoomInfo App Creation guide](https://docs.zoominfo.com/docs/app-creation-developer-portal-guide).
+
+### Add your ZoomInfo app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a ZoomInfo integration.
+
+3. Select **Provider Apps**.
+
+4. Select **ZoomInfo** from the **Provider** list.
+
+5. Enter the **Client ID** and **Client Secret** obtained from your ZoomInfo app.
+
+6. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with ZoomInfo:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the access token to your requests.

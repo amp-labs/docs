@@ -2,7 +2,6 @@
 title: "Meta"
 slug: "meta"
 excerpt: ""
-hidden: false
 createdAt: "Mon Jul 15 2024 09:52:57 GMT+0000 (Coordinated Universal Time)"
 updatedAt: "Mon Jul 21 2025 13:50:00 GMT+0000 (Coordinated Universal Time)"
 ---
@@ -10,6 +9,7 @@ updatedAt: "Mon Jul 21 2025 13:50:00 GMT+0000 (Coordinated Universal Time)"
 The Meta connector supports Meta products which have APIs with the root URL `https://graph.facebook.com`, these include:
 
 - Facebook
+- Meta Ads (Marketing API)
 - WhatsApp
 
 ## What's Supported
@@ -18,6 +18,35 @@ The Meta connector supports Meta products which have APIs with the root URL `htt
 
 This connector supports:
 - [Proxy Actions](/proxy-actions), using the base URL `https://graph.facebook.com`.
+
+### Modules
+
+| Module | Use case | Proxy |
+|--------|----------|-------|
+| `ads` (default) | Marketing / Ads API and other Graph proxy calls | Yes |
+| `whatsapp` | WhatsApp Cloud API (requires WABA ID and Phone Number ID at connect time) | Yes |
+
+To use WhatsApp, add `module: whatsapp` to your integration in `amp.yaml`:
+
+```yaml
+integrations:
+  - name: my-meta-whatsapp
+    provider: meta
+    module: whatsapp
+    proxy:
+      enabled: true
+```
+
+For Meta Ads, use the default `ads` module (or set it explicitly):
+
+```yaml
+integrations:
+  - name: my-meta-ads
+    provider: meta
+    module: ads
+    proxy:
+      enabled: true
+```
 
 ## Before You Get Started
 
@@ -70,7 +99,7 @@ In the **Settings** > **Basic** section of your app's dashboard, you will find t
 
 The above steps are enough for the Facebook product. To add the WhatsApp product, follow the steps below.
 
-11. Move to the **Add Product** under **Products** and choose the whatsApp product then configure it.
+11. Move to the **Add Product** under **Products** and choose the WhatsApp product then configure it.
 
 12. Scroll to the **Client OAuth Settings** section.
 

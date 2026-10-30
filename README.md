@@ -1,6 +1,6 @@
 # Ampersand docs
 
-This repo contains the source files for https://docs.withampersand.com, which includes:
+This repo contains the source files for https://docs.ampersand.ai, which includes:
 
 - Guides: their source files are `.mdx` files in the `src` folder
 - Reference docs: which are generated from the OpenAPI spec files in the [amp-labs/openapi](https://github.com/amp-labs/openapi) repo when `pnpm run gen` is run.
@@ -8,6 +8,8 @@ This repo contains the source files for https://docs.withampersand.com, which in
 ## Release process
 
 Merges to the main branch will automatically update the online docs via the Mintlify Github app.
+
+The docs used to be hosted at docs.withampersand.com. That hostname now permanently redirects every path to docs.ampersand.ai through the [amp-labs/docs-redirect](https://github.com/amp-labs/docs-redirect) Vercel project. Don't remove it: old links, search rankings and MCP configs depend on it.
 
 ## First time setup 
 

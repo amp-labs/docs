@@ -1,5 +1,6 @@
 ---
 title: Kinesis destinations
+description: "Send Read and Subscribe Action messages to an AWS Kinesis stream: create the stream and IAM credentials, set partition keys, and review the message format."
 ---
 
 For more information on destinations, see the [Destinations](/destinations) page.
@@ -29,7 +30,7 @@ aws kinesis create-stream \
   --region us-west-2
 ```
 
-Wait for the stream to become active, you can check by running this command:
+Wait for the stream to become active. You can check by running this command:
 
 ```bash
 aws kinesis describe-stream \
@@ -82,10 +83,6 @@ You'll need to provide:
 | **AWS Session Token** | string | No | Session token for temporary credentials |
 | **Partition key template** | string | No | [JMESPath](https://jmespath.org) template for partition key |
 | **Endpoint URL** | string | No | Custom Kinesis endpoint if applicable (e.g. when using [LocalStack](https://www.localstack.cloud)) |
-
-<Info>
-Ampersand encrypts and stores your AWS credentials securely.
-</Info>
 
 ## Refer to the destination in your integration
 

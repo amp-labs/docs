@@ -1,0 +1,87 @@
+---
+title: Workday
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.workday.com`.
+
+
+### Example integration
+
+To define an integration for Workday, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: workday-integration
+    displayName: My Workday Integration
+    provider: workday
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To connect Workday with Ampersand, you will need a Workday tenant with administrator access.
+
+Once your tenant is set up, you'll need to register an API client in Workday and obtain the following credentials:
+
+- Client ID
+- Client Secret
+
+You will also need the following information about your Workday environment:
+
+- **Workday Host**: Your Workday implementation hostname (e.g., `wd2-impl-services1`).
+- **Tenant Name**: The name of your Workday tenant.
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Creating a Workday API client
+
+1. Log in to your **Workday** tenant as an administrator.
+
+2. Search for the **Register API Client** task in the Workday search bar.
+
+3. Enter the following details:
+   - **Client Name**: The name of your integration.
+   - **Grant Type**: Select **Authorization Code Grant**.
+
+4. Under **Redirection URIs**, add: `https://api.withampersand.com/callbacks/v1/oauth`
+
+5. Select the **Scope (Functional Areas)** required for your integration.
+
+6. Click **Done**. Note the **Client ID** and **Client Secret**. You will need these to connect your app to Ampersand.
+
+For more details, see the [Workday documentation](https://doc.workday.com/).
+
+### Add your Workday app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Workday integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.
+
+4. Select **Workday** from the **Provider** list.
+
+5. Enter the **Client ID** and **Client Secret** obtained from your Workday API client.
+
+6. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Workday:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their Workday Host and Tenant Name, then guide them through OAuth authorization.
+- Start using the connector!
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.

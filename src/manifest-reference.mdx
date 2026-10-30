@@ -1,5 +1,6 @@
 ---
 title: "Manifest schema reference"
+description: "Field-by-field reference for the amp.yaml manifest schema: integration, read, write, proxy, and subscribe definitions, plus schedule and backfill options."
 sidebarTitle: "Manifest schema"
 ---
 
@@ -8,6 +9,8 @@ sidebarTitle: "Manifest schema"
 An Ampersand manifest (`amp.yaml`) is a YAML file that defines how your application integrates with various SaaS platforms through the Ampersand integration platform.
 
 This page provides a comprehensive reference for the schema of this file, including detailed field descriptions and best practices.
+
+For each customer's choices within an integration, such as selected fields, filters, and write settings, see the [Config schema reference](/config-reference).
 
 <Tip>
 **VSCode Extension for amp.yaml**
@@ -44,7 +47,7 @@ integrations:
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `specVersion` | String | Yes | The version of the manifest specification. Format: `MAJOR.MINOR.PATCH`. Currently only `1.0.0` is supported. |
-| `integrations` | Array | Yes | An array of [integration configurations](#integration-configuration). Each element defines a complete integration with a specific provider. |
+| `integrations` | Array | Yes | An array of [integration configurations](#integration-definition). Each element defines a complete integration with a specific provider. |
 
 <Note>
 Notes
@@ -116,7 +119,7 @@ subscribe:
 <Note>
 Subscribe considerations
 
-- Check the specific [provider guide](/provider-guides/overview) to see which providers support subscribe actions. If subscribe actions isn't supported for a particular provider, you can still use read actions to get updated data every 10 minutes.
+- Check the specific [provider guide](/provider-guides/overview) to see which providers support subscribe actions. If subscribe actions aren't supported for a particular provider, you can still use read actions to get updated data every 10 minutes.
 - A `read` block must always be defined alongside a `subscribe` block. Each subscribed object that uses `createEvent`, `updateEvent`, or `deleteEvent` must also have a matching object entry in the `read` block (with the same `objectName`) and set `inheritFieldsAndMapping: true`. Objects that only use `otherEvents` do not need their own entry in the `read` block.
 - Only one of `requiredWatchFields` or `watchFieldsAuto` should be provided for update events.
 - See [Subscribe Actions documentation](/subscribe-actions) for detailed implementation guidance.
@@ -201,13 +204,16 @@ Each object in the `objects` array defines a specific data type to read from the
 | `objectName` | String | Yes | The [name of the object](#object-name) to read (e.g., `contact`, `lead`, `account`). This must match an object type supported by the provider's API (see note below). Case-sensitive. |
 | `destination` | String | Yes | The [webhook destination](#destination) for the read data. This determines where the data will be sent after it's read. Must match a webhook configured in your Ampersand account. See [Destinations](/destinations) for setup. |
 | `schedule` | String | Yes | A [cron schedule](#schedule) for reading the data. Defines how frequently the data should be read. Uses standard cron syntax. Examples: `*/10 * * * *` (every 10 minutes), `0 0 * * *` (daily at midnight). |
-| `enabled` | String | No | If set to `always`, the integration automatically installs upon user connection and skips the user field selection step. |
+| `enabled` | String | No | Set to `always` to read this object for every installation. Consumers can't turn it off. See [Always-enabled objects](/read-actions#always-enabled-objects). |
 | `backfill` | Object | No | [Configuration for backfilling](#backfill) historical data. Defines how historical data should be loaded. See [backfill behavior](/read-actions#backfill-behavior) for details. |
 | `requiredFields` | Array | No | Fields that are always read for every customer. These fields will always be included in the data that's read. See [Field Configuration](#field) for more details. |
 | `optionalFields` | Array | No | Optional fields that can be included. Customers can choose which of these fields to include. See [Field Configuration](#field) for more details. |
 | `optionalFieldsAuto` | String | No | Set to `all` to automatically include all available fields. This can be used instead of explicitly listing optional fields. |
 | `mapToName` | String | No | An optional name mapping for this object. Used to standardize object names across different providers. See [Object and Field Mapping](/object-and-field-mapping) for details. |
 | `mapToDisplayName` | String | No | An optional display name mapping for this object. Used for UI display. |
+
+These fields control **which fields** are read. To control **which records** are read, use `fieldFilters`, which is set per-installation in the installation config rather than in `amp.yaml`.
+> Learn more in [Field filters](#field-filters).
 
 <Note>
 When configuring fields for a read object, keep these points in mind:
@@ -312,12 +318,19 @@ Backfill Considerations
 
 - Setting `fullHistory: true` may result in longer initial sync times, especially for large datasets.
 - Some providers may have API rate limits that affect backfill performance.
+- In the installation config, the `backfill` object accepts one additional key, `fieldFilters`, which restricts the records read during backfill. It is not available in `amp.yaml`. See [Field filters](#field-filters).
 - See [Read Actions backfill behavior](/read-actions#backfill-behavior) for detailed implementation guidance.
 </Note>
 
+### Field filters
+
+Field filters restrict **which records** a read action returns, by matching against field values. Only matching records are read and delivered to your destination.
+
+Unlike every other field on this page, `fieldFilters` is **not part of the manifest schema** — it cannot be set in `amp.yaml`. It is set per-installation in the installation config, when creating or updating an installation via the [REST API](/reference/installation/create-a-new-installation) or Headless UI's [createInstallation method](/headless#create-update-and-delete-installations). See the linked documentation for more information.
+
 ### Field
 
-In [Read Actions](#read-actions), fields can be configured in two main ways - either using a simple `fieldName` reference or using a mapped field approach (`mapToName`, `mapToDisplayName`, `prompt`, `default`). This flexibility allows for both direct field references and more sophisticated field mapping options.
+In [Read Actions](#read-definition), fields can be configured in two main ways - either using a simple `fieldName` reference or using a mapped field approach (`mapToName`, `mapToDisplayName`, `prompt`, `default`). This flexibility allows for both direct field references and more sophisticated field mapping options.
 > Learn more about [Object and Field Mapping](/object-and-field-mapping) and [Dynamic Field Mappings](/object-and-field-mapping#dynamic-field-mappings).
 
 **Simple Field Reference**
@@ -338,7 +351,7 @@ This approach is best when:
 **Field Mapping**
 
 For more complex scenarios, you can use field mapping to standardize field names or prompt users for configuration.
-> Learn more about [field mapping strategies](/object-and-field-mapping#field-mapping-strategies).
+> Learn more about [field mapping strategies](/object-and-field-mapping).
 
 ```yaml
 # Predefined mapping (no user input required)
@@ -499,5 +512,5 @@ otherEvents:
 Combine subscribe actions with read actions to get a complete picture of your customers' data:
 - Use read actions with backfill to get initial historical data
 - Use subscribe actions to get real-time updates going forward
-- Learn more about [combining read and subscribe actions](/subscribe-actions#specify-backfill-behavior)
+- Learn more about [combining read and subscribe actions](/subscribe-actions#combine-with-read-actions)
 </Tip>

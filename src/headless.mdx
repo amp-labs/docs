@@ -1,5 +1,6 @@
 ---
 title: Headless UI library
+description: "Use Headless UI library hooks from @amp-labs/react to manage connections, installations, field metadata, and local read and write config in a custom UI."
 ---
 
 The Headless UI library is part of `@amp-labs/react` and provides a powerful foundation for managing connections and installations while giving you complete control over your UI implementation. This library is designed for developers who want to build custom user interfaces while leveraging robust connection, integration, and installation management capabilities.
@@ -63,7 +64,7 @@ const options = {
   getToken: async ({consumerRef, groupRef}) => {  // JWT Authentication (advanced)
     // Custom logic to fetch JWT token from your backend, e.g.
     return await getTokenFromMyBackend(consumerRef, groupRef);
-    // See https://docs.withampersand.com/api/jwt-auth
+    // See https://docs.ampersand.ai/api/jwt-auth
   },
 };
 
@@ -198,7 +199,7 @@ function ConfigDisplayComponent() {
 ```
 
 <Note>
-For more advanced config management: including getting/setting read/write objects in the config and managing a local draft copy, use the [`useLocalConfig()`](#config-management) hook.
+For more advanced config management: including getting/setting read/write objects in the config and managing a local draft copy, use the [`useLocalConfig()`](#local-config-management) hook.
 </Note>
 
 ### Create, update, and delete installations
@@ -306,6 +307,7 @@ const {
     object: HydratedIntegrationObject | null;
     getRequiredFields: () => HydratedIntegrationField[] | null;
     getOptionalFields: () => HydratedIntegrationField[] | null;
+    isAlwaysEnabled: () => boolean;  // Object is marked `enabled: always` in amp.yaml (v2.18.0+)
   },
   getCustomerFieldsForObject: (objectName: string) => {
     // Map of field names to field metadata.
@@ -407,7 +409,7 @@ It returns these fields:
   setDisableDeletion: () => void;  // Disable deletion for object
   getWriteObject: () => BaseWriteConfigObject | undefined;  // Get write object config
    // advanced write features
-  // https://docs.withampersand.com/write-actions#advanced-use-cases
+  // https://docs.ampersand.ai/write-actions#advanced-use-cases
   getDefaultValues: (fieldName: string) => FieldSettingDefault | undefined;
   setDefaultValues: (params: {
     fieldName: string;
@@ -514,6 +516,12 @@ The `readObject()` handlers include `setEnableRead` and `setDisableRead` to cont
 - **`setEnableRead`** — initializes a read object in the draft config and enables it. Safe to call multiple times (idempotent). For convenience, you can skip calling this function if you are already calling `setFieldMapping` or `setSelectedField`.
 - **`setDisableRead`** — pauses reads for the object without removing its config (sets a `disabled` flag).
 - **`removeObject`** — fully deletes an object from all actions (both read and write) in the draft config.
+
+<Note>
+Objects marked [`enabled: always`](/read-actions#always-enabled-objects) in your `amp.yaml` are read for every installation, so they can't be turned off. Starting in `v2.18.0`, `setDisableRead` does nothing for them (and logs a warning), and `removeObject` removes only their write config. Use `useManifest().getReadObject(objectName).isAlwaysEnabled()` to find these objects, for example to show them as selected and locked in your UI.
+
+Unlike the [`InstallIntegration` component](/embeddable-ui-components#always-enabled-objects), the headless hooks don't install these objects on their own: the installation is created when your code calls `createInstallation`, and Ampersand adds any always-enabled objects your config leaves out.
+</Note>
 
 <Note>
 Calling `setSelectedField` or `setFieldMapping` will also automatically enable the read object, so `setEnableRead` is primarily useful when you want to enable an object without configuring fields, or to re-enable an object that was previously disabled.
@@ -728,7 +736,7 @@ The [headless demo app](https://github.com/amp-labs/demo-headless) uses a Salesf
 It uses the following headless hooks:
 - [useConnection](#connection-management): manage when to show [ConnectProvider](/embeddable-ui-components#connect-provider)
 - [useManifest](#get-manifest-and-field-metadata): manage objects and metadata
-- [useConfig](#config-management): manage installation configuration state
+- [useConfig](#local-config-management): manage installation configuration state
 - [useCreateInstallation, useUpdateInstallation, and useDeleteInstallation](#installation-management): manage installation lifecycle
 
 ### Demo app with write config

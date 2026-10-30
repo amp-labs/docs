@@ -24,7 +24,29 @@ export interface DocsConfig {
     light?: string;
     dark?: string;
   };
+  background?: {
+    color?: {
+      light?: string;
+      dark?: string;
+    };
+  };
+  styling?: {
+    codeblocks?: "system" | "dark";
+  };
+  fonts?: {
+    heading?: FontConfig;
+    body?: FontConfig;
+  };
+  appearance?: {
+    default?: "system" | "light" | "dark";
+  };
   favicon?: string;
+
+  // Hidden pages are otherwise excluded from site search, the sitemap, and AI
+  // context.
+  seo?: {
+    indexing?: "navigable" | "all";
+  };
   contextual?: {
     options: Array<string>;
   };
@@ -41,6 +63,11 @@ export interface DocsConfig {
   };
   api?: {
     openapi?: Array<string>;
+  };
+  integrations?: {
+    gtm?: {
+      tagId: string;
+    };
   };
   navbar?: {
     links?: Array<{
@@ -67,8 +94,19 @@ export interface DocsConfig {
   }>;
 }
 
+interface FontConfig {
+  family: string;
+  weight?: number;
+  source?: string;
+  format?: "woff" | "woff2";
+}
+
 interface NavigationGroup {
   group: string;
+
+  // Nested groups only: Mintlify collapses the group when false. Top-level groups ignore it.
+  expanded?: boolean;
+
   pages: Array<string | NavigationGroup>;
 
   // OpenAPI spec to refer to for all methods in this group. This is helpful to avoid collisions when we have similar
@@ -97,6 +135,7 @@ function convertNavigation(mintNavigation: Array<any>): Array<NavigationGroup> {
         }
         return {
           group: page.group,
+          ...(page.expanded === undefined ? {} : { expanded: page.expanded }),
           pages: page.pages
         };
       }) : []
@@ -111,27 +150,49 @@ export function generateDocsConfig(mintConfig: any): DocsConfig {
     theme: 'mint',
     name: mintConfig.name,
     colors: mintConfig.colors,
+    background: mintConfig.background,
+    styling: mintConfig.styling,
+    fonts: mintConfig.fonts,
+    appearance: mintConfig.appearance,
     favicon: mintConfig.favicon,
+    seo: {
+      indexing: 'all'
+    },
     contextual: {
       options: ['copy', 'view']
     },
     navigation: {
       tabs: [
         {
-          tab: 'Documentation',
+          tab: 'Guides',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
-            !group.group.match(/^(Introduction|WRITE API|READ API|SEARCH API|PLATFORM API)$/)))
+            group.group.match(/^(Get started|Actions|Data and schemas|UI library|Destinations|Notifications|Reference|Security|Resources)$/)))
         },
         {
           tab: 'API Reference',
           groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
             group.group.match(/^(Introduction|WRITE API|READ API|SEARCH API|PLATFORM API)$/)))
+        },
+        {
+          tab: 'Integrations',
+          groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
+            group.group.match(/^Integrations$/)))
+        },
+        {
+          tab: 'Troubleshooting',
+          groups: convertNavigation(mintConfig.navigation.filter((group: any) =>
+            group.group === 'Troubleshooting guides'))
         }
       ]
     },
     logo: mintConfig.logo,
     api: {
       openapi: ['./platform.json', './read.json', './write.json', './search.json']
+    },
+    integrations: {
+      gtm: {
+        tagId: 'GTM-KKG4NLZD'
+      }
     },
     navbar: {
       links: mintConfig.topbarLinks?.map((link: any) => ({
@@ -161,34 +222,97 @@ export function writeDocsJson(docsConfig: DocsConfig, outputPath: string = 'docs
 }
 
 // Create the base configuration
+// See https://www.mintlify.com/docs/organize/settings-appearance#settings
 const baseConfig = {
   name: "Ampersand",
   openapi: [openApiPlatform, openApiRead, openApiWrite, openApiSearch],
   logo: {
-    light: "/logos/dark.png",
-    dark: "/logos/light.png",
-    href: "https://withampersand.com"
+    light: "/logos/light.png",
+    dark: "/logos/dark.png",
+    href: "https://www.ampersand.ai"
   },
   favicon: "logos/favicon.svg",
-  colors: {
-    primary: "#4F1EB8",
-    light: "#A67CFF",
-    dark: "#6122E7",
+  // appearance: {
+  //   // Default to dark mode
+  //   default: "dark",
+  // },
+  "colors": {
+    // Generally used for emphasis in light mode
+    "primary": "#1F71D6", // denim 600
+    // Used for emphasis in dark mode
+    "light": "#F3F89B", // butter yellow 300
+    // Used for buttons and hover states across both light and dark modes
+    "dark": "#2B2B2B" // Charcoal
+  },
+  "background": {
+    "color": {
+      // Background color for light mode
+      "light": "#FDFBF9", // cream 100
+      // Background color for dark mode
+      "dark": "#121212" // cream 1000
+    }
+  },
+  "styling": {
+    "codeblocks": "dark"
+  },
+  // See https://www.mintlify.com/docs/customize/fonts
+  // Other weights (e.g. bold text) are declared in fonts.css
+  "fonts": {
+    "heading": {
+      "family": "Helvetica Neue",
+      "source": "/fonts/HelveticaNeue/HelveticaNeueMedium.woff2",
+      "format": "woff2",
+      "weight": 600
+    },
+    "body": {
+      "family": "Helvetica Neue",
+      "source": "/fonts/HelveticaNeue/HelveticaNeueRoman.woff2",
+      "format": "woff2",
+      "weight": 500
+    }
   },
   topbarCtaButton: {
     name: "Start building now",
-    url: "https://dashboard.withampersand.com/sign-up",
+    url: "https://dashboard.withampersand.com/sign-up?trk=docs",
   },
   topbarLinks: [
     {
       name: "Sign in",
-      url: "https://dashboard.withampersand.com/sign-in",
+      url: "https://dashboard.withampersand.com/sign-in?trk=docs",
     },
   ],
   redirects: [
     {
+      source: "/docs/box",
+      destination: "/provider-guides/box"
+    },
+    {
+      source: "/box",
+      destination: "/provider-guides/box"
+    },
+    {
+      source: "/docs/asana",
+      destination: "/provider-guides/asana"
+    },
+    {
+      source: "/asana",
+      destination: "/provider-guides/asana"
+    },
+    {
+      source: "/docs/drift",
+      destination: "/provider-guides/drift"
+    },
+    {
+      source: "/drift",
+      destination: "/provider-guides/drift"
+    },
+    {
       source: "/docs/:slug*",
       destination: "/:slug*"
+    },
+    {
+      source: "/provider-guides",
+      destination: "/provider-guides/overview"
     },
     {
       source: "/docs/read-actions",
@@ -248,61 +372,115 @@ const baseConfig = {
     twitter: "https://twitter.com/withampersand",
   },
   navigation: [
-    {
-      // In order for the group headers on the documentation tab to not be bolded,
-      // we need to nest all of them in a mega-group, but this mega-group shouldn't have a group name.
-      group: " ", // This is intentionally left empty, DO NOT MODIFY.
+{
+      group: "Get started",
       pages: [
-        {
-          group: "Get started",
-          pages: [
-            "overview",
-            "concepts",
-            "quickstart",
-            "use-with-ai-ide",
-          ]
-        },
-        "subscribe-actions",
+        "overview",
+        "starter-project",
+        "use-with-ai-ide",
+        "concepts",
+      ]
+    },
+    {
+      group: "Actions",
+      pages: [
         "read-actions",
         "write-actions",
-        "proxy-actions",
+        "subscribe-actions",
         "search-actions",
+        "proxy-actions",
+      ],
+    },
+    {
+      group: "Data and schemas",
+      pages: [
         "object-and-field-mapping",
         "manage-customer-schemas",
+      ],
+    },
+{
+      group: "UI library",
+      pages: [
+        "embeddable-ui-components",
+        "headless"
+      ]
+    },
+{
+      group: "Destinations",
+      pages: [
+        "destinations/overview",
+        "destinations/webhooks",
+        "destinations/slack",
         {
-          group: "UI library",
+          group: "Blob storage",
           pages: [
-            "embeddable-ui-components",
-            "headless"
+            "destinations/s3",
           ]
         },
         {
+          group: "Databases and warehouses",
+          pages: [
+            "destinations/bigquery",
+            "destinations/clickhouse",
+            "destinations/redshift",
+            "destinations/snowflake",
+          ]
+        },
+        {
+          group: "Streams and queues",
+          pages: [
+            "destinations/azureservicebus",
+            "destinations/kinesis",
+            "destinations/pubsub",
+            "destinations/rabbitmq",
+            "destinations/sqs",
+          ]
+        }
+      ]
+    },
+{
+      group: "Notifications",
+      pages: [
+        "notifications/overview",
+        "notifications/notification-payloads"
+      ]
+    },
+    {
+      group: "Reference",
+      pages: [
+        "manifest-reference",
+        "config-reference",
+    {
           group: "CLI",
           pages: [
             "cli/overview",
             "cli/reference"
           ]
         },
-        "manifest-reference",
+      ],
+    },
+{
+      group: "Security",
+      pages: [
+        "security/outgoing-ip-addresses"
+      ]
+    },
+    {
+      group: "Resources",
+      pages: [
+        "dev-and-prod-environments",
+        "terminology",
+        "unified-api",
+      ],
+    },
+{
+      group: "Integrations",
+      pages: [
+        "provider-guides/overview",
         {
-          group: "Destinations",
+          group: "All providers",
+          expanded: false,
           pages: [
-            "destinations/overview",
-            "destinations/webhooks",
-            "destinations/kinesis",
-          ]
-        },
-        {
-          group: "Notifications",
-          pages: [
-            "notifications/overview",
-            "notifications/notification-payloads"
-          ]
-        },
-        {
-          group: "Provider guides",
-          pages: [
-            "provider-guides/overview",
             "provider-guides/accuLynx",
             "provider-guides/acuityScheduling",
             "provider-guides/aha",
@@ -319,6 +497,7 @@ const baseConfig = {
             "provider-guides/avoma",
             "provider-guides/aweber",
             "provider-guides/aws",
+            "provider-guides/basecamp",
             "provider-guides/bentley",
             "provider-guides/bigquery",
             "provider-guides/bird",
@@ -330,9 +509,11 @@ const baseConfig = {
             "provider-guides/braintree",
             "provider-guides/braze",
             "provider-guides/breakcold",
+            "provider-guides/breezy",
             "provider-guides/brevo",
             "provider-guides/bynder",
             "provider-guides/calendly",
+            "provider-guides/callRail",
             "provider-guides/campaignMonitor",
             "provider-guides/capsule",
             "provider-guides/chargeOver",
@@ -340,8 +521,10 @@ const baseConfig = {
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
             "provider-guides/chorus",
+            "provider-guides/circleback",
             "provider-guides/clari",
             "provider-guides/clariCopilot",
+            "provider-guides/clarify",
             "provider-guides/clickup",
             "provider-guides/close",
             "provider-guides/cloudtalk",
@@ -386,6 +569,7 @@ const baseConfig = {
             "provider-guides/google",
             "provider-guides/google-workspace-delegation",
             "provider-guides/gorgias",
+            "provider-guides/grain",
             "provider-guides/granola",
             // "provider-guides/greenhouseJobBoard",
             "provider-guides/groove",
@@ -409,6 +593,7 @@ const baseConfig = {
             "provider-guides/jobber",
             "provider-guides/joinMe",
             "provider-guides/jotform",
+            "provider-guides/jump",
             "provider-guides/justCall",
             "provider-guides/kaseyaVSAX",
             "provider-guides/keap",
@@ -416,17 +601,21 @@ const baseConfig = {
             "provider-guides/klaviyo",
             "provider-guides/lemlist",
             "provider-guides/lever",
+            "provider-guides/lightfield",
             "provider-guides/linear",
             "provider-guides/linkedin",
             "provider-guides/livestorm",
+            "provider-guides/lob",
             "provider-guides/loxo",
             "provider-guides/mailgun",
             "provider-guides/marketo",
             "provider-guides/meta",
             "provider-guides/microsoft",
+            "provider-guides/microsoftAdminConsent",
             "provider-guides/miro",
             "provider-guides/mixmax",
             "provider-guides/mixpanel",
+            "provider-guides/monaco",
             "provider-guides/monday",
             "provider-guides/mural",
             "provider-guides/netsuite",
@@ -436,6 +625,7 @@ const baseConfig = {
             "provider-guides/odoo",
             "provider-guides/okta",
             "provider-guides/openAI",
+            "provider-guides/orb",
             "provider-guides/outplay",
             "provider-guides/outreach",
             "provider-guides/paddle",
@@ -452,6 +642,7 @@ const baseConfig = {
             "provider-guides/ramp",
             "provider-guides/rebilly",
             "provider-guides/recurly",
+            "provider-guides/reply",
             "provider-guides/revenuecat",
             "provider-guides/ringCentral",
             "provider-guides/sageIntacct",
@@ -472,6 +663,7 @@ const baseConfig = {
             "provider-guides/snapchatAds",
             "provider-guides/snowflake",
             "provider-guides/solarwindsServiceDesk",
+            "provider-guides/square",
             "provider-guides/stripe",
             "provider-guides/superSend",
             "provider-guides/surveyMonkey",
@@ -481,51 +673,50 @@ const baseConfig = {
             "provider-guides/timely",
             "provider-guides/tipalti",
             "provider-guides/vtiger",
+            "provider-guides/wealthbox",
             "provider-guides/webex",
             "provider-guides/webflow",
             "provider-guides/whereby",
             "provider-guides/wordpress",
             "provider-guides/wrike",
+            "provider-guides/workday",
             "provider-guides/xero",
             "provider-guides/zendeskSupport",
             "provider-guides/zoho",
             "provider-guides/zoom",
+            "provider-guides/zoominfo",
           ]
         },
         {
           group: "Customer guides",
+          expanded: false,
           pages: [
             "customer-guides/overview",
             "customer-guides/bigquery",
             "customer-guides/google-workspace-delegation",
+            "customer-guides/housecallPro",
+            "customer-guides/hubspot",
+            "customer-guides/loxo",
+            "customer-guides/marketo",
+            "customer-guides/netsuite",
             "customer-guides/salesforce",
             "customer-guides/salesforce-jwt",
-            "customer-guides/loxo",
-            "customer-guides/hubspot",
-            "customer-guides/housecallPro",
-            "customer-guides/marketo",
             "customer-guides/snowflake",
-            "customer-guides/netsuite",
-            "customer-guides/update-connection"
+            "customer-guides/update-connection",
+            "customer-guides/zoho"
           ]
         },
-        {
-          group: "Troubleshooting guides",
-          pages: [
-            "troubleshooting-guides/salesforce"
-          ]
-        },
-        "dev-and-prod-environments",
-        "terminology",
-        "unified-api",
-        // {
-        //   group: "AI Agents",
-        //   pages: [
-        //     "ai-sdk",
-        //     "mcp-server",
-        //   ]
-        // },
-      ],
+      ]
+    },
+{
+      group: "Troubleshooting guides",
+      pages: [
+        "troubleshooting-guides/overview",
+        "troubleshooting-guides/general",
+        "troubleshooting-guides/google",
+        "troubleshooting-guides/microsoft-dynamics",
+        "troubleshooting-guides/salesforce"
+      ]
     },
     {
       group: "Introduction",

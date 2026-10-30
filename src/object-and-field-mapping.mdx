@@ -12,7 +12,7 @@ You can map an object from a provider API to a label of your choice. This can he
 
 For example, if you map the `account` object from **Salesforce** and the `companies` object from **HubSpot** to a unified label like `company`, your read action results will be delivered under the object name of `company`. The original object name will still be available in the response's `rawObjectName` key.
 
-If you wish to write data to `company`, you can [inherit the mapping](/write-actions#sharing-mappings-with-read-actions) from the read action.
+If you wish to write data to `company`, you can [inherit the mapping](/write-actions#share-mappings-with-read-actions) from the read action.
 
 Here's an example of a Salesforce integration that maps the `account` object to `company`:
 
@@ -144,7 +144,7 @@ function MyComponent() {
 
 ```
 
-<Tip>Dynamic mappings are considered optional for a user to set, i.e, your users can install the integration without explicitly mapping a field. </Tip>
+<Tip>Dynamic mappings are considered optional for a user to set, i.e., your users can install the integration without explicitly mapping a field. </Tip>
 
 Note you can also use this configuration in tandem with static field mappings (the ones defined in `amp.yaml`):
 
@@ -196,12 +196,12 @@ Ampersand platform also offers the flexibility of mapping values of fields from 
 
 These might be for fields that are mapped either in a user-defined fashion or have a pre-defined mapping defined.
 
-Lets take an example:
+Let's take an example:
 
 - SampleApp is using Ampersand to integrate with their customer's HubSpot.
 - SampleApp needs to ask the customer to map their SampleApp fields to their HubSpot fields.
 - For a certain field, such as `Priority`,
-SampleApp has the values  `Very High`, `High`, `Medium`, `Low` while HubSpot has the values
+SampleApp has the values `Very High`, `High`, `Medium`, `Low` while HubSpot has the values
 `P1`, `P2`, `P3`, and `P4`. SampleApp would like the user to map the correlation between the SampleApp values and HubSpot values.
 
 To achieve this you can define the SampleApp side of the values that need to be mapped in `InstallIntegration` component like below:

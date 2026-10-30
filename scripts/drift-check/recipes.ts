@@ -40,6 +40,11 @@ export const recipes: Recipes = {
       until: '2026-09-01',
     },
     { provider: 'deelSandbox', reason: 'Sandbox variant.', until: '2027-01-01' },
+    {
+      provider: 'greenhouseJobBoard',
+      reason: 'Connector is intentionally gated pending public launch decision. See ENG-4072.',
+      until: '2026-09-01',
+    },
     { provider: 'gustoDemo', reason: 'Demo variant.', until: '2027-01-01' },
     { provider: 'paddleSandbox', reason: 'Sandbox variant.', until: '2027-01-01' },
     { provider: 'payPalSandBox', reason: 'Sandbox variant.', until: '2027-01-01' },
