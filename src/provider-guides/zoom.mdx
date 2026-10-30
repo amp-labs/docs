@@ -1,118 +1,127 @@
 ---
 title: "Zoom"
-slug: "zoom"
-excerpt: ""
-createdAt: "Thu Jul 04 2024 16:24:20 GMT+0000 (Coordinated Universal Time)"
-updatedAt: "Mon Jul 08 2024 17:16:37 GMT+0000 (Coordinated Universal Time)"
 ---
-## What's Supported
 
-### Supported Actions
+## What's supported
+
+### Supported actions
 
 This connector supports:
-- [Read Actions](/read-actions), including full historic backfill for most objects. Incremental read is supported for `recordings`, `archive_files`, `meeting_summaries`, `activities_report`, `meetings`, `users_report`, `recordings_report`, `meetings_report`, `operation_logs_report`, `meeting_activities_report`, `telephone_report`, and `upcoming_events_report`. For all other objects, a full read of the Zoom instance will be done per scheduled read.
+
+- [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects listed below. For all other objects, a full read of the Zoom instance will be done per scheduled read.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.zoom.us`.
 
-<Note>
-The following objects don't support historic backfill: `users_report`, `recordings_report`, `meetings_report`, `operation_logs_report`, `meeting_activities_report`, `telephone_report`, `upcoming_events_report`, and `recordings`. By default, the last 29 days are read. To retrieve more historical data, specify higher `defaultPeriod` in your read configuration.
-</Note>
+### Notes
 
-### Supported Objects
+- The following objects don't support full historic backfill: `meeting_activities_report`, `meetings_report`, `operation_logs_report`, `recordings`, `recordings_report`, `telephone_report`, `upcoming_events_report` and `users_report`. By default, the last 29 days are read. To read further back, set a longer `defaultPeriod` in the object's [backfill configuration](/read-actions#limited-time-backfill).
 
-The Zoom connector supports writing to and reading from the following objects:
-- [activities_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/GET/report/activities) (read only)
-- [archive_files](https://developers.zoom.us/docs/api/meetings/#tag/archiving/GET/archive_files) (read only)
-- [billing_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/GET/report/billing) (read only)
-- [contacts_groups](https://developers.zoom.us/docs/api/users/#tag/contact-groups/get/contacts/groups) (read and write)
-- [devices](https://developers.zoom.us/docs/api/meetings/#tag/devices/GET/devices) (read and write)
-- [devices_groups](https://developers.zoom.us/docs/api/meetings/#tag/devices/get/devices/groups) (read only)
-- [groups](https://developers.zoom.us/docs/api/users/#tag/groups/get/groups) (read and write)
-- [h323_devices](https://developers.zoom.us/docs/api/meetings/#tag/h323-devices/POST/h323/devices) (read and write)
-- [meeting_activities_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/meeting_activities) (read only)
-- [meeting_summaries](https://developers.zoom.us/docs/api/meetings/#tag/summaries/get/meetings/meeting_summaries) (read only)
-- [meeting_templates](https://developers.zoom.us/docs/api/meetings/#tag/templates/get/users/{userId}/meeting_templates) (read only)
-- [meetings](https://developers.zoom.us/docs/api/meetings/#tag/meetings/get/users/{userId}/meetings) (read and write)
-- [meetings_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/users/{userId}/meetings) (read only)
-- [operation_logs_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/operationlogs) (read only)
-- [phones](https://developers.zoom.us/docs/api/meetings/#tag/sip-phone/get/sip_phones/phones) (read only)
-- [recordings](https://developers.zoom.us/docs/api/meetings/#tag/cloud-recording/get/users/{userId}/recordings) (read only)
-- [recordings_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/cloud_recording) (read only)
-- [telephone_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/telephone) (read only)
-- [tracking_fields](https://developers.zoom.us/docs/api/meetings/#tag/tracking-field) (read and write)
-- [tsp](https://developers.zoom.us/docs/api/meetings/#tag/tsp/get/users/{userId}/tsp) (read and write)
-- [upcoming_events_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/upcoming_events) (read only)
-- [upcoming_meetings](https://developers.zoom.us/docs/api/meetings/#tag/meetings/get/users/{userId}/upcoming_meetings) (read only)
-- [users](https://developers.zoom.us/docs/api/users/#tag/users/get/users) (read and write)
-- [users_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/users) (read only)
-- [webinars](https://developers.zoom.us/docs/api/meetings/#tag/webinars/get/users/{userId}/webinars) (read and write)
+### Supported objects
 
+The Zoom connector supports reading from the following objects:
+
+{/* TODO: The connector's incremental set lists "activities", which matches no read object. If it should be "activities_report", fix it in amp-labs/connectors and mark activities_report as supporting incremental read. */}
+
+- [activities_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/GET/report/activities)
+- [archive_files](https://developers.zoom.us/docs/api/meetings/#tag/archiving/GET/archive_files) (supports incremental read)
+- [billing_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/GET/report/billing)
+- [contacts_groups](https://developers.zoom.us/docs/api/users/#tag/contact-groups/get/contacts/groups)
+- [devices](https://developers.zoom.us/docs/api/meetings/#tag/devices/GET/devices)
+- [devices_groups](https://developers.zoom.us/docs/api/meetings/#tag/devices/get/devices/groups)
+- [groups](https://developers.zoom.us/docs/api/users/#tag/groups/get/groups)
+- [h323_devices](https://developers.zoom.us/docs/api/meetings/#tag/h323-devices/POST/h323/devices)
+- [meeting_activities_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/meeting_activities) (supports incremental read)
+- [meeting_summaries](https://developers.zoom.us/docs/api/meetings/#tag/summaries/get/meetings/meeting_summaries) (supports incremental read)
+- [meeting_templates](https://developers.zoom.us/docs/api/meetings/#tag/templates/get/users/{userId}/meeting_templates)
+- [meetings](https://developers.zoom.us/docs/api/meetings/#tag/meetings/get/users/{userId}/meetings) (supports incremental read)
+- [meetings_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/users/{userId}/meetings) (supports incremental read)
+- [operation_logs_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/operationlogs) (supports incremental read)
+- [phones](https://developers.zoom.us/docs/api/meetings/#tag/sip-phone/get/sip_phones/phones)
+- [recordings](https://developers.zoom.us/docs/api/meetings/#tag/cloud-recording/get/users/{userId}/recordings) (supports incremental read)
+- [recordings_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/cloud_recording) (supports incremental read)
+- [telephone_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/telephone) (supports incremental read)
+- [tracking_fields](https://developers.zoom.us/docs/api/meetings/#tag/tracking-field)
+- [tsp](https://developers.zoom.us/docs/api/meetings/#tag/tsp/get/users/{userId}/tsp)
+- [upcoming_events_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/upcoming_events) (supports incremental read)
+- [upcoming_meetings](https://developers.zoom.us/docs/api/meetings/#tag/meetings/get/users/{userId}/upcoming_meetings)
+- [users](https://developers.zoom.us/docs/api/users/#tag/users/get/users)
+- [users_report](https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/users) (supports incremental read)
+- [webinars](https://developers.zoom.us/docs/api/meetings/#tag/webinars/get/users/{userId}/webinars)
+
+The Zoom connector supports writing to the following objects:
+
+{/* TODO: The connector has a write path for meetings but leaves it out of its supported write objects. Add meetings here if amp-labs/connectors adds it. */}
+
+- [contacts_groups](https://developers.zoom.us/docs/api/users/#tag/contact-groups/get/contacts/groups)
+- [devices](https://developers.zoom.us/docs/api/meetings/#tag/devices/GET/devices)
+- [groups](https://developers.zoom.us/docs/api/users/#tag/groups/get/groups)
+- [h323_devices](https://developers.zoom.us/docs/api/meetings/#tag/h323-devices/POST/h323/devices)
+- [tracking_fields](https://developers.zoom.us/docs/api/meetings/#tag/tracking-field)
+- [tsp](https://developers.zoom.us/docs/api/meetings/#tag/tsp/get/users/{userId}/tsp)
+- [users](https://developers.zoom.us/docs/api/users/#tag/users/get/users)
+- [webinars](https://developers.zoom.us/docs/api/meetings/#tag/webinars/get/users/{userId}/webinars)
 
 ### Example integration
 
-For an example manifest file of a Zoom integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/zoom/amp.yaml).
+For an example manifest file of a Zoom integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/zoom/amp.yaml).
 
+## Before you get started
 
-## Before You Get Started
+To integrate Zoom with Ampersand, you will need a [Zoom account](https://zoom.us/signup).
 
-To connect Zoom with Ampersand, you will need [a Zoom Account](#create-a-zoom-account).
-
-Once your account is created, you'll need to configure an app in Zoom and obtain the following credentials from your app:
+Once your account is created, you'll need to create a Zoom app and obtain the following credentials from it:
 
 - Client ID
 - Client Secret
 
-You will use these credentials to connect your application to Ampersand.
+You will then use these credentials to connect your application to Ampersand.
 
-### Create a Zoom Account
+### Creating a Zoom app
 
-Here's how you can sign up for a Zoom account:
+1. Log in to the [Zoom developer portal](https://marketplace.zoom.us/).
+2. Click **+** next to **Developer** and select **Build app**.
+3. Select **General app**, then click **Create**.
 
-1. Go to the [Zoom Sign Up page](https://zoom.us/signup) and create an account.
-2. Sign up using your preferred method.
+   <video autoPlay muted loop playsInline className="w-full rounded-xl" src="/images/provider-guides/zoom-app-create.mp4"></video>
 
-### Creating a Zoom App
+4. In the **OAuth information** section, set the redirect URL to: `https://api.withampersand.com/callbacks/v1/oauth`
+5. Go to **Scopes**.
+6. Click **Add scopes** and select the scopes your app uses.
 
-Follow the steps below to create a Zoom app and add the Ampersand redirect URL:
+   <video autoPlay muted loop playsInline className="w-full rounded-xl" src="/images/provider-guides/zoom-app-scopes.mp4"></video>
 
-1. Log in to your [Zoom Marketplace](https://marketplace.zoom.us/) account.
+7. Go to **Local test** and click **Add app now** to finish setting up your app.
+8. Copy the **Client ID** and **Client Secret** from the **Basic information** section of the app.
 
-2. Click on **Develop** in the top-right corner and select **Build App**.
+   <video autoPlay muted loop playsInline className="w-full rounded-xl" src="/images/provider-guides/zoom-app-credentials.mp4"></video>
 
-3. Choose the type of app you want to create. For this integration, select **General App**.
-
-4. Click **Create**.
-
-5. In the **OAuth Information** section, enter the Ampersand redirect URL: `https://api.withampersand.com/callbacks/v1/oauth`.
-
-   <br />
-
-   ![Creating Zoom App](/images/provider-guides/5cad59a-zoom1.gif)
-
-6. Click **Continue** and go to **Scopes**.
-
-7. Select the applicable scopes for your app.
-
-8. Click Continue and in the Add your app section, click Add app to finalize your app setup.
-
-You can find the **Client ID** and **Client Secret** in the **Basic Information** section of the app. You'll use these credentials to connect your app to [Ampersand](#add-your-zoom-app-info-to-ampersand).
-
-![Ampersand Project](/images/provider-guides/e6d1a69-zoom3.jpeg)
-
-### Add Your Zoom App Info to Ampersand
+### Add your Zoom app info to Ampersand
 
 1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 
 2. Select the project where you want to create a Zoom integration.
 
-   ![Ampersand Project](/images/provider-guides/dd47b7a-Ampersand.png)
-
 3. Select **Provider apps**.
 
-4. Select _Zoom_ from the **Provider** list.
+4. Click **+ New App**.
 
-5. Enter the previously obtained _Client ID_ in the **Client ID** field and the _Client Secret_ in the **Client Secret** field.
+5. Select **Zoom** from the **Provider** list.
 
-   ![Adding Zoom Credentials](/images/provider-guides/4669432-zoom2.gif)
+6. Enter the **Client ID** and **Client Secret** obtained from your Zoom app.
 
-6. Click **Save changes**.
+7. Click **Save changes**.
+
+<video autoPlay muted loop playsInline className="w-full rounded-xl" src="/images/provider-guides/zoom-ampersand.mp4"></video>
+
+## Using the connector
+
+To start integrating with Zoom:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
