@@ -1,38 +1,32 @@
-# Provider Guide Templates
+# Provider guide templates
 
-**Copy fixed text verbatim. Fill only `<angle-bracket>` slots. Do not rephrase, reorder, or "improve" fixed sentences.**
+Copy the fixed text exactly. Fill only the `<angle-bracket>` slots, and leave out any part that doesn't apply to this provider.
 
-## Page skeleton (canonical section order)
+## Skeleton
 
 ```markdown
 ---
-title: "<Provider Display Name>"
+title: "<displayName>"
 ---
-
-<optional 1–2 sentence intro — ONLY when the provider needs disambiguation,
- e.g. GoTo covering GoToWebinar + GoToMeeting. Most guides have no intro.>
 
 ## What's supported
 
 ### Supported actions
 
-### Notes                    ← optional; only when real caveats exist
+### Notes                 ← only for caveats specific to this provider
 
-### Supported objects        ← deep connectors only
+### Supported objects     ← deep connectors only
 
 ### Example integration
 
 ## Before you get started
 
-### <credential subsections — see auth-type variants below>
+### <credential section for the auth type>
 
 ## Using the connector
 
-<extra provider-specific sections (API documentation, rate limits, credential
- format quirks) — always LAST, after "Using the connector">
+<provider-specific sections, such as rate limits, go last>
 ```
-
----
 
 ## Supported actions
 
@@ -41,98 +35,67 @@ title: "<Provider Display Name>"
 
 This connector supports:
 
-- <Read bullet — exactly one of patterns A–D below>
+- <Read bullet>
 - [Subscribe Actions](/subscribe-actions).
 - [Write Actions](/write-actions).
-- [Proxy Actions](/proxy-actions), using the base URL `<base URL>`.
+- [Proxy Actions](/proxy-actions), using the base URL `<baseURL>`.
 ```
 
-Rules: order is Read → Subscribe → Write → Proxy; include only supported actions; every bullet ends with a period; Proxy bullet always carries the base URL in backticks (placeholders preserved, e.g. `` `https://rest.{{.restInstanceId}}.braze.com` ``).
+Pick the Read bullet by which objects the connector's code reads incrementally.
 
-### Read bullet — Pattern A: no incremental read
+None:
 
 ```markdown
 - [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is not supported, a full read of the <Provider> instance will be done for each scheduled read.
 ```
 
-### Read bullet — Pattern B: incremental for ≤5 objects (list inline)
+Five objects or fewer:
 
 ```markdown
-- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `<object1>`, `<object2>` and `<object3>` currently. For all other objects, a full read of the <Provider> instance will be done per scheduled read.
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `<object1>` and `<object2>` currently. For all other objects, a full read of the <Provider> instance will be done per scheduled read.
 ```
 
-### Read bullet — Pattern C: incremental for all objects
-
-```markdown
-- [Read Actions](/read-actions), including full historic backfill and incremental read for all supported objects.
-```
-
-### Read bullet — Pattern D: incremental for >5 objects (annotate object list)
+More than five objects (also append ` (supports incremental read)` to each of those object bullets):
 
 ```markdown
 - [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects listed below. For all other objects, a full read of the <Provider> instance will be done per scheduled read.
 ```
 
-With Pattern D, append ` (supports incremental read)` to each supporting bullet in the read-objects list.
+All objects:
 
-If a Subscribe action needs provider-specific setup, extend its bullet:
 ```markdown
-- [Subscribe Actions](/subscribe-actions). Please note that [special set up](#set-up-subscribe-actions) is needed for <Provider>.
+- [Read Actions](/read-actions), including full historic backfill and incremental read for all supported objects.
 ```
 
----
-
-## Supported objects (deep connectors)
+## Supported objects
 
 ```markdown
 ### Supported objects
 
 The <Provider> connector supports reading from the following objects:
 
-- [<objectName>](<upstream API reference URL>)
-- [<objectName>](<upstream API reference URL>)
+- [<objectName>](<API reference URL>)
 
 The <Provider> connector supports writing to the following objects:
 
-- [<objectName>](<upstream API reference URL>)
+- [<objectName>](<API reference URL>)
 ```
 
-Rules:
-- **REQUIRED:** every bullet is `[name](url)` linking to the provider's API reference for that object. Unknown URL → `- <objectName> <!-- TODO: Add API reference link -->`. Never a bare name.
-- Alphabetical order within each list.
-- Object names exactly as used in `amp.yaml` (e.g. `email/hard_bounces`, `user/keys`).
-- Pattern D: append ` (supports incremental read)` to supporting read bullets.
-- If read + write lists are long, `#### Read objects` / `#### Write objects` subheadings may replace the intro sentences (see procore.mdx).
-- If the object list is known to be incomplete:
-  ```markdown
-  > Note: The list below may be incomplete. <!-- TODO: Confirm supported objects -->
-  ```
-- Proxy-only connectors: omit this section, or use short prose pointing at the provider's API docs:
-  ```markdown
-  ### Supported objects
-
-  <Provider> is supported through Proxy Actions only. Use the proxy to call any [<Provider> API](<api docs URL>) endpoint, for example `GET /v1/projects`.
-  ```
-
----
+List objects alphabetically, named as in `amp.yaml`. For a proxy-only connector, leave the section out.
 
 ## Example integration
 
-**First check** (observable predicate — do not skip):
-```bash
-curl -s -o /dev/null -w "%{http_code}" https://raw.githubusercontent.com/amp-labs/samples/main/<catalogKey>/amp.yaml
-```
+If the samples manifest exists:
 
-**HTTP 200 → samples-link form:**
 ```markdown
 ### Example integration
 
 For an example manifest file of a <Provider> integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/<catalogKey>/amp.yaml).
 ```
-Use "an" instead of "a" when the provider name starts with a vowel sound ("an Outplay integration", "an Asana integration").
 
-**Otherwise → inline-manifest form** (action blocks only for supported capabilities):
-```markdown
+Use "an" before a vowel sound ("an Asana integration"). Otherwise, include a manifest with a block for each supported action only:
+
+````markdown
 ### Example integration
 
 To define an integration for <Provider>, create a manifest file that looks like this:
@@ -146,22 +109,19 @@ integrations:
     provider: <catalogKey>
     read:
       objects:
-        - objectName: <object1>
+        - objectName: <object>
           destination: <destinationName>
     write:
       objects:
-        - objectName: <object1>
+        - objectName: <object>
     proxy:
       enabled: true
 ```
-```
-Proxy-only connectors: keep only the `proxy` block.
+````
 
----
+## Before you get started
 
-## Before you get started — auth-type variants
-
-### OAuth2 Authorization Code (Provider App required)
+### OAuth2 Authorization Code
 
 ```markdown
 ## Before you get started
@@ -178,9 +138,9 @@ You will then use these credentials to connect your application to Ampersand.
 ### Creating a <Provider> app
 
 1. Log in to the [<Provider> developer portal](<URL>).
-2. <provider-specific steps…>
-3. Set the redirect/callback URL to: `https://api.withampersand.com/callbacks/v1/oauth`
-4. <steps to obtain Client ID and Client Secret…>
+2. <steps to create the app>
+3. Set the redirect URL to: `https://api.withampersand.com/callbacks/v1/oauth`
+4. <steps to copy the Client ID and Client Secret>
 
 ### Add your <Provider> app info to Ampersand
 
@@ -196,14 +156,12 @@ You will then use these credentials to connect your application to Ampersand.
 
 6. Enter the **Client ID** and **Client Secret** obtained from your <Provider> app.
 
-7. Enter the scopes your <Provider> app uses, one per line.
-
-8. Click **Save changes**.
+7. Click **Save changes**.
 ```
 
-Notes: include step 7 only if the catalog sets `oauth2Opts.explicitScopesRequired`, and list the scopes under "Creating a <Provider> app".
+If the catalog sets `oauth2Opts.explicitScopesRequired`, list the scopes in "Creating a <Provider> app", and end step 6 with: `, and the scopes your app uses, one per line.`
 
-### API Key / Basic Auth / OAuth2 Client Credentials (no Provider App)
+### API key, Basic Auth and OAuth2 Client Credentials
 
 ```markdown
 ## Before you get started
@@ -212,96 +170,71 @@ To connect <Provider> with Ampersand, you will need a [<Provider> account](<sign
 
 ### Creating <Provider> credentials
 
-1. <steps to generate the API key / client credentials…>
-2. <where to copy each value…>
+1. <steps to create the credentials>
+2. <where to copy each value>
 ```
 
-- Section title options: `### Creating an API key for <Provider>`, `### Creating <Provider> credentials` — pick what fits the credential.
-- **Each dynamic token gets explained here.** Example (from outplay.mdx): "Note your workspace identifier - this is the subdomain in your <Provider> URL (e.g., if your URL is `https://mycompany-api.outplayhq.com`, your workspace is `mycompany`)."
-- Nonstandard Basic Auth mapping (e.g. API key as username, blank password) gets stated explicitly and linked to the provider's auth docs, plus this sentence: "The UI components will display this link, so that your users can successfully provide their credentials." For extensive quirks, add a `## Credential format for <Provider>` section at the end of the file (see connectWise.mdx).
+Add a step for each dynamic token: what it is and where to find it. For example: "Note your workspace. This is the subdomain in your <Provider> URL (if your URL is `https://mycompany.example.com`, your workspace is `mycompany`)."
 
----
+If the username or password isn't what the name suggests (for example, the API key goes in the username), say so and link the provider's auth docs.
 
 ## Using the connector
 
 ```markdown
 ## Using the connector
 
-<auth intro line — see table; omitted entirely for OAuth2 Authorization Code>
+<auth intro line>
 
 To start integrating with <Provider>:
 
 - Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
 - If you are using Read Actions, create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. <auth prompt line — see table>
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. <auth prompt line>
 - Start using the connector!
    - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
    - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
    - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 ```
 
-Rules:
-- Include the destination bullet only if Read is supported.
-- Include only the "Start using" sub-bullets for supported actions.
-- If Subscribe is supported, the first sub-bullet becomes: `If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.`
+Keep the destination bullet and each sub-bullet only for supported actions. With Subscribe, the first sub-bullet reads `If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.`
 
-### Auth intro / prompt lines
-
-| Auth type | `<auth intro line>` | `<auth prompt line>` |
+| Auth type | Auth intro line | Auth prompt line |
 |---|---|---|
-| OAuth2 Authorization Code | *(omit)* | The UI component will prompt the customer for OAuth authorization. |
+| OAuth2 Authorization Code | none | The UI component will prompt the customer for OAuth authorization. |
 | OAuth2 Client Credentials | This connector uses OAuth2 Client Credentials grant type, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.) | The UI component will prompt the customer for their credentials. |
 | API Key | This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.) | The UI component will prompt the customer for their API key. |
 | Basic Auth | This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.) | The UI component will prompt the customer for their username and password. |
 
-If the customer must also supply dynamic tokens, extend the prompt line, e.g. "…for their API credentials and workspace location."
+If the customer also enters dynamic tokens, extend the prompt line, for example "…for their credentials and workspace."
 
-### Proxy-only ending variant
+For a proxy-only connector, replace the last bullet ("Start using the connector!" and its sub-bullets) with one of these:
 
-For proxy-only connectors, replace the last two bullets ("Embed…", "Start using…") with:
-
-```markdown
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. <auth prompt line>
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by <Basic Auth/API Key auth>. Please note that this connector's base URL is `<base URL>`.
-```
-
-For OAuth (either grant type) proxy-only connectors, the last bullet is instead:
 ```markdown
 - Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically handle the authentication with <Provider>.
 ```
 
----
+```markdown
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by <Basic Auth or API Key auth>. Please note that this connector's base URL is `<baseURL>`.
+```
 
-## Data gathering — amp-labs/connectors repo
+Use the first for OAuth and the second for Basic Auth and API key.
 
-### Catalog entry (all connectors)
+## Data gathering
 
-Read the provider's entry in [`internal/generated/catalog.json`](https://raw.githubusercontent.com/amp-labs/connectors/main/internal/generated/catalog.json):
-- `displayName` → guide title
-- `authType` (+ `oauth2Opts.grantType`) → auth-type variant
-- `baseURL` → Proxy bullet (preserve `{{.placeholders}}`)
-- `support` flags → supported actions
-- `metadata` fields → dynamic tokens to document
+From the provider's entry in the [catalog](https://raw.githubusercontent.com/amp-labs/connectors/main/internal/generated/catalog.json):
 
-If the provider is not in the catalog on `main`, ask the user for the feature branch and note at the top of the draft: `<!-- Draft based on branch: <branch>; update links after merge -->`
+- `displayName`: title
+- `authType` and `oauth2Opts.grantType`: auth-type variant
+- `baseURL`: Proxy bullet, keeping `{{.placeholders}}`
+- `support`: supported actions
+- `metadata`: dynamic tokens
 
-### Deep connectors (folder pattern)
+If the provider isn't in the catalog, ask for the connectors branch and start the draft with `<!-- Draft based on branch: <branch>; update links after merge -->`.
 
-Explore `https://github.com/amp-labs/connectors/tree/main/providers/<folder>` (usually the catalog key in lowercase):
-- `support.go` / `supports.go`, `schemas.json` → object lists
-- read/write handler files → objects and incremental read; claim only actions the catalog's `support` flags allow.
-- Incremental cues: `SupportsIncremental` / `IncrementalObjects` maps, or handlers filtering on timestamps (`since`, `updated_at`, `modifiedDate`). Mention the cursor field only if explicitly named in code.
-- Objects in code override `schemas.json`; note conflicts with a TODO.
+For a deep connector, read `providers/<folder>/` in the connectors repo (usually the catalog key in lowercase):
 
-### Upstream API reference links
+- Objects come from `supports.go` and `schemas.json`. If the code and `schemas.json` disagree, follow the code and add a TODO.
+- Incremental read shows as `IncrementalObjects`-style maps, or handlers that filter on a timestamp (`since`, `updated_at`).
 
-For each object, find the provider's API reference page for that resource (try `developers.<domain>`, `docs.<domain>`, `developer.<domain>`). Link the closest resource-level page. Nothing found → `<!-- TODO: Add API reference link -->`. Never invent URL paths.
-
----
-
-## Navigation registration (new guides)
-
-1. In `src/generate-docs.ts`, find the `group: "All providers"` block (nested in `group: "Integrations"`).
-2. Insert `"provider-guides/<catalogKey>",` keeping case-insensitive alphabetical order; one entry per line, double quotes, trailing comma.
-3. Run `pnpm run gen-docs`. If the user asked for no build, remind them to run it later.
+For each object, link the provider's API reference page for that resource. Never invent a URL path.

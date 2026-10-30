@@ -21,10 +21,10 @@ A guide is assembled from [templates.md](templates.md), not written. Copy its se
 - Headings are the exact sentence-case strings in templates.md.
 - Actions are listed Read → Subscribe → Write → Proxy. The Proxy bullet carries the base URL in backticks.
 - Every object bullet is `[name](API reference URL)`, or `name <!-- TODO: Add API reference link -->` when no page exists.
-- Claim incremental read only with evidence in the connector's code. Otherwise use Pattern A.
+- Claim incremental read only with evidence in the connector's code. Otherwise use the "none" Read bullet.
 - Link the samples manifest only if `curl -s -o /dev/null -w "%{http_code}" https://raw.githubusercontent.com/amp-labs/samples/main/<catalogKey>/amp.yaml` returns 200. Otherwise include the manifest inline.
 - Explain each dynamic token (`{{.workspace}}`, `{{.region}}`) once under "Before you get started": what it is and where the customer finds it.
-- Reference only images and videos that exist in `src/images/provider-guides/`.
+- Reference only images and videos that exist in `src/images/provider-guides/`. Record step videos with the `recording-provider-guides` skill.
 
 ## Checks
 
