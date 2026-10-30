@@ -3,7 +3,7 @@
 //
 // AGENT_BROWSER_SESSION=<session> npx tsx record.ts <flow.json> <out.mp4> key=value...
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -30,6 +30,8 @@ const flow: {
   start: string;
   // Selectors for secrets, emails and account names, covered before every screenshot.
   mask?: string[];
+  // Inputs whose values must not appear in any frame, checked after rendering.
+  secrets?: string[];
   steps: Step[];
 } = JSON.parse(
   readFileSync(flowPath, 'utf8').replace(/\{\{(\w+)\}\}/g, (_, k) => {
@@ -59,15 +61,21 @@ function boxOf(selector: string) {
   }
 }
 
-// Navigation drops injected styles, so the mask goes on before every screenshot.
+// Navigation drops the mask, so it goes on before every screenshot. Masks are
+// CSS selectors or `xpath=`; each match gets a data attribute the style covers.
 function screenshot(name: string) {
-  const css = (flow.mask ?? [])
-    .map((m) => `${m} { background: #3a3a3a !important; color: transparent !important; -webkit-text-fill-color: transparent !important; } ${m} * { visibility: hidden !important; }`)
-    .join('\n');
-  if (css) {
+  if (flow.mask?.length) {
     ab('eval', `(() => {
+      const css = '[data-mask] { background: #3a3a3a !important; color: transparent !important; -webkit-text-fill-color: transparent !important; } [data-mask] * { visibility: hidden !important; }';
       const s = document.getElementById('__mask') ?? document.head.appendChild(Object.assign(document.createElement('style'), { id: '__mask' }));
-      s.textContent = ${JSON.stringify(css)};
+      s.textContent = css;
+      for (const m of ${JSON.stringify(flow.mask)}) {
+        const found = m.startsWith('xpath=')
+          ? document.evaluate(m.slice(6), document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)
+          : null;
+        const els = found ? Array.from({ length: found.snapshotLength }, (_, i) => found.snapshotItem(i)) : [...document.querySelectorAll(m)];
+        els.forEach((el) => el.setAttribute('data-mask', ''));
+      }
     })()`);
   }
   ab('screenshot', join(dir, name));
@@ -77,6 +85,9 @@ function screenshot(name: string) {
 ab('set', 'viewport', String(flow.viewport.width), String(flow.viewport.height), '2');
 ab('open', flow.start);
 settle();
+const secrets: string[] = (flow.secrets ?? [])
+  .map((s) => ab('eval', `document.querySelector(${JSON.stringify(s)})?.value ?? ''`).result)
+  .filter((v: string) => v.length >= 10);
 const shots = flow.steps.map((step, i) => {
   boxOf(step.target);
   ab('scrollintoview', step.target);
@@ -198,4 +209,20 @@ writeFileSync(
 execFileSync('npx', ['-y', 'hyperframes@0.8.221', 'render', dir, '--quiet', '--format', 'mp4', '--crf', '28', '-o', resolve(outArg)], {
   stdio: 'inherit',
 });
+
+// A mask that misses an element hides nothing, so read each secret from the
+// page and search every frame for it. A match deletes the video and fails.
+if (secrets.length) {
+  execFileSync('ffmpeg', ['-loglevel', 'error', '-i', resolve(outArg), '-vf', 'fps=3', join(dir, 'frame-%03d.png')]);
+  const frames = readdirSync(dir).filter((f) => f.startsWith('frame-'));
+  const leaks = frames.filter((f) => {
+    const text = execFileSync('tesseract', [join(dir, f), '-'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).replace(/\s/g, '');
+    return secrets.some((s) => text.includes(s.slice(0, 10)));
+  });
+  if (leaks.length) {
+    rmSync(resolve(outArg));
+    throw new Error(`a secret shows in ${leaks.length} of ${frames.length} frames; add a mask and record again`);
+  }
+  console.log(`no secret found in ${frames.length} frames`);
+}
 console.log(resolve(outArg));

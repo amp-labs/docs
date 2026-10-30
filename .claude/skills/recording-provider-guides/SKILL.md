@@ -32,12 +32,25 @@ A flow is a JSON list of a guide's steps. `record.ts` replays it in a signed-in 
 
 ## Record a provider's own steps
 
-Copy `flows/ampersand-provider-app.json` to `flows/<catalogKey>.json`. Each step copies its guide step's `number` and wording as `caption`, and has:
+Needs `op` (1Password CLI) and `tesseract`.
 
-- `target`: a CSS selector, or `xpath=` to match text. Prefer ids, labels and button text. Use `agent-browser snapshot -i` in a `--headed` session to find them.
-- `action`: `click`, `fill`, `select` (type into a list, then Enter) or `none`.
-- `expect`: an element that must appear after the step, so a changed UI fails the run.
+1. **Sign in.** Test accounts are in the `Sandboxes` vault of the `ampersandteam.1password.com` account. Open the provider's sign-in page in a `--headed` session, then type each field with `scripts/fill.sh`, which never prints the value:
 
-Add a top-level `mask` list of selectors for anything secret, such as the generated Client Secret, emails and account names. They are covered before every screenshot.
+   ```sh
+   .claude/skills/recording-provider-guides/scripts/fill.sh <session> <item ID> username <selector>
+   .claude/skills/recording-provider-guides/scripts/fill.sh <session> <item ID> password <selector>
+   .claude/skills/recording-provider-guides/scripts/fill.sh <session> <item ID> otp <selector>   # if the item has a one-time password
+   ```
 
-Use a test account with nothing private in it, fill only placeholder values, and delete the app afterwards. A mask that stops matching hides nothing, so check every frame that shows a secret.
+2. **Keep one app per provider for recordings.** Steps after "create" usually happen inside an app, so create one once and reuse it. Stop flows before any click that creates or saves, and use `action: none` on fields the app already holds.
+
+3. **Write `flows/<catalogKey>-<part>.json`**, splitting long setups into parts of about 6 steps. Each step copies its guide step's `number` and wording as `caption`, and has:
+   - `target`: a CSS selector, or `xpath=` to match text. Prefer ids, labels and button text. Use `agent-browser snapshot -i` to find them.
+   - `action`: `click`, `fill`, `select` (type into a list, then Enter) or `none`.
+   - `expect`: an element that must appear after the step, so a changed UI fails the run.
+
+4. **Hide anything private.** At the top level of the flow:
+   - `mask`: selectors (CSS or `xpath=`) for secrets, emails, account names and avatars, covered before every screenshot. Providers often repeat credentials elsewhere, such as a side menu.
+   - `secrets`: selectors of inputs holding a secret, such as the Client ID. After rendering, `record.ts` searches every frame for their values and deletes the video if one shows.
+
+5. Record with the `record.ts` command above, using the provider's session and flow. If the guide's steps no longer match the site, fix the guide.
