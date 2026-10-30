@@ -120,14 +120,14 @@ Rules:
 
 **First check** (observable predicate — do not skip):
 ```bash
-curl -s -o /dev/null -w "%{http_code}" https://raw.githubusercontent.com/amp-labs/samples/main/<slug>/amp.yaml
+curl -s -o /dev/null -w "%{http_code}" https://raw.githubusercontent.com/amp-labs/samples/main/<catalogKey>/amp.yaml
 ```
 
 **HTTP 200 → samples-link form:**
 ```markdown
 ### Example integration
 
-For an example manifest file of a <Provider> integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/<slug>/amp.yaml).
+For an example manifest file of a <Provider> integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/<catalogKey>/amp.yaml).
 ```
 Use "an" instead of "a" when the provider name starts with a vowel sound ("an Outplay integration", "an Asana integration").
 
@@ -141,9 +141,9 @@ To define an integration for <Provider>, create a manifest file that looks like 
 # amp.yaml
 specVersion: 1.0.0
 integrations:
-  - name: <slug>Integration
+  - name: <catalogKey>Integration
     displayName: My <Provider> Integration
-    provider: <slug>
+    provider: <catalogKey>
     read:
       objects:
         - objectName: <object1>
@@ -188,18 +188,20 @@ You will then use these credentials to connect your application to Ampersand.
 
 2. Select the project where you want to create a <Provider> integration.
 
-   ![Ampersand Project Selection](/images/provider-guides/<image>)
+3. Select **Provider apps**.
 
-3. Select **Provider Apps**.
+4. Click **+ New App**.
 
-4. Select **<Provider>** from the **Provider** list.
+5. Select **<Provider>** from the **Provider** list.
 
-5. Enter the **Client ID** and **Client Secret** obtained from your <Provider> app.
+6. Enter the **Client ID** and **Client Secret** obtained from your <Provider> app.
 
-6. Click **Save Changes**.
+7. Enter the scopes your <Provider> app uses, one per line.
+
+8. Click **Save changes**.
 ```
 
-Notes: scopes bullet list goes under "Creating a <Provider> app" if the provider requires selecting scopes. Only reference images that actually exist in `src/images/provider-guides/`; otherwise omit the image line (no fabricated paths).
+Notes: include step 7 only if the catalog sets `oauth2Opts.explicitScopesRequired`, and list the scopes under "Creating a <Provider> app".
 
 ### API Key / Basic Auth / OAuth2 Client Credentials (no Provider App)
 
@@ -275,20 +277,20 @@ For OAuth (either grant type) proxy-only connectors, the last bullet is instead:
 
 ### Catalog entry (all connectors)
 
-Fetch `https://raw.githubusercontent.com/amp-labs/connectors/main/providers/<slug>.go` and read the `SetInfo(<Const>, ProviderInfo{...})` block:
-- `DisplayName` → guide title
-- `AuthType` (+ `Oauth2Opts.GrantType`) → auth-type variant
-- `BaseURL` → Proxy bullet (preserve `{{.placeholders}}`)
-- `Support` flags → proxy-only capabilities
-- `Metadata` / `PostAuthentication` fields → dynamic tokens to document
+Read the provider's entry in [`internal/generated/catalog.json`](https://raw.githubusercontent.com/amp-labs/connectors/main/internal/generated/catalog.json):
+- `displayName` → guide title
+- `authType` (+ `oauth2Opts.grantType`) → auth-type variant
+- `baseURL` → Proxy bullet (preserve `{{.placeholders}}`)
+- `support` flags → supported actions
+- `metadata` fields → dynamic tokens to document
 
-If the file is missing on `main`, ask the user for the feature branch and note at the top of the draft: `<!-- Draft based on branch: <branch>; update links after merge -->`
+If the provider is not in the catalog on `main`, ask the user for the feature branch and note at the top of the draft: `<!-- Draft based on branch: <branch>; update links after merge -->`
 
 ### Deep connectors (folder pattern)
 
-Explore `https://github.com/amp-labs/connectors/tree/main/providers/<slug>`:
+Explore `https://github.com/amp-labs/connectors/tree/main/providers/<folder>` (usually the catalog key in lowercase):
 - `support.go` / `supports.go`, `schemas.json` → object lists
-- read/write handler files → capabilities, but claim only what the catalog's `Support` flags allow (see SKILL.md).
+- read/write handler files → objects and incremental read; claim only actions the catalog's `support` flags allow.
 - Incremental cues: `SupportsIncremental` / `IncrementalObjects` maps, or handlers filtering on timestamps (`since`, `updated_at`, `modifiedDate`). Mention the cursor field only if explicitly named in code.
 - Objects in code override `schemas.json`; note conflicts with a TODO.
 
@@ -301,5 +303,5 @@ For each object, find the provider's API reference page for that resource (try `
 ## Navigation registration (new guides)
 
 1. In `src/generate-docs.ts`, find the `group: "All providers"` block (nested in `group: "Integrations"`).
-2. Insert `"provider-guides/<slug>",` keeping case-insensitive alphabetical order; one entry per line, double quotes, trailing comma.
+2. Insert `"provider-guides/<catalogKey>",` keeping case-insensitive alphabetical order; one entry per line, double quotes, trailing comma.
 3. Run `pnpm run gen-docs`. If the user asked for no build, remind them to run it later.
