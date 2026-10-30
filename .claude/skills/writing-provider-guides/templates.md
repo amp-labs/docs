@@ -230,7 +230,7 @@ From the provider's entry in the [catalog](https://raw.githubusercontent.com/amp
 - `support`: supported actions
 - `metadata`: dynamic tokens
 
-If the provider isn't in the catalog, ask for the connectors branch and start the draft with `<!-- Draft based on branch: <branch>; update links after merge -->`.
+If the provider isn't in the catalog, ask for the connectors branch and start the draft with `{/* Draft based on branch: <branch>; update links after merge */}`.
 
 For a deep connector, read `providers/<folder>/` in the connectors repo (usually the catalog key in lowercase):
 
