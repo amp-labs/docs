@@ -240,6 +240,11 @@ Each event is delivered to your destination with the fields and mappings from th
 
 Here's an example message for the account subscription above. Learn more in [Subscribe action webhooks](/destinations/webhooks#subscribe-action-webhooks) and [Object and field mapping](/object-and-field-mapping).
 
+Some objects deliver the record in the event payload itself, because the provider has no way to fetch a single record by id after the event arrives.
+Slack `messages` is one of these.
+For those objects there is no read action to inherit from, so `fields` and `mappedFields` are empty and the record is in `raw`.
+See [Subscribing to message events](/provider-guides/slack#subscribing-to-message-events) for a worked example.
+
 ```JS
 {
   "action": "subscribe",
