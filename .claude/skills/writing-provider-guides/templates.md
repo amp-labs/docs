@@ -288,7 +288,7 @@ If the file is missing on `main`, ask the user for the feature branch and note a
 
 Explore `https://github.com/amp-labs/connectors/tree/main/providers/<slug>`:
 - `support.go` / `supports.go`, `schemas.json` → object lists
-- read/write handler files → capabilities. **Presence of implementation files wins over `Support` flags** — flags lag behind.
+- read/write handler files → capabilities, but claim only what the catalog's `Support` flags allow (see SKILL.md).
 - Incremental cues: `SupportsIncremental` / `IncrementalObjects` maps, or handlers filtering on timestamps (`since`, `updated_at`, `modifiedDate`). Mention the cursor field only if explicitly named in code.
 - Objects in code override `schemas.json`; note conflicts with a TODO.
 

@@ -15,6 +15,17 @@ pnpm run test:drift-check                    # run the parser tests
 
 Both `--out X` and `-- --out X` (the pnpm forwarding form) work. Output is written to `drift-report.json` (canonical) and `drift-report.md` (human-readable rollup).
 
+## How a guide maps to a provider
+
+Each guide resolves to a catalog key, in this order:
+
+1. `provider` in the guide's frontmatter
+2. `slugOverrides` in `recipes.ts`
+3. A case-insensitive match between the filename and a catalog key
+4. The filename as is
+
+Name the guide after its catalog key. When the two are different strings (not just different case), set `provider` in the frontmatter.
+
 ## Modes
 
 - `full` (default): scan every guide; run the undocumented-provider check.

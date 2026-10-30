@@ -29,7 +29,7 @@ pnpm i
 
 If you need to add a new page, add it to the `mintConfig` object in `src/generate-docs.ts`, and then follow the steps below for regenerating docs.json.
 
-If you are adding or editing a provider guide, also follow [PROVIDER_GUIDE.md](./PROVIDER_GUIDE.md).
+If you are adding or editing a provider guide, follow [the writing-provider-guides skill](./.claude/skills/writing-provider-guides/SKILL.md) and run [the drift check](./scripts/drift-check/README.md).
 
 ## Changing the URL of a page
 

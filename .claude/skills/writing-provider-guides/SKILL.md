@@ -44,7 +44,7 @@ Every provider guide in `src/provider-guides/*.mdx` follows one canonical struct
 - **Each dynamic token** (`{{.workspace}}`, `{{.region}}`, …) is explained once under "Before you get started": what it is and where the customer finds it.
 - Inline code (backticks) for object names, field names, tokens, and URLs-as-values; `[text](url)` for every navigable link — no raw URLs in prose.
 - Imperative voice ("Create…", "Click…"); no future tense; "GitHub" spelled with capital H.
-- For deep connectors, treat Read and Write as enabled when implementation files exist in `providers/<slug>/`, even if `Support` flags in the catalog say otherwise.
+- Claim only actions the [connectors catalog](https://github.com/amp-labs/connectors/blob/main/internal/generated/catalog.json) supports. If code exists but the catalog flag is false, leave the action out and add a TODO; the catalog needs fixing, not the guide.
 
 ## Verification checklist (run every time)
 
@@ -54,6 +54,7 @@ grep -n "^#" $F                      # headings match templates.md exactly (sent
 sed -n '/### Supported objects/,/### Example integration/p' $F | grep "^- " | grep -v "\[.*\](" | grep -v "TODO"   # unlinked object bullets — must output nothing
 grep -n "Proxy Actions" $F           # base URL present in backticks
 grep -c "{{\." $F                    # every token also explained in Before you get started
+pnpm run drift-check -- --mode provider --provider <catalogKey> --out /tmp/drift   # must report 0 errors
 ```
 
 Then confirm by eye:
