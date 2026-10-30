@@ -8,13 +8,15 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 interface Step {
-  number: number;
+  // The guide step's wording, so the video reads like the text beside it.
   caption: string;
   target: string;
   action: 'click' | 'fill' | 'select' | 'none';
   value?: string;
   // Must exist after the action, so a changed UI fails the run.
   expect?: string;
+  // Zoom in when the reader has to read something, such as a field's value.
+  zoom?: boolean;
 }
 
 const [flowPath, outArg, ...vars] = process.argv.slice(2);
@@ -105,10 +107,12 @@ const shots = flow.steps.map((step, i) => {
   settle();
   if (step.expect) boxOf(step.expect);
   screenshot(`${i}-after.png`);
-  console.log(`${step.number} ${step.caption}`);
+  console.log(step.caption);
   return { ...step, box };
 });
 
+// Colors and type follow Ampersand's brand: charcoal, cream, butter for the
+// thing that matters, Helvetica Neue for words, square corners.
 // Build the HyperFrames composition: cursor moves to the target, a ring marks
 // it, then the "after" screenshot replaces the "before" one.
 const W = flow.viewport.width;
@@ -120,8 +124,12 @@ const CLICK = 1.1;
 // Docs show videos about 690px wide; zooming keeps 14px UI text readable there.
 const ZOOM = 1.5;
 
-const bold = (s: string) =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+const markdown = (s: string) =>
+  s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.+?)`/g, '<code>$1</code>');
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 const stage: string[] = [];
@@ -143,17 +151,15 @@ shots.forEach((step, i) => {
     `<div id="r${i}" class="clip ring" data-start="${t0}" data-duration="${ringFor}" data-track-index="1" style="left:${x - 6}px;top:${y - 6}px;width:${width + 12}px;height:${height + 12}px"></div>`,
   );
   captions.push(
-    `<div id="c${i}" class="clip caption" data-start="${t0}" data-duration="${STEP}" data-track-index="2"><span class="num">${step.number}</span><span>${bold(step.caption)}</span></div>`,
+    `<div id="c${i}" class="clip caption" data-start="${t0}" data-duration="${STEP}" data-track-index="2"><span>${markdown(step.caption)}</span></div>`,
   );
-  // The first step stays wide so the reader sees where they are.
-  const next =
-    i === 0
-      ? cam
-      : {
-          x: Math.round(clamp(W / 2 - target.x * ZOOM, W - W * ZOOM, 0)),
-          y: Math.round(clamp(SH / 2 - target.y * ZOOM, SH - SH * ZOOM, 0)),
-          scale: ZOOM,
-        };
+  const next = step.zoom
+    ? {
+        x: Math.round(clamp(W / 2 - target.x * ZOOM, W - W * ZOOM, 0)),
+        y: Math.round(clamp(SH / 2 - target.y * ZOOM, SH - SH * ZOOM, 0)),
+        scale: ZOOM,
+      }
+    : { x: 0, y: 0, scale: 1 };
   tweens.push(
     `tl.fromTo("#r${i}", { opacity: 0 }, { opacity: 1, duration: 0.3 }, ${t0 + MOVE - 0.3});`,
     `tl.fromTo("#cursor", { x: ${cursor.x}, y: ${cursor.y} }, { x: ${target.x}, y: ${target.y}, duration: ${MOVE}, ease: "power3.inOut" }, ${t0});`,
@@ -173,14 +179,15 @@ writeFileSync(
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { width: ${W}px; height: ${SH + CAPTION_H}px; overflow: hidden; background: #1f1f1f; }
-      #root { position: relative; width: 100%; height: 100%; font-family: Inter, sans-serif; }
+      html, body { width: ${W}px; height: ${SH + CAPTION_H}px; overflow: hidden; background: #2B2B2B; }
+      #root { position: relative; width: 100%; height: 100%; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
       #screen { position: absolute; width: ${W}px; height: ${SH}px; overflow: hidden; }
       #stage { position: absolute; width: ${W}px; height: ${SH}px; transform-origin: 0 0; }
       .shot { position: absolute; width: ${W}px; height: ${SH}px; }
-      .ring { position: absolute; border: 3px solid #f5e663; border-radius: 10px; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.18); }
-      .caption { position: absolute; top: ${SH}px; width: ${W}px; height: ${CAPTION_H}px; display: flex; align-items: center; gap: 20px; padding: 0 40px; color: #fff; font-size: 30px; }
-      .num { flex: none; width: 44px; height: 44px; border-radius: 50%; background: #f5e663; color: #1f1f1f; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 24px; }
+      .ring { position: absolute; border: 3px solid #F3F89B; outline: 1px solid #2B2B2B; box-shadow: 0 0 0 9999px rgba(18, 18, 18, 0.18); }
+      .caption { position: absolute; top: ${SH}px; width: ${W}px; height: ${CAPTION_H}px; display: flex; align-items: center; gap: 20px; padding: 0 40px; color: #FFFCF0; font-size: 30px; }
+      strong { font-weight: 500; color: #F3F89B; }
+      code { font-family: ui-monospace, monospace; font-size: 24px; }
       #cursor { position: absolute; width: 0; height: 0; }
       #cursor svg { position: absolute; left: -4px; top: -2px; width: 30px; height: 30px; }
     </style>
