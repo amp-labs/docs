@@ -5,7 +5,7 @@ import matter from 'gray-matter';
 const PROVIDER_GUIDES_DIR = path.join(process.cwd(), 'src', 'provider-guides');
 
 // Files in src/provider-guides/ that are not provider guides.
-const NON_GUIDE_FILES = new Set(['overview.mdx', 'AGENTS.md', 'CLAUDE.md']);
+const NON_GUIDE_FILES = new Set(['overview.mdx']);
 
 export type Capability = 'read' | 'write' | 'proxy' | 'subscribe' | 'search';
 
@@ -18,16 +18,34 @@ export interface GuideDoc {
   sampleLinks: string[];
 }
 
-const ACTION_PATTERNS: Array<{ cap: Capability; re: RegExp }> = [
-  { cap: 'read', re: /\[Read Actions\]\(\/read-actions\)/ },
-  { cap: 'write', re: /\[Write Actions\]\(\/write-actions\)/ },
-  { cap: 'subscribe', re: /\[Subscribe Actions\]\(\/subscribe-actions\)/ },
-  { cap: 'proxy', re: /\[Proxy Actions\]\(\/proxy-actions\)/ },
-  { cap: 'search', re: /\[Search Actions\]\(\/search-actions\)/ },
-];
+// A claim is any link to an action page inside the "Supported actions" section,
+// whatever the link text ("Read Action", "Proxy Calls", ...).
+const ACTION_LINK_RE = /\]\(\/(read|write|subscribe|proxy|search)-actions[)#]/g;
 
 const SAMPLE_LINK_RE =
-  /https:\/\/github\.com\/amp-labs\/samples\/blob\/[^/]+\/[^/]+\/amp\.ya?ml/g;
+  /https:\/\/github\.com\/amp-labs\/samples\/blob\/[^\s)"'>]*amp\.ya?ml/g;
+
+export function parseGuideContent(content: string): {
+  claimedActions: Set<Capability>;
+  sampleLinks: string[];
+} {
+  const claimedActions = new Set<Capability>();
+  for (const match of supportedActionsSection(content).matchAll(ACTION_LINK_RE)) {
+    claimedActions.add(match[1] as Capability);
+  }
+  const sampleLinks = Array.from(new Set(content.match(SAMPLE_LINK_RE) ?? []));
+  return { claimedActions, sampleLinks };
+}
+
+// Lines after the "Supported actions" heading, up to the next heading.
+function supportedActionsSection(content: string): string {
+  const lines = content.split('\n');
+  const start = lines.findIndex((l) => /^#+\s+supported actions\s*$/i.test(l));
+  if (start === -1) return '';
+  const rest = lines.slice(start + 1);
+  const end = rest.findIndex((l) => /^#/.test(l));
+  return (end === -1 ? rest : rest.slice(0, end)).join('\n');
+}
 
 export async function scanGuides(): Promise<GuideDoc[]> {
   const entries = await fs.readdir(PROVIDER_GUIDES_DIR);
@@ -39,13 +57,7 @@ export async function scanGuides(): Promise<GuideDoc[]> {
     const raw = await fs.readFile(full, 'utf8');
     const parsed = matter(raw);
     const slug = entry.replace(/\.mdx$/, '');
-    const claimedActions = new Set<Capability>();
-    for (const { cap, re } of ACTION_PATTERNS) {
-      if (re.test(parsed.content)) claimedActions.add(cap);
-    }
-    const sampleLinks = Array.from(
-      new Set(parsed.content.match(SAMPLE_LINK_RE) ?? []),
-    );
+    const { claimedActions, sampleLinks } = parseGuideContent(parsed.content);
     guides.push({
       docPath: path.relative(process.cwd(), full),
       slug,
