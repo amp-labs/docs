@@ -106,6 +106,7 @@ The parameters of the component are:
 * **onUpdateSuccess** (function, optional): a callback function that gets invoked after a consumer successfully updates an existing integration with the new configuration.
 * **onUninstallSuccess** (function, optional): a callback function that gets invoked after a consumer successfully uninstalls the integration.
 * **fieldMapping** (JSON): a JSON object that specifies the dynamic mapping configuration for this installation. Learn more about dynamic mapping [here](/object-and-field-mapping#dynamic-field-mappings)
+* **subscribeEvents** (JSON, optional): the subscribe configuration for objects that don't inherit fields from a read action. Supported in `@amp-labs/react` `vX.Y.Z+`, in [wizard mode](#wizard-mode-beta) only. See [Subscribe events](#subscribe-events).
 
 Both `onInstallSuccess` and `onUpdateSuccess` should be functions with the following signature: `(installationId: string, config: Config) => void`. `Config` is an exported type from `@amp-labs/react`.
 
@@ -163,6 +164,56 @@ If you close your install dialog in `onInstallSuccess`, it will close right afte
 </Note>
 
 
+#### Subscribe events
+
+<Note>
+`subscribeEvents` is supported in `@amp-labs/react` `vX.Y.Z+`, and **only in [wizard mode](#wizard-mode-beta)** for now. In the standard flow the prop is not applied, and an installation for a subscribe-only object is created without its fields — as happens on any earlier version, in either flow.
+</Note>
+
+An integration can have [subscribe objects that carry their own fields](/subscribe-actions#subscribe-without-a-read-action) rather than inheriting them from a read action. Those objects have no field metadata and no configuration screen, so the component can't ask the consumer about them. You tell it what to configure, with the `subscribeEvents` prop:
+
+```JSX
+<InstallIntegration
+  integration={myIntegrationName}
+  consumerRef={userId}
+  consumerName={userFullName}
+  groupRef={teamId}
+  groupName={teamName}
+  subscribeEvents={{
+    messages: {
+      inheritFieldsAndMappings: false,
+      createEvent: { userSelect: false },
+      updateEvent: {
+        userSelect: false,
+        requiredWatchFields: ["text", "user"],
+      },
+      deleteEvent: { userSelect: false },
+    },
+  }}
+/>
+```
+
+Keys are object names, matching the `objectName` in your `amp.yaml`.
+
+| Key | Meaning |
+|---|---|
+| `inheritFieldsAndMappings` | **Required.** Whether the object takes its fields from the matching read object. `false` for a subscribe-only object. |
+| `createEvent` / `updateEvent` / `deleteEvent` | Subscribe to this event. **Leave a key out to not subscribe to that event at all.** |
+| `updateEvent.requiredWatchFields` | Provider field names. Changes to these trigger an update event, and these are the fields every event delivers — one list, not two. |
+| `updateEvent.enabled` | Defaults to `true`. `false` installs the object without update events: the update event is kept as `never`, so its `requiredWatchFields` still name the fields the create and delete events deliver. |
+
+**An event's presence is what subscribes to it,** except an `updateEvent` with `enabled: false`, which names the fields without subscribing to updates. `userSelect` only decides whether the consumer is asked: `false` configures the event without a question. `userSelect: true` is reserved for a consumer-facing step that doesn't exist yet, so use `false` for now.
+
+**Name at least one field, in `requiredWatchFields`.** An object that inherits nothing and names nothing has no fields to deliver, and the installation is rejected. An object that names none watches and delivers every field. The names are not validated against the provider, so a typo gets you an event with a missing field rather than an error.
+
+**Field mappings are not settable through this prop yet.** The installation config supports `selectedFields` and `selectedFieldMappings`, and the API route below accepts both — the prop doesn't, pending a step that lets your end user pick fields and mappings. Until then events are delivered under the provider's own field names.
+
+**`inheritFieldsAndMappings` is required, and must be `false` for a subscribe-only object.** There is no default: the two values describe different objects, and the component will not guess which you meant. Set it to `true` for an object that does have a read action, whose fields it then takes.
+
+This works in [wizard mode](#wizard-mode-beta) only for now. The events are configured as the installation is created, so the consumer never sees a step for them. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
+
+<Warning>`subscribeEvents` is in beta preview and its shape may change.</Warning>
+
 #### Wizard mode (Beta)
 
 The wizard mode replaces the standard configuration view with a guided, multi-step installation flow during initial set up. It walks your end users through connecting, selecting objects, configuring fields/mappings, and reviewing before creating an installation.
@@ -200,6 +251,7 @@ With [always-enabled objects](#always-enabled-objects), the installation is crea
 | [Value mappings](/object-and-field-mapping#mapping-values) | No |
 | [Field mapping `default`](/object-and-field-mapping#field-mapping-1) | No |
 | [Dynamic field mappings](/object-and-field-mapping#dynamic-field-mappings) (`fieldMapping` prop) | No |
+| [Subscribe events](#subscribe-events) (`subscribeEvents` prop) | Yes |
 
 ### Connect provider
 
