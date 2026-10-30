@@ -1,0 +1,30 @@
+{
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "start": "https://marketplace.zoom.us/develop/applications/{{appId}}/information",
+  "mask": [
+    "[aria-label^='Current User']",
+    "input[name=clientId]",
+    "input[name=clientSecret]",
+    "xpath=//*[normalize-space(text())='App credentials']/../.."
+  ],
+  "steps": [
+    {
+      "number": 8,
+      "caption": "Copy the **Client ID** and **Client Secret** from the **Basic information** section of the app.",
+      "target": "input[name=clientId]",
+      "action": "none"
+    },
+    {
+      "number": 8,
+      "caption": "Copy the **Client ID** and **Client Secret** from the **Basic information** section of the app.",
+      "target": "input[name=clientSecret]",
+      "action": "none"
+    }
+  ],
+  "secrets": [
+    "input[name=clientId]"
+  ]
+}
