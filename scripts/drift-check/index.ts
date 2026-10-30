@@ -63,8 +63,9 @@ async function main() {
   // Accept both `drift-check --out X` and `pnpm run drift-check -- --out X`.
   const args = process.argv.slice(2);
   if (args[0] === '--') args.shift();
-  const { values } = parseArgs({
+  const { values, positionals } = parseArgs({
     args,
+    allowPositionals: true,
     options: {
       mode: { type: 'string', default: 'full' },
       provider: { type: 'string' },
@@ -75,6 +76,13 @@ async function main() {
       'fail-on-error': { type: 'boolean', default: false },
     },
   });
+  // `--changed a.mdx b.mdx`: paths after the first one arrive as positionals.
+  if (positionals.length > 0) {
+    if (!values.changed) {
+      throw new Error(`Unexpected argument "${positionals[0]}".`);
+    }
+    values.changed.push(...positionals);
+  }
 
   const mode = values.mode as 'full' | 'per-pr' | 'provider';
 
