@@ -15,7 +15,7 @@ A flow is a JSON list of a guide's steps. `record.ts` replays it in a signed-in 
    agent-browser --session amp-dashboard --headed --restore --restore-save auto open https://dashboard.withampersand.com
    ```
 
-2. Use a project with no provider apps, then run:
+2. Use a project with no provider apps. The flow starts on **Provider apps**, not the dashboard home page, which changes more often. Run:
 
    ```sh
    AGENT_BROWSER_SESSION=amp-dashboard npx tsx .claude/skills/recording-provider-guides/record.ts \
@@ -44,7 +44,7 @@ Needs `op` (1Password CLI) and `tesseract`.
 
 2. **Keep one app per provider for recordings.** Steps after "create" usually happen inside an app, so create one once and reuse it. Stop flows before any click that creates or saves, and use `action: none` on fields the app already holds.
 
-3. **Write `flows/<catalogKey>-<part>.json`**, splitting long setups into parts of about 6 steps. Each step copies its guide step's wording exactly as `caption`, so the video matches the text beside it, and has:
+3. **Write `flows/<catalogKey>-<part>.json`**, splitting long setups into parts of about 6 steps. Set `start` to the page where the steps happen, not a home page that leads there: home pages change most, and every extra page is another place the flow can break. Each step copies its guide step's wording exactly as `caption`, so the video matches the text beside it, and has:
    - `target`: a CSS selector, or `xpath=` to match text. Prefer ids, labels and button text. Use `agent-browser snapshot -i` to find them.
    - `action`: `click`, `fill`, `select` (type into a list, then Enter) or `none`.
    - `expect`: an element that must appear after the step, so a changed UI fails the run.
