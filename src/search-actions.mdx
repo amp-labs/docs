@@ -2,7 +2,7 @@
 title: "Search actions"
 ---
 
-A search action allows you to search for records in your customer's SaaS instance by specifying filter criteria. The matching results are returned synchronously in the API response.
+**Use a search action to look up specific records in your customer's SaaS on demand**, like finding a contact by email. You specify filter criteria, and the matching records come back right away in the API response.
 
 <Note>
 The Search API returns only a single page of provider results and is intended for narrow, targeted queries.
@@ -10,11 +10,15 @@ The Search API returns only a single page of provider results and is intended fo
 
 ## Enabling search for an object
 
-Search does not require a separate action type in the manifest. Instead, it uses the `read` action. An object is searchable as long as it is defined under `read` in your `amp.yaml` and is not disabled in the installation config. There are two ways to ensure an object is searchable:
+Search does not require a separate action type in the manifest. Instead, it uses the `read` action. An object is searchable when it's defined under `read` in your `amp.yaml` **and** it's in the installation's config without `disabled: true`.
+
+Like every read object, it needs a `destination`.
+
+There are two ways to make sure an object is searchable:
 
 ### Option 1: Set `enabled: "always"` in the manifest
 
-By setting `enabled: "always"` on an object, it will always be enabled for every installation, regardless of the installation config. This is useful when you want to guarantee that the object is always searchable.
+Set `enabled: "always"` on an object to enable it for every installation, so it's always searchable.
 
 ```YAML YAML
 specVersion: 1.0.0
@@ -24,12 +28,15 @@ integrations:
     read:
       objects:
         - objectName: contact
+          destination: contactWebhook
           enabled: "always"
 ```
 
-### Option 2: Ensure the object is not disabled in the installation config
+See [Always-enabled objects](/read-actions#always-enabled-objects) for how this affects new and existing installations.
 
-If you don't set `enabled: "always"` in the manifest, the object is searchable by default. However, the installation config must not set `disabled: true` for that object.
+### Option 2: Include the object in the installation config
+
+Without `enabled: "always"`, the object is searchable for an installation only if it's in that installation's config: the customer selected it during setup, or you added it through the API. If it's missing, search returns `Config not found for object`.
 
 ```YAML YAML
 specVersion: 1.0.0
@@ -39,9 +46,10 @@ integrations:
     read:
       objects:
         - objectName: contact
+          destination: contactWebhook
 ```
 
-With this manifest, search will work as long as the installation config does not disable the object. For example, the following installation config would **prevent** search from working:
+With this manifest, search works for installations whose config includes `contact`. Setting `disabled: true` on the object also stops search:
 
 ```json
 // This would disable search for the contact object — avoid this if you want search to work
@@ -60,7 +68,7 @@ With this manifest, search will work as long as the installation config does not
 
 You can call the [search API](/reference/search/search-records) to search for records in a customer's SaaS instance. The results are returned synchronously in the API response.
 
-Field mappings defined in `amp.yaml` and mappings selected by users during installation time will be respected and applied. See [Object and Field Mapping](/object-and-field-mapping) for more information.
+Filters use the `eq` (equals) operator, which is currently the only one supported. Field mappings defined in `amp.yaml` and mappings selected by users during installation time will be respected and applied. See [Object and Field Mapping](/object-and-field-mapping) for more information.
 
 Request example
 
@@ -97,7 +105,7 @@ Response example
             },
             "id": "00000000000001",
             "mappedFields": { // mapped fields are returned in separate field in the result object.
-                "PhoneNumber": "1234567890"  
+                "phoneNumber": "1234567890"  
             },
             "raw": {
                 "Id": "00000000000001",
