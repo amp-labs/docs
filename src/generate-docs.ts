@@ -672,6 +672,7 @@ const baseConfig = {
             "provider-guides/teamwork",
             "provider-guides/timely",
             "provider-guides/tipalti",
+            "provider-guides/twenty",
             "provider-guides/vtiger",
             "provider-guides/wealthbox",
             "provider-guides/webex",

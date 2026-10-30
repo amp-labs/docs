@@ -1,0 +1,98 @@
+---
+title: "Twenty"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill and incremental read for all supported objects.
+- [Write Actions](/write-actions).
+- [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}`.
+
+### Supported objects
+
+Twenty has no fixed list of objects: each workspace has its own schema, and every object in it, standard or custom, has the same REST API. Objects are named by their plural API name, the name in their REST path. See [Twenty's API docs](https://docs.twenty.com/developers/extend/api).
+
+The Twenty connector supports reading from the following objects:
+
+- [companies](https://docs.twenty.com/developers/extend/api)
+- [opportunities](https://docs.twenty.com/developers/extend/api)
+- [people](https://docs.twenty.com/developers/extend/api)
+- Any other [standard or custom object](https://docs.twenty.com/developers/extend/api) in the workspace, by its plural API name (for example `vendorContracts`)
+
+The Twenty connector supports writing to the following objects:
+
+- [companies](https://docs.twenty.com/developers/extend/api)
+- [opportunities](https://docs.twenty.com/developers/extend/api)
+- [people](https://docs.twenty.com/developers/extend/api)
+- Any other [standard or custom object](https://docs.twenty.com/developers/extend/api) in the workspace, by its plural API name (for example `vendorContracts`)
+
+### Example integration
+
+To define an integration for Twenty, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: twentyIntegration
+    displayName: My Twenty Integration
+    provider: twenty
+    read:
+      objects:
+        - objectName: companies
+          destination: myWebhook
+    write:
+      objects:
+        - objectName: companies
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To connect Twenty with Ampersand, you will need a [Twenty account](https://twenty.com), on Twenty Cloud or on a self-hosted instance.
+
+### Creating an API key for Twenty
+
+1. In Twenty, go to **Settings → Developers** and create an API key on the **API** tab.
+2. Give the key a role that can configure the data model, such as the default **Admin** role. The connector reads the workspace's object metadata, which Twenty serves only to keys with this permission. See [Twenty's permissions docs](https://docs.twenty.com/user-guide/permissions-access/capabilities/permissions).
+3. Copy the key. Twenty shows it only once.
+
+### Finding your instance domain
+
+Note the domain of your Twenty instance, without `https://`. This is the `{{.workspace}}` in the base URL, and every request goes to it.
+
+- **Self-hosted:** the domain your Twenty server is served on, for example `crm.yourcompany.com`.
+- **Twenty Cloud:** `api.twenty.com`, the base URL [Twenty documents](https://docs.twenty.com/developers/extend/api) for Cloud.
+
+## Using the connector
+
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+
+To start integrating with Twenty:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key and instance domain.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
+## Notes
+
+- **Object names.** Use the object's plural API name, which is case-sensitive: `workspaceMembers`, not `workspacemembers`. A custom object gets its name when it is created in Twenty, for example `vendorContracts`.
+- **Custom fields.** Fields are described from the workspace's own schema when they are requested, so custom fields, including fields added after the integration was installed, are read and written like standard ones.
+- **Incremental read** uses each record's `updatedAt`.
+- **Deleted records.** Records deleted in Twenty no longer appear in ordinary reads.
+- **Relationships.** A record carries each many-to-one relation as its ID field, such as `companyId`, which is also the field to write. Related records are not included.
+- **Wide objects.** On an object with more than 200 readable fields, Twenty returns a [default set of 200 fields](https://docs.twenty.com/developers/extend/api#selecting-fields-rest) per record. When a read requests a field outside that set, the connector asks Twenty for the requested fields by name.
+- **Field names on write.** Writes accept field names in any case, as read results return them, and send each one under Twenty's own name (`renewalnotes` is written as `renewalNotes`). Fields Twenty manages itself (`id`, `createdAt`, `updatedAt`, `deletedAt`, `createdBy`, `updatedBy` and `searchVector`) are left out of the write. When two fields of an object differ only by case, the connector refuses to read them, and to write them by a lowercase name; write such a field by its exact name, which works for a name with a capital letter (a field whose name is all lowercase cannot be written while the other exists).
+- **Deletes are soft.** When [deletion is enabled](/write-actions#enabling-deletion-for-an-object) for an object, a delete keeps the record in Twenty as a deleted record, with a `deletedAt` date, rather than destroying it.
+- **Rate limit.** Twenty allows 100 API requests per minute. Each write first reads the workspace's object metadata, so it takes at least two requests, and so does each page of a read that asks Twenty for fields by name.
+- **Proxy paths** start at the instance root, so they include `/rest`, for example `GET /rest/companies`.
