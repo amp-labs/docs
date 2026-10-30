@@ -86,9 +86,15 @@ You have two ways to resolve this:
 
 A subscription is healthy and other updates arrive, but changes to one specific field never produce an event.
 
-Salesforce only emits change events for **direct fields** on a record. Derived fields such as `LastActivityDate` never trigger change events, no matter how they are configured. See Salesforce's [change event documentation](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_associated_objects_change_event.htm) for the full list of limitations.
+Salesforce only emits change events for **direct fields** on a record. Formula fields and other derived fields such as `LastActivityDate` never trigger change events, no matter how they are configured. See Salesforce's [change event documentation](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_associated_objects_change_event.htm) for the full list of limitations.
 
 Watch a direct field instead, or subscribe to the object whose direct fields capture the change you care about.
+
+### Formula field changes in incremental reads
+
+Incremental reads pick up records whose `SystemModstamp` changed since the last read. Salesforce calculates formula fields when the record is queried, so a change in a formula's value does not update `SystemModstamp` on its own. For example, editing a related record that the formula references does not mark the parent record as modified.
+
+As a result, an incremental read returns the new formula value only the next time a direct field on that record changes. To pick up the change sooner, read the direct fields the formula depends on, or read the related object whose records actually changed.
 
 ## Connection shows `bad_credentials` after working previously
 
