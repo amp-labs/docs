@@ -144,19 +144,15 @@ You will then use these credentials to connect your application to Ampersand.
 
 ### Add your <Provider> app info to Ampersand
 
-1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+1. In the [Ampersand Dashboard](https://dashboard.withampersand.com), open the project for your <Provider> integration and go to **Provider apps**.
 
-2. Select the project where you want to create a <Provider> integration.
+2. Click **+ New App**.
 
-3. Select **Provider apps**.
+3. Select **<Provider>** from the **Provider** list.
 
-4. Click **+ New App**.
+4. Enter the **Client ID** and **Client Secret** obtained from your <Provider> app.
 
-5. Select **<Provider>** from the **Provider** list.
-
-6. Enter the **Client ID** and **Client Secret** obtained from your <Provider> app.
-
-7. Click **Save changes**.
+5. Click **Save changes**.
 ```
 
 If the catalog sets `oauth2Opts.explicitScopesRequired`, list the scopes in "Creating a <Provider> app", and end step 6 with: `, and the scopes your app uses, one per line.`
