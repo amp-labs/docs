@@ -35,7 +35,7 @@ jobs:
         run: |
           pnpm run drift-check -- \
             --mode per-pr \
-            --changed-from "${{ github.event.pull_request.base.sha }}" \
+            --changed-from "${{ github.sha }}^1" \
             --changed-to "${{ github.sha }}" \
             --out /tmp/ampersand-provider-guide-drift \
             --fail-on-error
