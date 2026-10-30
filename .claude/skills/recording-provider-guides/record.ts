@@ -194,7 +194,8 @@ writeFileSync(
 `,
 );
 
-execFileSync('npx', ['-y', 'hyperframes@0.8.221', 'render', dir, '--quiet', '--format', 'mp4', '-o', resolve(outArg)], {
+// CRF 28 keeps UI text sharp at about a quarter of the default file size.
+execFileSync('npx', ['-y', 'hyperframes@0.8.221', 'render', dir, '--quiet', '--format', 'mp4', '--crf', '28', '-o', resolve(outArg)], {
   stdio: 'inherit',
 });
 console.log(resolve(outArg));
