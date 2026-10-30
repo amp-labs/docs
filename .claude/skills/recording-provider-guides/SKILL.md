@@ -5,7 +5,7 @@ description: Use when a provider guide in src/provider-guides/ needs a video of 
 
 # Recording provider guides
 
-A flow is a JSON list of a guide's steps. `record.ts` replays it in a signed-in browser and renders an MP4 that zooms to each step's target with its caption below. Needs `agent-browser` and `npx`.
+A flow is a JSON list of a guide's steps. `record.ts` replays it in a signed-in browser and renders an MP4 that points to each step's target with its caption below. Needs `agent-browser` and `npx`.
 
 ## Record
 
@@ -44,10 +44,11 @@ Needs `op` (1Password CLI) and `tesseract`.
 
 2. **Keep one app per provider for recordings.** Steps after "create" usually happen inside an app, so create one once and reuse it. Stop flows before any click that creates or saves, and use `action: none` on fields the app already holds.
 
-3. **Write `flows/<catalogKey>-<part>.json`**, splitting long setups into parts of about 6 steps. Each step copies its guide step's `number` and wording as `caption`, and has:
+3. **Write `flows/<catalogKey>-<part>.json`**, splitting long setups into parts of about 6 steps. Each step copies its guide step's wording exactly as `caption`, so the video matches the text beside it, and has:
    - `target`: a CSS selector, or `xpath=` to match text. Prefer ids, labels and button text. Use `agent-browser snapshot -i` to find them.
    - `action`: `click`, `fill`, `select` (type into a list, then Enter) or `none`.
    - `expect`: an element that must appear after the step, so a changed UI fails the run.
+   - `zoom: true` only where the reader must read something small, such as a field's value. Clicks on buttons and menus stay wide.
 
 4. **Hide anything private.** At the top level of the flow:
    - `mask`: selectors (CSS or `xpath=`) for secrets, emails, account names and avatars, covered before every screenshot. Providers often repeat credentials elsewhere, such as a side menu.
