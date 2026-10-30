@@ -5,7 +5,7 @@ import matter from 'gray-matter';
 const PROVIDER_GUIDES_DIR = path.join(process.cwd(), 'src', 'provider-guides');
 
 // Files in src/provider-guides/ that are not provider guides.
-const NON_GUIDE_FILES = new Set(['overview.mdx', 'AGENTS.md', 'CLAUDE.md']);
+const NON_GUIDE_FILES = new Set(['overview.mdx']);
 
 export type Capability = 'read' | 'write' | 'proxy' | 'subscribe' | 'search';
 
