@@ -10,6 +10,7 @@ pnpm run drift-check -- --out /tmp/out       # custom output directory
 pnpm run drift-check -- --mode provider --provider hubspot
 pnpm run drift-check -- --fail-on-error      # exit non-zero on any error finding
 pnpm run drift-check -- --mode per-pr --changed-from "$BASE_SHA" --changed-to "$HEAD_SHA"
+pnpm run test:drift-check                    # run the parser tests
 ```
 
 Both `--out X` and `-- --out X` (the pnpm forwarding form) work. Output is written to `drift-report.json` (canonical) and `drift-report.md` (human-readable rollup).
@@ -26,8 +27,9 @@ Both `--out X` and `-- --out X` (the pnpm forwarding form) work. Output is writt
 |---|---|---|
 | `undocumented-provider` | error | Catalog has a provider; no guide; no allowance |
 | `undocumented-provider-allowance-expired` | warning | An entry in `undocumentedAllowed` has passed its `until` date |
+| `undocumented-provider-allowance-unneeded` | warning | An entry in `undocumentedAllowed` now has a guide |
 | `guide-without-catalog-entry` | error | A guide resolves to a catalog key that does not exist |
-| `doc-overclaims-{read,write,subscribe,proxy,search}` | error | Guide claims an action; neither provider-level nor any module-level support flag is true |
+| `doc-overclaims-{read,write,subscribe,proxy,search}` | error | Guide links to an action page under "Supported actions"; neither provider-level nor any module-level support flag is true |
 | `broken-sample-link` | error | Guide links to a `samples` manifest that 404s |
 
 Module-aware: a claim is valid if either the provider-level flag is true *or* any module-level flag is true. Multi-module provider findings carry `"module": "all"` since v1 does not attribute the claim to a specific module.

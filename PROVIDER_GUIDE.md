@@ -33,7 +33,7 @@ title: "HubSpot"
 
 Only list actions that are supported by the generated connector catalog.
 
-Use these exact links when claiming support. The drift check matches them exactly.
+List each supported action under a `### Supported actions` heading, using these links:
 
 ```md
 - [Read Actions](/read-actions)
@@ -43,7 +43,7 @@ Use these exact links when claiming support. The drift check matches them exactl
 - [Search Actions](/search-actions)
 ```
 
-Do not change those link labels to sentence case, such as `[Read actions]`, because the drift check will not detect the claim.
+The drift check treats any link to an action page under that heading as a claim, whatever the link text. Links elsewhere in the guide are not claims.
 
 ## Deep connector details
 
@@ -54,10 +54,10 @@ For deep connectors:
 - State clearly if incremental read is not supported.
 - Add a provider-specific sample `amp.yaml` to `amp-labs/samples` and link to it from the guide.
 
-Sample links should use this shape so drift check can validate them:
+Sample links should use this shape so drift check can validate them. `<path>` can be one folder or several, such as `zoho/crm`.
 
 ```md
-https://github.com/amp-labs/samples/blob/main/<provider>/amp.yaml
+https://github.com/amp-labs/samples/blob/main/<path>/amp.yaml
 ```
 
 ## Provider setup

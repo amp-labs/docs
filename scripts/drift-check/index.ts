@@ -107,6 +107,15 @@ async function main() {
     const documentedKeys = new Set(
       guides.map((g) => resolveProviderKey(g, recipes.slugOverrides, catalogKeys)),
     );
+    for (const allow of recipes.undocumentedAllowed) {
+      if (!documentedKeys.has(allow.provider)) continue;
+      findings.push({
+        provider: allow.provider,
+        severity: 'warning',
+        kind: 'undocumented-provider-allowance-unneeded',
+        suggestedFix: `"${allow.provider}" now has a guide. Remove its allowance from scripts/drift-check/recipes.ts.`,
+      });
+    }
     const today = new Date();
     for (const catalogKey of catalogKeys) {
       if (documentedKeys.has(catalogKey)) continue;
