@@ -375,6 +375,18 @@ The UI library will not prompt your users to install the package, you must indep
     - *Client Secret*: enter the Consumer Secret for the External Client App, obtained from [Step 4. Create External Client App](#4-create-external-client-app)
     - *Package Install URL*: enter the Package Install URL, obtained from [Step 6. Build the Package Install URL](#6-build-the-package-install-url)
 
+## Using the connector
+
+To start integrating with Salesforce:
+- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml).
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
+
 ## Migrating Connected App to External Client App
 
 Salesforce no longer supports the creation of new Connected Apps. If you had previously created a Connected App to be used for Ampersand integrations, it will continue to work for your existing and new customers as long as their user profile has the `Approve Uninstalled Connected Apps` or `Use Any API Client` permissions. See [Salesforce customer guide](/customer-guides/salesforce#required-system-permissions) for details.
@@ -444,18 +456,6 @@ Security reviews often ask whether the integration can be locked to a known set 
 Once a token has been minted, every API request Ampersand makes to Salesforce originates from a [fixed set of IP addresses](/security/outgoing-ip-addresses). A customer can restrict the profile of the user that connects the integration so that it can only log in from those addresses. This is configured in the customer's Salesforce org, not in your External Client App, so it requires no change on your side.
 
 Point customers at [Restrict API access by IP address](/customer-guides/salesforce#restrict-api-access-by-ip-address) in the Salesforce customer guide.
-
-## Using the connector
-
-To start integrating with Salesforce:
-- Create a manifest file like the [example](https://github.com/amp-labs/samples/blob/main/salesforce/amp.yaml).
-- Deploy it using the [amp CLI](/cli/overview).
-- If you are using Read Actions or Subscribe Actions, create a [destination](/destinations).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
-- Start using the connector!
-   - If your integration has [Read Actions](/read-actions) or [Subscribe Actions](/subscribe-actions), you'll start getting webhook messages.
-   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
-   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 
 ## Raw filters (SOQL)
 
