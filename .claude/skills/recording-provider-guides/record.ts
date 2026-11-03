@@ -1,5 +1,5 @@
 // Replays a flow in a signed-in agent-browser session, screenshots each step,
-// and renders an MP4 that zooms to each target with the step's caption below.
+// and renders an MP4 that moves a cursor to each target.
 //
 // AGENT_BROWSER_SESSION=<session> npx tsx record.ts <flow.json> <out.mp4> key=value...
 import { execFileSync } from 'node:child_process';
@@ -8,7 +8,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 interface Step {
-  // The guide step's wording, so the video reads like the text beside it.
+  // The guide step's wording. Not drawn: the guide's text sits beside the video.
   caption: string;
   target: string;
   action: 'click' | 'fill' | 'select' | 'none';
@@ -111,29 +111,20 @@ const shots = flow.steps.map((step, i) => {
   return { ...step, box };
 });
 
-// Colors and type follow Ampersand's brand: charcoal, cream, butter for the
-// thing that matters, Helvetica Neue for words, square corners.
+// The ring uses Ampersand's butter and charcoal, with square corners.
 // Build the HyperFrames composition: cursor moves to the target, a ring marks
 // it, then the "after" screenshot replaces the "before" one.
 const W = flow.viewport.width;
 const SH = flow.viewport.height;
-const CAPTION_H = 96;
 const STEP = 2.6;
 const MOVE = 0.9;
 const CLICK = 1.1;
 // Docs show videos about 690px wide; zooming keeps 14px UI text readable there.
 const ZOOM = 1.5;
 
-const markdown = (s: string) =>
-  s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/`(.+?)`/g, '<code>$1</code>');
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 const stage: string[] = [];
-const captions: string[] = [];
 const tweens: string[] = [];
 let cursor = { x: W / 2, y: SH / 2 };
 let cam = { x: 0, y: 0, scale: 1 };
@@ -149,9 +140,6 @@ shots.forEach((step, i) => {
     `<img id="b${i}" class="clip shot" src="${i}-before.png" data-start="${t0}" data-duration="${CLICK}" data-track-index="0" />`,
     `<img id="a${i}" class="clip shot" src="${i}-after.png" data-start="${t0 + CLICK}" data-duration="${STEP - CLICK}" data-track-index="0" />`,
     `<div id="r${i}" class="clip ring" data-start="${t0}" data-duration="${ringFor}" data-track-index="1" style="left:${x - 6}px;top:${y - 6}px;width:${width + 12}px;height:${height + 12}px"></div>`,
-  );
-  captions.push(
-    `<div id="c${i}" class="clip caption" data-start="${t0}" data-duration="${STEP}" data-track-index="2"><span>${markdown(step.caption)}</span></div>`,
   );
   const next = step.zoom
     ? {
@@ -179,28 +167,24 @@ writeFileSync(
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { width: ${W}px; height: ${SH + CAPTION_H}px; overflow: hidden; background: #2B2B2B; }
-      #root { position: relative; width: 100%; height: 100%; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+      html, body { width: ${W}px; height: ${SH}px; overflow: hidden; background: #2B2B2B; }
+      #root { position: relative; width: 100%; height: 100%; }
       #screen { position: absolute; width: ${W}px; height: ${SH}px; overflow: hidden; }
       #stage { position: absolute; width: ${W}px; height: ${SH}px; transform-origin: 0 0; }
       .shot { position: absolute; width: ${W}px; height: ${SH}px; }
       .ring { position: absolute; border: 3px solid #F3F89B; outline: 1px solid #2B2B2B; box-shadow: 0 0 0 9999px rgba(18, 18, 18, 0.18); }
-      .caption { position: absolute; top: ${SH}px; width: ${W}px; height: ${CAPTION_H}px; display: flex; align-items: center; gap: 20px; padding: 0 40px; color: #FFFCF0; font-size: 30px; }
-      strong { font-weight: 500; color: #F3F89B; }
-      code { font-family: ui-monospace, monospace; font-size: 24px; }
       #cursor { position: absolute; width: 0; height: 0; }
       #cursor svg { position: absolute; left: -4px; top: -2px; width: 30px; height: 30px; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="${duration}" data-width="${W}" data-height="${SH + CAPTION_H}">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="${duration}" data-width="${W}" data-height="${SH}">
       <div id="screen" data-layout-allow-overflow>
         <div id="stage">
           ${stage.join('\n          ')}
           <div id="cursor"><svg viewBox="0 0 24 24"><path d="M4 2l16 9.5-7 1.6L9.6 20z" fill="#111" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
         </div>
       </div>
-      ${captions.join('\n      ')}
     </div>
     <script>
       const tl = gsap.timeline({ paused: true });
