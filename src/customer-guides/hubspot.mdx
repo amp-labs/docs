@@ -33,5 +33,18 @@ If the app you're integrating with needs to know when custom fields change in Hu
   ```
   https://subscribe-webhook.withampersand.com/v1/projects/PROJECT_ID/integrations/INTEGRATION_ID/installations/INSTALLATION_ID
   ```
-2. [Create a private app](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/build-with-projects/create-private-apps-with-projects) in your HubSpot account.
-3. [Configure the private app's webhooks](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/build-with-projects/configure-webhooks) to send events to the webhook URL from step 1.
+2. Install the [HubSpot CLI](https://developers.hubspot.com/docs/developer-tooling/local-development/hubspot-cli/install-the-cli), then run `hs init` to connect it to your HubSpot account.
+3. Create a private app with webhooks. When prompted, enter a name and location for the project:
+  ```bash
+  hs project create --project-base app --distribution private --auth static --features webhooks
+  ```
+4. In the new project, open `src/app/webhooks/webhooks-hsmeta.json`. Set `targetUrl` to the webhook URL from step 1, and add an `object.propertyChange` subscription for each custom field you want to track. See HubSpot's [webhooks guide](https://developers.hubspot.com/docs/apps/developer-platform/add-features/configure-webhooks) for the file format.
+5. Run `hs project upload` to deploy the app to your HubSpot account.
+6. In HubSpot, go to **Development** > **Projects**. If you don't see **Development** in the left sidebar, look under **More**.
+7. Select your project, then click the app.
+8. On the **Distribution** tab, click **Install now**.
+9. Check the acknowledgment checkbox, then click **Connect App**.
+
+ <img src="/images/customer-guides/hubspot-private-app/connect-app.png" width="500"/>
+
+  If you see "We're still setting up this app," wait a minute and try again.
