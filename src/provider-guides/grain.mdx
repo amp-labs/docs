@@ -1,0 +1,73 @@
+---
+title: "Grain"
+---
+
+## What's supported
+
+### Supported actions
+
+This connector supports:
+
+- [Proxy Actions](/proxy-actions), using the base URL `https://api.grain.com/_/public-api`.
+
+### Notes
+
+- Grain requires a `Public-Api-Version` header on every API request, for example `Public-Api-Version: 2026-10-01`. Proxy calls must include it themselves. For available versions, see [Grain's versions documentation](https://developers.grain.com/versions.html).
+- Grain connections use Grain's default `personal` scope, which gives the same access as the Grain user who authorizes the connection.
+
+### Example integration
+
+To define an integration for Grain, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: grainIntegration
+    displayName: My Grain Integration
+    provider: grain
+    proxy:
+      enabled: true
+```
+
+## Before you get started
+
+To integrate Grain with Ampersand, you will need a [Grain account](https://grain.com/app/signup).
+
+Once your account is created, you'll need to request an OAuth client from Grain and obtain the following credentials:
+
+- Client ID
+- Client Secret
+
+You will then use these credentials to connect your application to Ampersand.
+
+### Requesting a Grain OAuth client
+
+1. Contact Grain to request a Client ID and Client Secret for a server-side application. Grain issues these credentials manually; see [Grain's authentication documentation](https://developers.grain.com/authentication.html).
+2. Ask Grain to register `https://api.withampersand.com/callbacks/v1/oauth` as the redirect URI prefix for your client.
+3. Note the **Client ID** and **Client Secret** that Grain provides. You will need these to connect your app to Ampersand.
+
+### Add your Grain app info to Ampersand
+
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
+
+2. Select the project where you want to create a Grain integration.
+
+   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
+
+3. Select **Provider Apps**.
+
+4. Select **Grain** from the **Provider** list.
+
+5. Enter the **Client ID** and **Client Secret** obtained from Grain.
+
+6. Click **Save Changes**.
+
+## Using the connector
+
+To start integrating with Grain:
+
+- Create a manifest file like the [example above](#example-integration).
+- Deploy it using the [amp CLI](/cli/overview).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
+- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically handle the authentication with Grain.

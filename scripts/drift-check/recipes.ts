@@ -30,23 +30,22 @@ export const recipes: Recipes = {
     {
       provider: 'instantly',
       reason: 'Legacy V1 connector; current public guide covers instantlyAI.',
-      until: '2026-09-01',
+      until: '2027-01-01',
     },
     { provider: 'adyenTest', reason: 'Internal test variant.', until: '2027-01-01' },
     { provider: 'gladlyQA', reason: 'QA-only variant.', until: '2027-01-01' },
     {
       provider: 'docusignDeveloper',
       reason: 'Developer-environment variant; setup covered by docusign.mdx.',
-      until: '2026-09-01',
+      until: '2027-01-01',
     },
     { provider: 'deelSandbox', reason: 'Sandbox variant.', until: '2027-01-01' },
     {
       provider: 'greenhouseJobBoard',
       reason: 'Connector is intentionally gated pending public launch decision. See ENG-4072.',
-      until: '2026-09-01',
+      until: '2027-01-01',
     },
     { provider: 'gustoDemo', reason: 'Demo variant.', until: '2027-01-01' },
-    { provider: 'paddleSandbox', reason: 'Sandbox variant.', until: '2027-01-01' },
     { provider: 'payPalSandBox', reason: 'Sandbox variant.', until: '2027-01-01' },
     { provider: 'procoreSandbox', reason: 'Sandbox variant.', until: '2027-01-01' },
     { provider: 'quickbooksSandbox', reason: 'Sandbox variant.', until: '2027-01-01' },
@@ -56,7 +55,7 @@ export const recipes: Recipes = {
     {
       provider: 'highLevelWhiteLabel',
       reason: 'WhiteLabel variant; highlevel.mdx covers the Standard variant.',
-      until: '2026-09-01',
+      until: '2027-01-01',
     },
   ],
 };

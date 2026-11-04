@@ -39,7 +39,7 @@ Your `amp.yaml` describes what is *possible*, not what any particular customer h
 
 ## Revision
 
-Every time you change `amp.yaml` and run `amp deploy`, Ampersand stores a new **revision**, a versioned snapshot of the integration's definition.
+Every time you change [`amp.yaml`](/manifest-reference) and run `amp deploy`, Ampersand stores a new **revision**, a versioned snapshot of the integration's definition.
 
 <Accordion title="If I add an object to amp.yaml and deploy, do existing customers get it?">
   Only if the object is under `read` and you mark it `enabled: always`. Then all installations start reading from that object. See [always-enabled objects](/read-actions#always-enabled-objects). Otherwise only new installations read that object by default. To have an existing installation read it, ask that customer to reopen the page where you embedded the Ampersand UI and go through the setup process for that object. Alternatively, call the [Update an installation API](/reference/installation/update-an-installation).

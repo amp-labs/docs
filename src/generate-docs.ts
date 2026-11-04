@@ -449,6 +449,7 @@ const baseConfig = {
       group: "Reference",
       pages: [
         "manifest-reference",
+        "config-reference",
     {
           group: "CLI",
           pages: [
@@ -520,8 +521,10 @@ const baseConfig = {
             "provider-guides/chartMogul",
             "provider-guides/chilipiper",
             "provider-guides/chorus",
+            "provider-guides/circleback",
             "provider-guides/clari",
             "provider-guides/clariCopilot",
+            "provider-guides/clarify",
             "provider-guides/clickup",
             "provider-guides/close",
             "provider-guides/cloudtalk",
@@ -566,6 +569,7 @@ const baseConfig = {
             "provider-guides/google",
             "provider-guides/google-workspace-delegation",
             "provider-guides/gorgias",
+            "provider-guides/grain",
             "provider-guides/granola",
             // "provider-guides/greenhouseJobBoard",
             "provider-guides/groove",
@@ -621,6 +625,7 @@ const baseConfig = {
             "provider-guides/odoo",
             "provider-guides/okta",
             "provider-guides/openAI",
+            "provider-guides/orb",
             "provider-guides/outplay",
             "provider-guides/outreach",
             "provider-guides/paddle",
