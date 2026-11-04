@@ -182,12 +182,9 @@ An integration can have [subscribe objects that carry their own fields](/subscri
   subscribeEvents={{
     messages: {
       inheritFieldsAndMappings: false,
-      createEvent: { userSelect: false },
-      updateEvent: {
-        userSelect: false,
-        requiredWatchFields: ["text", "user"],
-      },
-      deleteEvent: { userSelect: false },
+      createEvent: {},
+      updateEvent: { requiredWatchFields: ["text", "user"] },
+      deleteEvent: {},
     },
   }}
 />
@@ -202,7 +199,7 @@ Keys are object names, matching the `objectName` in your `amp.yaml`.
 | `updateEvent.requiredWatchFields` | Provider field names. Changes to these trigger an update event. For a subscribe-only object (`inheritFieldsAndMappings: false`) they are required, and they are also the fields every event delivers — one list, not two. |
 | `updateEvent.enabled` | Defaults to `true`. `false` installs the object without update events: the update event is kept as `never`, so its `requiredWatchFields` still name the fields the create and delete events deliver. |
 
-**An event's presence is what subscribes to it,** except an `updateEvent` with `enabled: false`, which names the fields without subscribing to updates. `userSelect` only decides whether the consumer is asked: `false` configures the event without a question. `userSelect: true` is reserved for a consumer-facing step that doesn't exist yet, so use `false` for now.
+**An event's presence is what subscribes to it,** except an `updateEvent` with `enabled: false`, which names the fields without subscribing to updates. The consumer is not asked about these events: the install writes them as given.
 
 **A subscribe-only object must name at least one field, in `requiredWatchFields`.** It has no read object to take fields from, and the server rejects it when it names none; the prop's TypeScript type requires the list for `inheritFieldsAndMappings: false`. An inheriting object may leave the list out: its update event then watches every field, and its events carry the read object's fields. The names are not validated against the provider, so a misspelled name results in an event with a missing field rather than an error.
 
