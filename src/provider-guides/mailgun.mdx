@@ -1,12 +1,113 @@
 ---
-title: Mailgun
+title: "Mailgun"
+description: "Connect Mailgun to Ampersand with an API key to read and write domains, mailing lists, suppressions, templates, and logs, send messages, and make proxy calls to the Mailgun API."
 ---
+
 ## What's supported
 
 ### Supported actions
 
 This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `account/templates`, `accounts/subaccounts`, `analytics/logs`, `analytics/tags`, `bounces`, `complaints`, `domains`, `domains/credentials`, `dynamic_pools/history`, `forwards`, `keys`, `lists`, `routes`, `templates`, `thresholds/alerts/send`, `thresholds/hits`, `thresholds/limits`, `unsubscribes`, `webhooks` and `whitelists` currently. For all other objects, a full read of the Mailgun instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.mailgun.net`.
+
+### Supported objects
+
+The Mailgun connector supports the following objects:
+
+export const rows = [
+  { label: "account/templates*", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/account-templates/get-v4-templates" },
+  { label: "accounts/subaccounts", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/subaccounts/get-v5-accounts-subaccounts" },
+  { label: "accounts/subaccounts/ip_pools/all", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/user-manual/subaccounts/subaccounts-ip-pools" },
+  { label: "alerts/settings", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/alerts/get-v1-alerts-settings" },
+  { label: "analytics/logs**", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/logs/post-v1-analytics-logs" },
+  { label: "analytics/tags", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/tags-new/post-v1-analytics-tags" },
+  { label: "bounces", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/bounces/get-v3--domainid--bounces" },
+  { label: "complaints", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/complaints/get-v3--domainid--complaints" },
+  { label: "dkim/keys", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-keys/get-v1-dkim-keys" },
+  { label: "domains*", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domains/get-v4-domains" },
+  { label: "domains/credentials*", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/credentials/get-v3-domains--domain-name--credentials" },
+  { label: "domains/keys", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-keys/get-v4-domains--authority-name--keys" },
+  { label: "dynamic_pools/domains", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/dynamic-ip-pools/get-v1-dynamic-pools-domains" },
+  { label: "dynamic_pools/history", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/dynamic-ip-pools/get-v1-dynamic-pools-history" },
+  { label: "forwards", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/forwards/get-v3-forwards" },
+  { label: "ip_pools", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/ip-pools/get-v3-ip-pools" },
+  { label: "ip_whitelist", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/ip-allowlist/get-v2-ip-whitelist" },
+  { label: "ips", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/ips/get-v3-ips" },
+  { label: "keys", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/keys/get-v1-keys" },
+  { label: "lists*", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/mailing-lists/get-v3-lists" },
+  { label: "lists/members", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/mailing-lists/get-lists-string:list_address-members" },
+  { label: "messages", read: false, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/messages/post-v3--domain-name--messages" },
+  { label: "routes*", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/routes/get-v3-routes" },
+  { label: "templates*", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-templates/get-v3--domain-name--templates" },
+  { label: "thresholds/alerts/send", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/send-alerts/get-v1-thresholds-alerts-send" },
+  { label: "thresholds/hits", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/send-alerts/get-v1-thresholds-hits" },
+  { label: "thresholds/limits", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/limits/get-v1-thresholds-limits" },
+  { label: "unsubscribes", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/unsubscribe/get-v3--domainid--unsubscribes" },
+  { label: "users", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/users/get-v5-users" },
+  { label: "webhooks*", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/account-webhooks/get-v1-webhooks" },
+  { label: "whitelists", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/allowlist/get-v3--domainid--whitelists" },
+]
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  return value;
+}
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+      <th style={{width: '20%'}}>Read</th>
+      <th style={{width: '20%'}}>Write</th>
+      <th style={{width: '20%'}}>Subscribe</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td style={{textAlign: "left"}}>
+            {row.href ? <a href={row.href}>{row.label}</a> : row.label}
+          </td>
+          <td>{renderCellValue(row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+          <td>{renderCellValue(row.subscribe)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+
+\* For these objects, incremental read picks up newly created records only. Mailgun has no last-updated timestamp for them, so changes to existing records are not picked up.
+
+\*\* Limited to the log retention of the customer's Mailgun plan. A full historic backfill returns the last day of logs.
+
+<Note>
+**Writes are limited by Mailgun's API:**
+
+- **Create-only:** `messages`, `bounces`, `complaints`, `unsubscribes`, and `whitelists` cannot be updated.
+- **No delete:** `messages` and `lists/members` cannot be deleted.
+- **`lists/members`:** include a `list_address` field naming the parent mailing list.
+</Note>
 
 ### Example integration
 
@@ -16,23 +117,59 @@ To define an integration for Mailgun, create a manifest file that looks like thi
 # amp.yaml
 specVersion: 1.0.0
 integrations:
-  - name: mailgun-integration
+  - name: mailgunIntegration
     displayName: My Mailgun Integration
     provider: mailgun
+    read:
+      objects:
+        - objectName: bounces
+          destination: myWebhook
+        - objectName: lists
+          destination: myWebhook
+    write:
+      objects:
+        - objectName: lists
+        - objectName: messages
     proxy:
       enabled: true
 ```
+
+## Before you get started
+
+To connect Mailgun with Ampersand, you will need a [Mailgun account](https://signup.mailgun.com/new/signup).
+
+### Creating an API key for Mailgun
+
+1. Log in to the [Mailgun dashboard](https://app.mailgun.com).
+2. Go to **Account Settings** > **API keys** and click **Create key**. If your plan supports key roles, choose **Admin** or **Developer** so the key can read and write.
+3. Copy the key. Mailgun shows it only once.
+
+![Mailgun API Key](/images/provider-guides/mailgun.gif)
+
+Use an account API key. Domain sending keys can only send messages.
+
+When installing the integration, the customer also provides:
+- **Domain name:** the Mailgun sending domain, as listed under **Send** > **Domains** in the Mailgun dashboard (for example, `mg.example.com`). It is used by domain-scoped objects such as `bounces`, `messages`, and `templates`.
+- **Region:** `us` (default) or `eu`, matching the region the domain was created in. Proxy Actions always use the US base URL.
 
 ## Using the connector
 
 This connector uses Basic Auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Mailgun:
-- Create a manifest file like the example above.
+- Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the correct header required by Basic Auth. Please note that this connector's base URL is `https://api.mailgun.net`.
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their username and password, Mailgun domain name, and region.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
 
 ## Credential format for Mailgun
 
-Mailgun uses a non-standard format for Basic Auth, which means that the username and password fields do not correspond to the actual username and password that a customer uses to log in. [Click here](https://documentation.mailgun.com/docs/mailgun/api-reference/authentication/) for more information about the expected credential format for Mailgun. The UI components will display this link, so that your users can successfully provide their credentials.
+Mailgun uses HTTP Basic Authentication with a non-standard credential format. The fields in the installation UI do not correspond to a Mailgun login. Instead:
+- **Username**: Always `api`.
+- **Password**: The Mailgun API key.
+
+For more detail, see [Mailgun's authentication documentation](https://documentation.mailgun.com/docs/mailgun/api-reference/authentication/). The UI components will display this link, so that your users can successfully provide their credentials.
