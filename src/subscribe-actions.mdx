@@ -335,7 +335,7 @@ curl -X POST \
                 "channelName": "channel"
               },
               "createEvent": { "enabled": "always" },
-              "updateEvent": { "enabled": "always" },
+              "updateEvent": { "enabled": "always", "requiredWatchFields": ["text"] },
               "deleteEvent": { "enabled": "always" }
             }
           }
@@ -358,7 +358,7 @@ Whichever route you take, three more rules apply to the config:
 
 - **Name at least one field**, in `selectedFields`, `selectedFieldMappings`, or the update event's `requiredWatchFields`. Any one of them is enough — they all name the fields the object cares about. An object that inherits nothing and names nothing has no fields to deliver, and the install is rejected.
 - **There is no field metadata for these objects**, so the names are taken as written rather than checked against the provider. A typo gets you an event with a missing field, not an error.
-- **`updateEvent` watches the fields you named.** An object that names none watches every field; to say so explicitly, set `watchFieldsAuto` to `all`.
+- **`updateEvent` watches only its `requiredWatchFields`.** Fields named only in `selectedFields` or `selectedFieldMappings` are not watched. An update event must carry `requiredWatchFields` or `watchFieldsAuto: all`, which watches every field; a subscribe-only object that uses `all` still has to name its fields in `selectedFields` or `selectedFieldMappings`.
 
 Events are delivered under their mapped names, so the API config above delivers `text`, `user`, `timeStamp`, and `channelName`. With no mappings, as in the React example, they arrive as `text` and `user`.
 
