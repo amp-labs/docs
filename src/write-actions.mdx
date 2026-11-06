@@ -21,8 +21,6 @@ integrations:
         - objectName: touchpoints__c # You can include custom objects
 ```
 
-You can only write to objects listed here. An installation's [config](/concepts#config) can currently change settings for these objects but not add new ones, so to write to another object, add it to `amp.yaml` and deploy again.
-
 ### Share mappings with read actions
 
 If your read actions use [field mappings](/read-actions#object-and-field-mappings), add `inheritMapping: true` to a write object to use the same mappings when writing. You then send the mapped field names in the write request, and Ampersand writes each one to the field that customer mapped it to.
@@ -40,10 +38,6 @@ integrations:
 ```
 
 - **The object needs a matching read object.** Mappings are defined on read objects, so `inheritMapping` uses the read object with the same `objectName`.
-
-<Warning>
-Without `inheritMapping: true`, mapped field names aren't translated, so a mapped field like `campaignName` won't be written to the customer's field.
-</Warning>
 
 ## Writing records
 
