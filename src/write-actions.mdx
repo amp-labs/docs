@@ -41,7 +41,7 @@ integrations:
 
 Once your users install an integration with a write action, your app can write data to their SaaS by making a POST call to Ampersand, the URL is in the format of:
 
-`https://write.withampersand.com/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
+`https://write.ampersand.ai/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
 
 You can find your project ID and integration ID in the [Ampersand Dashboard](https://dashboard.withampersand.com) (look in the address bar) or you can run the following in the terminal to get `projectId` & `integrationId`:
 
@@ -60,7 +60,7 @@ amp list:integrations --project <PROJECT_ID>
 To create a new record, make a request to the [Write endpoint](/reference/write/write-records) with `type` being `create`. For example:
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -80,7 +80,7 @@ If you'd like to create records that are associated with other records, you can 
 <Info> This is currently only supported for HubSpot. </Info>
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_ID_OR_NAME>/integrations/<INTEGRATION_ID>/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/<YOUR_PROJECT_ID_OR_NAME>/integrations/<INTEGRATION_ID>/objects/contact' \
 --header 'X-Api-Key: <API_KEY>' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -107,7 +107,7 @@ curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_ID_OR
 To update an existing record, you need to know the ID of the record, which is the ID that the SaaS provider uses to uniquely identify this record. If you created the record using Ampersand, this ID is available in the API response. If you are reading the record first using Ampersand's Read Actions, make sure you add the ID as a required field in the read action. Here is an example request:
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/66438162-5299-4669-a41d-85c5a3b1a83e/integrations/113e9685-9a51-42cc-8662-9d9725b17f14/objects/contact' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -132,7 +132,7 @@ This is currently supported for HubSpot and Salesforce.
 To delete a record, call the [Write endpoint](/reference/write/write-records) with `type` set to `delete`. Provide the record `id` in the `record` object; no other fields are required. Delete operations are **synchronous only** and support **single-record** deletes.
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/<OBJECT_NAME>' \
+curl --location 'https://write.ampersand.ai/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/<OBJECT_NAME>' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -151,7 +151,7 @@ If you need to pass additional headers when creating, updating, or deleting reco
 <Info>This is currently only supported for Salesforce. </Info>
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/<YOUR_PROJECT_ID_OR_NAME>/integrations/<INTEGRATION_ID>/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/<YOUR_PROJECT_ID_OR_NAME>/integrations/<INTEGRATION_ID>/objects/contact' \
 --header 'X-Api-Key: <API_KEY>' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -184,7 +184,7 @@ Batch write allows you to create or update multiple records in a single API call
 
 To perform a batch write, use the same [write endpoint](/reference/write/write-records) but provide a `batch` array instead of a single `record`:
 
-`https://write.withampersand.com/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
+`https://write.ampersand.ai/v1/projects/:projectIdOrName/integrations/:integrationId/objects/:objectName`
 
 Batch writes support both [synchronous and asynchronous modes](#write-modes). By default, batch writes use **partial success**, i.e., successful records will be committed even if some records in the batch fail. To fail the entire batch when any record fails, set [`batchPolicy.allOrNone`](/reference/write/write-records) to `true` in your request.
 
@@ -195,7 +195,7 @@ Batch writes support both [synchronous and asynchronous modes](#write-modes). By
 To create multiple records in a batch, set `type` to `create`:
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -226,7 +226,7 @@ curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integr
 To update multiple records in a batch, set `type` to `update` and include the record IDs:
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -259,7 +259,7 @@ You can create records with associations in batch mode. Each record in the batch
 <Info>Associations in batch write are currently only supported for HubSpot.</Info>
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -324,7 +324,7 @@ The auto batch policy has two configuration options:
 To enable auto batching, include `autoBatchPolicy` in the [write API](/reference/write/write-records) request, here's an example:
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -353,7 +353,7 @@ In this example:
 You can monitor auto batch operations using the operation ID returned in the response. The operation ID represents the master operation for the batch. Use the [Get Operation endpoint](/reference/operation/get-an-operation) to check the status:
 
 ```bash
-curl --location 'https://api.withampersand.com/v1/projects/<PROJECT_ID>/operations/<OPERATION_ID>' \
+curl --location 'https://api.ampersand.ai/v1/projects/<PROJECT_ID>/operations/<OPERATION_ID>' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY'
 ```
 
@@ -373,7 +373,7 @@ In synchronous mode, the write operation is processed immediately and the API wa
 For **single record writes**, the response includes the created/updated record immediately. If the write operation fails, the API will return the error response.
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -399,7 +399,7 @@ For single-record writes, you can also use the [auto batch policy](#auto-batchin
 To use async mode, set `mode: "asynchronous"` in your request:
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -426,7 +426,7 @@ The response returns an operation ID immediately:
 To check the status of an async write operation, use the [Get Operation endpoint](/reference/operation/get-an-operation) with the operation ID in the response body of the write API endpoint.
 
 ```bash
-curl --location 'https://api.withampersand.com/v1/projects/<PROJECT_ID>/operations/<OPERATION_ID>' \
+curl --location 'https://api.ampersand.ai/v1/projects/<PROJECT_ID>/operations/<OPERATION_ID>' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY'
 ```
 
@@ -455,7 +455,7 @@ An operation can be in a `success`, `failure` or `in_progress` state.
 Ampersand will automatically retry failed operations with exponential backoff until the default deadline of 1 hour. If this is not enough, you can specify a longer deadline of up to 48 hours.
 
 ```bash
-curl --location 'https://write.withampersand.com/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
+curl --location 'https://write.ampersand.ai/v1/projects/<PROJECT_ID>/integrations/<INTEGRATION_ID>/objects/contact' \
 --header 'X-Api-Key: YOUR_AMPERSAND_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
