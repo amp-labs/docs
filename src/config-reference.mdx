@@ -63,7 +63,10 @@ This config reads and writes HubSpot contacts, subscribes to contact events, and
         "destination": "contactsWebhook",
         "inheritFieldsAndMappings": true,
         "createEvent": { "enabled": "always" },
-        "updateEvent": { "enabled": "always", "watchFieldsAuto": "all" }
+        "updateEvent": {
+          "enabled": "always",
+          "requiredWatchFields": ["email", "phone"]
+        }
       }
     }
   },
@@ -242,7 +245,7 @@ An object can't have both `fieldFilters` and `rawFilter`. The same rule applies 
 | `createEvent.enabled` | String | No | `always` or `never`. |
 | `updateEvent.enabled` | String | No | `always` or `never`. |
 | `updateEvent.watchFieldsAuto` | String | No | Set to `all` to send an event when any field changes. Use this or `requiredWatchFields`, not both. |
-| `updateEvent.requiredWatchFields` | Array of String | No | Only send an event when one of these fields changes. Nested paths aren't supported. |
+| `updateEvent.requiredWatchFields` | Array of String | No | Only send an event when one of these fields changes. You can list provider field names or mapped field names. Nested paths aren't supported. |
 | `deleteEvent.enabled` | String | No | `always` or `never`. |
 | `otherEvents` | Array of String | No | Provider-specific events, such as `object.merged`. |
 | `providerOptions.quotaOptimization.enabled` | Boolean | No | **Salesforce only.** Filters out update events for fields you don't watch, which uses less API quota. Requires `requiredWatchFields`. Can't be used with `watchFieldsAuto`. |
@@ -252,6 +255,8 @@ The manifest field is `inheritFieldsAndMapping` (singular). The config field is 
 </Warning>
 
 ### Provider options
+
+These options apply to the whole installation, so they go directly under `subscribe`, not inside an object. Per-object options go in the object's own `providerOptions`.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
