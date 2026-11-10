@@ -16133,6 +16133,7 @@
                         "default": "api:create-installation"
                       },
                       "content": {
+                        "description": "The content of the config.",
                         "title": "Config Content",
                         "allOf": [
                           {
@@ -17931,8 +17932,7 @@
                               }
                             }
                           }
-                        ],
-                        "description": "The content of the config."
+                        ]
                       }
                     },
                     "description": "The config of the installation."
@@ -23965,6 +23965,16 @@
               "type": "string"
             },
             "description": "The Ampersand installation ID."
+          },
+          {
+            "name": "force",
+            "in": "query",
+            "required": false,
+            "description": "When `true`, deletes the installation even if cleanup in the provider fails (for example, because the connection's credentials are no longer valid) or a subscription change is still pending. A forced delete might not clean up the artifacts Ampersand created in the provider. Defaults to `false`.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
