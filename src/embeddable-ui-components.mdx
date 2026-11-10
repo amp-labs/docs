@@ -192,12 +192,12 @@ An integration can have [subscribe objects whose fields are listed in the instal
 />
 ```
 
-Keys are object names, matching the `objectName` in your `amp.yaml`.
+Keys are object names. Each must be a subscribe object in your `amp.yaml` with a `destination`: the component doesn't write a destination, so the installation takes it from there.
 
 | Key | Meaning |
 |---|---|
 | `inheritFieldsAndMappings` | **Required.** Whether the object takes its fields from the matching read object. `false` for a subscribe-only object. |
-| `createEvent` / `updateEvent` / `deleteEvent` | Subscribe to this event. **Leave a key out to not subscribe to that event at all.** |
+| `createEvent` / `updateEvent` / `deleteEvent` | Subscribe to this event. **A key you leave out isn't written to the installation, so your `amp.yaml` decides that event:** it's subscribed only if the `amp.yaml` object enables it. |
 | `updateEvent.requiredWatchFields` | Provider field names. Changes to these trigger an update event. For a subscribe-only object (`inheritFieldsAndMappings: false`) they are required, and they are also the fields every event delivers — one list, not two. |
 | `updateEvent.enabled` | Defaults to `true`. `false` installs the object without update events: the update event is kept as `never`, so its `requiredWatchFields` still name the fields the create and delete events deliver. |
 
@@ -209,7 +209,7 @@ Keys are object names, matching the `objectName` in your `amp.yaml`.
 
 **`inheritFieldsAndMappings` is required, and must be `false` for a subscribe-only object.** There is no default: the two values describe different objects, and the component will not guess which you meant. Set it to `true` for an object that does have a read action, whose fields it then takes.
 
-This works in [wizard mode](#wizard-mode-beta) only for now. The events are configured as the installation is created, so the consumer never sees a step for them. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
+This works in [wizard mode](#wizard-mode-beta) only for now. The events are configured as the installation is created. When the integration has no read objects, the consumer sees the subscribe objects listed on the select-objects and review steps but can't change them; otherwise they aren't shown. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
 
 <Warning>`subscribeEvents` is in beta preview and its shape may change.</Warning>
 
