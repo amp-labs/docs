@@ -170,7 +170,7 @@ If you close your install dialog in `onInstallSuccess`, it will close right afte
 `subscribeEvents` is supported in `@amp-labs/react` `vX.Y.Z+`, and **only in [wizard mode](#wizard-mode-beta)** for now. In the standard flow the prop is not applied, and an integration with subscribe objects but no read or write objects is not installed: the consumer sees an error asking them to contact their administrator.
 </Note>
 
-An integration can have [subscribe objects that carry their own fields](/subscribe-actions#subscribe-without-a-read-action) rather than inheriting them from a read action. Those objects have no field metadata and no configuration screen, so the component can't ask the consumer about them. You tell it what to configure, with the `subscribeEvents` prop:
+An integration can have [subscribe objects whose fields are listed in the installation config](/subscribe-actions#subscribe-without-a-read-action) rather than inheriting them from a read action. Those objects have no field metadata and no configuration screen, so the component can't ask the consumer about them. You tell it what to configure, with the `subscribeEvents` prop:
 
 ```JSX
 <InstallIntegration
@@ -205,7 +205,7 @@ Keys are object names, matching the `objectName` in your `amp.yaml`.
 
 **A subscribe-only object must name at least one field, in `requiredWatchFields`.** It has no read object to take fields from, and the server rejects it when it names none; the prop's TypeScript type requires the list for `inheritFieldsAndMappings: false`. An inheriting object may leave the list out: its update event then watches every field, and its events carry the read object's fields. The names are not validated against the provider, so a misspelled name results in an event with a missing field rather than an error.
 
-**Field mappings are not settable through this prop yet.** The installation config supports `selectedFields` and `selectedFieldMappings`, and the API route below accepts both — the prop doesn't, pending a step that lets your end user pick fields and mappings. Until then events are delivered under the provider's own field names.
+**Field mappings are not settable through this prop yet.** The installation config supports `selectedFields` and `selectedFieldMappings`, and the API route below accepts both — the prop doesn't, pending a step that lets your end user pick fields and mappings. Until then events are delivered under the provider's field names.
 
 **`inheritFieldsAndMappings` is required, and must be `false` for a subscribe-only object.** There is no default: the two values describe different objects, and the component will not guess which you meant. Set it to `true` for an object that does have a read action, whose fields it then takes.
 

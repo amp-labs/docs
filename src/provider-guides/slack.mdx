@@ -286,7 +286,7 @@ export const groupSeparator = {
   </table>
 </div>
 
-\* `messages` is subscribe only, and its installations carry their own fields rather than inheriting them from a read action. See [Set up Subscribe Actions](#set-up-subscribe-actions).
+\* `messages` is subscribe only, and its installations list their fields in the installation config rather than inheriting them from a read action. See [Set up Subscribe Actions](#set-up-subscribe-actions).
 
 ### Choose a connector
 
@@ -373,13 +373,13 @@ Follow the steps below to create a Slack app and add the Ampersand redirect URL.
 
 ## Set up Subscribe Actions
 
-Slack message events work differently from the other objects on this page, in two ways worth knowing before you start.
+Slack message events work differently from the other objects on this page, in two ways:
 
 ### Messages are a subscribe-only object
 
-As the object matrix above shows, `messages` is subscribe only: Slack messages aren't available to [read](/read-actions) on a schedule or to [search](/search-actions), so subscribing is the only way to get them. That also means there is no read action for the object to inherit fields from, so it carries its own, and each installation says which fields it wants.
+As the object matrix above shows, `messages` is subscribe only: Slack messages aren't available to [read](/read-actions) on a schedule or to [search](/search-actions), so subscribing is the only way to get them. That also means there is no read action for the object to inherit fields from, so each installation lists the fields it wants in its config.
 
-That shape is covered in full, with both the manifest and the two ways to create the installation, in [Subscribe without a read action](/subscribe-actions#subscribe-without-a-read-action). The short version is a manifest with an empty read block:
+That shape is covered in full, with both the manifest and the two ways to create the installation, in [Subscribe without a read action](/subscribe-actions#subscribe-without-a-read-action). It needs a manifest with an empty read block:
 
 ```yaml amp.yaml
 specVersion: 1.0.0
@@ -397,7 +397,7 @@ integrations:
           destination: slackWebhook
 ```
 
-Which events to subscribe to, and which fields to deliver, are set per installation rather than in the manifest — either through the [`subscribeEvents` prop](/embeddable-ui-components#subscribe-events) on the React component, in [wizard mode](/embeddable-ui-components#wizard-mode-beta) for now, or through the [installation API](/subscribe-actions#subscribe-without-a-read-action). Both must set `inheritFieldsAndMappings: false`, which is required for an object that carries its own fields.
+Which events to subscribe to, and which fields to deliver, are set per installation rather than in the manifest — either through the [`subscribeEvents` prop](/embeddable-ui-components#subscribe-events) on the React component, in [wizard mode](/embeddable-ui-components#wizard-mode-beta) for now, or through the [installation API](/subscribe-actions#subscribe-without-a-read-action). Both must set `inheritFieldsAndMappings: false`, which is required for an object whose fields are listed in the installation config.
 
 ### Ampersand does not register the subscription
 

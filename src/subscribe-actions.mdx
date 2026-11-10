@@ -20,7 +20,7 @@ To subscribe to an object, you need to specify:
 
 A subscribe action reuses the fields and mappings of a [read action](/read-actions). So each object that uses `createEvent`, `updateEvent`, `deleteEvent`, or `associationChangeEvent` also needs an object with the same `objectName` under `read`. That read object doesn't need a `schedule` or `backfill`: without them, it doesn't read anything and only supplies the fields and mappings. Objects that only use [`otherEvents`](#other-events) don't need one.
 
-If the object you want to subscribe to isn't one you read at all, you can leave the events out of `amp.yaml` and let each installation carry its own fields and events instead. See [Subscribe without a read action](#subscribe-without-a-read-action).
+If the object you want to subscribe to isn't one you read at all, you can leave the events out of `amp.yaml` and list the fields and events in each installation's config instead. See [Subscribe without a read action](#subscribe-without-a-read-action).
 
 <Note>
 In `amp.yaml` the setting is `inheritFieldsAndMapping`. In an installation's config it's spelled `inheritFieldsAndMappings`, with an **s**.
@@ -235,7 +235,7 @@ If you only want changes from now on, leave out `backfill` (and `schedule`). The
 
 Some objects can only be subscribed to. Slack `messages` is one: it isn't available to [read](/read-actions) on a schedule or to [search](/search-actions), so a subscription is the only way to get messages at all.
 
-An object like that can skip the matching read object entirely. Instead of inheriting fields from a read action, each installation carries its own fields, mappings, and events, set when the installation is created.
+An object like that can skip the matching read object entirely. Instead of inheriting fields from a read action, each installation's config lists the object's fields, mappings and events, set when the installation is created.
 
 ### Define the integration
 
@@ -262,7 +262,7 @@ That is the whole manifest. Each piece, and why there is so little of it:
 | Key | Why |
 | --- | --- |
 | `read.objects: []` | A manifest with `subscribe` and no `read` is rejected, and so is a `read` with no `objects` list. An empty list satisfies both, and nothing is read. |
-| `objectName` | Matches the object an installation configures. Use the provider's own name for it. |
+| `objectName` | Matches the object an installation configures. Use the provider's name for it. |
 | `destination` | Where events are delivered. An installation can override it, and events have nowhere to go without one. |
 
 Which events to subscribe to, and which fields to deliver, are set per installation rather than here. That is covered next.
@@ -300,9 +300,9 @@ Pass the `subscribeEvents` prop to [`InstallIntegration`](/embeddable-ui-compone
 />
 ```
 
-Use this when your end users connect their own Slack workspace through your UI. The component handles the connection, creates the installation, and applies the config above.
+Use this when your end users connect their own Slack workspace through your UI. The component connects the workspace, creates the installation, and writes the config above to it.
 
-`requiredWatchFields` names the fields the events deliver, and the changes that trigger an update event — one list, not two. To install without update events, add `enabled: false` to `updateEvent`: its `requiredWatchFields` still name the fields the create and delete events deliver. Field mappings are not settable through the prop yet, so events arrive under Slack's own field names. Use the API route if you need mapped names today.
+`requiredWatchFields` names the fields the events deliver, and the changes that trigger an update event — one list, not two. To install without update events, add `enabled: false` to `updateEvent`: its `requiredWatchFields` still name the fields the create and delete events deliver. Field mappings are not settable through the prop yet, so events arrive under Slack's field names. Use the API route if you need mapped names today.
 
 **`inheritFieldsAndMappings` is required, and must be `false` here.** There is no default — the component will not guess whether the object inherits.
 
@@ -355,7 +355,7 @@ To change the fields or events later, [update the installation](/reference/insta
 Whichever route you take, three more rules apply to the config:
 
 - **Name at least one field**, in `selectedFields`, `selectedFieldMappings`, or the update event's `requiredWatchFields`. Any one of them is enough — they all name the fields the object cares about. An object that inherits nothing and names nothing has no fields to deliver, and the install is rejected.
-- **There is no field metadata for these objects**, so the names are taken as written rather than checked against the provider. A typo gets you an event with a missing field, not an error.
+- **There is no field metadata for these objects**, so the names are taken as written rather than checked against the provider. A misspelled field name is not rejected; the event arrives without that field.
 - **`updateEvent` watches only its `requiredWatchFields`.** Fields named only in `selectedFields` or `selectedFieldMappings` are not watched. An update event must carry `requiredWatchFields` or `watchFieldsAuto: all`, which watches every field; a subscribe-only object that uses `all` still has to name its fields in `selectedFields` or `selectedFieldMappings`.
 
 Events are delivered under their mapped names, so the API config above delivers `text`, `user`, `timeStamp`, and `channelName`. With no mappings, as in the React example, they arrive as `text` and `user`.
