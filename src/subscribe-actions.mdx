@@ -16,7 +16,7 @@ To subscribe to an object, you need to specify:
 
 - **objectName:** to indicate which object you'd like to subscribe to. This should match the name of the object in the official documentation for the SaaS API.
 - **destination:** the name of the [destination](/destinations) that you've defined
-- **inheritFieldsAndMapping:** required when using `createEvent`, `updateEvent`, `deleteEvent`, or `associationChangeEvent`. Set this to `true` so the subscribe action inherits the mapped and unmapped fields from the matching read action. `true` is currently the only supported value.
+- **inheritFieldsAndMapping:** required when using `createEvent`, `updateEvent`, `deleteEvent`, or `associationChangeEvent`. Set this to `true` so the subscribe action inherits the mapped and unmapped fields from the matching read action. An object with these events must set it to `true`; a [subscribe-only object](#subscribe-without-a-read-action) leaves the events out of `amp.yaml` and lists its fields in the installation config instead.
 
 A subscribe action reuses the fields and mappings of a [read action](/read-actions). So each object that uses `createEvent`, `updateEvent`, `deleteEvent`, or `associationChangeEvent` also needs an object with the same `objectName` under `read`. That read object doesn't need a `schedule` or `backfill`: without them, it doesn't read anything and only supplies the fields and mappings. Objects that only use [`otherEvents`](#other-events) don't need one.
 
@@ -49,7 +49,7 @@ integrations:
       objects:
         - objectName: account
           destination: accountWebhook
-          inheritFieldsAndMapping: true # for now this must be true
+          inheritFieldsAndMapping: true # required with createEvent, updateEvent or deleteEvent
           createEvent:
             enabled: always
           updateEvent:
