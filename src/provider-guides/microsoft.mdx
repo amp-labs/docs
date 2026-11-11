@@ -25,6 +25,7 @@ We also have connectors for:
 
 This connector supports:
 - [Read Actions](/read-actions), including full historic backfill and incremental read.
+- [Subscribe Actions](/subscribe-actions).
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://graph.microsoft.com`.
 
@@ -37,13 +38,13 @@ export const rows = [
     label: "calendars", read: true, write: true, subscribe: false,
     href: "https://learn.microsoft.com/en-us/graph/api/resources/calendar?view=graph-rest-1.0",
   }, {
-    label: "me/events", read: true, write: true, subscribe: false,
+    label: "me/events", read: true, write: true, subscribe: true,
     href: "https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-1.0",
   }, {
-    label: "me/messages", read: true, write: true, subscribe: false,
+    label: "me/messages", read: true, write: true, subscribe: true,
     href: "https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0",
   }, {
-    label: "users", read: true, write: true, subscribe: false,
+    label: "users", read: true, write: true, subscribe: true,
     href: "https://learn.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0"
   }, {
     label: "AMPERSAND-sentMessages", read: true, write: false, subscribe: false,
@@ -115,9 +116,14 @@ export function renderCellValue(value) {
 </div>
 
 
-For the complete list of supported Graph API resources, refer to the [Microsoft Graph API documentation](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
+For the complete list of supported Microsoft Graph API **resources**,
+see the [Microsoft Graph API documentation](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
 
-To figure out the exact OAuth scope you will require based on the objects you need to integrate with, you can use a tool such as [Graph Permissions Explorer](https://graphpermissions.merill.net/permission/).
+For the complete list of resources that support **subscriptions**,
+see [Microsoft Graph change notifications](https://learn.microsoft.com/en-us/graph/api/resources/change-notifications-api-overview?view=graph-rest-1.0).
+
+To determine the exact **OAuth scope** required for the objects you want to integrate with,
+use a tool such as the [Microsoft Graph Permissions Explorer](https://graphpermissions.merill.net/permission/).
 
 ### Example Integration
 
