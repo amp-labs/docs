@@ -506,7 +506,9 @@ Ampersand creates a new subscription, so you only receive changes made from then
 
 ### For every customer
 
-Remove the object from `subscribe` in your `amp.yaml` and run `amp deploy`. Installations that have their own subscribe config for the object keep it.
+Remove the object's events from `subscribe` in your `amp.yaml`, keeping its `objectName` and `destination`, and run `amp deploy`. Installations that set the events in their own subscribe config keep them.
+
+Once an integration has installations, a deploy can't remove the object itself, or its `destination`. See [Removing objects](/cli/reference#deploy).
 
 ### When a customer uninstalls or revokes access
 
