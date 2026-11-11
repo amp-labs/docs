@@ -184,6 +184,7 @@ If you close your install dialog in `onInstallSuccess`, it will close right afte
   subscribeConfig={{
     messages: {
       inheritFieldsAndMappings: false,
+      selectedFields: { text: true, user: true },
       selectedFieldMappings: { timeStamp: "ts" },
       createEvent: { enabled: "always" },
       updateEvent: { enabled: "always", requiredWatchFields: ["text", "user"] },
@@ -200,11 +201,11 @@ Keys are object names. Each value is a subscribe config object, as documented fo
 | `inheritFieldsAndMappings` | Whether the object takes its fields and mappings from the matching read object. Should be `false` for a subscribe-only object. When left out, the server uses the object's `inheritFieldsAndMapping` from `amp.yaml`. |
 | `selectedFields` / `selectedFieldMappings` | Fields to deliver, by provider name, and mapped names for provider fields. Only for an object with `inheritFieldsAndMappings: false`. |
 | `createEvent` / `updateEvent` / `deleteEvent` | `{ enabled: "always" }` subscribes to the event and `{ enabled: "never" }` doesn't. **An event you leave out isn't written to the installation, so your `amp.yaml` decides it.** |
-| `updateEvent.requiredWatchFields` | Provider field names whose changes trigger an update event. On an object with `inheritFieldsAndMappings: false` they are also delivered with every event, create and delete included, even when the update event is `never`. |
-| `updateEvent.watchFieldsAuto` | `"all"` watches every field. An update event needs `requiredWatchFields` or `watchFieldsAuto`. |
+| `updateEvent.requiredWatchFields` | Provider field names whose changes trigger an update event. They are not delivered unless `selectedFields` or `selectedFieldMappings` also lists them. On an object with `inheritFieldsAndMappings: false` and an update event set to `always`, list at least one. |
+| `updateEvent.watchFieldsAuto` | `"all"` watches every field. An update event needs `requiredWatchFields` or `watchFieldsAuto`. Not accepted on an update event set to `always` when the object has `inheritFieldsAndMappings: false`. |
 | `destination`, `otherEvents`, `providerOptions` | As in the installation API. When `destination` is left out, the installation uses the object's `destination` in `amp.yaml`. |
 
-**A subscribe-only object must list at least one field**, in `selectedFields`, `selectedFieldMappings` or `updateEvent.requiredWatchFields`; the server rejects one that lists none. The names are not checked against the provider: a misspelled field name is not rejected, and the event arrives without that field.
+**A subscribe-only object must list at least one field to deliver**, in `selectedFields` or `selectedFieldMappings`, and an update event set to `always` must list at least one `requiredWatchFields` entry; the server rejects an object that doesn't. The names are not checked against the provider: a misspelled field name is not rejected, and the event arrives without that field.
 
 Subscribe-only objects are available only in [wizard mode](#wizard-mode-beta). The config is written as the installation is created. When the integration has no read objects, the consumer sees the subscribe objects listed on the select-objects and review steps but can't change them; otherwise they aren't shown. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
 

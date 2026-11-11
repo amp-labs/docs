@@ -355,9 +355,9 @@ To change the fields or events later, [update the installation](/reference/insta
 
 Whichever route you take, three more rules apply to the config:
 
-- **List at least one field**, in `selectedFields`, `selectedFieldMappings`, or the update event's `requiredWatchFields`. Any one of them is enough — they all list the fields the object cares about. An object that inherits nothing and lists nothing has no fields to deliver, and the install is rejected.
+- **List at least one field to deliver**, in `selectedFields` or `selectedFieldMappings`. An object that inherits nothing and lists nothing has no fields to deliver, and the install is rejected. `requiredWatchFields` doesn't count: it decides which changes fire an update event, and its fields are not delivered unless `selectedFields` or `selectedFieldMappings` also lists them.
 - **There is no field metadata for these objects**, so the names are taken as written rather than checked against the provider. A misspelled field name is not rejected; the event arrives without that field.
-- **`updateEvent` watches only its `requiredWatchFields`.** Fields listed only in `selectedFields` or `selectedFieldMappings` are not watched. An update event must carry `requiredWatchFields` or `watchFieldsAuto: all`, which watches every field; a subscribe-only object that uses `all` still has to list its fields in `selectedFields` or `selectedFieldMappings`.
+- **`updateEvent` watches only its `requiredWatchFields`.** Fields listed only in `selectedFields` or `selectedFieldMappings` are not watched. When the update event is `always`, list at least one field in `requiredWatchFields`; `watchFieldsAuto` isn't accepted on an object with `inheritFieldsAndMappings: false`.
 
 Events are delivered under their mapped names, so either config above delivers `text`, `user`, `timeStamp`, and `channelName`.
 
