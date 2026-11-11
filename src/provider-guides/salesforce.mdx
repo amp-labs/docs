@@ -497,6 +497,38 @@ Deleting a record, or restoring it from the Recycle Bin, updates its `SystemMods
 - The filter must be a condition only, as it would appear after `WHERE`. Clauses such as `LIMIT`, `ORDER BY` or `GROUP BY` aren't allowed. Subqueries are, for example `Id IN (SELECT ContactId FROM CampaignMember WHERE Status = 'Sent')`.
 - Raw filters are only supported by the CRM module.
 
+## Watch fields for subscribe actions
+
+### Use component fields, not compound fields
+
+Salesforce compound fields group several fields into one. For example, `BillingAddress` is made up of `BillingStreet`, `BillingCity`, `BillingState`, `BillingPostalCode` and `BillingCountry`.
+
+Subscribe actions detect changes on the individual component fields, not on the compound field. List the component fields you care about in `requiredWatchFields`:
+
+```yaml
+updateEvent:
+  enabled: always
+  requiredWatchFields:
+    # Not billingaddress: watch its components instead.
+    - billingstreet
+    - billingcity
+    - billingpostalcode
+```
+
+| Compound field | Object | Watch these component fields instead |
+| --- | --- | --- |
+| `BillingAddress`, `ShippingAddress` | Account | `BillingStreet`, `BillingCity`, `BillingState`, `BillingPostalCode`, `BillingCountry`, `BillingLatitude`, `BillingLongitude`, and the same fields starting with `Shipping` |
+| `MailingAddress`, `OtherAddress` | Contact | `MailingStreet`, `MailingCity`, `MailingState`, `MailingPostalCode`, `MailingCountry`, `MailingLatitude`, `MailingLongitude`, and the same fields starting with `Other` |
+| `Address` | Lead | `Street`, `City`, `State`, `PostalCode`, `Country`, `Latitude`, `Longitude` |
+| `Name` | Contact, Lead | `FirstName`, `LastName`, `Salutation` |
+| Custom geolocation fields, such as `Location__c` | Any | `Location__Latitude__s`, `Location__Longitude__s` |
+
+<Note>
+  `Name` is only a compound field on person objects such as Contact and Lead. On Account, Opportunity and most other objects, `Name` is a regular field that you can watch directly.
+</Note>
+
+This also applies to mapped fields. If `requiredWatchFields` lists a mapped field, such as `city`, the field your customer maps it to must be a component field such as `BillingCity`, not `BillingAddress`.
+
 ## Customer guide
 
 The [Salesforce customer guide](/customer-guides/salesforce) is a guide that can be shared with your customers to help them be successful in using your integration.
