@@ -273,12 +273,12 @@ Slack needs setup in your provider app before any events arrive, and Ampersand d
 
 ### Create the installation
 
-The installation names the fields, the mappings, and the events. Both routes write the same config — pick whichever fits how your app installs integrations.
+The installation lists the fields, the mappings, and the events. Both routes write the same config — pick whichever fits how your app installs integrations.
 
 <Tabs>
 <Tab title="React component">
 
-Pass the `subscribeConfig` prop to [`InstallIntegration`](/embeddable-ui-components#subscribe-config), supported in `@amp-labs/react` `vX.Y.Z+` and, for now, in [wizard mode](/embeddable-ui-components#wizard-mode-beta) only. The component writes the config when it creates the installation. With no read objects in the integration, your end user sees the object listed in the install flow but can't change it:
+Pass the `subscribeConfig` prop to [`InstallIntegration`](/embeddable-ui-components#subscribe-config), supported in `@amp-labs/react` `vX.Y.Z+` and available only in [wizard mode](/embeddable-ui-components#wizard-mode-beta). The component writes the config when it creates the installation. With no read objects in the integration, your end user sees the object listed in the install flow but can't change it:
 
 ```JSX
 <InstallIntegration
@@ -306,8 +306,6 @@ Pass the `subscribeConfig` prop to [`InstallIntegration`](/embeddable-ui-compone
 ```
 
 Use this when your end users connect their own Slack workspace through your UI. The component connects the workspace, creates the installation, and writes the config above to it.
-
-Each value is the object the API takes under `config.content.subscribe.objects`, without `objectName`: the component sets it from the key.
 
 </Tab>
 <Tab title="API">
@@ -348,7 +346,7 @@ curl -X POST \
 
 You need a `connectionId` first, from a connection your end user has already made. Use this when you build your own installation UI, or when you install on your end users' behalf rather than having them click through a flow.
 
-**Set `inheritFieldsAndMappings: false` here.** If you leave it out, the server takes `inheritFieldsAndMapping` from the matching subscribe object in your `amp.yaml`, or inherits if there is none. A value in the config always overrides the manifest. The events belong here too, alongside the fields.
+**Set `inheritFieldsAndMappings: false` here.** If you leave it out, the server takes `inheritFieldsAndMapping` from the matching subscribe object in your `amp.yaml`, or inherits if there is none. A value in the config always overrides the manifest. Either the config or `amp.yaml` must make it `false`: otherwise the subscribe-only object inherits, has no read object to inherit from, and the installation is rejected. The events belong here too, alongside the fields.
 
 To change the fields or events later, [update the installation](/reference/installation/update-an-installation) with `config.content.subscribe.objects.messages` in the `updateMask`. That path replaces the whole object, so send every key you want to keep.
 
@@ -357,9 +355,9 @@ To change the fields or events later, [update the installation](/reference/insta
 
 Whichever route you take, three more rules apply to the config:
 
-- **Name at least one field**, in `selectedFields`, `selectedFieldMappings`, or the update event's `requiredWatchFields`. Any one of them is enough — they all name the fields the object cares about. An object that inherits nothing and names nothing has no fields to deliver, and the install is rejected.
+- **List at least one field**, in `selectedFields`, `selectedFieldMappings`, or the update event's `requiredWatchFields`. Any one of them is enough — they all list the fields the object cares about. An object that inherits nothing and lists nothing has no fields to deliver, and the install is rejected.
 - **There is no field metadata for these objects**, so the names are taken as written rather than checked against the provider. A misspelled field name is not rejected; the event arrives without that field.
-- **`updateEvent` watches only its `requiredWatchFields`.** Fields named only in `selectedFields` or `selectedFieldMappings` are not watched. An update event must carry `requiredWatchFields` or `watchFieldsAuto: all`, which watches every field; a subscribe-only object that uses `all` still has to name its fields in `selectedFields` or `selectedFieldMappings`.
+- **`updateEvent` watches only its `requiredWatchFields`.** Fields listed only in `selectedFields` or `selectedFieldMappings` are not watched. An update event must carry `requiredWatchFields` or `watchFieldsAuto: all`, which watches every field; a subscribe-only object that uses `all` still has to list its fields in `selectedFields` or `selectedFieldMappings`.
 
 Events are delivered under their mapped names, so either config above delivers `text`, `user`, `timeStamp`, and `channelName`.
 

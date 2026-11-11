@@ -167,10 +167,10 @@ If you close your install dialog in `onInstallSuccess`, it will close right afte
 #### Subscribe config
 
 <Note>
-`subscribeConfig` is supported in `@amp-labs/react` `vX.Y.Z+`, and **only in [wizard mode](#wizard-mode-beta)** for now. In the standard flow the prop is not applied, and an integration with subscribe objects but no read or write objects is not installed: the consumer sees an error asking them to contact their administrator.
+`subscribeConfig` is supported in `@amp-labs/react` `vX.Y.Z+`. **Subscribe-only objects are available only in [wizard mode](#wizard-mode-beta).** In the standard flow the prop is not applied, and an integration with subscribe objects but no read or write objects is not installed: the consumer sees an error asking them to contact their administrator.
 </Note>
 
-An integration can have [subscribe objects whose fields are listed in the installation config](/subscribe-actions#subscribe-without-a-read-action) rather than inheriting them from a read action. Those objects have no field metadata and no configuration screen, so the component can't ask the consumer about them. You pass their config with the `subscribeConfig` prop, in the shape the [installation API](/subscribe-actions#create-the-installation) takes under `config.content.subscribe.objects`:
+[Subscribe-only objects](/subscribe-actions#subscribe-without-a-read-action) should have their own fields and mappings selected, since they have no read object to inherit from. Pass them with the `subscribeConfig` prop:
 
 ```JSX
 <InstallIntegration
@@ -193,20 +193,20 @@ An integration can have [subscribe objects whose fields are listed in the instal
 />
 ```
 
-Keys are object names, and the component sets each object's `objectName` from its key. Each object must be a subscribe object in your `amp.yaml` with a `destination`, unless you set `destination` in the prop: when it's left out, the installation takes the destination from `amp.yaml`.
+Keys are object names. Each value is a subscribe config object, as documented for [Create a new installation](/reference/installation/create-a-new-installation) under `config.content.subscribe.objects`. The prop's TypeScript type, `SubscribeConfigByObject`, is exported from `@amp-labs/react`.
 
 | Key | Meaning |
 |---|---|
-| `inheritFieldsAndMappings` | Whether the object takes its fields and mappings from the matching read object. `false` for a subscribe-only object. When left out, the server uses the object's `inheritFieldsAndMapping` from `amp.yaml`, which is `false` unless set. |
+| `inheritFieldsAndMappings` | Whether the object takes its fields and mappings from the matching read object. Should be `false` for a subscribe-only object. When left out, the server uses the object's `inheritFieldsAndMapping` from `amp.yaml`. |
 | `selectedFields` / `selectedFieldMappings` | Fields to deliver, by provider name, and mapped names for provider fields. Only for an object with `inheritFieldsAndMappings: false`. |
 | `createEvent` / `updateEvent` / `deleteEvent` | `{ enabled: "always" }` subscribes to the event and `{ enabled: "never" }` doesn't. **An event you leave out isn't written to the installation, so your `amp.yaml` decides it.** |
 | `updateEvent.requiredWatchFields` | Provider field names whose changes trigger an update event. On an object with `inheritFieldsAndMappings: false` they are also delivered with every event, create and delete included, even when the update event is `never`. |
 | `updateEvent.watchFieldsAuto` | `"all"` watches every field. An update event needs `requiredWatchFields` or `watchFieldsAuto`. |
-| `destination`, `otherEvents`, `providerOptions` | As in the installation API. |
+| `destination`, `otherEvents`, `providerOptions` | As in the installation API. When `destination` is left out, the installation uses the object's `destination` in `amp.yaml`. |
 
-**A subscribe-only object must name at least one field**, in `selectedFields`, `selectedFieldMappings` or `updateEvent.requiredWatchFields`; the server rejects one that names none. The names are not checked against the provider: a misspelled field name is not rejected, and the event arrives without that field.
+**A subscribe-only object must list at least one field**, in `selectedFields`, `selectedFieldMappings` or `updateEvent.requiredWatchFields`; the server rejects one that lists none. The names are not checked against the provider: a misspelled field name is not rejected, and the event arrives without that field.
 
-This works in [wizard mode](#wizard-mode-beta) only for now. The config is written as the installation is created. When the integration has no read objects, the consumer sees the subscribe objects listed on the select-objects and review steps but can't change them; otherwise they aren't shown. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
+Subscribe-only objects are available only in [wizard mode](#wizard-mode-beta). The config is written as the installation is created. When the integration has no read objects, the consumer sees the subscribe objects listed on the select-objects and review steps but can't change them; otherwise they aren't shown. The prop is read on create only: changing it later doesn't reconfigure an existing installation.
 
 <Warning>`subscribeConfig` is in beta preview and its shape may change.</Warning>
 

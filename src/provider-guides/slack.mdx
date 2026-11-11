@@ -397,16 +397,16 @@ integrations:
           destination: slackWebhook
 ```
 
-Which events to subscribe to, and which fields to deliver, are set per installation rather than in the manifest — either through the [`subscribeConfig` prop](/embeddable-ui-components#subscribe-config) on the React component, in [wizard mode](/embeddable-ui-components#wizard-mode-beta) for now, or through the [installation API](/subscribe-actions#subscribe-without-a-read-action). Both take the same config. Set `inheritFieldsAndMappings: false`, or leave it out: the manifest above doesn't set `inheritFieldsAndMapping`, so it's `false`.
+Which events to subscribe to, and which fields to deliver, are set per installation rather than in the manifest — either through the [`subscribeConfig` prop](/embeddable-ui-components#subscribe-config) on the React component, available only in [wizard mode](/embeddable-ui-components#wizard-mode-beta), or through the [installation API](/subscribe-actions#subscribe-without-a-read-action). Both take the same config. `inheritFieldsAndMappings` should be `false` for subscribe-only objects.
 
 ### Ampersand does not register the subscription
 
-For most providers, Ampersand registers the event subscription with the provider when a customer installs. Slack does not work that way: you turn on Event Subscriptions in your own Slack app, once, and every installation delivers through it.
+Slack Subscribe is only available via manual installation.
 
 1. **Add the bot scopes** for the events you want, under **OAuth & Permissions**. Message events in public channels need `channels:history`; private channels, group DMs and DMs need `groups:history`, `mpim:history` and `im:history`.
 2. **Turn on Event Subscriptions** in your Slack app and set the Request URL to your Ampersand subscribe webhook endpoint. Slack sends a challenge request to verify it before saving.
 3. **Subscribe to the bot events** you want under **Subscribe to bot events** — `message.channels` for messages in public channels, and the matching `message.*` event for other conversation types.
-4. **Reinstall the app** to your workspace. Slack does not apply new scopes or new event subscriptions to an app that is already installed, so an app you have not reinstalled sends nothing. This is the most common reason no events arrive.
+4. **Reinstall the app** to your workspace if the app is already installed to your workspace. Slack does not apply new scopes or new event subscriptions to an app that is already installed, so an app you have not reinstalled sends nothing. This is the most common reason no events arrive.
 5. **Invite the bot to the channels** you want events from. The bot only receives events from conversations it is in.
 
 <Note>
