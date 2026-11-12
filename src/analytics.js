@@ -62,7 +62,7 @@
       properties: {
         label: "Sign in",
         section: "navbar",
-        destination_url: "https://dashboard.withampersand.com/sign-in?trk=docs",
+        destination_url: "https://dashboard.ampersand.ai/sign-in?trk=docs",
       },
     },
     {
@@ -73,7 +73,7 @@
         section: "navbar",
         element_type: "button",
         conversion_type: "signup",
-        destination_url: "https://dashboard.withampersand.com/sign-up?trk=docs",
+        destination_url: "https://dashboard.ampersand.ai/sign-up?trk=docs",
       },
     },
   ];
@@ -86,7 +86,9 @@
       if (!target || !target.closest) return;
 
       // Scoped by position, not by destination: page bodies link out too.
-      var link = target.closest('a[href*="dashboard.withampersand.com"]');
+      var link = target.closest(
+        'a[href*="dashboard.ampersand.ai"], a[href*="dashboard.withampersand.com"]'
+      );
       if (!link || !link.closest("#navbar")) return;
 
       var href = link.getAttribute("href") || "";

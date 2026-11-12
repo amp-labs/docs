@@ -18,13 +18,15 @@ integrations:
 
 All proxy actions expose an API with the base of `https://proxy.ampersand.ai`. When making a passthrough call, simply replace the base URL with the Ampersand proxy URL. For example, instead of making a request to `https://subdomain.my.salesforce.com/services/data/v56.0/sobjects/Account`, make the same request to `https://proxy.ampersand.ai/services/data/v56.0/sobjects/Account`.
 
+`proxy.withampersand.com` continues to work, but `proxy.ampersand.ai` is preferred.
+
 Please refer to the [provider guides](/provider-guides/overview) for the base URL of each connector.
 
 Keep the request body and HTTP verb the same, and add these additional headers so Ampersand knows how to deliver the API request:
 
 * `x-amp-proxy-version`: this should always be 1
-* `x-amp-project-id`: your Ampersand project ID, not the project name. You can find it on your project's [General Settings page](https://dashboard.withampersand.com/projects/_/settings).
-* `x-api-key`: your Ampersand API key, if you don't have one yet, create one in the Ampersand Dashboard's [API Keys page](https://dashboard.withampersand.com/projects/_/api-keys).
+* `x-amp-project-id`: your Ampersand project ID, not the project name. You can find it on your project's [General Settings page](https://dashboard.ampersand.ai/projects/_/settings).
+* `x-api-key`: your Ampersand API key, if you don't have one yet, create one in the Ampersand Dashboard's [API Keys page](https://dashboard.ampersand.ai/projects/_/api-keys).
 
 In order for Ampersand to know which SaaS instance to make the API call against, you'll need to provide either:
 
