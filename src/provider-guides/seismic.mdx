@@ -168,7 +168,22 @@ The Seismic connector supports reading from the following objects:
 
 ### Example Integration
 
-For an example manifest file of a Seismic integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/seismic/amp.yaml).
+To define an integration for Seismic, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: seismicIntegration
+    displayName: My Seismic Integration
+    provider: seismic
+    read:
+      objects:
+        - objectName: libraryContents
+          destination: myWebhook
+    proxy:
+      enabled: true
+```
 
 
 ## Before You Get Started
