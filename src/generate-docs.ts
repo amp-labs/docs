@@ -462,6 +462,7 @@ const baseConfig = {
 {
       group: "Security",
       pages: [
+        "security/overview",
         "security/outgoing-ip-addresses"
       ]
     },
