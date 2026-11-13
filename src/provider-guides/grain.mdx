@@ -1,5 +1,6 @@
 ---
 title: "Grain"
+description: "Connect Grain to Ampersand with OAuth to read recordings, uploads, users, teams, meeting types, and hooks, write to recordings and uploads, and make proxy calls to the Grain API."
 ---
 
 ## What's supported
@@ -8,6 +9,8 @@ title: "Grain"
 
 This connector supports:
 
+- [Read Actions](/read-actions), including full historic backfill. **Please note that incremental read is only supported for `uploads`.**
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.grain.com/_/public-api`.
 
 ### Notes
@@ -15,24 +18,81 @@ This connector supports:
 - Grain requires a `Public-Api-Version` header on every API request, for example `Public-Api-Version: 2026-10-01`. Proxy calls must include it themselves. For available versions, see [Grain's versions documentation](https://developers.grain.com/versions.html).
 - Grain connections use Grain's default `personal` scope, which gives the same access as the Grain user who authorizes the connection.
 
+### Supported objects
+
+The Grain connector supports the following objects:
+
+export const rows = [
+  { label: "hooks", read: true, write: false, href: "https://developers.grain.com/endpoints.html#hook" },
+  { label: "meeting_types", read: true, write: false, href: "https://developers.grain.com/endpoints.html#meeting-type" },
+  { label: "recordings", read: true, write: true, href: "https://developers.grain.com/endpoints.html#recording" },
+  { label: "teams", read: true, write: false, href: "https://developers.grain.com/endpoints.html#team" },
+  { label: "uploads", read: true, write: true, href: "https://developers.grain.com/endpoints.html#upload" },
+  { label: "users", read: true, write: false, href: "https://developers.grain.com/endpoints.html#user" },
+]
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  if (typeof value === "string" && value.startsWith("<")) {
+    return <span dangerouslySetInnerHTML={{__html: value}}/>;
+  }
+
+  return value;
+}
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '50%'}}>Object</th>
+      <th style={{width: '25%'}}>Read</th>
+      <th style={{width: '25%'}}>Write</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td style={{textAlign: "left"}}>
+            <a href={row.href}>{row.label}</a>
+          </td>
+          <td>{renderCellValue(row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<Note>
+**Writes are limited by Grain's API:**
+
+- **Update-only:** `recordings` — recordings come from meetings and promoted uploads, so they cannot be created. Only the `title` can be updated. See [Update recording](https://developers.grain.com/endpoints.html#update-recording).
+- **Create and update:** `uploads` — an upload can be updated only while its status is `awaiting`, or `staged` with `auto_promote` set to `false`. See [Create upload](https://developers.grain.com/endpoints.html#create-upload) and [Update upload](https://developers.grain.com/endpoints.html#update-upload).
+- Neither `recordings` nor `uploads` can be deleted.
+</Note>
+
 ### Example integration
 
-To define an integration for Grain, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: grainIntegration
-    displayName: My Grain Integration
-    provider: grain
-    proxy:
-      enabled: true
-```
+For an example manifest file of a Grain integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/grain/amp.yaml).
 
 ## Before you get started
 
-To integrate Grain with Ampersand, you will need a [Grain account](https://grain.com/app/signup).
+To integrate Grain with Ampersand, you will need a [Grain account](https://grain.com/app/signup). Grain offers a free plan and a 14-day free trial; see [Grain's pricing](https://grain.com/pricing).
 
 Once your account is created, you'll need to request an OAuth client from Grain and obtain the following credentials:
 
@@ -44,7 +104,7 @@ You will then use these credentials to connect your application to Ampersand.
 ### Requesting a Grain OAuth client
 
 1. Contact Grain to request a Client ID and Client Secret for a server-side application. Grain issues these credentials manually; see [Grain's authentication documentation](https://developers.grain.com/authentication.html).
-2. Ask Grain to register `https://api.withampersand.com/callbacks/v1/oauth` as the redirect URI prefix for your client.
+2. Ask Grain to register `https://api.withampersand.com/callbacks/v1/oauth` as the redirect URI for your client.
 3. Note the **Client ID** and **Client Secret** that Grain provides. You will need these to connect your app to Ampersand.
 
 ### Add your Grain app info to Ampersand
@@ -65,9 +125,13 @@ You will then use these credentials to connect your application to Ampersand.
 
 ## Using the connector
 
-To start integrating with Grain:
+To integrate with Grain:
 
 - Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for OAuth authorization.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically handle the authentication with Grain.
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for OAuth authorization.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
