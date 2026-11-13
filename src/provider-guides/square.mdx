@@ -80,7 +80,25 @@ The Square connector supports reading from and writing to the following objects:
 
 ### Example integration
 
-For an example manifest file of a Square integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/square/amp.yaml).
+To define an integration for Square, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: squareIntegration
+    displayName: My Square Integration
+    provider: square
+    read:
+      objects:
+        - objectName: customers
+          destination: myWebhook
+    write:
+      objects:
+        - objectName: customers
+    proxy:
+      enabled: true
+```
 
 <Note>
   For testing against Square's [sandbox environment](https://developer.squareup.com/docs/devtools/sandbox/overview), set `provider: squareSandbox` in your manifest file. This is identical to `square` except that it uses the base URL `https://connect.squareupsandbox.com`.

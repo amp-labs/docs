@@ -39,7 +39,25 @@ The Drift connector supports writing to the following objects:
 
 ### Example integration
 
-For an example manifest file of a Drift integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/drift/amp.yaml).
+To define an integration for Drift, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: driftIntegration
+    displayName: My Drift Integration
+    provider: drift
+    read:
+      objects:
+        - objectName: users
+          destination: myWebhook
+    write:
+      objects:
+        - objectName: contacts
+    proxy:
+      enabled: true
+```
 
 ## Before You Get Started
 
