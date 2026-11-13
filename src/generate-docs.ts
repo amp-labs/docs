@@ -471,6 +471,8 @@ const baseConfig = {
         "dev-and-prod-environments",
         "terminology",
         "unified-api",
+        "migrate-from-nango",
+        "migrate-from-merge",
       ],
     },
 {

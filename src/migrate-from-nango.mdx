@@ -1,0 +1,119 @@
+---
+title: "Migrate from Nango"
+description: "Move your customers' existing connections from Nango to Ampersand without asking them to reconnect."
+---
+
+You can move your customers' existing connections from Nango to Ampersand without asking them to reconnect. You export each customer's tokens from Nango and import them into Ampersand. The examples on this page use HubSpot. Other OAuth providers follow similar steps, but some need extra fields when you import a connection, such as `providerWorkspaceRef`.
+
+## Set up your Ampersand project
+
+<Steps>
+  <Step title="Create a project">
+    In the [Ampersand Dashboard](https://dashboard.withampersand.com), create a project for production, for example `myapp-prod`. Only org owners can create projects.
+  </Step>
+  <Step title="Add Ampersand's redirect URL to your OAuth app">
+    In the OAuth app you use with Nango, add `https://api.withampersand.com/callbacks/v1/oauth` as an additional redirect URL. Keep Nango's redirect URL until you finish migrating.
+
+    For a HubSpot project app, add it to the `redirectUrls` array in `src/app/app-hsmeta.json`.
+  </Step>
+  <Step title="Add your OAuth app to Ampersand">
+    In the [Provider Apps](https://dashboard.withampersand.com/projects/_/provider-apps) page, add the same OAuth app's client ID, client secret, and scopes. Ampersand needs the same app so that it can refresh your customers' existing tokens.
+  </Step>
+  <Step title="Create an API key">
+    In the [API Keys](https://dashboard.withampersand.com/projects/_/api-keys) page, create an API key with the **Server or CLI** scope.
+  </Step>
+  <Step title="Deploy an integration">
+    Define an integration in `amp.yaml` and [deploy it](/cli/overview#deploy-integrations). For example, a proxy-only HubSpot integration:
+
+    ```yaml
+    specVersion: 1.0.0
+    integrations:
+      - name: hubspot-integration
+        provider: hubspot
+        module: crm
+        proxy:
+          enabled: true
+    ```
+  </Step>
+</Steps>
+
+## Migrate each customer
+
+Repeat these steps for each customer connection in Nango.
+
+<Steps>
+  <Step title="Export the tokens from Nango">
+    Call Nango's [Get connection and credentials](https://nango.dev/docs/reference/backend/http-api/connections/get) endpoint with `refresh_token=true`, so the response includes the refresh token:
+
+    ```bash
+    curl "https://api.nango.dev/connections/{connectionId}?provider_config_key={nangoIntegrationId}&refresh_token=true" \
+      --header "Authorization: Bearer <nango-api-key>"
+    ```
+
+    Here, `connectionId` is the customer's Nango connection ID, and `nangoIntegrationId` is the unique key of your Nango integration. You need `credentials.access_token`, `credentials.refresh_token`, and `credentials.expires_at` from the response.
+  </Step>
+  <Step title="Import the tokens into Ampersand">
+    Call [Generate connection](/reference/connection/generate-a-new-connection) with the tokens. For `groupRef`, use the ID your app uses for this customer, such as their org or company ID.
+
+    ```bash
+    curl --request POST \
+      --url https://api.ampersand.ai/v1/projects/{projectIdOrName}/connections:generate \
+      --header 'Content-Type: application/json' \
+      --header 'X-Api-Key: <api-key>' \
+      --data '{
+        "provider": "hubspot",
+        "groupRef": "customer-123",
+        "consumerRef": "user-456",
+        "oauth2AuthorizationCode": {
+          "accessToken": {
+            "token": "<access_token>",
+            "expiresAt": "<expires_at>"
+          },
+          "refreshToken": {
+            "token": "<refresh_token>"
+          }
+        }
+      }'
+    ```
+
+    Import the tokens right after you export them. When you import a HubSpot connection, Ampersand uses the access token to look up the HubSpot account and user, and the import fails if the token has expired.
+
+    Save the connection `id` from the response.
+  </Step>
+  <Step title="Create an installation">
+    Call [Create installation](/reference/installation/create-a-new-installation) with the connection ID. Use the ID of the integration you deployed, which you can find in the Ampersand Dashboard.
+
+    ```bash
+    curl --request POST \
+      --url https://api.ampersand.ai/v1/projects/{projectIdOrName}/integrations/{integrationId}/installations \
+      --header 'Content-Type: application/json' \
+      --header 'X-Api-Key: <api-key>' \
+      --data '{
+        "groupRef": "customer-123",
+        "connectionId": "<connection-id>",
+        "config": {
+          "content": {
+            "provider": "hubspot",
+            "proxy": {
+              "enabled": true
+            }
+          }
+        }
+      }'
+    ```
+  </Step>
+  <Step title="Check that the connection works">
+    Make a [proxy call](/proxy-actions) for the customer to an endpoint your app's scopes allow. For example, with the `crm.objects.contacts.read` scope:
+
+    ```bash
+    curl 'https://proxy.ampersand.ai/crm/v3/objects/contacts?limit=1' \
+      --header 'x-amp-proxy-version: 1' \
+      --header 'x-amp-project-id: <project-id>' \
+      --header 'x-api-key: <api-key>' \
+      --header 'x-amp-integration-name: hubspot-integration' \
+      --header 'x-amp-group-ref: customer-123'
+    ```
+
+    A `200` response means the migrated connection works.
+  </Step>
+</Steps>

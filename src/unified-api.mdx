@@ -175,70 +175,7 @@ Standardize tickets across Jira, Linear, Zendesk, and ServiceNow:
 
 ## Migration from Merge
 
-<Steps>
-  <Step title="Understand the persistence model">
-    **Merge:** Stores your customer data; you poll their API  
-    **Ampersand:** Streams data to your webhooks; you store it
-    
-    Set up webhook endpoints and decide on your storage strategy (database, warehouse, etc.)
-  </Step>
-
-  <Step title="Use compatible templates">
-    ```bash
-    git clone https://github.com/amp-labs/samples.git
-    cd samples/unifiedCRM
-    amp deploy --project=my-project
-    ```
-  </Step>
-  
-  <Step title="Update webhook handlers">
-    ```javascript
-    // Merge: Poll after webhook notification
-    app.post('/merge-webhook', async (req, res) => {
-      const contacts = await merge.crm.contacts.list({
-        modified_after: lastSync,
-        include_remote_data: true
-      });
-      await db.contacts.bulkUpsert(contacts);
-      res.sendStatus(200);
-    });
-    
-    // Ampersand: Data arrives in webhook
-    app.post('/webhook/contacts', async (req, res) => {
-      const { mappedFields, fields, raw } = req.body.result[0];
-      await db.contacts.upsert({
-        ...mappedFields,
-        ...fields,
-        providerData: raw
-      });
-      res.sendStatus(200);
-    });
-    ```
-  </Step>
-
-  <Step title="Add real-time with subscribe actions">
-    ```yaml
-    subscribe:
-      objects:
-        - objectName: opportunity
-          inheritFieldsAndMapping: true
-          updateEvent:
-            enabled: always
-            requiredWatchFields:
-              - amount
-              - stage
-    ```
-
-    Handle events in your webhook:
-    ```javascript
-    const { subscribeEventType, mappedFields } = req.body.result[0];
-
-    if (subscribeEventType === 'update' && mappedFields.stage === 'closed-won') {
-      await triggerSalesWorkflow(mappedFields);
-    }
-    ```
-  </Step>
-</Steps>
+See [Migrate from Merge](/migrate-from-merge).
 
 ## Related resources
 

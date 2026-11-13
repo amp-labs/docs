@@ -1,0 +1,109 @@
+---
+title: "Migrate from Merge"
+description: "Move your integrations from Merge to Ampersand, and switch from polling Merge's API to receiving data in your webhooks."
+---
+
+Merge and Ampersand handle your customers' data differently:
+
+- **Merge** syncs your customers' data into its own common models and stores it. Your app typically polls Merge's API for changes.
+- **Ampersand** reads data from each provider and delivers it to your [destination](/destinations), such as a webhook. You store the data in your own database or warehouse.
+
+## Set up your Ampersand project
+
+<Steps>
+  <Step title="Add your provider apps">
+    Add an OAuth app for each provider you integrate with. See the [provider guides](/provider-guides/overview) for each provider's steps.
+  </Step>
+  <Step title="Set up a destination">
+    Create a webhook endpoint in your app and add it as a [destination](/destinations). Decide where you'll store the data, such as your database or warehouse.
+  </Step>
+  <Step title="Define your schema">
+    Instead of Merge's common models, you define your own schema with [object and field mappings](/object-and-field-mapping). For example, map Salesforce's `account` and HubSpot's `companies` to one `company` object in your app.
+
+    To start from a ready-made CRM schema, deploy the [Unified CRM sample](https://github.com/amp-labs/samples/tree/main/unifiedCRM). It reads and writes accounts, contacts and opportunities in Salesforce, HubSpot, Zoho and Dynamics 365, and maps them to `company`, `person` and `deal`. It sends data to a destination named `crmWebhook`, so create a destination with that name.
+
+    ```bash
+    git clone https://github.com/amp-labs/samples.git
+    cd samples/unifiedCRM
+    amp deploy . --project=my-project
+    ```
+
+    A few things differ from Merge's common models:
+
+    - **Addresses and phone numbers are single fields.** Merge returns lists (`addresses`, `phone_numbers`). Where the sample includes them, it has one `address` and one `phone_number`, and each customer picks which field to use, such as the billing or shipping address.
+    - **Merge's own fields aren't included.** Fields that Merge adds, such as `created_at` and `modified_at`, don't come from the provider. Map the provider's own fields instead.
+  </Step>
+</Steps>
+
+## Move your customers' connections
+
+Merge's documentation doesn't describe a way to export your customers' OAuth tokens, so ask Merge whether they can give them to you. Imported tokens only keep working if they were issued to the same OAuth app that you add to Ampersand, because Ampersand refreshes them with that app.
+
+- **If you get the tokens**, import them with the [Generate connection](/reference/connection/generate-a-new-connection) endpoint, so your customers don't have to reconnect. [Migrate from Nango](/migrate-from-nango#migrate-each-customer) shows the steps.
+- **Otherwise**, ask your customers to connect again through Ampersand's [UI components](/embeddable-ui-components).
+
+## Update your app
+
+<Steps>
+  <Step title="Replace polling with webhook handlers">
+    With Merge, you poll for changes after a webhook notification. With Ampersand, the records arrive in your webhook. Large results come as a download URL instead, as described in [Webhooks](/destinations/webhooks).
+
+    ```javascript
+    // Merge (simplified): Poll after webhook notification
+    app.post('/merge-webhook', async (req, res) => {
+      const contacts = await merge.crm.contacts.list({
+        modified_after: lastSync,
+        include_remote_data: true
+      });
+      await db.contacts.bulkUpsert(contacts);
+      res.sendStatus(200);
+    });
+
+    // Ampersand: Data arrives in webhook
+    app.post('/webhook/contacts', async (req, res) => {
+      const { mappedFields, fields, raw } = req.body.result[0];
+      await db.contacts.upsert({
+        ...mappedFields,
+        ...fields,
+        providerData: raw
+      });
+      res.sendStatus(200);
+    });
+    ```
+
+    Each record has three parts:
+
+    - `mappedFields`: fields you mapped, under your names, such as `company_name`.
+    - `fields`: fields you selected but didn't map. Keys are lowercase.
+    - `raw`: the provider's original response, unchanged, like Merge's `remote_data`.
+
+    A field is in either `mappedFields` or `fields`, never both. Values in `fields` can differ from `raw`, for example after value mappings.
+  </Step>
+
+  <Step title="Add real-time updates with subscribe actions">
+    If your provider supports them, add a [subscribe action](/subscribe-actions) to get changes as they happen. It uses the fields and mappings of the matching read object:
+
+    ```yaml
+    subscribe:
+      objects:
+        - objectName: opportunity
+          destination: crmWebhook
+          inheritFieldsAndMapping: true
+          updateEvent:
+            enabled: always
+            requiredWatchFields:
+              - amount
+              - stage
+    ```
+
+    Handle events in your webhook:
+
+    ```javascript
+    const { subscribeEventType, mappedFields } = req.body.result[0];
+
+    if (subscribeEventType === 'update' && mappedFields.stage === 'Closed Won' /* your customer's stage name */) {
+      await triggerSalesWorkflow(mappedFields);
+    }
+    ```
+  </Step>
+</Steps>
