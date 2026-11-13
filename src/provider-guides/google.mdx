@@ -181,7 +181,7 @@ Ampersand creates and manages the webhook subscriptions on your behalf when the 
 
 To receive events, you must explicitly define a `subscribe` section for the `events` object in your integration's [`amp.yaml`](https://github.com/amp-labs/samples/blob/main/google-calendar/amp.yaml) manifest, alongside a corresponding read action. See [Subscribe Actions](/subscribe-actions) for the manifest format.
 
-### Caveats
+### Calendar subscribe action caveats
 
 - **`events` is the only supported object.** Changes to `acl`, `calendarList`, and `settings` are not delivered as Subscribe events.
 - **Primary calendar only.** Only changes on the connected user's primary calendar are delivered.
@@ -278,19 +278,20 @@ Click **Save changes**.
 
 Once saved, every new installation with a Gmail Subscribe action in its `amp.yaml` will automatically register a Gmail `watch` for that mailbox, pointing at your topic. Events then flow:
 
-1. A new message arrives in the **Gmail mailbox**.
+1. A message is added or changed anywhere in the **Gmail mailbox** (received, sent, archived, or moved to spam).
 2. Gmail publishes a notification to **your Pub/Sub topic**.
 3. **Your push subscription** forwards the notification to Ampersand.
 4. **Ampersand** hydrates the message and processes the event.
 5. The event is delivered to **your destination**.
 
 
-### Caveats
+## Gmail subscribe action caveats
 
 - **7-day history horizon.** Gmail only retains mailbox history for about 7 days. If a mailbox has not received or sent emails for 7 days, Ampersand will miss events from before the gap and resume from the next incoming notification.
 - **Delete events carry only `messageId`.** When a message is deleted, Gmail's history API does not return the message body — only its ID. Your destination will receive a `delete` subscribe event without `fields` or `mappedFields` populated.
-- **`messages` is the only supported object.** Changes to Gmail labels, drafts, filters, threads, and other objects are not delivered as Subscribe events.
-- **Inbox only by default.** Ampersand currently watches the `INBOX` label only, so you'll only receive events for messages entering, leaving, or being relabeled within the inbox. If you need notifications for other labels (e.g. `SENT`, `TRASH`, or custom labels), contact [support@withampersand.com](mailto:support@withampersand.com) and we can configure additional labels on our end.
+- **`messages` is the only supported object.** Changes to Gmail labels, filters, threads, and other objects are not delivered as Subscribe events.
+- **Whole mailbox.** Ampersand watches every message in the mailbox, not just the inbox. You'll receive events for received mail, sent mail (`SENT`), mail archived by a filter, and mail delivered to spam (`SPAM`). Label changes on any message (for example, read/unread or archiving) are delivered as `update` events.
+- **Drafts appear as `messages` events.** Gmail stores drafts as messages with the `DRAFT` label, so composing and sending an email can produce a `create` for the draft, a `delete` for the draft, and a `create` for the sent message. Because the draft usually no longer exists when Ampersand fetches it, the draft's `create` typically contains only the message `id` (no `labelIds` or `payload`).
 - **No historical backfill via Subscribe.** Subscribe events start from the moment the `watch` is created. To sync existing mailbox contents, combine your Subscribe action with a [Read action](/read-actions) that has `backfill` configured.
 - **One installation per mailbox per project.** Connecting the same Gmail account to multiple installations in the same Ampersand project is not supported for Subscribe. When a second OAuth connection is created for a mailbox that already has one, Google can invalidate the earlier connection's refresh token, which breaks token refresh on the older installation and stops its events from flowing.
 

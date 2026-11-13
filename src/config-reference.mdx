@@ -1,0 +1,351 @@
+---
+title: "Config schema reference"
+description: "Field-by-field reference for the installation config: read, write, subscribe, and proxy settings for each customer, how they map to amp.yaml, and how to create and update them."
+sidebarTitle: "Config schema"
+---
+
+## Introduction
+
+A **config** stores one customer's choices for an integration: which objects and fields to read, how to write, and which events to subscribe to. Every [installation](/terminology#installation) has one config.
+
+Your [manifest](/manifest-reference) (`amp.yaml`) defines what an integration *can* do for every customer. The config defines what it *does* for one customer. Fields you leave out of the config fall back to the revision deployed from `amp.yaml`. Learn more in [Concepts](/concepts#config).
+
+| | Manifest (`amp.yaml`) | Config |
+|---|---|---|
+| **Defines** | What the integration can sync | What syncs for one customer |
+| **Scope** | One per integration | One per installation |
+| **Written by** | You, in YAML | Your UI or the prebuilt UI components, in JSON |
+| **Example** | Read `contacts` with optional `phone` | This customer picked `phone`, and set backfill to 30 days |
+
+<Tip>
+The OpenAPI spec for the config [is available on GitHub](https://github.com/amp-labs/openapi/blob/main/config/config.yaml).
+</Tip>
+
+## Full example
+
+This config reads and writes HubSpot contacts, subscribes to contact events, and enables proxy calls. The sections below explain each field.
+
+```json
+{
+  "provider": "hubspot",
+  "read": {
+    "objects": {
+      "contacts": {
+        "objectName": "contacts",
+        "destination": "contactsWebhook",
+        "schedule": "*/30 * * * *",
+        "selectedFields": { "email": true, "firstname": true, "phone": true },
+        "selectedFieldMappings": { "priority": "hs_lead_priority" },
+        "backfill": {
+          "defaultPeriod": { "days": 30 }
+        }
+      }
+    }
+  },
+  "write": {
+    "objects": {
+      "contacts": {
+        "objectName": "contacts",
+        "deletionSettings": { "enabled": true },
+        "selectedFieldSettings": {
+          "lifecyclestage": {
+            "default": { "stringValue": "lead" },
+            "writeOnUpdate": "never"
+          }
+        }
+      }
+    }
+  },
+  "subscribe": {
+    "objects": {
+      "contacts": {
+        "objectName": "contacts",
+        "destination": "contactsWebhook",
+        "inheritFieldsAndMappings": true,
+        "createEvent": { "enabled": "always" },
+        "updateEvent": { "enabled": "always", "watchFieldsAuto": "all" }
+      }
+    }
+  },
+  "proxy": {
+    "enabled": true
+  }
+}
+```
+
+## Top-level structure
+
+This is the `config.content` object. All sections other than `provider` are optional. Include the ones your integration uses.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `provider` | String | Yes | The provider for this installation, such as `salesforce` or `hubspot`. Must match the integration's provider. |
+| `read` | Object | No | [Read settings](#read). |
+| `write` | Object | No | [Write settings](#write). |
+| `subscribe` | Object | No | [Subscribe settings](#subscribe). |
+| `proxy` | Object | No | [Proxy settings](#proxy). |
+
+## Read
+
+`read.objects` maps each object name to its read settings. Each object must be defined in the `read` section of `amp.yaml`. Learn more in [Read Actions](/read-actions).
+
+### Read object
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objectName` | String | Yes | The provider object to read, such as `contacts`. Must match an object in `amp.yaml`. |
+| `selectedFields` | Map of String → Boolean | Yes* | Provider fields to read, such as `{ "email": true }`. See [Choosing fields](#choosing-fields). |
+| `selectedFieldMappings` | Map of String → String | Yes* | Maps your field names (`mapToName`) to provider field names, such as `{ "priority": "hs_lead_priority" }`. See [Choosing fields](#choosing-fields). |
+| `selectedFieldsAuto` | String | No | Set to `all` to read every field on the object. |
+| `destination` | String | No | The [destination](/destinations) to deliver records to. Defaults to the value in `amp.yaml`. |
+| `schedule` | String | No | How often to read, in cron syntax, such as `*/30 * * * *`. Defaults to the value in `amp.yaml`. |
+| `backfill` | Object | No | How much historical data to read. See [Backfill](#backfill). |
+| `disabled` | Boolean | No | Set to `true` to pause scheduled reads and block on-demand reads for this object. Default: `false`. Can't be `true` for [always-enabled objects](/read-actions#always-enabled-objects). |
+| `fieldFilters` | Array | No | Only read records that match these conditions. See [Filters](#filters). |
+| `rawFilter` | Object | No | A filter in the provider's own query syntax. See [Filters](#filters). |
+| `selectedValueMappings` | Object | No | Maps your values to provider values for a field. See [Value mappings](#value-mappings). |
+| `dynamicMappingsInput` | Array | No | Set by the `InstallIntegration` component to record which [dynamic field mappings](/object-and-field-mapping#dynamic-field-mappings) were offered. You don't need to set this yourself. |
+
+*Required when creating an installation. An empty map `{}` is allowed.
+
+### Choosing fields
+
+There are three ways to choose which fields are read. You can combine them.
+
+| Field | Use it for | Example |
+|-------|-----------|---------|
+| `selectedFields` | Provider fields you read under their own names | `{ "email": true, "phone": true }` |
+| `selectedFieldMappings` | Fields you rename, or that the customer picks for you. The key is your name (`mapToName`). The value is the provider field. | `{ "priority": "hs_lead_priority" }` |
+| `selectedFieldsAuto` | Reading every field | `"all"` |
+
+Rules:
+- **Required fields are always read.** Fields in `requiredFields` in `amp.yaml` are read even if you leave them out of `selectedFields`. Setting one to `false` causes an error.
+- **Required mappings must be filled in.** If `amp.yaml` has a required field with a `mapToName` and no `fieldName`, the customer must pick a field for it, and it must appear in `selectedFieldMappings`.
+- **Read at least one field.** Each object needs at least one field from `selectedFields`, `selectedFieldMappings`, `selectedFieldsAuto`, or `amp.yaml`.
+- **No duplicate field names.** `selectedFields` can't contain two names that differ only in case, such as `Id` and `id`.
+- **Nested fields** use JSONPath bracket notation, such as `$['address']['city']`. See [Nested field mapping](/object-and-field-mapping#nested-field-mapping).
+
+### Backfill
+
+Controls how much historical data is read when the installation is created. Learn more in [Backfill behavior](/read-actions#backfill-behavior).
+
+```json
+"backfill": {
+  "defaultPeriod": { "days": 30 }
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `defaultPeriod.days` | Integer | One of `days` or `fullHistory` | Number of days of history to read. `0` means no backfill. |
+| `defaultPeriod.fullHistory` | Boolean | One of `days` or `fullHistory` | Set to `true` to read all history. |
+| `fieldFilters` | Array | No | Filters that apply only to the backfill and replace the object's `fieldFilters` during backfill. See [Backfill-specific filters](/read-actions#backfill-specific-filters). |
+| `rawFilter` | Object | No | A raw filter that applies only to the backfill. |
+
+### Filters
+
+Filters control **which records** are read. Filters only exist in the config. You can't set them in `amp.yaml`.
+
+**Field filters** match on field values. Multiple conditions are joined with AND, and each field can have only one condition. Learn more in [Filter by field values](/read-actions#filter-by-field-values).
+
+```json
+"fieldFilters": [
+  { "fieldName": "status", "operator": "eq", "value": "active" }
+]
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `fieldName` | String | Yes | The field to filter on. It doesn't have to be a selected field. |
+| `operator` | String | Yes | The comparison operator. Only `eq` is supported. |
+| `value` | String, Number, or Boolean | No | The value to match. |
+
+**Raw filters** use the provider's own query syntax, such as SOQL for Salesforce. Learn more in [Filter with a raw filter](/read-actions#filter-with-a-raw-filter).
+
+```json
+"rawFilter": {
+  "type": "soql",
+  "filter": "IsDeleted = true OR IsDeleted = false"
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `type` | String | Yes | The filter syntax, such as `soql`. Supported types are listed in each [provider guide](/provider-guides/overview). |
+| `filter` | String | Yes | The filter expression. |
+
+<Warning>
+An object can't have both `fieldFilters` and `rawFilter`. The same rule applies inside `backfill`.
+</Warning>
+
+### Value mappings
+
+`selectedValueMappings` maps your app's values to the provider's values for a field. In each inner map, the key is the value delivered to your destination and the value is the provider's value. Learn more in [Mapping values](/object-and-field-mapping#mapping-values).
+
+```json
+"selectedValueMappings": {
+  "stage": {
+    "open": "scheduled",
+    "closedWon": "won",
+    "closedLost": "lost"
+  }
+}
+```
+
+## Write
+
+`write.objects` maps each object name to its write settings. Learn more in [Write Actions](/write-actions).
+
+### Write object
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objectName` | String | Yes | The provider object to write to, such as `contacts`. |
+| `deletionSettings.enabled` | Boolean | No | Set to `true` to allow deleting records of this object. See [Enabling deletion](/write-actions#enabling-deletion-for-an-object). |
+| `selectedFieldSettings` | Map of String → Object | No | Per-field write settings, keyed by provider field name. See [Field settings](#field-settings). |
+| `selectedValueDefaults` | Object | No | **Deprecated.** Use `selectedFieldSettings` instead. |
+
+### Field settings
+
+```json
+"selectedFieldSettings": {
+  "source": {
+    "default": { "stringValue": "myApp" },
+    "writeOnCreate": "always",
+    "writeOnUpdate": "never"
+  }
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `default` | Object | No | Value to use when the field is missing from the write request. Set exactly one of `stringValue`, `integerValue`, or `booleanValue`. See [Default values](/write-actions#default-values). |
+| `writeOnCreate` | String | No | `always` (default) or `never`. Whether to write the field when creating a record. |
+| `writeOnUpdate` | String | No | `always` (default), `never`, or `ifEmpty`. Whether to write the field when updating a record. `ifEmpty` writes only if the field is empty, and is supported for Salesforce and HubSpot only. See [Prevent overwriting of customer data](/write-actions#prevent-overwriting-of-customer-data). |
+
+## Subscribe
+
+`subscribe` controls real-time events. Learn more in [Subscribe Actions](/subscribe-actions).
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objects` | Map of String → Object | No | Per-object subscribe settings. If you leave it out, subscribe objects come from `amp.yaml`. |
+| `providerOptions` | Object | No | Provider-specific options for the whole installation. See [Provider options](#provider-options). |
+
+### Subscribe object
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objectName` | String | Yes | The provider object to subscribe to. |
+| `destination` | String | Yes | The [destination](/destinations) to deliver events to. |
+| `inheritFieldsAndMappings` | Boolean | Yes | Set to `true` to use the fields and mappings from this object's read settings. |
+| `createEvent.enabled` | String | No | `always` or `never`. |
+| `updateEvent.enabled` | String | No | `always` or `never`. |
+| `updateEvent.watchFieldsAuto` | String | No | Set to `all` to send an event when any field changes. Use this or `requiredWatchFields`, not both. |
+| `updateEvent.requiredWatchFields` | Array of String | No | Only send an event when one of these fields changes. Nested paths aren't supported. |
+| `deleteEvent.enabled` | String | No | `always` or `never`. |
+| `otherEvents` | Array of String | No | Provider-specific events, such as `object.merged`. |
+| `providerOptions.quotaOptimization.enabled` | Boolean | No | **Salesforce only.** Filters out update events for fields you don't watch, which uses less API quota. Requires `requiredWatchFields`. Can't be used with `watchFieldsAuto`. |
+
+<Warning>
+The manifest field is `inheritFieldsAndMapping` (singular). The config field is `inheritFieldsAndMappings` (plural).
+</Warning>
+
+### Provider options
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `useSalesforceFlows.enabled` | Boolean | No | **Salesforce only.** Use record-triggered flows and outbound messages instead of Change Data Capture. Delete events aren't supported with this option. Default: `false`. |
+
+## Proxy
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `enabled` | Boolean | No | Set to `true` to allow [proxy calls](/proxy-actions) for this installation. |
+
+## From manifest to config
+
+How each `amp.yaml` field shows up in the config:
+
+| In `amp.yaml` | In the config | Notes |
+|---------------|---------------|-------|
+| `read.objects[]` (array) | `read.objects.<objectName>` (map) | Same for `write` and `subscribe`. |
+| `requiredFields` with `fieldName` | Nothing needed | Always read. Can't be set to `false` in `selectedFields`. |
+| `optionalFields` with `fieldName` | `selectedFields` | Add the fields the customer picked. |
+| Field with `fieldName` and `mapToName` | Nothing needed | You defined the mapping, so Ampersand applies it. |
+| Field with `mapToName` and no `fieldName` | `selectedFieldMappings` | The customer's choice: `{ "<mapToName>": "<provider field>" }`. Required if the field is in `requiredFields`. |
+| `optionalFieldsAuto: all` | `selectedFields` or `selectedFieldsAuto: all` | List the fields the customer picked, or read them all. |
+| `schedule`, `destination` | `schedule`, `destination` | Optional in the config. Defaults to the `amp.yaml` value. |
+| `backfill` | `backfill` | Per-customer. The config also accepts `fieldFilters` and `rawFilter`. |
+| `enabled: always` | Nothing needed | Added to every installation automatically. Can't be `disabled`. |
+| — | `fieldFilters`, `rawFilter` | Config only. |
+| `write.objects[].inheritMapping` | Nothing needed | Applied from `amp.yaml`. |
+| — | `deletionSettings`, `selectedFieldSettings` | Config only. |
+| `subscribe.objects[].inheritFieldsAndMapping` | `inheritFieldsAndMappings` | Note the plural `s`. |
+
+## Creating and updating a config
+
+### Create
+
+Send the full `content` when you [create an installation](/reference/installation/create-a-new-installation):
+
+```json
+{
+  "groupRef": "customer-group-ref",
+  "connectionId": "connection-id",
+  "config": {
+    "revisionId": "revision-id",
+    "content": {
+      "provider": "hubspot",
+      "read": {
+        "objects": {
+          "contacts": {
+            "objectName": "contacts",
+            "selectedFields": { "email": true },
+            "selectedFieldMappings": {}
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+With Headless UI, build the config with [`useLocalConfig`](/headless#local-config-management) and pass `config.get()` to `createInstallation`.
+
+### Update
+
+To change part of a config, [update the installation](/reference/installation/update-an-installation). List each path you're changing in `updateMask`. Each path **replaces** that whole section, so send the complete object, not just the changed fields.
+
+```json
+{
+  "updateMask": ["config.content.read.objects.contacts"],
+  "installation": {
+    "config": {
+      "content": {
+        "read": {
+          "objects": {
+            "contacts": {
+              "objectName": "contacts",
+              "schedule": "*/30 * * * *",
+              "selectedFields": { "email": true, "phone": true }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+| `updateMask` path | Replaces |
+|-------------------|----------|
+| `config.content.read.objects.<objectName>` | One read object |
+| `config.content.write.objects.<objectName>` | One write object |
+| `config.content.write.objects` | All write objects |
+| `config.content.subscribe.objects.<objectName>` | One subscribe object |
+| `config.content.subscribe.objects` | All subscribe objects |
+| `config.content.subscribe.providerOptions` | Subscribe provider options |
+| `config.content.proxy.enabled` | Proxy setting |
+
+To change a single field without resending the whole object, use [Update an installation object](/reference/installation/update-an-installation-object), which accepts JSON Patch operations.

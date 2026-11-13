@@ -39,7 +39,25 @@ The Drift connector supports writing to the following objects:
 
 ### Example integration
 
-For an example manifest file of a Drift integration, visit our [samples repo on Github](https://github.com/amp-labs/samples/blob/main/drift/amp.yaml).
+To define an integration for Drift, create a manifest file that looks like this:
+
+```YAML
+# amp.yaml
+specVersion: 1.0.0
+integrations:
+  - name: driftIntegration
+    displayName: My Drift Integration
+    provider: drift
+    read:
+      objects:
+        - objectName: users
+          destination: myWebhook
+    write:
+      objects:
+        - objectName: contacts
+    proxy:
+      enabled: true
+```
 
 ## Before You Get Started
 
@@ -86,7 +104,7 @@ Follow the steps below to create a Drift app and add the Ampersand redirect URL.
 
 Your app is now ready to connect to Ampersand.
 
-The **App Credentials** section displays **Client ID** and **Client Secret** keys for your app. You'll use these credentials to connect your app to [Ampersand](https://docs.ampersand.ai/docs/drift#add-your-drift-app-info-to-ampersand).
+The **App Credentials** section displays **Client ID** and **Client Secret** keys for your app. You'll use these credentials to connect your app to [Ampersand](/provider-guides/drift#add-your-drift-app-info-to-ampersand).
 
 ## Add Your Drift App Info to Ampersand
 

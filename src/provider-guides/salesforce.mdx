@@ -215,13 +215,15 @@ In order to connect with your customer's Salesforce instances, you'll need to cr
 
 > ✅ For more details on which OAuth scopes to include, refer to the [OAuth Tokens and Scopes](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_tokens_scopes.htm&language=en_US&type=5) guide.
 
-* Uncheck the box for `Require Proof Key for Code Exchange (PKCE) extension for Supported Authorization Flows`
+* `Require Proof Key for Code Exchange (PKCE) extension for Supported Authorization Flows` is supported, so you can leave it checked.
+* We recommend checking `Enable Refresh Token Rotation` and `Limit Idle Refresh Token Time-to-Live (TTL) to 30 Days`.
+* To restrict refresh tokens by IP address, check `Enforce Refresh Token IP Allowlist` and add Ampersand's [outgoing IP addresses](/security/outgoing-ip-addresses).
 * Check the box for `Enable Authorization Code and Credentials Flow`
 
 ![Create ECA](/images/provider-guides/salesforce_eca_creation.gif)
 
 5. Go to the Policies tab, expand “OAuth Policies”, and click the edit button. In the “App Authorization” box, make the following modifications:
-  - In “Refresh Token Policy”, select “Refresh token is valid until revoked”
+  - In “Refresh Token Policy”, select “Expire refresh token if not used for” and set it to 30 days
   - In “IP Relaxation”, select “Relax IP restrictions”
 
 <img src="/images/provider-guides/salesforce_eca_authorization.png"/>
@@ -410,7 +412,7 @@ Whenever you would like to, you can follow these steps to migrate a Connected Ap
 ![Migrate connected app 7](/images/provider-guides/salesforce/migrate-7.png)
 
 8. Go to the Policies tab, expand “OAuth Policies”, and click the edit button. In the “App Authorization” box, make the following modifications:
-  - In “Refresh Token Policy”, select “Refresh token is valid until revoked”
+  - In “Refresh Token Policy”, select “Expire refresh token if not used for” and set it to 30 days
   - In “IP Relaxation”, select “Relax IP restrictions”
 
 <img src="/images/provider-guides/salesforce_eca_authorization.png"/>
@@ -496,6 +498,38 @@ Deleting a record, or restoring it from the Recycle Bin, updates its `SystemMods
 - The filter can only use fields the object has. Setup objects such as User, Profile and RecordType have no `IsDeleted` field, so a filter that uses it fails.
 - The filter must be a condition only, as it would appear after `WHERE`. Clauses such as `LIMIT`, `ORDER BY` or `GROUP BY` aren't allowed. Subqueries are, for example `Id IN (SELECT ContactId FROM CampaignMember WHERE Status = 'Sent')`.
 - Raw filters are only supported by the CRM module.
+
+## Watch fields for subscribe actions
+
+### Use component fields, not compound fields
+
+Salesforce compound fields group several fields into one. For example, `BillingAddress` is made up of `BillingStreet`, `BillingCity`, `BillingState`, `BillingPostalCode` and `BillingCountry`.
+
+Subscribe actions detect changes on the individual component fields, not on the compound field. List the component fields you care about in `requiredWatchFields`:
+
+```yaml
+updateEvent:
+  enabled: always
+  requiredWatchFields:
+    # Not billingaddress: watch its components instead.
+    - billingstreet
+    - billingcity
+    - billingpostalcode
+```
+
+| Compound field | Object | Watch these component fields instead |
+| --- | --- | --- |
+| `BillingAddress`, `ShippingAddress` | Account | `BillingStreet`, `BillingCity`, `BillingState`, `BillingPostalCode`, `BillingCountry`, `BillingLatitude`, `BillingLongitude`, and the same fields starting with `Shipping` |
+| `MailingAddress`, `OtherAddress` | Contact | `MailingStreet`, `MailingCity`, `MailingState`, `MailingPostalCode`, `MailingCountry`, `MailingLatitude`, `MailingLongitude`, and the same fields starting with `Other` |
+| `Address` | Lead | `Street`, `City`, `State`, `PostalCode`, `Country`, `Latitude`, `Longitude` |
+| `Name` | Contact, Lead | `FirstName`, `LastName`, `Salutation` |
+| Custom geolocation fields, such as `Location__c` | Any | `Location__Latitude__s`, `Location__Longitude__s` |
+
+<Note>
+  `Name` is only a compound field on person objects such as Contact and Lead. On Account, Opportunity and most other objects, `Name` is a regular field that you can watch directly.
+</Note>
+
+This also applies to mapped fields. If `requiredWatchFields` lists a mapped field, such as `city`, the field your customer maps it to must be a component field such as `BillingCity`, not `BillingAddress`.
 
 ## Customer guide
 
