@@ -129,6 +129,16 @@ amp deploy <folder_with_amp.yaml> --project <id-or-name> [--key <api-key>] [--de
 - Use this command to deploy new integrations or update existing ones.
 - Use this command when you've made changes to your integration
 
+**Removing objects:** once an integration has installations, a deploy can't remove a read or subscribe object from `amp.yaml`, or clear an object's `destination`. Installations that list the object in their config take its destination from `amp.yaml`, and would be left without one. You can still change an object's `destination`. An integration with no installations has no such restriction.
+
+When you remove read objects from an integration that has installations, `amp deploy` asks what to do with them:
+
+- **Stop reading these objects across all installations & continue deployment** removes them. Ampersand turns the read objects off in every installation's config and pauses their reads, and deletes any subscribe objects the deploy removes from installations' configs and unsubscribes them.
+- **Continue reading these objects across all installations & continue deployment** is rejected, because the objects would lose their destinations.
+- **Cancel current deployment** stops without deploying.
+
+`amp deploy` doesn't ask about subscribe objects. To remove only subscribe objects from an integration with installations, call [Batch upsert a group of integrations](/reference/integration/batch-upsert-a-group-of-integrations) with `destructive=true`, or keep each object with its `destination` and remove its events instead.
+
 **Example:**
 
 ```bash
