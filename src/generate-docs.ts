@@ -273,12 +273,12 @@ const baseConfig = {
   },
   topbarCtaButton: {
     name: "Start building now",
-    url: "https://dashboard.withampersand.com/sign-up?trk=docs",
+    url: "https://dashboard.ampersand.ai/sign-up?trk=docs",
   },
   topbarLinks: [
     {
       name: "Sign in",
-      url: "https://dashboard.withampersand.com/sign-in?trk=docs",
+      url: "https://dashboard.ampersand.ai/sign-in?trk=docs",
     },
   ],
   redirects: [
