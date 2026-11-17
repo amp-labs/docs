@@ -13,39 +13,36 @@ This connector supports:
 - [Read Actions](/read-actions), including historic backfill for supported objects. Incremental reads apply to `file_uploads` only (filtered by last edited time). Each scheduled read for `users` returns the current workspace user list.
 - [Write Actions](/write-actions) (create only for `file_uploads`).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.notion.com`.
-- Subscribe and Delete actions are not currently supported.
+- Subscribe Actions are not currently supported.
 
 ### Supported objects
 
 export const Check = () => <span>✅</span>
 export const Cross = () => <span>🚫</span>
 
-<div style={{ width: '100%', overflowX: 'auto' }}>
-<table style={{ width: '100%', minWidth: '800px', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse' }}>
-  <thead>
-    <tr style={{ width: '100%' }}>
+<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
+<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
+  <thead style={{ display: 'table-header-group', width: '100%' }}>
+    <tr style={{ display: 'table-row', width: '100%' }}>
       <th style={{ textAlign: 'left', width: '44%' }}>Object</th>
-      <th style={{ width: '14%' }}>Metadata</th>
       <th style={{ width: '14%' }}>Read</th>
       <th style={{ width: '14%' }}>Write</th>
-      <th style={{ width: '14%' }}>Delete</th>
+      <th style={{ width: '14%' }}>Subscribe</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
+  <tbody style={{ display: 'table-row-group', width: '100%' }}>
+    <tr style={{ display: 'table-row' }}>
       <td style={{ textAlign: 'left' }}>
         <a href="https://developers.notion.com/reference/get-users">users</a>
       </td>
       <td><Check /></td>
-      <td><Check /></td>
       <td><Cross /></td>
       <td><Cross /></td>
     </tr>
-    <tr>
+    <tr style={{ display: 'table-row' }}>
       <td style={{ textAlign: 'left' }}>
         <a href="https://developers.notion.com/reference/list-file-uploads">file_uploads</a>
       </td>
-      <td><Check /></td>
       <td><Check /></td>
       <td><Check /></td>
       <td><Cross /></td>
@@ -56,8 +53,6 @@ export const Cross = () => <span>🚫</span>
 
 ### Notes and limitations
 
-- **Workspace access:** During installation, the end user chooses which Notion pages and databases the integration can access. Many Notion API calls only work for content that was shared with the integration. See [Notion’s authorization guide](https://developers.notion.com/docs/authorization).
-- **Read coverage:** Ampersand Read currently syncs **users** and **file uploads**—the workspace lists that Notion exposes without a parent page or database id. **Pages, databases, blocks, and comments** are not available through Read Actions in this connector. Notion often requires a specific parent or Search to list those resources, which does not provide a dependable incremental sync for scheduled reads.
 - **Users (`read`):** Notion’s user list does not support time-based filtering. Each scheduled read returns the workspace user list for the connection.
 - **File uploads (`read`):** Reads can be narrowed with `since` and `until` using each upload’s last edited time.
 - **File uploads (`write`):** Create only. Updating or deleting uploads through this connector is not supported.
@@ -92,11 +87,11 @@ For background, see [Notion’s OAuth authorization documentation](https://devel
 5. Save the integration.
 6. Open the integration **Configuration** (or **Secrets**) tab and copy the **OAuth client ID** and **OAuth client secret**. Store them securely; you will enter them in Ampersand.
 
-During customer installation, Notion prompts the user to **Allow access** and to **Select pages** for the integration. Only content the user shares is available to the API for that connection.
+During customer installation, Notion prompts the user to **Allow access** and to **Select pages** for the integration.
 
 ## Add your Notion integration to Ampersand
 
-1. Log in to your [Ampersand Console](https://console.withampersand.com).
+1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
 
 2. Select the project where you want to create a Notion integration.
 
