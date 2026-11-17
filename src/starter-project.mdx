@@ -32,16 +32,24 @@ Setting up the accounts and credentials takes longer than running the app itself
     </Accordion>
   </Step>
   <Step title="Create a destination named `defaultWebhook`">
-    In [Destinations](https://dashboard.withampersand.com/projects/_/destinations), create a webhook destination called `defaultWebhook`. If you do not have an endpoint to point it at, [play.svix.com](https://play.svix.com) gives you a disposable one that shows incoming payloads in the browser, which is ideal for a first run.
+    A destination is where Ampersand delivers the data it reads from your customer's account. In this quickstart, that is a webhook URL.
+
+    In [Destinations](https://dashboard.withampersand.com/projects/_/destinations), create a webhook destination called `defaultWebhook`. The name must match the `destination` in the integration's `amp.yaml`. The three included integrations all use `defaultWebhook`.
+
+    If you do not have an endpoint to point it at, open [play.svix.com](https://play.svix.com) in a new tab, copy the URL it shows, and paste it in as the destination's URL. The URL keeps working after you close the tab, so bookmark the page to come back and see the payloads it has received.
   </Step>
   <Step title="Set up the provider">
-    You can start with any of the three included integrations. Each provider guide walks you through creating an account and an app:
+    The starter project includes a sample integration for three providers: HubSpot, Salesforce, and GitHub. Each integration's guide walks you through creating an account and an app with the provider, and then a provider app under **Provider apps** in the Ampersand dashboard. The Ampersand dashboard then asks you for the client ID and client secret of the app you created, and you enter them there.
+
+    Your customers never see these credentials. They connect their individual account through `InstallIntegration`, Ampersand's [prebuilt UI component](/embeddable-ui-components#install-integration), which shows them the provider's own login. The starter project already includes it.
+
+    Follow the guide for the provider you picked:
 
     - **HubSpot** reads and writes contacts and companies, and subscribes to contact changes. Follow the [HubSpot provider guide](/provider-guides/hubspot).
     - **Salesforce** reads and writes accounts and contacts. Follow the [Salesforce provider guide](/provider-guides/salesforce).
     - **GitHub** reads and writes gists. Follow the [GitHub provider guide](/provider-guides/github).
 
-    You can also use other integrations from our [samples repo](https://github.com/amp-labs/samples), or browse [our provider guides](/provider-guides/overview) for all supported integrations. Learn more in [Make it yours](#make-it-yours).
+    You can also use the starter project with any other provider Ampersand supports. Find yours in the [provider guides](/provider-guides/overview) and follow that guide for this step. Then add its integration by following [Make it yours](#make-it-yours) before you deploy.
   </Step>
   <Step title="Install the CLI">
     Install the [Ampersand CLI](/cli/overview) and run `amp login` to authenticate.
@@ -80,12 +88,15 @@ Setting up the accounts and credentials takes longer than running the app itself
         ```
         Integration name: `githubIntegration`
       </Tab>
+      <Tab title="Another provider">
+        Add the integration first by following [Make it yours](#make-it-yours).
+      </Tab>
     </Tabs>
 
     This creates a [revision](/concepts#revision) of the integration from its `amp.yaml`. Nothing syncs yet, because no customer has installed it.
   </Step>
   <Step title="Point the app at your project">
-    In `src/App.tsx`, replace `MY-PROJECT-NAME` and `MY-API-KEY` with your project name and API key, and set `integration` to the name from the step above.
+    In `src/App.tsx`, replace `MY-PROJECT-NAME` and `MY-API-KEY` with your project name and API key. Then, in the same file, set the `integration` variable to the `name` field from the `amp.yaml` you deployed.
   </Step>
   <Step title="Start the app">
     ```bash
@@ -101,6 +112,12 @@ Setting up the accounts and credentials takes longer than running the app itself
 
     <Accordion title="I connected an account, but nothing is happening. What's wrong?">
       Check that you deployed the integration before connecting, and that the `integration` name in `App.tsx` matches your `amp.yaml`. Without a deployed integration, connecting creates a connection but not an installation.
+    </Accordion>
+
+    <Accordion title="Connecting or installing fails. What's wrong?">
+      Check these two things first:
+      - **Provider app**: for a provider that uses OAuth, there must be a provider app for it in this project. See [Set up the provider](#before-you-start).
+      - **Destination**: every `destination` named in your `amp.yaml` must exist in [Destinations](https://dashboard.withampersand.com/projects/_/destinations) with exactly the same name.
     </Accordion>
   </Step>
   <Step title="Check that it worked">
@@ -156,7 +173,18 @@ The whole integration surface is one component. `AmpersandProvider` holds your p
 
 <Steps>
   <Step title="Swap the integration">
-    Add a folder under `integrations/` with your own `amp.yaml`, or one from the [samples repository](https://github.com/amp-labs/samples), and deploy it the same way. Then set `integration` in `App.tsx` to its `name`, and make sure its `destination` exists in the dashboard. See the [manifest reference](/manifest-reference) for every field.
+    To use any other provider that Ampersand supports, such as NetSuite:
+
+    1. Follow its [provider guide](/provider-guides/overview) to set up credentials. Providers that use OAuth need a provider app. Others, such as [NetSuite (M2M)](/provider-guides/netsuite-m2m), do not.
+    2. Create a folder under `integrations/`, such as `integrations/netsuite`, and add a file named `amp.yaml` to it. Write your own, or copy one from the [samples repository](https://github.com/amp-labs/samples).
+    3. In that file, change each `destination` to `defaultWebhook`. Any other name is fine too, as long as a destination with the same name exists in your dashboard.
+    4. Deploy the folder:
+       ```bash
+       amp deploy integrations/netsuite -p <your-project-name>
+       ```
+    5. In `src/App.tsx`, set `integration` to the `name` field from that `amp.yaml`.
+
+    See the [manifest reference](/manifest-reference) for every field you can set in an `amp.yaml`.
   </Step>
   <Step title="Redeploy after changes">
     Run `amp deploy` again whenever you edit your `amp.yaml`. You only need one `amp.yaml` for all your customers, and it can hold multiple integrations.
