@@ -1,6 +1,5 @@
 ---
 title: "Mailgun"
-description: "Connect Mailgun to Ampersand with an API key to read and write domains, mailing lists, suppressions, templates, and logs, send messages, and make proxy calls to the Mailgun API."
 ---
 
 ## What's supported
@@ -9,7 +8,7 @@ description: "Connect Mailgun to Ampersand with an API key to read and write dom
 
 This connector supports:
 
-- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `account/templates`, `accounts/subaccounts`, `analytics/logs`, `analytics/tags`, `bounces`, `complaints`, `domains`, `domains/credentials`, `dynamic_pools/history`, `forwards`, `keys`, `lists`, `routes`, `templates`, `thresholds/alerts/send`, `thresholds/hits`, `thresholds/limits`, `unsubscribes`, `webhooks` and `whitelists` currently. For all other objects, a full read of the Mailgun instance will be done per scheduled read.
+- [Read Actions](/read-actions), including full historic backfill. Incremental reading is supported for the objects marked in the table below. For all other objects, a full read of the Mailgun instance will be done per scheduled read.
 - [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://api.mailgun.net`.
 
@@ -18,37 +17,37 @@ This connector supports:
 The Mailgun connector supports the following objects:
 
 export const rows = [
-  { label: "account/templates*", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/account-templates/get-v4-templates" },
-  { label: "accounts/subaccounts", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/subaccounts/get-v5-accounts-subaccounts" },
-  { label: "accounts/subaccounts/ip_pools/all", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/user-manual/subaccounts/subaccounts-ip-pools" },
-  { label: "alerts/settings", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/alerts/get-v1-alerts-settings" },
-  { label: "analytics/logs**", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/logs/post-v1-analytics-logs" },
-  { label: "analytics/tags", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/tags-new/post-v1-analytics-tags" },
-  { label: "bounces", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/bounces/get-v3--domainid--bounces" },
-  { label: "complaints", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/complaints/get-v3--domainid--complaints" },
-  { label: "dkim/keys", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-keys/get-v1-dkim-keys" },
-  { label: "domains*", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domains/get-v4-domains" },
-  { label: "domains/credentials*", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/credentials/get-v3-domains--domain-name--credentials" },
-  { label: "domains/keys", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-keys/get-v4-domains--authority-name--keys" },
-  { label: "dynamic_pools/domains", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/dynamic-ip-pools/get-v1-dynamic-pools-domains" },
-  { label: "dynamic_pools/history", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/dynamic-ip-pools/get-v1-dynamic-pools-history" },
-  { label: "forwards", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/forwards/get-v3-forwards" },
-  { label: "ip_pools", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/ip-pools/get-v3-ip-pools" },
-  { label: "ip_whitelist", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/ip-allowlist/get-v2-ip-whitelist" },
-  { label: "ips", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/ips/get-v3-ips" },
-  { label: "keys", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/keys/get-v1-keys" },
-  { label: "lists*", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/mailing-lists/get-v3-lists" },
-  { label: "lists/members", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/mailing-lists/get-lists-string:list_address-members" },
-  { label: "messages", read: false, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/messages/post-v3--domain-name--messages" },
-  { label: "routes*", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/routes/get-v3-routes" },
-  { label: "templates*", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-templates/get-v3--domain-name--templates" },
-  { label: "thresholds/alerts/send", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/send-alerts/get-v1-thresholds-alerts-send" },
-  { label: "thresholds/hits", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/send-alerts/get-v1-thresholds-hits" },
-  { label: "thresholds/limits", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/limits/get-v1-thresholds-limits" },
-  { label: "unsubscribes", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/unsubscribe/get-v3--domainid--unsubscribes" },
-  { label: "users", read: true, write: false, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/users/get-v5-users" },
-  { label: "webhooks*", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/account-webhooks/get-v1-webhooks" },
-  { label: "whitelists", read: true, write: true, subscribe: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/allowlist/get-v3--domainid--whitelists" },
+  { label: "account/templates*", read: true, write: true, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/account-templates/get-v4-templates" },
+  { label: "accounts/subaccounts", read: true, write: false, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/subaccounts/get-v5-accounts-subaccounts" },
+  { label: "accounts/subaccounts/ip_pools/all", read: true, write: false, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/user-manual/subaccounts/subaccounts-ip-pools" },
+  { label: "alerts/settings", read: true, write: true, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/alerts/get-v1-alerts-settings" },
+  { label: "analytics/logs**", read: true, write: false, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/logs/post-v1-analytics-logs" },
+  { label: "analytics/tags", read: true, write: false, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/tags-new/post-v1-analytics-tags" },
+  { label: "bounces", read: true, write: true, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/bounces/get-v3--domainid--bounces" },
+  { label: "complaints", read: true, write: true, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/complaints/get-v3--domainid--complaints" },
+  { label: "dkim/keys", read: true, write: false, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-keys/get-v1-dkim-keys" },
+  { label: "domains*", read: true, write: false, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domains/get-v4-domains" },
+  { label: "domains/credentials*", read: true, write: false, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/credentials/get-v3-domains--domain-name--credentials" },
+  { label: "domains/keys", read: true, write: false, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-keys/get-v4-domains--authority-name--keys" },
+  { label: "dynamic_pools/domains", read: true, write: false, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/dynamic-ip-pools/get-v1-dynamic-pools-domains" },
+  { label: "dynamic_pools/history", read: true, write: false, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/dynamic-ip-pools/get-v1-dynamic-pools-history" },
+  { label: "forwards", read: true, write: true, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/forwards/get-v3-forwards" },
+  { label: "ip_pools", read: true, write: false, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/ip-pools/get-v3-ip-pools" },
+  { label: "ip_whitelist", read: true, write: false, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/ip-allowlist/get-v2-ip-whitelist" },
+  { label: "ips", read: true, write: false, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/ips/get-v3-ips" },
+  { label: "keys", read: true, write: false, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/keys/get-v1-keys" },
+  { label: "lists*", read: true, write: true, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/mailing-lists/get-v3-lists" },
+  { label: "lists/members", read: true, write: true, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/mailing-lists/get-lists-string:list_address-members" },
+  { label: "messages", read: false, write: true, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/messages/post-v3--domain-name--messages" },
+  { label: "routes*", read: true, write: true, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/routes/get-v3-routes" },
+  { label: "templates*", read: true, write: true, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-templates/get-v3--domain-name--templates" },
+  { label: "thresholds/alerts/send", read: true, write: false, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/send-alerts/get-v1-thresholds-alerts-send" },
+  { label: "thresholds/hits", read: true, write: false, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/send-alerts/get-v1-thresholds-hits" },
+  { label: "thresholds/limits", read: true, write: false, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/limits/get-v1-thresholds-limits" },
+  { label: "unsubscribes", read: true, write: true, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/unsubscribe/get-v3--domainid--unsubscribes" },
+  { label: "users", read: true, write: false, incremental: false, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/users/get-v5-users" },
+  { label: "webhooks*", read: true, write: true, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/account-webhooks/get-v1-webhooks" },
+  { label: "whitelists", read: true, write: true, incremental: true, href: "https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/allowlist/get-v3--domainid--whitelists" },
 ]
 
 export const Check = () => <span>✅</span>
@@ -76,7 +75,7 @@ export function renderCellValue(value) {
       <th style={{textAlign: 'left', width: '40%'}}>Object</th>
       <th style={{width: '20%'}}>Read</th>
       <th style={{width: '20%'}}>Write</th>
-      <th style={{width: '20%'}}>Subscribe</th>
+      <th style={{width: '20%'}}>Incremental read</th>
     </tr>
     </thead>
     <tbody style={{display: 'table-row-group', width: '100%'}}>
@@ -89,7 +88,7 @@ export function renderCellValue(value) {
           </td>
           <td>{renderCellValue(row.read)}</td>
           <td>{renderCellValue(row.write)}</td>
-          <td>{renderCellValue(row.subscribe)}</td>
+          <td>{renderCellValue(row.incremental)}</td>
         </tr>
       ))}
     </tbody>
@@ -102,37 +101,24 @@ export function renderCellValue(value) {
 \*\* Limited to the log retention of the customer's Mailgun plan. A full historic backfill returns the last day of logs.
 
 <Note>
-**Writes are limited by Mailgun's API:**
+Some objects have write limits:
 
-- **Create-only:** `messages`, `bounces`, `complaints`, `unsubscribes`, and `whitelists` cannot be updated.
-- **No delete:** `messages` and `lists/members` cannot be deleted.
-- **`lists/members`:** include a `list_address` field naming the parent mailing list.
+- `messages`, `bounces`, `complaints`, `unsubscribes`, and `whitelists` can be created but not updated.
+- `messages` and `lists/members` can't be deleted.
+- To write to `lists/members`, include a `list_address` field with the address of the mailing list. For example:
+
+  ```json
+  {
+    "list_address": "newsletter@mg.example.com",
+    "address": "alice@example.com",
+    "name": "Alice"
+  }
+  ```
 </Note>
 
 ### Example integration
 
-To define an integration for Mailgun, create a manifest file that looks like this:
-
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: mailgunIntegration
-    displayName: My Mailgun Integration
-    provider: mailgun
-    read:
-      objects:
-        - objectName: bounces
-          destination: myWebhook
-        - objectName: lists
-          destination: myWebhook
-    write:
-      objects:
-        - objectName: lists
-        - objectName: messages
-    proxy:
-      enabled: true
-```
+For an example manifest file of a Mailgun integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/mailgun/amp.yaml).
 
 ## Before you get started
 
@@ -146,10 +132,10 @@ To connect Mailgun with Ampersand, you will need a [Mailgun account](https://sig
 
 ![Mailgun API Key](/images/provider-guides/mailgun.gif)
 
-Use an account API key. Domain sending keys can only send messages.
+<Warning>Use an account API key. Domain sending keys can only send messages.</Warning>
 
 When installing the integration, the customer also provides:
-- **Domain name:** the Mailgun sending domain, as listed under **Send** > **Domains** in the Mailgun dashboard (for example, `mg.example.com`). It is used by domain-scoped objects such as `bounces`, `messages`, and `templates`.
+- **Domain name:** the Mailgun sending domain, as listed under **Sending** > **Domains** in the Mailgun dashboard (for example, `mg.example.com`). It is used by domain-scoped objects such as `bounces`, `messages`, and `templates`.
 - **Region:** `us` (default) or `eu`, matching the region the domain was created in. Proxy Actions always use the US base URL.
 
 ## Using the connector
