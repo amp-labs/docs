@@ -1,5 +1,6 @@
 ---
-title: Jump
+title: "Jump"
+description: "Connect Jump to Ampersand with an API key to read meetings, contacts, notes, tasks, users, and other objects, write to contacts, and make proxy calls to the Jump GraphQL API."
 ---
 
 ## What's supported
@@ -8,28 +9,95 @@ title: Jump
 
 This connector supports:
 
+- [Read Actions](/read-actions), including full historic backfill and incremental read for all supported objects.
+- [Write Actions](/write-actions), including Delete.
 - [Proxy Actions](/proxy-actions), using the base URL `https://my.jumpapp.com/enterprise/graphql`.
+
+### Supported objects
+
+The Jump connector supports the following objects:
+
+export const rows = [
+  { label: "contacts", read: true, write: true, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-contacts" },
+  { label: "documents", read: true, write: false, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-documents" },
+  { label: "integrations", read: true, write: false, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-integrations" },
+  { label: "meetingPreps", read: true, write: false, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-meetingPreps" },
+  { label: "meetings", read: true, write: false, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-meetings" },
+  { label: "notes", read: true, write: false, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-notes" },
+  { label: "pulses", read: true, write: false, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-pulses" },
+  { label: "scorecards", read: true, write: false, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-scorecards" },
+  { label: "signalDefinitions", read: true, write: false, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-signalDefinitions" },
+  { label: "tasks", read: true, write: false, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-tasks" },
+  { label: "users", read: true, write: false, href: "https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-users" },
+]
+
+export const Check = () => <span>✅</span>
+export const Cross = () => <span>🚫</span>
+
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  if (typeof value === "string" && value.startsWith("<")) {
+    return <span dangerouslySetInnerHTML={{__html: value}}/>;
+  }
+
+  return value;
+}
+
+<div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+  <table style={{
+    width: '100%',
+    minWidth: '100%',
+    tableLayout: 'fixed',
+    textAlign: 'center',
+    borderCollapse: 'collapse',
+    display: 'table'
+  }}>
+    <thead style={{display: 'table-header-group', width: '100%'}}>
+    <tr style={{display: 'table-row', width: '100%'}}>
+      <th style={{textAlign: 'left', width: '50%'}}>Object</th>
+      <th style={{width: '25%'}}>Read</th>
+      <th style={{width: '25%'}}>Write</th>
+    </tr>
+    </thead>
+    <tbody style={{display: 'table-row-group', width: '100%'}}>
+    {[...rows]
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map((row) => (
+        <tr id={"row/" + row.label} key={row.label}>
+          <td style={{textAlign: "left"}}>
+            <a href={row.href}>{row.label}</a>
+          </td>
+          <td>{renderCellValue(row.read)}</td>
+          <td>{renderCellValue(row.write)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<Note>
+**Writes are limited by Jump's API:**
+
+- **Contacts only:** `contacts` is the only object that can be created, updated, and deleted. See Jump's [mutations reference](https://my.jumpapp.com/enterprise/documentation/reference?tab=mutations).
+- **Writable fields:** contact writes accept `firstName`, `lastName`, and `email` only. Any other field is rejected. Reads return `name` instead of `firstName` and `lastName`, and `name` cannot be written.
+- **Create:** `firstName`, `lastName`, and `email` are all required. If a contact with the same email already exists, Jump returns the existing contact instead of creating a new one.
+- **User ID:** contacts are created, updated, and deleted on behalf of the Jump user whose User ID the customer enters when installing the integration. Reads are not limited to that user.
+</Note>
+
+**Contact updates and incremental read:** Jump does not change a contact's `updatedAt` when the contact is updated through the API, so contacts updated through Write Actions are not included in later incremental reads.
 
 ### Example integration
 
-To define an integration for Jump, create a manifest file that looks like this:
+For an example manifest file of a Jump integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/jump/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: jumpIntegration
-    displayName: Jump Integration
-    provider: jump
-    proxy:
-      enabled: true
-```
+## Before you get started
 
-## Before You Get Started
+To use the Jump connector, you'll need an API key from your Jump account. Jump lists API access under its Enterprise plan; see [Jump's pricing](https://jump.ai/pricing). Here's how to get the API key:
 
-To use the Jump connector, you'll need an API Key from your Jump account. Here's how to get it:
-
-1. Sign in to the [Jump homepage](https://my.jumpapp.com).
+1. Sign in to the [Jump homepage](https://my.jumpapp.com) as an account owner (only account owners can create API keys).
 2. In the lower-right corner of the homepage, click **Profile & settings**.
 3. Click **Account settings**.
 4. Navigate to **API**.
@@ -39,15 +107,23 @@ To use the Jump connector, you'll need an API Key from your Jump account. Here's
 
 ![Jump API Key](/images/provider-guides/jump.gif)
 
+API keys are scoped to your Jump account and provide access to all data within it.
+
 For more details, see the [Jump Authentication documentation](https://my.jumpapp.com/enterprise/documentation/authentication).
+
+When installing the integration, the customer also enters a **User ID**. This is the `id` (for example, `usr_...`) of the Jump user on whose behalf contacts are created, updated, and deleted. You can find it with the [`users` query](https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-users) in the Jump API.
 
 ## Using the connector
 
-This connector uses API Key authentication, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
+This connector uses **API Key authentication**, so you do not need to configure a Provider App before getting started. (Provider Apps are only required for providers using the **OAuth2 Authorization Code grant type**.)
 
 To integrate with Jump:
 
-- Create a manifest file like the example above.
+- Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API Key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API Key supplied by the customer.
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component, which will prompt the customer for their API key and User ID.
+- Start using the connector!
+  - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+  - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API. To delete contacts, first [enable deletion](/write-actions#enabling-deletion-for-an-object) for the `contacts` object in the installation.
+  - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
