@@ -34,14 +34,14 @@ The HelpscoutMailbox connector supports writing to the following objects:
 
 ## Before You Get Started
 
-To connect Help Scout Mailbox with Ampersand, you will need [a Help Scout Account](https://www.helpscout.com/).
+To connect Help Scout Mailbox, each of your customers creates an app in their own [Help Scout account](https://www.helpscout.com/). You don't need to create a Help Scout app yourself.
 
-Once your account is created, you'll need to create an app in the Help Scout developer portal, configure the app, and obtain the following credentials from your app:
+Your customers follow the steps below to create the app and get these credentials from it:
 
 - App ID
 - App Secret
 
-You will then use these credentials to connect your application to Ampersand.
+When they connect through the [InstallIntegration](/embeddable-ui-components#install-integration) component, they enter the **App ID** as the **Client ID** and the **App Secret** as the **Client Secret**.
 
 ### Create a Help Scout Account
 
@@ -67,14 +67,16 @@ Upon creation, the app will display the necessary credentials: **Client ID (App 
 
 <br />
 
-## Add Your Help Scout App Info to Ampersand
+## Using the connector
 
-1. Log in to your [Ampersand Dashboard](https://dashboard.withampersand.com).
-2. Select the project where you want to create a Help Scout integration.  
-   ![Ampersand Project Selection](/images/provider-guides/31a6a12-Ampersand.png)
-3. Select **Provider Apps**.
-4. Select **Help Scout Mailbox** from the **Provider** list.
-5. Enter the previously obtained **App ID** in the **Client ID** field and the **App Secret** in the **Client Secret** field.
+This connector uses OAuth2 Client Credentials grant type, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
-   ![Ampersand Project Selection](/images/provider-guides/1d847cc-helpscout1.gif)
-6. Click **Save Changes**.
+To start integrating with Help Scout Mailbox:
+- Create a manifest file.
+- Deploy it using the [amp CLI](/cli/overview).
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
