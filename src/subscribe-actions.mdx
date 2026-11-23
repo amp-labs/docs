@@ -305,7 +305,7 @@ Subscribe actions don't currently have a pause endpoint, so to stop events, turn
 
 ### For one customer
 
-1. Find the customer's installation ID, in the [Ampersand Dashboard](https://dashboard.withampersand.com) or with the [List installations endpoint](/reference/installation/list-installations-for-an-integration).
+1. Find the customer's installation ID, in the [Ampersand Dashboard](https://dashboard.ampersand.ai) or with the [List installations endpoint](/reference/installation/list-installations-for-an-integration).
 2. Call [Update an installation](/reference/installation/update-an-installation) with `config.content.subscribe.objects.<objectName>` in `updateMask`.
 3. In the body, keep the object's `objectName`, `destination` and `inheritFieldsAndMappings`, set `createEvent`, `updateEvent` and `deleteEvent` to `never`, and set `otherEvents` to an empty list:
 
@@ -391,7 +391,7 @@ Check that:
 - **You're changing records in the connected account.** Events only come from the account your customer connected, so when testing, make your changes in that same account.
 - **Salesforce hasn't hit its Change Data Capture limit.** Salesforce subscriptions use Change Data Capture, and Salesforce limits how many objects an org can select for it. That limit is shared with the customer's other tools. If it's reached, ask the customer to free up objects, or use a scheduled [read action](/read-actions) instead.
 - **The object doesn't have too many fields selected.** Subscriptions fetch the read action's fields for each changed record, so the same [too-many-fields limit](/read-actions#allow-users-to-pick-from-all-fields) applies: a Salesforce object with hundreds of selected fields can fail with a `414` or `431` error.
-- **The subscription was created.** Look for its operation in the [Ampersand dashboard](https://dashboard.withampersand.com), or set up [subscribe notifications](/notifications/overview) to hear when a subscription fails.
+- **The subscription was created.** Look for its operation in the [Ampersand dashboard](https://dashboard.ampersand.ai), or set up [subscribe notifications](/notifications/overview) to hear when a subscription fails.
 
 ## Subscription lifecycle observability
 
