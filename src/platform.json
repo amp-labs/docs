@@ -39764,6 +39764,17 @@
                             "description": "The query parameter name used to pass OAuth scopes in the authorization URL.\nDefaults to \"scope\" when not specified. Some providers use a different\nparameter name, such as \"user_scope\" for Slack user scopes.\n",
                             "example": "user_scope",
                             "x-go-type-skip-optional-pointer": true
+                          },
+                          "tokenReqBodyParams": {
+                            "type": "object",
+                            "description": "Extra parameters to send in the body of every request to the token URL\n(authorization code exchange, refresh, client credentials and password grants),\nfor providers whose token endpoint needs fields beyond the OAuth 2.0 ones.\nValues may use catalog variables such as {{.workspace}}. A parameter here never\nreplaces one that the grant itself sets. A client_id or client_secret here is a\ndefault that is used only when the connection has no client credentials of its own.\n",
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "x-go-type-skip-optional-pointer": true,
+                            "example": {
+                              "platform": "{{.platform}}"
+                            }
                           }
                         }
                       },
@@ -41321,6 +41332,17 @@
                           "description": "The query parameter name used to pass OAuth scopes in the authorization URL.\nDefaults to \"scope\" when not specified. Some providers use a different\nparameter name, such as \"user_scope\" for Slack user scopes.\n",
                           "example": "user_scope",
                           "x-go-type-skip-optional-pointer": true
+                        },
+                        "tokenReqBodyParams": {
+                          "type": "object",
+                          "description": "Extra parameters to send in the body of every request to the token URL\n(authorization code exchange, refresh, client credentials and password grants),\nfor providers whose token endpoint needs fields beyond the OAuth 2.0 ones.\nValues may use catalog variables such as {{.workspace}}. A parameter here never\nreplaces one that the grant itself sets. A client_id or client_secret here is a\ndefault that is used only when the connection has no client credentials of its own.\n",
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "x-go-type-skip-optional-pointer": true,
+                          "example": {
+                            "platform": "{{.platform}}"
+                          }
                         }
                       }
                     },
@@ -46821,11 +46843,10 @@
                       },
                       "oauth2PasswordCredentials": {
                         "type": "object",
+                        "description": "Credentials for a provider that uses the OAuth 2.0 password grant (called the resource\nowner password credentials grant in RFC 6749). Ampersand signs in to the provider with\nthem before it creates the connection or saves updated credentials, so credentials that\nthe provider rejects return a 422 response and are not saved. The username and password\nare kept (encrypted) so that Ampersand can sign in again when the provider's refresh\ntoken expires.\n\nTo update some of a connection's credentials and keep the others (for example, a new\npassword with the connection's current client), name only those fields in `updateMask`,\nsuch as `oauth2PasswordCredentials.password`.\n",
                         "required": [
                           "username",
-                          "password",
-                          "clientId",
-                          "clientSecret"
+                          "password"
                         ],
                         "properties": {
                           "username": {
@@ -46838,11 +46859,11 @@
                           },
                           "clientId": {
                             "type": "string",
-                            "description": "The client ID to use for the connection."
+                            "description": "The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client."
                           },
                           "clientSecret": {
                             "type": "string",
-                            "description": "The client secret to use for the connection."
+                            "description": "The client secret to use for the connection. Omit it when the client has no secret."
                           },
                           "scopes": {
                             "type": "array",
@@ -48982,10 +49003,14 @@
                         "apiKey",
                         "basicAuth",
                         "oauth2ClientCredentials",
-                        "oauth2PasswordCredentials"
+                        "oauth2PasswordCredentials",
+                        "oauth2PasswordCredentials.username",
+                        "oauth2PasswordCredentials.password",
+                        "oauth2PasswordCredentials.clientId",
+                        "oauth2PasswordCredentials.clientSecret"
                       ]
                     },
-                    "description": "Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme.",
+                    "description": "Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme, and replace all of its credentials.\n\nA password grant connection can also update single credential fields: `oauth2PasswordCredentials.username`, `oauth2PasswordCredentials.password`, `oauth2PasswordCredentials.clientId` and `oauth2PasswordCredentials.clientSecret`. The fields not named keep their current values, and a named field with no value in `connection` is cleared. For example, naming `oauth2PasswordCredentials.clientId` and `oauth2PasswordCredentials.clientSecret` with no values switches the connection to the provider's default client.\n",
                     "example": [
                       "apiKey"
                     ]
@@ -49112,11 +49137,10 @@
                       },
                       "oauth2PasswordCredentials": {
                         "type": "object",
+                        "description": "Credentials for a provider that uses the OAuth 2.0 password grant (called the resource\nowner password credentials grant in RFC 6749). Ampersand signs in to the provider with\nthem before it creates the connection or saves updated credentials, so credentials that\nthe provider rejects return a 422 response and are not saved. The username and password\nare kept (encrypted) so that Ampersand can sign in again when the provider's refresh\ntoken expires.\n\nTo update some of a connection's credentials and keep the others (for example, a new\npassword with the connection's current client), name only those fields in `updateMask`,\nsuch as `oauth2PasswordCredentials.password`.\n",
                         "required": [
                           "username",
-                          "password",
-                          "clientId",
-                          "clientSecret"
+                          "password"
                         ],
                         "properties": {
                           "username": {
@@ -49129,11 +49153,11 @@
                           },
                           "clientId": {
                             "type": "string",
-                            "description": "The client ID to use for the connection."
+                            "description": "The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client."
                           },
                           "clientSecret": {
                             "type": "string",
-                            "description": "The client secret to use for the connection."
+                            "description": "The client secret to use for the connection. Omit it when the client has no secret."
                           },
                           "scopes": {
                             "type": "array",
@@ -77555,10 +77579,14 @@
                 "apiKey",
                 "basicAuth",
                 "oauth2ClientCredentials",
-                "oauth2PasswordCredentials"
+                "oauth2PasswordCredentials",
+                "oauth2PasswordCredentials.username",
+                "oauth2PasswordCredentials.password",
+                "oauth2PasswordCredentials.clientId",
+                "oauth2PasswordCredentials.clientSecret"
               ]
             },
-            "description": "Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme.",
+            "description": "Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme, and replace all of its credentials.\n\nA password grant connection can also update single credential fields: `oauth2PasswordCredentials.username`, `oauth2PasswordCredentials.password`, `oauth2PasswordCredentials.clientId` and `oauth2PasswordCredentials.clientSecret`. The fields not named keep their current values, and a named field with no value in `connection` is cleared. For example, naming `oauth2PasswordCredentials.clientId` and `oauth2PasswordCredentials.clientSecret` with no values switches the connection to the provider's default client.\n",
             "example": [
               "apiKey"
             ]
@@ -77685,11 +77713,10 @@
               },
               "oauth2PasswordCredentials": {
                 "type": "object",
+                "description": "Credentials for a provider that uses the OAuth 2.0 password grant (called the resource\nowner password credentials grant in RFC 6749). Ampersand signs in to the provider with\nthem before it creates the connection or saves updated credentials, so credentials that\nthe provider rejects return a 422 response and are not saved. The username and password\nare kept (encrypted) so that Ampersand can sign in again when the provider's refresh\ntoken expires.\n\nTo update some of a connection's credentials and keep the others (for example, a new\npassword with the connection's current client), name only those fields in `updateMask`,\nsuch as `oauth2PasswordCredentials.password`.\n",
                 "required": [
                   "username",
-                  "password",
-                  "clientId",
-                  "clientSecret"
+                  "password"
                 ],
                 "properties": {
                   "username": {
@@ -77702,11 +77729,11 @@
                   },
                   "clientId": {
                     "type": "string",
-                    "description": "The client ID to use for the connection."
+                    "description": "The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client."
                   },
                   "clientSecret": {
                     "type": "string",
-                    "description": "The client secret to use for the connection."
+                    "description": "The client secret to use for the connection. Omit it when the client has no secret."
                   },
                   "scopes": {
                     "type": "array",
@@ -77896,11 +77923,10 @@
           },
           "oauth2PasswordCredentials": {
             "type": "object",
+            "description": "Credentials for a provider that uses the OAuth 2.0 password grant (called the resource\nowner password credentials grant in RFC 6749). Ampersand signs in to the provider with\nthem before it creates the connection or saves updated credentials, so credentials that\nthe provider rejects return a 422 response and are not saved. The username and password\nare kept (encrypted) so that Ampersand can sign in again when the provider's refresh\ntoken expires.\n\nTo update some of a connection's credentials and keep the others (for example, a new\npassword with the connection's current client), name only those fields in `updateMask`,\nsuch as `oauth2PasswordCredentials.password`.\n",
             "required": [
               "username",
-              "password",
-              "clientId",
-              "clientSecret"
+              "password"
             ],
             "properties": {
               "username": {
@@ -77913,11 +77939,11 @@
               },
               "clientId": {
                 "type": "string",
-                "description": "The client ID to use for the connection."
+                "description": "The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client."
               },
               "clientSecret": {
                 "type": "string",
-                "description": "The client secret to use for the connection."
+                "description": "The client secret to use for the connection. Omit it when the client has no secret."
               },
               "scopes": {
                 "type": "array",
@@ -78108,11 +78134,10 @@
               },
               "oauth2PasswordCredentials": {
                 "type": "object",
+                "description": "Credentials for a provider that uses the OAuth 2.0 password grant (called the resource\nowner password credentials grant in RFC 6749). Ampersand signs in to the provider with\nthem before it creates the connection or saves updated credentials, so credentials that\nthe provider rejects return a 422 response and are not saved. The username and password\nare kept (encrypted) so that Ampersand can sign in again when the provider's refresh\ntoken expires.\n\nTo update some of a connection's credentials and keep the others (for example, a new\npassword with the connection's current client), name only those fields in `updateMask`,\nsuch as `oauth2PasswordCredentials.password`.\n",
                 "required": [
                   "username",
-                  "password",
-                  "clientId",
-                  "clientSecret"
+                  "password"
                 ],
                 "properties": {
                   "username": {
@@ -78125,11 +78150,11 @@
                   },
                   "clientId": {
                     "type": "string",
-                    "description": "The client ID to use for the connection."
+                    "description": "The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client."
                   },
                   "clientSecret": {
                     "type": "string",
-                    "description": "The client secret to use for the connection."
+                    "description": "The client secret to use for the connection. Omit it when the client has no secret."
                   },
                   "scopes": {
                     "type": "array",
