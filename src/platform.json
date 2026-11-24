@@ -6715,6 +6715,34 @@
                                           "description": "If true, the integration will inherit the fields and mapping from the read object.",
                                           "example": true
                                         },
+                                        "requiredFields": {
+                                          "type": "array",
+                                          "description": "Fields this subscribe object uses when it does not inherit fields and mappings from the read object. Each entry names a provider field in `fieldName` and can rename it with `mapToName`. Cannot be set when `inheritFieldsAndMapping` is true. Required when `inheritFieldsAndMapping` is false and create or update events are enabled.\n",
+                                          "items": {
+                                            "title": "Integration Field Existent",
+                                            "type": "object",
+                                            "required": [
+                                              "fieldName"
+                                            ],
+                                            "properties": {
+                                              "fieldName": {
+                                                "type": "string"
+                                              },
+                                              "mapToName": {
+                                                "type": "string",
+                                                "description": "The field name to map to.",
+                                                "example": "account_id",
+                                                "x-go-type-skip-optional-pointer": true
+                                              },
+                                              "mapToDisplayName": {
+                                                "type": "string",
+                                                "description": "The display name to map to.",
+                                                "example": "Account ID",
+                                                "x-go-type-skip-optional-pointer": true
+                                              }
+                                            }
+                                          }
+                                        },
                                         "createEvent": {
                                           "type": "object",
                                           "properties": {
@@ -7721,6 +7749,34 @@
                                       "x-go-type-skip-optional-pointer": true,
                                       "description": "If true, the integration will inherit the fields and mapping from the read object.",
                                       "example": true
+                                    },
+                                    "requiredFields": {
+                                      "type": "array",
+                                      "description": "Fields this subscribe object uses when it does not inherit fields and mappings from the read object. Each entry names a provider field in `fieldName` and can rename it with `mapToName`. Cannot be set when `inheritFieldsAndMapping` is true. Required when `inheritFieldsAndMapping` is false and create or update events are enabled.\n",
+                                      "items": {
+                                        "title": "Integration Field Existent",
+                                        "type": "object",
+                                        "required": [
+                                          "fieldName"
+                                        ],
+                                        "properties": {
+                                          "fieldName": {
+                                            "type": "string"
+                                          },
+                                          "mapToName": {
+                                            "type": "string",
+                                            "description": "The field name to map to.",
+                                            "example": "account_id",
+                                            "x-go-type-skip-optional-pointer": true
+                                          },
+                                          "mapToDisplayName": {
+                                            "type": "string",
+                                            "description": "The display name to map to.",
+                                            "example": "Account ID",
+                                            "x-go-type-skip-optional-pointer": true
+                                          }
+                                        }
+                                      }
                                     },
                                     "createEvent": {
                                       "type": "object",
@@ -9109,6 +9165,34 @@
                                         "x-go-type-skip-optional-pointer": true,
                                         "description": "If true, the integration will inherit the fields and mapping from the read object.",
                                         "example": true
+                                      },
+                                      "requiredFields": {
+                                        "type": "array",
+                                        "description": "Fields this subscribe object uses when it does not inherit fields and mappings from the read object. Each entry names a provider field in `fieldName` and can rename it with `mapToName`. Cannot be set when `inheritFieldsAndMapping` is true. Required when `inheritFieldsAndMapping` is false and create or update events are enabled.\n",
+                                        "items": {
+                                          "title": "Integration Field Existent",
+                                          "type": "object",
+                                          "required": [
+                                            "fieldName"
+                                          ],
+                                          "properties": {
+                                            "fieldName": {
+                                              "type": "string"
+                                            },
+                                            "mapToName": {
+                                              "type": "string",
+                                              "description": "The field name to map to.",
+                                              "example": "account_id",
+                                              "x-go-type-skip-optional-pointer": true
+                                            },
+                                            "mapToDisplayName": {
+                                              "type": "string",
+                                              "description": "The display name to map to.",
+                                              "example": "Account ID",
+                                              "x-go-type-skip-optional-pointer": true
+                                            }
+                                          }
+                                        }
                                       },
                                       "createEvent": {
                                         "type": "object",
@@ -11008,6 +11092,34 @@
                                           "x-go-type-skip-optional-pointer": true,
                                           "description": "If true, the integration will inherit the fields and mapping from the read object.",
                                           "example": true
+                                        },
+                                        "requiredFields": {
+                                          "type": "array",
+                                          "description": "Fields this subscribe object uses when it does not inherit fields and mappings from the read object. Each entry names a provider field in `fieldName` and can rename it with `mapToName`. Cannot be set when `inheritFieldsAndMapping` is true. Required when `inheritFieldsAndMapping` is false and create or update events are enabled.\n",
+                                          "items": {
+                                            "title": "Integration Field Existent",
+                                            "type": "object",
+                                            "required": [
+                                              "fieldName"
+                                            ],
+                                            "properties": {
+                                              "fieldName": {
+                                                "type": "string"
+                                              },
+                                              "mapToName": {
+                                                "type": "string",
+                                                "description": "The field name to map to.",
+                                                "example": "account_id",
+                                                "x-go-type-skip-optional-pointer": true
+                                              },
+                                              "mapToDisplayName": {
+                                                "type": "string",
+                                                "description": "The display name to map to.",
+                                                "example": "Account ID",
+                                                "x-go-type-skip-optional-pointer": true
+                                              }
+                                            }
+                                          }
                                         },
                                         "createEvent": {
                                           "type": "object",
@@ -15165,7 +15277,7 @@
                                                 "inheritFieldsAndMappings": {
                                                   "type": "boolean",
                                                   "nullable": true,
-                                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                   "example": true
                                                 },
                                                 "objectName": {
@@ -15180,22 +15292,6 @@
                                                   "description": "The name of the destination that the result should be sent to.",
                                                   "example": "accountWebhook",
                                                   "type": "string"
-                                                },
-                                                "selectedFields": {
-                                                  "type": "object",
-                                                  "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                  "example": "{ phone: true, fax: true }",
-                                                  "additionalProperties": {
-                                                    "type": "boolean"
-                                                  }
-                                                },
-                                                "selectedFieldMappings": {
-                                                  "type": "object",
-                                                  "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                  "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                  "additionalProperties": {
-                                                    "type": "string"
-                                                  }
                                                 },
                                                 "createEvent": {
                                                   "title": "Create Event",
@@ -15363,7 +15459,7 @@
                                                     "inheritFieldsAndMappings": {
                                                       "type": "boolean",
                                                       "nullable": true,
-                                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                       "example": true
                                                     },
                                                     "objectName": {
@@ -15378,22 +15474,6 @@
                                                       "description": "The name of the destination that the result should be sent to.",
                                                       "example": "accountWebhook",
                                                       "type": "string"
-                                                    },
-                                                    "selectedFields": {
-                                                      "type": "object",
-                                                      "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                      "example": "{ phone: true, fax: true }",
-                                                      "additionalProperties": {
-                                                        "type": "boolean"
-                                                      }
-                                                    },
-                                                    "selectedFieldMappings": {
-                                                      "type": "object",
-                                                      "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                      "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                      "additionalProperties": {
-                                                        "type": "string"
-                                                      }
                                                     },
                                                     "createEvent": {
                                                       "title": "Create Event",
@@ -17569,7 +17649,7 @@
                                             "inheritFieldsAndMappings": {
                                               "type": "boolean",
                                               "nullable": true,
-                                              "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                              "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                               "example": true
                                             },
                                             "objectName": {
@@ -17584,22 +17664,6 @@
                                               "description": "The name of the destination that the result should be sent to.",
                                               "example": "accountWebhook",
                                               "type": "string"
-                                            },
-                                            "selectedFields": {
-                                              "type": "object",
-                                              "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                              "example": "{ phone: true, fax: true }",
-                                              "additionalProperties": {
-                                                "type": "boolean"
-                                              }
-                                            },
-                                            "selectedFieldMappings": {
-                                              "type": "object",
-                                              "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                              "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                              "additionalProperties": {
-                                                "type": "string"
-                                              }
                                             },
                                             "createEvent": {
                                               "title": "Create Event",
@@ -17767,7 +17831,7 @@
                                                 "inheritFieldsAndMappings": {
                                                   "type": "boolean",
                                                   "nullable": true,
-                                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                   "example": true
                                                 },
                                                 "objectName": {
@@ -17782,22 +17846,6 @@
                                                   "description": "The name of the destination that the result should be sent to.",
                                                   "example": "accountWebhook",
                                                   "type": "string"
-                                                },
-                                                "selectedFields": {
-                                                  "type": "object",
-                                                  "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                  "example": "{ phone: true, fax: true }",
-                                                  "additionalProperties": {
-                                                    "type": "boolean"
-                                                  }
-                                                },
-                                                "selectedFieldMappings": {
-                                                  "type": "object",
-                                                  "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                  "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                  "additionalProperties": {
-                                                    "type": "string"
-                                                  }
                                                 },
                                                 "createEvent": {
                                                   "title": "Create Event",
@@ -19925,7 +19973,7 @@
                                               "inheritFieldsAndMappings": {
                                                 "type": "boolean",
                                                 "nullable": true,
-                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                 "example": true
                                               },
                                               "objectName": {
@@ -19940,22 +19988,6 @@
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
                                                 "type": "string"
-                                              },
-                                              "selectedFields": {
-                                                "type": "object",
-                                                "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                "example": "{ phone: true, fax: true }",
-                                                "additionalProperties": {
-                                                  "type": "boolean"
-                                                }
-                                              },
-                                              "selectedFieldMappings": {
-                                                "type": "object",
-                                                "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                "additionalProperties": {
-                                                  "type": "string"
-                                                }
                                               },
                                               "createEvent": {
                                                 "title": "Create Event",
@@ -20123,7 +20155,7 @@
                                                   "inheritFieldsAndMappings": {
                                                     "type": "boolean",
                                                     "nullable": true,
-                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                     "example": true
                                                   },
                                                   "objectName": {
@@ -20138,22 +20170,6 @@
                                                     "description": "The name of the destination that the result should be sent to.",
                                                     "example": "accountWebhook",
                                                     "type": "string"
-                                                  },
-                                                  "selectedFields": {
-                                                    "type": "object",
-                                                    "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                    "example": "{ phone: true, fax: true }",
-                                                    "additionalProperties": {
-                                                      "type": "boolean"
-                                                    }
-                                                  },
-                                                  "selectedFieldMappings": {
-                                                    "type": "object",
-                                                    "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                    "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                    "additionalProperties": {
-                                                      "type": "string"
-                                                    }
                                                   },
                                                   "createEvent": {
                                                     "title": "Create Event",
@@ -23041,7 +23057,7 @@
                                               "inheritFieldsAndMappings": {
                                                 "type": "boolean",
                                                 "nullable": true,
-                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                 "example": true
                                               },
                                               "objectName": {
@@ -23056,22 +23072,6 @@
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
                                                 "type": "string"
-                                              },
-                                              "selectedFields": {
-                                                "type": "object",
-                                                "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                "example": "{ phone: true, fax: true }",
-                                                "additionalProperties": {
-                                                  "type": "boolean"
-                                                }
-                                              },
-                                              "selectedFieldMappings": {
-                                                "type": "object",
-                                                "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                "additionalProperties": {
-                                                  "type": "string"
-                                                }
                                               },
                                               "createEvent": {
                                                 "title": "Create Event",
@@ -23239,7 +23239,7 @@
                                                   "inheritFieldsAndMappings": {
                                                     "type": "boolean",
                                                     "nullable": true,
-                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                     "example": true
                                                   },
                                                   "objectName": {
@@ -23254,22 +23254,6 @@
                                                     "description": "The name of the destination that the result should be sent to.",
                                                     "example": "accountWebhook",
                                                     "type": "string"
-                                                  },
-                                                  "selectedFields": {
-                                                    "type": "object",
-                                                    "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                    "example": "{ phone: true, fax: true }",
-                                                    "additionalProperties": {
-                                                      "type": "boolean"
-                                                    }
-                                                  },
-                                                  "selectedFieldMappings": {
-                                                    "type": "object",
-                                                    "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                    "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                    "additionalProperties": {
-                                                      "type": "string"
-                                                    }
                                                   },
                                                   "createEvent": {
                                                     "title": "Create Event",
@@ -24704,7 +24688,7 @@
                                             "inheritFieldsAndMappings": {
                                               "type": "boolean",
                                               "nullable": true,
-                                              "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                              "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                               "example": true
                                             },
                                             "objectName": {
@@ -24719,22 +24703,6 @@
                                               "description": "The name of the destination that the result should be sent to.",
                                               "example": "accountWebhook",
                                               "type": "string"
-                                            },
-                                            "selectedFields": {
-                                              "type": "object",
-                                              "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                              "example": "{ phone: true, fax: true }",
-                                              "additionalProperties": {
-                                                "type": "boolean"
-                                              }
-                                            },
-                                            "selectedFieldMappings": {
-                                              "type": "object",
-                                              "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                              "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                              "additionalProperties": {
-                                                "type": "string"
-                                              }
                                             },
                                             "createEvent": {
                                               "title": "Create Event",
@@ -26840,7 +26808,7 @@
                                               "inheritFieldsAndMappings": {
                                                 "type": "boolean",
                                                 "nullable": true,
-                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                 "example": true
                                               },
                                               "objectName": {
@@ -26855,22 +26823,6 @@
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
                                                 "type": "string"
-                                              },
-                                              "selectedFields": {
-                                                "type": "object",
-                                                "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                "example": "{ phone: true, fax: true }",
-                                                "additionalProperties": {
-                                                  "type": "boolean"
-                                                }
-                                              },
-                                              "selectedFieldMappings": {
-                                                "type": "object",
-                                                "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                "additionalProperties": {
-                                                  "type": "string"
-                                                }
                                               },
                                               "createEvent": {
                                                 "title": "Create Event",
@@ -27038,7 +26990,7 @@
                                                   "inheritFieldsAndMappings": {
                                                     "type": "boolean",
                                                     "nullable": true,
-                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                     "example": true
                                                   },
                                                   "objectName": {
@@ -27053,22 +27005,6 @@
                                                     "description": "The name of the destination that the result should be sent to.",
                                                     "example": "accountWebhook",
                                                     "type": "string"
-                                                  },
-                                                  "selectedFields": {
-                                                    "type": "object",
-                                                    "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                    "example": "{ phone: true, fax: true }",
-                                                    "additionalProperties": {
-                                                      "type": "boolean"
-                                                    }
-                                                  },
-                                                  "selectedFieldMappings": {
-                                                    "type": "object",
-                                                    "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                    "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                    "additionalProperties": {
-                                                      "type": "string"
-                                                    }
                                                   },
                                                   "createEvent": {
                                                     "title": "Create Event",
@@ -30122,7 +30058,7 @@
                                               "inheritFieldsAndMappings": {
                                                 "type": "boolean",
                                                 "nullable": true,
-                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                 "example": true
                                               },
                                               "objectName": {
@@ -30137,22 +30073,6 @@
                                                 "description": "The name of the destination that the result should be sent to.",
                                                 "example": "accountWebhook",
                                                 "type": "string"
-                                              },
-                                              "selectedFields": {
-                                                "type": "object",
-                                                "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                "example": "{ phone: true, fax: true }",
-                                                "additionalProperties": {
-                                                  "type": "boolean"
-                                                }
-                                              },
-                                              "selectedFieldMappings": {
-                                                "type": "object",
-                                                "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                "additionalProperties": {
-                                                  "type": "string"
-                                                }
                                               },
                                               "createEvent": {
                                                 "title": "Create Event",
@@ -30320,7 +30240,7 @@
                                                   "inheritFieldsAndMappings": {
                                                     "type": "boolean",
                                                     "nullable": true,
-                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                    "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                     "example": true
                                                   },
                                                   "objectName": {
@@ -30335,22 +30255,6 @@
                                                     "description": "The name of the destination that the result should be sent to.",
                                                     "example": "accountWebhook",
                                                     "type": "string"
-                                                  },
-                                                  "selectedFields": {
-                                                    "type": "object",
-                                                    "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                    "example": "{ phone: true, fax: true }",
-                                                    "additionalProperties": {
-                                                      "type": "boolean"
-                                                    }
-                                                  },
-                                                  "selectedFieldMappings": {
-                                                    "type": "object",
-                                                    "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                    "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                    "additionalProperties": {
-                                                      "type": "string"
-                                                    }
                                                   },
                                                   "createEvent": {
                                                     "title": "Create Event",
@@ -33601,7 +33505,7 @@
                                                 "inheritFieldsAndMappings": {
                                                   "type": "boolean",
                                                   "nullable": true,
-                                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                   "example": true
                                                 },
                                                 "objectName": {
@@ -33616,22 +33520,6 @@
                                                   "description": "The name of the destination that the result should be sent to.",
                                                   "example": "accountWebhook",
                                                   "type": "string"
-                                                },
-                                                "selectedFields": {
-                                                  "type": "object",
-                                                  "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                  "example": "{ phone: true, fax: true }",
-                                                  "additionalProperties": {
-                                                    "type": "boolean"
-                                                  }
-                                                },
-                                                "selectedFieldMappings": {
-                                                  "type": "object",
-                                                  "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                  "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                  "additionalProperties": {
-                                                    "type": "string"
-                                                  }
                                                 },
                                                 "createEvent": {
                                                   "title": "Create Event",
@@ -33799,7 +33687,7 @@
                                                     "inheritFieldsAndMappings": {
                                                       "type": "boolean",
                                                       "nullable": true,
-                                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                                       "example": true
                                                     },
                                                     "objectName": {
@@ -33814,22 +33702,6 @@
                                                       "description": "The name of the destination that the result should be sent to.",
                                                       "example": "accountWebhook",
                                                       "type": "string"
-                                                    },
-                                                    "selectedFields": {
-                                                      "type": "object",
-                                                      "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                                      "example": "{ phone: true, fax: true }",
-                                                      "additionalProperties": {
-                                                        "type": "boolean"
-                                                      }
-                                                    },
-                                                    "selectedFieldMappings": {
-                                                      "type": "object",
-                                                      "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                                      "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                                      "additionalProperties": {
-                                                        "type": "string"
-                                                      }
                                                     },
                                                     "createEvent": {
                                                       "title": "Create Event",
@@ -39892,6 +39764,17 @@
                             "description": "The query parameter name used to pass OAuth scopes in the authorization URL.\nDefaults to \"scope\" when not specified. Some providers use a different\nparameter name, such as \"user_scope\" for Slack user scopes.\n",
                             "example": "user_scope",
                             "x-go-type-skip-optional-pointer": true
+                          },
+                          "tokenReqBodyParams": {
+                            "type": "object",
+                            "description": "Extra parameters to send in the body of every request to the token URL\n(authorization code exchange, refresh, client credentials and password grants),\nfor providers whose token endpoint needs fields beyond the OAuth 2.0 ones.\nValues may use catalog variables such as {{.workspace}}. A parameter here never\nreplaces one that the grant itself sets. A client_id or client_secret here is a\ndefault that is used only when the connection has no client credentials of its own.\n",
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "x-go-type-skip-optional-pointer": true,
+                            "example": {
+                              "platform": "{{.platform}}"
+                            }
                           }
                         }
                       },
@@ -41449,6 +41332,17 @@
                           "description": "The query parameter name used to pass OAuth scopes in the authorization URL.\nDefaults to \"scope\" when not specified. Some providers use a different\nparameter name, such as \"user_scope\" for Slack user scopes.\n",
                           "example": "user_scope",
                           "x-go-type-skip-optional-pointer": true
+                        },
+                        "tokenReqBodyParams": {
+                          "type": "object",
+                          "description": "Extra parameters to send in the body of every request to the token URL\n(authorization code exchange, refresh, client credentials and password grants),\nfor providers whose token endpoint needs fields beyond the OAuth 2.0 ones.\nValues may use catalog variables such as {{.workspace}}. A parameter here never\nreplaces one that the grant itself sets. A client_id or client_secret here is a\ndefault that is used only when the connection has no client credentials of its own.\n",
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "x-go-type-skip-optional-pointer": true,
+                          "example": {
+                            "platform": "{{.platform}}"
+                          }
                         }
                       }
                     },
@@ -46949,11 +46843,10 @@
                       },
                       "oauth2PasswordCredentials": {
                         "type": "object",
+                        "description": "Credentials for a provider that uses the OAuth 2.0 password grant (called the resource\nowner password credentials grant in RFC 6749). Ampersand signs in to the provider with\nthem before it creates the connection or saves updated credentials, so credentials that\nthe provider rejects return a 422 response and are not saved. The username and password\nare kept (encrypted) so that Ampersand can sign in again when the provider's refresh\ntoken expires.\n\nTo update some of a connection's credentials and keep the others (for example, a new\npassword with the connection's current client), name only those fields in `updateMask`,\nsuch as `oauth2PasswordCredentials.password`.\n",
                         "required": [
                           "username",
-                          "password",
-                          "clientId",
-                          "clientSecret"
+                          "password"
                         ],
                         "properties": {
                           "username": {
@@ -46966,11 +46859,11 @@
                           },
                           "clientId": {
                             "type": "string",
-                            "description": "The client ID to use for the connection."
+                            "description": "The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client."
                           },
                           "clientSecret": {
                             "type": "string",
-                            "description": "The client secret to use for the connection."
+                            "description": "The client secret to use for the connection. Omit it when the client has no secret."
                           },
                           "scopes": {
                             "type": "array",
@@ -49110,10 +49003,14 @@
                         "apiKey",
                         "basicAuth",
                         "oauth2ClientCredentials",
-                        "oauth2PasswordCredentials"
+                        "oauth2PasswordCredentials",
+                        "oauth2PasswordCredentials.username",
+                        "oauth2PasswordCredentials.password",
+                        "oauth2PasswordCredentials.clientId",
+                        "oauth2PasswordCredentials.clientSecret"
                       ]
                     },
-                    "description": "Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme.",
+                    "description": "Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme, and replace all of its credentials.\n\nA password grant connection can also update single credential fields: `oauth2PasswordCredentials.username`, `oauth2PasswordCredentials.password`, `oauth2PasswordCredentials.clientId` and `oauth2PasswordCredentials.clientSecret`. The fields not named keep their current values, and a named field with no value in `connection` is cleared. For example, naming `oauth2PasswordCredentials.clientId` and `oauth2PasswordCredentials.clientSecret` with no values switches the connection to the provider's default client.\n",
                     "example": [
                       "apiKey"
                     ]
@@ -49240,11 +49137,10 @@
                       },
                       "oauth2PasswordCredentials": {
                         "type": "object",
+                        "description": "Credentials for a provider that uses the OAuth 2.0 password grant (called the resource\nowner password credentials grant in RFC 6749). Ampersand signs in to the provider with\nthem before it creates the connection or saves updated credentials, so credentials that\nthe provider rejects return a 422 response and are not saved. The username and password\nare kept (encrypted) so that Ampersand can sign in again when the provider's refresh\ntoken expires.\n\nTo update some of a connection's credentials and keep the others (for example, a new\npassword with the connection's current client), name only those fields in `updateMask`,\nsuch as `oauth2PasswordCredentials.password`.\n",
                         "required": [
                           "username",
-                          "password",
-                          "clientId",
-                          "clientSecret"
+                          "password"
                         ],
                         "properties": {
                           "username": {
@@ -49257,11 +49153,11 @@
                           },
                           "clientId": {
                             "type": "string",
-                            "description": "The client ID to use for the connection."
+                            "description": "The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client."
                           },
                           "clientSecret": {
                             "type": "string",
-                            "description": "The client secret to use for the connection."
+                            "description": "The client secret to use for the connection. Omit it when the client has no secret."
                           },
                           "scopes": {
                             "type": "array",
@@ -71873,6 +71769,34 @@
                               "description": "If true, the integration will inherit the fields and mapping from the read object.",
                               "example": true
                             },
+                            "requiredFields": {
+                              "type": "array",
+                              "description": "Fields this subscribe object uses when it does not inherit fields and mappings from the read object. Each entry names a provider field in `fieldName` and can rename it with `mapToName`. Cannot be set when `inheritFieldsAndMapping` is true. Required when `inheritFieldsAndMapping` is false and create or update events are enabled.\n",
+                              "items": {
+                                "title": "Integration Field Existent",
+                                "type": "object",
+                                "required": [
+                                  "fieldName"
+                                ],
+                                "properties": {
+                                  "fieldName": {
+                                    "type": "string"
+                                  },
+                                  "mapToName": {
+                                    "type": "string",
+                                    "description": "The field name to map to.",
+                                    "example": "account_id",
+                                    "x-go-type-skip-optional-pointer": true
+                                  },
+                                  "mapToDisplayName": {
+                                    "type": "string",
+                                    "description": "The display name to map to.",
+                                    "example": "Account ID",
+                                    "x-go-type-skip-optional-pointer": true
+                                  }
+                                }
+                              }
+                            },
                             "createEvent": {
                               "type": "object",
                               "properties": {
@@ -72389,6 +72313,34 @@
                           "x-go-type-skip-optional-pointer": true,
                           "description": "If true, the integration will inherit the fields and mapping from the read object.",
                           "example": true
+                        },
+                        "requiredFields": {
+                          "type": "array",
+                          "description": "Fields this subscribe object uses when it does not inherit fields and mappings from the read object. Each entry names a provider field in `fieldName` and can rename it with `mapToName`. Cannot be set when `inheritFieldsAndMapping` is true. Required when `inheritFieldsAndMapping` is false and create or update events are enabled.\n",
+                          "items": {
+                            "title": "Integration Field Existent",
+                            "type": "object",
+                            "required": [
+                              "fieldName"
+                            ],
+                            "properties": {
+                              "fieldName": {
+                                "type": "string"
+                              },
+                              "mapToName": {
+                                "type": "string",
+                                "description": "The field name to map to.",
+                                "example": "account_id",
+                                "x-go-type-skip-optional-pointer": true
+                              },
+                              "mapToDisplayName": {
+                                "type": "string",
+                                "description": "The display name to map to.",
+                                "example": "Account ID",
+                                "x-go-type-skip-optional-pointer": true
+                              }
+                            }
+                          }
                         },
                         "createEvent": {
                           "type": "object",
@@ -74984,7 +74936,7 @@
                                     "inheritFieldsAndMappings": {
                                       "type": "boolean",
                                       "nullable": true,
-                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                       "example": true
                                     },
                                     "objectName": {
@@ -74999,22 +74951,6 @@
                                       "description": "The name of the destination that the result should be sent to.",
                                       "example": "accountWebhook",
                                       "type": "string"
-                                    },
-                                    "selectedFields": {
-                                      "type": "object",
-                                      "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                      "example": "{ phone: true, fax: true }",
-                                      "additionalProperties": {
-                                        "type": "boolean"
-                                      }
-                                    },
-                                    "selectedFieldMappings": {
-                                      "type": "object",
-                                      "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                      "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                      "additionalProperties": {
-                                        "type": "string"
-                                      }
                                     },
                                     "createEvent": {
                                       "title": "Create Event",
@@ -75182,7 +75118,7 @@
                                         "inheritFieldsAndMappings": {
                                           "type": "boolean",
                                           "nullable": true,
-                                          "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                          "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                           "example": true
                                         },
                                         "objectName": {
@@ -75197,22 +75133,6 @@
                                           "description": "The name of the destination that the result should be sent to.",
                                           "example": "accountWebhook",
                                           "type": "string"
-                                        },
-                                        "selectedFields": {
-                                          "type": "object",
-                                          "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                          "example": "{ phone: true, fax: true }",
-                                          "additionalProperties": {
-                                            "type": "boolean"
-                                          }
-                                        },
-                                        "selectedFieldMappings": {
-                                          "type": "object",
-                                          "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                          "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                          "additionalProperties": {
-                                            "type": "string"
-                                          }
                                         },
                                         "createEvent": {
                                           "title": "Create Event",
@@ -76850,7 +76770,7 @@
                                 "inheritFieldsAndMappings": {
                                   "type": "boolean",
                                   "nullable": true,
-                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                  "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                   "example": true
                                 },
                                 "objectName": {
@@ -76865,22 +76785,6 @@
                                   "description": "The name of the destination that the result should be sent to.",
                                   "example": "accountWebhook",
                                   "type": "string"
-                                },
-                                "selectedFields": {
-                                  "type": "object",
-                                  "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                  "example": "{ phone: true, fax: true }",
-                                  "additionalProperties": {
-                                    "type": "boolean"
-                                  }
-                                },
-                                "selectedFieldMappings": {
-                                  "type": "object",
-                                  "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                  "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                  "additionalProperties": {
-                                    "type": "string"
-                                  }
                                 },
                                 "createEvent": {
                                   "title": "Create Event",
@@ -77048,7 +76952,7 @@
                                     "inheritFieldsAndMappings": {
                                       "type": "boolean",
                                       "nullable": true,
-                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object, and `selectedFields` and `selectedFieldMappings` cannot be used. If false, nothing is inherited from the read config, and the object's own `selectedFields` and `selectedFieldMappings` are used instead; at least one of them must be set.",
+                                      "description": "Whether to inherit fields and mappings from the read config. When omitted, the integration's `inheritFieldsAndMapping` from amp.yaml is used. If true, fields and mappings come from the matching read config object. If false, nothing is inherited from the read config.",
                                       "example": true
                                     },
                                     "objectName": {
@@ -77063,22 +76967,6 @@
                                       "description": "The name of the destination that the result should be sent to.",
                                       "example": "accountWebhook",
                                       "type": "string"
-                                    },
-                                    "selectedFields": {
-                                      "type": "object",
-                                      "description": "This is a map of field names to booleans indicating whether they should be included in subscription events. Only used when `inheritFieldsAndMappings` is false; otherwise fields are inherited from the read config. If a field is already included in `selectedFieldMappings`, it does not need to be included here.",
-                                      "example": "{ phone: true, fax: true }",
-                                      "additionalProperties": {
-                                        "type": "boolean"
-                                      }
-                                    },
-                                    "selectedFieldMappings": {
-                                      "type": "object",
-                                      "description": "This is a map of mapToNames to field names. (A mapTo name is the name the builder wants to map a field to when it lands in their destination.) Only used when `inheritFieldsAndMappings` is false; otherwise mappings are inherited from the read config.",
-                                      "example": "{ phoneNumber: phone, faxNumber: fax }",
-                                      "additionalProperties": {
-                                        "type": "string"
-                                      }
                                     },
                                     "createEvent": {
                                       "title": "Create Event",
@@ -77691,10 +77579,14 @@
                 "apiKey",
                 "basicAuth",
                 "oauth2ClientCredentials",
-                "oauth2PasswordCredentials"
+                "oauth2PasswordCredentials",
+                "oauth2PasswordCredentials.username",
+                "oauth2PasswordCredentials.password",
+                "oauth2PasswordCredentials.clientId",
+                "oauth2PasswordCredentials.clientSecret"
               ]
             },
-            "description": "Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme.",
+            "description": "Fields to update. Each entry must have a corresponding value in `connection`. Credential fields (`apiKey`, `basicAuth`, `oauth2ClientCredentials`, `oauth2PasswordCredentials`) must match the connection's existing auth scheme, and replace all of its credentials.\n\nA password grant connection can also update single credential fields: `oauth2PasswordCredentials.username`, `oauth2PasswordCredentials.password`, `oauth2PasswordCredentials.clientId` and `oauth2PasswordCredentials.clientSecret`. The fields not named keep their current values, and a named field with no value in `connection` is cleared. For example, naming `oauth2PasswordCredentials.clientId` and `oauth2PasswordCredentials.clientSecret` with no values switches the connection to the provider's default client.\n",
             "example": [
               "apiKey"
             ]
@@ -77821,11 +77713,10 @@
               },
               "oauth2PasswordCredentials": {
                 "type": "object",
+                "description": "Credentials for a provider that uses the OAuth 2.0 password grant (called the resource\nowner password credentials grant in RFC 6749). Ampersand signs in to the provider with\nthem before it creates the connection or saves updated credentials, so credentials that\nthe provider rejects return a 422 response and are not saved. The username and password\nare kept (encrypted) so that Ampersand can sign in again when the provider's refresh\ntoken expires.\n\nTo update some of a connection's credentials and keep the others (for example, a new\npassword with the connection's current client), name only those fields in `updateMask`,\nsuch as `oauth2PasswordCredentials.password`.\n",
                 "required": [
                   "username",
-                  "password",
-                  "clientId",
-                  "clientSecret"
+                  "password"
                 ],
                 "properties": {
                   "username": {
@@ -77838,11 +77729,11 @@
                   },
                   "clientId": {
                     "type": "string",
-                    "description": "The client ID to use for the connection."
+                    "description": "The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client."
                   },
                   "clientSecret": {
                     "type": "string",
-                    "description": "The client secret to use for the connection."
+                    "description": "The client secret to use for the connection. Omit it when the client has no secret."
                   },
                   "scopes": {
                     "type": "array",
@@ -78032,11 +77923,10 @@
           },
           "oauth2PasswordCredentials": {
             "type": "object",
+            "description": "Credentials for a provider that uses the OAuth 2.0 password grant (called the resource\nowner password credentials grant in RFC 6749). Ampersand signs in to the provider with\nthem before it creates the connection or saves updated credentials, so credentials that\nthe provider rejects return a 422 response and are not saved. The username and password\nare kept (encrypted) so that Ampersand can sign in again when the provider's refresh\ntoken expires.\n\nTo update some of a connection's credentials and keep the others (for example, a new\npassword with the connection's current client), name only those fields in `updateMask`,\nsuch as `oauth2PasswordCredentials.password`.\n",
             "required": [
               "username",
-              "password",
-              "clientId",
-              "clientSecret"
+              "password"
             ],
             "properties": {
               "username": {
@@ -78049,11 +77939,11 @@
               },
               "clientId": {
                 "type": "string",
-                "description": "The client ID to use for the connection."
+                "description": "The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client."
               },
               "clientSecret": {
                 "type": "string",
-                "description": "The client secret to use for the connection."
+                "description": "The client secret to use for the connection. Omit it when the client has no secret."
               },
               "scopes": {
                 "type": "array",
@@ -78244,11 +78134,10 @@
               },
               "oauth2PasswordCredentials": {
                 "type": "object",
+                "description": "Credentials for a provider that uses the OAuth 2.0 password grant (called the resource\nowner password credentials grant in RFC 6749). Ampersand signs in to the provider with\nthem before it creates the connection or saves updated credentials, so credentials that\nthe provider rejects return a 422 response and are not saved. The username and password\nare kept (encrypted) so that Ampersand can sign in again when the provider's refresh\ntoken expires.\n\nTo update some of a connection's credentials and keep the others (for example, a new\npassword with the connection's current client), name only those fields in `updateMask`,\nsuch as `oauth2PasswordCredentials.password`.\n",
                 "required": [
                   "username",
-                  "password",
-                  "clientId",
-                  "clientSecret"
+                  "password"
                 ],
                 "properties": {
                   "username": {
@@ -78261,11 +78150,11 @@
                   },
                   "clientId": {
                     "type": "string",
-                    "description": "The client ID to use for the connection."
+                    "description": "The client ID to use for the connection. Omit it when the provider does not require one, or to use the provider's default client."
                   },
                   "clientSecret": {
                     "type": "string",
-                    "description": "The client secret to use for the connection."
+                    "description": "The client secret to use for the connection. Omit it when the client has no secret."
                   },
                   "scopes": {
                     "type": "array",

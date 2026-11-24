@@ -65,6 +65,8 @@ export const Cross = () => <span>🚫</span>
     </tr>
   </thead>
   <tbody style={{ display: 'table-row-group', width: '100%' }}>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message">AMPERSAND-messages</a><sup>{'[3]'}</sup><div style={{ fontSize: '0.9em', color: '#666', marginTop: 4 }}>Inbox. Write sends a new email.</div></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
+    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message">AMPERSAND-sentMessages</a><sup>{'[4]'}</sup><div style={{ fontSize: '0.9em', color: '#666', marginTop: 4 }}>Sent mail. Read-only.</div></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
     <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.delegates/list">delegates</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
     <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.drafts#Draft">drafts</a><sup>{'[1]'}</sup></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
     <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.filters/list">filters</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
@@ -82,6 +84,10 @@ export const Cross = () => <span>🚫</span>
 _[1] `drafts` supports nested fields, e.g. `"$['message']['payload']['body']"`._
 
 _[2] `messages` supports nested fields, e.g. `"$['payload']['body']"`._
+
+_[3] `AMPERSAND-messages` is an Ampersand object for the Gmail inbox. A read returns messages in the inbox, and a write sends a new email from the connected mailbox using Gmail's [`messages.send`](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/send) method. Write supports creating (sending) only; updating and deleting are not supported. A write sends a new message and does not send an existing draft._
+
+_[4] `AMPERSAND-sentMessages` is an Ampersand object for sent mail. It is read-only._
 
 ### Example integration
 
