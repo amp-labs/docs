@@ -28,66 +28,143 @@ The **Gmail** module supports:
 - [Subscribe Actions](/subscribe-actions) for the `messages` object. Please note that [special set up](#set-up-gmail-push-notifications-for-subscribe-actions) is needed for Gmail.
 - [Write Actions](/write-actions).
 
+export const calendarRows = [
+  {
+    label: "acl", read: true, write: true, subscribe: false,
+    href: "https://developers.google.com/workspace/calendar/api/v3/reference/acl",
+  }, {
+    label: "calendarList", read: true, write: true, subscribe: false,
+    href: "https://developers.google.com/calendar/api/v3/reference/calendarList#resource-representations",
+  }, {
+    label: "events", read: true, write: true, subscribe: true,
+    href: "https://developers.google.com/workspace/calendar/api/v3/reference/events",
+  }, {
+    label: "settings", read: true, write: false, subscribe: false,
+    href: "https://developers.google.com/workspace/calendar/api/v3/reference/settings",
+  },
+]
+
+export const gmailRows = [
+  {
+    label: "AMPERSAND-messages", read: true, write: true, subscribe: false,
+    footnote: 1,
+    display: "Inbox. Write sends a new email.",
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message",
+  }, {
+    label: "AMPERSAND-sentMessages", read: true, write: false, subscribe: false,
+    footnote: 2,
+    display: "Sent mail. Read-only.",
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message",
+  }, {
+    label: "delegates", read: true, write: true, subscribe: false,
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.delegates/list",
+  }, {
+    label: "drafts", read: true, write: true, subscribe: false,
+    footnote: 3,
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.drafts#Draft",
+  }, {
+    label: "filters", read: true, write: true, subscribe: false,
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.filters/list",
+  }, {
+    label: "forwardingAddresses", read: true, write: true, subscribe: false,
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.forwardingAddresses/list",
+  }, {
+    label: "identities", read: true, write: true, subscribe: false,
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.cse.identities/list",
+  }, {
+    label: "keypairs", read: true, write: true, subscribe: false,
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.cse.keypairs/list",
+  }, {
+    label: "labels", read: true, write: true, subscribe: false,
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.labels/list",
+  }, {
+    label: "messages", read: true, write: false,
+    subscribe: '<span>✅<br/><a href="#set-up-gmail-push-notifications-for-subscribe-actions">(Setup required)</a></span>',
+    footnote: 4,
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message",
+  }, {
+    label: "sendAs", read: true, write: true, subscribe: false,
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.sendAs/list",
+  }, {
+    label: "threads", read: true, write: false, subscribe: false,
+    href: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.threads/list",
+  },
+]
+
 export const Check = () => <span>✅</span>
 export const Cross = () => <span>🚫</span>
 
+export function renderCellValue(value) {
+  if (typeof value === "boolean") {
+    return value ? <Check/> : <Cross/>;
+  }
+
+  if (typeof value === "string" && value.startsWith("<")) {
+    return <span dangerouslySetInnerHTML={{__html: value}}/>;
+  }
+
+  return value;
+}
+
+export function ObjectsTable({rows}) {
+  return (
+    <div style={{width: '100%', overflowX: 'auto', display: 'block'}}>
+      <table style={{
+        width: '100%',
+        minWidth: '100%',
+        tableLayout: 'fixed',
+        textAlign: 'center',
+        borderCollapse: 'collapse',
+        display: 'table'
+      }}>
+        <thead style={{display: 'table-header-group', width: '100%'}}>
+        <tr style={{display: 'table-row', width: '100%'}}>
+          <th style={{textAlign: 'left', width: '40%'}}>Object</th>
+          <th style={{width: '20%'}}>Read</th>
+          <th style={{width: '20%'}}>Write</th>
+          <th style={{width: '20%'}}>Subscribe</th>
+        </tr>
+        </thead>
+        <tbody style={{display: 'table-row-group', width: '100%'}}>
+        {[...rows]
+          .sort((a, b) => a.label.localeCompare(b.label))
+          .map((row) => (
+            <tr id={"row/" + row.label} key={row.label}>
+              <td style={{textAlign: "left"}}>
+                <a href={row.href}>{row.label}</a>
+                {row.footnote && <sup>{" [" + row.footnote + "]"}</sup>}
+                {row.display && (
+                  <div style={{fontSize: "0.9em", color: "#666", marginTop: 4}}>
+                    {row.display}
+                  </div>
+                )}
+              </td>
+              <td>{renderCellValue(row.read)}</td>
+              <td>{renderCellValue(row.write)}</td>
+              <td>{renderCellValue(row.subscribe)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 ### Supported Calendar objects
 
-<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
-<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
-  <thead style={{ display: 'table-header-group', width: '100%' }}>
-    <tr style={{ display: 'table-row', width: '100%' }}>
-      <th style={{ textAlign: 'left', width: '40%' }}>Object</th>
-      <th style={{ width: '20%' }}>Read</th>
-      <th style={{ width: '20%' }}>Write</th>
-      <th style={{ width: '20%' }}>Subscribe</th>
-    </tr>
-  </thead>
-  <tbody style={{ display: 'table-row-group', width: '100%' }}>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/calendar/api/v3/reference/acl">acl</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/calendar/api/v3/reference/calendarList#resource-representations">calendarList</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/calendar/api/v3/reference/events">events</a></td><td><Check /></td><td><Check /></td><td><Check /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/calendar/api/v3/reference/settings">settings</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
-  </tbody>
-</table>
-</div>
+<ObjectsTable rows={calendarRows}/>
 
 ### Supported Gmail objects
 
-<div style={{ width: '100%', overflowX: 'auto', display: 'block' }}>
-<table style={{ width: '100%', minWidth: '100%', tableLayout: 'fixed', textAlign: 'center', borderCollapse: 'collapse', display: 'table' }}>
-  <thead style={{ display: 'table-header-group', width: '100%' }}>
-    <tr style={{ display: 'table-row', width: '100%' }}>
-      <th style={{ textAlign: 'left', width: '40%' }}>Object</th>
-      <th style={{ width: '20%' }}>Read</th>
-      <th style={{ width: '20%' }}>Write</th>
-      <th style={{ width: '20%' }}>Subscribe</th>
-    </tr>
-  </thead>
-  <tbody style={{ display: 'table-row-group', width: '100%' }}>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message">AMPERSAND-messages</a><sup>{'[3]'}</sup><div style={{ fontSize: '0.9em', color: '#666', marginTop: 4 }}>Inbox. Write sends a new email.</div></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message">AMPERSAND-sentMessages</a><sup>{'[4]'}</sup><div style={{ fontSize: '0.9em', color: '#666', marginTop: 4 }}>Sent mail. Read-only.</div></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.delegates/list">delegates</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.drafts#Draft">drafts</a><sup>{'[1]'}</sup></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.filters/list">filters</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.forwardingAddresses/list">forwardingAddresses</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.cse.identities/list">identities</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.cse.keypairs/list">keypairs</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.labels/list">labels</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message">messages</a><sup>{'[2]'}</sup></td><td><Check /></td><td><Cross /></td><td><Check /><br /><a href="#set-up-gmail-push-notifications-for-subscribe-actions">(Setup required)</a></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.sendAs/list">sendAs</a></td><td><Check /></td><td><Check /></td><td><Cross /></td></tr>
-    <tr style={{ display: 'table-row' }}><td style={{ textAlign: 'left' }}><a href="https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.threads/list">threads</a></td><td><Check /></td><td><Cross /></td><td><Cross /></td></tr>
-  </tbody>
-</table>
-</div>
+<ObjectsTable rows={gmailRows}/>
 
-_[1] `drafts` supports nested fields, e.g. `"$['message']['payload']['body']"`._
+_[1] `AMPERSAND-messages` is an Ampersand object for the Gmail inbox. A read returns messages in the inbox, and a write sends a new email from the connected mailbox using Gmail's [`messages.send`](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/send) method. Write supports creating (sending) only; updating and deleting are not supported. A write sends a new message and does not send an existing draft._
 
-_[2] `messages` supports nested fields, e.g. `"$['payload']['body']"`._
+_[2] `AMPERSAND-sentMessages` is an Ampersand object for sent mail. It is read-only._
 
-_[3] `AMPERSAND-messages` is an Ampersand object for the Gmail inbox. A read returns messages in the inbox, and a write sends a new email from the connected mailbox using Gmail's [`messages.send`](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/send) method. Write supports creating (sending) only; updating and deleting are not supported. A write sends a new message and does not send an existing draft._
+_[3] `drafts` supports nested fields, e.g. `"$['message']['payload']['body']"`._
 
-_[4] `AMPERSAND-sentMessages` is an Ampersand object for sent mail. It is read-only._
+_[4] `messages` supports nested fields, e.g. `"$['payload']['body']"`._
 
 ### Example integration
 
