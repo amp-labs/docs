@@ -158,13 +158,106 @@ export function ObjectsTable({rows}) {
 
 <ObjectsTable rows={gmailRows}/>
 
-_[1] `AMPERSAND-messages` is an Ampersand object for the Gmail inbox. A read returns messages in the inbox, and a write sends a new email from the connected mailbox using Gmail's [`messages.send`](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/send) method. Write supports creating (sending) only; updating and deleting are not supported. A write sends a new message and does not send an existing draft._
+_[1] `AMPERSAND-messages` is an Ampersand object for the Gmail inbox.
+A read returns messages in the inbox, and a write sends a new email from the connected mailbox using
+Gmail's [`messages.send`](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/send) method. Write supports creating (sending) only; updating and deleting are not supported.
+A write sends a new message and does not send an existing draft.
+See [Sending Messages](#sending-messages) for details on constructing the write payload._
 
 _[2] `AMPERSAND-sentMessages` is an Ampersand object for sent mail. It is read-only._
 
 _[3] `drafts` supports nested fields, e.g. `"$['message']['payload']['body']"`._
 
 _[4] `messages` supports nested fields, e.g. `"$['payload']['body']"`._
+### Sending Messages
+
+Writing to `AMPERSAND-messages` supports two payload formats: **a raw IMF message** or
+the native [Gmail Message structure](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages#Message).
+
+1. **Raw IMF** — Set `raw` to a URL-safe Base64-encoded [IMF (RFC 5322)](https://www.rfc-editor.org/info/rfc5322/) message.
+The connector passes it through as-is, giving you full control over the message structure.
+
+ ```json
+ {
+   "raw": "URL_SAFE_BASE64_ENCODED_MESSAGE"
+ }
+ ```
+2. **Gmail Message** — Alternatively, supply the same Message structure returned when reading `AMPERSAND-messages`,
+`AMPERSAND-sentMessages`, `drafts`, or `messages`. The connector translates it into an IMF message before sending.
+Ensure that `body.data` in each part contains the actual URL-safe Base64-encoded content.
+
+**Note:** `body.attachmentId` references are only meaningful when reading and cannot be reused for writing.
+Attachment data must be supplied through `body.data`. The additional message wrapper returned by drafts
+(`message.payload`) is also supported.
+
+**Building the payload:**
+
+- **Headers** — Specify message headers such as `To`, `From`, `Subject`, `Cc`, etc. Headers are propagated as provided.
+- **Text and HTML** — Supply `text/plain` and `text/html` parts in `payload.parts` (or directly in `payload.body.data` for a single-part message).
+- **Attachments** — Add MIME parts with a `filename` and Base64-encoded `body.data`. Attachments can be PDFs, images, HTML files, or any other file type.
+
+**Inline attachments**
+
+An attachment is treated as inline content when either condition is met:
+
+- Its `Content-Disposition` header specifies `inline`.
+- Its `Content-ID` is referenced in the HTML body using `cid:`, for example, `src="cid:logo"`.
+
+**Example:**
+
+```json
+{
+  "payload": {
+    "body": {},
+    "headers": [
+      {
+        "name": "Subject",
+        "value": "{{.Subject}}"
+      }
+    ],
+    "mimeType": "multipart/related",
+    "parts": [
+      {
+        "mimeType": "multipart/alternative",
+        "parts": [
+          {
+            "body": {
+              "data": "{{.TEXT}}"
+            },
+            "mimeType": "text/plain"
+          },
+          {
+            "body": {
+              "data": "{{.HTML}}"
+            },
+            "mimeType": "text/html"
+          }
+        ]
+      },
+      {
+        "body": {
+          "data": "{{.House}}"
+        },
+        "filename": "house.png",
+        "headers": [
+          {
+            "name": "Content-ID",
+            "value": "<{{.EmbedId}}>"
+          },
+          {
+            "name": "Content-Disposition",
+            "value": "inline; filename=\"house.png\""
+          }
+        ],
+        "mimeType": "image/png"
+      }
+    ]
+  }
+}
+```
+
+In this example, reference the attachment from the HTML using `src="cid:{{.EmbedId}}"` to embed it in the message.
+Without that reference or an explicit `Content-Disposition: inline` header, it remains a regular attachment.
 
 ### Example integration
 
