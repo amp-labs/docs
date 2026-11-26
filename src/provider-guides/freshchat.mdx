@@ -2,39 +2,61 @@
 title: "Freshchat"
 hidden: true
 ---
+
 ## What's supported
 
 ### Supported actions
 
 This connector supports:
+
+- [Read Actions](/read-actions), including full historic backfill. Please note that incremental read is supported only for `users` currently. For all other objects, a full read of the Freshchat instance will be done per scheduled read.
+- [Write Actions](/write-actions).
 - [Proxy Actions](/proxy-actions), using the base URL `https://{{.workspace}}.freshchat.com`.
+
+### Supported objects
+
+The Freshchat connector supports reading from the following objects:
+
+- [accounts](https://developers.freshchat.com/api/#retrieve_account_information)
+- [agents](https://developers.freshchat.com/api/#list_all_agents)
+- [channels](https://developers.freshchat.com/api/#list_all_channels)
+- [groups](https://developers.freshchat.com/api/#list_all_groups)
+- [roles](https://developers.freshchat.com/api/#list_all_roles)
+- [users](https://developers.freshchat.com/api/#list_users)
+
+The Freshchat connector supports writing to the following objects:
+
+- [agents](https://developers.freshchat.com/api/#create_an_agent)
+- [conversations](https://developers.freshchat.com/api/#create_a_conversation)
+- [outbound-messages/whatsapp](https://developers.freshchat.com/api/#send_outbound_messages)
+- [users](https://developers.freshchat.com/api/#create_a_user)
 
 ### Example integration
 
-To define an integration for Freshchat, create a manifest file that looks like this:
+For an example manifest file of a Freshchat integration, visit our [samples repo on GitHub](https://github.com/amp-labs/samples/blob/main/freshchat/amp.yaml).
 
-```YAML
-# amp.yaml
-specVersion: 1.0.0
-integrations:
-  - name: freshchat-integration
-    displayName: My Freshchat Integration
-    provider: freshchat
-    proxy:
-      enabled: true
-```
+## Before you get started
+
+To connect Freshchat with Ampersand, you will need a [Freshchat account](https://www.freshworks.com/live-chat-software/).
+
+### Creating an API key for Freshchat
+
+1. Log in to your Freshchat account as an admin.
+2. Open the API settings page and generate an API token. See the [Freshchat authentication documentation](https://developers.freshchat.com/api/#authentication) for where to find this page in your account.
+3. Copy the API token. This is the API key that the customer enters when installing the integration.
+4. Note your account name - this is the subdomain of the chat URL shown on the same page (e.g., if your chat URL is `https://mycompany.freshchat.com`, your account name is `mycompany`). Ampersand uses it as the `{{.workspace}}` part of the base URL.
 
 ## Using the connector
 
-This connector uses API Key authentication, which means that you do not need to set up a Provider App before getting started. Provider apps are only required for providers that use OAuth2 Authorization Code grant type.
+This connector uses API Key auth, which means that you do not need to set up a Provider App before getting started. (Provider apps are only required for providers that use OAuth2 Authorization Code grant type.)
 
 To start integrating with Freshchat:
-- Create a manifest file like the example above.
+
+- Create a manifest file like the [example above](#example-integration).
 - Deploy it using the [amp CLI](/cli/overview).
-- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for an API key.
-- Start making [Proxy Calls](/proxy-actions), and Ampersand will automatically attach the API key supplied by the customer. Please note that this connector's base URL is `https://{{.workspace}}.freshchat.com`.
-
-## Creating an API key for Freshchat
-
-[Freshchat API key documentation](https://developers.freshchat.com/api) for more information on generating API keys for Freshchat.
-
+- If you are using Read Actions, create a [destination](/destinations).
+- Embed the [InstallIntegration](/embeddable-ui-components#install-integration) UI component. The UI component will prompt the customer for their API key and account name.
+- Start using the connector!
+   - If your integration has [Read Actions](/read-actions), you'll start getting webhook messages.
+   - If your integration has [Write Actions](/write-actions), you can start making API calls to our Write API.
+   - If your integration has [Proxy Actions](/proxy-actions), you can start making Proxy API calls.
