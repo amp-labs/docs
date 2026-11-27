@@ -87,15 +87,10 @@ export const Cross = () => <span>🚫</span>
 
 ### Notes and limitations
 
-- **Account type and scopes:** Use a [Dropbox app](https://www.dropbox.com/developers/apps) with **Full Dropbox** access for sharing-related objects. Some sharing list endpoints are not available to **App folder** apps. Enable OAuth scopes that match the objects you use (for example `files.metadata.read`, `file_requests.read`, `file_requests.write`, `sharing.read`). See the [Dropbox permissions guide](https://docs.dropboxapi.com/dropbox-api/docs/permissions/basics).
-- **Read coverage:** Ampersand Read syncs the six **user-level lists** above. Team admin APIs, search, file content download, Paper, and webhooks are out of scope for this connector. Use [Proxy Actions](#using-the-connector) for other [Dropbox user API](https://docs.dropboxapi.com/dropbox-api/api-reference/all-endpoints) routes when your app has the right scopes.
-- **Files (`read`):** Syncs **files and folders in the connected account’s root** (one directory level, not a full recursive walk of the entire tree). For incremental reads, `since` and `until` are applied using each item’s **server modified** time.
-- **File requests (`read`):** Incremental reads use each request’s **created** time.
-- **Shared links (`read`):** Incremental reads use each link’s **server modified** time.
-- **Shared folders, mountable shared folders, received files (`read`):** Incremental reads use each row’s **time invited** field.
-- **Incremental reads (all objects with timestamps):** Dropbox list calls do not accept time filters in the request. Ampersand keeps rows that fall inside your `since` / `until` window after each page is returned. Large accounts may require multiple pages per scheduled run even when you only need a small date range.
-- **File requests (`write`):** Create and update only. Deleting file requests through this connector is not supported. On create, send fields such as `title`, `destination` (folder path), and optional `description` / `deadline` as supported by [Dropbox’s create and update APIs](https://docs.dropboxapi.com/dropbox-api/api-reference/user-endpoints/file-requests/create). Other objects cannot be created or updated through Write Actions.
-- **Proxy:** Dropbox user API calls are typically `POST` requests with a JSON body to `https://api.dropboxapi.com/2/...`. Proxy passes the path and body through using the customer’s OAuth token. See [Dropbox’s HTTP guide](https://docs.dropboxapi.com/dropbox-api/docs/requests/api-base-header) for required headers (`Authorization`, `Content-Type`).
+- **Write support:** `file_requests` supports create and update only. Other objects in the table are read-only through Write Actions.
+- **Files (`read`):** Lists items in the connected account’s **root** folder (one directory level, not a full recursive tree).
+- **Incremental read:** `since` / `until` use these fields per object: `files` and `shared_links` — server modified; `file_requests` — created; `shared_folders`, `mountable_shared_folders`, and `received_files` — time invited.
+- **App type:** Sharing-related read objects require a **Full Dropbox** app. **App folder** apps cannot use all sharing list APIs. Grant OAuth scopes that match your manifest objects (see [Create a Dropbox app](#create-a-dropbox-app) and [Dropbox permissions](https://docs.dropboxapi.com/dropbox-api/docs/permissions/basics)).
 
 ### Example integration
 
